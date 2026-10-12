@@ -174,8 +174,12 @@ Status vocabulary: FALSIFIED, PARTLY FALSIFIED, REHABILITATED, DOWNGRADED (moved
 
 - **Hypothesis.** Implicit in every use of the 91.2% figure.
 - **Experiment.** [EXP-020](experiments/EXP-020-hit-rate-semantics/README.md).
-- **Evidence.** [MEASURED, test model] Up/down nodes re-pin slices loaded by the gate node and always hit: 97.7% runtime-style vs 93.1% expert-level.
+- **Evidence.** [MEASURED, test model] Up/down nodes re-pin slices loaded by the gate node and always hit: 97.7% runtime-style vs 93.1% gate-slice (`expert_level_hit_rate`).
 - **Conclusion.** Runtime miss rate ≈ expert miss rate / 3.
+- **Follow-up (2026-10-12, EXP-020 modern audit).** The approximate conclusion above is kept as recorded. Later evidence confirms the mechanism:
+  - EXP-021 found all misses in gate nodes, record for record, on real 30B runs;
+  - EXP-007's 252 qualified runs (30B and 80B, seven workload families, DEV/EVAL, 4 / 2 / 1.5 GiB) give a gate-slice (`expert_level_hit_rate`) / runtime-style miss ratio of exactly 3.000 in every run.
+  - Scope: the tested Argine2 expert store and instrumented binaries. The replay's expert-event hit rate is a different metric.
 
 ### FH-022 — One thread per P-core is optimal on this CPU — DOWNGRADED (Argine2)
 

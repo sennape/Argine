@@ -33,7 +33,7 @@
 Consequences that matter for research:
 
 1. No matrix compute overlaps the reads of the same node: the barrier precedes the kernel. "Hidden I/O" can only hide behind other residency work of the node.
-2. The up and down nodes re-request slices loaded by the gate node; they are guaranteed hits. The runtime hit counter therefore over-states the expert-level hit rate (EXP-020).
+2. The up and down nodes re-request slices loaded by the gate node; they are guaranteed hits. The runtime-style hit counter (all three nodes) therefore over-states the gate-slice hit rate stored as `expert_level_hit_rate`. On this store the miss ratio is exactly 3 (EXP-020, confirmed in 252 qualified EXP-007 runs). The replay's expert-event hit rate is a third, separate metric (METHODOLOGY §4).
 3. The policy is hash-sharded LRU over slices, not a global LRU over experts.
 
 ## 3. Research instrumentation (Argine2, patch 0003)

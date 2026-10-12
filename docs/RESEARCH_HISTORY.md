@@ -127,4 +127,11 @@ v1 is preserved unchanged and superseded for the final comparison; transition ke
 - The termination tail is INCOMPLETE: 5 records and 1 node lost, in the flush sentinel only. FH-024 stands.
 - The exact completion share is 0.634, so queue depth is an upper bound.
 - The manifest records no backend. Auto resolved to vulkan, but the CPU-only binary enumerated no device, so execution was effectively CPU; backend recording is fixed prospectively.
-- Overhead remains EXP-024. The audit is pending independent review. | EXP-019, FH-024 |
+- Overhead remains EXP-024. Independent review completed; EXP-019 audit CLOSED / SUPPORTED. | EXP-019, FH-024 |
+| 2026-10-12 | **EXP-020 modern audit CLOSED / SUPPORTED** (tested Argine2 expert-store / hit-rate-semantics scope).
+- The fixture mechanism evidence is preserved unchanged.
+- EXP-021 confirms the real-30B gate-node semantics.
+- EXP-007 confirms the miss ratio 3.000 in all 252 qualified 30B/80B runs.
+- The field `expert_level_hit_rate` is defined as the workload-only gate-slice rate; the whole-expert `expert_event` metric remains distinct.
+- The ≈74% 80B figure is superseded as an estimate.
+- No new measurement was performed. Independent review completed; modern audit CLOSED / SUPPORTED. | EXP-020, EXP-021, EXP-007, FH-021 |

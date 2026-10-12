@@ -135,7 +135,12 @@ Additional models are added only when they run on this machine and answer a spec
 - **Observation before optimisation.** No allocation algorithm is designed from intuition; the first deliverable is a characterization document.
 - **Event-atomic replay.** One event = the set of experts one forward pass needs in one layer; all members must be resident together (the runtime pins them), so no policy may evict a member of the current event. Flattened sequential replay changes policy rankings ([arXiv 2608.07911](https://arxiv.org/abs/2608.07911)).
 - **Exact vs modelled vs proxy.** Hits, misses, bytes and evictions from replay are exact; stall time from replay is modelled (published cost model); queue depth from the runtime is reconstructed from per-request timestamps, and any bound or proxy is labelled as such.
-- **Expert-level hit rate.** Hit rates in Argine2 count the first request of each expert per layer and step; the runtime's own counter does not ([EXP-020](experiments/EXP-020-hit-rate-semantics/README.md)).
+- **Hit-rate semantics.** Run manifests report two rates:
+  - the runtime-style rate, over all slice accesses of the gate, up and down nodes;
+  - the workload gate-slice rate stored as `expert_level_hit_rate`, over the slice accesses of the first (gate) node of each layer, prefill + decode.
+
+  Replay analyses use a third metric, the expert-event hit rate (an expert hits only if all three of its slices are resident), which is not interchangeable with gate-slice ([EXP-020](experiments/EXP-020-hit-rate-semantics/README.md), [EXP-021](experiments/EXP-021-replay-fidelity/README.md); definitions in [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md) §4).
+  - *(Earlier wording, kept as history: "Hit rates in Argine2 count the first request of each expert per layer and step; the runtime's own counter does not.")*
 - **Development vs evaluation.** Workloads have disjoint `dev` and `eval` prompt sets; constants are tuned on `dev`, claims are made on `eval`. Offline policies fitted on the same trace they are evaluated on are labelled *in-sample* everywhere.
 - **Repetitions and interleaving.** ≥3 runs (5 preferred), mean/median/SD/CV/95% CI, configurations interleaved (`A B C A C B C A B`) inside one session, because legacy non-interleaved / incompletely fingerprinted comparisons showed differences large enough to confound small effects ([EXP-018](experiments/EXP-018-reproducibility-audit/README.md)).
 - **Fingerprints.** Every measurement records Argine2 commit, llama.cpp commit and compile flags, binary SHA-256, model and store checksums, runtime flags, workload SHA-256. Incomplete fingerprint ⇒ not publication-quality.
@@ -164,7 +169,7 @@ Evidence: [EXP-005](experiments/EXP-005-30b-budget-sweep/README.md), [EXP-006](e
 
 [FALSIFIED] *"Throughput degradation is primarily explained by resident expert percentage."* Evidence: [EXP-006](experiments/EXP-006-80b-budget-sweep/README.md).
 
-[DERIVED] Argine attributed the difference to router concentration (a cache holding 11.7% of the experts served 91.2% of requests). Argine2 found that 91.2% counts guaranteed re-pins; the expert-level hit rate is ≈74% — still far above 11.7%, so the explanation survives with a smaller number ([EXP-020](experiments/EXP-020-hit-rate-semantics/README.md)).
+[DERIVED] Argine attributed the difference to router concentration (a cache holding 11.7% of the experts served 91.2% of requests). Argine2 found that 91.2% counts guaranteed re-pins; the derived expert-level figure was ≈74% *[historical derivation from Argine v1's 91.2% on another binary and prompt, superseded as a number by the EXP-007 measurements below: 80B gate-slice 61.4–78.1% at 4 GiB, coding DEV ≈ 65.9%]* — still far above 11.7%, so the explanation survives with a smaller number ([EXP-020](experiments/EXP-020-hit-rate-semantics/README.md)).
 
 [SUPERSEDED, 2026-10-11] "Concentration was inferred from a hit counter; no router trace of the 80B exists yet." [SUPPORTED, [EXP-007](experiments/EXP-007-router-characterization/README.md)] The 80B router is now traced directly on 14 cells.
 - Its routing is generally more concentrated than the 30B's: global EWS90 fraction 0.225–0.472 vs 0.327–0.554.
@@ -241,7 +246,11 @@ What drives the gain, and what does not:
 
 These came from re-reading Argine's raw data and code with Argine2's tools.
 
-**U-001 — the runtime's hit rate is not the expert-level hit rate.** [MEASURED, test model] For every layer the gate, up and down nodes each request the slices of all three kinds; the gate node loads them and the other two re-pin them. On the end-to-end test, all 71 misses were in gate nodes: runtime-style hit rate 97.7%, expert-level 93.1%. [MEASURED, first Windows smoke run, 30B at 4 GiB, not publication-quality] 90.06% runtime-style vs 70.17% expert-level: miss ratio 3.00. [DERIVED] runtime miss rate ≈ expert miss rate / 3. [EXP-020](experiments/EXP-020-hit-rate-semantics/README.md).
+**U-001 — the runtime's hit rate is not the expert-level hit rate.** [MEASURED, test model] For every layer the gate, up and down nodes each request the slices of all three kinds; the gate node loads them and the other two re-pin them. On the end-to-end test, all 71 misses were in gate nodes: runtime-style hit rate 97.7%, gate-slice (`expert_level_hit_rate`) 93.1%. [MEASURED, first Windows smoke run, 30B at 4 GiB, not publication-quality] 90.06% runtime-style vs 70.17% gate-slice (`expert_level_hit_rate`): miss ratio 3.00. [DERIVED] runtime miss rate ≈ expert miss rate / 3. [EXP-020](experiments/EXP-020-hit-rate-semantics/README.md).
+- [Update 2026-10-12] Confirmed beyond the smoke run:
+  - EXP-021 attributed real 30B runs record for record, and all misses are in gate nodes;
+  - EXP-007's 252 qualified 30B/80B runs give a gate-slice (`expert_level_hit_rate`) / runtime-style miss ratio of exactly 3.000 in every run.
+- Scope: the tested Argine2 expert store and instrumented binaries, not MoE runtimes in general. The replay's expert-event hit rate is a separate metric.
 
 **U-002 — legacy nominally matched runs can differ far more than 5%.**
 - [MEASURED] Within one invocation, the repetition CV reached ≈6.43%.

@@ -31,7 +31,12 @@ An inference is never presented as a measurement. "Pilot" results (too small, in
 
 - **Step.** One forward pass (one llama.cpp graph = one ubatch). Decode steps have one token; prompt steps many, except in the last layer.
 - **Event.** (step, layer, set of experts needed): the unit of residency.
-- **Expert-level hit rate.** Fraction of event members already resident when the event starts. The runtime's counter (slice requests in all three nodes of a layer) is reported as *runtime-style* and is not comparable.
+- **Hit-rate metrics** (three, not interchangeable; EXP-020 / EXP-021, clarified 2026-10-12):
+  - **Runtime-style slice hit rate** (`runtime_style_hit_rate`): hits over all slice accesses in the gate, up and down nodes of each layer. In the tested Argine2 store the up/down accesses are guaranteed re-pins, so this rate over-states first-request hits. It is reported, never compared with the other two.
+  - **Runtime gate-slice hit rate** (stored as `expert_level_hit_rate`; field name kept): slice hits over the slice accesses of the gate (first) node of each layer, prefill + decode, workload only (warm-up and flush sentinel excluded). On the tested store, gate-slice miss rate = 3 × runtime-style miss rate, exactly 3.000 in all 252 qualified EXP-007 runs; implementation-specific.
+  - **Expert-event hit rate** (`expert_event`; replay and EXP-021 analyses): the fraction of an event's experts already resident, with all three slices, when the event starts. It is stated per phase. It is separate from gate-slice: on 30B coding DEV at 4 GiB, decode gate-slice is 75.4% and decode expert-event is 73.7%.
+  - Always state the metric and the phase. An unqualified "expert-level hit rate" taken from a run manifest is the gate-slice field; replay results name `expert_event` explicitly.
+  - *(Earlier wording, kept as history: "**Expert-level hit rate.** Fraction of event members already resident when the event starts. The runtime's counter (slice requests in all three nodes of a layer) is reported as *runtime-style* and is not comparable.")*
 - **EWS_q.** Minimum number of experts covering a fraction q of selections in a layer (or globally over all layer-expert keys).
 - **Denning working set ws_τ.** Mean number of distinct experts selected in the last τ tokens.
 - **Stack distance.** Event-atomic LRU stack distance (see `metrics.lru_stack_distances`); per-layer LRU with c slots hits iff distance < c.

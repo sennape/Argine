@@ -115,7 +115,7 @@ Global (all 6144 layer-expert keys): EWS90 = 1729 (28%), EWS95 = 2115 (34%), EWS
 
 ## 11. Cache behaviour
 
-[MEASURED, Argine v1] 80B at 4 GiB: runtime-style hit rate 91.2% (170,088 misses). [DERIVED, Argine2] Expert-level ≈ 74% (EXP-020: runtime miss rate ≈ expert miss rate / 3).
+[MEASURED, Argine v1] 80B at 4 GiB: runtime-style hit rate 91.2% (170,088 misses). [DERIVED, Argine2] Expert-level ≈ 74% (EXP-020: runtime miss rate ≈ expert miss rate / 3). *[Historical derivation, superseded as a number by the 2026-10-12 EXP-020 audit: EXP-007 measures the 80B gate-slice hit rate directly, 61.4–78.1% at 4 GiB across workloads, coding DEV ≈ 65.9%.]*
 
 [DERIVED, 30B, coding dev, Windows, EXP-007/EXP-021] The runtime and the replay must be compared on the same metric. Workload only, expert-event hit (all 3 slices) over decode:
 
