@@ -323,5 +323,30 @@ class TestPublicationCheck(unittest.TestCase):
         self.assertIn("CPU identity", fp["missing"])
 
 
+class TestBackendProvenance(unittest.TestCase):
+    """EXP-019 audit (2026-10-12): auto resolved to vulkan, the CPU-only research binary
+    enumerated no Vulkan device, and the manifest recorded no backend at all."""
+
+    def test_vulkan_without_devices_is_effective_cpu(self):
+        b = runner.backend_provenance("auto", "vulkan", [])
+        self.assertEqual((b["requested"], b["resolved"], b["effective"]), ("auto", "vulkan", "cpu"))
+        self.assertEqual(b["vulkan_devices_enumerated"], [])
+
+    def test_vulkan_with_devices(self):
+        b = runner.backend_provenance("auto", "vulkan", ["Vulkan0: test iGPU"])
+        self.assertEqual(b["effective"], "vulkan")
+
+    def test_cpu(self):
+        b = runner.backend_provenance("cpu", "cpu", None)
+        self.assertEqual(b["effective"], "cpu")
+        self.assertIsNone(b["vulkan_devices_enumerated"])
+
+    def test_trace_completeness_declares_workload_scope(self):
+        d = TMP / "scope"
+        resp = make_run(d)
+        s = runner.process_run(d, TraceMeta(n_experts=8), resp)
+        self.assertIn("workload requests only", s["trace_completeness"]["scope"])
+
+
 if __name__ == "__main__":
     unittest.main()

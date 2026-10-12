@@ -197,6 +197,7 @@ Status vocabulary: FALSIFIED, PARTLY FALSIFIED, REHABILITATED, DOWNGRADED (moved
 - **Experiment.** [EXP-019](experiments/EXP-019-instrumentation-validation/README.md), Windows smoke run.
 - **Evidence.** [MEASURED] The last request has 126 of 127 decode steps and one partial step: ~263 ms of records buffered after the last 250 ms flush were lost when llama-server was terminated.
 - **Conclusion.** Completeness is checked against an independent count (llama.cpp's `predicted_n` per request); a flush sentinel request now follows every workload.
+- **Follow-up (2026-10-12, EXP-019 fresh Windows validation).** The negative result stands. With the flush sentinel, the measured workload was complete: 127 / 127 decode steps per request, 0 incomplete workload nodes, 0 replay-relevant sequence gaps, and replay event-exact over the workload. The well-formed trace (0 malformed records, no truncated line) still lost 5 records and left 1 node incomplete in the flush-sentinel tail. Completeness is therefore asserted only for the workload, and only from independent counts (`predicted_n`, per-shard sequence numbers, node completeness), never from well-formedness.
 
 ### FH-025 — `sharded-lru-16` replay at expert granularity reproduces the runtime — FALSIFIED (Argine2)
 

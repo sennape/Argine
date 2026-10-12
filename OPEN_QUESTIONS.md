@@ -231,7 +231,7 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 
 ## RQ-011 — Does replay reproduce the runtime?
 
-**Status: ANSWERED (2026-10-04).** `store-replay` with per-thread pins reproduces every runtime decision of the measured workload on format-v2 traces. This holds on Linux, on a fresh 30B Windows run, and on all nine 80B Windows runs. The only differences are in the flush-sentinel tail, explained by records lost at process termination (write-up §14).
+**Status: ANSWERED (2026-10-04).** `store-replay` with per-thread pins reproduces every runtime decision of the measured workload on format-v2 traces. This holds on Linux, on a fresh 30B Windows run, and on all nine 80B Windows runs. The only differences are in the flush-sentinel tail, explained by records lost at process termination (write-up §14). [2026-10-12] A further fresh 30B Windows run (EXP-019 validation, 4 GiB, coding DEV) agrees: replay is event-exact over the workload with 0 tail disagreements, and the record loss (5 records, 1 node) is confined to the flush sentinel.
 
 **Known.** [MEASURED] `store-replay`, the slice-level, per-shard, pin-aware LRU fed the runtime's request order, reproduces every decision of the real store: 0 disagreements in a C++ driver and in 89,892 + 89,928 requests of two native Linux runs with recorded shard maps.
 
@@ -247,7 +247,7 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 
 ## RQ-012 — What does the instrumentation cost?
 
-**Status: OPEN.** EXP-024: interleaved on/off, 5 repetitions.
+**Status: OPEN.** EXP-024: interleaved on/off, 5 repetitions. EXP-019's 2026-10-12 validation has no trace-off control and does not measure overhead.
 
 ## RQ-013 — Can an interpretable model predict ms/token within 10-15%?
 

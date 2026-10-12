@@ -20,4 +20,4 @@ When the repository is public, each line becomes an issue (title as written). Th
 | `[BASELINE] Implement LeCaR / LFRU replay policy` | policies.py |
 | `[ANALYSIS] Compare EWS95 with expert-level hit rate across budgets` | EXP-008 |
 | `[ANALYSIS] Failure envelope map model × workload × budget` | RQ-008 |
-| `[INSTRUMENTATION] Validate the Windows overlapped-I/O completion stamps` | EXP-019 limitation |
+| `[INSTRUMENTATION] Validate the Windows overlapped-I/O completion stamps` | EXP-019 limitation. [2026-10-12] Exercised on Windows (EXP-019 fresh validation): 63.4% exact completions, the rest upper bounds, so queue depth stays `upper_bound`. Open: raise the exact share or bound the error. |

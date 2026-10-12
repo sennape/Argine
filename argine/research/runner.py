@@ -263,7 +263,10 @@ def trace_completeness(log: rawlog.RawLog, tr, markers: List[Dict[str, Any]],
     checked = [x for x in rows if x.get("checked")]
     return {"requests": rows,
             "complete": bool(checked) and all(x["complete"] for x in checked),
-            "method": "decode steps per request vs llama.cpp predicted_n - 1; all layers present"}
+            "method": "decode steps per request vs llama.cpp predicted_n - 1; all layers present",
+            "scope": ("workload requests only: the warm-up and flush-sentinel requests are not "
+                      "checked; termination-tail record loss is reported separately by "
+                      "tools/validate_replay_fidelity.py (termination_tail_completeness)")}
 
 
 EXCLUDED_SEGMENTS = ("warmup", SENTINEL_SEGMENT)
@@ -457,6 +460,29 @@ def publication_check(fp: Dict[str, Any], run: Dict[str, Any]) -> Dict[str, Any]
     return {"publication_quality": not missing, "missing": missing, "warnings": warnings}
 
 
+def backend_provenance(requested: Optional[str], resolved: Optional[str],
+                       vulkan_devices: Optional[List[str]]) -> Dict[str, Any]:
+    """Requested vs resolved vs effective llama.cpp backend (EXP-019 audit, 2026-10-12).
+
+    `resolved` is Argine's choice (hardware.resolve_backend, e.g. auto -> vulkan on an
+    iGPU). Before 2026-10-12 it was only printed, never written to the manifest. When it
+    is vulkan but the binary enumerates no Vulkan device (a CPU-only build), llama.cpp
+    runs on the CPU and --n-gpu-layers has no effect.
+    """
+    devs = list(vulkan_devices) if vulkan_devices else []
+    if resolved == "vulkan":
+        eff, src = (("vulkan", "Vulkan devices enumerated by the binary") if devs else
+                    ("cpu", "no Vulkan device enumerated by the binary: llama.cpp falls back "
+                            "to the CPU"))
+    elif resolved == "cpu":
+        eff, src = "cpu", "resolved backend cpu"
+    else:
+        eff, src = None, "unknown"
+    return {"requested": requested, "resolved": resolved,
+            "vulkan_devices_enumerated": devs if resolved == "vulkan" else None,
+            "effective": eff, "effective_source": src}
+
+
 def cmd_trace(args: Any) -> int:
     from .. import cli as core
     from ..util import parse_size, fmt_bytes
@@ -550,6 +576,9 @@ def cmd_trace(args: Any) -> int:
             runtime_flags={"expert_budget": blabel, "requested_read_mode": requested_read_mode,
                            "effective_read_mode": rc.get("read_mode"),
                            "threads": ctx["plan"].threads, "ctx": ctx["plan"].ctx,
+                           "backend": backend_provenance(getattr(args, "backend", None),
+                                                         ctx.get("backend"),
+                                                         ctx.get("vulkan_devices")),
                            "llama_args": getattr(proc, "args", None)},
             full_checksum=args.full_checksum)
         binary_path = Path(str(ctx["rt"].binary("server")))

@@ -178,4 +178,4 @@ Checks: identical cache statistics with and without the trace (observation only)
 ### What has and has not been executed
 
 - Linux, synchronous POSIX read path: unit tests + end-to-end llama-server run (EXP-019).
-- Windows overlapped-I/O path (precise completion stamps with `WaitForMultipleObjects`, polling with `HasOverlappedIoCompleted`): compiled with MinGW-w64, **not yet executed**.
+- Windows overlapped-I/O path (precise completion stamps with `WaitForMultipleObjects`, polling with `HasOverlappedIoCompleted`): compiled with MinGW-w64, **not yet executed** *(historical wording, 2026-10-03)*. [2026-10-12] It has since been executed on Windows: the 2026-10-03 smoke run (66.6% exact completions) and the EXP-019 validation of 2026-10-12 (63.4% exact, the rest upper bounds).

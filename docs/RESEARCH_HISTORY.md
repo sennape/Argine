@@ -122,3 +122,9 @@ v1 is preserved unchanged and superseded for the final comparison; transition ke
 - The ~15% threshold is narrowed to a conservative legacy guardrail.
 - No new measurement. | EXP-018, FH-020, [HISTORICAL-AUDIT-EXP011-018](research/HISTORICAL-AUDIT-EXP011-018.md) |
 | 2026-10-11 | **Historical audit block EXP-011 … EXP-018 closed.** All eight experiments were audited; no registry status changed; claims and provenance were narrowed where required; no historical experiment was rerun; immutable measurements remain unchanged. | [HISTORICAL-AUDIT-EXP011-018](research/HISTORICAL-AUDIT-EXP011-018.md) |
+| 2026-10-12 | **EXP-019 modern audit CLOSED / SUPPORTED: fresh publication-quality Windows validation.** SUPPORTED retained with workload-completeness / tested-path scope (30B, 4 GiB, coding DEV, llama-research-v2@a0063720, commit 3a0df91).
+- The workload is complete (127 / 127 decode steps per request) and replay is event-exact over it.
+- The termination tail is INCOMPLETE: 5 records and 1 node lost, in the flush sentinel only. FH-024 stands.
+- The exact completion share is 0.634, so queue depth is an upper bound.
+- The manifest records no backend. Auto resolved to vulkan, but the CPU-only binary enumerated no device, so execution was effectively CPU; backend recording is fixed prospectively.
+- Overhead remains EXP-024. The audit is pending independent review. | EXP-019, FH-024 |

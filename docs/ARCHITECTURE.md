@@ -51,17 +51,17 @@ Activated by `ARGINE_RESEARCH_TRACE=<path>` (`%p` expands to the process id). Wi
 | `N` | thread 0, per MoE node | graph, layer, kind, entry time, time after the post-read barrier, experts requested, threads |
 | `S` | thread 0, at each forward-pass boundary | resident bytes, budget, hits, misses, evictions, bytes read, budget violations |
 
-**Exactness.** On Windows, while tracing, the wait for a thread's overlapped reads uses `WaitForMultipleObjects` one completion at a time, stamping the signalled read (`COMPLETE_EXACT`) and polling the others (`COMPLETE_BOUND`, upper bound); reads are also polled with `HasOverlappedIoCompleted` each time the thread issues a new read, so reads finished before the wait get a tight bound. Synchronous and fallback reads are flagged. The parser and the I/O timeline label every result built on bounds.
+**Exactness.** On Windows, while tracing, the wait for a thread's overlapped reads uses `WaitForMultipleObjects` one completion at a time, stamping the signalled read (`COMPLETE_EXACT`) and polling the others (`COMPLETE_BOUND`, upper bound); reads are also polled with `HasOverlappedIoCompleted` each time the thread issues a new read, so reads finished before the wait get a tight bound. Synchronous and fallback reads are flagged. The parser and the I/O timeline label every result built on bounds. The path has run on Windows: 66.6% exact completions in the 2026-10-03 smoke run and 63.4% in the 2026-10-12 EXP-019 validation, so Windows queue depth is in practice an upper bound.
 
 **Flushing.** Records go to a per-thread 64 KiB buffer, appended to the file under one lock at the end of every node, and thread 0 flushes the stdio buffer at most every 250 ms. Argine terminates llama-server instead of letting it exit, so nothing may depend on destructors.
 
-**Flush sentinel.** Thread 0 flushes the stdio buffer at a node boundary only when ≥250 ms have passed, and llama-server is terminated, not exited: the records of the last ≤250 ms would be lost (observed on the first Windows trace). The harness therefore sends one tiny request (segment `flush-sentinel`) >250 ms after the workload; its first node flushes everything before it, and its own records are excluded from statistics. Per-request completeness is checked against llama.cpp's `predicted_n`.
+**Flush sentinel.** Thread 0 flushes the stdio buffer at a node boundary only when ≥250 ms have passed, and llama-server is terminated, not exited: the records of the last ≤250 ms would be lost (observed on the first Windows trace). The harness therefore sends one tiny request (segment `flush-sentinel`) >250 ms after the workload; its first node flushes everything before it, and its own records are excluded from statistics. Those own records can still be lost at termination: in EXP-019 (2026-10-12), 5 per-shard sequence numbers and one node of the sentinel were lost, none in the workload. The replay-fidelity validator reports this as `termination_tail_completeness`. Per-request completeness is checked against llama.cpp's `predicted_n`.
 
 **Graph boundaries.** A new forward pass is detected when the layer index decreases. Prompt steps carry many tokens in every layer except the last, where llama.cpp computes only the output token(s): step size is the maximum over layers.
 
 **Invariant monitor.** `violazioni` counts admissions after which a shard's resident bytes exceeded its budget. It must be 0; it is exported so each run proves it.
 
-**Verification.** `patches/argine-research-test.cpp` (TSan, ASan/UBSan): identical statistics with and without tracing, one read record per miss, ordered timestamps, all evictions logged, no violations with 6 threads. End-to-end with a natively built llama-server: EXP-019.
+**Verification.** `patches/argine-research-test.cpp` (TSan, ASan/UBSan): identical statistics with and without tracing, one read record per miss, ordered timestamps, all evictions logged, no violations with 6 threads. End-to-end with a natively built llama-server (Linux fixture) and, on 2026-10-12, with the cross-compiled research binary on Windows: EXP-019.
 
 ## 4. Python research layer (`argine/research`)
 

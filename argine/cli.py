@@ -886,6 +886,7 @@ def _run_common(args: argparse.Namespace) -> tuple[int, Optional[Dict[str, Any]]
         error(f"runtime llama.cpp non disponibile: {e}")
         return EXIT_RUNTIME, None
 
+    devs: Optional[List[str]] = None
     if backend == "vulkan":
         devs = rt.list_devices()
         if devs:
@@ -901,7 +902,9 @@ def _run_common(args: argparse.Namespace) -> tuple[int, Optional[Dict[str, Any]]
         info(f"avvio llama-server (porta interna {upstream})...")
         ready = proc.wait_ready(upstream, timeout=args.load_timeout)
         if ready:
-            ok(f"modello caricato in RAM/mmap; backend={backend}, build={rt.build}")
+            nota = (" (richiesto; nessun device Vulkan enumerato: esecuzione CPU)"
+                    if backend == "vulkan" and not devs else "")
+            ok(f"modello caricato in RAM/mmap; backend={backend}{nota}, build={rt.build}")
             _avvisa_build_cambiata(m, rt)
             _report_buffer_calibration(proc, p)
             _report_expert_store(proc, args)
@@ -930,7 +933,8 @@ def _run_common(args: argparse.Namespace) -> tuple[int, Optional[Dict[str, Any]]
     assert proc is not None
     return EXIT_OK, {
         "model": m, "hw": hw, "plan": p, "rt": rt, "proc": proc,
-        "upstream": upstream, "backend": backend, "attempts": attempts,
+        "upstream": upstream, "backend": backend, "vulkan_devices": devs,
+        "attempts": attempts,
     }
 
 
