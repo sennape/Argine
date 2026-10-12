@@ -1,12 +1,17 @@
 # Replay fidelity validation (EXP-021)
 
+**Modern audit (2026-10-12).** EXP-021 is CLOSED / SUPPORTED within the tested-path / format-v2 workload-fidelity scope ([EXP-021 README](../../experiments/EXP-021-replay-fidelity/README.md)). The research narrative below is kept as written.
+- **Historical "pending" statements.** The top status, §10, §12 and §13.8 say a fresh Windows run is pending; they are historical. The fresh 30B confirmation and the 80B campaign (§14) resolved them on 2026-10-04.
+- **Later confirmation.** A publication-quality 30B Windows run ([EXP-019](../../experiments/EXP-019-instrumentation-validation/README.md), 2026-10-12, not part of EXP-021) agrees independently: `exp021_closure` PASS, 0 tail disagreements.
+- **Scope reminders.** The nine format-v1 30B traces remain statistical. On the 80B: 9 / 9 workload-exact, 7 / 9 full-trace exact.
+
 **Status (2026-10-04, final):** EXP-021 SUPPORTED. The per-thread pin model passed a fresh 30B Windows run and the 80B coding-dev campaign, exact over the workload (§14). Earlier status text is kept below.
 
 **Status (2026-10-04):** Question A is answered and Question B is answered. The first Windows format-v2 validation failed the closure criterion (5.29% event disagreement, 3 shards with sequence gaps). Both findings are explained in §13:
 - **The divergence** came from a wrong pin model in the replay. Pins are per thread, and on Windows prompt and decode graphs run on different thread pools.
 - **The gaps** are 5 records lost when the process was terminated, all inside the flush sentinel, so replay-irrelevant.
 
-With the corrected model the same failed trace replays with **0 disagreements** in 1,474,909 decisions. One fresh Windows run is pending before EXP-021 closes. History of this section: the 2026-10-03 text below is kept; where §13 corrects it, the text says so.
+With the corrected model the same failed trace replays with **0 disagreements** in 1,474,909 decisions. One fresh Windows run is pending before EXP-021 closes. *[Historical (2026-10-04), SUPERSEDED: the fresh run passed (§14.1); see the 2026-10-12 audit note above.]* History of this section: the 2026-10-03 text below is kept; where §13 corrects it, the text says so.
 
 - **Question A, why replay predicted higher hit rates than the runtime.** [SUPPORTED] The runtime-reproduction replay (`store-replay`) was shown equivalent to the real Expert Store event by event in three settings:
   - the C++ store driven deterministically, 0 disagreements;
@@ -16,7 +21,7 @@ With the corrected model the same failed trace replays with **0 disagreements** 
   On the nine Windows 30B runs it reproduces the runtime's hit rate within +0.10…+0.28 pp. The residual ~0.7% event disagreement has a single known cause: the shard mapping depends on memory addresses and is not recorded in format-v1 traces.
 - **Question B, why "optimal static" lost to uniform.** [SUPPORTED] The allocator had a discretization bug and is now exact. An invariant check makes it fail loudly if the result is ever worse than uniform.
 
-**Methodological limit.** Event-level equivalence on the *Windows* 30B runs needs one short trace recorded with the v2 instrumentation. The command is in §12.
+**Methodological limit.** Event-level equivalence on the *Windows* 30B runs needs one short trace recorded with the v2 instrumentation. The command is in §12. *[Historical (2026-10-03/04), SUPERSEDED for format v2: the v2 traces were recorded and replay exactly over the workload (§13, §14.1). The nine v1 traces remain statistical.]*
 
 Taxonomy as in [`METHODOLOGY.md`](../METHODOLOGY.md): [MEASURED] [DERIVED] [HYPOTHESIS] [SUPPORTED] [FALSIFIED] [OPEN] [LIMITATION] [SUPERSEDED].
 
@@ -280,11 +285,11 @@ The replay is systematically very slightly optimistic, exactly like the hash-mod
 
 [SUPERSEDED in part, 2026-10-04] The current list is §13.5 and §13.8. In particular, the Linux exactness did not transfer to Windows until pins were modelled per thread.
 
-- [LIMITATION] **v1 traces cannot be replayed exactly.** The key→shard map depends on virtual addresses, which v1 does not record. Residual 0.7 % event disagreement, +0.1–0.3 pp hit rate. Format v2 records the shard id and is exact. The Windows v2 binary is built but **not yet run on Windows** (§12).
+- [LIMITATION] **v1 traces cannot be replayed exactly.** The key→shard map depends on virtual addresses, which v1 does not record. Residual 0.7 % event disagreement, +0.1–0.3 pp hit rate. Format v2 records the shard id and is exact. The Windows v2 binary is built but **not yet run on Windows** (§12). *[Historical, SUPERSEDED: it ran on 2026-10-04 (§13, §14).]*
 - [LIMITATION] Concurrency is replayed through the per-shard order the runtime recorded, not simulated. A *different* interleaving, for example with another thread count, cannot be predicted, only replayed. The cross-shard order inside a node does not affect decisions, because shards are independent.
 - [LIMITATION] Read failures (`U`) and wait-on-in-flight (`w`) are modelled but were never exercised by EXP-007, which has 0 of each. They are tested on synthetic streams only.
 - [LIMITATION] Counterfactual policies remain expert-unit and event-atomic by design: they answer "what would a different policy do". They are **not** comparable to the measured runtime number. Compare them to each other, to `sharded-lru-16-expert` (the runtime's policy in the same model) and to the oracles.
-- [LIMITATION] One workload (coding dev), one model (30B). The fidelity result is about the replay machinery and should transfer. The policy numbers do not.
+- [LIMITATION] One workload (coding dev), one model (30B). *[Superseded in part: the 80B coding-dev campaign was added in §14.2; EXP-021 itself still covers one workload family.]* The fidelity result is about the replay machinery and should transfer. The policy numbers do not.
 - [OPEN] One unexplained record in run-03-4G (§5). It is 1 in 1.6 M, below any effect discussed, and v2 makes it checkable.
 
 ## 11. Research consequence
@@ -307,6 +312,8 @@ What may now be claimed, and how:
 - Not against the raw measured number.
 
 ## 12. Next experiment (exact)
+
+*[Historical plan (2026-10-03), executed 2026-10-04: the trace is `raw/30b-coding-dev-v2`. Its first validation failed and is explained in §13; the fresh confirmation passed (§14.1).]*
 
 One short Windows trace with the v2 instrumentation, to make the 30B equivalence exact instead of statistical:
 - one run, 4 GiB, coding dev;
@@ -491,7 +498,7 @@ On the failed trace itself, with the corrected replay, every criterion holds:
 - misses, miss bytes and evictions identical;
 - budget violations = 0, failures = 0.
 
-The model was corrected on this same trace, though, so it is not an independent test. **EXP-021 stays RUNNING** until one fresh short Windows run passes:
+The model was corrected on this same trace, though, so it is not an independent test. **EXP-021 stays RUNNING** until one fresh short Windows run passes: *[Historical (2026-10-04); resolved in §14.1: the fresh run passed and EXP-021 closed.]*
 
 ```bat
 cd C:\Users\alpel\Desktop\Argine2

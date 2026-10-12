@@ -9,6 +9,19 @@
 | Related questions | RQ-011, RQ-010, RQ-018, RQ-005 |
 | Supersedes / superseded | supersedes the `sharded-lru-16` "runtime model" rows of EXP-009 and the pilot heterogeneity numbers of EXP-008/EXP-010 (see below) |
 
+> **Audit scope (2026-10-12).** Final verdict: **CLOSED / SUPPORTED — tested-path / format-v2 workload-fidelity scope.** No run was made during the audit. Raw and processed evidence, `results.csv` and `config.json` are unchanged, and the originally FAILED Windows validation (`processed/30b-coding-dev-v2/`) stays FAILED.
+> - **Linux, format v2** (recorded shard map): exact (0 / 89,892 and 0 / 89,928 decisions), as is the deterministic C++ driver of the real store.
+> - **30B Windows, format v2:**
+>   - the first run failed with single-pool pins (5.29% disagreement);
+>   - per-thread pins on the same trace give 0 / 1,474,909, which establishes the root cause but is not a holdout;
+>   - the fresh confirmation run, not used to build the model, gives 0 / 1,474,817 with 1 record lost in the flush sentinel. This is the out-of-sample Windows validation.
+> - **80B Windows, format v2** (EXP-007 coding DEV, 9 runs): **9 / 9 exact over the measured workload**, **7 / 9 exact over the full trace**.
+>   - The other 2 runs (run-04-1.5G, run-07-4G) have 6 eviction-victim disagreements in total. All of them are in the flush-sentinel termination tail, and all are explained by records the shard had already lost.
+>   - Termination-tail record loss itself occurs in 6 / 9 runs. All 9 have 0 incomplete workload nodes and 0 replay-relevant gaps.
+> - **30B Windows, format v1** (the nine historical EXP-007 runs): statistical only (hash-model replay). Their address-dependent shard map was never recorded and cannot be recovered, so they are not event-exact.
+> - **Later independent confirmation (2026-10-12, [EXP-019](../EXP-019-instrumentation-validation/README.md), not part of this experiment):** a fresh publication-quality 30B Windows v2 run replays exactly over the workload and over the full surviving trace (`exp021_closure` PASS; 5 sequence numbers lost in the sentinel, 0 tail disagreements).
+> - **Closure rule:** `workload_fidelity` PASS and 0 unexplained tail disagreements. `full_trace_fidelity` is always reported. An unexplained tail disagreement, a replay-relevant gap or an incomplete workload node fails closure.
+
 Full write-up: [`docs/research/REPLAY-FIDELITY-VALIDATION.md`](../../docs/research/REPLAY-FIDELITY-VALIDATION.md).
 
 ## Research question
@@ -92,16 +105,21 @@ Closure requires workload fidelity and no unexplained tail disagreement. See wri
 
 It was not a runtime bug and not an instrumentation bug. Format-v1 records lack the shard id, which limits exactness to statistical. Format v2 adds it.
 
+[STATUS] **Audit closure (2026-10-12).** CLOSED / SUPPORTED within the scope note at the top: exact over the measured workload on format-v2 traces on the tested paths, statistical on the nine v1 traces.
+
 ## Limitations
 
 - [LIMITATION] (resolved 2026-10-04) The per-thread pin model was corrected on the same Windows trace; the fresh confirmation run passed.
 - [LIMITATION] Records produced after the last flush are lost when llama-server is terminated. The flush sentinel absorbs this tail; the validator verifies on every run that no lost record precedes a workload record.
-- [LIMITATION] Thread pools are told apart by thread count (`nth`): two pools of equal size would be merged. The validator would then report disagreements.
-- [LIMITATION] Synthetic streams (no thread information) model each pool as one thread: 1.25% event disagreement and −0.01 pp on the Windows v2 trace.
+- [LIMITATION] Thread pools are told apart by thread count (`nth`): two pools of equal size would be merged. The validator would then report disagreements. That configuration is not validated here.
+- [LIMITATION] Synthetic streams (no thread information) model each pool as one thread: 1.25% event disagreement and −0.01 pp on the Windows v2 trace. They are not exact runtime reproduction.
 
-- [LIMITATION] The 30B Windows equivalence is statistical: v1 traces lack the address-dependent shard map. One short v2 trace makes it exact (command in the write-up, §12).
-- [LIMITATION] The interleaving is replayed as recorded, not simulated.
-- [LIMITATION] The `w` (wait) and `U` (undo) paths are not exercised by EXP-007.
+- [LIMITATION] The nine historical Windows 30B **format-v1** traces remain statistical (hash-model replay, 3 seeds): their address-dependent shard map was not recorded and cannot be recovered. Windows **format-v2** equivalence is shown directly by the fresh 30B confirmation run and the 80B campaign (write-up §14), and independently by EXP-019 (2026-10-12). *[Historical wording, superseded by the 2026-10-12 audit: "The 30B Windows equivalence is statistical: v1 traces lack the address-dependent shard map. One short v2 trace makes it exact (command in the write-up, §12)."]*
+- [LIMITATION] The interleaving is replayed as recorded, not simulated. A different interleaving (e.g. another thread count) is not predicted.
+- [LIMITATION] The `w` (wait) and `U` (undo) paths are not exercised by EXP-007. They are modelled and tested on synthetic streams only, so fidelity under in-flight waits or read failures is not claimed.
+- [LIMITATION, audit 2026-10-12] Workload validity depends on the flush sentinel pushing every preceding workload record to the file. The validator checks replay-relevant gaps and workload node completeness on every run. Termination-tail record loss occurred in both 30B v2 runs, in 6 / 9 80B runs and in EXP-019's run, always after the last workload request.
+- [LIMITATION, audit 2026-10-12] Exactness is a property of the tested paths and implementation: this `argine-store.cpp` state machine, format-v2 instrumentation, 16 shards, `--threads 4 --threads-batch 12`, 30B Windows v2 coding DEV at 4 GiB and 80B Windows v2 coding DEV at 4 / 2 / 1.5 GiB on the reference machine; the Linux v2 fixture validation is separate. It is not a theorem about future Expert Store implementations or other binaries.
+- [LIMITATION, audit 2026-10-12] EXP-007 later applied this closure to all its runs. 4 of 256 failed `workload_fidelity` (`reconstruct_inconsistencies ≠ 0`) and were excluded there; the method detects such runs, it does not make every run exact.
 
 ## Status history
 
@@ -109,3 +127,10 @@ It was not a runtime bug and not an instrumentation bug. Format-v1 records lack 
 - 2026-10-03 SUPPORTED: event-level equivalence on v2 traces; all nine 30B runs within 0.3 pp. Windows v2 confirmation trace pending.
 - 2026-10-04 back to RUNNING. The first Windows v2 run failed closure (5.29%: per-thread pins with two thread pools; 3 replay-irrelevant sequence gaps). With the corrected replay that trace gives 0 disagreements. One fresh Windows run is pending.
 - 2026-10-04 SUPPORTED: the 30B confirmation run passes. The 80B campaign is exact over the workload of all 9 runs; its 6 tail disagreements are explained by termination record loss. Closure semantics split into full-trace, workload and termination-tail verdicts.
+- 2026-10-12 modern audit: **CLOSED / SUPPORTED** — tested-path / format-v2 workload-fidelity scope.
+  - Linux v2 exact; fresh 30B Windows v2 exact out of sample.
+  - 80B: 9 / 9 workload-exact, 7 / 9 full-trace exact; the 6 victim disagreements are tail-only and explained by record loss.
+  - The nine v1 30B traces remain statistical.
+  - The later EXP-019 (2026-10-12) 30B validation agrees independently.
+  - Wait/undo paths, equal-size pools and alternative interleavings remain untested.
+  - No run during the audit; evidence unchanged; independent review completed 2026-10-12.

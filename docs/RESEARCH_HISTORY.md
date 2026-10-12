@@ -135,3 +135,8 @@ v1 is preserved unchanged and superseded for the final comparison; transition ke
 - The field `expert_level_hit_rate` is defined as the workload-only gate-slice rate; the whole-expert `expert_event` metric remains distinct.
 - The ≈74% 80B figure is superseded as an estimate.
 - No new measurement was performed. Independent review completed; modern audit CLOSED / SUPPORTED. | EXP-020, EXP-021, EXP-007, FH-021 |
+| 2026-10-12 | **EXP-021 modern audit CLOSED / SUPPORTED** (tested-path / format-v2 workload-fidelity scope).
+- No new run during the audit.
+- The 2026-10-04 evidence is preserved: the FAILED first Windows v2 validation, the per-thread correction on the same trace, the fresh 30B confirmation (0 / 1,474,817), and the 80B campaign (9 / 9 workload-exact, 7 / 9 full-trace exact).
+- EXP-019's 2026-10-12 run is a later independent 30B confirmation.
+- The v1 shard-map limitation, the wait/undo paths, equal-size pools and recorded-interleaving limits remain. | EXP-021, EXP-019, RQ-011 |

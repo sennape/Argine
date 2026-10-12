@@ -243,7 +243,7 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 
 [FALSIFIED] The former `sharded-lru-16` (expert units) is not a runtime model: +3.5…+4.8 pp on the runtime metric, +1.5…+2.1 pp at matched metric. It is renamed `sharded-lru-16-expert` (counterfactual). [Write-up](docs/research/REPLAY-FIDELITY-VALIDATION.md).
 
-**Unknown.** Fidelity under read failures and in-flight waits, which never occurred in any run so far. Fidelity under read failures and in-flight waits, which never occurred in EXP-007.
+**Unknown.** Fidelity under read failures and in-flight waits, which never occurred in EXP-007. *(A duplicated sentence with a broader, unverified scope was removed by the 2026-10-12 audit.)*
 
 ## RQ-012 — What does the instrumentation cost?
 

@@ -8,7 +8,7 @@ When the repository is public, each line becomes an issue (title as written). Th
 | `[RQ-003] Bootstrap confidence intervals for per-layer entropy and EWS` | code contribution in `argine/research/metrics.py` |
 | `[RQ-009] Record the first router trace of Qwen3-Next-80B-A3B` | EXP-007, EXP-026 |
 | `[RQ-010] Report runtime-style vs expert-level hit rate on real models` | **RESOLVED (2026-10-12)** for the tested EXP-007 scope: `runtime-hit-rates.csv` reports both rates (gate-slice `expert_level_hit_rate` and runtime-style) for 252 qualified 30B/80B runs, with a miss ratio of 3.000. Other binaries, other models and budgets below 1.5 GiB are not covered. EXP-020, EXP-007 |
-| `[RQ-011] Replay fidelity with 16 shards on a real run` | EXP-021 |
+| `[RQ-011] Replay fidelity with 16 shards on a real run` | **RESOLVED (2026-10-04; modern audit 2026-10-12)** for the tested EXP-021 scope: format-v2 replay with per-thread pins is exact over the measured workload (Linux; 30B and 80B on Windows, 16 shards). The nine v1 traces are statistical. In-flight waits (`w`) and read failures (`U`) are not validated. EXP-021 |
 | `[RQ-012] Measure instrumentation overhead (interleaved on/off, 5 reps)` | EXP-024 |
 | `[RQ-014] Thread sweep on the current non-OpenMP build` | EXP-001 |
 | `[RQ-015] Log CPU frequency, temperature and load per run` | EXP-018 |
