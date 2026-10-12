@@ -8,7 +8,33 @@
     "RQ-012"
   ],
   "commands": [
-    "argine benchmark MODEL --expert-store --expert-budget 4G (with and without ARGINE_RESEARCH_TRACE set)"
+    "python tools/exp024_run.py --dry-run",
+    "python tools/exp024_run.py --preflight",
+    "python tools/exp024_run.py --run",
+    "python tools/exp024_run.py --analyze",
+    "python -m unittest discover -s tests -p \"test_exp024.py\" -v"
   ],
-  "supersedes": "—"
+  "supersedes": "—",
+  "protocol": {
+    "version": "EXP024-P1",
+    "freeze": "experiments/EXP-024-tracing-overhead/protocol_freeze.json",
+    "tool": "tools/exp024_run.py",
+    "factor": "ARGINE_RESEARCH_TRACE set (ON) vs absent (OFF), same llama-research-v2 binary",
+    "model": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf",
+    "expert_store": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs",
+    "backend": "cpu",
+    "read_mode": "asincrono",
+    "threads": 4,
+    "threads_batch": 12,
+    "budgets": ["4G", "1.5G"],
+    "n_predict": 128,
+    "repeat": 1,
+    "retries": 0,
+    "rounds": 5,
+    "launches": 20,
+    "cooldown_s": 60,
+    "primary_metric": "gen_tok_s; overhead_pct = 100*(OFF-ON)/OFF paired per round and budget",
+    "decision_rule": "SUPPORTED if CI95 upper < 2% at 4G and 1.5G; FALSIFIED if CI95 lower > 2% at >= 1 budget; otherwise INCONCLUSIVE",
+    "measurements_made": false
+  }
 }
