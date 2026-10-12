@@ -145,3 +145,8 @@ v1 is preserved unchanged and superseded for the final comparison; transition ke
 - 4G: mean paired overhead 1.099%, CI95 [0.605, 1.593], so < 2% is supported at 4G.
 - 1.5G: 0.549%, CI95 [−1.379, 2.478], inconclusive.
 - The frozen global rule gives INCONCLUSIVE. No post-hoc extra repetitions. | EXP-024, RQ-012 |
+| 2026-10-12 | **EXP-023 closed: FALSIFIED for the current controller** (retrospective, analysis-only synthesis of the four EXP-007 transition sessions; no new model run).
+- Verdict from the conjunctive hypothesis: its clause "adaptive allocation shortens the transient" is already falsified by FH-029, now reproduced in 12 / 12 trace × budget rows. Independent of JSD.
+- [DERIVED, retrospective operationalisation] Per-layer boundary JSD is 2.84–4.02× the within-segment reference (median per trace): descriptive positive evidence of workload-dependent routing, not confirmatory.
+- Signed boundary transient: adaptive signed `excess64` lower than frozen in 11 / 36 comparisons (not by itself a shorter transient); 42 negative signed `excess64` values reported with their sign.
+- Not a falsification of workload dependence or of layer-aware allocation. | EXP-023, FH-029, RQ-004, RQ-006 |

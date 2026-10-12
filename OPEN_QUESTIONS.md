@@ -111,21 +111,23 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 
 ## RQ-004 — Are working sets workload-dependent?
 
-**Status: PARTIALLY ANSWERED** (2026-10-11).
+**Status: PARTIALLY ANSWERED** (2026-10-11; updated 2026-10-12 with EXP-023). Workload dependence is positively evidenced, descriptively; controller exploitation of transitions remains unsuccessful for `adaptive-e64`.
 
 **Known.**
 - [SUPPORTED, [EXP-007](experiments/EXP-007-router-characterization/README.md)] Working sets depend on the workload: the global EWS90 fraction ranges 0.33–0.55 across workloads on the 30B and 0.23–0.47 on the 80B, with the DEV/EVAL pattern replicated.
 - [DERIVED, transition traces] Within one session per-segment routing differs strongly: on the 30B DEV trace EWS90 is 0.27–0.43 per segment vs 0.55 over the session, and hot-set stability falls from 0.82 to 0.54 ([TRANSITION-ADAPTIVE-GAIN](docs/research/TRANSITION-ADAPTIVE-GAIN.md)). The same temporal analysis exists for 30B EVAL and 80B DEV/EVAL (`analysis-v3/*transition*-temporal/`).
 - **Distinct from that:** [FALSIFIED for the current controller] the adaptive controller does *not* exploit transitions by reacting quickly (FH-029). Its reaction takes most of a segment, and a fixed split does as well or better. Workload dependence of the working set is real; fast exploitation of it by this controller is not.
+- [DERIVED, retrospective operationalisation, [EXP-023](experiments/EXP-023-workload-drift/README.md), 2026-10-12] Per-layer routing distributions change strongly at workload boundaries on all four transition traces: the median boundary JSD is 2.84–4.02× the within-segment reference per trace, and exceeds the within-segment maximum in 96.5–100% of layer-boundary rows. Descriptive, not confirmatory (specified after the data existed; no p-value, no threshold).
+- [DERIVED, EXP-023, 2026-10-12] Cross-trace transient synthesis (boundary transient / signed departure from the new-segment steady state): `adaptive-e64` has a lower signed `excess64` than the frozen split in 11 / 36 trace × budget × boundary comparisons (a lower signed value is not by itself a shorter transient; the temporal-reaction falsification rests on FH-029). FH-029's facts reproduce in 12 / 12 rows. EXP-023 is FALSIFIED for the current controller; this is not a falsification of workload dependence.
 
 **Unknown.**
-- Per-layer Jensen-Shannon divergence between workload segments vs within-segment variation, as a reported metric.
-- A cross-trace summary of the absolute transient metrics (FH-028). `adaptation_v2.csv` exists for all four transition traces (`analysis-v3/*transition*-temporal/`) but is only written up for the 30B DEV trace.
+- ~~Per-layer Jensen-Shannon divergence between workload segments vs within-segment variation, as a reported metric.~~ [Done 2026-10-12, EXP-023, retrospective and descriptive.] A confirmatory test on untouched traces remains open.
+- ~~A cross-trace summary of the absolute transient metrics (FH-028). `adaptation_v2.csv` exists for all four transition traces (`analysis-v3/*transition*-temporal/`) but is only written up for the 30B DEV trace.~~ [Done 2026-10-12, EXP-023.]
 - Whether a faster controller can capture the oracle value of instant switching (13–27% of the static potential on the 30B DEV trace).
 
 **Related experiments.** EXP-023 (`workloads/v1/transition.json`).
 
-**Suggested contribution.** Transition sessions now exist for both models, DEV and EVAL (EXP-007). Report per-layer segment divergence from their `drift.csv`, and the absolute transient metrics from `adaptation_v2.csv`, across all four traces.
+**Suggested contribution.** ~~Transition sessions now exist for both models, DEV and EVAL (EXP-007). Report per-layer segment divergence from their `drift.csv`, and the absolute transient metrics from `adaptation_v2.csv`, across all four traces.~~ [Done 2026-10-12, EXP-023.] Next: a faster or differently designed controller that exploits the measured boundary drift, or a confirmatory drift test on new, untouched transition traces.
 
 ## RQ-005 — Is uniform layer allocation suboptimal, and by how much?
 
@@ -155,6 +157,7 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 - [SUPPORTED] Hysteresis changes hits by ≤ 0.07 pp and moves by up to 2.9×.
 - [SUPPORTED] Cost weighting changes hits by ≤ 0.05 pp.
 - [FALSIFIED for the current design] Temporal reaction is not the source of the gain (FH-029).
+- [DERIVED, EXP-023, 2026-10-12] FH-029's facts reproduce on all four transition traces (12 / 12 trace × budget rows), and the controller's signed `excess64` is lower than its frozen split's in 11 / 36 comparisons. EXP-023 is FALSIFIED for the current controller; it does not address estimator accuracy or other controller designs.
 
 **Unknown.** Estimator accuracy vs the in-sample optimum, out-of-sample; whether a faster or differently designed controller can track drift; controller overhead in a runtime.
 

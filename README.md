@@ -297,6 +297,7 @@ Kept, not deleted; each with origin, reason, experiment, evidence and conclusion
   - *Evidence so far: four transition traces (30B and 80B, DEV and EVAL). The current controller's gain is a better general split, not tracking.*
   - *It is slower than the segments, and its time variation costs misses against a fixed split ([analysis](docs/research/TRANSITION-ADAPTIVE-GAIN.md); FH-029).*
   - *2026-10-11, [EXP-010](experiments/EXP-010-adaptive-allocation/README.md) (retrospective holdout): the DEV-selected controller (e32) does not beat the DEV-fitted, workload-family-informed static split on EVAL in either model (FALSIFIED for the surviving sub-question; effects +0.37% / +0.15% misses).*
+  - *2026-10-12, [EXP-023](experiments/EXP-023-workload-drift/README.md) (retrospective, existing EXP-007 traces): FALSIFIED for the current controller. Per-layer routing drift at workload boundaries is strong (descriptive JSD), and `adaptive-e64` has a lower signed `excess64` than its frozen split in 11 / 36 comparisons; the temporal-reaction falsification rests on FH-029. This does not falsify workload dependence.*
   - *H-3 stays open for a differently designed controller.*
 - **H-4** [HYPOTHESIS] The 80B/30B difference has three candidate causes — concentration, smaller slices (more queue depth per byte), bookkeeping-bound I/O — to be discriminated ([EXP-026](experiments/EXP-026-30b-vs-80b-regimes/README.md)).
   - *Concentration is now measured directly (EXP-007: the 80B is more concentrated). Its causal share is not established.*
@@ -329,7 +330,7 @@ Each question has a status, evidence, what is known and unknown, and a suggested
 
 ## Experiment index
 
-Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`experiments/index.json`](experiments/index.json). Status counts: SUPPORTED 12, FALSIFIED 6, SUPERSEDED 1, INCONCLUSIVE 4, RUNNING 0, PLANNED 4.
+Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`experiments/index.json`](experiments/index.json). Status counts: SUPPORTED 12, FALSIFIED 7, SUPERSEDED 1, INCONCLUSIVE 4, RUNNING 0, PLANNED 3.
 
 | ID | short title | status |
 |---|---|---|
@@ -355,7 +356,7 @@ Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`e
 | [EXP-020](experiments/EXP-020-hit-rate-semantics/README.md) | hit-rate semantics | SUPPORTED |
 | [EXP-021](experiments/EXP-021-replay-fidelity/README.md) | replay fidelity | SUPPORTED |
 | [EXP-022](experiments/EXP-022-extreme-pressure/README.md) | extreme memory pressure | PLANNED |
-| [EXP-023](experiments/EXP-023-workload-drift/README.md) | workload drift | PLANNED |
+| [EXP-023](experiments/EXP-023-workload-drift/README.md) | workload drift | FALSIFIED (current controller) |
 | [EXP-024](experiments/EXP-024-tracing-overhead/README.md) | tracing overhead | INCONCLUSIVE |
 | [EXP-025](experiments/EXP-025-performance-model/README.md) | performance model | PLANNED |
 | [EXP-026](experiments/EXP-026-30b-vs-80b-regimes/README.md) | 30B vs 80B regimes | PLANNED |
@@ -450,7 +451,7 @@ Argine2 does not claim novelty for its mechanisms. Utility-based partitioning of
 ## Roadmap
 
 0. Done 2026-10-04: replay fidelity (EXP-021) is validated on Linux, on a fresh 30B Windows run and on the 80B coding-dev campaign ([§14](docs/research/REPLAY-FIDELITY-VALIDATION.md#14-independent-confirmation-and-the-80b-campaign-2026-10-04)).
-1. ~~Phase-1 runs on the reference machine: EXP-007 (both models, all workloads, dev+eval)~~ — done 2026-10-11 (28/28 cells). Still open: EXP-022 (extreme pressure), EXP-023 (drift). EXP-024 (overhead) closed 2026-10-12, INCONCLUSIVE (supported at 4G, inconclusive at 1.5G).
+1. ~~Phase-1 runs on the reference machine: EXP-007 (both models, all workloads, dev+eval)~~ — done 2026-10-11 (28/28 cells). Still open: EXP-022 (extreme pressure). EXP-024 (overhead) closed 2026-10-12, INCONCLUSIVE (supported at 4G, inconclusive at 1.5G). EXP-023 (drift) closed 2026-10-12, FALSIFIED for the current controller (routing drift at boundaries is strong, descriptively; the controller does not exploit it).
 2. `ARGINE2-MEMORY-CHARACTERIZATION.md` v1 with real per-model sections, now that the EXP-007 data exist. RQ-010 and RQ-011 are answered; RQ-003 and RQ-009 are partially answered.
 2a. ~~**Next immediate step (as of 2026-10-11):** a retrospective DEV-selected → frozen → EVAL-tested allocation evaluation on the EXP-007 traces.~~ Done 2026-10-11: EXP-010 CLOSED, FALSIFIED (the adaptive controller did not beat the DEV-fitted, workload-family-informed static split on EVAL; layer-aware allocation still beats global LRU and per-layer uniform). It is a DEV-selected, frozen, EVAL-tested retrospective holdout: the EVAL traces and the EVAL outcomes of every adaptive candidate were already inspected in EXP-007, so this is not an untouched holdout. EXP-010 covers it, comparing the DEV-selected adaptive controller with a DEV-fitted, workload-family-informed static split (protocol EXP010-P1a, frozen 2026-10-11 before any EXP-010 replay).
 3. ~~EXP-008 (EWS as predictor), EXP-021 confirmation on the 80B~~: both done.

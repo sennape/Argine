@@ -215,12 +215,12 @@
   {
     "id": "EXP-023-workload-drift",
     "title": "Routing under workload transitions",
-    "status": "PLANNED",
+    "status": "FALSIFIED",
     "rqs": [
       "RQ-004",
       "RQ-006"
     ],
-    "period": "—"
+    "period": "2026-10-12"
   },
   {
     "id": "EXP-024-tracing-overhead",
