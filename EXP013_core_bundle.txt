@@ -1,0 +1,95 @@
+﻿EXP-013 CORE BUNDLE
+
+================ FILE: experiments\EXP-013-quality-per-bit\README.md ================
+# EXP-013 â€” Perplexity vs expert bits per weight
+
+| field | value |
+|---|---|
+| ID | `EXP-013-quality-per-bit` |
+| Status | **SUPPORTED** |
+| Period | 2026-09-30 â†’ 2026-10-01 |
+| Origin | Argine v1 (historical); data re-derived from raw logs by Argine2 |
+| Related questions | â€” |
+| Supersedes / superseded | â€” |
+
+## Research question
+
+Where is the knee of the quality / size curve for expert quantisation?
+
+## Hypothesis
+
+[HYPOTHESIS] Quality degrades smoothly down to ~2 bits.
+
+## Setup
+
+Experts re-quantised with an importance matrix calibrated on real prose; perplexity signature ctx=512, 60 chunks, reference text hash da315163291ee5c9.
+
+## Commands
+
+```bat
+argine imatrix MODEL --chunks 128
+argine quantize MODEL --experts IQ2_S
+argine ppl OUT.gguf --text testo-riferimento.txt --ctx 512 --chunks 60
+```
+
+## Raw data
+
+`raw/records.jsonl` (perplexity.jsonl records). Full log: `data/raw/argine-v1/perplexity.jsonl`.
+
+## Result
+
+[MEASURED] Q4_K_M 12.0642; IQ2_S 13.6283; IQ2_XS 14.3578; IQ2_XXS 15.1946 (re-calibrated) / 16.4396 (first calibration).
+
+## Interpretation
+
+[DERIVED] 2.56 bpw (IQ2_S) is the knee: above it the curve is nearly flat, below it about 4x steeper per bit.
+
+## Limitations
+
+[LIMITATION] Requantised from Q4_K_M, not from BF16.
+
+## Status history
+
+2026-10-01 SUPPORTED.
+
+
+================ FILE: experiments\EXP-013-quality-per-bit\config.json ================
+{
+  "id": "EXP-013-quality-per-bit",
+  "title": "Perplexity vs expert bits per weight",
+  "status": "SUPPORTED",
+  "period": "2026-09-30 â†’ 2026-10-01",
+  "origin": "Argine v1 (historical); data re-derived from raw logs by Argine2",
+  "rqs": [],
+  "commands": [
+    "argine imatrix MODEL --chunks 128",
+    "argine quantize MODEL --experts IQ2_S",
+    "argine ppl OUT.gguf --text testo-riferimento.txt --ctx 512 --chunks 60"
+  ],
+  "supersedes": "â€”"
+}
+
+
+================ FILE: experiments\EXP-013-quality-per-bit\results.csv ================
+model_file,ppl,ppl_err,signature,text_hash
+Qwen_Qwen3-30B-A3B-Q4_K_M.gguf,12.0642,0.2912,ctx=512;chunk=60;testo=da315163291ee5c9,da315163291ee5c9
+Qwen_Qwen3-30B-A3B-Q4_K_M-experts-IQ2_XXS.gguf,16.4396,0.4058,ctx=512;chunk=60;testo=da315163291ee5c9,da315163291ee5c9
+qwen30b-IQ2-reale.gguf,15.1946,0.3709,ctx=512;chunk=60;testo=da315163291ee5c9,da315163291ee5c9
+qwen30b-IQ2XS.gguf,14.3578,0.3472,ctx=512;chunk=60;testo=da315163291ee5c9,da315163291ee5c9
+qwen30b-IQ2S.gguf,13.6283,0.329,ctx=512;chunk=60;testo=da315163291ee5c9,da315163291ee5c9
+Qwen3-14B-Q4_K_M.gguf,13.2766,0.3176,ctx=512;chunk=60;testo=da315163291ee5c9,da315163291ee5c9
+
+
+================ FILE: experiments\EXP-013-quality-per-bit\raw\records.jsonl ================
+{"chunk": 60, "ctx": 512, "errore": 0.2912, "errore_msg": null, "firma": "ctx=512;chunk=60;testo=da315163291ee5c9", "model": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf", "ppl": 12.0642, "secondi": 1763.7, "testo": "C:\\Users\\USER\\Desktop\\picostar16\\testo-riferimento.txt", "testo_hash": "da315163291ee5c9", "tokens": 0}
+{"chunk": 60, "ctx": 512, "errore": 0.4058, "errore_msg": null, "firma": "ctx=512;chunk=60;testo=da315163291ee5c9", "model": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M-experts-IQ2_XXS.gguf", "ppl": 16.4396, "secondi": 772.6, "testo": "C:\\Users\\USER\\Desktop\\picostar16\\testo-riferimento.txt", "testo_hash": "da315163291ee5c9", "tokens": 0}
+{"chunk": 60, "ctx": 512, "errore": 0.3709, "errore_msg": null, "firma": "ctx=512;chunk=60;testo=da315163291ee5c9", "model": "C:\\modelli\\qwen30b-IQ2-reale.gguf", "ppl": 15.1946, "secondi": 832.2, "testo": "C:\\Users\\USER\\Desktop\\picostar16\\testo-riferimento.txt", "testo_hash": "da315163291ee5c9", "tokens": 0}
+{"chunk": 60, "ctx": 512, "errore": 0.3472, "errore_msg": null, "firma": "ctx=512;chunk=60;testo=da315163291ee5c9", "model": "C:\\modelli\\qwen30b-IQ2XS.gguf", "ppl": 14.3578, "secondi": 621.5, "testo": "C:\\Users\\USER\\Desktop\\picostar16\\testo-riferimento.txt", "testo_hash": "da315163291ee5c9", "tokens": 0}
+{"chunk": 60, "ctx": 512, "errore": 0.329, "errore_msg": null, "firma": "ctx=512;chunk=60;testo=da315163291ee5c9", "model": "C:\\modelli\\qwen30b-IQ2S.gguf", "ppl": 13.6283, "secondi": 614.4, "testo": "C:\\Users\\USER\\Desktop\\picostar16\\testo-riferimento.txt", "testo_hash": "da315163291ee5c9", "tokens": 0}
+{"chunk": 60, "ctx": 512, "errore": 0.3176, "errore_msg": null, "firma": "ctx=512;chunk=60;testo=da315163291ee5c9", "model": "C:\\modelli\\Qwen3-14B-Q4_K_M.gguf", "ppl": 13.2766, "secondi": 3022.9, "testo": "C:\\Users\\USER\\Desktop\\picostar16\\testo-riferimento.txt", "testo_hash": "da315163291ee5c9", "tokens": 0}
+
+
+================ HASHES ================
+D4A445AAA45B03A56833A85D82AFBC5868CC6EA3CF7352E6AABC1D87AD8E8252  experiments\EXP-013-quality-per-bit\results.csv
+F4454847086AA7F83C4E0C9AB31D5049D63507658A100B023742E80106370D9E  experiments\EXP-013-quality-per-bit\raw\records.jsonl
+BE30979C8E62FEA433A4136D3BFFB39BAC1A69462B9107AAC70DEAF2CAFDFC54  docs\history\ARGINE-V1-README.it.md

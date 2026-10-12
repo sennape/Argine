@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.venv/
+# llama.cpp binaries: publish them as GitHub release assets, keep BUILD-INFO.json in git
+llama-noomp/
+llama-omp/
+llama-patched/
+llama-research/*.exe
+llama-research/*.dll
+# local scratch
+*.tmp
+
+# files moved aside for manual deletion
+_to_delete/
+llama-research-v2/*.exe
+llama-research-v2/*.dll

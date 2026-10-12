@@ -1,0 +1,16 @@
+{
+  "id": "EXP-026-30b-vs-80b-regimes",
+  "title": "Two experimental regimes: 30B-A3B vs Next-80B-A3B",
+  "status": "PLANNED",
+  "period": "—",
+  "origin": "Argine2",
+  "rqs": [
+    "RQ-002",
+    "RQ-009"
+  ],
+  "commands": [
+    "argine research trace ... on both models",
+    "argine research analyze ..."
+  ],
+  "supersedes": "—"
+}

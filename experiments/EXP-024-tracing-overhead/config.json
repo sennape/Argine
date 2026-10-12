@@ -1,0 +1,14 @@
+{
+  "id": "EXP-024-tracing-overhead",
+  "title": "Cost of the research instrumentation",
+  "status": "PLANNED",
+  "period": "—",
+  "origin": "Argine2",
+  "rqs": [
+    "RQ-012"
+  ],
+  "commands": [
+    "argine benchmark MODEL --expert-store --expert-budget 4G (with and without ARGINE_RESEARCH_TRACE set)"
+  ],
+  "supersedes": "—"
+}

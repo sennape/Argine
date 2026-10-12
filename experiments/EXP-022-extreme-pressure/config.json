@@ -1,0 +1,14 @@
+{
+  "id": "EXP-022-extreme-pressure",
+  "title": "Extreme memory pressure: where streaming stops being useful",
+  "status": "PLANNED",
+  "period": "—",
+  "origin": "Argine2",
+  "rqs": [
+    "RQ-008"
+  ],
+  "commands": [
+    "argine research trace MODEL --expert-store --budgets 1.5G,1G,768M,512M --repeat 3 --workload natural-language --out experiments/EXP-022-extreme-pressure/raw"
+  ],
+  "supersedes": "—"
+}

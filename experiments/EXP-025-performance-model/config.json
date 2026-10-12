@@ -1,0 +1,14 @@
+{
+  "id": "EXP-025-performance-model",
+  "title": "Interpretable per-token performance model",
+  "status": "PLANNED",
+  "period": "—",
+  "origin": "Argine2",
+  "rqs": [
+    "RQ-013"
+  ],
+  "commands": [
+    "argine research predict runs.csv --out prediction.json"
+  ],
+  "supersedes": "—"
+}
