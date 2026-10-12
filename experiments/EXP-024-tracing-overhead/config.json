@@ -1,8 +1,8 @@
 {
   "id": "EXP-024-tracing-overhead",
   "title": "Cost of the research instrumentation",
-  "status": "PLANNED",
-  "period": "—",
+  "status": "INCONCLUSIVE",
+  "period": "2026-10-12",
   "origin": "Argine2",
   "rqs": [
     "RQ-012"
@@ -26,7 +26,10 @@
     "read_mode": "asincrono",
     "threads": 4,
     "threads_batch": 12,
-    "budgets": ["4G", "1.5G"],
+    "budgets": [
+      "4G",
+      "1.5G"
+    ],
     "n_predict": 128,
     "repeat": 1,
     "retries": 0,
@@ -35,6 +38,35 @@
     "cooldown_s": 60,
     "primary_metric": "gen_tok_s; overhead_pct = 100*(OFF-ON)/OFF paired per round and budget",
     "decision_rule": "SUPPORTED if CI95 upper < 2% at 4G and 1.5G; FALSIFIED if CI95 lower > 2% at >= 1 budget; otherwise INCONCLUSIVE",
-    "measurements_made": false
+    "measurements_made": true
+  },
+  "result": {
+    "session_id": "20261012T113829-5edc0f3f",
+    "protocol_commit": "22ef3f4e59647829ab742cd2cb4da41f87936e0b",
+    "launches": 20,
+    "valid": true,
+    "overhead_pct": {
+      "4G": {
+        "mean": 1.0989,
+        "ci95": [
+          0.6047,
+          1.593
+        ],
+        "reading": "< 2% supported at this budget"
+      },
+      "1.5G": {
+        "mean": 0.5491,
+        "ci95": [
+          -1.3793,
+          2.4776
+        ],
+        "reading": "inconclusive at this budget"
+      }
+    },
+    "verdict": "INCONCLUSIVE",
+    "evidence": [
+      "experiments/EXP-024-tracing-overhead/results.csv",
+      "experiments/EXP-024-tracing-overhead/processed/summary.json"
+    ]
   }
 }

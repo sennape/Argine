@@ -51,7 +51,7 @@ Every statement below is tagged: **[MEASURED]** read from raw data, **[DERIVED]*
 | phase | state |
 |---|---|
 | Argine v1 — runtime, expert store, measurements | complete; 163 raw measurement records imported ([`data/raw/argine-v1`](data/raw/argine-v1)) and 16 historical experiments reconstructed from surviving Argine v1 evidence; most are raw-rederived where provenance permits, while EXP-015 is provenance-limited and depends on the historical README for PRETOUCH attribution and per-miss counters |
-| **Phase 1 — observation** | **complete (2026-10-11).** Instrumentation built (patch [`0003`](patches/argine-research.h)) and validated ([EXP-019](experiments/EXP-019-instrumentation-validation/README.md): fixture/Linux 2026-10-03; fresh publication-quality Windows run 2026-10-12, workload-complete and replay event-exact, with record loss confined to the flush-sentinel tail and queue depth an upper bound; overhead unmeasured, EXP-024). The [EXP-007](experiments/EXP-007-router-characterization/README.md) characterization campaign is closed: **28 / 28 cells** (2 models × 7 workload families × DEV/EVAL), 9 runs each, every cell-budget with 3 runs qualified by the [EXP-021](experiments/EXP-021-replay-fidelity/README.md) replay-fidelity method. Both models are characterized. |
+| **Phase 1 — observation** | **complete (2026-10-11).** Instrumentation built (patch [`0003`](patches/argine-research.h)) and validated ([EXP-019](experiments/EXP-019-instrumentation-validation/README.md): fixture/Linux 2026-10-03; fresh publication-quality Windows run 2026-10-12, workload-complete and replay event-exact, with record loss confined to the flush-sentinel tail and queue depth an upper bound; enabled-instrumentation overhead measured in [EXP-024](experiments/EXP-024-tracing-overhead/README.md): 4G 1.099% [0.605, 1.593], 1.5G 0.549% [−1.379, 2.478], overall INCONCLUSIVE). The [EXP-007](experiments/EXP-007-router-characterization/README.md) characterization campaign is closed: **28 / 28 cells** (2 models × 7 workload families × DEV/EVAL), 9 runs each, every cell-budget with 3 runs qualified by the [EXP-021](experiments/EXP-021-replay-fidelity/README.md) replay-fidelity method. Both models are characterized. |
 | Phase 2 — counterfactual replay | event-atomic replay engine, 13 policies, Belady-style oracle, exact LRU elasticity curves, adaptive controller and ablations: run on all 28 EXP-007 cells (in-sample) and in a temporal analysis of the four transition traces |
 | Phase 3 — adaptive residency | controller exists **in replay only** ([EXP-010](experiments/EXP-010-adaptive-allocation/README.md)); deliberately not in the runtime. [EXP-010](experiments/EXP-010-adaptive-allocation/README.md) is **CLOSED, FALSIFIED** (2026-10-11, frozen protocol EXP010-P1a; a DEV-selected, frozen, EVAL-tested retrospective holdout whose EVAL adaptive outcomes had already been seen in EXP-007): the DEV-selected adaptive controller did not outperform the DEV-fitted, workload-family-informed static allocation on EVAL for either model (G adaptive/static 1.0037 on the 30B, 1.0015 on the 80B; small effects). Layer-aware allocation still outperforms global LRU and per-layer uniform in aggregate; the additional online adaptation does not beat the stronger DEV-fitted static comparator. |
 | First deliverable | [`ARGINE2-MEMORY-CHARACTERIZATION.md`](ARGINE2-MEMORY-CHARACTERIZATION.md): v0 (methodology, platform, historical evidence, pilot). The EXP-007 data for its per-model sections now exist; the v1 write-up is pending. |
@@ -318,17 +318,18 @@ Each question has a status, evidence, what is known and unknown, and a suggested
 | ID | question | first useful contribution |
 |---|---|---|
 | RQ-001 | central question | partially answered: EXP-010 (retrospective holdout) found layer isolation plus a DEV-fitted static split at least as good as the online controller; open: an untouched holdout and a runtime test |
-| RQ-002 | does EWS predict behaviour better than residency? | partially answered; EXP-008 completed the traced-data predictor comparison (INCONCLUSIVE for throughput, SUPPORTED for hit rate); a clean throughput follow-up would require EXP-024 first and controlled untraced measurements |
+| RQ-002 | does EWS predict behaviour better than residency? | partially answered; EXP-008 completed the traced-data predictor comparison (INCONCLUSIVE for throughput, SUPPORTED for hit rate); tracing overhead is now measured (EXP-024: 95% CI entirely below 2% at 4G, inconclusive at 1.5G); a clean throughput follow-up still needs matched, untraced, interleaved measurements |
 | RQ-005 | how much does uniform allocation lose? | partially answered in-sample (30B 3.5–10.4%, 80B 0.5–3.9%); EXP-010 (retrospective holdout): the DEV-fitted, workload-family-informed static split has 4.1% (30B) and 1.0% (80B) fewer misses than uniform on EVAL (geometric means) |
 | RQ-009 | why is the 80B different? | partially answered: the 80B router is traced (EXP-007); slice size, bookkeeping and architecture remain (EXP-026) |
 | RQ-010 | true expert-level hit rate on real models | answered for both models and seven workload families (EXP-007): 61–80% at 4 GiB; the miss ratio to runtime-style is exactly 3 |
 | RQ-011 | does replay reproduce the runtime? | answered: exact over the workload on v2 traces (Linux; 30B and 80B on Windows) with per-thread pins — [write-up](docs/research/REPLAY-FIDELITY-VALIDATION.md) |
+| RQ-012 | what does the instrumentation cost? | answered for the tested configuration ([EXP-024](experiments/EXP-024-tracing-overhead/README.md)): 4G 1.099% [0.605, 1.593], 1.5G 0.549% [−1.379, 2.478]. The preregistered < 2% hypothesis is INCONCLUSIVE overall (supported at 4G only) |
 | RQ-014 | thread count on the current build | answered for the tested configuration ([EXP-027](experiments/EXP-027-current-thread-sweep/README.md)): model-dependent, 30B 12 threads, 80B 4 threads (CPU, 4 GiB, current binary) |
 | RQ-017 | what exactly is Least-Stale? | read SpecMD and fix the replay variant |
 
 ## Experiment index
 
-Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`experiments/index.json`](experiments/index.json). Status counts: SUPPORTED 12, FALSIFIED 6, SUPERSEDED 1, INCONCLUSIVE 3, RUNNING 0, PLANNED 5.
+Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`experiments/index.json`](experiments/index.json). Status counts: SUPPORTED 12, FALSIFIED 6, SUPERSEDED 1, INCONCLUSIVE 4, RUNNING 0, PLANNED 4.
 
 | ID | short title | status |
 |---|---|---|
@@ -355,7 +356,7 @@ Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`e
 | [EXP-021](experiments/EXP-021-replay-fidelity/README.md) | replay fidelity | SUPPORTED |
 | [EXP-022](experiments/EXP-022-extreme-pressure/README.md) | extreme memory pressure | PLANNED |
 | [EXP-023](experiments/EXP-023-workload-drift/README.md) | workload drift | PLANNED |
-| [EXP-024](experiments/EXP-024-tracing-overhead/README.md) | tracing overhead | PLANNED |
+| [EXP-024](experiments/EXP-024-tracing-overhead/README.md) | tracing overhead | INCONCLUSIVE |
 | [EXP-025](experiments/EXP-025-performance-model/README.md) | performance model | PLANNED |
 | [EXP-026](experiments/EXP-026-30b-vs-80b-regimes/README.md) | 30B vs 80B regimes | PLANNED |
 | [EXP-027](experiments/EXP-027-current-thread-sweep/README.md) | current-runtime thread sweep (RQ-014) | FALSIFIED (pre-registered predictions; finding: model-dependent optimum) |
@@ -449,7 +450,7 @@ Argine2 does not claim novelty for its mechanisms. Utility-based partitioning of
 ## Roadmap
 
 0. Done 2026-10-04: replay fidelity (EXP-021) is validated on Linux, on a fresh 30B Windows run and on the 80B coding-dev campaign ([§14](docs/research/REPLAY-FIDELITY-VALIDATION.md#14-independent-confirmation-and-the-80b-campaign-2026-10-04)).
-1. ~~Phase-1 runs on the reference machine: EXP-007 (both models, all workloads, dev+eval)~~ — done 2026-10-11 (28/28 cells). Still open: EXP-024 (overhead), EXP-022 (extreme pressure), EXP-023 (drift).
+1. ~~Phase-1 runs on the reference machine: EXP-007 (both models, all workloads, dev+eval)~~ — done 2026-10-11 (28/28 cells). Still open: EXP-022 (extreme pressure), EXP-023 (drift). EXP-024 (overhead) closed 2026-10-12, INCONCLUSIVE (supported at 4G, inconclusive at 1.5G).
 2. `ARGINE2-MEMORY-CHARACTERIZATION.md` v1 with real per-model sections, now that the EXP-007 data exist. RQ-010 and RQ-011 are answered; RQ-003 and RQ-009 are partially answered.
 2a. ~~**Next immediate step (as of 2026-10-11):** a retrospective DEV-selected → frozen → EVAL-tested allocation evaluation on the EXP-007 traces.~~ Done 2026-10-11: EXP-010 CLOSED, FALSIFIED (the adaptive controller did not beat the DEV-fitted, workload-family-informed static split on EVAL; layer-aware allocation still beats global LRU and per-layer uniform). It is a DEV-selected, frozen, EVAL-tested retrospective holdout: the EVAL traces and the EVAL outcomes of every adaptive candidate were already inspected in EXP-007, so this is not an untouched holdout. EXP-010 covers it, comparing the DEV-selected adaptive controller with a DEV-fitted, workload-family-informed static split (protocol EXP010-P1a, frozen 2026-10-11 before any EXP-010 replay).
 3. ~~EXP-008 (EWS as predictor), EXP-021 confirmation on the 80B~~: both done.

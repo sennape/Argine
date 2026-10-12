@@ -3,15 +3,22 @@
 | field | value |
 |---|---|
 | ID | `EXP-024-tracing-overhead` |
-| Status | **PLANNED** |
-| Period | — |
+| Status | **INCONCLUSIVE** |
+| Period | 2026-10-12 |
 | Origin | Argine2 |
 | Related questions | RQ-012 |
 | Supersedes / superseded | — |
 
-> **Protocol status (2026-10-12).** Prospective protocol EXP024-P1, frozen before any measurement, with its hash in [`protocol_freeze.json`](protocol_freeze.json). Independent review completed 2026-10-12; no measurement has yet been performed. The pre-review candidate freeze is kept byte-for-byte as [`protocol_freeze_pre_review_2026-10-12.json`](protocol_freeze_pre_review_2026-10-12.json); it is history and was never executed.
+> **Closure (2026-10-12): formal verdict INCONCLUSIVE.** The < 2% hypothesis is supported at 4G (CI95 upper bound 1.593%) but not established at 1.5G (CI95 [−1.379, 2.478]%). Neither budget meets the falsification condition.
 >
-> **No measurement has been made under this protocol.** The status stays PLANNED until the first real launch, as with EXP-010. It becomes RUNNING when the session starts, and receives a verdict only through the frozen rule below.
+> Prospective chronology:
+> 1. A candidate protocol was frozen. It is kept byte-for-byte as [`protocol_freeze_pre_review_2026-10-12.json`](protocol_freeze_pre_review_2026-10-12.json), as history; it was never executed.
+> 2. Independent review made two pre-measurement fixes: the atomic-load wording, and the committed/clean Git gate.
+> 3. The reviewed freeze was committed in `22ef3f4`: protocol `70a29664…`, tool `bdc3c122…`, tests `5e5fe02a…` ([`protocol_freeze.json`](protocol_freeze.json)).
+> 4. The real session `20261012T113829-5edc0f3f` ran from that clean commit: 20 / 20 preregistered launches valid, no retries, final fingerprints valid.
+> 5. `tools/exp024_run.py --analyze` applied the frozen decision rule mechanically.
+>
+> The protocol block below is unchanged since the freeze.
 
 ## Research question
 
@@ -168,21 +175,71 @@ python -m unittest discover -s tests -p "test_exp024.py" -v
 
 ## Raw data
 
-Pending. The planned contents of `raw/`:
-- `session.json`: provenance, frozen protocol, schedule and commands;
-- `records.jsonl`: one benchmark record per launch, copied unchanged, with an `exp024` block;
-- `logs/launch-NN.log`;
-- `traces/launch-NN-rR-<budget>-ON.tsv` (ON launches only).
+**Local evidence** in `raw/`: excluded from git (`.git/info/exclude`), never force-added, and validated by the session itself.
+- `session.json`:
+  - session `20261012T113829-5edc0f3f`, 09:38–10:11 UTC;
+  - checked HEAD `22ef3f4e59647829ab742cd2cb4da41f87936e0b`;
+  - preflight OK, freeze matched, clean-tree gate passed before the preflight and again before the session file;
+  - status `complete`, `valid = true`, `fingerprints_final = true`. Model and Expert Store size/mtime were unchanged; full hashes were reused from known values without reading the files.
+- `records.jsonl`: exactly 20 benchmark records (launches 1–20, attempt 1 each, all valid). Each is copied unchanged from the shared run log with an `exp024` block.
+- `logs/launch-01.log` … `launch-20.log`.
+- `traces/`: the 10 ON traces only, 35.7–46.1 MB each. No OFF launch produced a trace.
+
+**Tracked compact evidence**, written by `--analyze` (the frozen method):
+- `results.csv`: the 10 round-level pairs;
+- `processed/summary.json`: per-budget summaries, CIs, diagnostics and the decision.
 
 ## Result
 
-No result yet: no launch has been executed under protocol EXP024-P1.
-- Not a measurement: the earlier fixture smoke test (2.6 vs 2.6 tok/s on an oversubscribed 2-core container).
-- Not an OFF control: EXP-019's 6.1166291 tok/s, which was a traced run.
+[MEASURED, paired; frozen analysis] Session `20261012T113829-5edc0f3f`, 20 / 20 valid launches. The overhead per round is `overhead_pct = 100 × (OFF − ON) / OFF`; positive means tracing is slower.
+
+| budget | mean OFF tok/s | mean ON tok/s | mean paired overhead | SD (pp) | 95% CI (Student-t, df 4) | per-budget reading |
+|---|---|---|---|---|---|---|
+| 4G | 6.362 | 6.292 | 1.099% | 0.398 | [0.605%, 1.593%] | CI entirely below 2%: < 2% supported at 4G |
+| 1.5G | 3.912 | 3.890 | 0.549% | 1.553 | [−1.379%, 2.478%] | CI crosses 2%: inconclusive at 1.5G |
+
+Round by round:
+
+| budget | overhead per round (rounds 1–5) | median | OFF tok/s | ON tok/s |
+|---|---|---|---|---|
+| 4G | 0.476 / 1.252 / 1.408 / 1.417 / 0.940% | 1.252% | 6.30 6.39 6.39 6.35 6.38 | 6.27 6.31 6.30 6.26 6.32 |
+| 1.5G | +0.510 / +1.531 / −1.823 / +0.255 / +2.273% | 0.510% | 3.92 3.92 3.84 3.92 3.96 | 3.90 3.86 3.91 3.91 3.87 |
+
+[DERIVED, secondary] Paired ms/token change:
+- 4G: +1.746 ms/token, CI95 [0.960, 2.533];
+- 1.5G: +1.427 ms/token, CI95 [−3.535, 6.390].
+
+[MEASURED, descriptive only] Medians OFF / ON:
+
+| | TTFT (s) | prompt tok/s | store hit |
+|---|---|---|---|
+| 4G | 3.367 / 3.406 | 22.99 / 22.74 | 90.8% / 90.8% |
+| 1.5G | 3.519 / 3.546 | 21.96 / 21.83 | 80.4% / 80.4% |
+
+Read mode was `asincrono` in every launch.
+
+**[INCONCLUSIVE] Overall preregistered verdict: INCONCLUSIVE.** Under the frozen rule, SUPPORTED requires the CI95 upper bound < 2% at both budgets, and FALSIFIED requires the CI95 lower bound > 2% at at least one budget.
+
+Earlier non-measurements, kept as history: the fixture smoke test (2.6 vs 2.6 tok/s on an oversubscribed 2-core container), and EXP-019's 6.1166291 tok/s, which was a traced run and is not an OFF control.
 
 ## Interpretation
 
-—
+[INCONCLUSIVE] The frozen rule is applied as written.
+
+- **4G.** The paired differences are consistent (SD 0.40 pp). Every round shows tracing slower, by 0.48–1.42%, and the whole 95% CI [0.605, 1.593]% lies below 2%.
+  - Under the frozen rule the < 2% hypothesis is supported at 4G for this configuration.
+  - The interval also excludes 0: at 4G the enabled instrumentation has a measurable cost of roughly 0.6–1.6% in mean generation throughput.
+- **1.5G.** The point estimate (0.549%) is smaller than at 4G, but the paired differences vary about four times as much (SD 1.55 pp; rounds from −1.82% to +2.27%).
+  - With five pairs, the CI [−1.379, 2.478]% includes values at and above 2%. The data neither exclude a mean overhead ≥ 2% at 1.5G nor show one.
+  - A smaller point estimate with a wider interval is not stronger evidence.
+  - The single negative round lies within that variability. It does not indicate that tracing improves performance.
+- **Overall.** The hypothesis is overhead < 2% at every tested budget. 4G meets the support condition and 1.5G does not, and neither meets the falsification condition. EXP-024 is therefore INCONCLUSIVE.
+- **What may be said.**
+  - The measured point estimates are small at both budgets (about 1.1% and 0.5%).
+  - At 4G the 95% CI of the mean overhead is entirely below 2% for this configuration; at 1.5G the threshold question remains open.
+  - It may not be said that tracing is below 2% everywhere, that it is negligible at all budgets, or that it has no effect.
+- **No post-hoc extension.** No repetitions were added after the data were seen. A tighter 1.5G interval would need a separate prospective follow-up, not extra EXP-024 rounds.
+- **Scope.** All of this applies only to the tested configuration (see Limitations).
 
 ## Limitations
 
@@ -192,6 +249,8 @@ No result yet: no launch has been executed under protocol EXP024-P1.
 - [LIMITATION] **Trace output location.** ON launches write a trace file (tens of MB) to `raw/traces/`, on the same machine's disk. That I/O is part of the measured overhead, as it is in real trace runs.
 - [LIMITATION] **Sample size and order.** Five paired rounds per budget (df = 4) give wide intervals if launch-to-launch noise is large, so INCONCLUSIVE is a plausible outcome. Order is balanced, not randomized: OFF comes first 3 times and ON 2 times per budget.
 - [LIMITATION] **Single-request replicate.** One measured request of 128 tokens per launch makes each replicate sensitive to start-up and cache state. The fresh process and empty store make this identical for both conditions.
+- [LIMITATION, closure 2026-10-12] **No post-hoc repetitions.** The five paired rounds per budget were run exactly as frozen. The width of the 1.5G interval reflects that sample size and the larger launch-to-launch variability of single-request launches at 1.5G.
+- [LIMITATION, closure 2026-10-12] **Evidence location.** The raw session, logs and traces are local, not version-controlled. The tracked evidence is `results.csv` and `processed/summary.json`.
 
 ## Status history
 
@@ -202,3 +261,8 @@ No result yet: no launch has been executed under protocol EXP024-P1.
   - a hard committed/clean Git gate for `--run`.
 
   The design is unchanged. Status PLANNED; no measurement.
+- 2026-10-12 → **INCONCLUSIVE**.
+  - The reviewed protocol was committed in `22ef3f4`.
+  - Session `20261012T113829-5edc0f3f` (09:38–10:11 UTC) ran from that clean commit: 20 / 20 preregistered launches valid, no retries, final fingerprints valid.
+  - 4G: 1.099% [0.605, 1.593], so < 2% is supported at 4G. 1.5G: 0.549% [−1.379, 2.478], inconclusive.
+  - The frozen rule gives INCONCLUSIVE. No post-hoc repetitions.

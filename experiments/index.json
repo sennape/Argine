@@ -225,11 +225,11 @@
   {
     "id": "EXP-024-tracing-overhead",
     "title": "Cost of the research instrumentation",
-    "status": "PLANNED",
+    "status": "INCONCLUSIVE",
     "rqs": [
       "RQ-012"
     ],
-    "period": "—"
+    "period": "2026-10-12"
   },
   {
     "id": "EXP-025-performance-model",

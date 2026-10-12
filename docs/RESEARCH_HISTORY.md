@@ -140,3 +140,8 @@ v1 is preserved unchanged and superseded for the final comparison; transition ke
 - The 2026-10-04 evidence is preserved: the FAILED first Windows v2 validation, the per-thread correction on the same trace, the fresh 30B confirmation (0 / 1,474,817), and the 80B campaign (9 / 9 workload-exact, 7 / 9 full-trace exact).
 - EXP-019's 2026-10-12 run is a later independent 30B confirmation.
 - The v1 shard-map limitation, the wait/undo paths, equal-size pools and recorded-interleaving limits remain. | EXP-021, EXP-019, RQ-011 |
+| 2026-10-12 | **EXP-024 closed: INCONCLUSIVE** (prospective protocol EXP024-P1; enabled vs disabled instrumentation on the same `llama-research-v2` binary).
+- The reviewed freeze was committed in `22ef3f4`. Session `20261012T113829-5edc0f3f` ran from that clean commit: 20 / 20 launches valid, no retries, final fingerprints valid.
+- 4G: mean paired overhead 1.099%, CI95 [0.605, 1.593], so < 2% is supported at 4G.
+- 1.5G: 0.549%, CI95 [−1.379, 2.478], inconclusive.
+- The frozen global rule gives INCONCLUSIVE. No post-hoc extra repetitions. | EXP-024, RQ-012 |

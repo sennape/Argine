@@ -65,7 +65,10 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 - ~~Whether `budget / EWS95_bytes` orders configurations by *speed* better than `budget / expert_bytes`: the formal predictor comparison of EXP-008, not run.~~ [2026-10-11, [EXP-008](experiments/EXP-008-working-set/README.md), INCONCLUSIVE] Run on the traced EXP-007 data with a plan frozen beforehand.
   - **Throughput:** the models disagree. On the 80B, budget / Denning working set beats resident fraction on all three measures; on the 30B, resident fraction is better on all three.
   - **Expert-level hit rate:** the working-set predictors beat resident fraction in both models on every measure (SUPPORTED within the traced dataset).
-  - **Open:** a clean throughput comparison (untraced, matched context, workloads interleaved within sessions; EXP-024 first).
+  - **Open:** a clean throughput comparison (untraced, matched context, workloads interleaved within sessions).
+    - [2026-10-12] EXP-024 is now complete. Under its frozen rule, the 95% CI of the tracing overhead is entirely below 2% at 4G, while the 1.5G threshold question remains statistically inconclusive.
+    - A genuinely clean predictor-throughput comparison would still use matched, untraced, interleaved measurements. That follow-up has not been done.
+    - *(Earlier wording: "…; EXP-024 first".)*
 - Length-normalised EWS (single-turn cells have only 320–389 decode tokens).
 - ~~EWS90/95/99 and Denning working sets of either model on real workloads.~~ [SUPERSEDED 2026-10-11 by EXP-007.]
 
@@ -74,11 +77,11 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 **Suggested contribution.** [2026-10-11] The formal predictor comparison has already been done on the traced EXP-007 dataset ([EXP-008](experiments/EXP-008-working-set/README.md), analysis plan frozen before the statistics were computed).
 - **Hit rate:** the working-set predictors beat resident fraction in both models on every measure. Supported within the traced dataset.
 - **Throughput:** still INCONCLUSIVE, for two reasons. The 30B and the 80B disagree. And the traced data are confounded by:
-  - unknown tracing overhead;
+  - tracing overhead: unknown when EXP-008 ran. EXP-024 has since measured it for the 30B benchmark configuration, with the 95% CI entirely below 2% at 4G and 1.5G inconclusive; it was not measured on the EXP-007 workloads themselves;
   - different context lengths per workload;
   - workloads recorded in different sessions.
 - **What a clean throughput test would need:**
-  1. EXP-024 (tracing overhead) first;
+  1. ~~EXP-024 (tracing overhead) first~~: done 2026-10-12, INCONCLUSIVE overall (95% CI entirely below 2% at 4G, inconclusive at 1.5G);
   2. then untraced throughput runs, on workloads matched for context length;
   3. with the workloads interleaved within each session.
 
@@ -247,7 +250,19 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 
 ## RQ-012 — What does the instrumentation cost?
 
-**Status: OPEN.** EXP-024: interleaved on/off, 5 repetitions. EXP-019's 2026-10-12 validation has no trace-off control and does not measure overhead.
+**Status: ANSWERED for the tested EXP-024 configuration; the preregistered hypothesis is INCONCLUSIVE overall.** ([EXP-024](experiments/EXP-024-tracing-overhead/README.md): session 20261012T113829-5edc0f3f, 20 / 20 valid launches, frozen protocol EXP024-P1.)
+
+**Known.** [MEASURED, paired] Enabled vs disabled research instrumentation on the same `llama-research-v2` binary: 30B Q4_K_M, asynchronous store, CPU, threads 4 / batch 12, the standard benchmark (128 tokens), 5 paired rounds per budget.
+- 4G: mean overhead 1.099%, CI95 [0.605, 1.593]%, so < 2% is supported at 4G.
+- 1.5G: mean overhead 0.549%, CI95 [−1.379, 2.478]%, so < 2% is inconclusive at 1.5G. The paired SD is 1.55 pp, against 0.40 pp at 4G.
+
+**Unknown.**
+- Whether the 1.5G mean is below 2%. That needs a separate prospective follow-up, not extra EXP-024 rounds.
+- Other machines, models, thread settings, budgets and workloads.
+- How the ON cost splits between recording and the Windows precise completion wait.
+- The cost of the disabled hooks against an unpatched binary.
+
+*(Earlier status, kept as history: "OPEN. EXP-024: interleaved on/off, 5 repetitions. EXP-019's 2026-10-12 validation has no trace-off control and does not measure overhead.")*
 
 ## RQ-013 — Can an interpretable model predict ms/token within 10-15%?
 
