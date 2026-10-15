@@ -189,9 +189,9 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 
 **Status: OPEN.**
 
-**Known.** [MEASURED] 30B: 3.51-3.89 tok/s at 1.5 GiB; 80B: 4.87 tok/s at 1.5 GiB. Nothing below 1.5 GiB was ever measured. [HYPOTHESIS] Recency policies collapse below one token's footprint ([EXP-022](experiments/EXP-022-extreme-pressure/README.md), prediction recorded).
+**Known.** [MEASURED, EXP-022] Extreme-pressure measurements now extend below 1.5 GiB. On 30B, all tested performance launches completed down to 512 MiB: mean throughput declined from 4.00 tok/s at 1.5 GiB to 2.71 at 768 MiB and 2.63 at 512 MiB, while diagnostic expert-level hit rate collapsed from 44.01% at 1.5 GiB to 0.232% at 768 MiB and 0% at 512 MiB. The historical H-5 >30% falsifier at 768 MiB was not met; formal status is INCONCLUSIVE because no positive support criterion was pre-specified. On exploratory 80B, 512 MiB produced two DEGRADED completions and one STORE_RESIDENCY_ABORT.
 
-**Suggested contribution.** EXP-022, then a failure-envelope map: model × workload × budget → INTERACTIVE (≥5 tok/s) / DEGRADED / I/O DOMINATED (residency phase > 50% of token time) / NON-INTERACTIVE (<1 tok/s). Thresholds are proposals and should be debated.
+**Open.** The one-token expert footprint is not a hard execution threshold for the measured workloads, but EXP-022 suggests it may mark a model-specific transition scale for expert reuse. This requires prospective confirmation across additional models, workloads and memory points, and a larger study of probabilistic STORE_RESIDENCY_ABORT behaviour near the lowest budgets.
 
 ## RQ-009 — Why does the 80B behave differently from the 30B?
 

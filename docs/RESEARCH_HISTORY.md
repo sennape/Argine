@@ -150,3 +150,11 @@ v1 is preserved unchanged and superseded for the final comparison; transition ke
 - [DERIVED, retrospective operationalisation] Per-layer boundary JSD is 2.84–4.02× the within-segment reference (median per trace): descriptive positive evidence of workload-dependent routing, not confirmatory.
 - Signed boundary transient: adaptive signed `excess64` lower than frozen in 11 / 36 comparisons (not by itself a shorter transient); 42 negative signed `excess64` values reported with their sign.
 - Not a falsification of workload dependence or of layer-aware allocation. | EXP-023, FH-029, RQ-004, RQ-006 |
+<!-- EXP-022 CLOSURE-BEGIN -->
+| 2026-10-15 | **EXP-022 closed: INCONCLUSIVE formal H-5 status; extreme-pressure envelope measured.**
+- All 45 prospectively frozen launches completed; 30B was 25/25 VALID and completed down to 512 MiB.
+- At the frozen H-5 point (30B / 768 MiB), both eligible replicas gave a mean workload gate-slice expert-level hit rate of 0.2322%, far below the historical >30% falsifier. The prediction is NOT FALSIFIED BY THIS TEST, but no positive support threshold was pre-specified, so formal status is INCONCLUSIVE.
+- Mechanism and usability separate under pressure: on 30B, expert reuse fell from 16.19% near the one-token footprint (1024 MiB) to 0.232% at 768 MiB and 0% at 512 MiB, while mean generation remained 2.71 and 2.63 tok/s.
+- Exploratory 80B showed the same qualitative reuse transition; 512 MiB yielded two DEGRADED completions and one causally unresolved STORE_RESIDENCY_ABORT.
+- All 18 replay-fidelity diagnostics were run post-session and remain diagnostic only. | EXP-022, RQ-008 |
+<!-- EXP-022 CLOSURE-END -->

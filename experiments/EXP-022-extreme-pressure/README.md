@@ -3,17 +3,16 @@
 | field | value |
 |---|---|
 | ID | `EXP-022-extreme-pressure` |
-| Status | **PLANNED** |
-| Period | — |
+| Status | **INCONCLUSIVE** |
+| Period | 2026-10-14 → 2026-10-15 |
 | Origin | Argine2 |
 | Related questions | RQ-008 |
 | Supersedes / superseded | — |
 
-> **Preparation note (2026-10-14): protocol EXP022-P1 prepared, nothing measured.**
-> - **Freeze.** The protocol below is frozen prospectively in [`protocol_freeze.json`](protocol_freeze.json), with the harness [`tools/exp022_run.py`](../../tools/exp022_run.py) and its tests [`tests/test_exp022.py`](../../tests/test_exp022.py). Independent review completed; the protocol is ready to be committed before execution.
-> - **No data yet.** No EXP-022 launch, trace or replay exists. All numbers in the protocol come from existing repository evidence: the EXP-007 analysis manifests, the BUILD-INFO-certified patch sources, and EXP-024 / EXP-027.
-> - **Runs.** None is allowed until the protocol is reviewed and committed and the working tree is clean.
-> - **Amendments A1–A2 (2026-10-14, before any EXP-022 measurement).** After review, H-5 requires both scheduled 768 MiB replicas (A1), and the store abort outcome was renamed to the causally neutral `STORE_RESIDENCY_ABORT` (A2). The first freeze is kept byte-for-byte as `protocol_freeze_pre_review_2026-10-14.json`; the active freeze supersedes it.
+> **Closure note (2026-10-15): EXP022-P1 completed; formal status INCONCLUSIVE.**
+> - **Execution.** All 45 frozen launches were executed on the frozen protocol/binary configuration.
+> - **H-5.** Both frozen 30B / 768 MiB diagnostic replicas were eligible; mean workload gate-slice hit rate was 0.2322%. The historical >30% falsifier was not met. No positive support threshold was pre-specified, so the formal status is INCONCLUSIVE.
+> - **Artifacts.** Raw sessions, results.csv, processed/summary.json, validation-registry entries, and all 18 post-session replay-fidelity diagnostics are retained.
 
 ## Research question
 
@@ -238,17 +237,48 @@ argine research trace MODEL --expert-store --budgets 1.5G,1G,768M,512M --repeat 
 
 ## Raw data
 
-Pending: no launch has been made.
-- `raw/<block>/` will hold `session.json`, `records.jsonl` and the launch logs. The traced runs go in `raw/<block>/launch-NN/run-00-<budget>/`.
-- `fidelity/` will hold the post-session replay diagnostics.
+
+
+
+All four frozen blocks completed. Primary machine-readable outputs:
+- `results.csv` — per-launch classified results.
+- `processed/summary.json` — aggregate envelope, diagnostics and frozen H-5 decision.
+- `raw/<block>/` — session metadata, records and launch logs.
+- `fidelity/<diag-block>/launch-NN/fidelity_runs.json` — 18 post-session replay diagnostics.
+
+`llama-research-v2/VALIDATIONS.jsonl` contains the append-only publication/trace validation records emitted by the EXP-022 diagnostic runs.
 
 ## Result
 
-No result yet.
+
+
+
+[MEASURED] EXP-022 completed all 45 prospectively scheduled launches.
+
+**30B primary arm.** All 15 performance launches and all 10 diagnostic launches were VALID. Performance remained DEGRADED at every tested budget: 4.00 tok/s at 1.5 GiB, 3.51 at 1152 MiB, 2.99 at 1024 MiB, 2.71 at 768 MiB, and 2.63 at 512 MiB. No STORE_RESIDENCY_ABORT, NON_COMPLETION, or INVALID outcome occurred in the 30B performance arm.
+
+The diagnostic workload gate-slice expert-level hit rate fell sharply with memory pressure: 44.01% at 1.5 GiB, 32.37% at 1152 MiB, 16.19% at 1024 MiB, 0.232% at 768 MiB, and 0.00% at 512 MiB.
+
+At the pre-registered H-5 point, both 30B / 768 MiB replicas were VALID and eligible, with hit rates 0.2433% and 0.2212%; mean 0.2322%. Because the historical falsifier was strictly >30%, H-5 is **NOT FALSIFIED BY THIS TEST**. Formal status remains **INCONCLUSIVE** because no positive support criterion was pre-specified.
+
+**80B exploratory arm.** At 1.5 GiB all three performance launches were INTERACTIVE, mean 5.35 tok/s. At 768 MiB and 672 MiB all launches were DEGRADED, means 4.10 and 3.58. At 512 MiB, two launches completed DEGRADED while one produced STORE_RESIDENCY_ABORT with `cause_unresolved`; the envelope is `MIXED: DEGRADED, STORE_RESIDENCY_ABORT`, not a claim of physical infeasibility.
+
+80B diagnostic hit-rate means were 52.26% at 1.5 GiB, 30.02% at 768 MiB, 9.86% at 672 MiB, and 0.446% at 512 MiB.
+
+All 18 post-session replay-fidelity diagnostics were run. Replay is diagnostic only and does not change launch eligibility, measured throughput, measured runtime hit rates, or the formal H-5 verdict.
 
 ## Interpretation
 
-—
+
+
+
+The one-token expert footprint is **not a hard execution threshold** in these workloads. The 30B runtime completed at 768 MiB (0.734× footprint) and 512 MiB (0.489×), while still producing 2.71 and 2.63 tok/s respectively.
+
+Instead, the footprint is associated with a much sharper mechanism-side transition in expert reuse. On 30B, workload gate-slice hit rate falls from 16.19% near the footprint (1024 MiB) to 0.232% at 768 MiB and 0% at 512 MiB. Mechanism/reuse collapse can therefore occur without immediate runtime-completion or throughput collapse.
+
+The exploratory 80B arm shows the same qualitative displacement relative to its smaller one-token footprint: 30.02% at 768 MiB (1.119×), 9.86% at 672 MiB (0.979×), and 0.446% at 512 MiB (0.746×). This is descriptive, not a pre-registered cross-model test, and motivates prospective confirmation of the footprint as a model-specific reuse transition scale rather than a universal feasibility boundary.
+
+The isolated 80B / 512 MiB STORE_RESIDENCY_ABORT further separates usability from hard feasibility: two performance replicas completed at the same budget, so the abort does not establish that 512 MiB is intrinsically impossible.
 
 ## Limitations
 
@@ -260,6 +290,12 @@ No result yet.
 - [LIMITATION] **Thread settings:** chosen at 4 GiB (EXP-027) and not re-optimised under pressure.
 - [LIMITATION] **Untraced invariant evidence:** in the performance blocks the hard-budget invariant is evidenced by the store's end snapshot (resident ≤ budget) only. The violation counter is exported only in traced runs.
 - [LIMITATION] **80B arm:** exploratory, with no pre-data prediction.
+
+<!-- EXP-022 CLOSURE-LIMITATIONS-BEGIN -->
+- [LIMITATION] **Small per-budget sample:** performance uses three rotated launches per budget and diagnostics two; EXP-022 maps this workload-specific envelope rather than estimating a population-level failure probability.
+- [LIMITATION] **Cross-model transition claim is descriptive:** the 80B arm was exploratory and had no prospective threshold or hypothesis.
+- [LIMITATION] **Replay fidelity is diagnostic:** post-session replay can reveal trace-tail incompleteness or replay disagreement but cannot replace measured runtime quantities or alter launch eligibility.
+<!-- EXP-022 CLOSURE-LIMITATIONS-END -->
 
 ## Status history
 
@@ -273,3 +309,18 @@ No result yet.
   - **A2:** INFEASIBLE is renamed to the causally neutral STORE_RESIDENCY_ABORT, with an evidence-only cause label.
   - The first freeze is archived byte-for-byte as `protocol_freeze_pre_review_2026-10-14.json`, and the regenerated active freeze supersedes it.
   - Nothing else changed: hypothesis, 30% threshold, metric, budgets, orders, models, threads, ctx / batch / ubatch, tracing, cooldown, caps, replay role and machine-state rules are as before. No measurement.
+- 2026-10-15 COMPLETED: all 45 frozen launches completed under EXP022-P1.
+  - 30B: 25/25 VALID; no completion failure down to 512 MiB.
+  - H-5 primary point (30B / 768 MiB): both replicas eligible, mean workload gate-slice hit rate 0.2322%; NOT FALSIFIED BY THIS TEST, formal status INCONCLUSIVE because no positive support threshold was pre-specified.
+  - 80B exploratory: 19/20 VALID and one STORE_RESIDENCY_ABORT at 512 MiB; two other 512 MiB performance replicas completed DEGRADED.
+  - All 18 post-session replay-fidelity diagnostics completed.
+  - `python -m unittest discover -s tests -p "test_exp022.py" -v`: 41/41 tests passed.
+
+<!-- EXP-022 CLOSURE-HISTORY-BEGIN -->
+- 2026-10-15 CLOSED / INCONCLUSIVE: all 45 frozen launches completed under EXP022-P1.
+  - 30B: 25/25 VALID; no completion failure down to 512 MiB.
+  - H-5 primary point (30B / 768 MiB): both replicas eligible, mean workload gate-slice hit rate 0.2322%; NOT FALSIFIED BY THIS TEST, formal status INCONCLUSIVE because no positive support threshold was pre-specified.
+  - 80B exploratory: 19/20 VALID and one STORE_RESIDENCY_ABORT at 512 MiB; two other 512 MiB performance replicas completed DEGRADED.
+  - All 18 post-session replay-fidelity diagnostics completed.
+  - Final EXP-022 test suite: 41/41 tests passed before documentary closure.
+<!-- EXP-022 CLOSURE-HISTORY-END -->

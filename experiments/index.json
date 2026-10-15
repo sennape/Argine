@@ -206,11 +206,11 @@
   {
     "id": "EXP-022-extreme-pressure",
     "title": "Extreme memory pressure: where streaming stops being useful",
-    "status": "PLANNED",
+    "status": "INCONCLUSIVE",
     "rqs": [
       "RQ-008"
     ],
-    "period": "—"
+    "period": "2026-10-14 → 2026-10-15"
   },
   {
     "id": "EXP-023-workload-drift",
