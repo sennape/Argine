@@ -418,7 +418,7 @@ def aggregate(replicas: Sequence[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]],
 def write_csv(path: Path, fields: Sequence[str], rows: Sequence[Mapping[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=list(fields), extrasaction="ignore")
+        writer = csv.DictWriter(f, fieldnames=list(fields), extrasaction="ignore", lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow({field: row.get(field, "") for field in fields})
@@ -476,6 +476,7 @@ def build(repo: Path, *, write: bool) -> Dict[str, Any]:
         (out_dir / "preprocess_report.json").write_text(
             json.dumps(report, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
+            newline="\n",
         )
         print(f"[EXP-025] wrote {out_dir / 'replicas.csv'}")
         print(f"[EXP-025] wrote {out_dir / 'runs.csv'}")
