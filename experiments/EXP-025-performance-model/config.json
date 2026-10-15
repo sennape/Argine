@@ -10,5 +10,33 @@
   "commands": [
     "argine research predict runs.csv --out prediction.json"
   ],
+  "primary_dataset": {
+    "source_experiment": "EXP-022-extreme-pressure",
+    "block": "30b-diag",
+    "model": "Qwen3-30B-A3B",
+    "workload": "natural-language",
+    "budgets": [
+      "1.5G",
+      "1152M",
+      "1024M",
+      "768M",
+      "512M"
+    ],
+    "replicas_per_configuration": 2,
+    "require_all_replicas": true,
+    "unit_of_validation": "budget_configuration",
+    "phase": "decode",
+    "token_denominator": "sum_predicted_n",
+    "expected_generated_tokens_per_replica": 384,
+    "expected_workload_decode_steps_per_replica": 381,
+    "replica_aggregation": "arithmetic_mean_of_replica_level_scalars",
+    "configuration_q_status": "upper_bound_if_any_replica_upper_bound"
+  },
+  "success_criterion": {
+    "metric": "leave-one-configuration-out median absolute percentage error",
+    "operator": "<",
+    "threshold_percent": 15.0,
+    "minimum_configurations": 5
+  },
   "supersedes": "—"
 }
