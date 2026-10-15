@@ -1,7 +1,7 @@
 {
   "id": "EXP-025-performance-model",
   "title": "Interpretable per-token performance model",
-  "status": "COMPLETED",
+  "status": "SUPPORTED",
   "period": "2026-10-15",
   "origin": "Argine2",
   "rqs": [

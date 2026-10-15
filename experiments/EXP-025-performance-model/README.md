@@ -3,7 +3,7 @@
 | field | value |
 |---|---|
 | ID | `EXP-025-performance-model` |
-| Status | **COMPLETED — SUPPORTED** |
+| Status | **SUPPORTED** |
 | Period | 2026-10-15 |
 | Origin | Argine2 |
 | Related questions | RQ-013 |
@@ -19,7 +19,9 @@ Can T_token = T_compute + T_unhidden_IO + T_sync + T_controller predict measured
 
 This hypothesis predates the EXP-025 primary fit. The numerical success criterion is the implementation-defined leave-one-out median absolute percentage error strictly below 15%.
 
-## Historical setup
+## Setup
+
+*Historical setup (2026-10-03), kept as written:*
 
 Features from EXP-007/022 runs (bytes missed, reads, nodes, queue depth per token from per-request timestamps, with its exact/upper-bound status); `argine research predict`.
 
@@ -314,6 +316,8 @@ Frozen success criterion:
 `median APE < 15%`
 
 Therefore the historical predictive hypothesis is **SUPPORTED BY THE PRIMARY TEST**.
+
+`results.csv` transcribes the five leave-one-configuration-out folds from the committed `processed/prediction.json`; nothing was refitted or recomputed.
 
 All five held-out configurations were predicted within 3.03% absolute percentage error; the result is not driven by a single favorable fold.
 

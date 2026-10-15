@@ -330,7 +330,7 @@ Each question has a status, evidence, what is known and unknown, and a suggested
 
 ## Experiment index
 
-Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`experiments/index.json`](experiments/index.json). Status counts: SUPPORTED 12, FALSIFIED 7, SUPERSEDED 1, INCONCLUSIVE 5, RUNNING 0, PLANNED 2.
+Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`experiments/index.json`](experiments/index.json). Status counts: SUPPORTED 13, FALSIFIED 7, SUPERSEDED 1, INCONCLUSIVE 5, RUNNING 0, PLANNED 1.
 
 | ID | short title | status |
 |---|---|---|
@@ -358,7 +358,7 @@ Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`e
 | [EXP-022](experiments/EXP-022-extreme-pressure/README.md) | extreme memory pressure | INCONCLUSIVE |
 | [EXP-023](experiments/EXP-023-workload-drift/README.md) | workload drift | FALSIFIED (current controller) |
 | [EXP-024](experiments/EXP-024-tracing-overhead/README.md) | tracing overhead | INCONCLUSIVE |
-| [EXP-025](experiments/EXP-025-performance-model/README.md) | performance model | PLANNED |
+| [EXP-025](experiments/EXP-025-performance-model/README.md) | performance model | SUPPORTED |
 | [EXP-026](experiments/EXP-026-30b-vs-80b-regimes/README.md) | 30B vs 80B regimes | PLANNED |
 | [EXP-027](experiments/EXP-027-current-thread-sweep/README.md) | current-runtime thread sweep (RQ-014) | FALSIFIED (pre-registered predictions; finding: model-dependent optimum) |
 
@@ -458,7 +458,7 @@ Argine2 does not claim novelty for its mechanisms. Utility-based partitioning of
    - EXP-008 is CLOSED, INCONCLUSIVE (2026-10-11): throughput is unresolved because the models disagree; hit rate is supported within the traced data.
    - EXP-021 is CLOSED, SUPPORTED, including the 80B campaign (2026-10-04).
 
-   Still open: EXP-025 (performance model).
+   ~~Still open: EXP-025 (performance model).~~ EXP-025 closed 2026-10-15, SUPPORTED by its primary test (30B only; median leave-one-configuration-out error 2.2546885% < 15%).
 4. After the replay research is scientifically closed: decide whether to implement a runtime controller above the expert store and validate it separately at runtime. EXP-010 remains replay-only and is not part of this future runtime-implementation step.
 5. Failure envelope map (model × workload × budget → INTERACTIVE / DEGRADED / I/O DOMINATED / NON-INTERACTIVE).
 6. Public GitHub repository with releases for binaries; DOI archive once results are stable.
