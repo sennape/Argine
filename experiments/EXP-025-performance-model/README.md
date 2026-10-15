@@ -3,8 +3,8 @@
 | field | value |
 |---|---|
 | ID | `EXP-025-performance-model` |
-| Status | **PLANNED** |
-| Period | — |
+| Status | **COMPLETED — SUPPORTED** |
+| Period | 2026-10-15 |
 | Origin | Argine2 |
 | Related questions | RQ-013 |
 | Supersedes / superseded | — |
@@ -277,9 +277,9 @@ The canonical prediction command remains:
 argine research predict runs.csv --out prediction.json
 ```
 
-A deterministic EXP-025 preprocessing step will first construct the frozen five-configuration primary `runs.csv` from the existing EXP-022 diagnostic traces.
+The deterministic EXP-025 preprocessing step constructed the frozen five-configuration primary `runs.csv` from the existing EXP-022 diagnostic traces.
 
-No new model inference is required to construct the primary dataset.
+No new model inference was required to construct the primary dataset.
 
 ## Raw data
 
@@ -289,35 +289,108 @@ Primary source data:
 
 Five budgets, two diagnostic replicas per budget.
 
-No EXP-025 primary prediction errors have been inspected at protocol freeze.
+At protocol freeze, no EXP-025 primary prediction errors had been inspected. The frozen primary dataset was subsequently generated from all ten eligible replicas and committed before the first primary fit.
 
 ## Result
 
-No result yet.
+[SUPPORTED] The preregistered primary predictive criterion was met.
 
-[DERIVED, rough consistency only] The default cost model predicts 72 ms/token of stall for the pilot trace at 4 GiB; the measured gap between 4 GiB (≈159 ms/token) and full residency (≈104 ms/token) on the 30B is ≈55 ms.
+The frozen five-configuration leave-one-configuration-out evaluation produced:
 
-This historical rough comparison is not an EXP-025 result and does not alter the frozen primary hypothesis or threshold.
+| held-out budget | measured ms/token | predicted ms/token | absolute percentage error |
+|---|---:|---:|---:|
+| `1.5G` | 258.11498 | 265.92740 | 3.0267209% |
+| `1152M` | 302.79354 | 295.16062 | 2.5208330% |
+| `1024M` | 347.33938 | 351.19403 | 1.1097639% |
+| `768M` | 391.97368 | 400.53006 | 2.1828968% |
+| `512M` | 402.70998 | 393.63013 | 2.2546885% |
+
+Primary metric:
+
+`median leave-one-configuration-out absolute percentage error = 2.2546885%`
+
+Frozen success criterion:
+
+`median APE < 15%`
+
+Therefore the historical predictive hypothesis is **SUPPORTED BY THE PRIMARY TEST**.
+
+All five held-out configurations were predicted within 3.03% absolute percentage error; the result is not driven by a single favorable fold.
+
+The full five-configuration NNLS fit returned:
+
+| coefficient | fitted value |
+|---|---:|
+| `compute` | 85.5716 |
+| `sync_nodes` | 1.0843354e-15 |
+| `io_bytes_over_bw` | 0.85973422 |
+| `reads` | 0.043179181 |
+
+The coefficient values are reported as fitted outputs, but they do not all admit separate physical interpretation in this dataset. In particular, `nodes_per_token = 142.875` for every primary configuration, so the `compute` intercept and `sync_nodes` feature are perfectly collinear across the five observations. The primary test therefore establishes the preregistered predictive claim, not separate identifiability of all four physical coefficients.
+
+[DERIVED, rough consistency only] The earlier default cost-model comparison predicted 72 ms/token of stall for the pilot trace at 4 GiB against an observed ≈55 ms residency gap on the 30B. That historical comparison remains contextual only and was not part of the EXP-025 primary verdict.
 
 ## Interpretation
 
-Pending primary analysis.
+For the frozen Qwen3-30B-A3B natural-language configuration, a compact non-negative performance model using decode-phase missed bytes, reads, queue depth and MoE-node count predicts held-out ms/token across the five tested memory budgets with a median error of 2.2546885%.
+
+This is substantially below the preregistered 15% threshold and supports RQ-013's central predictive claim for this configuration.
+
+The result also clarifies what EXP-025 does **not** establish:
+
+- it does not show that the fitted `sync_nodes` coefficient is physically zero;
+- it does not separately identify `compute` and `sync_nodes`, because `nodes_per_token` is constant across all five primary configurations;
+- it does not validate the same coefficients for Qwen3-80B or for a different workload/runtime;
+- it does not remove uncertainty from upper-bound queue-depth timestamps or from cost-model clamping at high queue depth;
+- it does not supersede EXP-026 for cross-model regime interpretation.
+
+The strongest defensible conclusion is therefore that the frozen four-term model has high held-out predictive accuracy on the primary 30B budget sweep, while coefficient-level causal interpretation remains only partial.
 
 ## Limitations
 
-Primary limitations known before fitting include:
+Primary limitations after completion:
 
-- exactly five configuration-level observations;
-- two replicas per budget;
+- exactly five independent configuration-level observations were available for leave-one-configuration-out validation;
+- each configuration is an arithmetic mean of two eligible replicas;
 - the generation target uses 384 generated tokens while the trace exposes 381 workload decode steps;
-- decode queue-depth estimates can retain upper-bound completion semantics;
-- bandwidth-curve queue depth is clamped outside its measured range;
-- tracing overhead is not bounded for every EXP-022 memory budget;
-- the primary result is specific to the frozen 30B natural-language EXP-022 diagnostic configuration;
-- EXP-007 and 80B analyses are not part of the primary verdict.
+- all primary `qd` values retain `upper_bound` completion semantics;
+- the highest-pressure configurations reach or exceed the measured queue-depth range and therefore use the frozen CostModel clamp;
+- tracing overhead was not independently bounded for every EXP-022 memory budget;
+- the primary result is specific to the frozen Qwen3-30B-A3B natural-language EXP-022 diagnostic configuration;
+- `nodes_per_token` is constant at 142.875 across all five configurations, making the `compute` and `sync_nodes` columns perfectly collinear and preventing separate identification of those two coefficients;
+- the fitted coefficient vector should therefore not be interpreted as a unique decomposition of physical per-token cost;
+- EXP-007 remains sensitivity/external-validation material and Qwen3-80B remains exploratory for EXP-025; neither changes the primary verdict.
+
+## Provenance
+
+Primary protocol freeze:
+
+`26da7819f79a114743aa8f38645c71e70e84ed7d`
+
+Frozen preprocessing implementation:
+
+`18d7afb6c0c356d54043349aed1c9f432cd25b4c`
+
+Initial frozen primary dataset commit:
+
+`668701b0f7f9ccfef048203aa54cccc48426512b`
+
+Dataset line-ending normalization:
+
+`af11f2574ff53007f65090a4d440a22cc198ee0d`
+
+Primary prediction result:
+
+`5d12049825deebc9f9fcffa901c21c16ce626827`
+
+The later prediction line-ending normalization changed serialization only and did not alter any numerical result.
 
 ## Status history
 
 2026-10-03 PLANNED.
 
 2026-10-15 primary EXP-025 protocol specified before fitting. Primary dataset frozen to the five EXP-022 30B diagnostic budgets; decode-only numerator semantics, generated-token denominator, equal-weight replica aggregation, configuration-level leave-one-out validation, and strict `<15%` success criterion preregistered.
+
+2026-10-15 preprocessing validated all 10 scheduled replicas and produced all 5 preregistered budget configurations.
+
+2026-10-15 primary leave-one-configuration-out evaluation completed with median APE 2.2546885%; the preregistered predictive hypothesis was SUPPORTED BY THE PRIMARY TEST. Coefficient-level interpretation remains limited by perfect collinearity between the constant intercept and constant `nodes_per_token` feature.
