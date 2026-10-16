@@ -240,7 +240,7 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 - The expert-level / runtime-style miss ratio is exactly 3.000 in every qualified run.
 - The earlier expectation of "≈74% expert-level at 4 GiB" for the 80B was derived from Argine v1's 91.2% on a different binary and prompt. The measured 80B coding-DEV value is 65.9%, and the 80B workloads span 61.4–78.1%. The derivation rule (runtime miss = expert miss / 3) holds exactly; the specific 74% figure was workload-specific.
 
-**Unknown.** Other binaries, budgets below 1.5 GiB (EXP-022), and other models. ~~The 80B.~~ [SUPERSEDED 2026-10-11.]
+**Unknown.** Other binaries, additional workloads and models, and the generality of the extreme-pressure behaviour observed by EXP-022. ~~The 80B.~~ [SUPERSEDED 2026-10-11.]
 
 ## RQ-011 — Does replay reproduce the runtime?
 
@@ -276,7 +276,13 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 
 ## RQ-013 — Can an interpretable model predict ms/token within 10-15%?
 
-**Status: OPEN.** [DERIVED, rough] The default cost model gives 72 ms/token of stall for the pilot trace at 4 GiB, against ≈55 ms of measured residency cost on the 30B. EXP-025 with ≥5 configurations.
+**Status: ANSWERED for the tested primary configuration** (2026-10-15, [EXP-025](experiments/EXP-025-performance-model/README.md)). The preregistered primary test was SUPPORTED: the 30B leave-one-configuration-out median absolute percentage error was 2.2546885%, below the 15% success threshold.
+
+**Known.** [SUPPORTED, EXP-025] The model `T_token = T_compute + T_unhidden_IO + T_sync + T_controller` predicts measured token latency accurately across the tested 30B configurations. The result supports the predictive usefulness of the decomposition, not separate causal identification of every term.
+
+**Limitation.** The tested configurations do not independently identify all physical components: the intercept/compute and synchronization contributions are collinear in the design. In particular, a fitted synchronization contribution near zero must not be interpreted as evidence that physical synchronization cost is zero.
+
+**Unknown.** Generalisation to the 80B, other binaries, machines, workloads and pressure regions.
 
 ## RQ-014 — How many threads on the current build?
 
@@ -301,7 +307,9 @@ EXP-001 itself is historically closed as INCONCLUSIVE ([audit](docs/research/HIS
 
 ## RQ-016 — Is hit rate the right objective?
 
-**Status: OPEN.** [MEASURED, Argine] Cost per miss *falls* as the budget shrinks (1.233 → 1.063 ms per read) because more misses per node raise queue depth. A policy with fewer misses but lower queue depth can therefore save less time than its hit rate suggests. Primary metric remains tokens/s; replay reports modelled stall with queue-depth effects, which must be validated against measured stall (EXP-025).
+**Status: OPEN.** [MEASURED, Argine] Cost per miss *falls* as the budget shrinks (1.233 → 1.063 ms per read) because more misses per node raise queue depth. A policy with fewer misses but lower queue depth can therefore save less time than its hit rate suggests. Primary metric remains tokens/s.
+
+[SUPPORTED, EXP-025] A time-based decomposition that includes unhidden I/O predicts measured token latency accurately in the tested 30B configurations (median leave-one-configuration-out absolute percentage error 2.2546885%). This strengthens the evidence that miss count or hit rate alone is insufficient as a performance model, but it does not establish an optimal control objective.
 
 ## RQ-017 — What exactly is Least-Stale, and does it help here?
 
