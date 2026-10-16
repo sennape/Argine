@@ -2,7 +2,30 @@
   "experiment": "EXP-026-30b-vs-80b-regimes",
   "protocol_version": "EXP026-P1",
   "freeze_date": "2026-10-15",
-  "status": "prospective freeze before any EXP-026 measurement",
+  "status": "prospective freeze before any EXP-026 measurement; test-only amendment A1 applied 2026-10-16 after measurement (no scientific change)",
+  "amendments": [
+    {
+      "id": "A1",
+      "date": "2026-10-16",
+      "before_any_measurement": false,
+      "scope": "test-only",
+      "timing": "post-measurement",
+      "reason": "lifecycle test bug: test_34_no_outputs_required_before_measurement asserted that the live repository stays in its pre-measurement state (measurements_made false, no results.csv), which cannot hold after the frozen measurements legitimately completed",
+      "change": "tests/test_exp026.py test_34 made lifecycle-aware: check_outputs() still asserted in both states; measurements_made false -> results.csv must be absent (unchanged guard); measurements_made true -> results.csv and processed/summary.json present and every raw/ entry a harness session (harness_session_dir); synthetic temporary-directory checks unchanged; no other test changed",
+      "files_changed": [
+        "tests/test_exp026.py"
+      ],
+      "tests_sha256_before": "cac33e65450088a50bd48a40fbcdbd40e1e46a04bc1d02fdab7acb1390c2d169",
+      "tests_sha256_after": "a5b0033ab44d6e5d60db38cf8f2062156f200cb96639963fe05c24eddb141c2a",
+      "measurement_head": "7168b936853b2c019e1c55000d81a11174a58682",
+      "scientific_protocol_changed": false,
+      "measurements_changed": false,
+      "analysis_changed": false,
+      "decision_rules_changed": false,
+      "results_changed": false
+    }
+  ],
+  "supersedes": "protocol_freeze_pre_test_amendment_2026-10-16.json",
   "pre_freeze_head": "527540cee4e97b7ecc337c57f95d767f47798473",
   "argine2_at_freeze": {
     "head": "527540cee4e97b7ecc337c57f95d767f47798473",
@@ -27,7 +50,7 @@
   "spec_sha256": "1b94af40e9880b5b38765917ca1e405470daf13ca62888bf5ea5574764003dd3",
   "config_protocol_sha256": "4043b86dd77b9494abb803f7375d39f38ffb8259caefc97647633c26db45b6f9",
   "tool_sha256": "e4da09c946e26dd8a8a5b149eceb7c2c95383944df584b52038640a35b92eaf0",
-  "tests_sha256": "cac33e65450088a50bd48a40fbcdbd40e1e46a04bc1d02fdab7acb1390c2d169",
+  "tests_sha256": "a5b0033ab44d6e5d60db38cf8f2062156f200cb96639963fe05c24eddb141c2a",
   "exp022_dependency_sha256": "cced9415e82bb6d495064c5ae2e6a9dd63e901a0f52f7967706d219a902b4e81",
   "workload": {
     "diagnostic": {

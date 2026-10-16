@@ -1,8 +1,8 @@
 {
   "id": "EXP-026-30b-vs-80b-regimes",
   "title": "Two experimental regimes: 30B-A3B vs Next-80B-A3B",
-  "status": "PLANNED",
-  "period": "—",
+  "status": "INCONCLUSIVE",
+  "period": "2026-10-15 → 2026-10-16",
   "origin": "Argine2",
   "rqs": [
     "RQ-002",
@@ -252,6 +252,64 @@
       "forbidden_wording": "caused by normalization",
       "open_questions_edit": "OPEN_QUESTIONS.md is not modified by the freeze; it is updated only at closure"
     },
-    "measurements_made": false
-  }
+    "measurements_made": true
+  },
+  "result": {
+    "closed": true,
+    "closed_date": "2026-10-16",
+    "formal_status": "INCONCLUSIVE",
+    "protocol_commit": "7168b936853b2c019e1c55000d81a11174a58682",
+    "primary_explanandum": {
+      "outcome": "NOT DISTINGUISHED",
+      "beta_30b": 0.47560756218632283,
+      "beta_80b": 0.49478700287061783,
+      "delta_beta": 0.019179440684295,
+      "envelope_30b": [
+        0.22750499195351992,
+        0.5797406846398588
+      ],
+      "envelope_80b": [
+        0.0638067085678771,
+        0.5832505986644648
+      ]
+    },
+    "traced_gate": {
+      "status": "FAIL",
+      "reason": "sign of delta_beta_traced differs from the primary delta_beta",
+      "delta_beta_traced": -0.2694248957704227,
+      "traced_classification": "REPRODUCED"
+    },
+    "candidates": {
+      "a": "NOT EVALUABLE",
+      "b": "NOT EVALUABLE",
+      "c": "NOT EVALUABLE",
+      "d": "NOT EVALUABLE"
+    },
+    "diskbench_device": "INDETERMINATE",
+    "rq009": {
+      "status": "PARTIALLY ANSWERED",
+      "kind": "unchanged, data note",
+      "note": "the historical slope difference is not reproduced at matched budget/F; consistent with a normalization/region difference"
+    },
+    "launches_total": 36,
+    "diskbench_runs_total": 60,
+    "outcomes": {
+      "diskbench": "60/60 VALID",
+      "perf": "24/24 VALID",
+      "diag": "12/12 VALID and eligible"
+    },
+    "retries": 0,
+    "replacements": 0,
+    "evidence": [
+      "experiments/EXP-026-30b-vs-80b-regimes/results.csv",
+      "experiments/EXP-026-30b-vs-80b-regimes/processed/summary.json",
+      "experiments/EXP-026-30b-vs-80b-regimes/raw/",
+      "llama-research-v2/VALIDATIONS.jsonl"
+    ]
+  },
+  "amendments": [
+    "A1 2026-10-16: test-only, post-measurement; tests/test_exp026.py test_34 made lifecycle-aware; scientific protocol, measurements, analysis, decision rules and results unchanged"
+  ],
+  "superseded_freeze": "experiments/EXP-026-30b-vs-80b-regimes/protocol_freeze_pre_test_amendment_2026-10-16.json",
+  "amendments_location_note": "recorded at top level, not inside 'protocol' as in EXP-022: the EXP-026 protocol object is hash-frozen and must equal the harness-generated object"
 }

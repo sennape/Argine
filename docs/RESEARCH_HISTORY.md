@@ -158,3 +158,9 @@ v1 is preserved unchanged and superseded for the final comparison; transition ke
 - Exploratory 80B showed the same qualitative reuse transition; 512 MiB yielded two DEGRADED completions and one causally unresolved STORE_RESIDENCY_ABORT.
 - All 18 replay-fidelity diagnostics were run post-session and remain diagnostic only. | EXP-022, RQ-008 |
 <!-- EXP-022 CLOSURE-END -->
+<!-- EXP-026 CLOSURE-BEGIN -->
+| 2026-10-16 | **EXP-026 closed: INCONCLUSIVE; historical slope difference not reproduced at matched budget/F.**
+- Protocol EXP026-P1 was frozen 2026-10-15 (commit `7168b936`). Measurements 2026-10-15 → 2026-10-16: diskbench 60/60, performance 24/24 and diagnostics 12/12 VALID; no retry, no replacement.
+- Primary explanandum NOT DISTINGUISHED: untraced, 4 generation threads, P1 → P2 at matched budget/F, β30 = 0.4756, β80 = 0.4948, Δβ = +0.0192, envelopes overlap. Consistent with a normalization/region difference; EXP-006 and F-004 are not retrospectively falsified.
+- Traced-slope agreement gate FAIL (traced Δβ = −0.2694): candidates (a)–(d) are all NOT EVALUABLE. RQ-009 stays PARTIALLY ANSWERED, with a data note. | EXP-026, RQ-009 |
+<!-- EXP-026 CLOSURE-END -->

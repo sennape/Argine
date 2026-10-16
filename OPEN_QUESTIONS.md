@@ -195,7 +195,7 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 
 ## RQ-009 — Why does the 80B behave differently from the 30B?
 
-**Status: PARTIALLY ANSWERED** (2026-10-11): the 80B router is now directly characterized; the causal question is open.
+**Status: PARTIALLY ANSWERED** (2026-10-11): the 80B router is now directly characterized; the causal question is open. *[2026-10-16: unchanged after EXP-026 (INCONCLUSIVE); data note below.]*
 
 **Candidate explanations.** (a) Router concentration; (b) smaller slices (440-704 KiB vs 930 KiB) give more reads in flight per byte; (c) I/O bookkeeping (commit/decommit/lock = 56% of the 80B's I/O bucket vs 10% on the 30B) rather than reading; (d) different compute (Gated DeltaNet in 36 layers).
 
@@ -209,6 +209,13 @@ Index: [RQ-001](#rq-001--is-expert-residency-better-modelled-as-online-resource-
 
 **Unknown.**
 - The relative contribution of (b) slice size, (c) bookkeeping and (d) architecture to the speed difference (EXP-026). The I/O decomposition still comes from one run.
+  - *[2026-10-16, [EXP-026](experiments/EXP-026-30b-vs-80b-regimes/README.md), INCONCLUSIVE] Still unknown for all four candidates (a)–(d): all are NOT EVALUABLE under the frozen protocol, because the traced-slope agreement gate failed.*
+
+**Data note (2026-10-16, [EXP-026](experiments/EXP-026-30b-vs-80b-regimes/README.md), frozen protocol EXP026-P1).**
+- [DERIVED] The historical slope difference is not reproduced at matched budget/F; consistent with a normalization/region difference.
+  - Untraced, 4 generation threads, P1 → P2 = 3.92 F → 1.47 F: β30 = 0.4756, β80 = 0.4948, Δβ = +0.0192. The launch-pairing envelopes overlap: NOT DISTINGUISHED.
+  - This does not retrospectively falsify EXP-006 or alter F-004 (different budget/F regions, earlier binaries).
+- [LIMITATION] The traced diagnostic slopes disagree (traced Δβ = −0.2694), so the preregistered agreement gate failed and no candidate was discriminated.
 - ~~No router trace of the 80B exists.~~ [SUPERSEDED 2026-10-11: EXP-007 recorded 9 runs in each of 14 80B cells, plus replacements.]
 
 **Related experiments.** EXP-006, EXP-026.

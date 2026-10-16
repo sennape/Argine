@@ -508,9 +508,17 @@ class LifecycleAndFreeze(unittest.TestCase):
         self.assertEqual(E.X22._lf_sha(E.EXP022_TOOL), E.EXP022_TOOL_SHA256)
 
     def test_34_no_outputs_required_before_measurement(self):
-        self.assertFalse(E.measurements_made())
+        # Lifecycle-aware (amendment A1, 2026-10-16, test-only): the live repository is checked against the
+        # contract of its current state; the synthetic checks below are unchanged.
         self.assertEqual(E.check_outputs(), [])
-        self.assertFalse((E.EXP / "results.csv").exists())
+        if not E.measurements_made():
+            self.assertFalse((E.EXP / "results.csv").exists())
+        else:
+            self.assertTrue((E.EXP / "results.csv").exists())
+            self.assertTrue((E.PROCESSED / "summary.json").exists())
+            for p in E.RAW.iterdir():
+                if p.name != ".gitkeep":
+                    self.assertTrue(E.harness_session_dir(p), p.name)
         with tempfile.TemporaryDirectory() as d:
             exp = Path(d)
             for sub in ("raw", "processed", "figures"):

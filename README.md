@@ -301,6 +301,9 @@ Kept, not deleted; each with origin, reason, experiment, evidence and conclusion
   - *H-3 stays open for a differently designed controller.*
 - **H-4** [HYPOTHESIS] The 80B/30B difference has three candidate causes — concentration, smaller slices (more queue depth per byte), bookkeeping-bound I/O — to be discriminated ([EXP-026](experiments/EXP-026-30b-vs-80b-regimes/README.md)).
   - *Concentration is now measured directly (EXP-007: the 80B is more concentrated). Its causal share is not established.*
+  - *2026-10-16, EXP-026 (prospective, frozen): INCONCLUSIVE.*
+    - At matched budget/F and 4 generation threads, the untraced pressure-response slopes are NOT DISTINGUISHED (β30 = 0.476, β80 = 0.495; envelopes overlap). The historical flatter-80B slope did not reproduce in that region; this is consistent with a normalization/region difference and does not falsify EXP-006 or F-004.
+    - The traced-slope agreement gate failed, so all candidates, including RQ-009's (d), are NOT EVALUABLE.
 - **H-5** [INCONCLUSIVE] EXP-022 did not falsify the historical >30% condition at 30B / 768 MiB (mean workload gate-slice hit rate 0.2322%), but no positive support threshold was pre-specified; mechanism-side reuse nevertheless collapsed descriptively below the one-token footprint ([EXP-022](experiments/EXP-022-extreme-pressure/README.md)).
 
 [SUPERSEDED, 2026-10-11] "The pilot already suggests a possible negative answer to the central question: what LRU loses is mostly *which* experts it keeps, not *how* memory is split across layers. That reading comes from 127 tokens and is not a result."
@@ -321,7 +324,7 @@ Each question has a status, evidence, what is known and unknown, and a suggested
 | RQ-001 | central question | partially answered: EXP-010 (retrospective holdout) found layer isolation plus a DEV-fitted static split at least as good as the online controller; open: an untouched holdout and a runtime test |
 | RQ-002 | does EWS predict behaviour better than residency? | partially answered; EXP-008 completed the traced-data predictor comparison (INCONCLUSIVE for throughput, SUPPORTED for hit rate); tracing overhead is now measured (EXP-024: 95% CI entirely below 2% at 4G, inconclusive at 1.5G); a clean throughput follow-up still needs matched, untraced, interleaved measurements |
 | RQ-005 | how much does uniform allocation lose? | partially answered in-sample (30B 3.5–10.4%, 80B 0.5–3.9%); EXP-010 (retrospective holdout): the DEV-fitted, workload-family-informed static split has 4.1% (30B) and 1.0% (80B) fewer misses than uniform on EVAL (geometric means) |
-| RQ-009 | why is the 80B different? | partially answered: the 80B router is traced (EXP-007); slice size, bookkeeping and architecture remain (EXP-026) |
+| RQ-009 | why is the 80B different? | partially answered: the 80B router is traced (EXP-007); EXP-026 (INCONCLUSIVE) found the historical slope difference not reproduced at matched budget/F, with all candidates not evaluable |
 | RQ-010 | true expert-level hit rate on real models | answered for both models and seven workload families (EXP-007): 61–80% at 4 GiB; the miss ratio to runtime-style is exactly 3 |
 | RQ-011 | does replay reproduce the runtime? | answered: exact over the workload on v2 traces (Linux; 30B and 80B on Windows) with per-thread pins — [write-up](docs/research/REPLAY-FIDELITY-VALIDATION.md) |
 | RQ-012 | what does the instrumentation cost? | answered for the tested configuration ([EXP-024](experiments/EXP-024-tracing-overhead/README.md)): 4G 1.099% [0.605, 1.593], 1.5G 0.549% [−1.379, 2.478]. The preregistered < 2% hypothesis is INCONCLUSIVE overall (supported at 4G only) |
@@ -330,7 +333,7 @@ Each question has a status, evidence, what is known and unknown, and a suggested
 
 ## Experiment index
 
-Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`experiments/index.json`](experiments/index.json). Status counts: SUPPORTED 13, FALSIFIED 7, SUPERSEDED 1, INCONCLUSIVE 5, RUNNING 0, PLANNED 1.
+Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`experiments/index.json`](experiments/index.json). Status counts: SUPPORTED 13, FALSIFIED 7, SUPERSEDED 1, INCONCLUSIVE 6, RUNNING 0, PLANNED 0.
 
 | ID | short title | status |
 |---|---|---|
@@ -359,7 +362,7 @@ Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`e
 | [EXP-023](experiments/EXP-023-workload-drift/README.md) | workload drift | FALSIFIED (current controller) |
 | [EXP-024](experiments/EXP-024-tracing-overhead/README.md) | tracing overhead | INCONCLUSIVE |
 | [EXP-025](experiments/EXP-025-performance-model/README.md) | performance model | SUPPORTED |
-| [EXP-026](experiments/EXP-026-30b-vs-80b-regimes/README.md) | 30B vs 80B regimes | PLANNED |
+| [EXP-026](experiments/EXP-026-30b-vs-80b-regimes/README.md) | 30B vs 80B regimes | INCONCLUSIVE (explanandum not distinguished at matched budget/F; traced gate failed; candidates not evaluable) |
 | [EXP-027](experiments/EXP-027-current-thread-sweep/README.md) | current-runtime thread sweep (RQ-014) | FALSIFIED (pre-registered predictions; finding: model-dependent optimum) |
 
 ## Reproduction
@@ -451,7 +454,7 @@ Argine2 does not claim novelty for its mechanisms. Utility-based partitioning of
 ## Roadmap
 
 0. Done 2026-10-04: replay fidelity (EXP-021) is validated on Linux, on a fresh 30B Windows run and on the 80B coding-dev campaign ([§14](docs/research/REPLAY-FIDELITY-VALIDATION.md#14-independent-confirmation-and-the-80b-campaign-2026-10-04)).
-1. ~~Phase-1 runs on the reference machine: EXP-007 (both models, all workloads, dev+eval)~~ — done 2026-10-11 (28/28 cells). EXP-022 (extreme pressure) closed 2026-10-15, INCONCLUSIVE. EXP-024 (overhead) closed 2026-10-12, INCONCLUSIVE (supported at 4G, inconclusive at 1.5G). EXP-023 (drift) closed 2026-10-12, FALSIFIED for the current controller (routing drift at boundaries is strong, descriptively; the controller does not exploit it).
+1. ~~Phase-1 runs on the reference machine: EXP-007 (both models, all workloads, dev+eval)~~ — done 2026-10-11 (28/28 cells). EXP-022 (extreme pressure) closed 2026-10-15, INCONCLUSIVE. EXP-026 (30B vs 80B regimes) closed 2026-10-16, INCONCLUSIVE. EXP-024 (overhead) closed 2026-10-12, INCONCLUSIVE (supported at 4G, inconclusive at 1.5G). EXP-023 (drift) closed 2026-10-12, FALSIFIED for the current controller (routing drift at boundaries is strong, descriptively; the controller does not exploit it).
 2. `ARGINE2-MEMORY-CHARACTERIZATION.md` v1 with real per-model sections, now that the EXP-007 data exist. RQ-010 and RQ-011 are answered; RQ-003 and RQ-009 are partially answered.
 2a. ~~**Next immediate step (as of 2026-10-11):** a retrospective DEV-selected → frozen → EVAL-tested allocation evaluation on the EXP-007 traces.~~ Done 2026-10-11: EXP-010 CLOSED, FALSIFIED (the adaptive controller did not beat the DEV-fitted, workload-family-informed static split on EVAL; layer-aware allocation still beats global LRU and per-layer uniform). It is a DEV-selected, frozen, EVAL-tested retrospective holdout: the EVAL traces and the EVAL outcomes of every adaptive candidate were already inspected in EXP-007, so this is not an untouched holdout. EXP-010 covers it, comparing the DEV-selected adaptive controller with a DEV-fitted, workload-family-informed static split (protocol EXP010-P1a, frozen 2026-10-11 before any EXP-010 replay).
 3. ~~EXP-008 (EWS as predictor), EXP-021 confirmation on the 80B~~: both done.

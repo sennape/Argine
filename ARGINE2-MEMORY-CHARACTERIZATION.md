@@ -174,7 +174,7 @@ Readings that Phase 1 must confirm or falsify (status after EXP-007 run-00, v2):
 
 **Known [MEASURED / DERIVED from Argine v1]:** at ~12% residency the 80B is 1.58× faster; speed/residency exponent 0.384 vs 0.50-0.58; per-token expert bytes 0.65× and reads 1.25× of the 30B; slices 440-704 KiB vs ~930 KiB; I/O bucket on the 80B: read 44%, decommit 31%, lock 17%, commit 8% (30B: 48 / 6 / 3 / 1%); RAM peak − budget 2.110 vs 1.520 GiB.
 
-**[OPEN] awaiting EXP-007/EXP-026:** routing concentration, EWS, reuse, expert-level hit rates and queue depth of the 80B. [Update 2026-10-11] EXP-007 now provides the 80B's concentration, EWS, reuse and expert-level hit rates (61.4–78.1% at 4 GiB); queue depth is in each run's `summary.json`. The causal comparison remains EXP-026.
+**[OPEN] awaiting EXP-007/EXP-026:** routing concentration, EWS, reuse, expert-level hit rates and queue depth of the 80B. [Update 2026-10-11] EXP-007 now provides the 80B's concentration, EWS, reuse and expert-level hit rates (61.4–78.1% at 4 GiB); queue depth is in each run's `summary.json`. The causal comparison remains EXP-026. [Update 2026-10-16] EXP-026 closed INCONCLUSIVE: at matched budget/F the untraced slopes were not distinguishable, the traced agreement gate failed, and no candidate cause was evaluable; the causal comparison remains open.
 
 ## 14. Supported hypotheses
 
