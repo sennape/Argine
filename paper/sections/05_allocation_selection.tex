@@ -1,0 +1,9 @@
+\section{Allocation Helps, but Selection Dominates the Remaining Gap}
+\label{sec:allocation-selection}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{../experiments/EXP-007-router-characterization/figures/allocation_vs_selection.pdf}
+    \caption{Allocation matters, but selection matters more. Median hit-rate improvement of \texttt{adaptive-e64} over global LRU and remaining Belady-style future-informed headroom across the 14 in-sample workload/split cells for each model and memory budget; whiskers show the full observed range. Layer-aware allocation becomes increasingly valuable under stronger memory pressure, especially for the 30B model. Nevertheless, the remaining future-informed selection headroom is substantially larger in every tested model/budget condition. The Belady-style reference is not an achievable online policy and is used only to quantify residual selection opportunity.}
+    \label{fig:allocation-selection}
+\end{figure}

@@ -1,0 +1,78 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\newlabel{sec:introduction}{{1}{1}{Introduction}{section.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}From cache capacity to allocation and retention}{2}{subsection.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Why hit rate is not enough}{2}{subsection.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Pressure regimes and mechanism tests}{2}{subsection.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}Contributions}{2}{subsection.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}System Model and Problem Formulation}{3}{section.2}\protected@file@percent }
+\newlabel{sec:system-model}{{2}{3}{System Model and Problem Formulation}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Expert streaming under a hard memory budget}{3}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Allocation and retention}{3}{subsection.2.2}\protected@file@percent }
+\newlabel{eq:allocation-budget}{{1}{3}{Allocation and retention}{equation.1}{}}
+\newlabel{eq:allocation-vector}{{2}{3}{Allocation and retention}{equation.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Expert streaming under a hard DRAM budget. For each token, the router selects experts whose weights must reside in a bounded DRAM expert-memory pool. The allocation/retention policy determines per-layer memory budgets and eviction decisions. Requests for non-resident experts trigger asynchronous direct reads from the NVMe expert store. The experiments characterize this coupled allocation-and-retention process through reuse, I/O volume, queue depth, token latency, and generation throughput.}}{4}{figure.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:architecture}{{1}{4}{Expert streaming under a hard DRAM budget. For each token, the router selects experts whose weights must reside in a bounded DRAM expert-memory pool. The allocation/retention policy determines per-layer memory budgets and eviction decisions. Requests for non-resident experts trigger asynchronous direct reads from the NVMe expert store. The experiments characterize this coupled allocation-and-retention process through reuse, I/O volume, queue depth, token latency, and generation throughput}{figure.caption.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Expert working sets}{4}{subsection.2.3}\protected@file@percent }
+\newlabel{eq:ews}{{3}{4}{Expert working sets}{equation.3}{}}
+\newlabel{eq:ews-fraction}{{4}{4}{Expert working sets}{equation.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Normalized pressure and one-token footprint}{4}{subsection.2.4}\protected@file@percent }
+\newlabel{eq:footprint}{{5}{5}{Normalized pressure and one-token footprint}{equation.5}{}}
+\newlabel{eq:footprints}{{6}{5}{Normalized pressure and one-token footprint}{equation.6}{}}
+\newlabel{eq:normalized-pressure}{{7}{5}{Normalized pressure and one-token footprint}{equation.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Metrics and performance quantities}{5}{subsection.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Reuse.}{5}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{I/O.}{5}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{End-to-end performance.}{5}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Experimental Methodology}{5}{section.3}\protected@file@percent }
+\newlabel{sec:methodology}{{3}{5}{Experimental Methodology}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Reference platform}{5}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Models}{6}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Workloads and splits}{6}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Tracing and event-atomic replay}{6}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Policy comparisons}{6}{subsection.3.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Evaluated MoE models. Expert and non-expert byte counts are those recorded by the Argine artifact for the quantized GGUFs used in the experiments.}}{7}{table.caption.5}\protected@file@percent }
+\newlabel{tab:models}{{1}{7}{Evaluated MoE models. Expert and non-expert byte counts are those recorded by the Argine artifact for the quantized GGUFs used in the experiments}{table.caption.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Memory-pressure experiments}{7}{subsection.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Extreme pressure.}{7}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Interpretable performance model.}{7}{section*.7}\protected@file@percent }
+\newlabel{eq:latency-model}{{8}{7}{Interpretable performance model}{equation.8}{}}
+\@writefile{toc}{\contentsline {paragraph}{Matched-pressure cross-model test.}{7}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Measurement semantics}{8}{subsection.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Expert-level diagnostic hit rate.}{8}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Runtime-style hit rate.}{8}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Throughput and latency.}{8}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8}Experimental discipline}{8}{subsection.3.8}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Layer demand is heterogeneous and uniform memory partitioning is measurably suboptimal. Panels (a) and (b) show the median per-layer EWS90 fraction across the 14 final in-sample workload/split cells for the 30B and 80B MoEs; shaded regions denote the full observed range. Layer-demand heterogeneity is present in both models, with per-cell EWS90 coefficients of variation spanning 0.085--0.248 for 30B and 0.162--0.455 for 80B. Panel (c) shows the median excess misses induced by a uniform per-layer memory split, with whiskers denoting the full observed range. The result establishes measurable allocation opportunity but does not imply that greater routing heterogeneity necessarily yields greater allocation benefit.}}{9}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:heterogeneity}{{2}{9}{Layer demand is heterogeneous and uniform memory partitioning is measurably suboptimal. Panels (a) and (b) show the median per-layer EWS90 fraction across the 14 final in-sample workload/split cells for the 30B and 80B MoEs; shaded regions denote the full observed range. Layer-demand heterogeneity is present in both models, with per-cell EWS90 coefficients of variation spanning 0.085--0.248 for 30B and 0.162--0.455 for 80B. Panel (c) shows the median excess misses induced by a uniform per-layer memory split, with whiskers denoting the full observed range. The result establishes measurable allocation opportunity but does not imply that greater routing heterogeneity necessarily yields greater allocation benefit}{figure.caption.12}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Layer Demand Is Heterogeneous}{9}{section.4}\protected@file@percent }
+\newlabel{sec:heterogeneity}{{4}{9}{Layer Demand Is Heterogeneous}{section.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Allocation Helps, but Selection Dominates the Remaining Gap}{9}{section.5}\protected@file@percent }
+\newlabel{sec:allocation-selection}{{5}{9}{Allocation Helps, but Selection Dominates the Remaining Gap}{section.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Workload Drift Does Not Imply Useful Fast Adaptation}{9}{section.6}\protected@file@percent }
+\newlabel{sec:workload-drift}{{6}{9}{Workload Drift Does Not Imply Useful Fast Adaptation}{section.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Hit Rate Is Not a Performance Model}{9}{section.7}\protected@file@percent }
+\newlabel{sec:performance-model}{{7}{9}{Hit Rate Is Not a Performance Model}{section.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Pressure Regimes Are Not Universal Residency Thresholds}{9}{section.8}\protected@file@percent }
+\newlabel{sec:pressure-regimes}{{8}{9}{Pressure Regimes Are Not Universal Residency Thresholds}{section.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Discussion}{9}{section.9}\protected@file@percent }
+\newlabel{sec:discussion}{{9}{9}{Discussion}{section.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}Limitations}{9}{section.10}\protected@file@percent }
+\newlabel{sec:limitations}{{10}{9}{Limitations}{section.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {11}Related Work}{9}{section.11}\protected@file@percent }
+\newlabel{sec:related-work}{{11}{9}{Related Work}{section.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {12}Conclusion}{9}{section.12}\protected@file@percent }
+\newlabel{sec:conclusion}{{12}{9}{Conclusion}{section.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Allocation matters, but selection matters more. Median hit-rate improvement of \texttt  {adaptive-e64} over global LRU and remaining Belady-style future-informed headroom across the 14 in-sample workload/split cells for each model and memory budget; whiskers show the full observed range. Layer-aware allocation becomes increasingly valuable under stronger memory pressure, especially for the 30B model. Nevertheless, the remaining future-informed selection headroom is substantially larger in every tested model/budget condition. The Belady-style reference is not an achievable online policy and is used only to quantify residual selection opportunity.}}{10}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:allocation-selection}{{3}{10}{Allocation matters, but selection matters more. Median hit-rate improvement of \texttt {adaptive-e64} over global LRU and remaining Belady-style future-informed headroom across the 14 in-sample workload/split cells for each model and memory budget; whiskers show the full observed range. Layer-aware allocation becomes increasingly valuable under stronger memory pressure, especially for the 30B model. Nevertheless, the remaining future-informed selection headroom is substantially larger in every tested model/budget condition. The Belady-style reference is not an achievable online policy and is used only to quantify residual selection opportunity}{figure.caption.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Workload drift does not imply useful fast adaptation. Panel (a) shows that Jensen--Shannon divergence between routing distributions is substantially larger across workload boundaries than within segments for both evaluated MoEs. Panel (b) compares the gain of a fixed allocation equal to the controller's mean allocation with the gain of the tested controller. The result confirms workload-dependent routing drift but falsifies the temporal mechanism of the current \texttt  {adaptive-e64} controller; it does not establish that dynamic adaptation is ineffective in general.}}{10}{figure.caption.14}\protected@file@percent }
+\newlabel{fig:workload-drift}{{4}{10}{Workload drift does not imply useful fast adaptation. Panel (a) shows that Jensen--Shannon divergence between routing distributions is substantially larger across workload boundaries than within segments for both evaluated MoEs. Panel (b) compares the gain of a fixed allocation equal to the controller's mean allocation with the gain of the tested controller. The result confirms workload-dependent routing drift but falsifies the temporal mechanism of the current \texttt {adaptive-e64} controller; it does not establish that dynamic adaptation is ineffective in general}{figure.caption.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Interpretable prediction of token latency. Measured versus leave-one-configuration-out predicted latency for the five preregistered 30B memory configurations. The dashed diagonal denotes perfect prediction. Median absolute percentage error is 2.25\%, below the preregistered 15\% criterion. The result supports the predictive usefulness of the latency decomposition over the tested configurations, without separately identifying every physical latency component.}}{11}{figure.caption.15}\protected@file@percent }
+\newlabel{fig:performance-model}{{5}{11}{Interpretable prediction of token latency. Measured versus leave-one-configuration-out predicted latency for the five preregistered 30B memory configurations. The dashed diagonal denotes perfect prediction. Median absolute percentage error is 2.25\%, below the preregistered 15\% criterion. The result supports the predictive usefulness of the latency decomposition over the tested configurations, without separately identifying every physical latency component}{figure.caption.15}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Reuse transitions and performance regimes are not universal residency thresholds. Panel (a) shows the 30B extreme-pressure result normalized to the 1.5\,GiB baseline: expert-level reuse collapses substantially faster than generation throughput, and execution continues below the one-token expert footprint. Panel (b) shows the matched-pressure comparison: the preregistered P1$\rightarrow $P2 pressure-response exponents are $\beta _{30}=0.476$ and $\beta _{80}=0.495$ ($\Delta \beta =+0.019$), so the models are not distinguished by the primary explanandum. Open markers show the secondary P3 condition.}}{11}{figure.caption.16}\protected@file@percent }
+\newlabel{fig:pressure-regimes}{{6}{11}{Reuse transitions and performance regimes are not universal residency thresholds. Panel (a) shows the 30B extreme-pressure result normalized to the 1.5\,GiB baseline: expert-level reuse collapses substantially faster than generation throughput, and execution continues below the one-token expert footprint. Panel (b) shows the matched-pressure comparison: the preregistered P1$\rightarrow $P2 pressure-response exponents are $\beta _{30}=0.476$ and $\beta _{80}=0.495$ ($\Delta \beta =+0.019$), so the models are not distinguished by the primary explanandum. Open markers show the secondary P3 condition}{figure.caption.16}{}}
+\gdef \@abspage@last{11}

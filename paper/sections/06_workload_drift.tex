@@ -1,0 +1,9 @@
+\section{Workload Drift Does Not Imply Useful Fast Adaptation}
+\label{sec:workload-drift}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\linewidth]{../experiments/EXP-023-workload-drift/figures/workload_drift_vs_adaptation.pdf}
+    \caption{Workload drift does not imply useful fast adaptation. Panel (a) shows that Jensen--Shannon divergence between routing distributions is substantially larger across workload boundaries than within segments for both evaluated MoEs. Panel (b) compares the gain of a fixed allocation equal to the controller's mean allocation with the gain of the tested controller. The result confirms workload-dependent routing drift but falsifies the temporal mechanism of the current \texttt{adaptive-e64} controller; it does not establish that dynamic adaptation is ineffective in general.}
+    \label{fig:workload-drift}
+\end{figure}
