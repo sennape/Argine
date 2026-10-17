@@ -174,3 +174,7 @@ Its figures are produced by `tools/paper_figures.py` from the committed
 experimental evidence. The paper should be interpreted together with the
 experiment registry and the individual `EXP-*` records, which contain the
 scope, protocol, result, and limitations behind each reported claim.
+
+## Public snapshot and historical provenance
+
+The public Argine2 release is distributed from a clean repository snapshot rather than from the complete pre-publication Git history. Historical Argine2 commit identifiers embedded in frozen experiment protocols, configuration files, processed reports, and experiment narratives are intentionally retained as immutable provenance identifiers. They refer to the original research-development history and are not guaranteed to resolve as commits in the public snapshot history. External upstream commit identifiers, such as the pinned llama.cpp revision, retain their normal upstream meaning. The frozen experiment records themselves are part of the released artifact and are not rewritten to manufacture a new public lineage.
