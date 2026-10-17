@@ -31,8 +31,11 @@ def _clean(x: Any, digits: int = 8) -> Any:
 def write_json(obj: Any, path: str | Path) -> Path:
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(json.dumps(_clean(obj), indent=2, sort_keys=True, ensure_ascii=False) + "\n",
-                 encoding="utf-8")
+    with open(p, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(
+            json.dumps(_clean(obj), indent=2, sort_keys=True, ensure_ascii=False)
+            + "\n"
+        )
     return p
 
 
@@ -49,7 +52,12 @@ def write_csv(rows: Sequence[Dict[str, Any]], path: str | Path,
                     seen.add(k)
                     cols.append(k)
     with open(p, "w", newline="", encoding="utf-8") as fh:
-        w = csv.DictWriter(fh, fieldnames=cols, extrasaction="ignore")
+        w = csv.DictWriter(
+    fh,
+    fieldnames=cols,
+    extrasaction="ignore",
+    lineterminator="\n",
+)
         w.writeheader()
         for r in rows:
             w.writerow({k: _clean(r.get(k)) for k in cols})

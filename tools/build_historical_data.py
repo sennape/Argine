@@ -26,7 +26,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from argine.research.io import write_csv  # noqa: E402
+from argine.research.io import write_csv # noqa: E402
 from argine.research.stats import summarize  # noqa: E402
 
 RAW = ROOT / "data" / "raw" / "argine-v1"
@@ -52,13 +52,24 @@ def gen(r):
 def write(exp_id, records, rows, notes=None):
     d = EXP / exp_id
     (d / "raw").mkdir(parents=True, exist_ok=True)
-    with open(d / "raw" / "records.jsonl", "w", encoding="utf-8") as fh:
+    with open(
+        d / "raw" / "records.jsonl",
+        "w",
+        encoding="utf-8",
+        newline="\n",
+    ) as fh:
         for r in records:
             fh.write(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n")
     write_csv(rows, d / "results.csv")
     if notes:
         (d / "processed").mkdir(exist_ok=True)
-        (d / "processed" / "notes.json").write_text(json.dumps(notes, indent=2) + "\n")
+        with open(
+            d / "processed" / "notes.json",
+            "w",
+            encoding="utf-8",
+            newline="\n",
+        ) as fh:
+            fh.write(json.dumps(notes, indent=2) + "\n")
 
 
 def speed_row(label, recs, **extra):

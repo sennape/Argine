@@ -15,7 +15,7 @@ Argine2 is a research project. The most valuable contributions produce evidence 
 
 ## Rules that keep results comparable
 
-1. **Cite IDs.** Every result names the `RQ-` it addresses and the `EXP-` it belongs to. New experiments take the next free number: `EXP-027-short-name`. IDs are never reused or renamed.
+1. **Cite IDs.** Every result names the `RQ-` it addresses and the `EXP-` it belongs to. New experiments use the next free `EXP-NNN-short-name` identifier. IDs are never reused or renamed.
 2. **Raw data first.** Commit raw outputs (`raw.tsv`, `trace.jsonl.gz`, CSV/JSON). Screenshots and Markdown tables are not data.
 3. **Fingerprint.** Runs made with `argine research trace` carry `manifest.json`; keep it. A result without a complete fingerprint is not publication-quality (`argine research fingerprint` tells you what is missing).
 4. **Repeat and interleave.** At least 3 runs (5 preferred) per configuration, configurations interleaved inside one session (`argine research schedule --configs A,B,C --repeat 3`).

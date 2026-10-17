@@ -13,6 +13,7 @@ from __future__ import annotations
 import re
 import sys
 from pathlib import Path
+import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "strumenti"))
@@ -39,10 +40,24 @@ def outside_code(text: str) -> str:
     return "\n".join(out)
 
 
+def markdown_files() -> list[Path]:
+    result = subprocess.run(
+        ["git", "ls-files", "-z", "--", "*.md"],
+        cwd=ROOT,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    return sorted(
+        ROOT / Path(raw.decode("utf-8"))
+        for raw in result.stdout.split(b"\0")
+        if raw
+    )
+
+
 def check() -> list:
     problems = []
     cache = {}
-    for md in sorted(ROOT.rglob("*.md")):
+    for md in markdown_files():
         if any(p in SKIP_DIRS for p in md.relative_to(ROOT).parts):
             continue
         text = outside_code(md.read_text(encoding="utf-8"))
