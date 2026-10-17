@@ -248,7 +248,7 @@ STEP 5 is explained once, in P16.
 No new trace or fidelity run is required for EXP-010, because it reuses EXP-021-qualified EXP-007 traces. Commands use single `%` (interactive prompt). EXP-010 becomes RUNNING when STEP 1 is first executed.
 
 ```bat
-cd /d C:\Users\alpel\Desktop\Argine2
+cd /d C:\path\to\Argine2
 set R=experiments\EXP-007-router-characterization\raw
 set O=experiments\EXP-010-adaptive-allocation
 python tools\exp010_analysis.py check-freeze

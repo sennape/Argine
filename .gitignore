@@ -17,3 +17,19 @@ llama-research/*.dll
 _to_delete/
 llama-research-v2/*.exe
 llama-research-v2/*.dll
+
+# publication/local research outputs
+experiments/*/raw/
+experiments/SMOKE-*/
+experiments/EXP-019-instrumentation-validation/processed/windows-validation-2026-10-12/
+_audit_*/
+_review_*/
+EXP*_audit_bundle.txt
+EXP*_doublecheck.txt
+EXP*_review_bundle.txt
+EXP*_final_review*.txt
+EXP*_closure_review*.txt
+EXP*_post_*review*.txt
+Argine2_EXP*_review*.txt
+EXP*_final_doublecheck*.txt
+EXP*_core_bundle.txt

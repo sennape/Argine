@@ -20,10 +20,11 @@ import sys
 from pathlib import Path
 
 REPLACE = [
-    (re.compile(r"LucaAlpeHP"), "reference-machine"),
-    (re.compile(r"(?i)(C:\\\\+Users\\\\+)alpel"), r"\1USER"),
-    (re.compile(r"(?i)(C:\\+Users\\+)alpel"), r"\1USER"),
-    (re.compile(r"(?i)\balpel\b"), "USER"),
+    # Replace the recorded host value without embedding the original machine name.
+    (re.compile(r'("host"\s*:\s*")[^"]+(")'), r"\1reference-machine\2"),
+    # Replace any Windows user component in both JSON-escaped and ordinary paths.
+    (re.compile(r"(?i)(C:\\\\+Users\\\\+)[^\\\"]+"), r"\1USER"),
+    (re.compile(r"(?i)(C:\\+Users\\+)[^\\\"]+"), r"\1USER"),
 ]
 
 

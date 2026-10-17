@@ -320,7 +320,7 @@ One short Windows trace with the v2 instrumentation, to make the 30B equivalence
 - nothing else changes.
 
 ```bat
-cd C:\Users\alpel\Desktop\Argine2
+cd C:\path\to\Argine2
 set ARGINE_LLAMA_DIR=%CD%\llama-research-v2
 argine.bat doctor
 argine.bat research trace C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf --expert-store --budgets 4G --repeat 1 ^
@@ -501,7 +501,7 @@ On the failed trace itself, with the corrected replay, every criterion holds:
 The model was corrected on this same trace, though, so it is not an independent test. **EXP-021 stays RUNNING** until one fresh short Windows run passes: *[Historical (2026-10-04); resolved in §14.1: the fresh run passed and EXP-021 closed.]*
 
 ```bat
-cd C:\Users\alpel\Desktop\Argine2
+cd C:\path\to\Argine2
 set ARGINE_LLAMA_DIR=%CD%\llama-research-v2
 argine.bat research trace C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf --expert-store --budgets 4G --repeat 1 ^
     --workload coding --split dev --out experiments\EXP-021-replay-fidelity\raw\30b-coding-dev-v2-confirm
