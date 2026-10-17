@@ -4,6 +4,20 @@
 
 Argine2 is a research fork of [Argine](docs/history/ARGINE-V1-README.it.md), a local runtime that runs MoE models larger than RAM on a 16 GB Windows laptop by streaming experts from NVMe through a hard-capped expert cache built into llama.cpp. Argine answered *"how big can a usable MoE be on this machine?"* (an 80-billion-parameter model at 6.87 tokens/s). Argine2 asks *why* it behaves the way it does, and whether a better way to spend a fixed expert-memory budget exists. The repository is the research artifact: runtime, instrumentation, experiment framework, raw evidence, and the narrative, including what failed.
 
+**Artifact map.**
+
+| resource | purpose |
+|---|---|
+| [`paper/main.tex`](paper/main.tex) | paper source: *Argine: Expert Streaming Under Hard Memory Constraints* |
+| [`REPRODUCING.md`](REPRODUCING.md) | public reproduction and experimental-replication guide |
+| [`experiments/INDEX.md`](experiments/INDEX.md) / [`experiments/index.json`](experiments/index.json) | canonical experiment registry and machine-readable status |
+| [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) | research-question ledger, including what remains open |
+| [`data/raw/`](data/raw) and [`experiments/`](experiments) | committed raw evidence, processed outputs, protocols and experiment-local figures |
+| [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md) | experimental methodology and evidence rules |
+| [`tools/paper_figures.py`](tools/paper_figures.py) | reproducible generator for the six main paper figures |
+
+**Publication snapshot.** The planned experimental campaign is closed: **27 experiments**, with **13 SUPPORTED, 7 FALSIFIED, 1 SUPERSEDED, and 6 INCONCLUSIVE; 0 RUNNING and 0 PLANNED**. Open research questions remain explicitly open rather than being converted into post-hoc experiments.
+
 Every statement below is tagged: **[MEASURED]** read from raw data, **[DERIVED]** computed from measured data by a stated method, **[HYPOTHESIS]**, **[SUPPORTED]**, **[FALSIFIED]**, **[OPEN]**, **[LIMITATION]**. Experiments have permanent identifiers (`EXP-NNN`), open questions too (`RQ-NNN`).
 
 <!-- indice: generato da strumenti/controlla_readme.py, non modificare a mano -->
@@ -54,7 +68,7 @@ Every statement below is tagged: **[MEASURED]** read from raw data, **[DERIVED]*
 | **Phase 1 — observation** | **complete (2026-10-11).** Instrumentation built (patch [`0003`](patches/argine-research.h)) and validated ([EXP-019](experiments/EXP-019-instrumentation-validation/README.md): fixture/Linux 2026-10-03; fresh publication-quality Windows run 2026-10-12, workload-complete and replay event-exact, with record loss confined to the flush-sentinel tail and queue depth an upper bound; enabled-instrumentation overhead measured in [EXP-024](experiments/EXP-024-tracing-overhead/README.md): 4G 1.099% [0.605, 1.593], 1.5G 0.549% [−1.379, 2.478], overall INCONCLUSIVE). The [EXP-007](experiments/EXP-007-router-characterization/README.md) characterization campaign is closed: **28 / 28 cells** (2 models × 7 workload families × DEV/EVAL), 9 runs each, every cell-budget with 3 runs qualified by the [EXP-021](experiments/EXP-021-replay-fidelity/README.md) replay-fidelity method. Both models are characterized. |
 | Phase 2 — counterfactual replay | event-atomic replay engine, 13 policies, Belady-style oracle, exact LRU elasticity curves, adaptive controller and ablations: run on all 28 EXP-007 cells (in-sample) and in a temporal analysis of the four transition traces |
 | Phase 3 — adaptive residency | controller exists **in replay only** ([EXP-010](experiments/EXP-010-adaptive-allocation/README.md)); deliberately not in the runtime. [EXP-010](experiments/EXP-010-adaptive-allocation/README.md) is **CLOSED, FALSIFIED** (2026-10-11, frozen protocol EXP010-P1a; a DEV-selected, frozen, EVAL-tested retrospective holdout whose EVAL adaptive outcomes had already been seen in EXP-007): the DEV-selected adaptive controller did not outperform the DEV-fitted, workload-family-informed static allocation on EVAL for either model (G adaptive/static 1.0037 on the 30B, 1.0015 on the 80B; small effects). Layer-aware allocation still outperforms global LRU and per-layer uniform in aggregate; the additional online adaptation does not beat the stronger DEV-fitted static comparator. |
-| First deliverable | [`ARGINE2-MEMORY-CHARACTERIZATION.md`](ARGINE2-MEMORY-CHARACTERIZATION.md): v0 (methodology, platform, historical evidence, pilot). The EXP-007 data for its per-model sections now exist; the v1 write-up is pending. |
+| Publication artifact | [`paper/main.tex`](paper/main.tex) is the canonical scientific synthesis; [`ARGINE2-MEMORY-CHARACTERIZATION.md`](ARGINE2-MEMORY-CHARACTERIZATION.md) is retained as an earlier research note. Reproduction instructions are in [`REPRODUCING.md`](REPRODUCING.md). |
 
 [SUPPORTED, EXP-007, counterfactual replay, in-sample] The evidence on the central question is materially stronger, but it is not settled:
 - Layer-aware adaptive allocation beats global LRU in most constrained regimes, and the gain grows with memory pressure. Most of it under pressure comes from per-layer partitioning itself.
@@ -367,6 +381,8 @@ Generated, machine-readable: [`experiments/INDEX.md`](experiments/INDEX.md), [`e
 
 ## Reproduction
 
+The public reproduction entry point is [`REPRODUCING.md`](REPRODUCING.md). The commands below are retained as the detailed reference-machine workflow.
+
 ### Without a model: re-derive every table in this repository
 
 ```bash
@@ -375,7 +391,7 @@ python tools/build_historical_data.py          # EXP-001..006, 011..018 from dat
 python -m argine research analyze data/processed/legacy-30b-route-request1.jsonl.gz \
        --budgets 4G,3G,2G,1.5G,1G,768M,512M --out /tmp/pilot   # EXP-007/009/010 pilot
 python tools/index_experiments.py --check       # registry consistency
-python -m unittest discover -s tests            # 341 tests, no network, no model
+python -m unittest discover -s tests            # full test suite; no network, no model
 ```
 
 Outputs are deterministic (sorted keys, fixed float precision); replay timings go to separate `overhead.csv` files.
@@ -449,22 +465,13 @@ Work against a research question, not a feature. Good contributions: reproducing
 
 ## Literature positioning
 
-Argine2 does not claim novelty for its mechanisms. Utility-based partitioning of a shared cache by marginal utility is classic (Qureshi & Patt, MICRO 2006); dynamic-programming cache allocation across MoE layers appears in AdapMoE (arXiv 2408.10284); per-layer expert slots with learned replacement in FlashMoE (arXiv 2601.17063); per-layer quotas, event-atomic replay and the Belady gap in "Reproducible Evaluation of MoE Expert Caching" (arXiv 2608.07911); stale-first eviction in SpecMD (arXiv 2602.03921). Two recent papers that look directly relevant, MoE-CORE (arXiv 2610.01950) and Mira (arXiv 2609.38090), have **not yet been read** [OPEN]. What Argine2 investigates differently: a *global* hard DRAM budget split by *measured* marginal value on a consumer CPU+NVMe machine, with the runtime's own traces, an enforced memory invariant, and falsification as the goal. Full comparison table: [`docs/LITERATURE.md`](docs/LITERATURE.md).
+Argine2 does not claim novelty for generic MoE caching, expert offload, prefetching, or cache-allocation mechanisms. The canonical literature review and comparison to prior systems are in Section 11 of the paper ([`paper/sections/11_related_work.tex`](paper/sections/11_related_work.tex)) and [`paper/references.bib`](paper/references.bib). Extended research notes are retained in [`docs/LITERATURE.md`](docs/LITERATURE.md). The contribution evaluated here is the empirical decomposition of expert residency under a hard global DRAM budget on the reference CPU+NVMe system, including validated replay, negative tests, and explicitly scoped limitations.
 
 ## Roadmap
 
-0. Done 2026-10-04: replay fidelity (EXP-021) is validated on Linux, on a fresh 30B Windows run and on the 80B coding-dev campaign ([§14](docs/research/REPLAY-FIDELITY-VALIDATION.md#14-independent-confirmation-and-the-80b-campaign-2026-10-04)).
-1. ~~Phase-1 runs on the reference machine: EXP-007 (both models, all workloads, dev+eval)~~ — done 2026-10-11 (28/28 cells). EXP-022 (extreme pressure) closed 2026-10-15, INCONCLUSIVE. EXP-026 (30B vs 80B regimes) closed 2026-10-16, INCONCLUSIVE. EXP-024 (overhead) closed 2026-10-12, INCONCLUSIVE (supported at 4G, inconclusive at 1.5G). EXP-023 (drift) closed 2026-10-12, FALSIFIED for the current controller (routing drift at boundaries is strong, descriptively; the controller does not exploit it).
-2. `ARGINE2-MEMORY-CHARACTERIZATION.md` v1 with real per-model sections, now that the EXP-007 data exist. RQ-010 and RQ-011 are answered; RQ-003 and RQ-009 are partially answered.
-2a. ~~**Next immediate step (as of 2026-10-11):** a retrospective DEV-selected → frozen → EVAL-tested allocation evaluation on the EXP-007 traces.~~ Done 2026-10-11: EXP-010 CLOSED, FALSIFIED (the adaptive controller did not beat the DEV-fitted, workload-family-informed static split on EVAL; layer-aware allocation still beats global LRU and per-layer uniform). It is a DEV-selected, frozen, EVAL-tested retrospective holdout: the EVAL traces and the EVAL outcomes of every adaptive candidate were already inspected in EXP-007, so this is not an untouched holdout. EXP-010 covers it, comparing the DEV-selected adaptive controller with a DEV-fitted, workload-family-informed static split (protocol EXP010-P1a, frozen 2026-10-11 before any EXP-010 replay).
-3. ~~EXP-008 (EWS as predictor), EXP-021 confirmation on the 80B~~: both done.
-   - EXP-008 is CLOSED, INCONCLUSIVE (2026-10-11): throughput is unresolved because the models disagree; hit rate is supported within the traced data.
-   - EXP-021 is CLOSED, SUPPORTED, including the 80B campaign (2026-10-04).
+The publication experiment campaign is complete: the registry contains no RUNNING or PLANNED experiments. Remaining work is deliberately separated from the evidence already reported.
 
-   ~~Still open: EXP-025 (performance model).~~ EXP-025 closed 2026-10-15, SUPPORTED by its primary test (30B only; median leave-one-configuration-out error 2.2546885% < 15%).
-4. After the replay research is scientifically closed: decide whether to implement a runtime controller above the expert store and validate it separately at runtime. EXP-010 remains replay-only and is not part of this future runtime-implementation step.
-5. Failure envelope map (model × workload × budget → INTERACTIVE / DEGRADED / I/O DOMINATED / NON-INTERACTIVE).
-6. Public GitHub repository with releases for binaries; DOI archive once results are stable.
+Future directions include an untouched prospective holdout, runtime implementation and end-to-end validation of a controller above the expert store, replication on other hardware, and a broader failure-envelope map. These are future research directions, not missing prerequisites for reproducing the current artifact. Public release metadata, repository URL, release tag, and archival/DOI information are handled separately from the scientific experiment ledger.
 
 ## Citation
 
