@@ -5,9 +5,9 @@ message: >-
 title: "Argine2: expert memory as a resource-allocation problem in sparse MoE inference under a hard DRAM budget"
 type: software
 authors:
-  - name: "Argine contributors"
-version: "0.2.0.dev0"
-date-released: "2026-10-03"
+  - name: "sennape"
+version: "0.2.0"
+date-released: "2026-10-17"
 license: MIT
 keywords:
   - Mixture-of-Experts

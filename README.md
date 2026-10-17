@@ -14,6 +14,7 @@ Argine2 is a research fork of [Argine](docs/history/ARGINE-V1-README.it.md), a l
 | [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) | research-question ledger, including what remains open |
 | [`data/raw/`](data/raw) and [`experiments/`](experiments) | committed raw evidence, processed outputs, protocols and experiment-local figures |
 | [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md) | experimental methodology and evidence rules |
+| [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) | third-party license notices and text-fixture provenance |
 | [`tools/paper_figures.py`](tools/paper_figures.py) | reproducible generator for the six main paper figures |
 
 **Publication snapshot.** The planned experimental campaign is closed: **27 experiments**, with **13 SUPPORTED, 7 FALSIFIED, 1 SUPERSEDED, and 6 INCONCLUSIVE; 0 RUNNING and 0 PLANNED**. Open research questions remain explicitly open rather than being converted into post-hoc experiments.
