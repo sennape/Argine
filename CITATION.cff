@@ -9,6 +9,7 @@ authors:
 version: "0.2.0"
 date-released: "2026-10-17"
 license: MIT
+repository-code: "https://github.com/sennape/Argine2"
 keywords:
   - Mixture-of-Experts
   - MoE inference

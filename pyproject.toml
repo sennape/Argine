@@ -24,6 +24,8 @@ dependencies = [
 [project.scripts]
 argine2 = "argine.cli:main"
 
+[project.urls]
+Repository = "https://github.com/sennape/Argine2"
 
 [tool.setuptools]
 packages = ["argine", "argine.research"]
