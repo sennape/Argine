@@ -2,8 +2,10 @@
 
 Argine2 distinguishes between **artifact reproduction** and **experimental replication**.
 
-Artifact reproduction re-derives analyses, tables, checks, and figures from the
-raw evidence committed to this repository. It does not require downloading or
+Artifact reproduction verifies analyses, tables, checks, and figures from the
+evidence committed to this repository. Full reprocessing of experiments whose
+run artifacts live under `experiments/EXP-*/raw/` requires the external raw
+corpus identified by `data/external_raw_manifest.csv`. It does not require downloading or
 running the evaluated language models.
 
 Experimental replication performs new instrumented model runs. It requires
@@ -75,12 +77,12 @@ The main evidence locations are:
 - `data/raw/argine-v1/` — imported Argine v1 execution records;
 - `data/raw/legacy/` — legacy routing evidence;
 - `data/processed/` — derived legacy analyses;
-- `experiments/EXP-*/raw/` — raw records for individual experiments;
+- `experiments/EXP-*/raw/` — external raw records for individual experiments; these are intentionally excluded from Git and cryptographically inventoried by `data/external_raw_manifest.csv` and `data/external_raw_summary.json`;
 - `experiments/EXP-*/processed/` — derived experiment outputs;
 - `experiments/EXP-*/results.csv` — experiment-level result tables;
 - `experiments/INDEX.md` — experiment registry and final status.
 
-Experiment conclusions are versioned with their raw evidence. Historical
+Experiment conclusions are versioned with committed processed evidence and protocol metadata. The larger external raw corpus is bound to this publication candidate by per-file SHA-256 digests in `data/external_raw_manifest.csv`. Historical
 conclusions are not silently rewritten when later experiments supersede or
 qualify them.
 
@@ -151,8 +153,8 @@ substitute their own local model and runtime paths.
 
 The repository supports two distinct claims:
 
-**Artifact reproduction** means regenerating derived outputs from the committed
-raw evidence and checking the internal consistency of the research artifact.
+**Artifact reproduction** means checking and regenerating the repository-contained
+derived outputs from committed evidence and verifying the internal consistency of the research artifact. Full raw reprocessing additionally requires the external corpus matching the committed SHA-256 manifest.
 
 **Experimental replication** means collecting new measurements under a
 compatible protocol. New performance measurements on other hardware extend the

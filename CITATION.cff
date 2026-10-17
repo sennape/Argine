@@ -26,5 +26,7 @@ abstract: >-
   allocated across MoE layers by measured marginal value rather than managed as a cache,
   on a 16 GB consumer PC streaming experts from NVMe through a hard-capped expert store
   in llama.cpp. Contains the runtime, research instrumentation, an event-atomic replay
-  engine with offline oracles, raw measurement logs, and an experiment registry including
+  engine with offline oracles, committed historical raw measurement logs, processed
+  experimental evidence, cryptographic metadata for the larger external raw trace corpus,
+  and an experiment registry including
   falsified hypotheses.

@@ -2,7 +2,7 @@
 
 **An open, executable investigation of sparse Mixture-of-Experts (MoE) inference under a hard DRAM budget on one consumer PC: is expert residency better modelled as an online resource-allocation problem across layers than as a cache-replacement problem?**
 
-Argine2 is a research fork of [Argine](docs/history/ARGINE-V1-README.it.md), a local runtime that runs MoE models larger than RAM on a 16 GB Windows laptop by streaming experts from NVMe through a hard-capped expert cache built into llama.cpp. Argine answered *"how big can a usable MoE be on this machine?"* (an 80-billion-parameter model at 6.87 tokens/s). Argine2 asks *why* it behaves the way it does, and whether a better way to spend a fixed expert-memory budget exists. The repository is the research artifact: runtime, instrumentation, experiment framework, raw evidence, and the narrative, including what failed.
+Argine2 is a research fork of [Argine](docs/history/ARGINE-V1-README.it.md), a local runtime that runs MoE models larger than RAM on a 16 GB Windows laptop by streaming experts from NVMe through a hard-capped expert cache built into llama.cpp. Argine answered *"how big can a usable MoE be on this machine?"* (an 80-billion-parameter model at 6.87 tokens/s). Argine2 asks *why* it behaves the way it does, and whether a better way to spend a fixed expert-memory budget exists. The repository is the research artifact: runtime, instrumentation, experiment framework, committed evidence, cryptographic metadata for external raw traces, and the narrative, including what failed.
 
 **Artifact map.**
 
@@ -12,7 +12,7 @@ Argine2 is a research fork of [Argine](docs/history/ARGINE-V1-README.it.md), a l
 | [`REPRODUCING.md`](REPRODUCING.md) | public reproduction and experimental-replication guide |
 | [`experiments/INDEX.md`](experiments/INDEX.md) / [`experiments/index.json`](experiments/index.json) | canonical experiment registry and machine-readable status |
 | [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) | research-question ledger, including what remains open |
-| [`data/raw/`](data/raw) and [`experiments/`](experiments) | committed raw evidence, processed outputs, protocols and experiment-local figures |
+| [`data/raw/`](data/raw), [`data/external_raw_manifest.csv`](data/external_raw_manifest.csv), and [`experiments/`](experiments) | committed historical raw evidence, cryptographic inventory of external experiment raw data, processed outputs, protocols and experiment-local figures |
 | [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md) | experimental methodology and evidence rules |
 | [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) | third-party license notices and text-fixture provenance |
 | [`tools/paper_figures.py`](tools/paper_figures.py) | reproducible generator for the six main paper figures |
@@ -441,11 +441,13 @@ data/raw/legacy/         route.log — the only router trace of the Argine v1 er
 data/processed/          argine-v1-runs.csv (353 speed measurements), the legacy trace in Argine2 format,
                          pilot-legacy-30b-v2/ (pilot analysis, current replay semantics),
                          pilot-legacy-30b/ (original v1-legacy pilot analysis, superseded, kept as history)
-experiments/EXP-*/raw/   the exact raw records each experiment uses
+experiments/EXP-*/raw/   external raw records used by experiments; intentionally excluded from Git and inventoried by data/external_raw_manifest.csv
+
+The publication-candidate external raw manifest enumerates **3,280 files** (117,746,227,384 bytes; **109.660 GiB**) and has SHA-256 `da1d920dea3065bdde7800e644550647804fa64817c79e03229ec1d48a0b9b57`. The manifest records repository-relative paths, file sizes, and per-file SHA-256 digests; it contains no local absolute paths. The raw corpus itself is not stored in Git. Its archival download location will be added to the release metadata when the external archive is published.
 experiments/EXP-*/       results.csv, processed/, figures/
 ```
 
-Processed data are reproducible from raw data with the commands above. Figures always sit next to their CSV source.
+Processed data can be re-derived from raw data with the commands above when the corresponding raw input is available. Repository-only checks and paper-figure regeneration use committed evidence; full reprocessing of experiments whose run artifacts live under `experiments/EXP-*/raw/` requires the external raw corpus matching [`data/external_raw_manifest.csv`](data/external_raw_manifest.csv). Figures always sit next to their CSV source.
 
 ## How to contribute
 
