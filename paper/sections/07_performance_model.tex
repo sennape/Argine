@@ -20,7 +20,7 @@ This also separates the runtime metrics from the replay's whole-expert event met
 
 \subsection{Misses do not have a constant wall-clock cost}
 
-The storage path is asynchronous. As pressure increases, more misses can create more reads in flight, increasing queue depth and improving I/O overlap. In the measured Argine data, the average cost per read decreases from approximately 1.233 to 1.063\,ms as the budget shrinks. Thus a policy that prevents one additional miss does not necessarily save a constant amount of time.
+The storage path is asynchronous. As pressure increases, more misses can create more reads in flight, increasing queue depth and improving I/O overlap. Consequently, the wall-clock cost of an additional miss need not be constant across configurations: a policy that prevents one additional miss does not necessarily save a fixed amount of time.
 
 This is why the performance question cannot be reduced to
 \[
@@ -74,4 +74,4 @@ The five leave-one-configuration-out errors in Table~\ref{tab:loo-predictions} h
 
 The success of Proposition~\ref{prop:latency-predictive} should not be read as a causal identification of every term. In the five primary configurations, \texttt{nodes\_per\_token} is constant at 142.875. The fitted intercept-like compute term and the synchronization term are therefore collinear. The fitted synchronization coefficient being effectively zero does \emph{not} establish that physical synchronization cost is zero.
 
-Likewise, reconstructed queue depths retain upper-bound status where completion timestamps are bounded, and tracing overhead is not independently bounded below 1.5\,GiB. EXP-025 supports the usefulness of a time-based decomposition over the tested range; it does not establish that its coefficients are unique physical constants. The broader conclusion is narrower but important: hit rate is useful for describing reuse, yet insufficient by itself to predict performance.
+Likewise, reconstructed queue depths retain upper-bound status where completion timestamps are bounded, and tracing overhead is not independently bounded at or below 1.5\,GiB. EXP-025 supports the usefulness of a time-based decomposition over the tested range; it does not establish that its coefficients are unique physical constants. The broader conclusion is narrower but important: hit rate is useful for describing reuse, yet insufficient by itself to predict performance.

@@ -635,6 +635,9 @@ def figure6(write: bool) -> None:
     ax.set_xlabel("Expert-memory budget / one-token footprint")
     ax.set_ylabel("Generation throughput (tok/s)")
     ax.set_title("(b) Matched pressure: EXP-026")
+    ax.set_xscale("log")
+    ax.set_xticks([1.0, 1.5, 4.0])
+    ax.set_xticklabels(["1.0", "1.5", "4.0"])
     ax.legend(frameon=False, fontsize=8)
     ax.text(
         0.05,

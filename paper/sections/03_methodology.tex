@@ -5,7 +5,7 @@
 
 All measurements in this paper were collected on one controlled consumer machine; hardware generalization is therefore outside the scope of the empirical claims. The reference system uses an Intel Core i5-1340P with four performance cores, eight efficiency cores, 16 logical CPUs, and AVX2 support; 16\,GB of RAM (15.72\,GiB usable); NVMe storage; integrated Intel Iris Xe graphics; and Windows~11. All reported model execution uses the CPU backend with zero GPU layers.
 
-The expert-store runtime is a patched \texttt{llama.cpp}. The current research binary used by the later confirmatory experiments is based on \texttt{llama.cpp} commit \texttt{254b177} with the Argine expert-store and research instrumentation. It uses asynchronous direct I/O, bypassing the operating-system file cache on the measured expert-store path. Unless an experiment explicitly states otherwise, the later frozen configuration uses context size 4096, batch size 2048, micro-batch size 512, f16 KV storage, flash attention enabled, and pretouch disabled.
+The expert-store runtime is a patched \texttt{llama.cpp}~\cite{gerganov2023llamacpp}. The current research binary used by the later confirmatory experiments is based on \texttt{llama.cpp} commit \texttt{254b177} with the Argine expert-store and research instrumentation. It uses asynchronous direct I/O, bypassing the operating-system file cache on the measured expert-store path. Unless an experiment explicitly states otherwise, the later frozen configuration uses context size 4096, batch size 2048, micro-batch size 512, f16 KV storage, flash attention enabled, and pretouch disabled.
 
 The repository retains historical binary provenance because the binary itself is an experimental variable. The EXP-007 characterization campaign spans the validated trace formats used during its collection; later controlled experiments use the current \texttt{llama-research-v2} runtime. We do not pool timings across binaries unless the corresponding experiment explicitly licenses that comparison.
 
@@ -22,7 +22,7 @@ Table~\ref{tab:models} summarizes the two experimental regimes. We refer to them
         \toprule
         & \textbf{30B} & \textbf{80B} \\
         \midrule
-        Model & Qwen3-30B-A3B & Qwen3-Next-80B-A3B-Instruct \\
+        Model & Qwen3-30B-A3B~\cite{qwen3technicalreport} & Qwen3-Next-80B-A3B-Instruct~\cite{qwen3next2025} \\
         Total / active parameters & 30.5B / 3.35B & 79.7B / 3.87B \\
         MoE layers & 48 & 48 \\
         Routed experts / layer & 128 & 512 \\
@@ -89,7 +89,7 @@ The 30B performance-model experiment uses five memory configurations spanning 1.
 The design tests predictive usefulness of this decomposition; it does not guarantee separate causal identification of each fitted component.
 
 \paragraph{Matched-pressure cross-model test.}
-The final cross-model experiment fixes generation threads at four for both models and matches memory pressure using $\rho=M/F$. Three pressure points are measured with three complete launches per cell. The preregistered primary explanandum compares the P1$\rightarrow$P2 pressure-response exponent; P3 is secondary. This design was introduced specifically because earlier cross-model observations differed simultaneously in binary, thread count, and pressure region.
+The final cross-model experiment fixes generation threads at four for both models and matches memory pressure using $\rho=M/F$. Three pressure points are measured with three complete launches per cell. The preregistered primary explanandum compares the P1$\rightarrow$P2 pressure-response exponent; P3 is secondary. This design was introduced specifically because the historical cross-model observations compared different normalized pressure regions on earlier binaries.
 
 \subsection{Measurement semantics}
 
