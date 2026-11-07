@@ -487,3 +487,135 @@ binding plus the normalized trace identity), `budget_results.json`,
 `summary.md`, and a flat `budget_results.csv` for later plotting, under
 the Research2 evidence root, and appends one registry entry -- the same
 evidence architecture R2-01/R2-02 established, no new one invented.
+
+## R2-04: Recoverable-Margin Analysis
+
+A pure offline SYNTHESIS over already-completed R2-01/R2-02/R2-03
+evidence -- no new replay, no model/runtime invocation, no new trace
+capture. Decomposes R2-03's Oracle-vs-causal-retention gap, at every
+R2-03-declared budget, into a STRUCTURAL SHARDING GAP (Runtime-Sharded-
+LRU vs Global-LRU) and a POLICY-INFORMATION HEADROOM (Global-LRU vs
+Oracle-Global-Belady); their sum is the TOTAL OBSERVED UPPER-BOUND GAP
+(Runtime-Sharded-LRU vs Oracle-Global-Belady). Implemented in
+`argine/research2/r2_04/`. See
+`experiments/R2-04-recoverable-margin/README.md` for the full scientific
+design and terminology contract; this section records the
+implementation-level contract.
+
+**Critical distinction, enforced throughout:** the POLICY-INFORMATION
+HEADROOM is a THEORETICAL/INFORMATIONAL upper bound, never a demonstrated
+causally recoverable performance figure. No causal predictor exists yet
+(II-C's job). "Causally recovered margin" is always reported literally as
+`NOT_YET_MEASURED -- II-C`.
+
+### R2-01 + R2-02 + R2-03 prerequisite and binding consistency
+
+`r2_04.prerequisite.require_r2_01_r2_02_r2_03_pass()` reuses (never
+duplicates) `r2_03.prerequisite.require_r2_01_and_r2_02_pass()` for the
+R2-01+R2-02 half, then separately verifies R2-03's own latest run reached
+`PASS`, that R2-03's own recorded binding (`provenance.json`'s
+`binding.trace_sha256` / `r2_01_run_id` / `r2_02_run_id`) agrees with the
+CURRENT R2-01/R2-02 binding, and that R2-03's own registered
+`comparison.json.reproduction_check.ok` still reads `true`. Any
+divergence refuses the run atomically
+(`R2_01_R2_02_OR_R2_03_PREREQUISITE_NOT_MET`), with no evidence written.
+`fixed_budgets_bytes` and `reproduction_budget_bytes` are read from R2-03's
+own `manifest.json`/`provenance.json` -- never from today's
+`r2_03.budget_sweep` module constants -- so R2-04 binds to what the
+CANONICAL R2-03 RUN actually used.
+
+### Decomposition
+
+`r2_04.decomposition.decompose_budget()` computes all three gaps by
+calling `r2_02.comparison.oracle_gap()` three times per budget:
+`oracle_gap(Sharded, GlobalLRU)` (structural), `oracle_gap(GlobalLRU,
+Oracle)` (information), `oracle_gap(Sharded, Oracle)` (total) -- no new
+numeric formula is invented. The absolute miss-count and miss-byte
+differences are asserted to sum exactly (`structural + information ==
+total`); a violation raises `ImpossibleValuesError`, an unconditional
+R2-04 `FAIL`. The relative fractions (section 8) are intentionally never
+summed, since their denominators differ (a documented, not hidden,
+property). The structural gap may legitimately be negative (sharding
+itself reducing misses relative to Global-LRU, observed at the real
+evidence's 1.5/2 GiB points) -- this is a valid result, not an error.
+
+### Regime classification
+
+`r2_04.regimes.py`: `capacity_constrained_budgets()` (Global-LRU
+evictions > 0), `effective_residency_budget()` (first tested budget,
+ascending, where Global-LRU and Oracle have equal misses, equal miss
+bytes, and zero evictions each -- reported only as the first *tested*
+budget exhibiting convergence, never claimed minimal), `peak_opportunity()`
+(four maxima over the information-headroom gap, determined independently:
+max relative/absolute miss-byte headroom, max relative/absolute miss
+headroom -- never assumed to coincide), `headroom_persistence()` (whether
+Oracle strictly improves over Global-LRU at every capacity-constrained
+budget, excluding the effective-residency budget per its own exclusion
+rule), and `classify_curve_shape()` (a deterministic classifier over the
+primary relative-information-headroom-fraction curve: plateau ->
+monotonic increasing/decreasing -> collapse-at-effective-residency (the
+curve rises to its predecessor then collapses to its global minimum
+exactly at the observed effective-residency budget) -> single/multiple
+interior maxima -> other/non-monotonic). No regime or curve shape is
+assumed ahead of time; the classifier is applied mechanically to whatever
+the fixed tested points actually show.
+
+### LFU (secondary only)
+
+`r2_04.lfu_summary.lfu_vs_global_lru()` reports, per budget, whether LFU
+beats, loses to, or ties Global-LRU on miss count. LFU plays no role in
+the structural/information/total decomposition.
+
+### Claims and the II-C future metric
+
+`r2_04.claims.build_claims()` produces an explicit `supported_now` /
+`not_yet_supported` split (section 20), plus `FUTURE_METRIC_II_C`: the
+exact, documented-but-never-computed formula
+`fraction_of_oracle_headroom_recovered = (causal_baseline_miss_bytes -
+predictor_miss_bytes) / (causal_baseline_miss_bytes - oracle_miss_bytes)`.
+`claims.check_no_forbidden_claims()` is an automated, defense-in-depth
+scan of every `supported_now` claim's text against a forbidden-phrase
+list (e.g. "can be recovered", "faster inference", "lower latency") --
+a violation raises `ForbiddenClaimError`, an unconditional `FAIL`
+(section 18: "a generated claim incorrectly presents Oracle headroom as
+demonstrated causal recovery").
+
+### Determinism
+
+`orchestrator._synthesize()` is a pure function of
+`(budget_results, fixed_budgets_bytes, reproduction_budget_bytes)`.
+`orchestrator.run()` calls it twice against the identical loaded R2-03
+evidence and compares a canonical SHA-256 digest (sorted-key JSON, no
+volatile run ids/timestamps included in the digested payload); a mismatch
+is an immediate `FAIL` ("nondeterministic synthesis") -- the same
+determinism-by-duplication pattern R2-02/R2-03 apply to live replay,
+applied here to the synthesis step instead.
+
+### Outcome rules
+
+`orchestrator.classify_outcome()`: any synthesis error (malformed
+upstream row, `ImpossibleValuesError`, a forbidden claim) forces `FAIL`;
+nondeterminism forces `FAIL`; any R2-03-declared budget missing a
+required policy row forces `INCONCLUSIVE`; otherwise `PASS` -- never
+contingent on the size of the headroom, so a null (zero-headroom) result
+is a valid `PASS`.
+
+### Evidence
+
+Each run writes `manifest.json`, `provenance.json` (the four-way binding
+plus the canonical digest), `recoverable_margin.json` (decomposition by
+budget, regimes, curve shape, LFU summary, figure data A/B/C),
+`claims.json`, `margin_by_budget.csv`, `summary.json`, `summary.md` under
+the Research2 evidence root, and appends one registry entry -- the same
+evidence architecture R2-01/R2-02/R2-03 established, no new one invented.
+
+### Phase II-A closure
+
+`research2/roadmap.json` carries no literal phase-state field (phases are
+immutable, tracked planning metadata only -- see `roadmap.py`'s own
+docstring); "II-A CLOSED/PASS" is a narrative conclusion derived from
+R2-01/R2-02/R2-03/R2-04 all reaching the `COMPLETED`/`PASS` experiment
+state, not something any orchestrator writes as a separate field. A real
+R2-04 `PASS` run does **not** automatically advance II-B's state --
+II-B's experiments (R2-05..R2-08) remain `PLANNED`/`FUTURE` until a
+separate "paper-freeze" step completes, per R2-04's own task instructions.

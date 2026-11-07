@@ -428,10 +428,10 @@ class R2_01_RunnerIntegrationTests(_FixtureCase):
         """Fulfils the 'dirty-tree refusal + --allow-dirty => NON-CANDIDATE'
         requirement specifically for R2-01's real implementation (the
         generic stub version of this is tests/test_research2.py::
-        test_allow_dirty_marks_non_candidate, now exercised against R2-04
-        since R2-02 and R2-03 are also real implementations -- see
-        tests/test_r2_02_*.py and tests/test_r2_03_*.py for their own
-        non-candidate coverage)."""
+        test_allow_dirty_marks_non_candidate, now exercised against R2-05
+        since R2-02, R2-03 and R2-04 are also real implementations -- see
+        tests/test_r2_02_*.py, tests/test_r2_03_*.py and
+        tests/test_r2_04_*.py for their own non-candidate coverage)."""
         p = self.trace_path(make_trace())
         result = runner.run_experiment("R2-01", trace_source_arg=str(p), allow_dirty=True)
         self.assertEqual(result.get("candidate_status"), "NON-CANDIDATE")

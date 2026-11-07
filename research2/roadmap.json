@@ -62,7 +62,7 @@
         "R2-01"
       ],
       "initial_state": "PLANNED",
-      "implemented": false,
+      "implemented": true,
       "requires_real_runtime": false,
       "purpose": "Compare, at minimum, current Argine retention behaviour, LRU, LFU, and the offline oracle.",
       "expected_output_categories": [
@@ -76,7 +76,7 @@
         "R2-02"
       ],
       "initial_state": "PLANNED",
-      "implemented": false,
+      "implemented": true,
       "requires_real_runtime": false,
       "purpose": "Measure how the oracle/baseline gap changes under multiple expert-memory budgets.",
       "expected_output_categories": [
@@ -90,7 +90,7 @@
         "R2-03"
       ],
       "initial_state": "PLANNED",
-      "implemented": false,
+      "implemented": true,
       "requires_real_runtime": false,
       "purpose": "Quantify the theoretical performance margin available to improved retention.",
       "expected_output_categories": [
