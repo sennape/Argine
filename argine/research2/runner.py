@@ -55,14 +55,15 @@ def _register_implementations() -> None:
         return _r2_01.analyse(run_id=run_id)
 
     def _capture_r2_01(allow_dirty: bool = False, model_path: Optional[str] = None,
-                       dry_run: bool = True, **_ignored: Any) -> Dict[str, Any]:
+                       dry_run: bool = True, runtime_path: Optional[str] = None,
+                       **_ignored: Any) -> Dict[str, Any]:
         from .r2_01 import capture as _capture
         if not model_path:
             return {"experiment_id": "R2-01", "outcome": "USAGE_ERROR",
                     "message": "capture requires --model PATH (a local Qwen3-30B-A3B "
                                "GGUF file)."}
         return _capture.capture(model_path=model_path, allow_dirty=allow_dirty,
-                                dry_run=dry_run)
+                                dry_run=dry_run, runtime_path=runtime_path)
 
     def _status_extra_r2_01(local_states: Dict[str, dict]) -> Dict[str, Any]:
         from .r2_01 import trace_source as _trace_source
@@ -204,6 +205,19 @@ def _current_phase(rm: roadmap_mod.Roadmap, local_states: Dict[str, dict]) -> Op
 
 # --------------------------------------------------------------- doctor ---
 
+def _argine_llama_dir_check() -> Dict[str, Any]:
+    """Cheap, informational-only surface of ARGINE_LLAMA_DIR's own raw
+    validity (section 5: "valid / stale / absent"), independent of whatever
+    runtime_resolver ultimately resolved to (which may come from a
+    different tier entirely when this env var is stale)."""
+    from .. import runtime as _rtmod
+    value, var, installed = _rtmod.llama_dir_configurato()
+    if not value:
+        return {"value": None, "ok": True, "note": "absent"}
+    return {"value": f"{var}={value}", "ok": True,
+           "note": "valid" if installed else "stale (does not contain llama-server)"}
+
+
 def doctor_report() -> Dict[str, Any]:
     """Read-only environment/readiness diagnostic. No model start, no heavy
     artifact hashing (that belongs to an actual run)."""
@@ -221,21 +235,30 @@ def doctor_report() -> Dict[str, Any]:
     clean = git_is_clean()
     checks["git_clean"] = {"value": clean, "ok": True, "note": "informational only; doctor does "
                            "not gate on this"}
-    import os as _os
-    llama_dir = _os.environ.get("ARGINE_LLAMA_DIR")
-    checks["runtime_binary_hint"] = {
-        "value": llama_dir, "ok": True,
-        "note": "informational only: this is simply the current ARGINE_LLAMA_DIR "
-               "environment variable (see argine/runtime.py:llama_dir_configurato), not "
-               "something research2 derives or resolves itself. On this project's "
-               "machine it has been observed pointing at the original Argine v1 "
-               "repository's build (...\\Argine\\llama-noomp), not Argine2's or "
-               "Argine3's own research runtime (llama-research / llama-research-v2) -- "
-               "i.e. likely stale leftover from before Argine2 existed. R2-01's offline "
-               "trace/replay contract validation does not use or require this value at "
-               "all; a future real trace CAPTURE would need its own explicit runtime "
-               "artifact resolution rather than trusting this hint.",
+    # Deterministic resolution (argine.research2.runtime_resolver), not merely
+    # the raw ARGINE_LLAMA_DIR hint this check used to report before a real
+    # resolver existed. Cheap: capability validation reads one llama-server
+    # binary (tens of MB), never a GB-scale trace/model hash -- SHA-256 is
+    # computed only at explicit registration time (runtime_resolver.resolve()
+    # itself never hashes).
+    from . import runtime_resolver as _runtime_resolver
+    resolution = _runtime_resolver.resolve()
+    checks["runtime_resolution"] = {
+        "value": resolution.resolved_path, "ok": True,
+        # Not folded into overall_ok below: a research2 capture needing a
+        # runtime it cannot yet resolve is real, actionable information for
+        # the human, but is not itself an "invalid configuration" the way an
+        # unparsable roadmap/protocol file is -- doctor surfaces it without
+        # gating on it, the same treatment git_clean already gets above.
+        "note": {
+            "status": resolution.status,
+            "runtime_configured_by": resolution.tier,
+            "runtime_path": resolution.resolved_path,
+            "stale_env_note": resolution.stale_env_note,
+            "message": resolution.message,
+        },
     }
+    checks["argine_llama_dir"] = _argine_llama_dir_check()
     try:
         store.ensure_root_writeable()
         checks["evidence_root_writeable"] = {"value": str(store.evidence_root()), "ok": True}

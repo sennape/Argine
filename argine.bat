@@ -3,13 +3,16 @@ REM Avvia Argine senza installarlo: argine.bat <comando> [opzioni]
 setlocal
 cd /d "%~dp0"
 python -m argine %*
-set ARGINE_EXITCODE=%ERRORLEVEL%
-REM `endlocal` can itself reset ERRORLEVEL, and without an explicit
-REM `exit /b`, a .bat file's own exit status (as seen by a caller
-REM chaining with `&&`) can end up reflecting the last internal command
-REM (endlocal) rather than the python process -- silently turning a
-REM non-zero research2 result (e.g. CAPTURE_FAILED) into an apparent
-REM success and letting a chained `&& next-command` run anyway. Capture
-REM the real exit code into a variable before `endlocal`, then exit with
-REM it explicitly, in one statement so the captured value survives.
-endlocal & exit /b %ARGINE_EXITCODE%
+REM `exit /b N`, unlike a bare `exit`, ends only THIS batch script's own
+REM execution (returning control to an interactive session or to a
+REM caller's `&&`/`||` chain) and implicitly performs ENDLOCAL as part
+REM of ending the script -- there is no need for, and no race against,
+REM a separate explicit `endlocal` here. An earlier version chained
+REM `endlocal & exit /b %VAR%` on one line specifically to work around
+REM `endlocal` resetting ERRORLEVEL before it could be read; that relied
+REM on `&` sequencing and parse-time `%` expansion happening in exactly
+REM the right order. Dropping the explicit `endlocal` removes that
+REM dependency entirely: nothing runs between the python call and this
+REM `exit /b`, so `%ERRORLEVEL%` here is still exactly python's own exit
+REM code, and ENDLOCAL happens automatically afterward.
+exit /b %ERRORLEVEL%

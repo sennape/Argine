@@ -70,7 +70,8 @@ def cmd_capture(args) -> int:
     try:
         result = runner.capture_experiment(args.experiment_id, allow_dirty=args.allow_dirty,
                                            model_path=getattr(args, "model", None),
-                                           dry_run=getattr(args, "dry_run", False))
+                                           dry_run=getattr(args, "dry_run", False),
+                                           runtime_path=getattr(args, "runtime", None))
     except KeyError as e:
         print(f"error: {e}", file=sys.stderr)
         return runner.EXIT_UNKNOWN_ID
@@ -81,7 +82,7 @@ def cmd_capture(args) -> int:
     if outcome == "NOT_IMPLEMENTED":
         return runner.EXIT_NOT_IMPLEMENTED
     if outcome in ("CAPTURE_PROTOCOL_INCOMPLETE", "MODEL_NOT_FOUND", "CAPTURE_FAILED",
-                   "USAGE_ERROR"):
+                   "USAGE_ERROR", "RUNTIME_NOT_FOUND", "RUNTIME_AMBIGUOUS"):
         return runner.EXIT_BLOCKED
     return EXIT_OK
 
@@ -156,6 +157,13 @@ def register(sub, core) -> None:
                         "`research2 capture R2-01 --model PATH` actually runs the "
                         "capture (section 9: capture then run is the two-command "
                         "fresh-capture workflow).")
+    p.add_argument("--runtime", default=None, metavar="PATH",
+                   help="explicit llama-server(.exe) path to use for this capture, "
+                        "taking precedence over any Research2-registered runtime, "
+                        "ARGINE_LLAMA_DIR, the documented-canonical runtime, or "
+                        "narrow local discovery (see argine.research2.runtime_resolver). "
+                        "Normal usage needs no --runtime at all: resolution is "
+                        "automatic.")
     p.set_defaults(func=cmd_capture)
 
     p = rs.add_parser("audit", help="validate Research Part 2 infrastructure consistency")

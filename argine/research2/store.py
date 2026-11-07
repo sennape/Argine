@@ -113,3 +113,27 @@ def get_trace_source_registration(experiment_id: str, root: Optional[Path] = Non
                                   ) -> Optional[dict]:
     root = root or evidence_root()
     return load_state(root).get(experiment_id, {}).get("trace_source_registration")
+
+
+# Reserved state key for runtime registration: shared Research2 infra, not
+# scoped to one experiment. No real experiment id ever starts with "_"
+# (they are all "R2-NN"), so this can never collide with one.
+_RUNTIME_STATE_KEY = "_runtime"
+
+
+def set_runtime_registration(registration: dict, root: Optional[Path] = None) -> None:
+    """Persist a verified local llama.cpp runtime registration OUTSIDE Git.
+    Shared across every Research2 experiment that needs to start the model
+    (the runtime binary is shared infrastructure, not scoped to one
+    experiment id), so it is stored under the reserved key _RUNTIME_STATE_KEY
+    rather than under an experiment_id."""
+    root = root or evidence_root()
+    states = load_state(root)
+    states[_RUNTIME_STATE_KEY] = {**states.get(_RUNTIME_STATE_KEY, {}),
+                                  "runtime_registration": registration}
+    save_state(states, root)
+
+
+def get_runtime_registration(root: Optional[Path] = None) -> Optional[dict]:
+    root = root or evidence_root()
+    return load_state(root).get(_RUNTIME_STATE_KEY, {}).get("runtime_registration")

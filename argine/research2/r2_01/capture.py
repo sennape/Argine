@@ -11,12 +11,13 @@ package calls it as a side effect of import, of `run`, or of `analyse`.
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from .. import provenance, store
+from .. import provenance, runtime_resolver, store
 from . import trace_contract, trace_source
 
 OUTCOME_DRY_RUN = "DRY_RUN"
@@ -25,6 +26,8 @@ OUTCOME_CAPTURE_FAILED = "CAPTURE_FAILED"
 OUTCOME_PROTOCOL_INCOMPLETE = "CAPTURE_PROTOCOL_INCOMPLETE"
 OUTCOME_MODEL_NOT_FOUND = "MODEL_NOT_FOUND"
 OUTCOME_REFUSED_DIRTY_TREE = "REFUSED_DIRTY_TREE"
+OUTCOME_RUNTIME_NOT_FOUND = "RUNTIME_NOT_FOUND"
+OUTCOME_RUNTIME_AMBIGUOUS = "RUNTIME_AMBIGUOUS"
 
 # Protocol reconstructed from experiments/EXP-019-instrumentation-validation/
 # README.md (the 2026-10-12 publication-quality Windows validation run),
@@ -122,7 +125,8 @@ def _expected_run_subdir(out_dir: Path) -> Path:
 
 
 def capture(*, model_path: "str | Path", allow_dirty: bool = False, dry_run: bool = True,
-           out_root: Optional[Path] = None, argine2_cwd: Optional[Path] = None
+           out_root: Optional[Path] = None, argine2_cwd: Optional[Path] = None,
+           runtime_path: Optional[str] = None
            ) -> Dict[str, Any]:
     """Plan (dry_run=True, default) or execute (dry_run=False) a fresh
     R2-01 capture. Never called with dry_run=False by this implementation
@@ -148,6 +152,22 @@ def capture(*, model_path: "str | Path", allow_dirty: bool = False, dry_run: boo
                            f"needs a local Qwen3-30B-A3B-Q4_K_M GGUF file; model "
                            f"weights are not distributed with the repository."}
 
+    # Resolve the llama.cpp runtime deterministically BEFORE touching the
+    # filesystem for this run: a RUNTIME_NOT_FOUND/RUNTIME_AMBIGUOUS result
+    # must create no capture directory at all, exactly like
+    # MODEL_NOT_FOUND/CAPTURE_PROTOCOL_INCOMPLETE above. Never relies on
+    # whatever ARGINE_LLAMA_DIR happens to be inherited from the caller's
+    # shell -- see runtime_resolver.resolve().
+    runtime_resolution = runtime_resolver.resolve(explicit_runtime=runtime_path)
+    if runtime_resolution.status == runtime_resolver.RUNTIME_NOT_FOUND:
+        return {"experiment_id": "R2-01", "outcome": OUTCOME_RUNTIME_NOT_FOUND,
+                "runtime_resolution": runtime_resolution.to_json(),
+                "message": runtime_resolution.message}
+    if runtime_resolution.status == runtime_resolver.RUNTIME_AMBIGUOUS:
+        return {"experiment_id": "R2-01", "outcome": OUTCOME_RUNTIME_AMBIGUOUS,
+                "runtime_resolution": runtime_resolution.to_json(),
+                "message": runtime_resolution.message}
+
     rec = provenance.build_record("R2-01", outcome="PENDING", allow_dirty=allow_dirty)
     run_id = rec["identity"]["run_id"]
     candidate_status = rec["git"]["candidate_status"]
@@ -164,14 +184,22 @@ def capture(*, model_path: "str | Path", allow_dirty: bool = False, dry_run: boo
             "protocol": dict(PROTOCOL), "command": cmd,
             "out_dir": str(capture_dir),
             "expected_trace_path": str(expected_run_dir / "trace.jsonl.gz"),
+            "runtime_resolution": runtime_resolution.to_json(),
             "message": "planned only; pass dry_run=False (CLI: omit --dry-run) to "
                        "actually run the 30B capture. This has NOT executed any "
                        "model.",
         }
 
     capture_dir.mkdir(parents=True, exist_ok=True)
+    # Pin the EXACT resolved runtime into the child subprocess's own
+    # environment, overriding (never mutating) whatever ARGINE_LLAMA_DIR
+    # the parent process inherited. This is what makes resolution
+    # deterministic rather than merely diagnostic: the child cannot fall
+    # back to a stale/different ARGINE_LLAMA_DIR behind resolve()'s back.
+    child_env = dict(os.environ)
+    child_env["ARGINE_LLAMA_DIR"] = str(Path(runtime_resolution.resolved_path).parent)
     proc = subprocess.run(cmd, cwd=str(argine2_cwd) if argine2_cwd else None,
-                          capture_output=True, text=True)
+                          capture_output=True, text=True, env=child_env)
 
     manifest_path = capture_dir / "manifest.json"
     _write_json(manifest_path, {
@@ -179,6 +207,7 @@ def capture(*, model_path: "str | Path", allow_dirty: bool = False, dry_run: boo
         "capture_command": cmd,
         "capture_protocol": PROTOCOL,
         "capture_exit_code": proc.returncode,
+        "runtime_resolution": runtime_resolution.to_json(),
     })
     _write_text(capture_dir / "stdout.log", proc.stdout)
     _write_text(capture_dir / "stderr.log", proc.stderr)
@@ -198,6 +227,21 @@ def capture(*, model_path: "str | Path", allow_dirty: bool = False, dry_run: boo
         path=trace_path, source_experiment_id="R2-01", source_run_id=run_id,
         source_type="fresh_capture")
     store.set_trace_source_registration("R2-01", registration.to_json())
+
+    # Optional automatic runtime registration (section 8): a REAL capture
+    # that just succeeded is exactly the "explicit registration/candidate
+    # capture" moment section 7 reserves for computing a runtime's
+    # SHA-256 -- never done merely on status/doctor. Only when resolution
+    # was not already a re-validated existing registration (tier
+    # "registered"), and resolution already guarantees this was an
+    # UNAMBIGUOUS single eligible runtime (never guessed between two).
+    if runtime_resolution.tier != "registered":
+        try:
+            runtime_registration = runtime_resolver.register_runtime(
+                runtime_resolution.resolved_path, resolution_source=runtime_resolution.tier)
+            store.set_runtime_registration(runtime_registration)
+        except (ValueError, OSError):
+            pass  # local-state convenience only; never block a successful capture on it
 
     return {
         "experiment_id": "R2-01", "run_id": run_id, "outcome": OUTCOME_CAPTURED,
