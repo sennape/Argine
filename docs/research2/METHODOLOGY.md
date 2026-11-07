@@ -360,3 +360,72 @@ required by R2-01B: it reads the already-registered capture's own sibling
 files, so there is no new `capture_run_id` to bind -- the existing
 `capture_provenance` binding (R2-01A) already identifies which capture
 produced both `trace.jsonl.gz` and the `raw.tsv` R2-01B reads.
+
+## R2-02: Oracle vs Retention Baselines
+
+An offline retention/replay comparison, on R2-01's already-validated real
+candidate trace at a fixed 4 GiB expert-memory budget: how much better can
+a non-causal, future-aware (Oracle) retention policy perform than causal
+retention baselines. Implemented in `argine/research2/r2_02/`. See
+`experiments/R2-02-oracle-baselines/README.md` for the full scientific
+design, policy definitions, sharding-decomposition treatment, metrics, and
+outcome rules; this section records the implementation-level contract.
+
+### R2-01 PASS prerequisite and trace-SHA binding
+
+`r2_02.prerequisite.require_r2_01_pass()` reads R2-01's own registry
+(read-only -- R2-01's evidence is never modified) to find R2-01's latest
+`PASS` run, reads that run's `source-trace.json` to learn the exact trace
+file (path/sha256/byte_size) it validated, and re-hashes that file now.
+Any divergence (no R2-01 run, R2-01 not `PASS`, ambiguous latest `PASS`,
+missing evidence, missing trace file, or a hash/size mismatch against
+what R2-01 recorded) returns a non-`OK` `R201Binding` and R2-02's own
+`run()` refuses atomically (`R2_01_PREREQUISITE_NOT_MET`) -- no run
+directory, no registry entry, no state change. No trace SHA-256 literal
+is hard-coded anywhere in this module; the "validated trace" is always
+whichever one R2-01's own latest PASS run actually bound to.
+
+### Generalized deterministic replay contract
+
+`r2_01.replay_contract.py` is R2-01's own canonical-evidence code path,
+hardcoded to exactly one policy (`GlobalLRU`), and remains completely
+unmodified (R2-01 immutability). `r2_02.replay_multi.run_policy_replay()`
+reuses its `_digest`/`_deterministic_subset`/`DeterministicReplayResult`
+building blocks directly (import, never copy) and adds the one thing
+R2-01's version does not need: an arbitrary policy parameter, with the
+causal/non-causal assertion (`r2_01.policy_interface`) appropriate to that
+policy's own declared metadata.
+
+### Determinism verification
+
+Section 16's "two independent analysis runs produce byte-identical
+canonical digests" requirement is verified **within a single R2-02 run**:
+`orchestrator.run()` replays every declared policy **twice**, from two
+freshly constructed policy instances, and requires the two
+`deterministic_replay_digest` values to match exactly before accepting
+that policy's result row. A mismatch is `FAIL` ("repeated identical
+replay produces different metrics/digests" -- section 14).
+
+### Outcome classification
+
+`orchestrator.classify_outcome()` applies section 14's criteria
+mechanically: reconciliation problems or a replay/policy-interface error
+or non-determinism all force `FAIL`; a missing policy result (malformed
+output) forces `INCONCLUSIVE`; a hits+misses accounting mismatch or a
+capacity violation forces `FAIL`; an Oracle that performs worse than a
+causal baseline it theoretically dominates forces `FAIL`
+("logically inconsistent results"); missing byte-level expert-capacity
+metadata or an undocumented cold-start assumption force `INCONCLUSIVE`
+(the exact caveat R2-01B already flagged as relevant to R2-02's own
+byte-based metrics); otherwise `PASS` -- **never contingent on the size of
+the Oracle gap**, so a null (zero-gap) result is reported as a valid PASS,
+never hidden or reinterpreted.
+
+### Evidence
+
+Each run writes `manifest.json`, `provenance.json` (the R2-01 binding plus
+the normalized trace identity), `policy_results.json`, `comparison.json`
+(Oracle gaps + sharding decomposition), `summary.json`, and `summary.md`
+under the Research2 evidence root, and appends one registry entry --
+exactly the same evidence architecture R2-01 established, no new one
+invented.

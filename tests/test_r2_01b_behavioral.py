@@ -509,11 +509,17 @@ class NoFailedCaptureRegistrationTests(_TmpDirCase):
 
 
 class R202StaysLockedTests(_TmpDirCase):
-    """Item 27: R2-02 remains locked unless final R2-01 PASS policy
-    permits unlock -- R2-01B does not implement or unlock R2-02; it
-    remains NOT_IMPLEMENTED regardless of R2-01's own Level-D outcome."""
+    """Item 27 (superseded by R2-02's own task): R2-02 is now implemented
+    (see argine/research2/r2_02/), but it is still gated on an upstream
+    R2-01 PASS -- this fixture's trace carries no byte-level expert-
+    capacity metadata, so R2-01 itself reaches INCONCLUSIVE (not PASS)
+    here, and R2-02 must therefore refuse to run at all rather than
+    silently proceeding against a non-PASS R2-01 result. R2-02's own
+    test suite (tests/test_r2_02_*.py) covers the real PASS-prerequisite
+    path end-to-end; this test only confirms R2-01B's INCONCLUSIVE
+    fixture still correctly blocks R2-02, exactly as it always has."""
 
-    def test_r2_02_not_implemented_regardless_of_level_d(self):
+    def test_r2_02_refuses_when_r2_01_is_inconclusive(self):
         d = self.tmp / "evidence"
         os.environ["ARGINE3_RESEARCH_ROOT"] = str(d)
         self.addCleanup(os.environ.pop, "ARGINE3_RESEARCH_ROOT", None)
@@ -530,11 +536,17 @@ class R202StaysLockedTests(_TmpDirCase):
         # structural caveat even though Level D is OBSERVED_PASS --
         # classify_outcome() correctly reports INCONCLUSIVE, not PASS, in
         # that case (see ClassifyOutcomeLevelDWiringTests for the PASS
-        # path with a fully clean A-C trace). Either way, R2-02 must stay
-        # locked -- that is the actual point of this test.
+        # path with a fully clean A-C trace).
         self.assertIn(result["outcome"], ("PASS", "INCONCLUSIVE"))
         r2_02 = runner.run_experiment("R2-02", allow_dirty=True)
-        self.assertEqual(r2_02["outcome"], "NOT_IMPLEMENTED")
+        if result["outcome"] == "PASS":
+            # If this fixture ever does reach a clean R2-01 PASS, R2-02 is
+            # now implemented and must actually run against it -- never
+            # NOT_IMPLEMENTED.
+            self.assertNotEqual(r2_02["outcome"], "NOT_IMPLEMENTED")
+        else:
+            self.assertEqual(r2_02["outcome"], "R2_01_PREREQUISITE_NOT_MET")
+            self.assertEqual(r2_02["r2_01_prerequisite_status"], "R2_01_NOT_PASS")
 
 
 # --------------------------------------------------------------------------

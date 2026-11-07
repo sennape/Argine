@@ -219,11 +219,16 @@ class AutoCaptureFailureAtomicityTests(_EvidenceRootCase):
         states = store.load_state()
         self.assertNotIn("R2-01", states)  # never transitioned, never touched
 
-    def test_capture_failure_r2_02_remains_not_implemented(self):
+    def test_capture_failure_r2_02_stays_locked(self):
+        # R2-02 is now implemented (see argine/research2/r2_02/), but it is
+        # still gated on an upstream R2-01 PASS. With R2-01's own capture
+        # having failed, no R2-01 run exists at all, so R2-02 must refuse
+        # to run rather than silently proceeding.
         self._patch_capture(succeed=False)
         orchestrator.run(allow_dirty=True, model_path=str(self.model))
         result = runner.run_experiment("R2-02", allow_dirty=True)
-        self.assertEqual(result["outcome"], "NOT_IMPLEMENTED")
+        self.assertEqual(result["outcome"], "R2_01_PREREQUISITE_NOT_MET")
+        self.assertEqual(result["r2_01_prerequisite_status"], "NO_R2_01_RUN")
 
     def test_capture_failure_does_not_register_a_source(self):
         self._patch_capture(succeed=False)
