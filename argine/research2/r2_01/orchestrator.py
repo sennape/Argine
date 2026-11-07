@@ -84,8 +84,16 @@ def run(*, trace_source_arg: Optional[str] = None, allow_dirty: bool = False
     rec["identity"]["start_utc"] = provenance.utc_now_iso()
 
     local = store.load_state().get("R2-01", {})
+    # R2-01A: a verified registration (historical or fresh-capture) takes
+    # priority over the legacy plain "trace_source" string, but a smoke/
+    # synthetic trace can never reach this path either way -- registration
+    # itself refuses anything that is not the documented canonical EXP-019
+    # identity or this session's own fresh-capture output (see
+    # trace_source.register_source).
+    registration = local.get("trace_source_registration")
+    local_state_path = (registration or {}).get("path") or local.get("trace_source")
     resolution = trace_source.resolve(explicit_source=trace_source_arg,
-                                      local_state_source=local.get("trace_source"))
+                                      local_state_source=local_state_path)
     if resolution.status != trace_source.TRACE_SOURCE_RESOLVED:
         return {
             "experiment_id": "R2-01", "run_id": run_id, "outcome": resolution.status,

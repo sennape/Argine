@@ -24,15 +24,105 @@ Precedence:
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import List, Optional
 
+from .. import provenance
 from . import trace_contract
 
 TRACE_SOURCE_MISSING = "TRACE_SOURCE_MISSING"
 TRACE_SOURCE_AMBIGUOUS = "TRACE_SOURCE_AMBIGUOUS"
 TRACE_SOURCE_RESOLVED = "TRACE_SOURCE_RESOLVED"
+
+# R2-01A section 4: the one historical trace this repository's own
+# documentation (experiments/EXP-019-instrumentation-validation/README.md)
+# identifies as the publication-quality canonical source, with the exact
+# identity/size/hash it records. A "historical_canonical" registration is
+# accepted ONLY if it matches this identity -- never a SMOKE run, never the
+# synthetic fixture, never any other file, however it is named.
+DOCUMENTED_CANONICAL_EXP019 = {
+    "source_experiment_id": "EXP-019-instrumentation-validation",
+    "source_run_id": "windows-validation-2026-10-12-r2/run-00-4G",
+    "expected_sha256": "1983ce757f1b023576ae0e0610d5cfe31fcbe02e1c131daadfb62cfe263a3fc2",
+    "expected_size_bytes": 268624,
+}
+
+
+class SourceRegistrationError(ValueError):
+    """Raised by register_source() when a candidate fails identity, size,
+    or hash verification -- never silently accepted."""
+
+
+@dataclass
+class SourceRegistration:
+    path: str
+    source_experiment_id: str
+    source_run_id: str
+    size_bytes: int
+    sha256: str
+    source_type: str          # "historical_canonical" | "fresh_capture"
+    verification_status: str  # "verified" | "unverified"
+    registered_at_utc: str
+
+    def to_json(self) -> dict:
+        return asdict(self)
+
+
+def register_source(*, path: "str | Path", source_experiment_id: str, source_run_id: str,
+                    source_type: str) -> SourceRegistration:
+    """Build a verified registration record for a trace file that will be
+    written to local Research2 state (OUTSIDE Git) so a future `run R2-01`
+    resolves it automatically. Never writes the record itself -- callers
+    persist it via argine.research2.store.set_trace_source_registration.
+
+    - "historical_canonical": accepted ONLY if source_experiment_id/
+      source_run_id match DOCUMENTED_CANONICAL_EXP019 exactly, AND the
+      file's actual size and SHA-256 match the documented values exactly.
+      Any mismatch raises SourceRegistrationError -- a SMOKE trace or the
+      synthetic fixture can never be registered this way, whatever
+      identity strings a caller supplies, because their real size/hash
+      will not match.
+    - "fresh_capture": self-verified (this session's own capture produced
+      the file and hashes it immediately after) -- source_experiment_id/
+      source_run_id identify the capture run itself, not an external
+      historical identity.
+    """
+    p = Path(path)
+    if not p.is_file():
+        raise SourceRegistrationError(f"cannot register a source that does not exist: {p}")
+    hashed = trace_contract.sha256_file(p)
+    size = hashed["byte_size"]
+    sha = hashed["sha256"]
+
+    if source_type == "historical_canonical":
+        exp = DOCUMENTED_CANONICAL_EXP019
+        if (source_experiment_id != exp["source_experiment_id"]
+                or source_run_id != exp["source_run_id"]):
+            raise SourceRegistrationError(
+                f"wrong run identity for a historical_canonical registration: "
+                f"got experiment_id={source_experiment_id!r} run_id={source_run_id!r}, "
+                f"the only documented canonical identity is "
+                f"experiment_id={exp['source_experiment_id']!r} "
+                f"run_id={exp['source_run_id']!r}")
+        if size != exp["expected_size_bytes"] or sha != exp["expected_sha256"]:
+            raise SourceRegistrationError(
+                f"hash/size mismatch registering {p} as the documented canonical "
+                f"EXP-019 trace: got size={size} sha256={sha}, documented "
+                f"size={exp['expected_size_bytes']} sha256={exp['expected_sha256']}; "
+                f"refusing to register a file that does not match the repository's "
+                f"own recorded evidence")
+        verification_status = "verified"
+    elif source_type == "fresh_capture":
+        verification_status = "verified"  # self-verified: hashed immediately post-capture
+    else:
+        raise SourceRegistrationError(f"unknown source_type: {source_type!r}")
+
+    return SourceRegistration(
+        path=str(p), source_experiment_id=source_experiment_id,
+        source_run_id=source_run_id, size_bytes=size, sha256=sha,
+        source_type=source_type, verification_status=verification_status,
+        registered_at_utc=provenance.utc_now_iso())
 
 
 @dataclass

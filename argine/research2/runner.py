@@ -32,6 +32,10 @@ EXIT_SCIENTIFIC_FAIL = 18    # the run completed but outcome == FAIL
 # analyse(); see docs/research2/AUTOMATION.md.
 EXPERIMENT_RUN_IMPLEMENTATIONS: Dict[str, Callable[..., Dict[str, Any]]] = {}
 EXPERIMENT_ANALYSE_IMPLEMENTATIONS: Dict[str, Callable[..., Dict[str, Any]]] = {}
+EXPERIMENT_CAPTURE_IMPLEMENTATIONS: Dict[str, Callable[..., Dict[str, Any]]] = {}
+# exp_id -> callable(local_states) -> cheap extra status fields (status_report()
+# must stay cheap: no hashing, no model/runtime startup -- see R2-01A section 10).
+EXPERIMENT_STATUS_EXTRA: Dict[str, Callable[[Dict[str, dict]], Dict[str, Any]]] = {}
 
 
 def _register_implementations() -> None:
@@ -50,8 +54,36 @@ def _register_implementations() -> None:
     def _analyse_r2_01(run_id: Optional[str] = None, **_ignored: Any) -> Dict[str, Any]:
         return _r2_01.analyse(run_id=run_id)
 
+    def _capture_r2_01(allow_dirty: bool = False, model_path: Optional[str] = None,
+                       dry_run: bool = True, **_ignored: Any) -> Dict[str, Any]:
+        from .r2_01 import capture as _capture
+        if not model_path:
+            return {"experiment_id": "R2-01", "outcome": "USAGE_ERROR",
+                    "message": "capture requires --model PATH (a local Qwen3-30B-A3B "
+                               "GGUF file)."}
+        return _capture.capture(model_path=model_path, allow_dirty=allow_dirty,
+                                dry_run=dry_run)
+
+    def _status_extra_r2_01(local_states: Dict[str, dict]) -> Dict[str, Any]:
+        from .r2_01 import trace_source as _trace_source
+        local = local_states.get("R2-01", {})
+        registration = local.get("trace_source_registration")
+        local_state_path = (registration or {}).get("path") or local.get("trace_source")
+        # Cheap: resolve() with no explicit arg only stats local candidate
+        # paths (discover_local_candidates), never hashes a multi-GB trace.
+        resolution = _trace_source.resolve(local_state_source=local_state_path)
+        runnable = resolution.status == _trace_source.TRACE_SOURCE_RESOLVED
+        return {
+            "trace_source_status": resolution.status,
+            "trace_source_type": (registration or {}).get("source_type"),
+            "trace_source_runnable": runnable,
+            "trace_source_blocker": None if runnable else resolution.message,
+        }
+
     EXPERIMENT_RUN_IMPLEMENTATIONS["R2-01"] = _run_r2_01
     EXPERIMENT_ANALYSE_IMPLEMENTATIONS["R2-01"] = _analyse_r2_01
+    EXPERIMENT_CAPTURE_IMPLEMENTATIONS["R2-01"] = _capture_r2_01
+    EXPERIMENT_STATUS_EXTRA["R2-01"] = _status_extra_r2_01
 
 
 _register_implementations()
@@ -142,6 +174,12 @@ def status_report() -> Dict[str, Any]:
             "state": effective_state(exp_id, rm, local_states),
             "implemented": rm.is_implemented(exp_id),
         }
+        extra = EXPERIMENT_STATUS_EXTRA.get(exp_id)
+        if extra is not None:
+            # Each registered extra is documented cheap (no hashing, no
+            # model/runtime startup) by the implementation that registers
+            # it -- status_report() itself performs no heavy work here.
+            experiments[exp_id].update(extra(local_states))
 
     nxt = next_eligible(rm, local_states)
     return {
@@ -353,6 +391,47 @@ def run_experiment(experiment_id: str, *, allow_dirty: bool = False, **kwargs: A
             "candidate_status": provenance.candidate_status(dirty, allow_dirty),
             "message": f"{experiment_id} has no implementation yet (R2-M0.1 is "
                        f"infrastructure-only). No run directory or provenance was created.",
+        }
+    return impl(allow_dirty=allow_dirty, **kwargs)
+
+
+def capture_experiment(experiment_id: str, *, allow_dirty: bool = False, **kwargs: Any
+                       ) -> Dict[str, Any]:
+    """R2-01A: generic fresh-capture-readiness contract, gated exactly like
+    run_experiment() (same fail-closed dirty/unverified-tree semantics).
+    Experiments without a registered capture implementation return
+    NOT_IMPLEMENTED, same as run_experiment()."""
+    _register_implementations()
+    rm = roadmap_mod.load()
+    _validated_experiment(rm, experiment_id)
+
+    clean = git_is_clean()
+    dirty = (clean is not True)
+    unverified = (clean is None)
+    if dirty and not allow_dirty:
+        return {
+            "experiment_id": experiment_id,
+            "outcome": "REFUSED_DIRTY_TREE",
+            "candidate_status": provenance.candidate_status(dirty, False),
+            "message": (
+                "working tree cleanliness could not be verified (the git status "
+                "check failed or timed out); capture refuses this by default. "
+                "Pass --allow-dirty to proceed (the capture is then permanently "
+                "marked NON-CANDIDATE)."
+                if unverified else
+                "working tree is dirty; capture refuses this by default. Pass "
+                "--allow-dirty to proceed (the capture is then permanently marked "
+                "NON-CANDIDATE)."
+            ),
+        }
+
+    impl = EXPERIMENT_CAPTURE_IMPLEMENTATIONS.get(experiment_id)
+    if impl is None:
+        return {
+            "experiment_id": experiment_id,
+            "outcome": "NOT_IMPLEMENTED",
+            "candidate_status": provenance.candidate_status(dirty, allow_dirty),
+            "message": f"{experiment_id} has no capture implementation.",
         }
     return impl(allow_dirty=allow_dirty, **kwargs)
 

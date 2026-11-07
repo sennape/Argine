@@ -181,3 +181,50 @@ against this repository over the remote device bridge) the same as a
 confirmed-dirty tree: never `CANDIDATE`, only `NON-CANDIDATE` (with
 `--allow-dirty`) or `REFUSED` (without it). Only a tree **positively**
 verified clean is ever marked `CANDIDATE`.
+
+## R2-01A: trace-source recovery and fresh-capture readiness
+
+Introduced to resolve R2-01's own documented blocker (no locally-present
+canonical trace). The decision procedure is strict priority order, never
+a guess:
+
+1. **Recover the exact historical trace.** Only accepted if its
+   experiment/run identity, byte size, and SHA-256 all match what the
+   repository's own documentation records (`trace_source.
+   DOCUMENTED_CANONICAL_EXP019`). `trace_source.register_source(...,
+   source_type="historical_canonical")` enforces this exactly --
+   `SourceRegistrationError` on any mismatch, never a silent accept.
+2. **A scientifically equivalent alternative, if explicitly documented as
+   such.** None exists in this repository today (every SMOKE run is
+   explicitly labelled not publication-quality).
+3. **A fresh capture**, only once 1 and 2 are exhausted. `capture.py`'s
+   `PROTOCOL` dict reconstructs the documented EXP-019 protocol from
+   `experiments/EXP-019-instrumentation-validation/README.md`;
+   `validate_protocol()` fails closed (`CAPTURE_PROTOCOL_INCOMPLETE`) if
+   any essential field is ever missing, rather than guessing a value.
+   `plan_capture_command()` builds the exact `argine research trace`
+   invocation; nothing about tracing, the retention algorithm, or HoPi is
+   reimplemented.
+
+### Source registration
+
+A verified source (historical or freshly captured) is registered via
+`argine.research2.store.set_trace_source_registration()` -- local state,
+outside Git, merged into (never clobbering) the experiment's existing
+state. `trace_source.register_source(..., source_type="fresh_capture")`
+is self-verified (the capture hashes its own output immediately).
+`orchestrator.run()` prefers a registration's path over the legacy plain
+`trace_source` string when both are present, so a future `run R2-01`
+needs no `--trace-source` argument once a source is registered. A smoke
+run or the synthetic fixture can never reach this path: registration
+itself verifies identity/size/hash before persisting anything, regardless
+of what a caller claims about a file.
+
+### Status extension
+
+`status_report()` stays cheap (no hashing, no model/runtime startup):
+each experiment may register a `EXPERIMENT_STATUS_EXTRA` callable (the
+same deferred-import pattern as `EXPERIMENT_RUN_IMPLEMENTATIONS`); R2-01's
+reports `trace_source_status`, `trace_source_type`, `trace_source_runnable`,
+and `trace_source_blocker` by calling `trace_source.resolve()`, which only
+stats local candidate paths and never hashes a multi-gigabyte trace.

@@ -107,10 +107,59 @@ A missing or ambiguous source trace is explicitly **not** a scientific
 FAIL -- it is a run blocker (`TRACE_SOURCE_MISSING` / `TRACE_SOURCE_AMBIGUOUS`),
 distinct from and prior to any scientific verdict.
 
+## R2-01A: canonical trace recovery / fresh-capture readiness
+
+A follow-up task (R2-01A) searched for the canonical historical trace this
+README originally pointed `run R2-01` at. Findings, narrowly scoped to
+repository-documented locations (never an uncontrolled disk scan):
+
+- The exact canonical identity is unambiguous: Research Part 1's own
+  `experiments/EXP-019-instrumentation-validation/README.md` documents the
+  2026-10-12 publication-quality Windows validation run
+  (`raw/windows-validation-2026-10-12-r2/run-00-4G/trace.jsonl.gz`,
+  `publication_quality = true`), with its exact SHA-256 and byte size
+  recorded in `data/external_raw_manifest.csv`.
+- That file is **not present on this machine**: its local `raw/` directory
+  is empty (0 bytes). Argine2's own README states its external raw
+  corpus's "archival download location will be added to the release
+  metadata when the external archive is published" -- i.e. no resolvable
+  external location exists yet, by the repository's own authority.
+- No other locally-present trace is a scientifically equivalent
+  substitute: every SMOKE run is explicitly documented as not
+  publication-quality, and no other experiment (EXP-007/008/021/024/026)
+  has any local raw evidence either.
+
+**Decision: FRESH_CAPTURE_READY.** `argine research2 capture R2-01`
+(`argine/research2/r2_01/capture.py`) reconstructs the documented EXP-019
+protocol -- model `Qwen3-30B-A3B-Q4_K_M`, 4 GiB expert budget, `coding` v1
+workload (DEV split, verified byte-identical to the historical run via its
+SHA-256), seed 42, 4 generation threads / 12 batch threads, ctx 4096 --
+and drives it through Argine2's own existing `argine research trace`
+command (never a reimplementation of tracing). Nothing not explicitly
+documented was invented; where the README does not pin a value (batch/
+ubatch size, read mode, PRETOUCH), the current CLI's own default already
+matches the documented behaviour, so nothing needed to be guessed.
+
+```
+argine.bat research2 capture R2-01 --model C:\path\to\Qwen3-30B-A3B-Q4_K_M.gguf
+argine.bat research2 run R2-01
+```
+
+The first command (add `--dry-run` to preview the exact command without
+starting the model) runs the real capture and, on success, registers the
+produced trace in local Research2 state (outside Git) so the second
+command resolves it automatically -- no `--trace-source` needed. Neither
+command was executed by the R2-01A implementation task itself; both are
+left ready for one human to run.
+
 ## Current state
 
-See `argine.bat research2 status` for the live state-machine status. As of
-this implementation commit: `IMPLEMENTED`/`READY` (no candidate run has
-been recorded against this repository's committed state). **No scientific
-conclusion, measurement, or claim should be inferred from the presence of
-this README update** -- only from an actual run's recorded evidence.
+See `argine.bat research2 status` for the live state-machine status (now
+also reporting R2-01's trace-source readiness: `trace_source_status`,
+`trace_source_type`, `trace_source_runnable`, `trace_source_blocker`). As
+of this implementation commit: `IMPLEMENTED`/`READY`, trace source
+`TRACE_SOURCE_MISSING` or `TRACE_SOURCE_AMBIGUOUS` pending a human running
+the capture command above. No candidate scientific run has been recorded
+against this repository's committed state. **No scientific conclusion,
+measurement, or claim should be inferred from the presence of this README
+update** -- only from an actual run's recorded evidence.

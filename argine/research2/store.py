@@ -94,3 +94,22 @@ def append_registry_entry(entry: dict, root: Optional[Path] = None) -> None:
 def run_dir(experiment_id: str, run_id: str, root: Optional[Path] = None) -> Path:
     root = root or evidence_root()
     return root / experiment_id / run_id
+
+
+def set_trace_source_registration(experiment_id: str, registration: dict,
+                                  root: Optional[Path] = None) -> None:
+    """R2-01A: persist a verified (or explicitly unverified) trace-source
+    registration OUTSIDE Git, merged alongside the experiment's existing
+    state/extra fields (never overwriting them). See
+    argine.research2.r2_01.trace_source.SourceRegistration for the shape."""
+    root = root or evidence_root()
+    states = load_state(root)
+    states[experiment_id] = {**states.get(experiment_id, {}),
+                             "trace_source_registration": registration}
+    save_state(states, root)
+
+
+def get_trace_source_registration(experiment_id: str, root: Optional[Path] = None
+                                  ) -> Optional[dict]:
+    root = root or evidence_root()
+    return load_state(root).get(experiment_id, {}).get("trace_source_registration")

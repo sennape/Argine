@@ -66,6 +66,26 @@ def cmd_run(args) -> int:
     return EXIT_OK
 
 
+def cmd_capture(args) -> int:
+    try:
+        result = runner.capture_experiment(args.experiment_id, allow_dirty=args.allow_dirty,
+                                           model_path=getattr(args, "model", None),
+                                           dry_run=getattr(args, "dry_run", False))
+    except KeyError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return runner.EXIT_UNKNOWN_ID
+    _print(result)
+    outcome = result.get("outcome")
+    if outcome == "REFUSED_DIRTY_TREE":
+        return runner.EXIT_DIRTY_REFUSED
+    if outcome == "NOT_IMPLEMENTED":
+        return runner.EXIT_NOT_IMPLEMENTED
+    if outcome in ("CAPTURE_PROTOCOL_INCOMPLETE", "MODEL_NOT_FOUND", "CAPTURE_FAILED",
+                   "USAGE_ERROR"):
+        return runner.EXIT_BLOCKED
+    return EXIT_OK
+
+
 def cmd_analyse(args) -> int:
     try:
         result = runner.analyse_experiment(args.experiment_id, run_id=getattr(args, "run_id", None))
@@ -121,6 +141,22 @@ def register(sub, core) -> None:
                    help="analyse this specific run instead of the latest completed one "
                         "(required if 'latest' would be ambiguous)")
     p.set_defaults(func=cmd_analyse)
+
+    p = rs.add_parser("capture", help="fresh-capture readiness/execution contract "
+                      "(used only when no historical trace can be recovered)")
+    p.add_argument("experiment_id", metavar="EXPERIMENT_ID", help="e.g. R2-01")
+    p.add_argument("--model", default=None, metavar="PATH",
+                   help="local GGUF model file for the capture (required)")
+    p.add_argument("--allow-dirty", action="store_true",
+                   help="proceed despite a dirty working tree; the capture is "
+                        "permanently marked NON-CANDIDATE")
+    p.add_argument("--dry-run", action="store_true",
+                   help="only plan and print the exact command that would run -- "
+                        "does not start the model. Without this flag, "
+                        "`research2 capture R2-01 --model PATH` actually runs the "
+                        "capture (section 9: capture then run is the two-command "
+                        "fresh-capture workflow).")
+    p.set_defaults(func=cmd_capture)
 
     p = rs.add_parser("audit", help="validate Research Part 2 infrastructure consistency")
     p.set_defaults(func=cmd_audit)
