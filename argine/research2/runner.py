@@ -24,12 +24,37 @@ EXIT_DIRTY_REFUSED = 13
 EXIT_NOT_IMPLEMENTED = 14
 EXIT_AUDIT_FAILED = 15
 EXIT_CONFIG_INVALID = 16
+EXIT_BLOCKED = 17            # e.g. TRACE_SOURCE_MISSING / TRACE_SOURCE_AMBIGUOUS
+EXIT_SCIENTIFIC_FAIL = 18    # the run completed but outcome == FAIL
 
 # Pluggable experiment implementations. Empty in R2-M0.1. A future change
 # adds entries here (or via a registration hook) rather than editing run()/
 # analyse(); see docs/research2/AUTOMATION.md.
-EXPERIMENT_RUN_IMPLEMENTATIONS: Dict[str, Callable[[Any], Dict[str, Any]]] = {}
-EXPERIMENT_ANALYSE_IMPLEMENTATIONS: Dict[str, Callable[[Any], Dict[str, Any]]] = {}
+EXPERIMENT_RUN_IMPLEMENTATIONS: Dict[str, Callable[..., Dict[str, Any]]] = {}
+EXPERIMENT_ANALYSE_IMPLEMENTATIONS: Dict[str, Callable[..., Dict[str, Any]]] = {}
+
+
+def _register_implementations() -> None:
+    """Deferred import: R2-01's implementation registers itself here rather
+    than at module import time, so importing `runner` alone never pulls in
+    argine.research/numpy-ish heavier modules unless an experiment is
+    actually implemented (section 15: the framework stays pluggable)."""
+    if "R2-01" in EXPERIMENT_RUN_IMPLEMENTATIONS:
+        return
+    from .r2_01 import orchestrator as _r2_01
+
+    def _run_r2_01(allow_dirty: bool = False, trace_source_arg: Optional[str] = None,
+                  **_ignored: Any) -> Dict[str, Any]:
+        return _r2_01.run(trace_source_arg=trace_source_arg, allow_dirty=allow_dirty)
+
+    def _analyse_r2_01(run_id: Optional[str] = None, **_ignored: Any) -> Dict[str, Any]:
+        return _r2_01.analyse(run_id=run_id)
+
+    EXPERIMENT_RUN_IMPLEMENTATIONS["R2-01"] = _run_r2_01
+    EXPERIMENT_ANALYSE_IMPLEMENTATIONS["R2-01"] = _analyse_r2_01
+
+
+_register_implementations()
 
 
 def _repo_root() -> Path:
@@ -63,10 +88,15 @@ def _load_baseline() -> dict:
 def effective_state(experiment_id: str, rm: roadmap_mod.Roadmap,
                     local_states: Dict[str, dict]) -> str:
     override = local_states.get(experiment_id, {}).get("state")
-    if override:
-        return override
     exp = rm.experiments.get(experiment_id, {})
-    return exp.get("initial_state", "PLANNED")
+    base = override or exp.get("initial_state", "PLANNED")
+    if base == "PLANNED" and rm.is_implemented(experiment_id):
+        # PLANNED -> IMPLEMENTED is a legal protocol.json transition; this is
+        # the implied state once an implementation has landed, computed
+        # read-only here rather than written through set_experiment_state
+        # (status/doctor/next must never mutate state).
+        return "IMPLEMENTED"
+    return base
 
 
 def next_eligible(rm: roadmap_mod.Roadmap, local_states: Dict[str, dict]) -> Optional[dict]:
@@ -155,8 +185,19 @@ def doctor_report() -> Dict[str, Any]:
                            "not gate on this"}
     import os as _os
     llama_dir = _os.environ.get("ARGINE_LLAMA_DIR")
-    checks["runtime_binary_hint"] = {"value": llama_dir, "ok": True,
-                                     "note": "informational; not required for R2-M0.1 infrastructure"}
+    checks["runtime_binary_hint"] = {
+        "value": llama_dir, "ok": True,
+        "note": "informational only: this is simply the current ARGINE_LLAMA_DIR "
+               "environment variable (see argine/runtime.py:llama_dir_configurato), not "
+               "something research2 derives or resolves itself. On this project's "
+               "machine it has been observed pointing at the original Argine v1 "
+               "repository's build (...\\Argine\\llama-noomp), not Argine2's or "
+               "Argine3's own research runtime (llama-research / llama-research-v2) -- "
+               "i.e. likely stale leftover from before Argine2 existed. R2-01's offline "
+               "trace/replay contract validation does not use or require this value at "
+               "all; a future real trace CAPTURE would need its own explicit runtime "
+               "artifact resolution rather than trusting this hint.",
+    }
     try:
         store.ensure_root_writeable()
         checks["evidence_root_writeable"] = {"value": str(store.evidence_root()), "ok": True}
@@ -268,9 +309,11 @@ def _validated_experiment(rm: roadmap_mod.Roadmap, experiment_id: str) -> None:
                        f"(known: {', '.join(sorted(rm.experiments))})")
 
 
-def run_experiment(experiment_id: str, *, allow_dirty: bool = False) -> Dict[str, Any]:
+def run_experiment(experiment_id: str, *, allow_dirty: bool = False, **kwargs: Any
+                   ) -> Dict[str, Any]:
     """Generic experiment-run contract. For every experiment currently in
-    EXPERIMENT_RUN_IMPLEMENTATIONS (empty in R2-M0.1): would dispatch to it.
+    EXPERIMENT_RUN_IMPLEMENTATIONS: dispatches to it (passing allow_dirty
+    plus any experiment-specific kwargs, e.g. trace_source_arg for R2-01).
     Otherwise: validate ID, fail closed on a dirty tree (unless allowed),
     then return NOT_IMPLEMENTED -- and create no run directory, no
     provenance file, no false evidence."""
@@ -278,15 +321,28 @@ def run_experiment(experiment_id: str, *, allow_dirty: bool = False) -> Dict[str
     _validated_experiment(rm, experiment_id)  # raises KeyError if unknown
 
     clean = git_is_clean()
-    dirty = (clean is False)
+    # dirty is True unless the tree was POSITIVELY verified clean; an
+    # unknown git state (clean is None -- e.g. the git subprocess was
+    # unavailable or timed out, which has been observed to happen
+    # transiently against this repository) must fail closed exactly like a
+    # confirmed-dirty tree, never silently be treated as clean.
+    dirty = (clean is not True)
+    unverified = (clean is None)
     if dirty and not allow_dirty:
         return {
             "experiment_id": experiment_id,
             "outcome": "REFUSED_DIRTY_TREE",
-            "candidate_status": provenance.candidate_status(True, False),
-            "message": "working tree is dirty; candidate scientific runs refuse this by "
-                       "default. Pass --allow-dirty to proceed (the run is then permanently "
-                       "marked NON-CANDIDATE).",
+            "candidate_status": provenance.candidate_status(dirty, False),
+            "message": (
+                "working tree cleanliness could not be verified (the git status "
+                "check failed or timed out); candidate scientific runs refuse this "
+                "by default. Pass --allow-dirty to proceed (the run is then "
+                "permanently marked NON-CANDIDATE)."
+                if unverified else
+                "working tree is dirty; candidate scientific runs refuse this by "
+                "default. Pass --allow-dirty to proceed (the run is then permanently "
+                "marked NON-CANDIDATE)."
+            ),
         }
 
     impl = EXPERIMENT_RUN_IMPLEMENTATIONS.get(experiment_id)
@@ -298,10 +354,10 @@ def run_experiment(experiment_id: str, *, allow_dirty: bool = False) -> Dict[str
             "message": f"{experiment_id} has no implementation yet (R2-M0.1 is "
                        f"infrastructure-only). No run directory or provenance was created.",
         }
-    return impl(allow_dirty)
+    return impl(allow_dirty=allow_dirty, **kwargs)
 
 
-def analyse_experiment(experiment_id: str) -> Dict[str, Any]:
+def analyse_experiment(experiment_id: str, **kwargs: Any) -> Dict[str, Any]:
     rm = roadmap_mod.load()
     _validated_experiment(rm, experiment_id)
     impl = EXPERIMENT_ANALYSE_IMPLEMENTATIONS.get(experiment_id)
@@ -311,4 +367,4 @@ def analyse_experiment(experiment_id: str) -> Dict[str, Any]:
             "outcome": "NOT_IMPLEMENTED",
             "message": f"{experiment_id} has no raw evidence / analysis implementation yet.",
         }
-    return impl()
+    return impl(**kwargs)

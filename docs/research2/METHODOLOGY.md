@@ -63,3 +63,121 @@ analysis step and is never inferred from the state machine or from a
 process exit code alone. No causal claim is drawn from observational
 correlation alone; see each experiment's own README for how it guards
 against that once designed.
+
+## R2Trace v1 (introduced by R2-01)
+
+R2-01 (`argine/research2/r2_01/`) defines "R2Trace v1": a versioned,
+schema-validated canonical representation built directly on top of
+Research Part 1's existing "argine-router-trace" v1 format
+(`argine.research.trace.Trace`/`Step`), reused rather than replaced.
+Reuse, not reimplementation, is deliberate throughout R2-01: Research
+Part 1's `argine.research.{trace,replay,policies,oracle,storereplay}`
+already implement event-atomic deterministic replay, byte-based unequal
+expert-size capacity, causal/non-causal policy separation, and cold/warm
+start handling, pinned by 18 existing fidelity tests
+(`tests/test_fidelity.py` in Argine2) -- R2-01 does not duplicate any of
+that logic.
+
+### Routing-step unit and expert-order semantics
+
+One `Step` is one forward-pass/graph/ubatch. `Step.experts(layer)` is the
+**union** of experts a layer needs for that step (an "event"); members of
+an event must be resident simultaneously. R2-01's normalizer
+(`trace_contract.normalize`) never flattens the per-token expert
+selections recorded inside `Step.routes[layer]` -- each token's selected
+experts remain grouped exactly as recorded, and the union is only derived
+at replay/analysis time, never stored as a substitute for the grouping.
+
+### Capacity semantics
+
+Byte-based (`trace.meta.expert_bytes[layer]`), not a uniform per-expert
+count, matching the real retention problem. When a layer's byte metadata
+is missing, R2-01 records that layer in
+`NormalizationReport.layers_missing_expert_bytes` rather than inventing a
+size or an "atomic load exceeds budget" exception; this is one of the
+documented conditions that can make R2-01's outcome `INCONCLUSIVE`. The
+replay engine (Research Part 1's `replay()`, reused) never permits
+resident bytes to exceed the configured budget.
+
+### Initial-residency semantics
+
+Recorded explicitly as one of: `cold_start_documented` (the trace's first
+segment is a `"warmup"` segment, matching Research Part 1's canonical
+cold-start convention) or `unknown_cold_assumed` (no warmup segment is
+present, so a true cold start cannot be distinguished from missing
+information). The second case is never silently treated as equivalent to
+the first; it is a documented limitation that can drive an
+`INCONCLUSIVE` outcome.
+
+### Normalization pipeline and trace integrity
+
+`source trace -> validated source adapter -> canonical R2Trace v1 ->
+deterministic replay`. Every normalization computes and records: source
+path, SHA-256, byte size, source row count, normalized step count,
+excluded-row count with categorized exclusion reasons (never a silent
+drop), and the canonical normalized-trace digest (SHA-256 over
+sorted-key JSON of the deterministic fields only). `reconcile()` fails
+if source and normalized counts do not account for each other exactly.
+Rows that should carry routing evidence but cannot be interpreted fail
+closed (`ContractError`), including: malformed/unparseable source,
+non-strictly-increasing step ordering, and any expert id outside
+`[0, n_experts)`.
+
+### Deterministic replay result contract
+
+`replay_contract.run_contract_replay()` separates deterministic scientific
+fields (schema versions, trace digest, policy id, budget, routing-step
+count, expert-request count, hit/miss/eviction counts, bytes loaded,
+maximum resident bytes, deterministic replay digest) from volatile
+metadata (wall-clock timestamps). The deterministic fields are stable
+across repeated executions on identical inputs; latency is never
+fabricated from byte counts or an assumed bandwidth.
+
+### Causal / non-causal policy separation
+
+`policy_interface.assert_causal()` / `assert_non_causal()` structurally
+verify Research Part 1's existing separation: a causal policy
+(`needs_future=False`, e.g. `GlobalLRU`) is driven only by per-step
+`access()` calls in strict step order and never receives future
+information; a non-causal/Oracle policy (`needs_future=True`, e.g.
+`BeladyGlobal`) receives the full event list and next-use map only at
+construction time -- the single sanctioned path for future information.
+R2-01 validates this separation exists and holds; it does not implement
+the Oracle algorithm itself or compare it against anything (R2-02's job).
+
+### Multi-level validation
+
+- **Level A** (schema): synthetic fixtures -- valid traces accepted;
+  malformed, unknown-schema, invalid-ordering, and invalid-expert-ID
+  traces rejected.
+- **Level B** (determinism): identical canonical trace + config yields an
+  identical deterministic replay digest across repeated executions.
+- **Level C** (normalization fidelity): source and normalized counts
+  reconcile exactly, with every exclusion categorized.
+- **Level D** (behavioral replay validation): performed only if a source
+  trace carries independently recorded resident/hit/miss/eviction state to
+  compare replay against. No locally available real candidate source
+  carries that independent state, so Level D is `NOT_OBSERVABLE` for any
+  run against those sources; `classify_outcome()` treats that as a factor
+  that, combined with any other limitation, drives `INCONCLUSIVE` rather
+  than `PASS` -- structural fidelity (A-C) alone is not treated as
+  sufficient for `PASS`.
+
+### Scientific outcome criteria
+
+Defined in `orchestrator.classify_outcome()` before any candidate data is
+read, and applied mechanically: PASS / INCONCLUSIVE / FAIL as described in
+`experiments/R2-01-oracle-trace-validation/README.md`. A missing or
+ambiguous trace source (`trace_source.TRACE_SOURCE_MISSING` /
+`TRACE_SOURCE_AMBIGUOUS`) is a run blocker, never a scientific `FAIL`, and
+creates no evidence directory.
+
+### Known limitation: `candidate_status` fail-closed on unverifiable git state
+
+`provenance.candidate_status()` and `runner.run_experiment()`'s dirty-tree
+gate both treat an **unverifiable** git state (the `git status` subprocess
+unavailable or timed out -- observed in practice to happen transiently
+against this repository over the remote device bridge) the same as a
+confirmed-dirty tree: never `CANDIDATE`, only `NON-CANDIDATE` (with
+`--allow-dirty`) or `REFUSED` (without it). Only a tree **positively**
+verified clean is ever marked `CANDIDATE`.

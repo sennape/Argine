@@ -48,24 +48,33 @@ def cmd_next(args) -> int:
 
 def cmd_run(args) -> int:
     try:
-        result = runner.run_experiment(args.experiment_id, allow_dirty=args.allow_dirty)
+        result = runner.run_experiment(args.experiment_id, allow_dirty=args.allow_dirty,
+                                       trace_source_arg=getattr(args, "trace_source", None))
     except KeyError as e:
         print(f"error: {e}", file=sys.stderr)
         return runner.EXIT_UNKNOWN_ID
     _print(result)
-    if result.get("outcome") == "REFUSED_DIRTY_TREE":
+    outcome = result.get("outcome")
+    if outcome == "REFUSED_DIRTY_TREE":
         return runner.EXIT_DIRTY_REFUSED
-    if result.get("outcome") == "NOT_IMPLEMENTED":
+    if outcome == "NOT_IMPLEMENTED":
         return runner.EXIT_NOT_IMPLEMENTED
+    if outcome in ("TRACE_SOURCE_MISSING", "TRACE_SOURCE_AMBIGUOUS"):
+        return runner.EXIT_BLOCKED
+    if outcome == "FAIL":
+        return runner.EXIT_SCIENTIFIC_FAIL
     return EXIT_OK
 
 
 def cmd_analyse(args) -> int:
     try:
-        result = runner.analyse_experiment(args.experiment_id)
+        result = runner.analyse_experiment(args.experiment_id, run_id=getattr(args, "run_id", None))
     except KeyError as e:
         print(f"error: {e}", file=sys.stderr)
         return runner.EXIT_UNKNOWN_ID
+    except ValueError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return runner.EXIT_BLOCKED
     _print(result)
     if result.get("outcome") == "NOT_IMPLEMENTED":
         return runner.EXIT_NOT_IMPLEMENTED
@@ -101,10 +110,16 @@ def register(sub, core) -> None:
     p.add_argument("--allow-dirty", action="store_true",
                    help="proceed despite a dirty working tree; the run is permanently "
                         "marked NON-CANDIDATE")
+    p.add_argument("--trace-source", default=None, metavar="PATH",
+                   help="(R2-01) explicit source trace path; takes precedence over any "
+                        "pinned local-state or documented-canonical source")
     p.set_defaults(func=cmd_run)
 
     p = rs.add_parser("analyse", help="generic offline-analysis contract")
     p.add_argument("experiment_id", metavar="EXPERIMENT_ID", help="e.g. R2-01")
+    p.add_argument("--run-id", default=None, metavar="RUN_ID",
+                   help="analyse this specific run instead of the latest completed one "
+                        "(required if 'latest' would be ambiguous)")
     p.set_defaults(func=cmd_analyse)
 
     p = rs.add_parser("audit", help="validate Research Part 2 infrastructure consistency")

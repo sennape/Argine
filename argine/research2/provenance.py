@@ -84,13 +84,16 @@ def hardware_identity() -> Dict[str, Any]:
 
 
 def candidate_status(dirty: Optional[bool], allow_dirty: bool) -> str:
-    """CANDIDATE unless the tree is dirty and the run was not explicitly
-    allowed to proceed dirty; a dirty+allowed run is permanently marked
-    NON-CANDIDATE and must never silently become candidate scientific
-    evidence."""
-    if dirty:
-        return "NON-CANDIDATE" if allow_dirty else "REFUSED"
-    return "CANDIDATE"
+    """CANDIDATE only when the tree was positively verified clean
+    (dirty is False). Any other state -- confirmed dirty (True) OR
+    unknown/unverifiable (None, e.g. the git subprocess was unavailable or
+    timed out, which has been observed to happen transiently against this
+    repository) -- must never silently become candidate scientific
+    evidence. A dirty-or-unknown+allowed run is permanently marked
+    NON-CANDIDATE; a dirty-or-unknown+disallowed run is REFUSED."""
+    if dirty is False:
+        return "CANDIDATE"
+    return "NON-CANDIDATE" if allow_dirty else "REFUSED"
 
 
 def build_record(

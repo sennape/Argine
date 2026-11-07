@@ -210,6 +210,19 @@ class ProvenanceTests(unittest.TestCase):
                       "experiment", "execution"):
             self.assertIn(group, rec)
 
+    def test_candidate_status_fails_closed_on_unverifiable_git_state(self):
+        """Regression: an unknown git state (dirty=None, e.g. the git
+        subprocess timed out against this repository, observed in practice
+        against this remote-mounted working tree) must never be reported as
+        CANDIDATE -- only a POSITIVELY verified clean tree (dirty=False)
+        may be. See runner.run_experiment's matching fail-closed gate."""
+        self.assertEqual(provenance.candidate_status(None, False), "REFUSED")
+        self.assertEqual(provenance.candidate_status(None, True), "NON-CANDIDATE")
+        self.assertEqual(provenance.candidate_status(True, False), "REFUSED")
+        self.assertEqual(provenance.candidate_status(True, True), "NON-CANDIDATE")
+        self.assertEqual(provenance.candidate_status(False, False), "CANDIDATE")
+        self.assertEqual(provenance.candidate_status(False, True), "CANDIDATE")
+
     def test_identity_git_software_hardware_fields_present(self):
         rec = provenance.build_record("R2-01", "NOT_IMPLEMENTED")
         self.assertIn("run_id", rec["identity"])
@@ -292,11 +305,15 @@ class StatusDoctorAuditSubprocessTests(_TempGitRepoCase):
         self.assertEqual(r.returncode, runner.EXIT_UNKNOWN_ID)
 
     def test_unimplemented_experiment_returns_not_implemented_no_evidence(self):
+        # R2-02 (not R2-01): R2-01 is now a real implementation (see R2-01's
+        # own test suite in tests/test_r2_01.py); this test exercises the
+        # generic "unimplemented experiment" path, which still needs an
+        # experiment that is genuinely unimplemented.
         env_root = tempfile.mkdtemp(prefix="argine3-evidence-")
         try:
             env = dict(os.environ)
             env["ARGINE3_RESEARCH_ROOT"] = env_root
-            r = subprocess.run([sys.executable, "-m", "argine", "research2", "run", "R2-01"],
+            r = subprocess.run([sys.executable, "-m", "argine", "research2", "run", "R2-02"],
                                cwd=self.tmp, env=env, capture_output=True, text=True, timeout=60)
             payload = json.loads(r.stdout)
             self.assertEqual(payload["outcome"], "NOT_IMPLEMENTED")
@@ -314,25 +331,31 @@ class StatusDoctorAuditSubprocessTests(_TempGitRepoCase):
         self.assertEqual(r.returncode, runner.EXIT_DIRTY_REFUSED)
 
     def test_allow_dirty_marks_non_candidate(self):
+        # R2-02: generic stub path (R2-01's real-implementation variant of
+        # this is tests/test_r2_01.py::test_allow_dirty_marks_non_candidate_for_r2_01).
         (Path(self.tmp) / "README.md").write_text(
             Path(self.tmp, "README.md").read_text(encoding="utf-8") + "\ndirty\n", encoding="utf-8")
-        r = self._run_in_shared("run", "R2-01", "--allow-dirty")
+        r = self._run_in_shared("run", "R2-02", "--allow-dirty")
         payload = json.loads(r.stdout)
         self.assertEqual(payload["candidate_status"], "NON-CANDIDATE")
 
     def test_analyse_unimplemented_returns_not_implemented(self):
-        r = self._run_in_shared("analyse", "R2-01")
+        r = self._run_in_shared("analyse", "R2-02")  # R2-01 is now implemented
         payload = json.loads(r.stdout)
         self.assertEqual(payload["outcome"], "NOT_IMPLEMENTED")
 
     def test_next_identifies_r2_01_as_next(self):
+        # R2-01 is now IMPLEMENTED/READY (not yet COMPLETED, since no
+        # candidate scientific run has been recorded against the real
+        # repository), so it correctly remains "next" -- but it IS
+        # implemented now, unlike at M0.1 bootstrap time.
         r = self._run_in_shared("next")
         payload = json.loads(r.stdout)
         self.assertEqual(payload["experiment_id"], "R2-01")
-        self.assertFalse(payload["implemented"])
+        self.assertTrue(payload["implemented"])
 
     def test_mutable_local_state_does_not_dirty_repository(self):
-        r = self._run_in_shared("run", "R2-01", "--allow-dirty")
+        r = self._run_in_shared("run", "R2-02", "--allow-dirty")  # still-unimplemented stub
         self.assertEqual(r.returncode, runner.EXIT_NOT_IMPLEMENTED)
         status = subprocess.run(["git", "-C", self.tmp, "status", "--porcelain"],
                                 capture_output=True, text=True, check=True)
