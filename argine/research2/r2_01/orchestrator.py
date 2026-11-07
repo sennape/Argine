@@ -23,6 +23,7 @@ from . import replay_contract, trace_contract, trace_source
 OUTCOME_PASS = "PASS"
 OUTCOME_INCONCLUSIVE = "INCONCLUSIVE"
 OUTCOME_FAIL = "FAIL"
+OUTCOME_CAPTURE_PREREQUISITE_FAILED = "CAPTURE_PREREQUISITE_FAILED"
 
 
 def _write_json(path: Path, data: Dict[str, Any]) -> None:
@@ -77,7 +78,8 @@ def classify_outcome(norm_report: trace_contract.NormalizationReport,
     return OUTCOME_PASS, reasons  # unreachable while behavioral_observable is always False
 
 
-def run(*, trace_source_arg: Optional[str] = None, allow_dirty: bool = False
+def run(*, trace_source_arg: Optional[str] = None, allow_dirty: bool = False,
+       model_path: Optional[str] = None
        ) -> Dict[str, Any]:
     rec = provenance.build_record("R2-01", outcome="PENDING", allow_dirty=allow_dirty)
     run_id = rec["identity"]["run_id"]
@@ -94,10 +96,71 @@ def run(*, trace_source_arg: Optional[str] = None, allow_dirty: bool = False
     local_state_path = (registration or {}).get("path") or local.get("trace_source")
     resolution = trace_source.resolve(explicit_source=trace_source_arg,
                                       local_state_source=local_state_path)
+
+    capture_provenance: Optional[Dict[str, Any]] = None
+    # Section 2/4: automatic fresh-capture prerequisite. Only ever
+    # attempted when there is truly NO eligible source (TRACE_SOURCE_
+    # MISSING) -- never when the block is TRACE_SOURCE_AMBIGUOUS (real
+    # candidates already exist; capturing a new one is never the fix for
+    # that), and never when an explicit --trace-source was given (resolve()
+    # already short-circuits to RESOLVED in that case, so this branch is
+    # unreachable then regardless). The hook itself also refuses to attempt
+    # anything without a model path.
+    if resolution.status == trace_source.TRACE_SOURCE_MISSING:
+        from .. import runner as _runner  # deferred: runner imports this
+                                          # module during its own init
+        capture_attempt = _runner.run_prerequisite(
+            "R2-01", resolution, model_path=model_path, allow_dirty=allow_dirty)
+        if capture_attempt is not None:
+            if capture_attempt.get("outcome") != "CAPTURED":
+                # Atomic failure (section 5): no replay, no R2-01 run
+                # directory, no scientific-state change, no R2-02 unlock,
+                # no trace registration -- capture() itself already
+                # guarantees the latter two. Return directly; the
+                # experiment state machine is never touched below this
+                # point, so it stays wherever it already was.
+                return {
+                    "experiment_id": "R2-01", "run_id": run_id,
+                    "outcome": OUTCOME_CAPTURE_PREREQUISITE_FAILED,
+                    "message": (
+                        "R2-01 NOT RUN because the prerequisite capture failed "
+                        f"(capture outcome: {capture_attempt.get('outcome')}). "
+                        "See capture_result for the full diagnostic (including "
+                        "capture_dir, where applicable)."),
+                    "capture_result": capture_attempt,
+                }
+            # Capture succeeded: re-resolve from the ACTUAL store state
+            # (never just trusting capture_attempt's own claim) so a
+            # capture that reports CAPTURED but somehow failed to persist
+            # its registration fails closed here exactly like any other
+            # missing/ambiguous source, rather than being blindly trusted.
+            # Section 6: this also guarantees the source used is the one
+            # JUST registered, never some unrelated historical candidate
+            # discover_local_candidates() might also see.
+            fresh_local = store.load_state().get("R2-01", {})
+            fresh_registration = fresh_local.get("trace_source_registration")
+            fresh_local_state_path = (fresh_registration or {}).get("path")
+            resolution = trace_source.resolve(explicit_source=trace_source_arg,
+                                              local_state_source=fresh_local_state_path)
+            if resolution.status == trace_source.TRACE_SOURCE_RESOLVED:
+                capture_provenance = {
+                    "capture_run_id": capture_attempt.get("run_id"),
+                    "capture_candidate_status": capture_attempt.get("candidate_status"),
+                    "trace_source_path": resolution.resolved_path,
+                    "trace_sha256": (fresh_registration or {}).get("sha256"),
+                }
+
     if resolution.status != trace_source.TRACE_SOURCE_RESOLVED:
+        message = resolution.message
+        if resolution.status == trace_source.TRACE_SOURCE_MISSING and not model_path:
+            # Section 3: a clear, specific remediation when fresh capture
+            # is the actual available remedy -- never silently a no-op.
+            message = (f"{message} A fresh capture is available for R2-01: re-run "
+                       f"with --model PATH to capture automatically, or use "
+                       f"--trace-source PATH to name an existing trace.")
         return {
             "experiment_id": "R2-01", "run_id": run_id, "outcome": resolution.status,
-            "message": resolution.message,
+            "message": message,
             "candidates": [c.__dict__ for c in resolution.candidates],
         }  # no run directory, no provenance, no evidence: this run never began
 
@@ -128,6 +191,8 @@ def run(*, trace_source_arg: Optional[str] = None, allow_dirty: bool = False
     rec["identity"]["outcome"] = outcome
     rec["experiment"]["workload"] = norm_report.source.source_workload
     rec["artifacts"]["model"] = None  # not materially known for any candidate source
+    if capture_provenance is not None:
+        rec["artifacts"]["capture_provenance"] = capture_provenance
 
     run_dir = store.run_dir("R2-01", run_id)
     _write_json(run_dir / "manifest.json", rec)
@@ -148,6 +213,11 @@ def run(*, trace_source_arg: Optional[str] = None, allow_dirty: bool = False
         # block) so CLI/test callers see it the same way runner.py's own
         # REFUSED_DIRTY_TREE / NOT_IMPLEMENTED payloads already do.
         "candidate_status": rec["git"]["candidate_status"],
+        # Section 9: explicit, never-duplicated binding between this R2-01
+        # scientific run and the capture run that produced its source
+        # trace (None when the source was already registered/explicit --
+        # i.e. no capture happened as part of THIS run).
+        "capture_provenance": capture_provenance,
     }
     _write_json(run_dir / "summary.json", summary)
     _write_text(run_dir / "summary.md", _summary_markdown(summary, norm_report, rr))

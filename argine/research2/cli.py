@@ -49,7 +49,8 @@ def cmd_next(args) -> int:
 def cmd_run(args) -> int:
     try:
         result = runner.run_experiment(args.experiment_id, allow_dirty=args.allow_dirty,
-                                       trace_source_arg=getattr(args, "trace_source", None))
+                                       trace_source_arg=getattr(args, "trace_source", None),
+                                       model_path=getattr(args, "model", None))
     except KeyError as e:
         print(f"error: {e}", file=sys.stderr)
         return runner.EXIT_UNKNOWN_ID
@@ -59,7 +60,8 @@ def cmd_run(args) -> int:
         return runner.EXIT_DIRTY_REFUSED
     if outcome == "NOT_IMPLEMENTED":
         return runner.EXIT_NOT_IMPLEMENTED
-    if outcome in ("TRACE_SOURCE_MISSING", "TRACE_SOURCE_AMBIGUOUS"):
+    if outcome in ("TRACE_SOURCE_MISSING", "TRACE_SOURCE_AMBIGUOUS",
+                   "CAPTURE_PREREQUISITE_FAILED"):
         return runner.EXIT_BLOCKED
     if outcome == "FAIL":
         return runner.EXIT_SCIENTIFIC_FAIL
@@ -134,6 +136,15 @@ def register(sub, core) -> None:
     p.add_argument("--trace-source", default=None, metavar="PATH",
                    help="(R2-01) explicit source trace path; takes precedence over any "
                         "pinned local-state or documented-canonical source")
+    p.add_argument("--model", default=None, metavar="PATH",
+                   help="(R2-01) local GGUF model file -- the SAME contract as "
+                        "`research2 capture R2-01 --model PATH` (section 3: not a second, "
+                        "competing model-path option). Only used, and only required, when "
+                        "no eligible trace source already exists: if one does (registered, "
+                        "or explicit --trace-source), --model is ignored for this run. When "
+                        "no eligible source exists and --model is given, `run` captures "
+                        "automatically before continuing -- no need to run `capture` "
+                        "separately first.")
     p.set_defaults(func=cmd_run)
 
     p = rs.add_parser("analyse", help="generic offline-analysis contract")

@@ -36,6 +36,21 @@ EXPERIMENT_CAPTURE_IMPLEMENTATIONS: Dict[str, Callable[..., Dict[str, Any]]] = {
 # exp_id -> callable(local_states) -> cheap extra status fields (status_report()
 # must stay cheap: no hashing, no model/runtime startup -- see R2-01A section 10).
 EXPERIMENT_STATUS_EXTRA: Dict[str, Callable[[Dict[str, dict]], Dict[str, Any]]] = {}
+# Generic prerequisite/orchestration hook (round 3: "run R2-01 --model PATH"
+# automation). exp_id -> callable(resolution, **run_kwargs) -> Optional[dict].
+# An experiment's own run() implementation calls run_prerequisite() itself
+# when it determines a prerequisite (a fresh capture today; preprocessing
+# or something else for a future experiment) might be satisfiable, passing
+# whatever domain-specific "what's missing" object it already has (R2-01
+# passes its own trace_source.Resolution). The hook decides, from that
+# object and the kwargs, whether an attempt is even warranted (e.g. R2-01's
+# hook only attempts anything when the resolution is exactly
+# TRACE_SOURCE_MISSING -- never when it's merely AMBIGUOUS, and never
+# without a model path) and returns None when it is not; the caller's own
+# ordinary blocked result is then unchanged. This is deliberately NOT a
+# general workflow engine: one dict in, one dict (or None) out, and R2-01
+# is the only registered hook for now.
+EXPERIMENT_PREREQUISITE_IMPLEMENTATIONS: Dict[str, Callable[..., Optional[Dict[str, Any]]]] = {}
 
 
 def _register_implementations() -> None:
@@ -48,8 +63,27 @@ def _register_implementations() -> None:
     from .r2_01 import orchestrator as _r2_01
 
     def _run_r2_01(allow_dirty: bool = False, trace_source_arg: Optional[str] = None,
-                  **_ignored: Any) -> Dict[str, Any]:
-        return _r2_01.run(trace_source_arg=trace_source_arg, allow_dirty=allow_dirty)
+                  model_path: Optional[str] = None, **_ignored: Any) -> Dict[str, Any]:
+        return _r2_01.run(trace_source_arg=trace_source_arg, allow_dirty=allow_dirty,
+                          model_path=model_path)
+
+    def _prerequisite_r2_01(resolution: Any, *, model_path: Optional[str] = None,
+                            allow_dirty: bool = False, **_ignored: Any
+                            ) -> Optional[Dict[str, Any]]:
+        """Section 2/4: only ever attempts a fresh capture when R2-01's own
+        trace-source resolution came back exactly TRACE_SOURCE_MISSING (no
+        eligible source at all -- never when it's AMBIGUOUS: multiple real
+        candidates already existing is never a reason to capture a new
+        one), and only when a model path was actually supplied (section 3:
+        missing --model is a blocker, not an automatic no-op). Reuses the
+        existing R2-01 capture implementation verbatim -- never a second,
+        competing capture code path."""
+        from .r2_01 import capture as _capture, trace_source as _trace_source
+        if resolution.status != _trace_source.TRACE_SOURCE_MISSING:
+            return None
+        if not model_path:
+            return None
+        return _capture.capture(model_path=model_path, allow_dirty=allow_dirty, dry_run=False)
 
     def _analyse_r2_01(run_id: Optional[str] = None, **_ignored: Any) -> Dict[str, Any]:
         return _r2_01.analyse(run_id=run_id)
@@ -85,6 +119,7 @@ def _register_implementations() -> None:
     EXPERIMENT_ANALYSE_IMPLEMENTATIONS["R2-01"] = _analyse_r2_01
     EXPERIMENT_CAPTURE_IMPLEMENTATIONS["R2-01"] = _capture_r2_01
     EXPERIMENT_STATUS_EXTRA["R2-01"] = _status_extra_r2_01
+    EXPERIMENT_PREREQUISITE_IMPLEMENTATIONS["R2-01"] = _prerequisite_r2_01
 
 
 _register_implementations()
@@ -368,6 +403,24 @@ def _validated_experiment(rm: roadmap_mod.Roadmap, experiment_id: str) -> None:
     if experiment_id not in rm.experiments:
         raise KeyError(f"unknown experiment id: {experiment_id!r} "
                        f"(known: {', '.join(sorted(rm.experiments))})")
+
+
+def run_prerequisite(experiment_id: str, resolution: Any, **kwargs: Any
+                     ) -> Optional[Dict[str, Any]]:
+    """Public entry point for the generic prerequisite hook (see
+    EXPERIMENT_PREREQUISITE_IMPLEMENTATIONS above). Returns None when no
+    hook is registered for this experiment, or when the registered hook
+    itself decides nothing should be attempted. An experiment's own run()
+    implementation calls this directly (a deferred/in-function import, to
+    avoid a module-import cycle with this module) rather than being called
+    BY run_experiment() -- the decision of *when* a prerequisite might
+    apply is domain-specific (R2-01 knows what "no eligible trace source"
+    means; this module does not), so it stays with the experiment."""
+    _register_implementations()
+    hook = EXPERIMENT_PREREQUISITE_IMPLEMENTATIONS.get(experiment_id)
+    if hook is None:
+        return None
+    return hook(resolution, **kwargs)
 
 
 def run_experiment(experiment_id: str, *, allow_dirty: bool = False, **kwargs: Any
