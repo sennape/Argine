@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from .. import provenance, store
-from . import replay_contract, trace_contract, trace_source
+from . import behavioral_fidelity, replay_contract, trace_contract, trace_source
 
 OUTCOME_PASS = "PASS"
 OUTCOME_INCONCLUSIVE = "INCONCLUSIVE"
@@ -38,10 +38,16 @@ def _write_text(path: Path, text: str) -> None:
 
 
 def classify_outcome(norm_report: trace_contract.NormalizationReport,
-                     reconcile_problems: list, rr: Optional[replay_contract.DeterministicReplayResult]
+                     reconcile_problems: list, rr: Optional[replay_contract.DeterministicReplayResult],
+                     level_d: Optional[Dict[str, Any]] = None
                      ) -> "tuple[str, list[str]]":
     """Section 14's criteria, applied mechanically -- never inferred from a
-    process exit code alone, never silently promoted."""
+    process exit code alone, never silently promoted.
+
+    `level_d` is `behavioral_fidelity.evaluate()`'s result (R2-01B) or
+    `None`/status `NOT_OBSERVABLE` when no independent runtime behavioral
+    evidence is available for this source (synthetic fixture, SMOKE runs,
+    format-v1 raw.tsv, or no raw.tsv at all)."""
     reasons = []
     if reconcile_problems:
         reasons.extend(reconcile_problems)
@@ -62,20 +68,48 @@ def classify_outcome(norm_report: trace_contract.NormalizationReport,
             "distinguished from a true cold start; this trace alone cannot establish "
             "replay suitability for a warm-runtime comparison")
 
-    behavioral_observable = False  # Level D: see run(); no source candidate carries
-                                   # recorded resident/hit/miss state independent of replay
-    if not behavioral_observable and reasons:
+    level_d_status = (level_d or {}).get("status", behavioral_fidelity.STATUS_NOT_OBSERVABLE)
+
+    if level_d_status == behavioral_fidelity.STATUS_OBSERVED_FAIL:
+        # A genuine behavioral disagreement between the real runtime and
+        # independent replay is fatal regardless of how clean Levels A-C
+        # were -- never downgraded to INCONCLUSIVE.
+        reasons.append(
+            "behavioral replay validation (Level D) is OBSERVED and shows a disagreement "
+            f"between the real runtime's own recorded cache events and independent "
+            f"replay prediction: {(level_d or {}).get('reason', 'see level_d for detail')}")
+        return OUTCOME_FAIL, reasons
+
+    if level_d_status == behavioral_fidelity.STATUS_OBSERVED_PASS:
+        if reasons:
+            # An independently observed behavioral match does not
+            # retroactively fix an unrelated structural-metadata gap in
+            # Levels A-C; R2-01B never forces PASS by relaxing a
+            # limitation it did not actually close.
+            reasons.append(
+                "behavioral replay validation (Level D) is OBSERVED and PASSES "
+                "(independent runtime-vs-replay comparison agrees with zero "
+                "disagreements); however the structural caveat(s) above are unrelated "
+                "to Level D and still prevent an unqualified PASS")
+            return OUTCOME_INCONCLUSIVE, reasons
+        reasons.append(
+            "behavioral replay validation (Level D) is OBSERVED and PASSES: the real "
+            "runtime's own recorded cache events (raw.tsv, format v2, exact recorded "
+            "shard map) agree with independent StoreReplay prediction with zero "
+            "disagreements over the measured workload (see level_d for metrics)")
+        return OUTCOME_PASS, reasons
+
+    # NOT_OBSERVABLE: unchanged pre-existing behavior.
+    if reasons:
         return OUTCOME_INCONCLUSIVE, reasons + [
             "behavioral replay validation (Level D) is NOT_OBSERVABLE for this source: "
             "it carries no independently recorded resident/hit/miss state to compare "
             "replay against, and structural fidelity alone is not sufficient given the "
             "limitations above"]
-    if not behavioral_observable:
-        reasons.append("behavioral replay validation (Level D) is NOT_OBSERVABLE for this "
-                       "source (no independently recorded resident/hit/miss state); "
-                       "structural fidelity (Levels A-C) was otherwise sufficient")
-        return OUTCOME_INCONCLUSIVE, reasons
-    return OUTCOME_PASS, reasons  # unreachable while behavioral_observable is always False
+    reasons.append("behavioral replay validation (Level D) is NOT_OBSERVABLE for this "
+                   "source (no independently recorded resident/hit/miss state); "
+                   "structural fidelity (Levels A-C) was otherwise sufficient")
+    return OUTCOME_INCONCLUSIVE, reasons
 
 
 def run(*, trace_source_arg: Optional[str] = None, allow_dirty: bool = False,
@@ -185,7 +219,8 @@ def run(*, trace_source_arg: Optional[str] = None, allow_dirty: bool = False,
         replay_error = str(e)
         reconcile_problems = reconcile_problems + [f"replay invariant violated: {e}"]
 
-    outcome, reasons = classify_outcome(norm_report, reconcile_problems, rr)
+    level_d = behavioral_fidelity.evaluate(Path(src_path).parent)
+    outcome, reasons = classify_outcome(norm_report, reconcile_problems, rr, level_d)
 
     rec["identity"]["end_utc"] = provenance.utc_now_iso()
     rec["identity"]["outcome"] = outcome
@@ -203,6 +238,7 @@ def run(*, trace_source_arg: Optional[str] = None, allow_dirty: bool = False,
         "reconcile_problems": reconcile_problems,
         "replay_error": replay_error,
         "reasons": reasons,
+        "level_d": level_d,
     })
     summary = {
         "experiment_id": "R2-01", "run_id": run_id, "outcome": outcome,
@@ -218,6 +254,10 @@ def run(*, trace_source_arg: Optional[str] = None, allow_dirty: bool = False,
         # trace (None when the source was already registered/explicit --
         # i.e. no capture happened as part of THIS run).
         "capture_provenance": capture_provenance,
+        # R2-01B (section 15): always present, NOT_OBSERVABLE included, so a
+        # run's Level-D status is visible on its own rather than only implied
+        # by the final outcome.
+        "level_d": level_d,
     }
     _write_json(run_dir / "summary.json", summary)
     _write_text(run_dir / "summary.md", _summary_markdown(summary, norm_report, rr))

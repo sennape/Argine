@@ -152,6 +152,10 @@ command resolves it automatically -- no `--trace-source` needed. Neither
 command was executed by the R2-01A implementation task itself; both are
 left ready for one human to run.
 
+## R2-01B: Level-D behavioral evidence
+
+See `docs/research2/METHODOLOGY.md` ('R2-01B: closing the Level-D behavioral-observability gap') for the full contract. In short: the existing `argine research trace` capture already writes a format-v2 `raw.tsv` alongside `trace.jsonl.gz`, and Research Part 1's own EXP-021 fidelity tooling (`argine.research.fidelity`, `tools/validate_replay_fidelity.py`) already defines a predeclared, zero-tolerance runtime-vs-replay comparison. `behavioral_fidelity.evaluate()` reuses that tooling directly; no runtime change, no second real capture.
+
 ## Current state
 
 See `argine.bat research2 status` for the live state-machine status (now

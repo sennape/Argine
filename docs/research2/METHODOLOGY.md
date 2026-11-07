@@ -156,12 +156,14 @@ the Oracle algorithm itself or compare it against anything (R2-02's job).
   reconcile exactly, with every exclusion categorized.
 - **Level D** (behavioral replay validation): performed only if a source
   trace carries independently recorded resident/hit/miss/eviction state to
-  compare replay against. No locally available real candidate source
-  carries that independent state, so Level D is `NOT_OBSERVABLE` for any
-  run against those sources; `classify_outcome()` treats that as a factor
-  that, combined with any other limitation, drives `INCONCLUSIVE` rather
-  than `PASS` -- structural fidelity (A-C) alone is not treated as
-  sufficient for `PASS`.
+  compare replay against. `classify_outcome()` treats the absence of that
+  state as a factor that, combined with any other limitation, drives
+  `INCONCLUSIVE` rather than `PASS` -- structural fidelity (A-C) alone is
+  not treated as sufficient for `PASS`. As of R2-01B (below), Level D is
+  `OBSERVED_PASS` / `OBSERVED_FAIL` whenever the resolved trace source's
+  own capture directory carries a format-v2 `raw.tsv` sibling, and
+  `NOT_OBSERVABLE` otherwise (format v1, or no `raw.tsv` at all -- e.g. the
+  synthetic fixture and SMOKE runs).
 
 ### Scientific outcome criteria
 
@@ -228,3 +230,133 @@ same deferred-import pattern as `EXPERIMENT_RUN_IMPLEMENTATIONS`); R2-01's
 reports `trace_source_status`, `trace_source_type`, `trace_source_runnable`,
 and `trace_source_blocker` by calling `trace_source.resolve()`, which only
 stats local candidate paths and never hashes a multi-gigabyte trace.
+
+
+## R2-01B: closing the Level-D behavioral-observability gap
+
+R2-01's first real candidate run (`c9d55e46733c4ac584ea74c12f1cc606`,
+source capture `286a41477ce54d5fb9ccc24f4e508f22`) reached Levels A-C at
+PASS-quality but Level D `NOT_OBSERVABLE`, because `classify_outcome()`
+had no behavioral evidence wired in at all (`behavioral_observable` was a
+hardcoded `False`). R2-01B closes this gap using existing instrumentation
+and existing, already-validated tooling -- no runtime source change, no
+second real 30B capture.
+
+### What was actually missing
+
+Nothing in the runtime or in capture. `argine research trace` (the exact
+command `capture.py` already invokes for R2-01) already writes, in the
+same run directory as `trace.jsonl.gz`:
+
+- `raw.tsv` -- the runtime's own raw research log (`argine-raw` format;
+  `argine2-research-v2` carries an exact per-shard recorded mapping and
+  sequence numbers, never a statistical hash-based approximation);
+- `evictions.csv`, `markers.jsonl`, `io.csv`, `nodes.csv`,
+  `graph_timing.csv`, `summary.json` -- all produced by
+  `argine.research.runner` (Research Part 1), independently of the route
+  trace replay is validated against.
+
+Research Part 1 also already contains a complete, independent
+runtime-vs-replay fidelity checker (`argine.research.fidelity`, fed by
+`argine.research.rawlog`/`storereplay`/`replay`), exercised by its own
+EXP-021 closure tool, `tools/validate_replay_fidelity.py`. That tool reads
+exactly this directory layout and predeclares its own acceptance
+criteria (`WORKLOAD`, `FULL_TRACE` tuples) -- zero tolerance, defined
+before R2-01 ever existed, for EXP-021's own purposes. Classification:
+**EXISTING_TELEMETRY_SUFFICIENT.** The gap was purely that nothing in
+Research Part 2 looked at these sibling files; `behavioral_fidelity.py`
+is the whole fix.
+
+### Independence / non-circularity
+
+Levels A-C validate the trace/replay *contract* (does a deterministic
+replay of the recorded route trace reconcile and digest stably?) using a
+simplified `GlobalLRU` counterfactual policy -- this was never intended to
+reproduce the real cache's architecture, only to exercise the replay
+mechanism itself. Level D instead compares the REAL runtime's own
+recorded cache events (`raw.tsv`'s S/A/I/E records: what the C++ expert
+cache actually did) against an INDEPENDENT `StoreReplay` prediction fed
+only the runtime's own request stream and its exact recorded 16-shard
+mapping (`ShardedLRU(16)` / `RecordedShardMap`, matching
+`argine.research.storereplay.runtime_shard_count()`'s real
+`clamp(budget // 32MiB, 1, 16)` architecture -- see "16 cache shards"
+below). Route information alone never enters this comparison as the
+thing being validated; the replay's own predicted hit/miss/evict/victim
+decisions are checked against the runtime's own INDEPENDENTLY recorded
+decisions, event by event. This is not circular.
+
+### 16 cache shards
+
+The real runtime shards its expert cache (`runtime_shard_count`: up to 16,
+`budget // 32MiB` clamped), while Part 2's own `GlobalLRU` (Levels A-C)
+models a single global cache. This is not a mismatch Part 2 hides: Levels
+A-C and Level D are deliberately different checks on different axes
+(contract/structural vs. real-behavioral), and Level D uses Part 1's
+already shard-correct `ShardedLRU`/`RecordedShardMap`, never `GlobalLRU`.
+
+### Level-D acceptance criteria (predeclared, reused verbatim)
+
+`behavioral_fidelity.evaluate()` imports `tools.validate_replay_fidelity
+.one()` and its `WORKLOAD` criterion tuple directly -- never redefines or
+loosens them:
+
+```
+reconstruct_inconsistencies == 0
+shards_with_replay_relevant_seq_gaps == 0
+incomplete_nodes_in_workload == 0
+wl_disagreements == 0
+wl_victim_disagreements == 0
+wl_skip_count_disagreements == 0
+pre_workload_disagreements == 0
+pre_workload_skip_count_disagreements == 0
+wl_rt_misses == wl_rp_misses
+wl_rt_miss_bytes == wl_rp_miss_bytes
+wl_rt_evictions == wl_rp_evictions
+rp_budget_violations == 0
+wl_rp_failures == 0
+pre_workload_rp_failures == 0
+```
+
+These were predeclared by Research Part 1 for EXP-021's own closure,
+before this R2-01 capture ever existed -- R2-01B does not choose or tune
+any threshold after seeing a result. The committed `exp021_closure` field
+additionally requires zero *unexplained* tail disagreement after the
+measured workload (`tail_disagreements_unexplained == 0`); R2-01B reuses
+that exact field as its own strict PASS gate, matching this contract's own
+zero-tolerance policy (discrete state/event validation, not a noisy
+measurement).
+
+- **`OBSERVED_PASS`**: `raw.tsv` is format v2 and `exp021_closure == "PASS"`.
+- **`OBSERVED_FAIL`**: `raw.tsv` is format v2 and evaluation completed but
+  `exp021_closure != "PASS"` (any criterion above violated, or an
+  unexplained tail disagreement).
+- **`NOT_OBSERVABLE`**: no `raw.tsv`/`trace.jsonl.gz` sibling, format v1
+  (statistical shard mapping only -- insufficient for exact event-level
+  comparison), or the evaluation itself raised (malformed telemetry) --
+  always fails closed, never guessed.
+
+### Classification change in `classify_outcome()`
+
+- `level_d` `NOT_OBSERVABLE` (or absent): unchanged pre-existing behavior
+  (`INCONCLUSIVE`, with the original explanatory reason).
+- `level_d` `OBSERVED_FAIL`: always `FAIL`, appended to any existing A-C
+  reasons -- a genuine behavioral disagreement is fatal regardless of how
+  clean Levels A-C were.
+- `level_d` `OBSERVED_PASS` with no other A-C reasons: `PASS`.
+- `level_d` `OBSERVED_PASS` but A-C still carries a structural caveat
+  (e.g. `layers_missing_expert_bytes`, `unknown_cold_assumed`):
+  `INCONCLUSIVE`, not `PASS` -- an independently observed behavioral match
+  does not retroactively fix an unrelated structural-metadata gap, and
+  R2-01B never forces `PASS` by relaxing a limitation it did not actually
+  close.
+
+### Provenance
+
+`behavioral_fidelity.evaluate()`'s full result is written into
+`validation.json`/`summary.json` under `level_d` for every R2-01 run
+(`NOT_OBSERVABLE` included) so a run's Level-D status is always visible,
+not just implied by the outcome. No second real capture is created or
+required by R2-01B: it reads the already-registered capture's own sibling
+files, so there is no new `capture_run_id` to bind -- the existing
+`capture_provenance` binding (R2-01A) already identifies which capture
+produced both `trace.jsonl.gz` and the `raw.tsv` R2-01B reads.
