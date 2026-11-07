@@ -429,3 +429,61 @@ the normalized trace identity), `policy_results.json`, `comparison.json`
 under the Research2 evidence root, and appends one registry entry --
 exactly the same evidence architecture R2-01 established, no new one
 invented.
+
+## R2-03: Expert-Memory Budget Sensitivity
+
+Replays R2-02's declared policy set, on the same R2-01-validated real
+trace, across a small, fixed, predeclared set of expert-memory budgets,
+to test whether the Oracle-vs-causal-retention gap R2-02 observed at
+4 GiB is robust. Implemented in `argine/research2/r2_03/`. See
+`experiments/R2-03-budget-sensitivity/README.md` for the full scientific
+design, the chosen budgets and their rationale, metrics, and outcome
+rules; this section records the implementation-level contract.
+
+### R2-01 + R2-02 prerequisite and trace-binding consistency
+
+`r2_03.prerequisite.require_r2_01_and_r2_02_pass()` reuses (never
+duplicates) `r2_02.prerequisite.require_r2_01_pass()` for the R2-01 half
+of the check, then separately verifies R2-02's own latest run reached
+`PASS` and that R2-02's own recorded trace binding (from its
+`provenance.json`) agrees with R2-01's current one. Any divergence
+refuses the run atomically (`R2_01_OR_R2_02_PREREQUISITE_NOT_MET`).
+
+### Predeclared budget sweep
+
+`r2_03.budget_sweep.FIXED_BUDGETS_BYTES` is a fixed, five-point,
+strictly-increasing tuple of exact byte capacities (module-level
+constants, asserted unique and sorted at import time): 1.5 / 2 / 4 / 8 /
+16 GiB. 4 GiB is `REPRODUCTION_BUDGET_BYTES`, asserted to be a member of
+the sweep. Nothing in `orchestrator.run()` accepts a budget parameter --
+the sweep is not swept further at runtime.
+
+### R2-02 reproduction check
+
+`r2_03.reproduction.check()` compares the sweep's own 4 GiB point against
+R2-02's own registered `policy_results.json` (read dynamically via the
+R2-02 run id the prerequisite binding resolved, never a hard-coded
+expected-value literal), for `misses` and `miss_bytes` on `Global-LRU`
+and `Oracle-Global-Belady`. `orchestrator.classify_outcome()` evaluates
+this check FIRST: any mismatch is `FAIL` and short-circuits every other
+rule, per the task's own "any mismatch blocks interpretation of the
+sweep" instruction.
+
+### Replay and curves
+
+Reuses `r2_02.replay_multi.run_policy_replay()` and
+`r2_02.comparison.{policy_row,oracle_gap}` verbatim for every
+(budget, policy) pair, each replayed twice (the same independent-replay
+determinism check R2-02 established). `r2_03.curves.py` reshapes the
+resulting rows into the three predeclared curves (primary: relative
+Oracle miss-byte reduction vs budget; secondary: Global-LRU and Oracle
+miss rate vs budget) -- no new metric semantics.
+
+### Evidence
+
+Each run writes `manifest.json`, `provenance.json` (the R2-01+R2-02
+binding plus the normalized trace identity), `budget_results.json`,
+`comparison.json` (reproduction check + gap curves), `summary.json`,
+`summary.md`, and a flat `budget_results.csv` for later plotting, under
+the Research2 evidence root, and appends one registry entry -- the same
+evidence architecture R2-01/R2-02 established, no new one invented.
