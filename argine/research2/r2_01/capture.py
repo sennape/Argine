@@ -98,7 +98,17 @@ def plan_capture_command(model_path: "str | Path", *, out_dir: Path) -> List[str
         "--split", PROTOCOL["split"],
         "--seed", str(PROTOCOL["seed"]),
         "--threads", str(PROTOCOL["threads"]),
-        "--llama-arg", "--threads-batch", "--llama-arg", str(PROTOCOL["threads_batch"]),
+        # Argine2's `--llama-arg ARG` is `action="append"`, one value per
+        # occurrence: a value starting with "-" immediately after
+        # `--llama-arg` is mis-parsed by argparse as another option
+        # ("error: argument --llama-arg: expected one argument"), not as
+        # that occurrence's value. The documented repository-defined
+        # workaround for a dash-prefixed value is `--llama-arg=VALUE`
+        # (the "=" form bypasses argparse's option-like-token check); a
+        # plain value (no leading dash) still needs its own separate
+        # `--llama-arg VALUE` occurrence. Verified against the real
+        # `argine research trace` parser in tests/test_r2_01a_capture.py.
+        "--llama-arg=--threads-batch", "--llama-arg", str(PROTOCOL["threads_batch"]),
         "--ctx", str(PROTOCOL["ctx"]),
         "--out", str(out_dir),
     ]

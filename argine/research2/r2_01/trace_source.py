@@ -208,16 +208,39 @@ def resolve(*, explicit_source: Optional[str] = None,
                           tier="documented_canonical", candidates=candidates,
                           message=f"exactly one documented-canonical local candidate: "
                                   f"{plausible[0].path}")
-    if not candidates:
-        return Resolution(
-            status=TRACE_SOURCE_MISSING, candidates=candidates,
-            message="no usable local trace source found (checked EXP-019 raw/ Windows "
-                    "validation runs, SMOKE-* runs, and the EXP-019 fixture). Pass "
-                    "--trace-source PATH, or attach the real publication-quality trace "
-                    "(see docs/research2/experiments/R2-01.../README.md).")
+
+    # Two distinct BLOCKED outcomes, chosen on the count of SCIENTIFICALLY
+    # ELIGIBLE (plausible) candidates, never on the raw discovered count:
+    #   - TRACE_SOURCE_MISSING: zero eligible candidates exist. Files may
+    #     still physically exist on disk (SMOKE-* runs, the synthetic
+    #     fixture) -- discovery may have found several -- but none of them
+    #     is eligible to be Research Part 2 canonical evidence, so there is
+    #     nothing usable, exactly as if nothing had been found at all.
+    #   - TRACE_SOURCE_AMBIGUOUS: two or more eligible candidates exist and
+    #     there is no deterministic way to choose between them.
+    # The message and the candidate/eligible counts must never contradict
+    # each other: "candidate(s) found" counts everything discover_local_
+    # candidates() returned (plausible or not); "scientifically eligible"
+    # counts only `plausible`.
+    if len(plausible) == 0:
+        if not candidates:
+            message = ("no local trace candidate(s) found (checked EXP-019 raw/ Windows "
+                       "validation runs, SMOKE-* runs, and the EXP-019 fixture). Pass "
+                       "--trace-source PATH, or attach the real publication-quality trace "
+                       "(see docs/research2/experiments/R2-01.../README.md).")
+        else:
+            message = (f"{len(candidates)} local trace candidate(s) found, 0 scientifically "
+                      f"eligible/plausible for canonical R2-01 evidence (all {len(candidates)} "
+                      f"discovered candidate(s) are SMOKE runs, a synthetic fixture, or "
+                      f"otherwise explicitly non-canonical -- see each candidate's own "
+                      f"reason). Pass --trace-source PATH, or attach the real "
+                      f"publication-quality trace "
+                      f"(see docs/research2/experiments/R2-01.../README.md).")
+        return Resolution(status=TRACE_SOURCE_MISSING, candidates=candidates, message=message)
+
     return Resolution(
         status=TRACE_SOURCE_AMBIGUOUS, candidates=candidates,
-        message=f"{len(candidates)} plausible local trace source(s) found and none is "
-                f"unambiguously documented as canonical for Research Part 2 "
-                f"({sum(1 for c in candidates if c.plausible)} marked plausible). "
+        message=f"{len(plausible)} scientifically eligible/plausible trace candidate(s) found "
+                f"({len(candidates)} candidate(s) discovered in total) and no deterministic "
+                f"canonical choice can be made among them. "
                 f"Re-run with --trace-source PATH naming the one to use.")

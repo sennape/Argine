@@ -279,15 +279,63 @@ class TraceSourceResolverTests(_FixtureCase):
         r = trace_source.resolve(argine2_root=self.tmp)  # empty dir: no candidates
         self.assertEqual(r.status, trace_source.TRACE_SOURCE_MISSING)
 
-    def test_ambiguous_when_multiple_real_candidates_present(self):
+    def test_missing_when_candidates_found_but_none_scientifically_eligible(self):
+        """Discovery can find real files (two SMOKE runs here) while zero of
+        them are scientifically eligible/plausible canonical evidence. That
+        must be TRACE_SOURCE_MISSING (nothing usable), not
+        TRACE_SOURCE_AMBIGUOUS -- there is no ambiguity between two runs that
+        are both ineligible, and the old wording ("N plausible... 0 marked
+        plausible") was internally contradictory."""
         root = self.tmp / "Argine2"
         for d in ("SMOKE-30B", "SMOKE-30B-r2"):
             p = root / "experiments" / d / "run-00-4G"
             p.mkdir(parents=True)
             write_trace(make_trace(), p / "trace.jsonl.gz")
         r = trace_source.resolve(argine2_root=root)
+        self.assertEqual(r.status, trace_source.TRACE_SOURCE_MISSING)
+        self.assertEqual(len(r.candidates), 2)
+        self.assertTrue(all(not c.plausible for c in r.candidates))
+        # message must state the discovered count AND the zero-eligible
+        # count, and must never claim any of them is plausible
+        self.assertIn("2 local trace candidate(s) found", r.message)
+        self.assertIn("0 scientifically eligible", r.message)
+
+    def test_ambiguous_when_multiple_scientifically_eligible_candidates_present(self):
+        """True ambiguity: two or more candidates that ARE scientifically
+        eligible/plausible, with no deterministic way to pick between
+        them."""
+        root = self.tmp / "Argine2"
+        for exp019_dir in ("windows-validation-2026-10-12", "windows-validation-2026-10-12-r2"):
+            p = (root / "experiments" / "EXP-019-instrumentation-validation" / "raw"
+                / exp019_dir / "run-00-4G")
+            p.mkdir(parents=True)
+            write_trace(make_trace(), p / "trace.jsonl.gz")
+        r = trace_source.resolve(argine2_root=root)
         self.assertEqual(r.status, trace_source.TRACE_SOURCE_AMBIGUOUS)
         self.assertEqual(len(r.candidates), 2)
+        self.assertTrue(all(c.plausible for c in r.candidates))
+        self.assertIn("2 scientifically eligible", r.message)
+
+    def test_smoke_traces_remain_ineligible(self):
+        root = self.tmp / "Argine2"
+        p = root / "experiments" / "SMOKE-30B" / "run-00-4G"
+        p.mkdir(parents=True)
+        write_trace(make_trace(), p / "trace.jsonl.gz")
+        r = trace_source.resolve(argine2_root=root)
+        self.assertEqual(len(r.candidates), 1)
+        self.assertFalse(r.candidates[0].plausible)
+        self.assertEqual(r.status, trace_source.TRACE_SOURCE_MISSING)
+
+    def test_synthetic_fixture_remains_ineligible(self):
+        root = self.tmp / "Argine2"
+        p = (root / "experiments" / "EXP-019-instrumentation-validation" / "processed"
+            / "e2e-fixture")
+        p.mkdir(parents=True)
+        write_trace(make_trace(), p / "trace.jsonl.gz")
+        r = trace_source.resolve(argine2_root=root)
+        self.assertEqual(len(r.candidates), 1)
+        self.assertFalse(r.candidates[0].plausible)
+        self.assertEqual(r.status, trace_source.TRACE_SOURCE_MISSING)
 
     def test_single_plausible_candidate_resolves(self):
         root = self.tmp / "Argine2"

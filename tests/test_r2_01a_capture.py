@@ -9,6 +9,7 @@ from __future__ import annotations
 import gzip
 import json
 import os
+import subprocess
 import shutil
 import sys
 import tempfile
@@ -69,9 +70,89 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(cmd[cmd.index("--seed") + 1], "42")
         self.assertIn("--expert-budget", cmd)
         self.assertEqual(cmd[cmd.index("--expert-budget") + 1], "4G")
-        # threads-batch has no dedicated flag; passed through --llama-arg
-        self.assertIn("--llama-arg", cmd)
-        self.assertIn("--threads-batch", cmd)
+        # threads-batch has no dedicated capture flag; passed through the
+        # existing --llama-arg passthrough using the "=" form (a bare
+        # "--llama-arg --threads-batch" is rejected by argparse -- see
+        # LlamaArgRealParserTests below, which proves this against the
+        # real parser, not just this string check).
+        self.assertIn("--llama-arg=--threads-batch", cmd)
+        self.assertNotIn("--threads-batch", cmd)  # never as a separate bare token
+        idx = cmd.index("--llama-arg=--threads-batch")
+        self.assertEqual(cmd[idx + 1], "--llama-arg")
+        self.assertEqual(cmd[idx + 2], "12")
+
+
+class LlamaArgRealParserTests(unittest.TestCase):
+    """Proves the exact R2-01 capture argv parses through the REAL
+    `argine research trace` argparse parser (not just a string check), and
+    that the originally-observed real failure is reproduced and fixed."""
+
+    @classmethod
+    def setUpClass(cls):
+        import argine.cli as argine_cli
+        cls.parser = argine_cli.build_parser()
+
+    def test_real_protocol_command_parses_successfully(self):
+        cmd = r2_01_capture.plan_capture_command(
+            "/tmp/Qwen_Qwen3-30B-A3B-Q4_K_M.gguf", out_dir=Path("/tmp/out"))
+        # strip the leading [sys.executable, "-m", "argine"]: build_parser()
+        # parses from "research" onward, exactly like argine.bat does.
+        argv = cmd[3:]
+        ns = self.parser.parse_args(argv)  # must not raise SystemExit
+        self.assertEqual(ns.workload, "coding")
+        self.assertEqual(ns.workload_version, "v1")
+        self.assertEqual(ns.split, "dev")
+        self.assertEqual(ns.seed, 42)
+        self.assertEqual(ns.threads, 4)
+        self.assertEqual(ns.ctx, 4096)
+
+    def test_downstream_dash_option_survives_llama_arg_exactly(self):
+        cmd = r2_01_capture.plan_capture_command("/x/model.gguf", out_dir=Path("/tmp/out"))
+        ns = self.parser.parse_args(cmd[3:])
+        self.assertEqual(ns.llama_arg, ["--threads-batch", "12"])
+
+    def test_generation_threads_four_represented_correctly(self):
+        cmd = r2_01_capture.plan_capture_command("/x/model.gguf", out_dir=Path("/tmp/out"))
+        ns = self.parser.parse_args(cmd[3:])
+        self.assertEqual(ns.threads, 4)
+
+    def test_batch_threads_twelve_survives_as_llama_arg_value(self):
+        cmd = r2_01_capture.plan_capture_command("/x/model.gguf", out_dir=Path("/tmp/out"))
+        ns = self.parser.parse_args(cmd[3:])
+        self.assertEqual(ns.llama_arg[ns.llama_arg.index("--threads-batch") + 1], "12")
+
+    def test_original_broken_form_is_reproduced_and_rejected(self):
+        """Regression anchor: the exact malformed argv the user actually hit
+        in production (two bare '--llama-arg' occurrences straddling a
+        dash-prefixed value) must still fail the real parser the same way,
+        proving this test suite would have caught the original defect."""
+        broken = ["trace", "/x/model.gguf", "--expert-store", "--expert-budget", "4G",
+                 "--workload", "coding", "--workload-version", "v1", "--split", "dev",
+                 "--seed", "42", "--threads", "4",
+                 "--llama-arg", "--threads-batch", "--llama-arg", "12",
+                 "--ctx", "4096", "--out", "/tmp/out"]
+        with self.assertRaises(SystemExit):
+            with mock.patch("sys.stderr"):
+                self.parser.parse_args(broken)
+
+    def test_expert_store_auto_resolution_flag_present(self):
+        cmd = r2_01_capture.plan_capture_command("/x/model.gguf", out_dir=Path("/tmp/out"))
+        ns = self.parser.parse_args(cmd[3:])
+        self.assertEqual(ns.expert_store, "auto")  # bare --expert-store -> const="auto"
+
+    def test_output_path_survives(self):
+        out = Path("/tmp/capture-out-dir")
+        cmd = r2_01_capture.plan_capture_command("/x/model.gguf", out_dir=out)
+        ns = self.parser.parse_args(cmd[3:])
+        self.assertEqual(ns.out, str(out))
+
+    def test_no_real_runtime_or_model_started(self):
+        """Parsing alone must never touch a model or runtime."""
+        cmd = r2_01_capture.plan_capture_command("/x/model.gguf", out_dir=Path("/tmp/out"))
+        with mock.patch("subprocess.run") as m, mock.patch("subprocess.Popen") as m2:
+            self.parser.parse_args(cmd[3:])
+            m.assert_not_called()
+            m2.assert_not_called()
 
 
 class RegistrationTests(_TmpCase):
@@ -313,6 +394,167 @@ class CaptureExperimentGateTests(_TmpCase):
     def test_capture_experiment_requires_model(self):
         result = runner.capture_experiment("R2-01", allow_dirty=True, dry_run=True)
         self.assertEqual(result["outcome"], "USAGE_ERROR")
+
+
+class CliExitCodeTests(_TmpCase):
+    """Defect B: capture ... && run R2-01 must not run `run` when capture
+    logically failed. cli.main()'s int return value IS the process's exit
+    status (argine/__main__.py does sys.exit(main())), so testing main()'s
+    return value here is equivalent to testing the real process exit code;
+    a POSIX subprocess chain is also tested below as an end-to-end proof,
+    and argine.bat (Windows) was separately fixed to stop losing this exit
+    code across setlocal/endlocal (see argine.bat's own comment)."""
+
+    def setUp(self):
+        super().setUp()
+        self._old_root = os.environ.get("ARGINE3_RESEARCH_ROOT")
+        os.environ["ARGINE3_RESEARCH_ROOT"] = str(self.tmp)
+        self.addCleanup(self._restore)
+
+    def _restore(self):
+        if self._old_root is None:
+            os.environ.pop("ARGINE3_RESEARCH_ROOT", None)
+        else:
+            os.environ["ARGINE3_RESEARCH_ROOT"] = self._old_root
+
+    def test_capture_failed_is_nonzero_at_top_level(self):
+        import argine.cli as cli
+        model = self.tmp / "fake.gguf"
+        model.write_bytes(b"x")
+        with mock.patch("subprocess.run") as m:
+            m.return_value = mock.Mock(returncode=2, stdout="", stderr="boom")
+            rc = cli.main(["research2", "capture", "R2-01", "--model", str(model),
+                          "--allow-dirty"])
+        self.assertNotEqual(rc, 0)
+
+    def test_successful_mocked_capture_is_zero_at_top_level(self):
+        import argine.cli as cli
+        model = self.tmp / "fake2.gguf"
+        model.write_bytes(b"x")
+        rc = cli.main(["research2", "capture", "R2-01", "--model", str(model),
+                      "--allow-dirty", "--dry-run"])
+        self.assertEqual(rc, 0)
+
+    def test_model_not_found_is_nonzero(self):
+        import argine.cli as cli
+        rc = cli.main(["research2", "capture", "R2-01", "--model",
+                      str(self.tmp / "nope.gguf"), "--allow-dirty"])
+        self.assertNotEqual(rc, 0)
+
+    def test_dirty_tree_refusal_is_nonzero(self):
+        import argine.cli as cli
+        from argine.research2 import runner as _runner
+        model = self.tmp / "fake3.gguf"
+        model.write_bytes(b"x")
+        with mock.patch.object(_runner, "git_is_clean", return_value=False):
+            rc = cli.main(["research2", "capture", "R2-01", "--model", str(model)])
+        self.assertNotEqual(rc, 0)
+
+    def test_protocol_incomplete_is_nonzero(self):
+        import argine.cli as cli
+        model = self.tmp / "fake4.gguf"
+        model.write_bytes(b"x")
+        with mock.patch.dict(r2_01_capture.PROTOCOL, {"workload": None}):
+            rc = cli.main(["research2", "capture", "R2-01", "--model", str(model),
+                          "--allow-dirty"])
+        self.assertNotEqual(rc, 0)
+
+    def test_unknown_capture_experiment_is_nonzero(self):
+        import argine.cli as cli
+        rc = cli.main(["research2", "capture", "R2-99", "--model", "/tmp/x",
+                      "--allow-dirty"])
+        self.assertNotEqual(rc, 0)
+
+    def test_not_implemented_capture_is_nonzero(self):
+        import argine.cli as cli
+        rc = cli.main(["research2", "capture", "R2-02", "--model", "/tmp/x",
+                      "--allow-dirty"])
+        self.assertNotEqual(rc, 0)
+
+    def test_failed_capture_registers_no_source(self):
+        import argine.cli as cli
+        model = self.tmp / "fake5.gguf"
+        model.write_bytes(b"x")
+        with mock.patch("subprocess.run") as m:
+            m.return_value = mock.Mock(returncode=2, stdout="", stderr="boom")
+            cli.main(["research2", "capture", "R2-01", "--model", str(model),
+                     "--allow-dirty"])
+        self.assertIsNone(store.get_trace_source_registration("R2-01"))
+
+    def test_failed_capture_cannot_become_candidate_trace_evidence(self):
+        """A CAPTURE_FAILED run's own stdout.log/stderr.log/manifest.json
+        (legitimate failure diagnostics) must never be resolvable by
+        trace_source.resolve() as a usable trace -- they are not even a
+        trace file, let alone a plausible one."""
+        import argine.cli as cli
+        model = self.tmp / "fake6.gguf"
+        model.write_bytes(b"x")
+        with mock.patch("subprocess.run") as m:
+            m.return_value = mock.Mock(returncode=2, stdout="", stderr="boom")
+            result_holder = {}
+            orig_capture = r2_01_capture.capture
+            def _spy(*a, **kw):
+                r = orig_capture(*a, **kw)
+                result_holder["result"] = r
+                return r
+            with mock.patch.object(r2_01_capture, "capture", side_effect=_spy):
+                from argine.research2 import runner as _runner
+                _runner.capture_experiment("R2-01", allow_dirty=True, model_path=str(model),
+                                           dry_run=False)
+        capture_dir = Path(result_holder["result"]["capture_dir"])
+        self.assertTrue((capture_dir / "stderr.log").exists())
+        resolution = trace_source.resolve()
+        self.assertNotEqual(resolution.resolved_path, str(capture_dir / "stderr.log"))
+        self.assertNotIn(str(capture_dir), str(resolution.resolved_path or ""))
+
+
+class ShellChainRegressionTests(unittest.TestCase):
+    """End-to-end proof, via the real `python -m argine` subprocess (the
+    exact child process argine.bat invokes), that shell `&&` chaining
+    behaves correctly: a logical capture failure must produce a non-zero
+    OS process exit code, so a chained `&& next-command` never runs."""
+
+    def _run(self, args, root):
+        env = dict(os.environ)
+        env["ARGINE3_RESEARCH_ROOT"] = str(root)
+        return subprocess.run([sys.executable, "-m", "argine", *args], cwd=str(REPO_ROOT),
+                              env=env, capture_output=True, text=True, timeout=60)
+
+    def test_real_subprocess_nonzero_blocks_shell_chain(self):
+        root = Path(tempfile.mkdtemp(prefix="r2-01a-shell-"))
+        try:
+            r = self._run(["research2", "capture", "R2-01", "--model",
+                          str(root / "nope.gguf"), "--allow-dirty"], root)
+            self.assertNotEqual(r.returncode, 0)
+            # the real shell-level proof: `&&` after a nonzero-exit process
+            # never runs the right-hand side, in any POSIX shell.
+            chain = subprocess.run(
+                f'{sys.executable} -m argine research2 capture R2-01 '
+                f'--model {root / "nope.gguf"} --allow-dirty && echo SENTINEL_RAN',
+                shell=True, cwd=str(REPO_ROOT),
+                env={**os.environ, "ARGINE3_RESEARCH_ROOT": str(root)},
+                capture_output=True, text=True, timeout=60)
+            self.assertNotIn("SENTINEL_RAN", chain.stdout)
+            self.assertNotEqual(chain.returncode, 0)
+        finally:
+            shutil.rmtree(root, ignore_errors=True)
+
+    def test_real_subprocess_zero_on_success_allows_shell_chain(self):
+        root = Path(tempfile.mkdtemp(prefix="r2-01a-shell-ok-"))
+        model = root / "fake.gguf"
+        try:
+            root.mkdir(parents=True, exist_ok=True)
+            model.write_bytes(b"x")
+            chain = subprocess.run(
+                f'{sys.executable} -m argine research2 capture R2-01 '
+                f'--model {model} --allow-dirty --dry-run && echo SENTINEL_RAN',
+                shell=True, cwd=str(REPO_ROOT),
+                env={**os.environ, "ARGINE3_RESEARCH_ROOT": str(root)},
+                capture_output=True, text=True, timeout=60)
+            self.assertIn("SENTINEL_RAN", chain.stdout)
+            self.assertEqual(chain.returncode, 0)
+        finally:
+            shutil.rmtree(root, ignore_errors=True)
 
 
 if __name__ == "__main__":
