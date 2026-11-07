@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "states": ["PLANNED", "IMPLEMENTED", "READY", "RUNNING", "COMPLETED", "INCONCLUSIVE", "FAILED", "BLOCKED"],
+  "terminal_run_states": ["COMPLETED", "INCONCLUSIVE", "FAILED"],
+  "transitions": [
+    ["PLANNED", "IMPLEMENTED"],
+    ["PLANNED", "BLOCKED"],
+    ["IMPLEMENTED", "READY"],
+    ["IMPLEMENTED", "BLOCKED"],
+    ["BLOCKED", "IMPLEMENTED"],
+    ["BLOCKED", "READY"],
+    ["READY", "RUNNING"],
+    ["READY", "BLOCKED"],
+    ["RUNNING", "COMPLETED"],
+    ["RUNNING", "FAILED"],
+    ["RUNNING", "INCONCLUSIVE"],
+    ["COMPLETED", "READY"],
+    ["FAILED", "READY"],
+    ["INCONCLUSIVE", "READY"]
+  ],
+  "notes": [
+    "COMPLETED means the run finished without a fatal process failure. It does NOT by itself mean the hypothesis was scientifically supported.",
+    "INCONCLUSIVE is a first-class run outcome, distinct from FAILED (a raw run/process failure) and distinct from a scientific PASS/FAIL verdict.",
+    "Scientific verdicts (e.g. a hypothesis supported/falsified) are recorded separately, in an experiment's own analysis output, never inferred from the state machine or from a process exit code alone."
+  ]
+}

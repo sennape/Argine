@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "roadmap_name": "Argine Research Part 2",
+  "phases": [
+    {
+      "id": "II-A",
+      "name": "Oracle Expert Retention",
+      "purpose": "Measure the theoretical upper bound of expert-management improvement and the recoverable margin relative to current Argine and standard baselines.",
+      "experiments": ["R2-01", "R2-02", "R2-03", "R2-04"]
+    },
+    {
+      "id": "II-B",
+      "name": "Routing Characterization",
+      "purpose": "Determine whether expert routing exhibits exploitable temporal structure.",
+      "experiments": ["R2-05", "R2-06", "R2-07", "R2-08"]
+    },
+    {
+      "id": "II-C",
+      "name": "Working-Set Prediction",
+      "purpose": "Build causal predictors and determine whether prediction can improve actual runtime behaviour.",
+      "experiments": ["R2-09", "R2-10", "R2-11", "R2-12"]
+    }
+  ],
+  "phase_order": ["II-A", "II-B", "II-C"],
+  "experiments": {
+    "R2-01": {
+      "name": "Oracle Trace Contract and Replay Validation",
+      "phase": "II-A",
+      "depends_on": [],
+      "initial_state": "PLANNED",
+      "implemented": false,
+      "requires_real_runtime": false,
+      "purpose": "Establish a deterministic trace/replay contract suitable for offline retention-policy evaluation and validate that the replay preserves the information required for later oracle analysis.",
+      "expected_output_categories": ["trace-replay contract document", "replay fidelity validation report"]
+    },
+    "R2-02": {
+      "name": "Oracle vs Retention Baselines",
+      "phase": "II-A",
+      "depends_on": ["R2-01"],
+      "initial_state": "PLANNED",
+      "implemented": false,
+      "requires_real_runtime": false,
+      "purpose": "Compare, at minimum, current Argine retention behaviour, LRU, LFU, and the offline oracle.",
+      "expected_output_categories": ["policy comparison tables/plots"]
+    },
+    "R2-03": {
+      "name": "Expert-Memory Budget Sensitivity",
+      "phase": "II-A",
+      "depends_on": ["R2-02"],
+      "initial_state": "PLANNED",
+      "implemented": false,
+      "requires_real_runtime": false,
+      "purpose": "Measure how the oracle/baseline gap changes under multiple expert-memory budgets.",
+      "expected_output_categories": ["budget-sensitivity curves"]
+    },
+    "R2-04": {
+      "name": "Recoverable-Margin Analysis",
+      "phase": "II-A",
+      "depends_on": ["R2-03"],
+      "initial_state": "PLANNED",
+      "implemented": false,
+      "requires_real_runtime": false,
+      "purpose": "Quantify the theoretical performance margin available to improved retention.",
+      "expected_output_categories": ["recoverable-margin report"]
+    },
+    "R2-05": {
+      "name": "Expert Frequency and Concentration",
+      "phase": "II-B",
+      "depends_on": ["R2-04"],
+      "initial_state": "PLANNED",
+      "implemented": false,
+      "requires_real_runtime": false,
+      "purpose": "Characterize expert access frequency and routing concentration across layers and workloads.",
+      "expected_output_categories": ["frequency/concentration tables"]
+    },
+    "R2-06": {
+      "name": "Routing Transition Structure",
+      "phase": "II-B",
+      "depends_on": ["R2-05"],
+      "initial_state": "PLANNED",
+      "implemented": false,
+      "requires_real_runtime": false,
+      "purpose": "Characterize temporal transition structure in expert routing.",
+      "expected_output_categories": ["transition-structure report"]
+    },
+    "R2-07": {
+      "name": "Reuse Distance and Working-Set Structure",
+      "phase": "II-B",
+      "depends_on": ["R2-06"],
+      "initial_state": "PLANNED",
+      "implemented": false,
+      "requires_real_runtime": false,
+      "purpose": "Characterize reuse distance and effective working-set structure of expert accesses.",
+      "expected_output_categories": ["reuse-distance / working-set report"]
+    },
+    "R2-08": {
+      "name": "Routing Drift and Workload Dependence",
+      "phase": "II-B",
+      "depends_on": ["R2-07"],
+      "initial_state": "PLANNED",
+      "implemented": false,
+      "requires_real_runtime": false,
+      "purpose": "Characterize how routing structure drifts over time and across workloads.",
+      "expected_output_categories": ["drift / workload-dependence report"]
+    },
+    "R2-09": {
+      "name": "Prediction Benchmark",
+      "phase": "II-C",
+      "depends_on": ["R2-08"],
+      "initial_state": "PLANNED",
+      "implemented": false,
+      "requires_real_runtime": false,
+      "purpose": "Define the offline benchmark and metrics for working-set prediction.",
+      "expected_output_categories": ["prediction benchmark definition + baseline numbers"]
+    },
+    "R2-10": {
+      "name": "Causal Working-Set Predictor",
+      "phase": "II-C",
+      "depends_on": ["R2-09"],
+      "initial_state": "PLANNED",
+      "implemented": false,
+      "requires_real_runtime": false,
+      "purpose": "Build a causal (no-future-information) predictor of the near-future expert working set.",
+      "expected_output_categories": ["predictor implementation + offline accuracy report"]
+    },
+    "R2-11": {
+      "name": "Prediction-Driven Retention",
+      "phase": "II-C",
+      "depends_on": ["R2-10"],
+      "initial_state": "PLANNED",
+      "implemented": false,
+      "requires_real_runtime": false,
+      "purpose": "Evaluate, in replay, whether the predictor can drive a retention policy that improves on the best static/oracle-informed baseline.",
+      "expected_output_categories": ["predictive-retention replay report"]
+    },
+    "R2-12": {
+      "name": "Real Runtime Validation",
+      "phase": "II-C",
+      "depends_on": ["R2-11"],
+      "initial_state": "PLANNED",
+      "implemented": false,
+      "requires_real_runtime": true,
+      "purpose": "Validate the predictive retention result against the real runtime, not only in replay.",
+      "expected_output_categories": ["real-runtime validation report"]
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "note": "Declarative placeholder identifiers for Research Part 2, Phase II-A (Oracle Expert Retention). No policy is implemented here; this file only reserves stable identifiers so later experiment configs can reference them declaratively. No measured result is recorded or implied.",
+  "baselines": {
+    "CURRENT_ARGINE": {
+      "description": "Current Argine retention/eviction behaviour as implemented in the expert store (argine/expert_store.py), unchanged.",
+      "implemented": true,
+      "implementation_ref": "argine.expert_store (Argine runtime, Research Part 1)",
+      "status": "reference_only"
+    },
+    "LRU": {
+      "description": "Global least-recently-used eviction over the expert pool.",
+      "implemented": false,
+      "implementation_ref": null,
+      "status": "reserved"
+    },
+    "LFU": {
+      "description": "Global least-frequently-used eviction over the expert pool.",
+      "implemented": false,
+      "implementation_ref": null,
+      "status": "reserved"
+    },
+    "ORACLE": {
+      "description": "Offline Belady-style oracle (upper bound), as used for the Research Part 1 replay engine (argine/research/replay / Belady-style oracle policy family).",
+      "implemented": false,
+      "implementation_ref": "argine.research replay engine already implements an offline oracle policy family (Research Part 1); R2-02 is expected to reference, not reimplement, it",
+      "status": "reserved"
+    }
+  }
+}

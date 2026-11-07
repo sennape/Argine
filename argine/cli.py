@@ -3522,6 +3522,9 @@ def build_parser() -> argparse.ArgumentParser:
     # Argine2: the research command family (argine/research/cli.py)
     from .research.cli import register as _register_research
     _register_research(sub, sys.modules[__name__])
+    # Argine Research Part 2: automation infrastructure (argine/research2/cli.py)
+    from .research2.cli import register as _register_research2
+    _register_research2(sub, sys.modules[__name__])
     return ap
 
 
