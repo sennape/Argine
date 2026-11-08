@@ -1,0 +1,15 @@
+{
+  "audit_id": "AUDIT-ORACLE-001",
+  "experiment": "EXP-025-performance-model",
+  "experiment_status": "SUPPORTED (preregistered primary predictive claim on frozen 30B budget sweep; coefficient identifiability partial)",
+  "primary_source": "experiments/EXP-025-performance-model/README.md",
+  "performance_model_class": "P2",
+  "performance_model_class_rationale": "EXP-025 uses T_token = T_compute + T_unhidden_IO + T_sync + T_controller with non-negative coefficients and predictor terms including decode-attributed missed bytes / CostModel.bandwidth(qd) and per-read terms, plus nodes; qd is a time-weighted queue-depth statistic reconstructed from decode-attributed I/O and can retain upper-bound status. Modeled service/performance therefore depends on miss-stream properties beyond aggregate bytes alone (reads count, queue depth/timing, stream-specific bandwidth context). It is not a validated constant-coefficient byte model (P1) across arbitrary streams, and not merely T=c(stream)*bytes (P3) because of explicit reads and qd/bandwidth structure.",
+  "exp025_domain": "Frozen Qwen3-30B-A3B natural-language EXP-022 diagnostic configuration/budget sweep (1.5G, 1152M, 1024M, 768M, 512M; 2 replicas each; decode-only numerators; 384 generated-token denominator). Not validated for 80B, different workloads/runtimes, or arbitrary policy-induced miss streams.",
+  "equal_total_miss_bytes_can_differ_modeled_time": "YES",
+  "equal_bytes_rationale": "Two policies with equal total miss bytes can produce different reads_per_token, object/read-size/ordering patterns, and queue depth/timing (qd), which affect the reads term and io_bytes_over_bw(qd). Therefore modeled service time can differ materially even when aggregate miss bytes are equal.",
+  "policy_stream_transferability": "UNSUPPORTED",
+  "policy_stream_transferability_rationale": "EXP-025 validated held-out prediction on preregistered budget-sweep configurations for a specific workload/model/runtime, not on arbitrary policy-induced miss streams (e.g., different retention policies at the same budget producing different layer/size/read/timing mixes). Applying it to arbitrary policy comparisons requires explicit validation or must be labeled approximate/unsupported.",
+  "correct_future_performance_form": "DeltaT_model = PerformanceModel(MissStream_B_best) - PerformanceModel(MissStream_P); never simplify to a single shared c*bytes coefficient unless a constant-coefficient domain is independently validated. Modeled I/O/service time is not measured end-to-end latency, time-to-final-answer, or throughput.",
+  "numeric_practical_threshold_preregistered": false
+}
