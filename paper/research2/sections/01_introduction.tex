@@ -14,37 +14,42 @@ must be re-fetched during inference.
 
 This report presents a cumulative tranche of a three-stage research
 programme (``Research Part~2''), organized around one central question:
-\emph{how much of the cost of imperfect expert retention is an
-irreducible property of the workload, and how much is recoverable by a
-better, practical retention policy?} The programme is structured as
+\emph{how much of the cost of imperfect expert retention is explained by a
+simple causal baseline, and what measurable separation remains relative to
+a non-causal clairvoyant comparator?} The programme is structured as
 \begin{enumerate}
- \item \textbf{Research II-A -- Oracle headroom.} Establish, under a
-   validated offline replay model, the \emph{upper bound} on recoverable
-   retention performance: the gap between realistic causal policies and a
-   non-causal, information-unbounded oracle.
+ \item \textbf{Research II-A -- Clairvoyant-comparator gap.} Establish,
+   under a validated offline replay model, the measured miss-byte gap
+   between realistic causal policies and an implemented clairvoyant
+   Belady-style comparator ($O_B$). After \textsc{AUDIT-ORACLE-001}, this
+   gap is not interpreted as a proven byte-optimal bound or a proven upper
+   bound on causal recovery.
  \item \textbf{Research II-B -- Routing structure.} Characterize whether
    the expert-routing process exhibits exploitable temporal or
    statistical structure (frequency concentration, transition structure,
    reuse-distance/locality structure, and workload dependence/drift) that
-   could, in principle, explain and motivate a causal predictor.
- \item \textbf{Research II-C -- Causal recovery.} Build an actual causal
-   predictor and measure what fraction of the II-A upper bound it
-   recovers, including validation against the real runtime.
+   could, in principle, motivate a stronger causal policy.
+ \item \textbf{Research II-C -- Causal prediction and validation.} Build
+   and evaluate actual causal predictors and retention policies under a
+   preregistered benchmark/evaluation contract, measuring improvement over
+   selected causal baselines and (separately) recovery relative to the
+   implemented comparator, with later runtime validation.
 \end{enumerate}
 
 This document reports the completed II-A and II-B stages.
 Research~II-C has not started (Section~\ref{sec:iic-placeholder} states
 its intended scope as a placeholder only); no result, finding, or claim
-from II-C is made here. The II-A deliverable is the
-\emph{policy-information headroom} between causal retention policies and a
-non-causal oracle, decomposed from the \emph{structural} cost of the
-runtime's sharded retention architecture, measured across a fixed sweep of
-expert-memory budgets on a real, validated routing trace. The II-B
-deliverable is a descriptive characterization of routing concentration,
-same-layer transition dependence, short-horizon reuse locality, and
-workload dependence under the tested protocol. II-A headroom is a
-theoretical upper bound on recoverable performance, not demonstrated
-causal recoverability; II-B structure is evidence that causal prediction
-is scientifically worth testing, not evidence that prediction works or
-improves runtime. That distinction is the central methodological concern
-of this cumulative tranche.
+from II-C is made here. The II-A deliverable is the measured
+\emph{Belady comparator gap} between causal retention policies and the
+implemented clairvoyant comparator $O_B$, decomposed from the
+\emph{structural} cost of the runtime's sharded retention architecture,
+measured across a fixed sweep of expert-memory budgets on a real,
+validated routing trace. The II-B deliverable is a descriptive
+characterization of routing concentration, same-layer transition
+dependence, short-horizon reuse locality, and workload dependence under the
+tested protocol. The II-A comparator gap is a measured separation from a
+non-causal comparator, not a demonstrated causal recovery and not a proven
+causal upper bound; II-B structure is evidence that stronger causal
+prediction is scientifically worth testing, not evidence that prediction
+works or improves runtime. That distinction is the central methodological
+concern of this cumulative tranche.

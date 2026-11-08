@@ -70,7 +70,7 @@ def figure1(comparison: dict) -> None:
     fig, ax = plt.subplots()
     ax.plot(x, y_glru, marker="o", linewidth=1.3, markersize=4, label="Global-LRU (causal)")
     ax.plot(x, y_oracle, marker="s", linewidth=1.3, markersize=4,
-            label="Oracle-Global-Belady (non-causal)")
+            label="Belady comparator (clairvoyant, $O_B$)")
     ax.set_xlabel("Expert-memory budget (GiB)")
     ax.set_ylabel("Miss rate")
     ax.set_xticks(x)
@@ -92,7 +92,7 @@ def figure2(comparison: dict) -> None:
     ax.plot(x, y, marker="o", linewidth=1.3, markersize=4, color="#8a1f1f")
     ax.axhline(0, color="black", linewidth=0.6)
     ax.set_xlabel("Expert-memory budget (GiB)")
-    ax.set_ylabel("Relative Oracle miss-byte reduction\n(information headroom, vs. Global-LRU)")
+    ax.set_ylabel("Relative Belady comparator miss-byte reduction\n(vs. Global-LRU)")
     ax.set_xticks(x)
     ax.set_xticklabels([f"{v:g}" for v in x])
     ax.set_ylim(-0.05, 1.0)

@@ -5,7 +5,10 @@
 \begin{table}[h]
 \centering
 \caption{Canonical run identity for the II-A tranche. The historical II-A
-freeze record remains \texttt{II-A-FREEZE.json}.}
+freeze record remains \texttt{II-A-FREEZE.json}. Policy labels
+\textsc{Oracle-Global-Belady} in source artifacts are historical names for
+the implemented clairvoyant comparator $O_B$; semantics are amended by
+\textsc{AUDIT-ORACLE-001} and \texttt{ORACLE-SEMANTICS-AMENDMENT.json}.}
 \label{tab:provenance-iia}
 \small
 \begin{tabular}{@{}llll@{}}
@@ -20,8 +23,8 @@ R2-04 & \texttt{cd2b58b0\ldots} & PASS & \texttt{b6f0fd79\ldots} \\
 \end{tabular}
 \end{table}
 
-\noindent Validated source trace SHA-256 (II-A and R2-05--R2-07):
-\texttt{e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1}.
+\noindent Validated source trace SHA-256 (II-A and R2-05--R2-07):\\
+{\small\texttt{e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1}}.
 
 \subsection{II-B canonical runs}
 \begin{table}[h]
@@ -30,31 +33,31 @@ R2-04 & \texttt{cd2b58b0\ldots} & PASS & \texttt{b6f0fd79\ldots} \\
 \texttt{II-B-FREEZE.json} for the machine-readable manifest.}
 \label{tab:provenance-iib}
 \small
-\begin{tabular}{@{}p{1.1cm}p{3.2cm}p{1.1cm}p{5.7cm}@{}}
+\begin{tabular}{@{}p{1.1cm}p{4.8cm}p{1.1cm}p{4.3cm}@{}}
 \toprule
 Exp. & Run ID & Outcome & Canonical digest (prefix) \\
 \midrule
-R2-05 & \texttt{da82e15b61c94019840477642618565a} & PASS & \texttt{4a1b72cdfcd37144\ldots} \\
-R2-06 & \texttt{2e075161f02443ff822279add6938ca4} & PASS & \texttt{a727edf427352864\ldots} \\
-R2-07 & \texttt{af28e8c6dc5044a18e4a86137d59156a} & PASS & \texttt{ad36e615970b196b\ldots} \\
-R2-08 & \texttt{6165471a12574e05b48932aac2f1626c} & PASS & \texttt{f5db4e0bf43ce424\ldots} \\
+R2-05 & {\scriptsize\texttt{da82e15b61c94019840477642618565a}} & PASS & {\scriptsize\texttt{4a1b72cdfcd37144\ldots}} \\
+R2-06 & {\scriptsize\texttt{2e075161f02443ff822279add6938ca4}} & PASS & {\scriptsize\texttt{a727edf427352864\ldots}} \\
+R2-07 & {\scriptsize\texttt{af28e8c6dc5044a18e4a86137d59156a}} & PASS & {\scriptsize\texttt{ad36e615970b196b\ldots}} \\
+R2-08 & {\scriptsize\texttt{6165471a12574e05b48932aac2f1626c}} & PASS & {\scriptsize\texttt{f5db4e0bf43ce424\ldots}} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\noindent Full II-B canonical digests (from frozen manifests/summaries):
-R2-05 \texttt{4a1b72cdfcd37144446fc1a106b6fa8d559d10bc0729e1baf16dda7c1fa620df};
-R2-06 \texttt{a727edf42735286420d326baad481687167d3d0aba0444a527183c084140926e};
-R2-07 \texttt{ad36e615970b196b64ba3a3fdc2559e252cc8627e5d17d0d830d16742f59281a};
-R2-08 \texttt{f5db4e0bf43ce4243edb303441e82ceefa5a0aeb5754143292f1230f220527c3}.
+\noindent Full II-B canonical digests (from frozen manifests/summaries):\\
+R2-05 {\small\texttt{4a1b72cdfcd37144446fc1a106b6fa8d559d10bc0729e1baf16dda7c1fa620df}};\\
+R2-06 {\small\texttt{a727edf42735286420d326baad481687167d3d0aba0444a527183c084140926e}};\\
+R2-07 {\small\texttt{ad36e615970b196b64ba3a3fdc2559e252cc8627e5d17d0d830d16742f59281a}};\\
+R2-08 {\small\texttt{f5db4e0bf43ce4243edb303441e82ceefa5a0aeb5754143292f1230f220527c3}}.
 
 \subsection{R2-08 controlled-capture provenance}
 R2-08 canonical matrix: 4 workloads $\times$ 2 replicates = 8 valid cells,
 matched decode horizon $H=388$, 8 temporal windows of length 48, 1 reused
 capture and 7 new captures. All canonical cells report compatible
-configuration fingerprints and consistent model/runtime identities:
-model SHA-256 \texttt{a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32};
-runtime SHA-256 \texttt{a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3}.
+configuration fingerprints and consistent model/runtime identities:\\
+model SHA-256 {\small\texttt{a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32}};\\
+runtime SHA-256 {\small\texttt{a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3}}.
 Deterministic decoding protocol: temperature $=0.0$, top-$k=1$.
 
 \paragraph{Capture-ID audit (required before freeze).}
@@ -72,7 +75,23 @@ canonical run identity are sufficient to identify the evidence. No capture
 IDs were invented, no scientific traces were modified, and no model
 capture was recaptured for the paper freeze.
 
-\subsection{Freeze records}
+\subsection{Oracle-semantics scientific amendment}
+\textsc{AUDIT-ORACLE-001} (commit \texttt{3789a8511e9623f953dda5a610c9d7897e4ae63b},
+CASE~C, \texttt{BLOCKED\_FOR\_SCIENTIFIC\_AMENDMENT}) found that the
+implemented \textsc{Oracle-Global-Belady} policy is a clairvoyant
+Belady-style farthest-next-use comparator ($O_B$, algorithm class O2), not
+proven byte-optimal under the variable-size, byte-capacity miss-byte
+objective. The paper amendment preserves all R2-01--R2-08 numerical
+evidence, run IDs, digests, trace hashes, and data-derived figures/tables;
+it corrects semantics (title, definitions, comparator-gap framing,
+recovery-metric interpretation, limitations, DEV/EVAL/EXP-025 transparency,
+and II-C roadmap). The distinct amendment provenance record is
+\texttt{ORACLE-SEMANTICS-AMENDMENT.json}; historical
+\texttt{II-A-FREEZE.json} and \texttt{II-B-FREEZE.json} are preserved as
+freeze-time records and are not silently rewritten.
+
+\subsection{Freeze and amendment records}
 The II-A historical freeze remains \texttt{II-A-FREEZE.json}. The II-B
-freeze record is \texttt{II-B-FREEZE.json}. This cumulative
+freeze record is \texttt{II-B-FREEZE.json}. The Oracle-semantics amendment
+record is \texttt{ORACLE-SEMANTICS-AMENDMENT.json}. This cumulative
 II-A+II-B+II-C manuscript is provisional; II-C remains future work.

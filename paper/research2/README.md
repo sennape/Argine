@@ -76,8 +76,9 @@ python scripts/verify_paper_freeze.py
 
 ## Status
 
-- Research II-A: **CLOSED / PASS / PAPER-FROZEN** (`II-A-FREEZE.json` preserved).
-- Research II-B: **CLOSED / PASS / PAPER-FROZEN** (`II-B-FREEZE.json`).
+- Research II-A: **CLOSED / PASS / PAPER-FROZEN** (`II-A-FREEZE.json` preserved; scientific Oracle-semantics amendment applied, see `ORACLE-SEMANTICS-AMENDMENT.json`).
+- Research II-B: **CLOSED / PASS / PAPER-FROZEN** (`II-B-FREEZE.json`; scientific Oracle-semantics amendment applied, see `ORACLE-SEMANTICS-AMENDMENT.json`).
+- `AUDIT-ORACLE-001`: **CLOSED / CASE C / resolved by paper amendment**.
 - Research II-C: **FUTURE / NOT STARTED** (placeholder only).
 
 The R2-08 capture-ID audit found seven R2-08-managed new capture cells
@@ -87,4 +88,6 @@ canonical R2-08 run binding. This is documented as an intentional
 R2-08-internal provenance representation; no capture IDs were invented and
 no scientific traces were modified.
 
-Next action: **R2-09 Prediction Benchmark** (not started in this freeze).
+Next action: **R2-09B prerequisite/evaluation-design work** (including a
+held-out EVAL contract) before the causal baseline tournament or predictor
+evaluation. R2-09 remains **not started**.

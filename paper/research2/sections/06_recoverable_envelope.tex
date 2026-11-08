@@ -1,4 +1,4 @@
-\section{Oracle-Bounded Recoverable Envelope (R2-04)}
+\section{Clairvoyant-Comparator Gap Decomposition (R2-04)}
 \label{sec:recoverable-envelope}
 
 R2-04 synthesizes the R2-02/R2-03 evidence into a single decomposition,
@@ -6,15 +6,16 @@ applied at every tested budget, and reported here as the headline II-A
 result. No new replay, model, or runtime invocation is performed in this
 step; it is a pure offline synthesis over already-registered evidence.
 
-\begin{definition}[Structural / information / total decomposition]
+\begin{definition}[Structural, Belady-comparator, and total decomposition]
 \label{def:decomposition}
-Let $S$, $G$, $O$ denote the miss-byte totals (at a fixed budget
-$\budget$) of Runtime-Sharded-LRU, Global-LRU, and Oracle-Global-Belady
-respectively. Define
+Let $S_\budget$, $G_\budget$, and $O_{B,\budget}$ denote the miss-byte
+totals (at a fixed budget $\budget$) of Runtime-Sharded-LRU, Global-LRU,
+and the implemented clairvoyant comparator \textsc{Oracle-Global-Belady}
+($O_B$), respectively. Define
 \begin{align}
-\text{Structural sharding gap} &= S - G, \label{eq:structural} \\
-\text{Policy-information headroom} &= G - O, \label{eq:information} \\
-\text{Total observed upper-bound gap} &= S - O. \label{eq:total}
+\text{Structural sharding gap} &= S_\budget - G_\budget, \label{eq:structural} \\
+\text{Belady comparator gap} &= G_\budget - O_{B,\budget}, \label{eq:information} \\
+\text{Total runtime-to-comparator gap} &= S_\budget - O_{B,\budget}. \label{eq:total}
 \end{align}
 By construction, Eq.~\eqref{eq:structural} $+$ Eq.~\eqref{eq:information}
 $=$ Eq.~\eqref{eq:total} exactly, for both the miss-byte and miss-count
@@ -25,42 +26,43 @@ differ -- see Table~\ref{tab:r2-03-sweep} vs.\ the structural
 percentages quoted in Section~\ref{sec:sensitivity-capacity}.
 \end{definition}
 
-The \emph{policy-information headroom} (Eq.~\ref{eq:information}) is the
-quantity of scientific interest for motivating II-B/II-C: it isolates the
-cost of imperfect \emph{causal information}, independent of the specific
-sharded retention architecture. The \emph{structural sharding gap}
-(Eq.~\ref{eq:structural}) is reported for completeness but is not the
+The \emph{Belady comparator gap} (Eq.~\ref{eq:information}) is the measured
+miss-byte separation between the selected global causal baseline and the
+implemented clairvoyant comparator. It motivates II-B/II-C as a measurement
+of unexplained separation from $O_B$, not as a proven maximum causal
+opportunity: $O_B$ is not established as byte-optimal, and there is no
+guaranteed ordering between $O_B$ and the causal optimum $C^*$
+(Section~\ref{sec:problem-formulation}). The \emph{structural sharding
+gap} (Eq.~\ref{eq:structural}) is reported for completeness but is not the
 focus of this report, and carries the limitation that the offline
 Runtime-Sharded-LRU's shard-to-key mapping is statistical rather than the
 runtime's exact address-derived mapping.
 
 \input{tables/table4_r2_04_synthesis}
 
-\paragraph{Absolute vs.\ relative headroom occur at different budgets.}
-A single important distinction this synthesis makes explicit: the budget
-at which the \emph{relative} information headroom is maximized ($8$~GiB,
-$70.66\%$) is \textbf{not} the budget at which the \emph{absolute}
-miss-byte headroom is maximized ($1.5$~GiB, $103{,}574{,}900{,}736$
-bytes $\approx 103.57$~GB). Under more severe memory pressure (lower
-budgets), both Global-LRU and the Oracle incur far more total misses, so
-the \emph{absolute} volume of miss bytes the Oracle avoids can be larger
-even while its \emph{relative} advantage (as a fraction of Global-LRU's
-own, larger, miss-byte total) is smaller. Neither framing is more
-``correct''; they answer different engineering questions (fraction of
-traffic avoidable vs.\ total bytes avoidable) and are reported
-separately, never conflated into one number.
+\paragraph{Absolute vs.\ relative comparator gaps occur at different
+budgets.} A single important distinction this synthesis makes explicit:
+the budget at which the \emph{relative} Belady comparator gap is maximized
+among tested points ($8$~GiB, $70.66\%$) is \textbf{not} the budget at
+which the \emph{absolute} miss-byte comparator gap is maximized
+($1.5$~GiB, $103{,}574{,}900{,}736$ bytes $\approx 103.57$~GB). Under more
+severe memory pressure (lower budgets), both Global-LRU and $O_B$ incur
+more total misses, so the \emph{absolute} volume of miss bytes avoided by
+$O_B$ can be larger even while its \emph{relative} advantage (as a
+fraction of Global-LRU's own, larger, miss-byte total) is smaller. Neither
+framing is more ``correct''; they answer different engineering questions
+(fraction of traffic reduced by the comparator vs.\ total bytes reduced) and
+are reported separately, never conflated into one number.
 
-\paragraph{Headroom persistence under pressure.} At every one of the
+\paragraph{Comparator-gap persistence under pressure.} At every one of the
 four capacity-constrained tested budgets ($1.5$--$8$~GiB, where
-Global-LRU's own eviction count is nonzero), the Oracle strictly
-dominates Global-LRU: a strictly positive miss and miss-byte reduction
-is observed at each such point. The $16$~GiB
-policy-indifference point is excluded from this statement by definition
-(no policy has anything left to decide there, so ``the oracle strictly
-improves'' is not a meaningful comparison at that point).
+Global-LRU's own eviction count is nonzero), $O_B$ has strictly fewer miss
+bytes and misses than Global-LRU. The $16$~GiB policy-indifference point is
+excluded from this statement by definition (no evictions occur, so policies
+do not differ at that tested point).
 
-\paragraph{Observed curve shape.} The relative information-headroom
-curve (Figure~\ref{fig:headroom-vs-budget}) is classified, deterministically
+\paragraph{Observed curve shape.} The relative Belady comparator gap curve
+(Figure~\ref{fig:headroom-vs-budget}) is classified, deterministically
 from the five tested points, as a \emph{rise followed by a collapse at
 the observed effective-residency budget}: non-decreasing across
 $1.5$--$8$~GiB, then dropping to its global minimum ($0$) exactly at
@@ -68,25 +70,32 @@ $16$~GiB, the first tested budget exhibiting policy convergence. This
 classification is derived mechanically from the tested points, not
 assumed in advance.
 
-\begin{definition}[Future II-C metric -- documented, not evaluated]
+\begin{definition}[Future II-C comparator-relative metric -- documented,
+not evaluated]
 \label{def:ii-c-metric}
-For a causal baseline with miss bytes $B_\budget$ and a future causal
-predictor-driven policy with miss bytes $P_\budget$, both at budget
-$\budget$, define
+For a selected causal baseline with miss bytes $B_\budget$, the implemented
+clairvoyant comparator $O_B$ with miss bytes $O_{B,\budget}$, and a future
+causal policy or predictor-driven policy with miss bytes $P_\budget$, all
+at budget $\budget$, define
 \begin{equation}
-\mathrm{FractionOfOracleHeadroomRecovered}_\budget \;=\;
-\frac{B_\budget - P_\budget}{B_\budget - O_\budget}, \label{eq:ii-c}
+\mathrm{RecoveryOfBeladyGap}_\budget \;=\;
+\frac{B_\budget - P_\budget}{B_\budget - O_{B,\budget}}, \label{eq:ii-c}
 \end{equation}
-where $O_\budget$ is the Oracle's miss bytes at that budget. This metric
-is defined now, as the scientific bridge from II-A's upper bound to
-II-C's demonstrated causal recovery, but \textbf{cannot be evaluated} --
-no causal predictor $P$ exists yet. It is reported here purely as a
-predeclared target metric for Research II-C.
+when $B_\budget \ne O_{B,\budget}$. This metric is signed (negative values
+are allowed when $P_\budget > B_\budget$) and values $>1$ are
+mathematically possible under CASE~C if $P_\budget < O_{B,\budget}$; a
+value $>1$ means $P$ beats $O_B$ on miss bytes, not that $P$ beats the true
+offline optimum $O^*$. The denominator is a measured comparator gap, not a
+proven maximum causal-recovery gap. The metric is defined here as a
+predeclared comparator-relative target for Research~II-C, but
+\textbf{cannot be evaluated} -- no causal predictor/policy $P$ exists yet.
 \end{definition}
 
 \paragraph{Causal recovery: explicitly unmeasured.} We emphasize, as
 strongly as the evidence allows: nothing in this section measures or
-estimates the fraction of the policy-information headroom that any
-practical causal predictor could actually recover. That quantity is
-\notyetmeasured{} and is the subject of Research II-C
-(Section~\ref{sec:iic-placeholder}), which has not started.
+estimates the fraction of any proven causal-recovery opportunity that a
+practical causal predictor could recover. The comparator-relative quantity
+in Eq.~\eqref{eq:ii-c} remains \notyetmeasured{} and is the subject of
+Research~II-C (Section~\ref{sec:iic-placeholder}), which has not started.
+A separate metric $\mathrm{Recovery\_vs\_LRU} = (B-P)/B$ may also be useful
+in II-C, but neither metric is evaluated here.

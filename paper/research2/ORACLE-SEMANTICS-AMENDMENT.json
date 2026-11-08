@@ -1,0 +1,83 @@
+{
+  "amendment_version": "1.0.0",
+  "amendment_name": "Research-II-A-II-B-Oracle-Semantics-Amendment",
+  "amendment_timestamp_utc": "2026-11-08T20:30:00Z",
+  "status": "APPLIED",
+  "applies_to": {
+    "II-A": "CLOSED / PASS / PAPER-FROZEN (scientific semantics amended; historical freeze preserved)",
+    "II-B": "CLOSED / PASS / PAPER-FROZEN (scientific semantics amended; historical freeze preserved)",
+    "II-C": "FUTURE / NOT STARTED"
+  },
+  "audit_id": "AUDIT-ORACLE-001",
+  "audit_commit": "3789a8511e9623f953dda5a610c9d7897e4ae63b",
+  "audit_verdict": "CASE C / BLOCKED_FOR_SCIENTIFIC_AMENDMENT",
+  "audit_resolution": "Scientific semantics amended in the cumulative Research II-A + II-B paper; numerical experiment evidence unchanged.",
+  "historical_freeze_records_preserved": [
+    "paper/research2/II-A-FREEZE.json",
+    "paper/research2/II-B-FREEZE.json"
+  ],
+  "historical_freezes_rewritten": false,
+  "previous_terminology": [
+    "Oracle-Bounded (title/framing)",
+    "Belady-optimal oracle / Oracle as non-causal upper-bound policy for the miss-byte objective",
+    "policy-information headroom / information headroom as upper bound on recoverable causal performance",
+    "Oracle-Bounded Recoverable Envelope",
+    "maximum policy-information opportunity / maximum recoverable headroom",
+    "FractionOfOracleHeadroomRecovered as fraction of maximum recoverable headroom"
+  ],
+  "corrected_terminology": [
+    "Clairvoyant-Comparator Expert Retention (title direction)",
+    "implemented clairvoyant Belady-style farthest-next-use comparator (O_B, Oracle-Global-Belady / BeladyGlobal), not proven byte-optimal under variable-size byte-capacity miss-byte semantics",
+    "relative Belady comparator gap G_M(B,O_B) = (missbytes_M(B)-missbytes_M(O_B))/missbytes_M(B), measured comparator gap, not proven upper/lower bound on causal recovery B-C*",
+    "Clairvoyant-Comparator Gap Decomposition: (S-G)+(G-O_B)=S-O_B, algebraic decomposition of measured gaps",
+    "comparator-relative recovery metric RecoveryOfBeladyGap = (B-P)/(B-O_B), signed, >1 possible under CASE C (beats O_B, not O*)"
+  ],
+  "core_semantics": {
+    "B": "causal baseline miss-byte cost",
+    "O_star": "true offline optimum for the primary miss-byte objective",
+    "C_star": "optimum/infimum over the admissible causal-policy class (not computed; may be not identifiable without restricting policy class)",
+    "O_B": "implemented Oracle-Global-Belady / BeladyGlobal clairvoyant farthest-next-use comparator",
+    "relations": [
+      "O* <= O_B",
+      "O* <= C*",
+      "no guaranteed ordering between O_B and C*"
+    ],
+    "interpretation": "B-O_B is a measured gap to O_B and a lower-bound relation to B-O* (since O* <= O_B), but is not a proven upper or lower bound on causal recovery B-C*."
+  },
+  "affected_claims": [
+    "manuscript title, status quote, abstract",
+    "sections/01_introduction.tex",
+    "sections/02_problem_formulation.tex (Oracle subsection, Definition 1 comparator gap, Definition 2 decomposition, O*/O_B/C* clarification)",
+    "sections/04_oracle_headroom_fixed_memory.tex",
+    "sections/05_sensitivity_capacity.tex and figure captions/labels",
+    "sections/06_recoverable_envelope.tex",
+    "sections/07_discussion.tex",
+    "sections/08_limitations.tex (CASE C limitation, DEV/EVAL, EXP-025, no numeric practical-effect threshold)",
+    "sections/09_research_iib.tex (II-A bridge and II-B synthesis connection; descriptive R2-05..R2-08 findings preserved)",
+    "sections/10_research_iic_placeholder.tex (R2-09/R2-09A/R2-09B/R2-10/R2-11/R2-12 roadmap)",
+    "sections/11_conclusion.tex",
+    "sections/12_provenance_appendix.tex",
+    "tables/table1_configuration.tex, table4_r2_04_synthesis.tex, tables/generate_tables.py",
+    "figures/make_figures.py and regenerated presentation assets figure1/figure2 (labels/captions only; plotted data unchanged)",
+    "claims/claim_ledger.md (numerical claims preserved; semantic supersession explicit)",
+    "paper/research2/README.md, paper/research2/data/README.md"
+  ],
+  "numerical_experiment_evidence_unchanged": true,
+  "unchanged_evidence": [
+    "R2-01..R2-08 measured numerical results, run IDs, canonical digests, trace hashes",
+    "miss counts, miss bytes, budget sweep values, structural gap values, routing/reuse/drift metrics",
+    "paper/research2/data/r2_01..r2_08 frozen evidence snapshots",
+    "R2-08 capture-ID audit representation",
+    "II-A-FREEZE.json and II-B-FREEZE.json historical records (not silently rewritten)"
+  ],
+  "presentation_artifacts_regenerated": [
+    "figures/figure1_miss_rate_vs_budget.{pdf,png}",
+    "figures/figure2_relative_headroom_vs_budget.{pdf,png}",
+    "tables/table1_configuration.tex",
+    "tables/table4_r2_04_synthesis.tex"
+  ],
+  "amendment_commit_message": "Amend Research II-A and II-B Oracle semantics",
+  "amendment_branch": "r2-main",
+  "amendment_git_commit": "recorded by the single git commit with message 'Amend Research II-A and II-B Oracle semantics'",
+  "notes": "Do not start R2-09. R2-09 remains NOT STARTED. Next action is R2-09B prerequisite/evaluation-design work including establishment of a held-out EVAL contract before causal baseline tournament or predictor evaluation."
+}

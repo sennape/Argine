@@ -37,7 +37,7 @@
 \newcommand{\budget}{M}
 \newcommand{\notyetmeasured}{\textsc{not yet measured}}
 
-\title{\textbf{Oracle-Bounded Expert Retention and Routing Structure in
+\title{\textbf{Clairvoyant-Comparator Expert Retention and Routing Structure in
 Memory-Constrained Mixture-of-Experts Inference}\\
 \large Argine Research Part 2 (Research II-A + Research II-B) --
 Working Title, Provisional}
@@ -49,14 +49,15 @@ Working Title, Provisional}
 \maketitle
 
 \begin{quote}
-\small\textit{Status: This document reports Research II-A (oracle-bounded
-headroom under a validated offline replay model) and Research II-B
+\small\textit{Status: This document reports Research II-A (clairvoyant-comparator
+gap measurements under a validated offline replay model) and Research II-B
 (descriptive routing characterization: concentration, transitions, reuse
-locality, and workload dependence). It is a provisional cumulative tranche
-of a larger three-stage programme; Research II-C (causal prediction and
-runtime validation) has not started and is not reported here. This title
-and abstract remain working text and are expected to change once II-C is
-complete.}
+locality, and workload dependence). The II-A Oracle-semantics framing was
+amended after \textsc{AUDIT-ORACLE-001} (CASE~C); measured numerical evidence is
+unchanged. This is a provisional cumulative tranche of a larger three-stage
+programme; Research II-C (causal prediction and runtime validation) has not
+started and is not reported here. This title and abstract remain working text
+and are expected to change once II-C is complete.}
 \end{quote}
 
 \begin{abstract}
@@ -65,14 +66,20 @@ weights using validated offline replay of real routing traces from
 Qwen3-30B-A3B-Q4\_K\_M running on a consumer-machine runtime protocol.
 Research~II-A establishes, by runtime-telemetry-vs-replay behavioral
 validation with zero event disagreements on the measured coding trace,
-that a causal Global-LRU baseline leaves a substantial
-\emph{policy-information headroom} relative to a non-causal
-Belady-optimal oracle under constrained expert-memory budgets. Across the
-tested capacity-constrained sweep, this headroom is large and persists
-after decomposing away the runtime's small structural sharding gap; it
-reaches its largest tested relative value near 8~GiB and collapses once
-the working set becomes effectively resident at 16~GiB. This headroom is
-an upper bound, not a demonstrated causal improvement.
+that a causal Global-LRU baseline leaves a substantial measured miss-byte
+gap relative to a non-causal, clairvoyant Belady-style furthest-next-use
+comparator ($O_B$, the implemented \textsc{Oracle-Global-Belady}) under
+constrained expert-memory budgets. Across the tested capacity-constrained
+sweep, this comparator gap is large and persists after decomposing away the
+runtime's small structural sharding gap: at 4~GiB, Global-LRU incurs
+102,151,507,968 miss bytes versus 42,296,352,768 for $O_B$ (58.59\%
+relative reduction); the largest tested relative comparator gap is 70.66\%
+at 8~GiB, and the gap collapses once the working set becomes effectively
+resident at 16~GiB. Because expert cache objects have two byte-size classes
+across layers and the implemented comparator uses furthest next use without
+size-aware victim ranking, miss-byte optimality is not established
+(\textsc{AUDIT-ORACLE-001}, CASE~C); the measured $O_B$ gap is therefore not
+interpreted as a proven upper bound on causal recovery.
 Research~II-B characterizes whether routing contains structure that could
 motivate causal working-set prediction. On the canonical validated trace,
 aggregate layer-local routing is concentrated (median effective expert
@@ -90,8 +97,7 @@ replicate frequency distributions were identical at the reported
 resolution). These II-B results are descriptive characterizations, not
 evidence of predictive accuracy or runtime improvement. The unresolved
 question is whether a strictly causal predictor can exploit this
-structure to recover a measurable fraction of the Oracle-bounded
-policy-information headroom.
+structure to recover a measurable fraction of the measured comparator gap.
 \end{abstract}
 
 \input{sections/01_introduction}

@@ -22,7 +22,7 @@ copying.
 | R2-01 (trace/replay validation)    | R2-01      | PASS    | `bb6d8ca34dbc4537a43d54be30c9f3e1`   |
 | R2-02 (Oracle vs retention @4GiB)  | R2-02      | PASS    | `238c8ee7f0914df7b28942ec99627c24`   |
 | R2-03 (budget-sensitivity sweep)   | R2-03      | PASS    | `d957077073374f1e9fd1e101a002946f`   |
-| R2-04 (recoverable-margin synthesis)| R2-04     | PASS    | `cd2b58b019314fafb90304234e6d1907`   |
+| R2-04 (comparator-gap decomposition; historical R2-04 run name retained) | R2-04 | PASS | `cd2b58b019314fafb90304234e6d1907` |
 
 Validated source trace SHA-256 (II-A and R2-05--R2-07; reused by R2-08 coding-v1/seed-42):
 `e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1`

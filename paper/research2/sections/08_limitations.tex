@@ -1,10 +1,10 @@
 \section{Limitations}
 \label{sec:limitations}
 
-\subsection*{II-A limitations (unchanged)}
+\subsection*{II-A limitations (preserved, amended for Oracle semantics)}
 \begin{itemize}
  \item \textbf{Single validated real workload/trace for II-A.} The II-A
-   replay, headroom, sensitivity, and recoverable-envelope analyses are
+   replay, comparator-gap, sensitivity, and decomposition analyses are
    computed against one captured coding trace (one workload, one
    30B-A3B model instance, one capture budget). Replay fidelity
    (Section~\ref{sec:replay-validation}) is demonstrated for this trace
@@ -17,11 +17,21 @@
    expert data that would need to be serviced under the replay model. No
    latency, throughput, tokens/second, or SSD-traffic measurement is made
    or implied by II-A or II-B.
- \item \textbf{No causal predictor exists yet.} The policy-information
-   headroom (Section~\ref{sec:recoverable-envelope}) is an upper bound,
-   not a demonstrated causal recovery. II-B characterizes routing
-   structure but does not evaluate a causal predictor or recover any
-   fraction of that headroom.
+ \item \textbf{No causal predictor exists yet.} The Belady comparator gap
+   (Section~\ref{sec:recoverable-envelope}) is a measured separation from
+   $O_B$, not a demonstrated causal recovery and not a proven bound on
+   causal recovery. II-B characterizes routing structure but does not
+   evaluate a causal predictor or recover any fraction of that gap.
+ \item \textbf{Comparator-objective limitation (\textsc{AUDIT-ORACLE-001},
+   CASE~C).} Expert cache objects are $(\ell,e)$ pairs with two byte-size
+   classes across layers in the tested trace. The implemented
+   \textsc{Oracle-Global-Belady} comparator ($O_B$) uses furthest next use
+   only; object byte size does not enter victim ranking. Miss-count and
+   miss-byte optimality are not proven under the actual variable-size,
+   byte-capacity, multi-key replay semantics. Consequently $B-O_B$ is not
+   interpreted as a proven upper or lower bound on causal recovery
+   $B-C^*$; $O^* \le O_B$ is known, but $O_B$ and $C^*$ have no guaranteed
+   ordering.
  \item \textbf{Statistical, not exact, shard mapping.} The
    Runtime-Sharded-LRU baseline matches the real runtime's \emph{shard
    count} (16 shards at $4$~GiB) but not its exact address-derived
@@ -30,9 +40,9 @@
    tests five fixed points ($1.5, 2, 4, 8, 16$~GiB). Behavior between
    tested points and the exact mathematically minimal policy-convergence
    budget are not characterized.
- \item \textbf{No shard-constrained oracle.} The II-A structural and
-   policy-information decomposition uses Global-LRU as a shared pivot
-   rather than a true sharded-oracle comparison.
+ \item \textbf{No shard-constrained clairvoyant comparator.} The II-A
+   structural and comparator decomposition uses Global-LRU as a shared
+   pivot rather than a true sharded-clairvoyant comparison.
 \end{itemize}
 
 \subsection*{II-B limitations}
@@ -62,7 +72,7 @@
    causal predictor, no predictor accuracy/precision/recall/F1 measurement,
    no prefetch or admission mechanism, no retention-policy replacement, no
    runtime speedup or latency/throughput measurement, and no
-   Oracle-headroom recovery measurement. The fraction in
+   comparator-gap recovery measurement. The fraction in
    Eq.~\eqref{eq:iib-iic-recovery} remains \notyetmeasured{}.
  \item \textbf{R2-08 capture-provenance representation.} New R2-08-managed
    capture cells record \texttt{capture\_run\_id}/\texttt{capture\_source}
@@ -71,4 +81,32 @@
    This is documented as an intentional representation for internal R2-08
    captures; no capture IDs are invented and no scientific traces are
    modified.
+\end{itemize}
+
+\subsection*{DEV/EVAL, EXP-025, and II-C evaluation transparency}
+\begin{itemize}
+ \item \textbf{DEV characterization evidence.} The canonical R2-01 coding
+   trace is documented as a \texttt{dev} split in inspected provenance, and
+   the inspected R2-08 workload captures are also documented as
+   \texttt{dev}-split characterization captures. Research~II-A and II-B are
+   characterization/development tranches, not held-out predictive
+   evaluation. No II-C EVAL set has been frozen. This is not retrospective
+   leakage because II-C has not started; R2-09B must establish and freeze a
+   held-out evaluation contract before tuning/evaluating predictors.
+ \item \textbf{EXP-025 applicability.} \textsc{AUDIT-ORACLE-001} classifies
+   EXP-025 as a stream/distribution-dependent performance model (P2) whose
+   transferability to arbitrary policy-induced miss streams is
+   \textsc{UNSUPPORTED} without separate validation. Comparator miss-byte
+   reductions must not be converted directly into latency or avoided
+   seconds. Future modeled comparisons, if used, must follow
+   \begin{equation*}
+   \Delta T_{\mathrm{model}} = \mathrm{PerformanceModel}(\mathrm{MissStream}_{B_\mathrm{best}})
+   - \mathrm{PerformanceModel}(\mathrm{MissStream}_P)
+   \end{equation*}
+   with justified scope, and must not be equated with measured end-to-end
+   latency, time-to-first answer, or throughput.
+ \item \textbf{No numeric practical-effect threshold.} No numeric
+   practical-effect threshold is preregistered by this amendment. Any
+   future threshold must be derived and frozen in R2-09B using a metric
+   justified by the evaluation/performance-model contract.
 \end{itemize}

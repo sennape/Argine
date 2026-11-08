@@ -2,16 +2,29 @@
 \label{sec:discussion}
 
 \paragraph{What II-A establishes.} Under a validated offline replay
-model of a real 30B-A3B MoE coding workload, a substantial gap exists
-between causal LRU-family retention and a non-causal Belady-optimal
-upper bound, at every tested capacity-constrained expert-memory budget.
-This gap -- the policy-information headroom -- is not uniform across
-budgets: it is largest, among the tested points, near $8$~GiB in relative
-terms and near $1.5$~GiB in absolute terms, and it collapses entirely
-once the working set becomes effectively resident (the first tested such
-budget being $16$~GiB). The gap persists after decomposing away the
-specific cost of the runtime's sharded retention architecture, which is
-small and not consistently signed across the sweep.
+model of a real 30B-A3B MoE coding workload, a substantial miss-byte gap
+exists between causal LRU-family retention and the implemented
+non-causal clairvoyant Belady-style comparator $O_B$ at every tested
+capacity-constrained expert-memory budget. This measured comparator gap is
+not uniform across budgets: it is largest, among the tested points, near
+$8$~GiB in relative terms ($70.66\%$) and near $1.5$~GiB in absolute
+terms ($103.57$~GB), and it collapses entirely once the working set
+becomes effectively resident (the first tested such budget being
+$16$~GiB). The gap persists after decomposing away the specific cost of
+the runtime's sharded retention architecture, which is small and not
+consistently signed across the sweep.
+
+\paragraph{What II-A does not establish.} \textsc{AUDIT-ORACLE-001}
+(CASE~C) shows that $O_B$ is not proven byte-optimal for the
+variable-size, byte-capacity miss-byte objective, because expert cache
+objects have two byte-size classes across layers and the implementation
+evicts by furthest next use without size-aware victim ranking. With
+$O^*$ the true offline optimum and $C^*$ the optimum/infimum over an
+admissible causal policy class, $O^* \le O_B$ and $O^* \le C^*$ hold, but
+there is no guaranteed ordering between $O_B$ and $C^*$. Therefore
+$B-O_B$ is not interpreted as an upper bound on causal recovery $B-C^*$,
+and the full comparator gap is not established as recoverable or as the
+maximum causal opportunity.
 
 \paragraph{What II-B establishes.} Under the tested
 Qwen3-30B-A3B-Q4\_K\_M protocol, routing is descriptively non-uniform,
@@ -26,31 +39,34 @@ policy.
 \paragraph{Observed, inferred motivation, and not established.}
 The distinction among these categories is central:
 \begin{itemize}
- \item \textbf{Observed:} strong Oracle headroom (II-A); aggregate routing
-   concentration, with LFU underperforming Global-LRU at the II-A anchor
-   budget; measurable same-layer transition dependence (positive NMI in
-   every tested layer); strong short-horizon reuse relative to a shuffled
-   null; and cross-workload divergence exceeding temporal drift under the
-   deterministic R2-08 protocol.
- \item \textbf{Inference/motivation:} these properties make strictly
-   causal working-set prediction scientifically worth testing. The
-   short-horizon locality is the most relevant signal for that test; the
-   workload dependence implies that a practical predictor may need to be
-   robust across workload categories or conditioned on workload context.
- \item \textbf{Not established:} that any causal predictor can recover a
-   meaningful fraction of the Oracle-bounded policy-information headroom;
-   that prediction accuracy is sufficient; that prefetch, admission, or a
-   new retention policy improves runtime; that latency, throughput, or
-   memory traffic improves; or that the observed structure generalizes
-   across models, quantizations, machines, or non-deterministic decoding
-   protocols.
+ \item \textbf{Observed:} substantial causal-baseline-to-clairvoyant-comparator
+   gap (II-A); aggregate routing concentration, with LFU underperforming
+   Global-LRU at the II-A 4~GiB anchor budget; measurable same-layer
+   transition dependence (positive NMI in every tested layer); strong
+   short-horizon reuse relative to a shuffled null; and cross-workload
+   divergence exceeding temporal drift under the deterministic R2-08
+   protocol.
+ \item \textbf{Inference/motivation:} these properties make stronger
+   causal retention/prediction strategies scientifically worth testing.
+   The short-horizon locality is the most relevant signal for that test;
+   the workload dependence implies that a practical predictor may need to
+   be robust across workload categories or conditioned on workload
+   context.
+ \item \textbf{Not established:} that $O_B$ is byte-optimal; that $B-O_B$
+   bounds causal recovery; that any causal predictor can recover a
+   meaningful fraction of the measured comparator gap; that prediction
+   accuracy is sufficient; that prefetch, admission, or a new retention
+   policy improves runtime; that latency, throughput, or memory traffic
+   improves; or that the observed structure generalizes across models,
+   quantizations, machines, or non-deterministic decoding protocols.
 \end{itemize}
 
-\paragraph{Why II-A headroom is not automatically deployable.} An oracle
-upper bound requires information no real system has at decision time.
-Treating a large oracle gap as an implicit promise of recoverable
-performance would conflate an informational upper bound with demonstrated
-causal recovery. II-B adds structure, not recovery.
+\paragraph{Why the comparator gap is not automatically deployable.} The
+comparator uses future information no real system has at decision time.
+Treating a large comparator gap as an implicit promise of recoverable
+performance would conflate a measured separation from a non-causal
+comparator with demonstrated causal recovery. II-B adds structure, not
+recovery.
 
 \paragraph{Why II-B structure is not automatically predictive.}
 Concentration, transition dependence, reuse locality, and workload

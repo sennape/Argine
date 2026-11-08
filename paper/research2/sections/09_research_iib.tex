@@ -1,11 +1,13 @@
 \section{Research II-B -- Routing Characterization}
 \label{sec:iib}
 
-Research~II-A established that Global-LRU leaves a substantial
-policy-information headroom relative to the non-causal Oracle under
+Research~II-A measured a substantial miss-byte gap between Global-LRU
+and the implemented clairvoyant Belady-style comparator $O_B$ under
 constrained memory (Sections~\ref{sec:oracle-headroom}--\ref{sec:recoverable-envelope}).
-That headroom is an upper bound: it does not show whether any causal
-policy can exploit it. Research~II-B asks the necessary prior question:
+After \textsc{AUDIT-ORACLE-001}, that comparator gap is not interpreted as a
+proven byte-optimal bound or a proven upper bound on causal recovery; it
+shows separation from a non-causal comparator, not whether a causal policy
+can close it. Research~II-B asks the necessary prior question:
 
 \begin{quote}
 \emph{Is MoE expert routing sufficiently structured, local, and
@@ -25,7 +27,7 @@ questions belong to Research~II-C or later work.
 Table~\ref{tab:iib-map} lists the four canonical PASS experiments.
 R2-05--R2-07 are offline analyses over the same validated R2-01 coding
 trace used throughout II-A
-(SHA-256 \texttt{e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1}),
+(SHA-256 {\small\texttt{e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1}}),
 with layer-local expert identity, no new model/runtime invocation, and no
 new trace capture. R2-08 adds controlled captures for four workload
 families (coding, reasoning, summarization, instruction), two replicates
@@ -222,17 +224,20 @@ structure that can motivate causal working-set prediction, but do not
 themselves demonstrate predictive accuracy or runtime improvement.}
 \end{quote}
 
-This characterization connects to II-A through the Oracle-bounded
-opportunity. II-A measures the maximum policy-information opportunity
-available to any causal retention method; II-B assesses whether observable
-routing history contains structure that could, in principle, allow a
-causal policy to exploit part of that opportunity. Research~II-C will
-measure the causal recovery fraction
+This characterization connects to II-A through the measured
+clairvoyant-comparator gap. II-A measures the separation between a simple
+causal baseline and the implemented comparator $O_B$; II-B assesses whether
+observable routing history contains structure that could, in principle,
+allow a stronger causal policy to reduce part of that measured gap.
+Research~II-C will, under a preregistered held-out contract, measure the
+comparator-relative recovery
 \begin{equation}
 \label{eq:iib-iic-recovery}
-\mathrm{FractionOfOracleHeadroomRecovered}
-  = \frac{B - P}{B - O},
+\mathrm{RecoveryOfBeladyGap}
+  = \frac{B - P}{B - O_B},
 \end{equation}
-where $B$ is causal baseline miss bytes, $P$ is predictor-driven miss
-bytes, and $O$ is Oracle miss bytes, all at fixed budget and workload.
-This metric is \notyetmeasured{} and is not populated by II-B.
+where $B$ is selected causal baseline miss bytes, $P$ is predictor-driven
+miss bytes, and $O_B$ is implemented comparator miss bytes, all at fixed
+budget and workload. The metric is signed; values $>1$ are possible under
+CASE~C and mean $P$ beats $O_B$, not $O^*$. This metric is
+\notyetmeasured{} and is not populated by II-B.

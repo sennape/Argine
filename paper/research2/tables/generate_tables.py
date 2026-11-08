@@ -63,14 +63,14 @@ def table1() -> str:
         r"\caption{Experimental configuration for the II-A tranche.}",
         r"\label{tab:configuration}",
         r"\small",
-        r"\begin{tabular}{@{}ll@{}}",
+        r"\begin{tabular}{@{}lp{7.9cm}@{}}",
         r"\toprule",
         r"Workload trace source & \texttt{run-00-4G} (coding workload, 30B-A3B MoE) \\",
         r"Phase analyzed & decode \\",
         rf"Expert-memory budgets tested (GiB) & {budgets_str} \\",
         r"Reproduction (anchor) budget & 4~GiB \\",
         r"Causal baselines & Runtime-Sharded-LRU, Global-LRU, LFU \\",
-        r"Non-causal upper bound & Oracle-Global-Belady (offline, full future knowledge) \\",
+        r"Clairvoyant comparator ($O_B$) & \textsc{Oracle-Global-Belady} / \texttt{BeladyGlobal}: Belady-style farthest-next-use, offline full-future; not proven byte-optimal under variable expert sizes (CASE~C) \\",
         r"Replay semantics & byte-budgeted residency, per-expert-per-layer granularity \\",
         r"\bottomrule",
         r"\end{tabular}",
@@ -111,14 +111,16 @@ def table3() -> str:
     lines = [
         r"\begin{table}[t]",
         r"\centering",
-        r"\caption{Global-LRU vs.\ Oracle-Global-Belady across the tested "
-        r"expert-memory budget sweep (R2-03).}",
+        r"\caption{Global-LRU vs.\ clairvoyant comparator $O_B$ "
+        r"(\textsc{Oracle-Global-Belady}) across the tested expert-memory "
+        r"budget sweep (R2-03).}",
         r"\label{tab:r2-03-sweep}",
-        r"\small",
+        r"\footnotesize",
+        r"\setlength{\tabcolsep}{4pt}",
         r"\begin{tabular}{@{}rrrrr@{}}",
         r"\toprule",
-        r"Budget (GiB) & Global-LRU misses & Oracle misses & "
-        r"Rel.\ miss-byte reduction & Abs.\ miss-byte reduction (GB) \\",
+        r"Budget (GiB) & Global-LRU misses & $O_B$ misses & "
+        r"Rel.\ reduction & Abs.\ reduction (GB) \\",
         r"\midrule",
     ]
     for b in budgets:
@@ -149,28 +151,28 @@ def table4() -> str:
     lines = [
         r"\begin{table}[t]",
         r"\centering",
-        r"\caption{Headline II-A synthesis (R2-04): oracle-bounded "
-        r"recoverable-envelope summary.}",
+        r"\caption{Headline II-A synthesis (R2-04): clairvoyant-comparator "
+        r"gap decomposition summary.}",
         r"\label{tab:r2-04-synthesis}",
         r"\small",
         r"\begin{tabular}{@{}lr@{}}",
         r"\toprule",
         r"Quantity & Value \\",
         r"\midrule",
-        rf"Information headroom at 4~GiB (anchor) & "
+        rf"Belady comparator gap at 4~GiB (anchor) & "
         rf"{_fmt_pct(metrics['information_headroom_fraction_at_reproduction_budget'])} \\",
-        rf"Maximum tested relative information headroom & "
+        rf"Maximum tested relative Belady comparator gap & "
         rf"{_fmt_pct(peak['max_relative_miss_byte_headroom']['value'])} "
         rf"(at {gib(peak['max_relative_miss_byte_headroom']['budget_bytes'])}~GiB) \\",
-        rf"Maximum tested absolute miss-byte headroom (GB) & "
+        rf"Maximum tested absolute miss-byte comparator gap (GB) & "
         rf"{_fmt_bytes_gb(peak['max_absolute_miss_byte_headroom']['value'])} "
         rf"(at {gib(peak['max_absolute_miss_byte_headroom']['budget_bytes'])}~GiB) \\",
         rf"First tested policy-indifference budget (GiB) & {gib(eff)} \\",
-        rf"Oracle strictly improves at every capacity-constrained point & "
+        rf"Comparator miss bytes lower at every capacity-constrained tested point & "
         rf"{'yes' if persistence else 'no'} \\",
-        rf"Observed information-headroom curve shape & "
+        rf"Observed comparator-gap curve shape & "
         rf"{curve_shape.replace('_', ' ')} \\",
-        r"Causally recovered margin & \textsc{not yet measured} (\S~II-C) \\",
+        r"Causal recovery relative to comparator gap & \textsc{not yet measured} (\S~II-C) \\",
         r"\bottomrule",
         r"\end{tabular}",
         r"\end{table}",

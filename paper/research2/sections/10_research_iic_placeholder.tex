@@ -4,24 +4,44 @@
 \textit{Research II-C has not started. This section states only its
 intended scope; it reports no finding, result, or claim.}
 
-Research II-C is intended to build an actual causal working-set
-predictor and measure what fraction of the II-A policy-information
-headroom it recovers (Definition~\ref{def:ii-c-metric}, Eq.~\ref{eq:ii-c}),
-including eventual validation against the real runtime, corresponding to
-planned experiments R2-09--R2-12:
+Research~II-C is intended to evaluate whether strictly causal policies can
+improve on selected causal baselines and to measure, under preregistered
+semantics, how much of the measured II-A Belady comparator gap they recover
+(Definition~\ref{def:ii-c-metric}, Eq.~\ref{eq:ii-c}). Because
+\textsc{AUDIT-ORACLE-001} (CASE~C) establishes that $O_B$ is not proven
+byte-optimal and that $O_B$ and $C^*$ have no guaranteed ordering,
+recovery relative to $O_B$ is a comparator-relative metric, not a proven
+fraction of maximum causal opportunity. The planned boundary is:
+
 \begin{enumerate}
- \item \textbf{Prediction benchmark} (R2-09): define the offline
-   benchmark and baseline numbers for working-set prediction.
- \item \textbf{Causal working-set predictor} (R2-10): build a causal
-   (no-future-information) predictor and report its offline accuracy.
- \item \textbf{Prediction-driven retention} (R2-11): evaluate, in
-   replay, whether the predictor can drive a retention policy that
-   improves on the best static/oracle-informed causal baseline, i.e.\
-   evaluate Eq.~\eqref{eq:ii-c} for the first time.
- \item \textbf{Real runtime validation} (R2-12): validate any
-   predictive-retention result against the real runtime, not only
-   offline replay.
+ \item \textbf{R2-09 -- Prediction Benchmark.}
+   \begin{itemize}
+    \item \textbf{R2-09A Causal Baseline Tournament:} evaluate causal
+      retention baselines under a leakage-safe selection contract;
+      select $B_\mathrm{best}$ on DEV only before held-out EVAL reporting.
+    \item \textbf{R2-09B Benchmark Contract / preregistration:} freeze
+      DEV/EVAL roles and held-out EVAL acquisition/design; baseline
+      selection without EVAL leakage; comparator semantics ($O_B$ unless a
+      valid $O^*$ bound is established); deterministic/stochastic
+      evaluation conditions; metric definitions; EXP-025 applicability;
+      practical-effect threshold derivation; and falsification criteria.
+   \end{itemize}
+ \item \textbf{R2-10 -- Causal Working-Set Predictor:} build and evaluate
+   strictly causal predictors (no future information) under the frozen
+   R2-09B contract. R2-09 contains no final R2-10 predictor result.
+ \item \textbf{R2-11 -- Prediction-Driven Retention:} evaluate, in replay,
+   whether predictor-driven retention improves on $B_\mathrm{best}$ and
+   report comparator-relative recovery (Eq.~\ref{eq:ii-c}) and
+   $\mathrm{Recovery\_vs\_LRU}$ where useful. Values $>1$ for
+   $\mathrm{RecoveryOfBeladyGap}$ are possible only as comparator-relative
+   outcomes and do not imply beating $O^*$.
+ \item \textbf{R2-12 -- Real Runtime Validation:} validate any
+   predictive-retention result against the real runtime, not only offline
+   replay. Modeled EXP-025 quantities are not measured end-to-end latency,
+   time-to-first answer, or throughput.
 \end{enumerate}
+
 No experiment in this list has been run, and no value for
-$\mathrm{FractionOfOracleHeadroomRecovered}$ (Eq.~\ref{eq:ii-c}) has been
-computed. The causally recovered margin remains \notyetmeasured{}.
+$\mathrm{RecoveryOfBeladyGap}_\budget$ (Eq.~\ref{eq:ii-c}) has been
+computed. The causal recovery fraction relative to the measured comparator
+gap remains \notyetmeasured{}.

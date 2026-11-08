@@ -40,33 +40,65 @@ verify that no causal policy is accidentally given future information,
 and that the sole non-causal policy is in fact built from full-trace
 future information before replay begins.
 
-\paragraph{The oracle.} The Belady-optimal offline policy
-\cite{belady1966replacement} -- evict, at every eviction, whichever resident
-item is needed again furthest in the future, or never again -- minimizes
-the miss count of any policy operating under a fixed-capacity, single-cost
-cache model, given full knowledge of the future reference sequence. We
-use a global (cross-layer, cross-shard) variant of Belady,
-\textsc{Oracle-Global-Belady}, as the non-causal upper-bound policy
-throughout. It is unconditionally non-causal and is never treated as a
-deployable baseline.
+\paragraph{Implemented clairvoyant comparator ($O_B$).} The offline
+comparator used in II-A is the implemented \textsc{Oracle-Global-Belady}
+policy (code label \texttt{belady-global}, \texttt{BeladyGlobal})
+\cite{belady1966replacement}. It has full future knowledge of the trace,
+operates globally across layers, uses byte capacity, and represents cache
+objects as $(\ell,e)$ pairs with byte size $\mathrm{bytes}(\ell)$ taken
+from trace metadata. In the tested trace, expert sizes take two values
+across layers; sizes are equal within a layer but not assumed uniform
+across layers. The implementation evicts by furthest next use (or never
+used again), with current-event members protected; object size does not
+enter the victim-ranking rule. It is therefore a \emph{clairvoyant
+Belady-style furthest-next-use comparator}, not a proven byte-optimal
+policy for the variable-size, byte-capacity miss-byte objective under the
+actual multi-key replay semantics. We denote its miss-byte cost by $O_B$.
+It is unconditionally non-causal and is never treated as a deployable
+baseline.
 
-\begin{definition}[Information headroom]
-\label{def:information-headroom}
-For a causal baseline policy $\pi$ and the oracle $\pi^\star$, both
-operating under the same byte budget $\budget$ and the same cache scope
-(global, not shard-constrained), the \emph{relative information
-headroom} at budget $\budget$ is
+\paragraph{Offline optimum and causal optimum (notation).} For a fixed
+workload, budget, and cache semantics, let $B$ denote a causal baseline's
+miss-byte cost, $O^*$ the true offline optimum for the primary miss-byte
+objective, and $C^*$ the optimum or infimum over an admissible causal
+policy class. By definition $O^* \le O_B$ and $O^* \le C^*$, but there is
+no guaranteed ordering between $O_B$ and $C^*$ unless additional
+optimality results are established. Consequently, the measured gap
+$B - O_B$ is a lower bound on $B - O^*$, the gap to the true offline
+optimum; it is not, in general, a proven upper or lower bound on
+$B - C^*$, the maximum causal recovery.
+
+\begin{definition}[Clairvoyant Belady comparator gap]
+\label{def:comparator-gap}
+For a causal baseline policy $\pi$ with miss-byte cost $B_\budget(\pi)$ and
+the implemented clairvoyant comparator $O_B$ with miss-byte cost
+$O_{B,\budget}$, both operating under the same byte budget $\budget$ and
+the same global cache scope, the \emph{relative Belady comparator gap} at
+budget $\budget$ is
 \begin{equation}
-H_{\budget}(\pi) \;=\; \frac{\mathrm{missbytes}_\budget(\pi) -
-\mathrm{missbytes}_\budget(\pi^\star)}{\mathrm{missbytes}_\budget(\pi)}.
-\label{eq:information-headroom}
+G_{\budget}(\pi,O_B) \;=\; \frac{B_\budget(\pi) - O_{B,\budget}}{B_\budget(\pi)}.
+\label{eq:comparator-gap}
 \end{equation}
-$H_\budget(\pi)$ is an \emph{upper bound} on the fraction of $\pi$'s miss
-bytes that any future causal policy -- no matter how well-informed by
-observable routing structure -- could possibly avoid at that budget. It
-is not itself a claim that any causal policy achieves this reduction.
+$G_\budget(\pi,O_B)$ is the measured relative miss-byte reduction of $O_B$
+relative to $\pi$. It is \emph{not} a proven upper bound on the fraction of
+$\pi$'s miss bytes recoverable by a causal policy. If $O^*_\budget$ denotes
+the true offline miss-byte optimum, then $O^*_\budget \le O_{B,\budget}$ and
+therefore $B_\budget(\pi)-O_{B,\budget} \le B_\budget(\pi)-O^*_\budget$; no
+ordering between $O_{B,\budget}$ and $C^*_\budget$ is inferred.
 \end{definition}
 
-Section~\ref{sec:recoverable-envelope} formalizes the further
-decomposition of this headroom away from the cost specifically
-attributable to the real runtime's sharded retention architecture.
+\begin{definition}[Miss-byte gap decomposition]
+\label{def:decomposition-terms}
+For policies with miss-byte costs $S_\budget$ (runtime-sharded causal),
+$G_\budget$ (global-scope causal baseline), and $O_{B,\budget}$ (implemented
+clairvoyant comparator), all at budget $\budget$, define the structural
+sharding gap $S_\budget-G_\budget$, the Belady comparator gap
+$G_\budget-O_{B,\budget}$, and the total runtime-to-comparator gap
+$S_\budget-O_{B,\budget}$. These terms satisfy the exact identity
+$(S_\budget-G_\budget)+(G_\budget-O_{B,\budget})=S_\budget-O_{B,\budget}$.
+This is an algebraic decomposition of measured miss-byte gaps, not a
+decomposition into recoverable and irrecoverable causal performance.
+\end{definition}
+
+Section~\ref{sec:recoverable-envelope} applies this decomposition across
+the tested budget sweep.

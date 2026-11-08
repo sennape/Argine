@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
-"""Consistency checks for the Research II-A + II-B paper freeze.
+"""Consistency checks for the Research II-A + II-B paper freeze and
+Oracle-semantics scientific amendment.
 
 Run from paper/research2/ (or any cwd; resolves paths from this file).
 
 Checks:
   II-A (preserved): headline numbers in II-A-FREEZE.json match frozen II-A
   data; run IDs/trace SHA consistent across II-A freeze, data README, claim
-  ledger.
+  ledger. Historical freeze records are not rewritten by the amendment.
   II-B: headline numbers and canonical run IDs/digests in II-B-FREEZE.json
   match frozen II-B data/manifests/summaries; R2-08 capture-ID audit is
   explicitly represented; claim ledger contains required II-B claim IDs.
+  Amendment: ORACLE-SEMANTICS-AMENDMENT.json present with required fields
+  (AUDIT-ORACLE-001, audit commit, historical freezes preserved, numerical
+  evidence unchanged).
   Manuscript hygiene: forbidden performance-claim phrases absent under
   sections/; no numeric percentage attached to "causally recovered margin"
-  or a populated fraction-of-oracle-headroom-recovered value.
+  or a populated recovery metric; no active "Oracle-Bounded" framing in
+  manuscript/sections.
 
 Exits non-zero on any failure, printing every problem found.
 """
@@ -172,6 +177,23 @@ check("capture" in prov_app.lower() and "null" in prov_app.lower() and "6165471a
 for cid in ["B-C1", "B-C2", "B-C3", "B-C4", "B-C5", "B-C6", "B-C7", "B-C8", "B-C9", "B-C10"]:
     check(cid in claim_ledger, f"claim ID {cid} missing from claim ledger")
 
+# --- Oracle-semantics amendment ---------------------------------------------
+amend = load_json("ORACLE-SEMANTICS-AMENDMENT.json")
+check(amend.get("audit_id") == "AUDIT-ORACLE-001", "amendment audit_id mismatch")
+check(amend.get("audit_commit") == "3789a8511e9623f953dda5a610c9d7897e4ae63b",
+      "amendment audit_commit mismatch")
+check(amend.get("historical_freezes_rewritten") is False,
+      "amendment must not rewrite historical freezes")
+check(amend.get("numerical_experiment_evidence_unchanged") is True,
+      "amendment must state numerical evidence unchanged")
+for rec in ("paper/research2/II-A-FREEZE.json", "paper/research2/II-B-FREEZE.json"):
+    check(rec in (amend.get("historical_freeze_records_preserved") or []),
+          f"amendment missing preserved record {rec}")
+check("AUDIT-ORACLE-001" in claim_ledger, "AUDIT-ORACLE-001 missing from claim ledger")
+check("ORACLE-SEMANTICS-AMENDMENT" in claim_ledger, "ORACLE-SEMANTICS-AMENDMENT missing from claim ledger")
+check(amend.get("amendment_commit_message") == "Amend Research II-A and II-B Oracle semantics",
+      "amendment commit message mismatch")
+
 # --- Manuscript hygiene -----------------------------------------------------
 forbidden_phrases = [
     "performance improvement",
@@ -191,12 +213,18 @@ for path in sorted(sections_dir.glob("*.tex")):
     m = causal_pattern.search(text)
     check(m is None, f"numeric percentage attached to 'causally recovered margin' in {path.relative_to(ROOT)}: {getattr(m, 'group', lambda *_: '')(0)!r}")
 
-# No populated fraction metric (allow equation definition with B-P/B-O symbols and NOT YET MEASURED text)
-# Look for suspicious numeric assignment patterns near the metric name.
-for path in sorted(sections_dir.glob("*.tex")):
+# No populated recovery metric (comparator-relative or historical name).
+for path in [ROOT / "manuscript.tex", *sorted(sections_dir.glob("*.tex"))]:
     text = path.read_text(encoding="utf-8")
-    if re.search(r"FractionOfOracleHeadroomRecovered\s*[=:]\s*[-+]?\d", text):
-        check(False, f"FractionOfOracleHeadroomRecovered appears numerically populated in {path.relative_to(ROOT)}")
+    for name in (r"FractionOfOracleHeadroomRecovered", r"RecoveryOfBeladyGap"):
+        if re.search(name + r"\s*[=:]\s*[-+]?\d", text):
+            check(False, f"{name} appears numerically populated in {path.relative_to(ROOT)}")
+
+# No active "Oracle-Bounded" framing in manuscript/sections (historical references belong in amendment/audit records).
+for path in [ROOT / "manuscript.tex", *sorted(sections_dir.glob("*.tex"))]:
+    text = path.read_text(encoding="utf-8")
+    check("Oracle-Bounded" not in text,
+          f"active 'Oracle-Bounded' framing found in {path.relative_to(ROOT)}")
 
 # --- Report -----------------------------------------------------------------
 if errors:
