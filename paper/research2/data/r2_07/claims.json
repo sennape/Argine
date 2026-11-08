@@ -1,0 +1,52 @@
+{
+  "not_yet_supported": [
+    {
+      "claim": "This reuse structure lets us predict the next expert with X% accuracy.",
+      "reason": "R2-07 trains no predictor and reports no accuracy/precision/recall/F1/AUC; predictability is II-C's question."
+    },
+    {
+      "claim": "A retention policy using these reuse-distance signals would reduce misses by X%.",
+      "reason": "actual retention improvement is II-C's job; R2-07 reports only the descriptive structural observation that shorter reuse gaps are structurally favorable to retention."
+    },
+    {
+      "claim": "Reuse locality changes over time / across workload phases.",
+      "reason": "temporal/windowed drift analysis is R2-08's job; not computed here (section 23)."
+    },
+    {
+      "claim": "MoE models generally / Qwen workloads generally exhibit this reuse structure.",
+      "reason": "R2-07 remains bound to the single validated canonical trace; cross-workload/cross-model generalization is explicitly deferred to R2-08 (section 24)."
+    },
+    {
+      "claim": "R2-06 already proved long-range locality.",
+      "reason": "R2-06 established only one-step conditional structure; R2-07 is what tests whether that extends beyond one step (section 16)."
+    }
+  ],
+  "r2_05_bridge": "R2-05 showed frequency concentration. Being frequent is a logically distinct property from being reused soon; R2-07 computes a secondary, descriptive Spearman correlation between request frequency and median token reuse gap to characterize, not causally explain, this distinction.",
+  "r2_06_bridge": "R2-06 identified immediate (one-step) conditional routing structure. R2-07 measures the temporal horizon and working-set consequences of that structure -- R2-06's finding does not by itself establish long-range locality; R2-07 is what tests that.",
+  "supported_now": [
+    {
+      "basis": "global_summary.median_immediate_reuse_fraction",
+      "claim": "On the validated canonical trace, the median per-layer immediate (gap=1) reuse fraction is 0.42561606101711047."
+    },
+    {
+      "basis": "global_summary.median_token_reuse_gap / median_distinct_intervening_reuse_distance",
+      "claim": "On the validated canonical trace, the median per-layer token reuse gap is 2.0, and the median per-layer distinct-intervening expert reuse distance is 8.0."
+    },
+    {
+      "basis": "global_summary.median_working_set_size_by_window[32]",
+      "claim": "On the validated canonical trace, the median working-set size at window 32 is 57.0, out of the nominal expert population per layer."
+    },
+    {
+      "basis": "section 18's allowed interpretation",
+      "claim": "On the validated canonical trace, shorter reuse gaps are structurally favorable to retention (a descriptive, non-performance statement; no retention-policy improvement is claimed)."
+    },
+    {
+      "basis": "global_summary.heterogeneity / working-set growth curve",
+      "claim": "On the validated canonical trace, layer-local reuse locality (section 16's bridge) extends the one-step conditional structure R2-06 identified to a measurable multi-step horizon, and the active working set grows as the observation window expands at the rate this experiment's growth curve describes."
+    },
+    {
+      "basis": "bridge.frequency_vs_reuse_gap_correlation.spearman_correlation",
+      "claim": "On the validated canonical trace, the descriptive Spearman rank correlation between per-expert request frequency (R2-05) and median token reuse gap (R2-07) is -0.6506356646901621 (secondary; no causal interpretation)."
+    }
+  ]
+}

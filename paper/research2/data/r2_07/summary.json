@@ -1,0 +1,118 @@
+{
+  "binding": {
+    "candidate_status": "CANDIDATE",
+    "message": "bound to R2-01 PASS run bb6d8ca34dbc4537a43d54be30c9f3e1 (candidate_status=CANDIDATE), R2-04 PASS run cd2b58b019314fafb90304234e6d1907, R2-05 PASS run da82e15b61c94019840477642618565a, and R2-06 PASS run 2e075161f02443ff822279add6938ca4; trace identity re-verified byte-identical on disk.",
+    "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+    "r2_04_run_id": "cd2b58b019314fafb90304234e6d1907",
+    "r2_05_run_id": "da82e15b61c94019840477642618565a",
+    "r2_06_run_id": "2e075161f02443ff822279add6938ca4",
+    "status": "OK",
+    "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+    "trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1"
+  },
+  "candidate_status": "CANDIDATE",
+  "canonical_digest": "ad36e615970b196b64ba3a3fdc2559e252cc8627e5d17d0d830d16742f59281a",
+  "experiment_id": "R2-07",
+  "headline": {
+    "frequency_vs_reuse_gap_spearman_correlation": -0.6506356646901621,
+    "layer_count": 48,
+    "longest_median_reuse_gap_layer": 0,
+    "median_distinct_intervening_reuse_distance": 8.0,
+    "median_immediate_reuse_fraction": 0.42561606101711047,
+    "median_p90_token_reuse_gap": 24.0,
+    "median_reuse_within_16_fraction": 0.8602290781936344,
+    "median_reuse_within_4_fraction": 0.6415319972958208,
+    "median_token_reuse_gap": 2.0,
+    "median_working_set_size_by_window": {
+      "8": 30.0,
+      "32": 57.0,
+      "128": 89.5,
+      "256": 102.5
+    },
+    "nominal_experts_per_layer": 128,
+    "observed_vs_null": {
+      "immediate_reuse_fraction": {
+        "difference_observed_minus_null": 0.23833226893141718,
+        "median_null": 0.1872837920856933,
+        "median_observed": 0.42561606101711047,
+        "ratio_observed_to_null": 2.272572849349218
+      },
+      "median_distinct_intervening_reuse_distance": {
+        "difference_observed_minus_null": -16.0,
+        "median_null": 24.0,
+        "median_observed": 8.0,
+        "ratio_observed_to_null": 0.3333333333333333
+      },
+      "median_token_reuse_gap": {
+        "difference_observed_minus_null": -3.0,
+        "median_null": 5.0,
+        "median_observed": 2.0,
+        "ratio_observed_to_null": 0.4
+      },
+      "p90_token_reuse_gap": {
+        "difference_observed_minus_null": -2.0,
+        "median_null": 26.0,
+        "median_observed": 24.0,
+        "ratio_observed_to_null": 0.9230769230769231
+      },
+      "reuse_within_16_fraction": {
+        "difference_observed_minus_null": 0.039461898819152186,
+        "median_null": 0.8207671793744822,
+        "median_observed": 0.8602290781936344,
+        "ratio_observed_to_null": 1.048079284614215
+      },
+      "reuse_within_4_fraction": {
+        "difference_observed_minus_null": 0.16349428071497718,
+        "median_null": 0.4780377165808436,
+        "median_observed": 0.6415319972958208,
+        "ratio_observed_to_null": 1.3420112577818486
+      },
+      "working_set_size": {
+        "8": {
+          "difference_observed_minus_null": -9.0,
+          "median_null": 39.0,
+          "median_observed": 30.0,
+          "ratio_observed_to_null": 0.7692307692307693
+        },
+        "32": {
+          "difference_observed_minus_null": -16.5,
+          "median_null": 73.5,
+          "median_observed": 57.0,
+          "ratio_observed_to_null": 0.7755102040816326
+        },
+        "128": {
+          "difference_observed_minus_null": -7.5,
+          "median_null": 97.0,
+          "median_observed": 89.5,
+          "ratio_observed_to_null": 0.9226804123711341
+        },
+        "256": {
+          "difference_observed_minus_null": -3.0,
+          "median_null": 105.5,
+          "median_observed": 102.5,
+          "ratio_observed_to_null": 0.9715639810426541
+        }
+      }
+    },
+    "shortest_median_reuse_gap_layer": 6,
+    "total_first_observations": 5264,
+    "total_reuse_events": 199784
+  },
+  "nondeterminism": [],
+  "outcome": "PASS",
+  "reasons": [
+    "R2-01 PASS, R2-04/II-A PASS, R2-05 PASS, and R2-06 PASS verified; trace identity re-verified byte-identical on disk; layer-local expert identity preserved throughout; reuse accounting reconciled exactly against an independently-coded second computation (cold + reuse + duplicate-within-position == raw total occurrences); working-set windows computed deterministically with full-windows-only semantics; null-baseline invariants (token count, per-token cardinality, total occurrences, per-expert marginal counts) verified preserved; two independent syntheses over the identical trace, identical R2-05/R2-06 bridge evidence, and identical null-baseline seed/config produced an identical canonical digest; no forbidden claim (predictor accuracy, retention-policy performance, temporal drift, cross-workload generalization, R2-06-already-proved-long-range-locality) was generated."
+  ],
+  "roadmap_state": {
+    "ii_a": "CLOSED/PASS/PAPER-FROZEN",
+    "ii_c": "FUTURE",
+    "r2_05": "CLOSED/PASS",
+    "r2_06": "CLOSED/PASS",
+    "r2_07": "PASS",
+    "r2_08": "LOCKED"
+  },
+  "run_id": "af28e8c6dc5044a18e4a86137d59156a",
+  "scope": "offline DESCRIPTIVE CHARACTERIZATION of layer-local expert reuse locality and working-set growth on the validated R2-01 trace -- no new replay, no model/runtime invocation, no new trace capture, no predictor, no accuracy claim, no retention-policy performance claim, no temporal-drift or cross-workload claim",
+  "synthesis_errors": [],
+  "temporal_unit": "One POSITION = one (token_index, selection) entry yielded, in order, by Trace.token_selections(layer, phase) for one layer; positions are numbered 0, 1, 2, ... in that yielded order (never by raw token_index). A selection is an unordered SET of concurrently selected experts: no artificial within-token ordering is ever constructed."
+}

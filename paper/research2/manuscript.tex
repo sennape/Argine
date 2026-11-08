@@ -37,9 +37,9 @@
 \newcommand{\budget}{M}
 \newcommand{\notyetmeasured}{\textsc{not yet measured}}
 
-\title{\textbf{Oracle-Bounded Expert Retention in Memory-Constrained
-Mixture-of-Experts Inference}\\
-\large A First Tranche of Argine Research Part 2 (Research II-A) --
+\title{\textbf{Oracle-Bounded Expert Retention and Routing Structure in
+Memory-Constrained Mixture-of-Experts Inference}\\
+\large Argine Research Part 2 (Research II-A + Research II-B) --
 Working Title, Provisional}
 \author{sennape}
 \date{November 2026}
@@ -49,44 +49,49 @@ Working Title, Provisional}
 \maketitle
 
 \begin{quote}
-\small\textit{Status: This document reports only Research II-A
-(oracle-bounded headroom under a validated offline replay model). It is a
-provisional tranche of a larger three-stage programme; Research II-B
-(routing characterization) and Research II-C (causal prediction and
-runtime validation) are not yet started and are not reported here. This
-title and abstract are working text and are expected to change once
-II-B/II-C are complete.}
+\small\textit{Status: This document reports Research II-A (oracle-bounded
+headroom under a validated offline replay model) and Research II-B
+(descriptive routing characterization: concentration, transitions, reuse
+locality, and workload dependence). It is a provisional cumulative tranche
+of a larger three-stage programme; Research II-C (causal prediction and
+runtime validation) has not started and is not reported here. This title
+and abstract remain working text and are expected to change once II-C is
+complete.}
 \end{quote}
 
 \begin{abstract}
-We study the memory-constrained retention of mixture-of-experts (MoE)
-expert weights under offline replay of a real routing trace captured from
-a 30B-parameter MoE model running a coding workload. We first establish,
-by independent runtime-telemetry-vs-replay behavioral validation, that an
-offline replay model built from the captured trace agrees exactly with
-the real runtime's own recorded cache events over the measured workload
-(zero event disagreements). We then compare, at a fixed 4~GiB
-expert-memory budget, three causal retention baselines -- a
-runtime-architecture-matched sharded LRU, a global LRU, and a global
-LFU -- against a non-causal Belady-optimal oracle with full knowledge of
-future expert accesses. We extend this comparison across a five-point
-expert-memory budget sweep (1.5--16~GiB) to test the sensitivity of the
-oracle-vs-causal gap to available memory, and decompose the observed gap
-into a structural component (attributable to the runtime's sharded
-retention architecture) and a policy-information component (the
-oracle-vs-causal-LRU gap at equal cache scope). The latter component --
-the \emph{policy-information headroom} -- establishes an upper bound on
-what any future causal retention or prediction mechanism could possibly
-close; it is not itself a demonstrated, causally achievable improvement.
-Across the tested capacity-constrained budgets this headroom is
-substantial and the oracle strictly dominates every causal baseline
-tested; it reaches its largest tested relative value near 8~GiB and
-collapses once the expert working set becomes effectively resident at
-16~GiB. Whether, and how much of, this headroom is causally recoverable
-by a practical predictor is explicitly left unmeasured and is the subject
-of Research II-B (routing structure) and Research II-C (causal
-prediction), neither of which has started. This report is provisional and
-limited strictly to what the completed II-A evidence supports.
+We study memory-constrained retention of mixture-of-experts (MoE) expert
+weights using validated offline replay of real routing traces from
+Qwen3-30B-A3B-Q4\_K\_M running on a consumer-machine runtime protocol.
+Research~II-A establishes, by runtime-telemetry-vs-replay behavioral
+validation with zero event disagreements on the measured coding trace,
+that a causal Global-LRU baseline leaves a substantial
+\emph{policy-information headroom} relative to a non-causal
+Belady-optimal oracle under constrained expert-memory budgets. Across the
+tested capacity-constrained sweep, this headroom is large and persists
+after decomposing away the runtime's small structural sharding gap; it
+reaches its largest tested relative value near 8~GiB and collapses once
+the working set becomes effectively resident at 16~GiB. This headroom is
+an upper bound, not a demonstrated causal improvement.
+Research~II-B characterizes whether routing contains structure that could
+motivate causal working-set prediction. On the canonical validated trace,
+aggregate layer-local routing is concentrated (median effective expert
+fraction $0.514$, median top-8 traffic share $0.300$), while the earlier
+II-A result that LFU underperforms Global-LRU shows that aggregate
+popularity alone is insufficient for retention. Same-layer token-to-token
+routing exhibits measurable transition dependence (median NMI $0.099$,
+positive in every tested layer), strong short-horizon reuse locality that
+exceeds a deterministic shuffled null (median immediate reuse $0.426$ vs.
+$0.187$; median token reuse gap $2$ vs.\ $5$), and pronounced workload
+dependence across four workload families at matched decode horizon
+$H=388$ (median cross-workload JSD $0.299$ vs.\ median temporal JSD
+$0.136$, ratio $2.21\times$; under deterministic decoding, same-workload
+replicate frequency distributions were identical at the reported
+resolution). These II-B results are descriptive characterizations, not
+evidence of predictive accuracy or runtime improvement. The unresolved
+question is whether a strictly causal predictor can exploit this
+structure to recover a measurable fraction of the Oracle-bounded
+policy-information headroom.
 \end{abstract}
 
 \input{sections/01_introduction}
@@ -97,7 +102,7 @@ limited strictly to what the completed II-A evidence supports.
 \input{sections/06_recoverable_envelope}
 \input{sections/07_discussion}
 \input{sections/08_limitations}
-\input{sections/09_research_iib_placeholder}
+\input{sections/09_research_iib}
 \input{sections/10_research_iic_placeholder}
 \input{sections/11_conclusion}
 

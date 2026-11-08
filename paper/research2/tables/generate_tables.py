@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
-"""Generate the II-A paper tables (LaTeX fragments, \\input{}-ready) from
-the frozen canonical data snapshot under paper/research2/data/ -- never
-hand-typed datapoints.
+r"""Generate Research2 paper tables (LaTeX fragments, \input{}-ready) from
+the frozen canonical data snapshot under paper/research2/data/.
+
+II-A tables (preserved):
+  table1_configuration.tex, table2_r2_02_comparison.tex,
+  table3_r2_03_sweep.tex, table4_r2_04_synthesis.tex
+
+II-B tables (II-B freeze):
+  table_b1_iib_map.tex
+  table_b2_r2_05_concentration.tex
+  table_b3_r2_06_transitions.tex
+  table_b4_r2_07_reuse_locality.tex
+  table_b5_r2_08_scale.tex
 
 Usage: python3 generate_tables.py
-Outputs: table1_configuration.tex
-         table2_r2_02_comparison.tex
-         table3_r2_03_sweep.tex
-         table4_r2_04_synthesis.tex
 """
 
 from __future__ import annotations
@@ -32,12 +38,25 @@ def _fmt_pct(x) -> str:
     return "---" if x is None else f"{x * 100:.2f}\\%"
 
 
+def _f(x, d=4) -> str:
+    if x is None:
+        return "---"
+    return f"{float(x):.{d}f}"
+
+
+def _short(h: str, n: int = 12) -> str:
+    return h[:n]
+
+
+# ---------------------------------------------------------------------------
+# II-A (preserved)
+# ---------------------------------------------------------------------------
+
 def table1() -> str:
-    r2_01_summary = _load("r2_01", "summary.json")
+    _load("r2_01", "summary.json")
     r2_03_prov = _load("r2_03", "provenance.json")
     budgets_gib = [b / GIB for b in r2_03_prov["fixed_budgets_bytes"]]
     budgets_str = ", ".join(f"{b:g}" for b in budgets_gib)
-    trace_sha = r2_01_summary["trace_source"]
     lines = [
         r"\begin{table}[t]",
         r"\centering",
@@ -159,12 +178,201 @@ def table4() -> str:
     return "\n".join(lines) + "\n"
 
 
+# ---------------------------------------------------------------------------
+# II-B
+# ---------------------------------------------------------------------------
+
+def table_b1_map() -> str:
+    s5 = _load("r2_05", "summary.json")
+    s6 = _load("r2_06", "summary.json")
+    s7 = _load("r2_07", "summary.json")
+    s8 = _load("r2_08", "summary.json")
+    rows = [
+        ("R2-05", "Expert frequency and concentration",
+         "normalized entropy, effective experts, top-8 share, 80\\% mass",
+         _short(s5["run_id"]), "PASS"),
+        ("R2-06", "Routing transition structure",
+         "same-layer NMI, conditional entropy, self-transition lift",
+         _short(s6["run_id"]), "PASS"),
+        ("R2-07", "Reuse distance and working-set structure",
+         "reuse fractions, gaps, distinct-intervening distance, working set, shuffled null",
+         _short(s7["run_id"]), "PASS"),
+        ("R2-08", "Routing drift and workload dependence",
+         "temporal/replicate/cross-workload JSD, top-8 Jaccard distance, regime",
+         _short(s8["run_id"]), "PASS"),
+    ]
+    lines = [
+        r"\begin{table}[t]",
+        r"\centering",
+        r"\caption{Research II-B experiment map (canonical PASS evidence only).}",
+        r"\label{tab:iib-map}",
+        r"\small",
+        r"\begin{tabular}{@{}p{1.0cm}p{3.2cm}p{5.0cm}ll@{}}",
+        r"\toprule",
+        r"Exp. & Question & Primary metrics & Run & Outcome \\",
+        r"\midrule",
+    ]
+    for r in rows:
+        lines.append(f"{r[0]} & {r[1]} & {r[2]} & \\texttt{{{r[3]}\\ldots}} & {r[4]} \\\\")
+    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    return "\n".join(lines) + "\n"
+
+
+def table_b2_r2_05() -> str:
+    h = _load("r2_05", "summary.json")["headline"]
+    rows = [
+        ("Total routing requests (token-expert assignments)", f"{h['total_routing_requests']:,}"),
+        ("Layers / nominal experts per layer / top-$k$", f"{h['layer_count']} / {h['nominal_experts_per_layer']} / {h['top_k_recorded_in_trace_meta']}"),
+        ("Median normalized entropy", _f(h["median_normalized_entropy"], 4)),
+        ("Median effective expert fraction", _f(h["median_effective_expert_fraction"], 4)),
+        (r"Median effective experts ($\approx$)", f"{h['median_effective_expert_fraction'] * h['nominal_experts_per_layer']:.1f} / {h['nominal_experts_per_layer']}"),
+        ("Median top-8 traffic share", _f(h["median_top_8_share"], 4)),
+        ("Top-8 share range (min--max)", f"{_f(h['min_top_8_share'],4)}--{_f(h['max_top_8_share'],4)}"),
+        ("Median experts for 80\\% traffic", f"{h['experts_for_80pct_median']:.0f}"),
+        ("80\\% mass range (min--max experts)", f"{h['experts_for_80pct_min']}--{h['experts_for_80pct_max']}"),
+        ("Most / least concentrated layer", f"{h['most_concentrated_layer']} / {h['least_concentrated_layer']}"),
+    ]
+    lines = [
+        r"\begin{table}[t]",
+        r"\centering",
+        r"\caption{R2-05 expert frequency and concentration summary (descriptive, layer-local).}",
+        r"\label{tab:r2-05-summary}",
+        r"\small",
+        r"\begin{tabular}{@{}lr@{}}",
+        r"\toprule",
+        r"Quantity & Value \\",
+        r"\midrule",
+    ]
+    for k, v in rows:
+        lines.append(f"{k} & {v} \\\\")
+    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    return "\n".join(lines) + "\n"
+
+
+def table_b3_r2_06() -> str:
+    h = _load("r2_06", "summary.json")["headline"]
+    rows = [
+        ("Pairwise set-to-set transition observations", f"{h['total_transition_observations']:,}"),
+        ("Layers / nominal experts per layer", f"{h['layer_count']} / {h['nominal_experts_per_layer']}"),
+        ("Median same-layer NMI", _f(h["median_nmi"], 4)),
+        ("NMI range (min--max)", f"{_f(h['min_nmi'],4)}--{_f(h['max_nmi'],4)}"),
+        ("Layers with positive NMI", _f(h["fraction_layers_with_nmi_positive"], 2)),
+        ("Median conditional entropy", _f(h["median_conditional_entropy"], 4)),
+        ("Median self-transition lift", _f(h["median_self_transition_lift"], 4)),
+        ("Median top-1 outgoing probability", _f(h["median_top_1_outgoing_probability"], 4)),
+        ("Median outgoing effective-target fraction", _f(h["median_outgoing_effective_target_fraction"], 4)),
+        ("Maximum supported transition lift (layer)", f"{_f(h['max_supported_transition_lift'],2)} (L{h['max_supported_transition_lift_layer']})"),
+        ("Strongest / weakest NMI layer", f"{h['strongest_layer_by_nmi']} / {h['weakest_layer_by_nmi']}"),
+    ]
+    lines = [
+        r"\begin{table}[t]",
+        r"\centering",
+        r"\caption{R2-06 routing transition structure summary (same-layer, pairwise set-to-set observations).}",
+        r"\label{tab:r2-06-summary}",
+        r"\small",
+        r"\begin{tabular}{@{}lr@{}}",
+        r"\toprule",
+        r"Quantity & Value \\",
+        r"\midrule",
+    ]
+    for k, v in rows:
+        lines.append(f"{k} & {v} \\\\")
+    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    return "\n".join(lines) + "\n"
+
+
+def table_b4_r2_07() -> str:
+    h = _load("r2_07", "summary.json")["headline"]
+    ovn = h["observed_vs_null"]
+    ws = h["median_working_set_size_by_window"]
+    rows = [
+        ("Reuse events / first observations", f"{h['total_reuse_events']:,} / {h['total_first_observations']:,}"),
+        ("Median immediate reuse (gap=1)", _f(h["median_immediate_reuse_fraction"], 4)),
+        ("Median reuse $\\le 4$ / $\\le 16$ positions", f"{_f(h['median_reuse_within_4_fraction'],4)} / {_f(h['median_reuse_within_16_fraction'],4)}"),
+        ("Median token reuse gap / p90 gap", f"{_f(h['median_token_reuse_gap'],0).rstrip('0').rstrip('.')} / {_f(h['median_p90_token_reuse_gap'],0).rstrip('0').rstrip('.')}"),
+        ("Median distinct-intervening reuse distance", _f(h["median_distinct_intervening_reuse_distance"], 0).rstrip("0").rstrip(".")),
+        ("Median working set $W_8/W_{32}/W_{128}/W_{256}$", f"{ws['8']}/{ws['32']}/{ws['128']}/{ws['256']}"),
+        ("Frequency--reuse-gap Spearman (descriptive)", _f(h["frequency_vs_reuse_gap_spearman_correlation"], 4)),
+        ("Immediate reuse: observed / null / ratio", f"{_f(ovn['immediate_reuse_fraction']['median_observed'],4)} / {_f(ovn['immediate_reuse_fraction']['median_null'],4)} / {_f(ovn['immediate_reuse_fraction']['ratio_observed_to_null'],2)}$\\times$"),
+        ("Reuse $\\le 4$: observed / null / ratio", f"{_f(ovn['reuse_within_4_fraction']['median_observed'],4)} / {_f(ovn['reuse_within_4_fraction']['median_null'],4)} / {_f(ovn['reuse_within_4_fraction']['ratio_observed_to_null'],2)}$\\times$"),
+        ("Reuse $\\le 16$: observed / null / ratio", f"{_f(ovn['reuse_within_16_fraction']['median_observed'],4)} / {_f(ovn['reuse_within_16_fraction']['median_null'],4)} / {_f(ovn['reuse_within_16_fraction']['ratio_observed_to_null'],2)}$\\times$"),
+        ("Median gap: observed / null", f"{_f(ovn['median_token_reuse_gap']['median_observed'],0).rstrip('0').rstrip('.')} / {_f(ovn['median_token_reuse_gap']['median_null'],0).rstrip('0').rstrip('.')}"),
+        ("Distinct-intervening: observed / null", f"{_f(ovn['median_distinct_intervening_reuse_distance']['median_observed'],0).rstrip('0').rstrip('.')} / {_f(ovn['median_distinct_intervening_reuse_distance']['median_null'],0).rstrip('0').rstrip('.')}"),
+    ]
+    lines = [
+        r"\begin{table}[t]",
+        r"\centering",
+        r"\caption{R2-07 reuse distance and working-set summary (observed vs deterministic shuffled null).}",
+        r"\label{tab:r2-07-summary}",
+        r"\small",
+        r"\begin{tabular}{@{}lr@{}}",
+        r"\toprule",
+        r"Quantity & Value \\",
+        r"\midrule",
+    ]
+    for k, v in rows:
+        lines.append(f"{k} & {v} \\\\")
+    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    return "\n".join(lines) + "\n"
+
+
+def table_b5_r2_08() -> str:
+    s = _load("r2_08", "summary.json")
+    h = s["headline"]
+    comp = s["comparison"]
+    pair = h["strongest_workload_pair"]
+    rows = [
+        ("Matrix", f"{h['workload_count']} workloads $\\times$ 2 replicates = {h['canonical_capture_count']} cells"),
+        ("Reused / new captures", f"{h['reused_capture_count']} / {h['newly_performed_capture_count']}"),
+        ("Matched decode horizon $H$", f"{h['matched_decode_horizon']}"),
+        ("Temporal windows / window length", f"{h['matched_decode_horizon'] // h['temporal_window_length']} / {h['temporal_window_length']}"),
+        ("Median temporal JSD", _f(h["median_temporal_jsd"], 6)),
+        ("Median same-workload replicate JSD", _f(h["median_same_workload_replicate_jsd"], 1) + r"\,\footnotemark[1]"),
+        ("Median cross-workload JSD", _f(h["median_cross_workload_jsd"], 6)),
+        ("Cross-workload / temporal ratio", _f(h["cross_workload_to_temporal_ratio"], 4) + "$\\times$"),
+        ("Median top-8 temporal Jaccard distance", _f(h["median_top8_temporal_jaccard_distance"], 6)),
+        ("Predeclared regime", comp["regime"].replace("_", "\\_")),
+        ("Most / least stable workload", f"{h['most_stable_workload']} / {h['least_stable_workload']}"),
+        ("Most / least stable layer", f"{h['most_stable_layer']} / {h['least_stable_layer']}"),
+        ("Strongest workload pair (median layer JSD)", f"{pair['workload_a']} (s{pair['seed_a']}) vs {pair['workload_b']} (s{pair['seed_b']}), {_f(pair['median_layer_frequency_jsd'],6)}"),
+        ("Configuration compatibility", "true" if h["all_configuration_fingerprints_compatible"] else "false"),
+    ]
+    lines = [
+        r"\begin{table}[t]",
+        r"\centering",
+        r"\caption{R2-08 routing drift and workload-dependence scale comparison.}",
+        r"\label{tab:r2-08-summary}",
+        r"\small",
+        r"\begin{tabular}{@{}lr@{}}",
+        r"\toprule",
+        r"Quantity & Value \\",
+        r"\midrule",
+    ]
+    for k, v in rows:
+        lines.append(f"{k} & {v} \\\\")
+    lines += [
+        r"\bottomrule",
+        r"\end{tabular}",
+        r"\vspace{2pt}",
+        r"\par\footnotesize\textsuperscript{1}Under the deterministic decoding protocol (temperature~$=0.0$, top-$k=1$); interpreted as a reproducibility check at the reported resolution, not as a general claim of zero stochastic run-to-run variability.",
+        r"\end{table}",
+    ]
+    return "\n".join(lines) + "\n"
+
+
 def main() -> None:
+    # II-A
     (HERE / "table1_configuration.tex").write_text(table1(), encoding="utf-8")
     (HERE / "table2_r2_02_comparison.tex").write_text(table2(), encoding="utf-8")
     (HERE / "table3_r2_03_sweep.tex").write_text(table3(), encoding="utf-8")
     (HERE / "table4_r2_04_synthesis.tex").write_text(table4(), encoding="utf-8")
-    print("wrote 4 table fragments")
+    # II-B
+    (HERE / "table_b1_iib_map.tex").write_text(table_b1_map(), encoding="utf-8")
+    (HERE / "table_b2_r2_05_concentration.tex").write_text(table_b2_r2_05(), encoding="utf-8")
+    (HERE / "table_b3_r2_06_transitions.tex").write_text(table_b3_r2_06(), encoding="utf-8")
+    (HERE / "table_b4_r2_07_reuse_locality.tex").write_text(table_b4_r2_07(), encoding="utf-8")
+    (HERE / "table_b5_r2_08_scale.tex").write_text(table_b5_r2_08(), encoding="utf-8")
+    print("wrote II-A table fragments (4) and II-B table fragments (5)")
 
 
 if __name__ == "__main__":

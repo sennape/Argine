@@ -1,45 +1,74 @@
 \section{Limitations}
 \label{sec:limitations}
 
+\subsection*{II-A limitations (unchanged)}
 \begin{itemize}
- \item \textbf{Single validated real workload/trace.} All results in
-   this report are computed against one captured trace (one coding
-   workload, one 30B-A3B model instance, one capture budget). Replay
-   fidelity (Section~\ref{sec:replay-validation}) is demonstrated for
-   this trace only; it is not evidence of fidelity for other workloads,
-   models, or capture configurations. Generality across workloads and
-   models is explicitly not established by II-A.
- \item \textbf{Offline replay, not live measurement.} Every comparison in
-   this report is an offline replay against a fixed, already-captured
-   trace. It does not measure live runtime behavior under the compared
-   policies themselves (only Global-LRU's and the real runtime's
-   recorded behavior at the capture budget are directly observed; the
-   other policies and budgets are evaluated purely by replay).
- \item \textbf{No latency or throughput claim.} Miss bytes are a proxy
-   for expert data that would need to be serviced under the replay
-   model. No latency, throughput, tokens/second, or SSD-traffic
-   measurement is made or implied anywhere in this report.
+ \item \textbf{Single validated real workload/trace for II-A.} The II-A
+   replay, headroom, sensitivity, and recoverable-envelope analyses are
+   computed against one captured coding trace (one workload, one
+   30B-A3B model instance, one capture budget). Replay fidelity
+   (Section~\ref{sec:replay-validation}) is demonstrated for this trace
+   only; it is not evidence of fidelity for other workloads, models, or
+   capture configurations.
+ \item \textbf{Offline replay, not live measurement.} II-A comparisons are
+   offline replays against a fixed, already-captured trace. They do not
+   measure live runtime behavior under the compared policies themselves.
+ \item \textbf{No latency or throughput claim.} Miss bytes are a proxy for
+   expert data that would need to be serviced under the replay model. No
+   latency, throughput, tokens/second, or SSD-traffic measurement is made
+   or implied by II-A or II-B.
  \item \textbf{No causal predictor exists yet.} The policy-information
    headroom (Section~\ref{sec:recoverable-envelope}) is an upper bound,
-   not a demonstrated causal recovery. Whether, or how much of, it is
-   recoverable by a practical predictor is unmeasured
-   (Definition~\ref{def:ii-c-metric}; Section~\ref{sec:iic-placeholder}).
+   not a demonstrated causal recovery. II-B characterizes routing
+   structure but does not evaluate a causal predictor or recover any
+   fraction of that headroom.
  \item \textbf{Statistical, not exact, shard mapping.} The
    Runtime-Sharded-LRU baseline matches the real runtime's \emph{shard
    count} (16 shards at $4$~GiB) but not its exact address-derived
-   shard-to-key mapping, which is not reproducible offline. The
-   structural sharding gap (Eq.~\ref{eq:structural}) should be read with
-   this caveat.
- \item \textbf{Finite, predeclared budget grid.} The budget sweep
-   (Section~\ref{sec:sensitivity-capacity}) tests five fixed points
-   ($1.5, 2, 4, 8, 16$~GiB). Behavior between tested points, and the
-   exact mathematically minimal budget at which policy convergence
-   occurs, are not characterized; $16$~GiB is reported only as the
-   \emph{first tested} point exhibiting convergence.
- \item \textbf{No shard-constrained oracle.} No shard-constrained Belady
-   variant exists in the underlying implementation; the structural and
-   policy-information gaps are decomposed using Global-LRU as a shared
-   pivot rather than a true sharded-oracle comparison. This is a stated
-   methodological limitation of the decomposition in
-   Definition~\ref{def:decomposition}, not a hidden approximation.
+   shard-to-key mapping, which is not reproducible offline.
+ \item \textbf{Finite, predeclared budget grid.} The II-A budget sweep
+   tests five fixed points ($1.5, 2, 4, 8, 16$~GiB). Behavior between
+   tested points and the exact mathematically minimal policy-convergence
+   budget are not characterized.
+ \item \textbf{No shard-constrained oracle.} The II-A structural and
+   policy-information decomposition uses Global-LRU as a shared pivot
+   rather than a true sharded-oracle comparison.
+\end{itemize}
+
+\subsection*{II-B limitations}
+\begin{itemize}
+ \item \textbf{Model, quantization, and runtime scope.} II-B evidence is
+   limited to Qwen3-30B-A3B-Q4\_K\_M under one consumer-machine runtime
+   protocol and one expert-budget configuration context for the tested
+   captures. No cross-model, cross-quantization, cross-machine, or
+   cross-runtime generalization is measured.
+ \item \textbf{Workload scope.} R2-08 tests four workload families
+   (coding, reasoning, summarization, instruction), two replicates each.
+   The \texttt{WORKLOAD\_DEPENDENCE\_DOMINANT} classification is
+   conditional on this tested workload set and protocol.
+ \item \textbf{Deterministic decoding protocol.} R2-08 uses
+   temperature~$=0.0$, top-$k=1$. Same-workload replicate JSD $=0.0$ is
+   therefore interpreted only as reproducibility at the reported
+   resolution under deterministic decoding, not as general evidence of
+   zero stochastic run-to-run variability.
+ \item \textbf{Finite matched horizon.} R2-08 comparisons use matched
+   decode horizon $H=388$ with 8 temporal windows of length 48. Longer
+   horizons and other windowing choices are not evaluated.
+ \item \textbf{Layer-local descriptive analysis.} II-B metrics are
+   layer-local and descriptive. No cross-layer primary transition claim is
+   made from R2-06, and no causal or mechanistic explanation of routing is
+   established.
+ \item \textbf{No predictive or runtime evaluation.} II-B includes no
+   causal predictor, no predictor accuracy/precision/recall/F1 measurement,
+   no prefetch or admission mechanism, no retention-policy replacement, no
+   runtime speedup or latency/throughput measurement, and no
+   Oracle-headroom recovery measurement. The fraction in
+   Eq.~\eqref{eq:iib-iic-recovery} remains \notyetmeasured{}.
+ \item \textbf{R2-08 capture-provenance representation.} New R2-08-managed
+   capture cells record \texttt{capture\_run\_id}/\texttt{capture\_source}
+   as null while preserving trace path, trace SHA, configuration, model
+   and runtime SHAs, validation state, and canonical R2-08 run identity.
+   This is documented as an intentional representation for internal R2-08
+   captures; no capture IDs are invented and no scientific traces are
+   modified.
 \end{itemize}

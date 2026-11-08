@@ -1,98 +1,90 @@
-# Argine Research Part 2 — Paper Tree (Research II-A tranche)
+# Argine Research Part 2 — Paper Tree (II-A + II-B cumulative freeze)
 
-This directory holds the first publication-ready tranche of the Argine
-Research Part 2 paper, covering only the completed and closed **Research
-II-A** programme (R2-01 through R2-04). Research II-B and II-C have not
-started; the manuscript includes placeholder sections for them and makes
-no II-B/II-C claims.
+This directory holds the cumulative publication-oriented manuscript for
+Argine Research Part 2, covering the completed and closed **Research
+II-A** programme (R2-01 through R2-04) and the completed and closed
+**Research II-B** programme (R2-05 through R2-08). Research II-C has not
+started; the manuscript includes an II-C placeholder section and makes no
+II-C claims.
 
 This is a separate, sibling tree to the pre-existing `paper/` directory
 (the finished Part 1 manuscript, "Argine: Expert Streaming Under Hard
-Memory Constraints"). Nothing in `paper/` was modified by this freeze.
+Memory Constraints"). Nothing in `paper/` was modified by these freezes.
 
 ## Layout
 
 ```
 paper/research2/
-├── manuscript.tex          # main LaTeX file; \input's sections/ in order
-├── sections/                # one .tex file per numbered paper section
+├── manuscript.tex            # main LaTeX file; \input's sections/ in order
+├── sections/                  # numbered paper sections (II-A, II-B, II-C placeholder)
 ├── tables/
-│   ├── generate_tables.py   # reads data/, emits table*_*.tex fragments
-│   └── table*_*.tex          # generated LaTeX table fragments (checked in
-│                              # for reproducibility inspection, but can be
-│                              # regenerated from data/ at any time)
+│   ├── generate_tables.py     # reads data/, emits II-A and II-B table fragments
+│   └── table*.tex             # generated LaTeX table fragments
 ├── figures/
-│   ├── make_figures.py      # reads data/r2_03/comparison.json, emits figures
-│   └── figure*_*.{pdf,png}   # generated vector (pdf) + preview (png) figures
-├── data/                    # frozen byte-for-byte snapshot of the specific
-│                              canonical evidence files the paper cites —
-│                              see data/README.md. NOT the source of truth.
+│   ├── make_figures.py        # reads frozen data/, emits II-A and II-B figures
+│   └── figure*.{pdf,png}      # generated vector (pdf) + preview (png) figures
+├── data/                      # frozen snapshots of canonical evidence files cited
+│   ├── r2_01..r2_04/          # II-A evidence snapshot
+│   └── r2_05..r2_08/          # II-B evidence snapshot
 ├── claims/
-│   └── claim_ledger.md      # every numerical/scientific claim in the paper,
-│                              with its source run ID, artifact, and metric key
-├── references.bib           # bibliography (entries preserved verbatim from
-│                              the Part 1 paper's vetted reference list, plus
-│                              a clearly marked II-B/II-C scaffold)
-├── II-A-FREEZE.json         # freeze manifest: run IDs, trace SHA, git commits,
-│                              headline metrics, and content digests, so this
-│                              tranche is auditable later
-└── README.md                 # this file
+│   └── claim_ledger.md        # every numerical/scientific claim with source IDs/digests
+├── references.bib             # preserved vetted citations; no speculative II-B/II-C additions
+├── II-A-FREEZE.json           # historical II-A freeze manifest (preserved)
+├── II-B-FREEZE.json           # II-B freeze manifest
+└── README.md                  # this file
 ```
 
-## Rebuilding the paper
+## Rebuilding tables and figures
 
-From canonical evidence (regenerates the `data/` snapshot, tables, and
-figures; only meaningful on a machine with access to the Argine3 evidence
-root):
+Regenerates table fragments and figures from the frozen `data/` snapshot:
 
 ```
-python3 tables/generate_tables.py
-python3 figures/make_figures.py
+python tables/generate_tables.py
+python figures/make_figures.py
 ```
 
-Building the PDF:
+## Building the PDF
 
 ```
 cd paper/research2
 latexmk -pdf -interaction=nonstopmode manuscript.tex
 ```
 
-**Known build-environment limitation:** the Part 1 paper's `main.tex` uses
-`newtxtext`/`newtxmath` (Times-like text/math fonts), which require the
-`texlive-fonts-extra` package. That package is not installed in this
-session's build environment and could not be installed (no `sudo`/`tlmgr`
-write access). `manuscript.tex` therefore uses `amsmath`+`amssymb` with the
-default Latin Modern fonts instead, and disables microtype's font-expansion
-feature (`\usepackage[expansion=false]{microtype}`, since expansion requires
-scalable Type 1 fonts not available here). This is a build-environment
-substitution, not a deliberate style departure from Part 1; swapping back to
-`newtxtext`/`newtxmath` on a machine with `texlive-fonts-extra` installed
-requires no other source change.
+On this Windows environment, a direct `pdflatex`/`bibtex`/`pdflatex`/
+`pdflatex` sequence can be used if `latexmk` is unavailable.
+
+**Known build-environment limitation:** the Part 1 paper uses
+`newtxtext`/`newtxmath`, which require `texlive-fonts-extra`. This
+manuscript uses `amsmath`+`amssymb` with default Latin Modern fonts and
+`\usepackage[expansion=false]{microtype}` as a build-environment
+substitution; swapping back to NewTX on a machine with the required fonts
+needs no other source change.
 
 ## Validation
 
-`scripts/verify_paper_freeze.py` (run from this directory) checks that:
-- every headline numeric value quoted in `II-A-FREEZE.json` and in the
-  generated table fragments matches the frozen `data/` snapshot;
-- the four canonical run IDs and the source trace SHA-256 appear
-  consistently across `II-A-FREEZE.json`, `data/README.md`, and
-  `claims/claim_ledger.md`;
-- none of the forbidden performance-claim phrases
-  ("performance improvement", "memory saving", "faster inference",
-  "demonstrated recoverability") appear anywhere under `sections/`;
-- no numeric percentage is attached to "causally recovered margin"
-  anywhere under `sections/` (causal recovery must always read
-  "NOT YET MEASURED -- II-C").
+`scripts/verify_paper_freeze.py` checks II-A and II-B freeze consistency:
+headline numbers match frozen data, canonical run IDs/digests are
+consistent across freeze manifests/data/README/claim ledger, the R2-08
+capture-ID audit is documented, forbidden performance phrases are absent
+under `sections/`, and no numeric causal-recovery claim is present.
 
-Run it with:
+Run:
 
 ```
-python3 scripts/verify_paper_freeze.py
+python scripts/verify_paper_freeze.py
 ```
 
 ## Status
 
-Research II-A: **CLOSED / PASS / PAPER-FROZEN**. See `II-A-FREEZE.json`
-for the full freeze manifest and `claims/claim_ledger.md` for the frozen
-claim set. Research II-B is ready to start (not yet started); Research
-II-C depends on II-B and has not started.
+- Research II-A: **CLOSED / PASS / PAPER-FROZEN** (`II-A-FREEZE.json` preserved).
+- Research II-B: **CLOSED / PASS / PAPER-FROZEN** (`II-B-FREEZE.json`).
+- Research II-C: **FUTURE / NOT STARTED** (placeholder only).
+
+The R2-08 capture-ID audit found seven R2-08-managed new capture cells
+with `capture_run_id`/`capture_source` null while preserving trace SHA,
+path, workload/seed/config/model/runtime identity, validation state, and
+canonical R2-08 run binding. This is documented as an intentional
+R2-08-internal provenance representation; no capture IDs were invented and
+no scientific traces were modified.
+
+Next action: **R2-09 Prediction Benchmark** (not started in this freeze).

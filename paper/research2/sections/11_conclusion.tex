@@ -1,31 +1,41 @@
-\section{Conclusion (Provisional, II-A Only)}
+\section{Conclusion (Provisional, II-A + II-B)}
 \label{sec:conclusion}
 
 This report establishes, under a behaviorally validated offline replay
 model of a real 30B-A3B MoE coding-workload trace
 (Section~\ref{sec:replay-validation}), that a substantial gap exists
 between causal LRU-family expert retention and a non-causal Belady-optimal
-upper bound, at every tested capacity-constrained expert-memory budget
-(Sections~\ref{sec:oracle-headroom}--\ref{sec:sensitivity-capacity}). We
-decompose this gap into a small, non-monotonically-signed structural
-component attributable to the runtime's sharded retention architecture,
-and a substantially larger policy-information headroom
-(Section~\ref{sec:recoverable-envelope}) -- the scientifically clean
-upper bound motivating future causal retention and prediction research.
-The largest tested relative headroom occurs near $8$~GiB ($70.66\%$) and
-the largest tested absolute headroom near $1.5$~GiB
-($\approx 103.57$~GB); the gap collapses entirely once the working set
-becomes effectively resident at $16$~GiB, the first tested such point.
+upper bound at every tested capacity-constrained expert-memory budget
+(Sections~\ref{sec:oracle-headroom}--\ref{sec:sensitivity-capacity}). The
+policy-information headroom is largest, among the tested points, near
+$8$~GiB in relative terms ($70.66\%$) and near $1.5$~GiB in absolute
+terms ($\approx 103.57$~GB), and collapses once the working set becomes
+effectively resident at $16$~GiB, the first tested such point.
 
-This is a provisional conclusion, limited strictly to Research II-A. It
-establishes an upper bound on recoverable retention performance; it does
-not establish, estimate, or imply any demonstrated causal recoverability,
-latency improvement, or production performance gain. Research II-B
-(whether exploitable routing structure exists) and Research II-C
-(whether a causal predictor can recover any of this headroom, and
-validation against the real runtime) remain future work, not yet
-started. The present II-A tranche is frozen as of the commit and run IDs
-recorded in Appendix~\ref{sec:provenance-appendix} and
-\texttt{II-A-FREEZE.json}, and is intended to be incorporated, without
-silent strengthening of its claims, into the eventual combined
-II-A+II-B+II-C Research Part 2 paper.
+Research~II-B adds a descriptive characterization of routing structure on
+the validated trace and on controlled workload captures
+(Section~\ref{sec:iib}). Under the tested
+Qwen3-30B-A3B-Q4\_K\_M protocol, routing is non-uniform in aggregate;
+same-layer routing exhibits measurable transition dependence (positive NMI
+in every tested layer); reuse is concentrated at short horizons relative to
+a deterministic shuffled null; and cross-workload divergence exceeds
+temporal drift under the predeclared comparison
+($2.21\times$, \texttt{WORKLOAD\_DEPENDENCE\_DOMINANT}). The II-A LFU
+result remains important: aggregate popularity exists, but static
+frequency is not sufficient. The II-B result is correspondingly bounded:
+structure exists, but structure is not a measured causal recovery.
+
+This is a provisional conclusion, limited to Research~II-A and
+Research~II-B. It establishes an Oracle-bounded upper bound on retention
+performance and a descriptive routing-structure basis for testing causal
+prediction; it does not establish, estimate, or imply predictor accuracy,
+causal Oracle-headroom recovery, prefetch benefit, retention-policy
+improvement, latency/throughput gain, or cross-model generalization.
+Research~II-C -- whether a strictly causal predictor can recover a
+measurable fraction of the II-A policy-information headroom and how any
+such result validates against the real runtime -- remains future work, not
+yet started. The II-A tranche remains frozen as recorded in
+\texttt{II-A-FREEZE.json}; the II-B tranche is frozen as recorded in
+\texttt{II-B-FREEZE.json} and Appendix~\ref{sec:provenance-appendix}, and
+is intended to be incorporated, without silent strengthening of II-A
+claims, into the eventual combined II-A+II-B+II-C Research Part~2 paper.

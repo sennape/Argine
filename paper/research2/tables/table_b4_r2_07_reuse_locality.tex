@@ -1,0 +1,24 @@
+\begin{table}[t]
+\centering
+\caption{R2-07 reuse distance and working-set summary (observed vs deterministic shuffled null).}
+\label{tab:r2-07-summary}
+\small
+\begin{tabular}{@{}lr@{}}
+\toprule
+Quantity & Value \\
+\midrule
+Reuse events / first observations & 199,784 / 5,264 \\
+Median immediate reuse (gap=1) & 0.4256 \\
+Median reuse $\le 4$ / $\le 16$ positions & 0.6415 / 0.8602 \\
+Median token reuse gap / p90 gap & 2 / 24 \\
+Median distinct-intervening reuse distance & 8 \\
+Median working set $W_8/W_{32}/W_{128}/W_{256}$ & 30.0/57.0/89.5/102.5 \\
+Frequency--reuse-gap Spearman (descriptive) & -0.6506 \\
+Immediate reuse: observed / null / ratio & 0.4256 / 0.1873 / 2.27$\times$ \\
+Reuse $\le 4$: observed / null / ratio & 0.6415 / 0.4780 / 1.34$\times$ \\
+Reuse $\le 16$: observed / null / ratio & 0.8602 / 0.8208 / 1.05$\times$ \\
+Median gap: observed / null & 2 / 5 \\
+Distinct-intervening: observed / null & 8 / 24 \\
+\bottomrule
+\end{tabular}
+\end{table}

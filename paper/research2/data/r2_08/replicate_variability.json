@@ -1,0 +1,1181 @@
+{
+  "median_replicate_jsd": 0.0,
+  "per_workload": {
+    "coding-v1": {
+      "layer_count": 48,
+      "median_replicate_jsd": 0.0,
+      "per_layer": {
+        "0": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "1": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "2": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "3": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "4": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "5": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "6": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "7": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "8": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "9": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "10": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "11": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "12": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "13": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "14": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "15": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "16": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "17": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "18": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "19": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "20": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "21": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "22": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "23": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "24": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "25": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "26": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "27": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "28": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "29": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "30": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "31": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "32": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "33": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "34": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "35": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "36": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "37": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "38": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "39": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "40": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "41": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "42": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "43": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "44": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "45": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "46": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "47": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        }
+      }
+    },
+    "instruction-v1": {
+      "layer_count": 48,
+      "median_replicate_jsd": 0.0,
+      "per_layer": {
+        "0": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "1": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "2": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "3": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "4": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "5": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "6": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "7": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "8": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "9": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "10": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "11": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "12": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "13": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "14": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "15": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "16": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "17": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "18": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "19": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "20": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "21": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "22": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "23": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "24": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "25": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "26": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "27": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "28": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "29": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "30": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "31": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "32": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "33": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "34": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "35": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "36": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "37": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "38": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "39": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "40": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "41": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "42": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "43": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "44": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "45": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "46": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "47": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        }
+      }
+    },
+    "reasoning-v1": {
+      "layer_count": 48,
+      "median_replicate_jsd": 0.0,
+      "per_layer": {
+        "0": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "1": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "2": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "3": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "4": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "5": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "6": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "7": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "8": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "9": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "10": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "11": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "12": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "13": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "14": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "15": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "16": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "17": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "18": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "19": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "20": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "21": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "22": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "23": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "24": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "25": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "26": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "27": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "28": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "29": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "30": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "31": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "32": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "33": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "34": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "35": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "36": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "37": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "38": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "39": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "40": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "41": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "42": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "43": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "44": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "45": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "46": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "47": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        }
+      }
+    },
+    "summarization-v1": {
+      "layer_count": 48,
+      "median_replicate_jsd": 0.0,
+      "per_layer": {
+        "0": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "1": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "2": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "3": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "4": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "5": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "6": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "7": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "8": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "9": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "10": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "11": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "12": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "13": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "14": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "15": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "16": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "17": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "18": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "19": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "20": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "21": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "22": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "23": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "24": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "25": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "26": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "27": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "28": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "29": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "30": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "31": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "32": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "33": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "34": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "35": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "36": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "37": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "38": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "39": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "40": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "41": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "42": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "43": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "44": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "45": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "46": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        },
+        "47": {
+          "frequency_jsd": 0.0,
+          "normalized_entropy_difference": 0.0,
+          "top16_jaccard_distance": 0.0,
+          "top8_jaccard_distance": 0.0
+        }
+      }
+    }
+  }
+}

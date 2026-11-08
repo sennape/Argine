@@ -11,34 +11,51 @@ terms and near $1.5$~GiB in absolute terms, and it collapses entirely
 once the working set becomes effectively resident (the first tested such
 budget being $16$~GiB). The gap persists after decomposing away the
 specific cost of the runtime's sharded retention architecture, which is
-itself small and not even consistently signed across the sweep.
+small and not consistently signed across the sweep.
 
-\paragraph{What II-A does \emph{not} establish.} II-A does not show that
-any of this headroom is causally recoverable. A non-causal oracle with
-full future knowledge is, by construction, an unreachable upper bound;
-the gap it exposes could in principle be closed, partially closed, or
-not closed at all by a real predictor, depending on whether the
-underlying routing process contains structure a causal method can
-actually exploit at the point a retention decision must be made. II-A
-also does not establish any latency, throughput, or production
-performance result: miss bytes are an offline proxy for expert data that
-would need to be serviced under the replay model, not a measured runtime
-quantity.
+\paragraph{What II-B establishes.} Under the tested
+Qwen3-30B-A3B-Q4\_K\_M protocol, routing is descriptively non-uniform,
+sequentially dependent at one-step same-layer resolution, and temporally
+local at short horizons relative to a shuffled null. At the same time,
+R2-08 shows that cross-workload routing differences exceed temporal drift
+under the predeclared comparison (ratio $2.21\times$), with
+\texttt{WORKLOAD\_DEPENDENCE\_DOMINANT} as the regime classification.
+These results characterize the routing stream; they do not evaluate a
+policy.
 
-\paragraph{Why this motivates II-B.} The size and persistence of the
-policy-information headroom is the empirical motivation for asking
-\emph{why} causal LRU-family retention leaves this much headroom on the
-table: whether expert routing is concentrated, temporally structured, or
-exhibits exploitable reuse-distance behavior. II-A deliberately does not
-answer this question (Section~\ref{sec:iib-placeholder}).
+\paragraph{Observed, inferred motivation, and not established.}
+The distinction among these categories is central:
+\begin{itemize}
+ \item \textbf{Observed:} strong Oracle headroom (II-A); aggregate routing
+   concentration, with LFU underperforming Global-LRU at the II-A anchor
+   budget; measurable same-layer transition dependence (positive NMI in
+   every tested layer); strong short-horizon reuse relative to a shuffled
+   null; and cross-workload divergence exceeding temporal drift under the
+   deterministic R2-08 protocol.
+ \item \textbf{Inference/motivation:} these properties make strictly
+   causal working-set prediction scientifically worth testing. The
+   short-horizon locality is the most relevant signal for that test; the
+   workload dependence implies that a practical predictor may need to be
+   robust across workload categories or conditioned on workload context.
+ \item \textbf{Not established:} that any causal predictor can recover a
+   meaningful fraction of the Oracle-bounded policy-information headroom;
+   that prediction accuracy is sufficient; that prefetch, admission, or a
+   new retention policy improves runtime; that latency, throughput, or
+   memory traffic improves; or that the observed structure generalizes
+   across models, quantizations, machines, or non-deterministic decoding
+   protocols.
+\end{itemize}
 
-\paragraph{Why the headroom is not automatically deployable.} An oracle
-upper bound is, definitionally, not a policy -- it requires information
-no real system has at decision time. Treating a large oracle gap as an
-implicit promise of recoverable performance would conflate two distinct
-claims this report is careful to keep separate (Definition
-\ref{def:information-headroom} and the terminology throughout
-Section~\ref{sec:recoverable-envelope}): an informational upper bound,
-and a demonstrated causal recovery. Only the latter would license a
-deployment or performance claim, and it is explicitly out of scope for
-this tranche.
+\paragraph{Why II-A headroom is not automatically deployable.} An oracle
+upper bound requires information no real system has at decision time.
+Treating a large oracle gap as an implicit promise of recoverable
+performance would conflate an informational upper bound with demonstrated
+causal recovery. II-B adds structure, not recovery.
+
+\paragraph{Why II-B structure is not automatically predictive.}
+Concentration, transition dependence, reuse locality, and workload
+dependence are descriptive properties of observed traces. Each can
+motivate a hypothesis about future routing, but none is the same object as
+a causal predictor evaluated on future decisions. This is why
+Eq.~\eqref{eq:iib-iic-recovery} remains \notyetmeasured{} until
+Research~II-C.
