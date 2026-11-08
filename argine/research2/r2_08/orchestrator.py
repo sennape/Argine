@@ -15,7 +15,7 @@ import statistics
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from .. import provenance, store
+from .. import provenance, runtime_resolver, store
 from ...research.trace import PHASE_DECODE, Step, Trace, TraceMeta
 from . import bridges, capture as capture_mod, capture_matrix, claims as claims_mod
 from . import drift, figures as figures_mod, matched_horizon, prerequisite, summary as summary_mod
@@ -26,6 +26,8 @@ OUTCOME_INCONCLUSIVE = "INCONCLUSIVE"
 OUTCOME_FAIL = "FAIL"
 OUTCOME_PREREQUISITE_NOT_MET = "UPSTREAM_PREREQUISITE_NOT_MET"
 OUTCOME_BLOCKED = "BLOCKED"
+
+_PLACEHOLDER_RUNTIME_SHA = "runtime-unresolved:canonical-r2-protocol"
 
 JSD_DEFINITION = "Jensen-Shannon divergence, log base 2, full nominal 128-expert support including zeros, value in [0,1]."
 JACCARD_DEFINITION = "Jaccard similarity = |A∩B|/|A∪B| on top-k expert sets (k in {8,16}); Jaccard distance = 1-similarity; tie-breaking by expert ID ascending (deterministic)."
@@ -60,21 +62,101 @@ def _decode_selections(trace: Trace, layer: int, h: int) -> List[Tuple[int, ...]
     return sels[:h]
 
 
+def _looks_like_sha256(value: Any) -> bool:
+    if not isinstance(value, str) or len(value) != 64:
+        return False
+    try:
+        int(value, 16)
+        return True
+    except ValueError:
+        return False
+
+
+def _runtime_sha_from_registration(*, resolved_path: Optional[str], root: Optional[Path]) -> Optional[str]:
+    reg = store.get_runtime_registration(root)
+    if not reg or not reg.get("sha256"):
+        return None
+    if not _looks_like_sha256(reg.get("sha256")):
+        return None
+    if resolved_path and reg.get("path"):
+        try:
+            if Path(reg["path"]).resolve() != Path(resolved_path).resolve():
+                return None
+        except OSError:
+            return None
+    return str(reg["sha256"])
+
+
+def _resolve_runtime_sha(binding: prerequisite.R208Binding, *, root: Optional[Path],
+                         runtime_path: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
+    """Return (verified_runtime_sha, error_message). Never invents a SHA.
+
+    For the canonical reused R2-01 cell, provenance must establish the actual
+    runtime SHA or this fails closed.
+    """
+    # 1) Reused trace fingerprint, only if it contains an actual SHA.
+    try:
+        validation = capture_mod.validate_trace_file(Path(binding.reused_trace_path))
+        fp_data = ((validation.get("trace_meta") or {}).get("fingerprint") or {})
+        for key in ("runtime_sha256",):
+            v = fp_data.get(key)
+            if _looks_like_sha256(v):
+                return str(v), None
+        rt = fp_data.get("runtime")
+        if isinstance(rt, dict) and _looks_like_sha256(rt.get("sha256")):
+            return str(rt["sha256"]), None
+    except Exception:
+        pass
+
+    # 2) Canonical R2-01 reused capture provenance (scientifically bound).
+    canonical_reuse = (binding.reused_trace_sha256 == prerequisite.CANONICAL_REUSED_TRACE_SHA256
+                       and binding.reused_capture_source == prerequisite.CANONICAL_REUSED_CAPTURE_SOURCE)
+    if canonical_reuse:
+        sha, err = capture_mod.runtime_sha256_from_reused_r2_01_capture(root=root)
+        if sha:
+            return sha, None
+        return None, (f"canonical reused R2-01 cell runtime identity cannot be established from "
+                      f"provenance: {err}")
+
+    # 3) Current runtime registration (useful for synthetic/offline-safe flows that
+    # already have verified runtime state), only when it matches a resolvable runtime
+    # context or is the only verified local registration.
+    try:
+        rr = runtime_resolver.resolve(explicit_runtime=runtime_path)
+        if rr.status == runtime_resolver.RUNTIME_RESOLVED:
+            sha = _runtime_sha_from_registration(resolved_path=rr.resolved_path, root=root)
+            if sha:
+                return sha, None
+            if rr.tier == "documented_canonical":
+                return runtime_resolver.DOCUMENTED_CANONICAL_RUNTIME["expected_sha256"], None
+    except Exception:
+        pass
+    sha = _runtime_sha_from_registration(resolved_path=None, root=root)
+    if sha:
+        return sha, None
+    return None, None
+
+
 def _resolve_canonical_identity(binding: prerequisite.R208Binding,
                                  model_path: Optional[str],
-                                 root: Optional[Path]) -> Tuple[str, str]:
-    """Resolve consistent model/runtime SHA across all 8 cells."""
+                                 root: Optional[Path],
+                                 runtime_path: Optional[str] = None) -> Tuple[str, str, Optional[str]]:
+    """Resolve consistent model/runtime SHA across all 8 cells.
+
+    Returns (model_sha, runtime_sha, runtime_identity_error). runtime_sha is a
+    verified SHA when establishable; for the canonical reused R2-01 cell a
+    placeholder is never returned without an error.
+    """
     model_sha = None
     runtime_sha = None
+    runtime_err = None
     # from reused trace fingerprint
     try:
         validation = capture_mod.validate_trace_file(Path(binding.reused_trace_path))
         fp_data = ((validation.get("trace_meta") or {}).get("fingerprint") or {})
         model_sha = fp_data.get("model_sha256") or (fp_data.get("model") or {}).get("sha256")
-        runtime_sha = fp_data.get("runtime_sha256") or (fp_data.get("runtime") or {}).get("sha256")
     except Exception:
         pass
-    # from R2-01 upstream digest/provenance is not directly carrying SHAs in all cases; keep best-effort
     # from model file if available
     if not model_sha and model_path and Path(model_path).is_file():
         try:
@@ -85,12 +167,17 @@ def _resolve_canonical_identity(binding: prerequisite.R208Binding,
             model_sha = h.hexdigest()
         except OSError:
             pass
+    runtime_sha, runtime_err = _resolve_runtime_sha(binding, root=root, runtime_path=runtime_path)
     # consistent placeholders when unresolved (test/offline-safe, but still consistent)
-    if not model_sha or model_sha == "unknown-from-trace":
-        model_sha = f"model-unresolved:{prerequisite.REUSED_TRACE_SHA256[:16]}"
-    if not runtime_sha or runtime_sha == "unknown-from-trace":
-        runtime_sha = "runtime-unresolved:canonical-r2-protocol"
-    return str(model_sha), str(runtime_sha)
+    if not model_sha or model_sha == "unknown-from-trace" or not _looks_like_sha256(str(model_sha)):
+        model_sha = f"model-unresolved:{binding.reused_trace_sha256[:16]}"
+    if not runtime_sha or not _looks_like_sha256(str(runtime_sha)):
+        canonical_reuse = (binding.reused_trace_sha256 == prerequisite.CANONICAL_REUSED_TRACE_SHA256
+                           and binding.reused_capture_source == prerequisite.CANONICAL_REUSED_CAPTURE_SOURCE)
+        if canonical_reuse and not runtime_err:
+            runtime_err = "canonical reused R2-01 runtime SHA could not be verified"
+        runtime_sha = _PLACEHOLDER_RUNTIME_SHA
+    return str(model_sha), str(runtime_sha), runtime_err
 
 
 def _ensure_reused_coding_cell(binding: prerequisite.R208Binding,
@@ -401,8 +488,15 @@ def run(*, allow_dirty: bool = False, model_path: Optional[str] = None,
         return {"experiment_id": "R2-08", "run_id": run_id, "outcome": OUTCOME_PREREQUISITE_NOT_MET,
                 "message": binding.message, "binding": binding.to_json()}
 
-    model_sha, runtime_sha = _resolve_canonical_identity(binding, model_path, root)
+    model_sha, runtime_sha, runtime_identity_err = _resolve_canonical_identity(
+        binding, model_path, root, runtime_path=runtime_path)
+    canonical_reuse = (binding.reused_trace_sha256 == prerequisite.CANONICAL_REUSED_TRACE_SHA256
+                       and binding.reused_capture_source == prerequisite.CANONICAL_REUSED_CAPTURE_SOURCE)
     cells = capture_matrix.load_matrix(root)
+    if runtime_identity_err and canonical_reuse:
+        return {"experiment_id": "R2-08", "run_id": run_id, "outcome": OUTCOME_FAIL,
+                "message": runtime_identity_err,
+                "capture_matrix": _cell_diagnostics(cells)}
     try:
         _ensure_reused_coding_cell(binding, root, model_sha, runtime_sha)
         cells = capture_matrix.load_matrix(root)
@@ -468,11 +562,29 @@ def run(*, allow_dirty: bool = False, model_path: Optional[str] = None,
                 return {"experiment_id": "R2-08", "run_id": run_id, "outcome": OUTCOME_BLOCKED,
                         "message": f"trace validation failed for {wid}/seed-{seed}: {val.get('reason')}",
                         "capture_matrix": _cell_diagnostics(cells)}
-            conf = capture_mod.configuration_for_cell(wid, seed, model_sha256=model_sha, runtime_sha256=runtime_sha)
+            result_runtime_sha = result.get("runtime_sha256")
+            effective_runtime_sha = runtime_sha
+            if _looks_like_sha256(result_runtime_sha):
+                if _looks_like_sha256(runtime_sha) and str(result_runtime_sha) != str(runtime_sha):
+                    return {"experiment_id": "R2-08", "run_id": run_id, "outcome": OUTCOME_FAIL,
+                            "message": (f"runtime SHA mismatch for {wid}/seed-{seed}: capture returned "
+                                        f"{result_runtime_sha}, expected verified {runtime_sha}"),
+                            "capture_matrix": _cell_diagnostics(cells)}
+                effective_runtime_sha = str(result_runtime_sha)
+                if not _looks_like_sha256(runtime_sha) or runtime_sha == _PLACEHOLDER_RUNTIME_SHA:
+                    runtime_sha = effective_runtime_sha
+                    # Upgrade reused cell to the same verified runtime identity.
+                    try:
+                        _ensure_reused_coding_cell(binding, root, model_sha, runtime_sha)
+                        cells = capture_matrix.load_matrix(root)
+                    except Exception as e:  # noqa: BLE001
+                        return {"experiment_id": "R2-08", "run_id": run_id, "outcome": OUTCOME_FAIL,
+                                "message": f"failed to bind reused cell runtime identity: {e}"}
+            conf = capture_mod.configuration_for_cell(wid, seed, model_sha256=model_sha, runtime_sha256=effective_runtime_sha)
             cell = capture_matrix.CaptureCell(
                 workload_id=wid, workload_version=workloads.WORKLOADS_BY_ID[wid].version,
                 seed=seed, prompt_sha256=conf["prompt_sha256"], model_sha256=model_sha,
-                runtime_sha256=runtime_sha, configuration_fingerprint=conf["fingerprint_hash"],
+                runtime_sha256=effective_runtime_sha, configuration_fingerprint=conf["fingerprint_hash"],
                 configuration=conf["fingerprint"], capture_run_id=result.get("run_id"),
                 capture_source=result.get("capture_dir"), trace_path=result["trace_path"],
                 trace_sha256=val["trace_sha256"], validation_state="VALID", canonical_status=True,
@@ -487,6 +599,23 @@ def run(*, allow_dirty: bool = False, model_path: Optional[str] = None,
         return {"experiment_id": "R2-08", "run_id": run_id, "outcome": OUTCOME_INCONCLUSIVE,
                 "message": "fewer than 8 valid canonical capture cells",
                 "capture_matrix": _cell_diagnostics(cells)}
+
+    # Canonical reuse requires a verified (non-placeholder) runtime identity bound
+    # consistently across all 8 cells before scientific analysis.
+    if canonical_reuse:
+        bad = [c.cell_id for c in cells.values()
+               if c.canonical_status and c.validation_state == "VALID"
+               and not _looks_like_sha256(c.runtime_sha256)]
+        if bad:
+            return {"experiment_id": "R2-08", "run_id": run_id, "outcome": OUTCOME_FAIL,
+                    "message": ("verified runtime SHA required for canonical R2-08 cells; "
+                                f"placeholder/non-verified runtime identity remains: {bad}"),
+                    "capture_matrix": _cell_diagnostics(cells)}
+        runtime_shas = {c.runtime_sha256 for c in cells.values() if c.canonical_status}
+        if len(runtime_shas) != 1 or not _looks_like_sha256(next(iter(runtime_shas), "")):
+            return {"experiment_id": "R2-08", "run_id": run_id, "outcome": OUTCOME_FAIL,
+                    "message": f"all canonical R2-08 cells must share one verified runtime SHA; got {sorted(runtime_shas)}",
+                    "capture_matrix": _cell_diagnostics(cells)}
 
     # configuration fingerprint compatibility
     fps = [c.configuration for c in cells.values() if c.configuration]
