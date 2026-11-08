@@ -730,3 +730,150 @@ everything above, classifies the outcome, and persists
 `claims.json`, and `figure_data.json` under the Research2 evidence root.
 No manual data extraction step exists. R2-06/R2-07/R2-08 remain LOCKED
 (not auto-started) after a R2-05 PASS; II-C remains FUTURE.
+
+## R2-06: Routing Transition Structure
+
+Offline descriptive characterization of SAME-LAYER token-to-token
+*transition* structure in expert routing on the validated R2-01 trace,
+bridged against R2-05's canonical frequency evidence. R2-06 asks whether
+the SEQUENCE of layer-local routing decisions carries conditional
+structure beyond R2-05's marginal frequency finding -- it never measures
+reuse distance (R2-07), temporal/windowed drift (R2-08), or prediction
+performance (II-C), and it never treats cross-layer order (architectural,
+not routing structure) as a primary transition.
+
+### Prerequisite and binding (`r2_06.prerequisite`)
+
+`require_r2_01_pass_and_r2_05_pass()` reuses, never duplicates,
+`r2_05.prerequisite.require_r2_01_pass_and_r2_04_pass()` for the R2-01-
+trace-identity-plus-II-A-closure half of the gate, and adds: a R2-05 PASS
+run must exist; its own recorded `r2_01_run_id` binding must agree with
+the CURRENT R2-01 binding; the trace SHA-256 is re-verified byte-identical
+on disk every run (fail-closed on `STATUS_TRACE_CHANGED` upstream). No
+trace path, SHA, or run id is ever hard-coded.
+
+### The transition unit (section 4/6)
+
+`r2_06.transition_unit.TRANSITION_UNIT_DEFINITION`: one counted
+transition observation = one (source_expert_id, target_expert_id) pair
+contributed by one pair of CONSECUTIVE entries `Trace.token_selections
+(layer)` yields for one layer -- token-to-token, SAME layer.
+"Consecutive" means consecutive in the iterator's own yielded order, not
+consecutive token_index (a layer need not route every token). Multi-
+expert (top-k) selections are expanded via documented PAIRWISE set-to-set
+counting: every expert i in the source selection paired with every expert
+j in the target selection, each pair counted once with weight 1, never
+deduplicated -- one transition STEP therefore contributes exactly
+k_src * k_tgt observations. Cross-layer transitions are excluded from
+this unit entirely (section 4): layer visitation order is architectural,
+not a scientific routing transition. A second, NON-PRIMARY step-to-step
+unit is documented (`SECONDARY_STEP_TO_STEP_UNIT_DEFINITION`) but used by
+no primary metric.
+
+### Primary matrix, conditionals, lift (`r2_06.matrix`)
+
+`layer_transition_table()` builds, per layer: the raw pairwise counts,
+row/column sums, the source marginal P(i) and the TRANSITION-DERIVED
+target marginal P(j) (the column sums of the SAME joint distribution --
+never substituted with R2-05's differently-defined marginal, which would
+silently break the H(Y)=H(Y|X)+I(X;Y) identity), the conditional P(j|i),
+and lift(i->j) = P(j|i)/P(j). Fail-closed on zero denominators: both
+P(j|i) and lift are `None`, never a fabricated 0.0, whenever their
+denominator is zero.
+
+### Information-theoretic metrics (`r2_06.info_metrics`)
+
+Marginal entropy H(Y), conditional entropy H(Y|X) (weighted per-source),
+mutual information I(X;Y) = H(Y) - H(Y|X) (clamped to 0 against floating-
+point noise around a true independence value), and normalized mutual
+information NMI = I(X;Y)/H(Y) when H(Y) > 0, else `None`. These measure
+ASSOCIATION, never "prediction accuracy" -- R2-06 trains no predictor and
+reports no accuracy/precision/recall/F1 (claims.py's forbidden-phrase
+guard enforces this).
+
+### Frequency-controlled null baselines (`r2_06.null_baseline`)
+
+Two complementary, deterministic baselines: (1) the ANALYTIC
+INDEPENDENCE baseline -- the exact closed-form expectation under
+P_expected(j|i) = P(j), needing no seed, used as the primary "observed-
+vs-marginal-expected" comparison; (2) a fixed-seed (`NULL_BASELINE_SEED =
+1234`, predeclared before any real execution) DETERMINISTIC SHUFFLE of
+each layer's own selection sequence, preserving the exact per-layer
+selection multiset (hence the marginal) while destroying order, re-run
+through the identical transition-counting pipeline as a second,
+confirmatory check.
+
+### Predeclared support threshold (`r2_06.support`)
+
+`MIN_SOURCE_SUPPORT = 30`, `MIN_PAIR_SUPPORT = 10`: conservative, round-
+number minimum-sample-size conventions fixed BEFORE any real R2-06
+execution, based on sample-count considerations rather than observed
+results. Applied ONLY to headline/strong-transition summaries
+(`support.strongest_supported_lift`, the global summary, figures, CLI
+headline); raw per-cell data in `transition_metrics.csv` is never
+filtered by this rule.
+
+### Transition concentration and self-transitions (`r2_06.concentration`)
+
+Per-source-expert: most-likely next expert, top-1/4/8 target share
+(`TOP_K_TARGET_SHARES = (1, 4, 8)`), outgoing conditional entropy, and
+outgoing effective target count (`exp(H(Y|X=i))`), each fail-closed to
+`None` for a source with no outgoing mass. Self-transition metrics
+(`self_transition_metrics`) report P(i->i) share, lift over marginal, and
+aggregate self-transition mass -- MEASURED, never assumed dominant.
+
+### R2-05 bridge (`r2_06.bridge`, section 13)
+
+Dynamically loads the latest R2-05 PASS run's `expert_frequency.csv` and
+compares, per layer and per expert, R2-06's transition-derived target
+marginal against R2-05's request-unit marginal. Exact equality is never
+required (the two are built from different unit definitions, and R2-06's
+unit structurally drops each layer's first/last token); only a GROSS
+divergence (> `GROSS_DIVERGENCE_THRESHOLD = 0.25` for some expert) is
+flagged, and never as a hard FAIL condition on its own.
+
+### Global summary and claims (`r2_06.summary`, `r2_06.claims`)
+
+Primary cross-layer comparison axis is NORMALIZED MUTUAL INFORMATION
+(higher = more same-layer transition structure beyond marginal
+frequency), mirroring R2-05's own choice of normalized entropy as its
+single comparable-across-layers axis. `claims.build_claims()` splits
+SUPPORTED NOW vs NOT YET SUPPORTED with a forbidden-phrase guard scanning
+only `supported_now` (mirroring R2-04's/R2-05's guard design exactly) for:
+predictor accuracy/precision/recall/F1 language, reuse-distance language,
+temporal/windowed-drift language, a cross-layer-explains-same-layer
+claim, and an assumed (rather than measured) self-transition dominance
+claim. The `r2_05_transition_bridge` note explicitly states that a
+positive R2-06 finding does not retroactively validate a frequency-only
+retention policy and does not by itself establish exploitability --
+that is II-C's question.
+
+### Outcome classification and determinism
+
+PASS requires: R2-01 PASS and R2-05 PASS verified, trace identity held,
+layer-local expert identity preserved throughout, transition counts
+reconciled against an independently-coded second computation (walking
+`Step.routes` directly, carrying its own previous-selection state),
+conditional probability mass per source expert summing to 1.0 within
+tolerance, the predeclared support threshold applied only to headline
+summaries, and two independent in-process syntheses -- over the
+identically loaded trace, identical R2-05 bridge evidence, AND the
+identical null-baseline seed/config -- producing an identical canonical
+digest. PASS never requires NMI > 0 anywhere: a trace with no detectable
+same-layer transition structure is valid PASS science too, exactly as
+R2-05's uniform-routing result was. INCONCLUSIVE covers an unavailable
+authoritative nominal expert count. A synthesis error, a digest mismatch,
+or a generated claim tripping the forbidden-phrase guard are each an
+unconditional FAIL.
+
+### Evidence and automation
+
+`argine.bat research2 run R2-06` is the single human-facing command: it
+verifies the prerequisite, loads the validated R2-01 trace and the R2-05
+bridge evidence, computes everything above, classifies the outcome, and
+persists `summary.json`/`summary.md`, `transition_metrics.csv`,
+`layer_transition_summary.csv`, `transition_structure.json`,
+`null_baseline.json`, `provenance.json`, `claims.json`, and
+`figure_data.json` under the Research2 evidence root. No manual data
+extraction step exists. R2-07/R2-08 remain LOCKED (not auto-started)
+after a R2-06 PASS; II-C remains FUTURE.

@@ -65,6 +65,7 @@ def _register_implementations() -> None:
     from .r2_03 import orchestrator as _r2_03
     from .r2_04 import orchestrator as _r2_04
     from .r2_05 import orchestrator as _r2_05
+    from .r2_06 import orchestrator as _r2_06
 
     def _run_r2_01(allow_dirty: bool = False, trace_source_arg: Optional[str] = None,
                   model_path: Optional[str] = None, **_ignored: Any) -> Dict[str, Any]:
@@ -160,6 +161,15 @@ def _register_implementations() -> None:
 
     EXPERIMENT_RUN_IMPLEMENTATIONS["R2-05"] = _run_r2_05
     EXPERIMENT_ANALYSE_IMPLEMENTATIONS["R2-05"] = _analyse_r2_05
+
+    def _run_r2_06(allow_dirty: bool = False, **_ignored: Any) -> Dict[str, Any]:
+        return _r2_06.run(allow_dirty=allow_dirty)
+
+    def _analyse_r2_06(run_id: Optional[str] = None, **_ignored: Any) -> Dict[str, Any]:
+        return _r2_06.analyse(run_id=run_id)
+
+    EXPERIMENT_RUN_IMPLEMENTATIONS["R2-06"] = _run_r2_06
+    EXPERIMENT_ANALYSE_IMPLEMENTATIONS["R2-06"] = _analyse_r2_06
 
 
 _register_implementations()
