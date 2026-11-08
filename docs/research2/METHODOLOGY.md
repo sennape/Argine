@@ -619,3 +619,114 @@ state, not something any orchestrator writes as a separate field. A real
 R2-04 `PASS` run does **not** automatically advance II-B's state --
 II-B's experiments (R2-05..R2-08) remain `PLANNED`/`FUTURE` until a
 separate "paper-freeze" step completes, per R2-04's own task instructions.
+
+## R2-05: Expert Frequency and Concentration
+
+The first canonical Research II-B experiment. A fully offline
+DESCRIPTIVE CHARACTERIZATION of layer-local expert-routing frequency on
+the validated R2-01 trace -- no new replay, no model/runtime invocation,
+no new trace capture. Implemented in `argine/research2/r2_05/`. See
+`experiments/R2-05-expert-frequency-concentration/README.md` for the full
+scientific design. R2-05 answers "how concentrated is expert routing on
+the validated real 30B MoE trace?"; it does not answer transition
+structure (R2-06), reuse distance (R2-07), temporal drift (R2-08), or
+predictability (II-C), and must not be read as doing so.
+
+### R2-01 + R2-04 prerequisite and candidate-status binding
+
+`r2_05.prerequisite.require_r2_01_pass_and_r2_04_pass()` reuses (never
+duplicates) `r2_02.prerequisite.require_r2_01_pass()` for the trace-
+identity half (re-hashes the trace file R2-01's latest PASS run
+validated; refuses if it has changed on disk). It additionally requires
+a R2-04 PASS run to exist (Research II-A must be CLOSED/PASS before any
+II-B experiment runs), confirms that R2-04's own recorded
+`provenance.json.binding.r2_01_run_id` agrees with the CURRENT R2-01
+binding, and -- specific to R2-05 -- confirms the R2-01 PASS run's own
+recorded `manifest.json.git.candidate_status` is `CANDIDATE`, refusing to
+bind to historical evidence that was itself recorded under a dirty/
+unverified tree even if its scientific outcome was PASS. Any divergence
+refuses the run atomically (`R2_01_OR_R2_04_PREREQUISITE_NOT_MET`), with
+no evidence written.
+
+### Request unit (section 6's canonical, documented choice)
+
+`r2_05.request_unit.REQUEST_UNIT_DEFINITION`: one counted expert request
+= one occurrence of one expert id within one token's selected-expert
+tuple, via `Trace.token_selections(layer, phase)` -- the trace module's
+own documented routing-statistics accessor, distinct from the per-step-
+per-layer UNION (`Step.experts(layer)`) that R2-01..R2-04 use for cache-
+residency accounting. Duplicate expert ids within one token's tuple, if
+any, are each counted separately, never deduplicated. A second,
+independently-coded computation (`independent_count_per_layer`, walking
+`Step.routes` directly) is run and compared against the primary count for
+every layer as an explicit reconciliation check (section 19's "request
+counts do not reconcile" FAIL condition) -- not merely a repeat of the
+same function.
+
+### Frequency table and concentration metrics
+
+`r2_05.frequency.py` builds the primary per-(layer, expert) frequency
+table with deterministic ordering (rank descending by count, expert_id
+ascending as the tie-breaker). `r2_05.metrics.py` computes, per layer:
+Shannon entropy, normalized entropy (against the NOMINAL expert count
+when `trace.meta.n_experts` provides one, per section 8's explicit
+preference; a missing nominal count makes the whole run `INCONCLUSIVE`
+rather than silently falling back to an observed-only N for the headline
+result), effective expert count/fraction, HHI, Gini (zero-padded to the
+nominal population when nominal N is known, so never-observed experts
+correctly contribute to inequality), predeclared top-{1,4,8,16,32} shares
+filtered to valid k <= N, the theoretical uniform-routing baseline, and
+the Pareto-style `experts_for_{50,80,90,95}pct` concentration counts. No
+Zipfian/power-law/heavy-tailed label is ever produced (see Claims below).
+
+### Global summary
+
+`r2_05.summary.global_summary()` reports LAYER-MEDIAN (and min/max) and
+REQUEST-WEIGHTED aggregate statistics as explicitly distinct fields
+(section 9), plus the most/least concentrated layer (by normalized
+entropy -- the single axis documented as the primary concentration
+measure, since it alone is bounded to [0, 1] and comparable across
+layers regardless of each layer's own N). `layer_heterogeneity()` reports
+only a descriptive spread classification, with no causal explanation and
+no temporal/workload-drift claim (that is R2-08's).
+
+### Claims and the LFU bridge (sections 15-20)
+
+`r2_05.claims.build_claims()` splits the output into SUPPORTED NOW vs
+NOT YET SUPPORTED, with a forbidden-phrase guard
+(`check_no_forbidden_claims`) scanning only `supported_now` (mirroring
+R2-04's own guard design) for: "zipfian"/"power-law"/"heavy-tailed",
+"temporally stable"/"remain hot over time", "frequency solves
+retention", "explains the oracle gap", "frequency alone is sufficient".
+The LFU bridge note explicitly connects to R2-02: LFU performed WORSE
+than Global-LRU at 4 GiB, so even strong observed frequency concentration
+does NOT imply "frequency solves retention" -- frequency alone may not
+capture the timing information the Oracle exploits, which is exactly
+what motivates R2-06/R2-07.
+
+### Outcome classification and determinism
+
+PASS requires: trace identity held, layer-local expert identity
+preserved throughout, frequency counts reconciled against the
+independent second computation, probability mass per layer summing to
+1.0 within tolerance, deterministic rank/tie-breaking, and two
+independent in-process syntheses over the identically loaded trace
+producing an identical canonical digest (volatile run ids/timestamps
+excluded) -- mirroring R2-04's own double-synthesis determinism check. A
+uniform or near-uniform result, or a highly concentrated one, are both
+valid PASS science; PASS never requires strong concentration.
+INCONCLUSIVE covers an unavailable authoritative nominal expert count. A
+synthesis error, a digest mismatch between the two syntheses, or a
+generated claim tripping the forbidden-phrase guard are each an
+unconditional FAIL.
+
+### Evidence and automation
+
+`argine.bat research2 run R2-05` is the single human-facing command: it
+verifies the prerequisite, loads the validated R2-01 trace, computes
+everything above, classifies the outcome, and persists
+`summary.json`/`summary.md`, `expert_frequency.csv`,
+`layer_concentration.csv`, `concentration.json`, `provenance.json`,
+`claims.json`, and `figure_data.json` under the Research2 evidence root.
+No manual data extraction step exists. R2-06/R2-07/R2-08 remain LOCKED
+(not auto-started) after a R2-05 PASS; II-C remains FUTURE.

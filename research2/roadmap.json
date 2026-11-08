@@ -104,7 +104,7 @@
         "R2-04"
       ],
       "initial_state": "PLANNED",
-      "implemented": false,
+      "implemented": true,
       "requires_real_runtime": false,
       "purpose": "Characterize expert access frequency and routing concentration across layers and workloads.",
       "expected_output_categories": [
