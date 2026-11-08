@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-09b-prediction-contract-v1",
+  "primary_target": {
+    "target_id": "next_step_same_layer_routing",
+    "name": "Next-step same-layer routing prediction",
+    "level": "primary_confirmatory_benchmark_target",
+    "definition": "For decode step t and each MoE layer l, predict the set of expert IDs E_{t,l} that will be routed/requested at step t in layer l (top-k experts as defined by trace/runtime semantics, k recorded in trace metadata). Input may use only information available at decision time before observing E_{t,l} and any future step t'>t.",
+    "granularity": "per-layer, per-decode-step",
+    "output_forms": [
+      "binary_set",
+      "ranked_scores_or_list (if used, ranking metric applies)"
+    ]
+  },
+  "secondary_targets": [
+    {
+      "target_id": "short_horizon_future_working_set",
+      "name": "Short-horizon future working-set prediction",
+      "level": "secondary_diagnostic",
+      "definition": "For each layer l at decision time t, predict the union U_{t,l,h}=Union_{i=1..h} E_{t+i,l} for preregistered horizon h. Used only as secondary/diagnostic unless explicitly promoted by a future contract version (not in R2-09B).",
+      "horizons": [
+        1,
+        4,
+        16
+      ],
+      "horizon_justification": "Grounded in published R2-07 DEV characterization: immediate reuse strong, reuse <=4 strong, reuse <=16 much weaker relative to shuffled null. Horizons frozen here; not selected/changed after EVAL."
+    }
+  ],
+  "horizons": [
+    1,
+    4,
+    16
+  ],
+  "input_time_semantics": {
+    "causal_boundary": "At decision time for step t, predictor/baseline may use past observed routing, cache state, recency/frequency/transition history, and other preregistered causal features from steps < t (or repository-equivalent causal boundary). No access to E_{t,l}, future steps, future cache events, or EVAL labels."
+  },
+  "allowed_feature_families": [
+    {
+      "feature_family_id": "recency",
+      "causal_only": true
+    },
+    {
+      "feature_family_id": "cumulative_frequency",
+      "causal_only": true
+    },
+    {
+      "feature_family_id": "decayed_aged_frequency",
+      "causal_only": true
+    },
+    {
+      "feature_family_id": "recent_reuse_distance_history",
+      "causal_only": true
+    },
+    {
+      "feature_family_id": "same_layer_transition_history",
+      "causal_only": true
+    },
+    {
+      "feature_family_id": "cross_layer_routing_history",
+      "causal_only": true,
+      "note": "Candidate signal, not established superior signal."
+    },
+    {
+      "feature_family_id": "observable_workload_family_context",
+      "causal_only": true,
+      "note": "Allowed only if observable before retention decisions and explicitly preregistered/frozen before DEV tuning; not post-hoc runtime-unavailable label."
+    },
+    {
+      "feature_family_id": "simple_causal_combinations",
+      "causal_only": true
+    }
+  ],
+  "forbidden_features": [
+    {
+      "feature_family_id": "future_information",
+      "examples": [
+        "future expert IDs",
+        "future routing",
+        "future cache events",
+        "target-position leakage",
+        "EVAL labels",
+        "post-hoc workload labels unavailable at runtime"
+      ]
+    }
+  ]
+}

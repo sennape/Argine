@@ -1,0 +1,63 @@
+{
+  "freeze_version": "1.0.0",
+  "freeze_name": "Research-II-R2-09B-Benchmark-Evaluation-Contract-Freeze",
+  "freeze_timestamp_utc": "2026-11-08T00:00:00Z",
+  "status": "CONTRACT-FROZEN",
+  "contract_state": "R2_09B_CONTRACT_FROZEN_WITH_RUNTIME_MATERIALITY_GATE",
+  "scope": "R2-09B preregistration/benchmark/evaluation contract only. No R2-09A experiments run, no EVAL traces captured/opened/inspected, no R2-10 predictor implemented, no R2-11 retention run, no R2-12 runtime validation, no model execution, no R2-01..R2-08 canonical evidence modified.",
+  "contract_version": "r2-09b-contract-v1",
+  "contract_schema_version": 1,
+  "contract_digest": "2f4c0859c6ce3f589142cd8b1c6cb3c3a47946f1b222a5a2e875495cccaa6f5d",
+  "contract_dir": "experiments/R2-09-prediction-benchmark",
+  "contract_component_hashes": {
+    "contract.json": "8d6c2a427dc10eddacb9e875b6eafe1a0a79496453b487e1d5459563047adb18",
+    "eval_manifest.json": "3d10733a46d8c745719174d401666569188ff15ab08b3697b394c0fc3da5beae",
+    "baseline_space.json": "e88e5b46c17cac4b094020b19293ce0f40d36582aeda43ee995142049b979b3f",
+    "prediction_contract.json": "9a8d2b2d47dcce9d37a5b45b39ae76f5084c8a192e90b6eac72482cfd059726c",
+    "metrics_contract.json": "db886d4fe4c077994ef6c3e110d59f3b656c946527a9fe4ee5faad44c111b3b4",
+    "decision_rules.json": "fa927601d737f33fe60aa69baec2e9ab360b6bb13c20664d7dff515ac48f97a0",
+    "README.md": "0b47fe4f50c82af44c41f003bd42c16a5205e03f187b05e9a58a0f28b84d576c",
+    "PREREGISTRATION.md": "6eeb0234e179dceef98d35b2b94dd0dc595593d266c769bdebc3fcaa7e3406b7"
+  },
+  "upstream": {
+    "ii_a_ii_b_paper_baseline_commit": "4025a2ecdd30cb5d2604fdfdf5cb4966f594a11d",
+    "paper_state": "II-A + II-B semantically closed; II-C not started",
+    "ii_a_freeze": "paper/research2/II-A-FREEZE.json (preserved)",
+    "ii_b_freeze": "paper/research2/II-B-FREEZE.json (preserved)",
+    "oracle_amendment": "paper/research2/ORACLE-SEMANTICS-AMENDMENT.json",
+    "audit_id": "AUDIT-ORACLE-001",
+    "audit_commit": "3789a8511e9623f953dda5a610c9d7897e4ae63b",
+    "audit_verdict": "CASE C / RESOLVED BY PAPER AMENDMENT"
+  },
+  "existing_dev_evidence": {
+    "r2_01_canonical_trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+    "r2_03_run_id": "d957077073374f1e9fd1e101a002946f",
+    "r2_03_lfu_classification": "LFU_SWEEP_CANONICAL_AUXILIARY",
+    "lfu_rerun": false
+  },
+  "eval_status": "ACQUISITION_CONTRACT_FROZEN_NOT_EXECUTED",
+  "eval_visibility_state": "EVAL_LOCKED",
+  "stochastic_profile_status": "UNRESOLVED (STOCHASTIC_PROFILE_UNRESOLVED; deterministic defined; stochastic robustness claims blocked until explicit profile + seeds frozen by contract amendment)",
+  "practical_threshold_status": "PENDING_POLICY_STREAM_CALIBRATION (no numeric threshold fabricated; engineering-materiality claims blocked; R2-09A not blocked)",
+  "r2_09a_readiness": {
+    "may_start_dev_only": true,
+    "requires": [
+      "DEV/EVAL firewall frozen",
+      "EVAL acquisition/specs frozen (acquisition contract; EVAL not opened)",
+      "primary budgets frozen",
+      "baseline families frozen",
+      "hyperparameter search spaces frozen",
+      "B_selected rule frozen",
+      "metrics frozen",
+      "CASE C semantics frozen",
+      "reporting granularity frozen",
+      "contract version/digest created"
+    ],
+    "gates_not_blocking_r2_09a": [
+      "PENDING_POLICY_STREAM_CALIBRATION blocks R2-11 engineering-materiality claims",
+      "STOCHASTIC_PROFILE_UNRESOLVED blocks stochastic robustness claims"
+    ]
+  },
+  "historical_freezes_rewritten": false,
+  "notes": "Do not start R2-09A experiments in this freeze commit. II-A/II-B paper remains semantically closed."
+}

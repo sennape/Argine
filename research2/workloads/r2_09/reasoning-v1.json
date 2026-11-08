@@ -1,0 +1,15 @@
+{
+  "name": "reasoning-eval-v1",
+  "version": "r2-09-eval-v1",
+  "split": "eval",
+  "semantic_category": "reasoning",
+  "description": "R2-09B held-out EVAL reasoning specification. New analytical task, not a reuse of R2-08 DEV reasoning prompts.",
+  "n_predict": 512,
+  "items": [
+    {
+      "id": "r2-09-eval-reasoning-001",
+      "segment": "reasoning-eval-v1",
+      "prompt": "Solve step by step and justify each step. A library loans books in three categories: fiction, history, and science. On Monday it loaned 120 books total: 45% fiction, 30% history, and the rest science. On Tuesday it loaned 80 books: half fiction, one quarter history, and the rest science. (1) How many science books were loaned across both days? (2) What fraction of all books loaned on Monday and Tuesday combined were history books? (3) If 10% of Monday fiction loans and 20% of Tuesday fiction loans were returned late, how many fiction books were returned late in total? Show calculations clearly."
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "space_version": "r2-09b-baseline-space-v1",
+  "selection_prerequisite": "All hyperparameters, tie-breakers, and capacity semantics frozen before R2-09A DEV tournament runs. DEV only for selection/tuning; EVAL never used.",
+  "byte_capacity_semantics": {
+    "unit": "bytes of expert cache residency, per Research2 replay/policy convention",
+    "budget_parameter": "M in {1610612736,4294967296,8589934592} for primary budgets",
+    "object_granularity": "per-expert-per-layer cache object (or repository-equivalent replay unit), sized by trace metadata; variable expert sizes respected where trace provides them",
+    "deterministic_tie_breaking": "All policies must define deterministic tie-breaking (e.g., stable expert key/layer/expert id order after primary score/recency key). Ties must not depend on hash-map iteration order.",
+    "cold_start": "empty resident set at replay start unless an explicitly frozen warm-start variant is preregistered separately; primary contract uses canonical cold-start semantics.",
+    "admission": "on miss/request, object is admitted if space available after eviction; objects required simultaneously by a step/union event must respect the same byte budget semantics used by Research2 replay.",
+    "eviction": "evict until admitting requested object(s) fits within M; if an object cannot fit M, follow frozen replay contract behavior and record violation."
+  },
+  "baseline_families": [
+    {
+      "family_id": "global_lru",
+      "name": "Global-LRU",
+      "causal": true,
+      "status": "existing_dev_evidence_available",
+      "description": "Unsharded global least-recently-used eviction over byte-budgeted expert cache.",
+      "hyperparameters": {
+        "tunable": false,
+        "search_space": {},
+        "fixed": {
+          "scope": "global",
+          "recency": "last access/serving order per Research2 replay semantics"
+        }
+      }
+    },
+    {
+      "family_id": "lfu",
+      "name": "LFU",
+      "causal": true,
+      "status": "existing_dev_evidence_available_canonical_auxiliary_r2_03",
+      "description": "Unsharded global least-frequently-used eviction; deterministic frequency ties.",
+      "hyperparameters": {
+        "tunable": false,
+        "search_space": {},
+        "fixed": {
+          "scope": "global",
+          "frequency": "cumulative causal access count",
+          "tie_break": "LRU-or-stable-key (must be frozen in implementation before run)"
+        }
+      }
+    },
+    {
+      "family_id": "twoq",
+      "name": "2Q",
+      "causal": true,
+      "status": "r2_09a_candidate",
+      "description": "Byte-budgeted 2Q-style admission/eviction with a probationary FIFO/A1in region, ghost/A1out history, and main LRU/Am region. Strictly causal; uses only past accesses.",
+      "hyperparameters": {
+        "tunable": true,
+        "search_space": {
+          "a1in_fraction": [
+            0.1,
+            0.25,
+            0.5
+          ],
+          "a1out_slots_factor": [
+            1,
+            2,
+            4
+          ],
+          "main_policy": [
+            "LRU"
+          ]
+        },
+        "notes": "a1in_fraction is fraction of byte budget M assigned to A1in (remaining to Am, minus metadata represented logically; implementation must define deterministic byte accounting). a1out_slots_factor scales ghost history capacity relative to nominal object count implied by M/median object size or an explicitly frozen formula; exact formula frozen in implementation spec before R2-09A."
+      }
+    },
+    {
+      "family_id": "lru_k",
+      "name": "LRU-K",
+      "causal": true,
+      "status": "r2_09a_candidate",
+      "description": "Byte-budgeted LRU-K using last K causal reference times/distances; K=2 is default family member. Strictly causal.",
+      "hyperparameters": {
+        "tunable": true,
+        "search_space": {
+          "K": [
+            2,
+            3
+          ],
+          "correlated_reference_period_objects": [
+            0,
+            1,
+            2
+          ]
+        },
+        "notes": "K search space frozen prospectively (small finite grid). correlated_reference_period_objects is an optional short suppression window in object references/steps, default 0 unless evidence in implementation spec; if 0, standard LRU-K behavior."
+      }
+    },
+    {
+      "family_id": "aged_frequency",
+      "name": "Aged/Decayed Frequency",
+      "causal": true,
+      "status": "r2_09a_candidate",
+      "description": "Byte-budgeted frequency-aware eviction with causal aging/decay so stale popularity fades. Strictly causal; no future information.",
+      "hyperparameters": {
+        "tunable": true,
+        "search_space": {
+          "decay_form": [
+            "exponential_step_decay"
+          ],
+          "decay_factor": [
+            0.9,
+            0.99,
+            0.999
+          ],
+          "aging_interval_steps": [
+            1,
+            16,
+            64
+          ],
+          "admission": [
+            "on_miss_insert"
+          ]
+        },
+        "notes": "Finite grid motivated by II-B short/medium locality evidence but not selected from descriptive evidence. Score update/eviction semantics must be deterministic and byte-capacity-aware."
+      }
+    },
+    {
+      "family_id": "simple_recency_frequency_hybrid_optional",
+      "name": "Simple Recency-Frequency Hybrid (optional, preregistered slot)",
+      "causal": true,
+      "status": "optional_r2_09a_candidate_only_if_precise",
+      "description": "Optional simple deterministic hybrid combining causal recency rank and causal frequency/decayed frequency by a fixed formula. May be evaluated only if its exact byte-capacity semantics and formula are frozen before R2-09A; otherwise omitted without EVAL impact.",
+      "hyperparameters": {
+        "tunable": true,
+        "search_space": {
+          "enabled": [
+            false
+          ],
+          "formula": [
+            "rank_sum_recency_freq"
+          ],
+          "frequency_mode": [
+            "cumulative",
+            "decayed"
+          ],
+          "decay_factor": [
+            0.99
+          ]
+        },
+        "notes": "Disabled by default in frozen space; enabling requires contract amendment/version bump before R2-09A."
+      }
+    }
+  ]
+}

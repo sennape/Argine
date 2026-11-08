@@ -1,0 +1,15 @@
+{
+  "name": "instruction-eval-v1",
+  "version": "r2-09-eval-v1",
+  "split": "eval",
+  "semantic_category": "instruction",
+  "description": "R2-09B held-out EVAL instruction-following/expository specification. New task, not a reuse of R2-08 DEV instruction prompts.",
+  "n_predict": 512,
+  "items": [
+    {
+      "id": "r2-09-eval-instruction-001",
+      "segment": "instruction-eval-v1",
+      "prompt": "Explain how to plan a small community vegetable garden for 12 households. Organize your answer with clear headings and cover: (1) choosing and preparing the site, (2) dividing plots fairly, (3) a simple watering and maintenance schedule, (4) basic rules for shared tools and compost, and (5) two common mistakes to avoid. Keep the guidance practical and concrete."
+    }
+  ]
+}

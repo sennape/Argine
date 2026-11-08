@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-09b-contract-v1",
+  "name": "Research2 R2-09B Benchmark and Evaluation Contract",
+  "status": "FROZEN_WITH_RUNTIME_MATERIALITY_GATE",
+  "freeze_utc": "2026-11-08T00:00:00Z",
+  "upstream": {
+    "ii_a_ii_b_paper_baseline_commit": "4025a2ecdd30cb5d2604fdfdf5cb4966f594a11d",
+    "paper_state": "II-A + II-B semantically closed; II-C not started",
+    "audit_id": "AUDIT-ORACLE-001",
+    "audit_commit": "3789a8511e9623f953dda5a610c9d7897e4ae63b",
+    "audit_verdict": "CASE C / RESOLVED BY PAPER AMENDMENT"
+  },
+  "purpose": "Prevent Research II-C from winning by construction by freezing DEV/EVAL roles, EVAL acquisition/design, causal baselines, hyperparameter spaces, B_selected semantics, prediction targets/horizons/metrics, retention/reporting metrics, deterministic/stochastic conditions, CASE C comparator semantics, negative/>1 recovery semantics, EXP-025 applicability, practical-effect threshold status, falsification/leakage rules, and freeze conditions before R2-09A/R2-10/R2-11 EVAL-dependent selection.",
+  "existing_dev_evidence": {
+    "r2_01_canonical_trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+    "r2_01_coding_trace_split": "dev",
+    "r2_08_workload_captures_split": "dev characterization captures",
+    "r2_03_run_id": "d957077073374f1e9fd1e101a002946f",
+    "r2_03_budgets_gib": [
+      1.5,
+      2.0,
+      4.0,
+      8.0,
+      16.0
+    ],
+    "r2_03_policies_present": [
+      "Global-LRU",
+      "LFU",
+      "Runtime-Sharded-LRU",
+      "Oracle-Global-Belady/O_B"
+    ],
+    "lfu_classification": "LFU_SWEEP_CANONICAL_AUXILIARY",
+    "lfu_dev_vs_global_lru_miss_bytes_pct": {
+      "1.5": 4.368686,
+      "2.0": 7.664017,
+      "4.0": 9.760895,
+      "8.0": 11.979284,
+      "16.0": 0.0
+    },
+    "rerun_lfu_sweep": false,
+    "note": "R2-09A begins from existing canonical DEV evidence (Global-LRU, LFU, existing R2-03 capacity sweep) and extends to additional preregistered causal families. LFU DEV result does not generalize to EVAL/all workloads/all capacities/aged frequency."
+  },
+  "primary_budgets_gib": [
+    1.5,
+    4.0,
+    8.0
+  ],
+  "primary_budgets_bytes": [
+    1610612736,
+    4294967296,
+    8589934592
+  ],
+  "optional_sensitivity_budgets_gib": [
+    2.0
+  ],
+  "excluded_primary_budgets": {
+    "16.0": "effective residency/policy indifference in tested II-A sweep; not primary pressured predictor/retention budget"
+  },
+  "deterministic_condition": {
+    "name": "deterministic",
+    "temperature": 0.0,
+    "top_k": 1,
+    "pooling": "never pooled with stochastic",
+    "continuity": "direct continuity with II-B deterministic protocol; record actual runtime flags at acquisition/execution"
+  },
+  "stochastic_condition": {
+    "status": "UNRESOLVED",
+    "profile": null,
+    "blocking": "STOCHASTIC_PROFILE_UNRESOLVED blocks stochastic robustness claims. No versioned canonical/recommended stochastic profile found in repository evidence during R2-09B freeze.",
+    "resolution_requirement": "Before stochastic robustness claims: either (A) freeze one explicit justified profile with rationale independent of experimental results, or (B) keep stochastic claims out of scope. Any stochastic condition must use multiple independent sampling seeds with seed IDs frozen before EVAL opening. Contract amendment/version bump required.",
+    "deterministic_still_defined": true
+  },
+  "case_c": {
+    "o_b_name": "implemented clairvoyant Belady-style furthest-next-use comparator (Oracle-Global-Belady/BeladyGlobal)",
+    "o_b_proven_byte_optimal": false,
+    "relations": [
+      "O* <= O_B",
+      "O* <= C*",
+      "no guaranteed ordering between O_B and C*"
+    ],
+    "recovery_of_belady_gap": {
+      "formula": "(B-P)/(B-O_B)",
+      "signed": true,
+      "allows_negative": true,
+      "allows_greater_than_one": true,
+      "greater_than_one_meaning": "P beats O_B on miss bytes; does NOT mean P beats O*",
+      "not_fraction_of_maximum_causal_opportunity": true
+    },
+    "forbidden_terms": [
+      "Oracle headroom",
+      "upper bound on causal recovery",
+      "maximum recoverable opportunity"
+    ]
+  },
+  "exp025": {
+    "classification": "P2_FULL_STREAM_DISTRIBUTION_MODEL",
+    "arbitrary_policy_stream_transferability": "UNSUPPORTED",
+    "direct_bytes_to_seconds_forbidden": true,
+    "future_modeled_form": "DeltaT_model = PerformanceModel(MissStream_B_selected) - PerformanceModel(MissStream_P) only after validation for those policy-induced miss streams"
+  },
+  "thresholds": {
+    "status": "PENDING_POLICY_STREAM_CALIBRATION",
+    "numeric_threshold_frozen": false,
+    "engineering_materiality_claims_blocked": true,
+    "r2_09a_blocked": false,
+    "r2_11_materiality_claims_blocked_until": "policy-stream performance calibration/validation prerequisite frozen and satisfied",
+    "note": "No numeric practical-effect threshold fabricated (no arbitrary %, bytes, or seconds). Scientific improvement and engineering-material improvement remain distinct."
+  },
+  "component_files": [
+    "eval_manifest.json",
+    "baseline_space.json",
+    "prediction_contract.json",
+    "metrics_contract.json",
+    "decision_rules.json",
+    "README.md",
+    "PREREGISTRATION.md"
+  ],
+  "contract_digest": "2f4c0859c6ce3f589142cd8b1c6cb3c3a47946f1b222a5a2e875495cccaa6f5d"
+}
