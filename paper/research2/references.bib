@@ -1,0 +1,123 @@
+% References for the Research Part 2 (II-A) paper tranche.
+% These entries are copied verbatim from the existing, already-vetted
+% paper/references.bib (Research Part 1), per the paper-freeze task's
+% instruction to preserve existing reliable citations rather than
+% fabricate new ones (Section 16). Additional entries for II-B/II-C
+% related work may be appended later, in a dedicated scaffold section
+% below, once that literature review is actually done.
+
+@inproceedings{shazeer2017sparsely,
+  author    = {Noam Shazeer and Azalia Mirhoseini and Krzysztof Maziarz and Andy Davis and Quoc V. Le and Geoffrey E. Hinton and Jeff Dean},
+  title     = {Outrageously Large Neural Networks: The Sparsely-Gated {Mixture-of-Experts} Layer},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2017}
+}
+
+@article{fedus2022switch,
+  author  = {William Fedus and Barret Zoph and Noam Shazeer},
+  title   = {Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity},
+  journal = {Journal of Machine Learning Research},
+  volume  = {23},
+  number  = {120},
+  pages   = {1--39},
+  year    = {2022}
+}
+
+@inproceedings{rajbhandari2022deepspeedmoe,
+  author    = {Samyam Rajbhandari and Conglong Li and Zhewei Yao and Minjia Zhang and Reza Yazdani Aminabadi and Ammar Ahmad Awan and Jeff Rasley and Yuxiong He},
+  title     = {{DeepSpeed-MoE}: Advancing {Mixture-of-Experts} Inference and Training to Power Next-Generation {AI} Scale},
+  booktitle = {Proceedings of the 39th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {162},
+  pages     = {18332--18346},
+  year      = {2022},
+  publisher = {PMLR}
+}
+
+@inproceedings{sheng2023flexgen,
+  author    = {Ying Sheng and Lianmin Zheng and Binhang Yuan and Zhuohan Li and Max Ryabinin and Beidi Chen and Percy Liang and Christopher R{\'e} and Ion Stoica and Ce Zhang},
+  title     = {{FlexGen}: High-Throughput Generative Inference of Large Language Models with a Single {GPU}},
+  booktitle = {Proceedings of the 40th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {202},
+  pages     = {31094--31116},
+  year      = {2023},
+  publisher = {PMLR}
+}
+
+@inproceedings{kwon2023pagedattention,
+  author    = {Woosuk Kwon and Zhuohan Li and Siyuan Zhuang and Ying Sheng and Lianmin Zheng and Cody Hao Yu and Joseph E. Gonzalez and Hao Zhang and Ion Stoica},
+  title     = {Efficient Memory Management for Large Language Model Serving with {PagedAttention}},
+  booktitle = {Proceedings of the 29th Symposium on Operating Systems Principles},
+  pages     = {611--626},
+  year      = {2023},
+  doi       = {10.1145/3600006.3613165}
+}
+
+@misc{eliseev2023offloading,
+  author = {Artyom Eliseev and Denis Mazur},
+  title  = {Fast Inference of {Mixture-of-Experts} Language Models with Offloading},
+  year   = {2023},
+  note   = {arXiv preprint arXiv:2312.17238}
+}
+
+@misc{xue2025moeinfinity,
+  author = {Leyang Xue and Yao Fu and Zhan Lu and Luo Mai and Mahesh Marina},
+  title  = {{MoE-Infinity}: Efficient {MoE} Inference on Personal Machines with Sparsity-Aware Expert Cache},
+  year   = {2024},
+  note   = {arXiv preprint arXiv:2401.14361}
+}
+
+@inproceedings{kamahori2025fiddler,
+  author    = {Keisuke Kamahori and Tian Tang and Yile Gu and Kan Zhu and Baris Kasikci},
+  title     = {{Fiddler}: {CPU-GPU} Orchestration for Fast Inference of {Mixture-of-Experts} Models},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2025}
+}
+
+@article{belady1966replacement,
+  author  = {L. A. Belady},
+  title   = {A Study of Replacement Algorithms for a Virtual-Storage Computer},
+  journal = {IBM Systems Journal},
+  volume  = {5},
+  number  = {2},
+  pages   = {78--101},
+  year    = {1966},
+  doi     = {10.1147/SJ.52.0078}
+}
+
+@article{liu2026survey,
+  author    = {Jiacheng Liu and Peng Tang and Wenfeng Wang and Yuhang Ren and Xiaofeng Hou and Pheng-Ann Heng and Minyi Guo and Chao Li},
+  title     = {A Survey on Inference Optimization Techniques for {Mixture of Experts} Models},
+  journal   = {ACM Computing Surveys},
+  volume    = {58},
+  number    = {10},
+  articleno = {247},
+  pages     = {1--37},
+  year      = {2026},
+  doi       = {10.1145/3794845}
+}
+
+@misc{gerganov2023llamacpp,
+  author       = {Georgi Gerganov and llama.cpp contributors},
+  title        = {{llama.cpp}: {LLM} inference in {C/C++}},
+  year         = {2023},
+  howpublished = {GitHub repository},
+  url          = {https://github.com/ggml-org/llama.cpp}
+}
+
+@misc{qwen3technicalreport,
+  author        = {{Qwen Team}},
+  title         = {{Qwen3} Technical Report},
+  year          = {2025},
+  eprint        = {2505.09388},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2505.09388}
+}
+
+% --- II-B / II-C related-work scaffold -----------------------------
+% Research II-B (routing characterization) and II-C (causal prediction)
+% have not started. Citations specific to routing-structure analysis,
+% cache-replacement prediction, and MoE routing drift belong here once
+% that literature review is performed. No entry is added speculatively.

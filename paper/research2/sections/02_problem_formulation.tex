@@ -1,0 +1,72 @@
+\section{Problem Formulation}
+\label{sec:problem-formulation}
+
+\paragraph{Expert requests.} During generation, at routing step $t$ and
+layer $\ell$, the model selects a set of experts
+$R_t(\ell) \subseteq \{1,\dots,n_\text{experts}\}$ (the top-$k$ routed
+experts for that layer and step). The sequence of per-layer routed sets
+over all steps of a workload constitutes its \emph{expert-request
+trace}. A step may batch multiple tokens (prompt processing), in which
+case the experts required by every token in the step must be resident
+\emph{simultaneously}; this report's replay model preserves step
+boundaries rather than flattening them into independent per-token
+accesses.
+
+\paragraph{Byte-capacity retention.} Each expert at layer $\ell$ occupies
+$\mathrm{bytes}(\ell)$ resident bytes, not assumed uniform across layers.
+A \emph{retention policy} $\pi$ maintains, under a fixed byte budget
+$\budget$, a resident set of (layer, expert) pairs, admitting and evicting
+entries as routing proceeds, subject to
+\begin{equation}
+\sum_{(\ell,e)\,\in\,\text{resident}(\pi,t)} \mathrm{bytes}(\ell) \;\le\; \budget
+\qquad \text{for every step } t. \label{eq:capacity}
+\end{equation}
+A \emph{miss} occurs when a requested expert is not resident and must be
+fetched; a \emph{hit} occurs otherwise. We report both the miss
+\emph{count} and the miss \emph{bytes} (the sum of $\mathrm{bytes}(\ell)$
+over all missed requests); miss bytes are the primary quantity throughout
+this report, since they are proportional to the volume of expert data
+that would need to be serviced under the replay model, while miss count
+alone does not account for per-layer size heterogeneity.
+
+\paragraph{Causal vs.\ non-causal policies.} A policy is \emph{causal} if
+its decision at step $t$ depends only on routing information available at
+or before $t$ -- the only kind of policy that could ever be deployed in a
+real runtime. A policy is \emph{non-causal} if it is permitted to use the
+\emph{full} future routing sequence when making retention decisions at
+step $t$. Every policy in this report is explicitly declared causal or
+non-causal; interface-level assertions in the replay implementation
+verify that no causal policy is accidentally given future information,
+and that the sole non-causal policy is in fact built from full-trace
+future information before replay begins.
+
+\paragraph{The oracle.} The Belady-optimal offline policy
+\cite{belady1966replacement} -- evict, at every eviction, whichever resident
+item is needed again furthest in the future, or never again -- minimizes
+the miss count of any policy operating under a fixed-capacity, single-cost
+cache model, given full knowledge of the future reference sequence. We
+use a global (cross-layer, cross-shard) variant of Belady,
+\textsc{Oracle-Global-Belady}, as the non-causal upper-bound policy
+throughout. It is unconditionally non-causal and is never treated as a
+deployable baseline.
+
+\begin{definition}[Information headroom]
+\label{def:information-headroom}
+For a causal baseline policy $\pi$ and the oracle $\pi^\star$, both
+operating under the same byte budget $\budget$ and the same cache scope
+(global, not shard-constrained), the \emph{relative information
+headroom} at budget $\budget$ is
+\begin{equation}
+H_{\budget}(\pi) \;=\; \frac{\mathrm{missbytes}_\budget(\pi) -
+\mathrm{missbytes}_\budget(\pi^\star)}{\mathrm{missbytes}_\budget(\pi)}.
+\label{eq:information-headroom}
+\end{equation}
+$H_\budget(\pi)$ is an \emph{upper bound} on the fraction of $\pi$'s miss
+bytes that any future causal policy -- no matter how well-informed by
+observable routing structure -- could possibly avoid at that budget. It
+is not itself a claim that any causal policy achieves this reduction.
+\end{definition}
+
+Section~\ref{sec:recoverable-envelope} formalizes the further
+decomposition of this headroom away from the cost specifically
+attributable to the real runtime's sharded retention architecture.

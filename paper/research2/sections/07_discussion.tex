@@ -1,0 +1,44 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\paragraph{What II-A establishes.} Under a validated offline replay
+model of a real 30B-A3B MoE coding workload, a substantial gap exists
+between causal LRU-family retention and a non-causal Belady-optimal
+upper bound, at every tested capacity-constrained expert-memory budget.
+This gap -- the policy-information headroom -- is not uniform across
+budgets: it is largest, among the tested points, near $8$~GiB in relative
+terms and near $1.5$~GiB in absolute terms, and it collapses entirely
+once the working set becomes effectively resident (the first tested such
+budget being $16$~GiB). The gap persists after decomposing away the
+specific cost of the runtime's sharded retention architecture, which is
+itself small and not even consistently signed across the sweep.
+
+\paragraph{What II-A does \emph{not} establish.} II-A does not show that
+any of this headroom is causally recoverable. A non-causal oracle with
+full future knowledge is, by construction, an unreachable upper bound;
+the gap it exposes could in principle be closed, partially closed, or
+not closed at all by a real predictor, depending on whether the
+underlying routing process contains structure a causal method can
+actually exploit at the point a retention decision must be made. II-A
+also does not establish any latency, throughput, or production
+performance result: miss bytes are an offline proxy for expert data that
+would need to be serviced under the replay model, not a measured runtime
+quantity.
+
+\paragraph{Why this motivates II-B.} The size and persistence of the
+policy-information headroom is the empirical motivation for asking
+\emph{why} causal LRU-family retention leaves this much headroom on the
+table: whether expert routing is concentrated, temporally structured, or
+exhibits exploitable reuse-distance behavior. II-A deliberately does not
+answer this question (Section~\ref{sec:iib-placeholder}).
+
+\paragraph{Why the headroom is not automatically deployable.} An oracle
+upper bound is, definitionally, not a policy -- it requires information
+no real system has at decision time. Treating a large oracle gap as an
+implicit promise of recoverable performance would conflate two distinct
+claims this report is careful to keep separate (Definition
+\ref{def:information-headroom} and the terminology throughout
+Section~\ref{sec:recoverable-envelope}): an informational upper bound,
+and a demonstrated causal recovery. Only the latter would license a
+deployment or performance claim, and it is explicitly out of scope for
+this tranche.

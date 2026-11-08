@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Policy comparison at the 4~GiB anchor budget (R2-02).}
+\label{tab:r2-02-comparison}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Policy & Causal & Misses & Miss rate & Miss bytes (GB) \\
+\midrule
+Runtime-Sharded-LRU & yes & 35,943 & 0.2457 & 103.35 \\
+Global-LRU & yes & 35,529 & 0.2428 & 102.15 \\
+LFU & yes & 39,124 & 0.2674 & 112.12 \\
+Oracle-Global-Belady & no & 14,754 & 0.1008 & 42.30 \\
+\bottomrule
+\end{tabular}
+\end{table}

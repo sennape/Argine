@@ -1,0 +1,67 @@
+{
+  "artifacts": {
+    "expert_store": null,
+    "model": null,
+    "runtime_binary": null
+  },
+  "execution": {
+    "command": null,
+    "exit_code": null,
+    "raw_evidence_paths": [],
+    "stderr_path": null,
+    "stdout_path": null
+  },
+  "experiment": {
+    "baseline_policy": null,
+    "parameters": {
+      "fixed_budgets_bytes": [
+        1610612736,
+        2147483648,
+        4294967296,
+        8589934592,
+        17179869184
+      ],
+      "phase": "decode",
+      "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+      "r2_02_run_id": "238c8ee7f0914df7b28942ec99627c24",
+      "reproduction_budget_bytes": 4294967296
+    },
+    "seed": null,
+    "workload": "coding@460949e7abf0"
+  },
+  "git": {
+    "branch": "r2-main",
+    "candidate_status": "CANDIDATE",
+    "clean": true,
+    "commit": "0cdc657ae3ad6153dcca99a34577ce44c4c1f45c",
+    "dirty_definition": "tracked files modified (untracked files ignored)",
+    "note": null,
+    "repo_root": "C:\\Users\\alpel\\Desktop\\Argine3"
+  },
+  "hardware": {
+    "cores_logical": 16,
+    "cores_physical": 12,
+    "cpu": "13th Gen Intel(R) Core(TM) i5-1340P",
+    "cpu_source": "windows-registry:ProcessorNameString",
+    "machine": "AMD64",
+    "os": "Windows-11-10.0.26200-SP0",
+    "os_release": "11",
+    "os_version": "10.0.26200",
+    "ram_total": 16876888064
+  },
+  "identity": {
+    "end_utc": "2026-11-07T21:42:39Z",
+    "experiment_id": "R2-03",
+    "outcome": "PASS",
+    "run_id": "d957077073374f1e9fd1e101a002946f",
+    "runner_schema_version": 1,
+    "start_utc": "2026-11-07T21:42:20Z"
+  },
+  "schema_version": 1,
+  "software": {
+    "argine_version": "0.1.0",
+    "os": "Windows-11-10.0.26200-SP0",
+    "python_version": "3.13.9",
+    "runtime_identity": null
+  }
+}

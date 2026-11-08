@@ -1,0 +1,64 @@
+{
+  "oracle_gaps_by_baseline": {
+    "Global-LRU": {
+      "baseline": "Global-LRU",
+      "miss_byte_reduction": 59855155200,
+      "miss_reduction": 20775,
+      "oracle": "Oracle-Global-Belady",
+      "oracle_dominates": true,
+      "relative_miss_byte_reduction": 0.5859449007718049,
+      "relative_miss_reduction": 0.584733597905936
+    },
+    "LFU": {
+      "baseline": "LFU",
+      "miss_byte_reduction": 69826056192,
+      "miss_reduction": 24370,
+      "oracle": "Oracle-Global-Belady",
+      "oracle_dominates": true,
+      "relative_miss_byte_reduction": 0.6227662858805563,
+      "relative_miss_reduction": 0.62289131990594
+    },
+    "Runtime-Sharded-LRU": {
+      "baseline": "Runtime-Sharded-LRU",
+      "miss_byte_reduction": 61055373312,
+      "miss_reduction": 21189,
+      "oracle": "Oracle-Global-Belady",
+      "oracle_dominates": true,
+      "relative_miss_byte_reduction": 0.5907533006728861,
+      "relative_miss_reduction": 0.5895167348301478
+    }
+  },
+  "sharding_decomposition": {
+    "limitation": "no shard-constrained Oracle exists in Research Part 1 (argine.research.oracle defines a global Belady variant and a per-LAYER one, never a per-shard one); a true (A) Sharded-LRU-vs-Sharded-Oracle / (B) Sharded-Oracle-vs-Global-Oracle / (C) total decomposition (section 19) therefore cannot be built from already-validated Part 1 components. This decomposition instead uses Global-LRU as the shared pivot between the structural and policy-information gaps, which needs no new, unvalidated oracle.",
+    "policy_information_gap": {
+      "baseline": "Global-LRU",
+      "interpretation": "Global-LRU vs Oracle-Global-Belady: both global cache scope -- isolates the cost of imperfect (causal) prediction alone, decomposed away from sharding.",
+      "miss_byte_reduction": 59855155200,
+      "miss_reduction": 20775,
+      "oracle": "Oracle-Global-Belady",
+      "oracle_dominates": true,
+      "relative_miss_byte_reduction": 0.5859449007718049,
+      "relative_miss_reduction": 0.584733597905936
+    },
+    "structural_sharding_gap": {
+      "baseline": "Runtime-Sharded-LRU",
+      "interpretation": "Runtime-Sharded-LRU vs Global-LRU: both causal, both zero future knowledge -- isolates the cost of the runtime's sharded architecture alone, decomposed away from any prediction/retention advantage.",
+      "miss_byte_reduction": 1200218112,
+      "miss_reduction": 414,
+      "oracle": "Global-LRU",
+      "oracle_dominates": true,
+      "relative_miss_byte_reduction": 0.011612946948471516,
+      "relative_miss_reduction": 0.011518237208914114
+    },
+    "total_observed_upper_bound_gap": {
+      "baseline": "Runtime-Sharded-LRU",
+      "interpretation": "Runtime-Sharded-LRU vs Oracle-Global-Belady: the full observed gap against the real runtime's own architecture; approximately structural + policy-information above (miss counts need not add exactly linearly across policies).",
+      "miss_byte_reduction": 61055373312,
+      "miss_reduction": 21189,
+      "oracle": "Oracle-Global-Belady",
+      "oracle_dominates": true,
+      "relative_miss_byte_reduction": 0.5907533006728861,
+      "relative_miss_reduction": 0.5895167348301478
+    }
+  }
+}

@@ -1,0 +1,27 @@
+\section{Research II-C -- Causal Prediction and Runtime Validation (Placeholder)}
+\label{sec:iic-placeholder}
+
+\textit{Research II-C has not started. This section states only its
+intended scope; it reports no finding, result, or claim.}
+
+Research II-C is intended to build an actual causal working-set
+predictor and measure what fraction of the II-A policy-information
+headroom it recovers (Definition~\ref{def:ii-c-metric}, Eq.~\ref{eq:ii-c}),
+including eventual validation against the real runtime, corresponding to
+planned experiments R2-09--R2-12:
+\begin{enumerate}
+ \item \textbf{Prediction benchmark} (R2-09): define the offline
+   benchmark and baseline numbers for working-set prediction.
+ \item \textbf{Causal working-set predictor} (R2-10): build a causal
+   (no-future-information) predictor and report its offline accuracy.
+ \item \textbf{Prediction-driven retention} (R2-11): evaluate, in
+   replay, whether the predictor can drive a retention policy that
+   improves on the best static/oracle-informed causal baseline, i.e.\
+   evaluate Eq.~\eqref{eq:ii-c} for the first time.
+ \item \textbf{Real runtime validation} (R2-12): validate any
+   predictive-retention result against the real runtime, not only
+   offline replay.
+\end{enumerate}
+No experiment in this list has been run, and no value for
+$\mathrm{FractionOfOracleHeadroomRecovered}$ (Eq.~\ref{eq:ii-c}) has been
+computed. The causally recovered margin remains \notyetmeasured{}.

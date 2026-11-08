@@ -1,0 +1,100 @@
+{
+  "policies": [
+    {
+      "budget_violations": 0,
+      "deterministic_replay_digest": "7d2cabadce09a5468dd63af9a89f12de5e9242cb5c8277f128178beaa90a936b",
+      "eviction_bytes": null,
+      "evictions": 48187,
+      "hits": 110361,
+      "miss_bytes": 103351726080,
+      "miss_rate": 0.24567339238845146,
+      "misses": 35943,
+      "peak_resident_bytes": 4282859520,
+      "policy": "Runtime-Sharded-LRU",
+      "policy_metadata": {
+        "capacity_bytes": 4294967296,
+        "causal": true,
+        "configuration": {
+          "base_policy": "sharded-lru",
+          "note": "statistical shard-count match to the real runtime's own 16-shard architecture at 4 GiB (R2-01B); the shard-to-key MAPPING is not the runtime's exact one -- the runtime hashes real memory addresses, not reproducible offline (see ShardedLRU's own docstring).",
+          "seed": 0,
+          "shards": 16
+        },
+        "name": "Runtime-Sharded-LRU",
+        "version": "1"
+      },
+      "total_expert_requests": 146304
+    },
+    {
+      "budget_violations": 0,
+      "deterministic_replay_digest": "0a12b3388e43d05a44d61d19454c4f406db8ec91fe8629b435c99e96d3b2c001",
+      "eviction_bytes": null,
+      "evictions": 47736,
+      "hits": 110775,
+      "miss_bytes": 102151507968,
+      "miss_rate": 0.24284366797900261,
+      "misses": 35529,
+      "peak_resident_bytes": 4294950912,
+      "policy": "Global-LRU",
+      "policy_metadata": {
+        "capacity_bytes": 4294967296,
+        "causal": true,
+        "configuration": {
+          "base_policy": "global-lru"
+        },
+        "name": "Global-LRU",
+        "version": "1"
+      },
+      "total_expert_requests": 146304
+    },
+    {
+      "budget_violations": 0,
+      "deterministic_replay_digest": "399f937c29de639889ef9139d40a0d29f829cd9d187e6e9cfd2ff3c708ea9dfe",
+      "eviction_bytes": null,
+      "evictions": 49153,
+      "hits": 107180,
+      "miss_bytes": 112122408960,
+      "miss_rate": 0.267415791776028,
+      "misses": 39124,
+      "peak_resident_bytes": 4294950912,
+      "policy": "LFU",
+      "policy_metadata": {
+        "capacity_bytes": 4294967296,
+        "causal": true,
+        "configuration": {
+          "base_policy": "lfu",
+          "halflife": 0,
+          "in_cache_only": false
+        },
+        "name": "LFU",
+        "version": "1"
+      },
+      "total_expert_requests": 146304
+    },
+    {
+      "budget_violations": 0,
+      "deterministic_replay_digest": "ba1df67ca18eb615979e7caabbcc0d40236b5319dde922fda05e93111e1aeb85",
+      "eviction_bytes": null,
+      "evictions": 23065,
+      "hits": 131550,
+      "miss_bytes": 42296352768,
+      "miss_rate": 0.10084481627296588,
+      "misses": 14754,
+      "peak_resident_bytes": 4294950912,
+      "policy": "Oracle-Global-Belady",
+      "policy_metadata": {
+        "capacity_bytes": 4294967296,
+        "causal": false,
+        "configuration": {
+          "base_policy": "belady-global",
+          "note": "non-causal by construction: built from the trace's FULL future event list (argine.research.oracle.event_list / next_uses) before replay starts; never deployable.",
+          "phase": "decode",
+          "semantics": "v2"
+        },
+        "name": "Oracle-Global-Belady",
+        "version": "1"
+      },
+      "total_expert_requests": 146304
+    }
+  ]
+}

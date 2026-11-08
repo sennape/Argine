@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{Global-LRU vs.\ Oracle-Global-Belady across the tested expert-memory budget sweep (R2-03).}
+\label{tab:r2-03-sweep}
+\small
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+Budget (GiB) & Global-LRU misses & Oracle misses & Rel.\ miss-byte reduction & Abs.\ miss-byte reduction (GB) \\
+\midrule
+1.5 & 81,752 & 45,603 & 44.11\% & 103.57 \\
+2 & 68,318 & 35,821 & 47.55\% & 93.42 \\
+4 & 35,529 & 14,754 & 58.59\% & 59.86 \\
+8 & 7,952 & 2,350 & 70.66\% & 16.18 \\
+16 & 973 & 973 & 0.00\% & 0.00 \\
+\bottomrule
+\end{tabular}
+\end{table}

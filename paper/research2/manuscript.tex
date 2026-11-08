@@ -1,0 +1,110 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+% NOTE (build-environment limitation, not a content choice): newtxtext/
+% newtxmath (used by the Part-1 paper/main.tex) are not installed in this
+% build environment (texlive-fonts-extra unavailable, no root/tlmgr
+% access here). Falling back to amsmath/amssymb with the LaTeX default
+% (Latin Modern) fonts keeps the source buildable without altering any
+% content. See paper/research2/README.md for the documented build
+% command and this limitation.
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[expansion=false]{microtype}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{flafter}
+\usepackage[section]{placeins}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\captionsetup{font=small,labelfont=bf}
+\setlist[itemize]{leftmargin=*,topsep=4pt,itemsep=2pt}
+\setlist[enumerate]{leftmargin=*,topsep=4pt,itemsep=3pt}
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0pt}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+
+\newcommand{\argine}{\textsc{Argine}}
+\newcommand{\budget}{M}
+\newcommand{\notyetmeasured}{\textsc{not yet measured}}
+
+\title{\textbf{Oracle-Bounded Expert Retention in Memory-Constrained
+Mixture-of-Experts Inference}\\
+\large A First Tranche of Argine Research Part 2 (Research II-A) --
+Working Title, Provisional}
+\author{sennape}
+\date{November 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{quote}
+\small\textit{Status: This document reports only Research II-A
+(oracle-bounded headroom under a validated offline replay model). It is a
+provisional tranche of a larger three-stage programme; Research II-B
+(routing characterization) and Research II-C (causal prediction and
+runtime validation) are not yet started and are not reported here. This
+title and abstract are working text and are expected to change once
+II-B/II-C are complete.}
+\end{quote}
+
+\begin{abstract}
+We study the memory-constrained retention of mixture-of-experts (MoE)
+expert weights under offline replay of a real routing trace captured from
+a 30B-parameter MoE model running a coding workload. We first establish,
+by independent runtime-telemetry-vs-replay behavioral validation, that an
+offline replay model built from the captured trace agrees exactly with
+the real runtime's own recorded cache events over the measured workload
+(zero event disagreements). We then compare, at a fixed 4~GiB
+expert-memory budget, three causal retention baselines -- a
+runtime-architecture-matched sharded LRU, a global LRU, and a global
+LFU -- against a non-causal Belady-optimal oracle with full knowledge of
+future expert accesses. We extend this comparison across a five-point
+expert-memory budget sweep (1.5--16~GiB) to test the sensitivity of the
+oracle-vs-causal gap to available memory, and decompose the observed gap
+into a structural component (attributable to the runtime's sharded
+retention architecture) and a policy-information component (the
+oracle-vs-causal-LRU gap at equal cache scope). The latter component --
+the \emph{policy-information headroom} -- establishes an upper bound on
+what any future causal retention or prediction mechanism could possibly
+close; it is not itself a demonstrated, causally achievable improvement.
+Across the tested capacity-constrained budgets this headroom is
+substantial and the oracle strictly dominates every causal baseline
+tested; it reaches its largest tested relative value near 8~GiB and
+collapses once the expert working set becomes effectively resident at
+16~GiB. Whether, and how much of, this headroom is causally recoverable
+by a practical predictor is explicitly left unmeasured and is the subject
+of Research II-B (routing structure) and Research II-C (causal
+prediction), neither of which has started. This report is provisional and
+limited strictly to what the completed II-A evidence supports.
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_problem_formulation}
+\input{sections/03_methodology_replay_validation}
+\input{sections/04_oracle_headroom_fixed_memory}
+\input{sections/05_sensitivity_capacity}
+\input{sections/06_recoverable_envelope}
+\input{sections/07_discussion}
+\input{sections/08_limitations}
+\input{sections/09_research_iib_placeholder}
+\input{sections/10_research_iic_placeholder}
+\input{sections/11_conclusion}
+
+\appendix
+\input{sections/12_provenance_appendix}
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}

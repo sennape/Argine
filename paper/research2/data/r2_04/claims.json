@@ -1,0 +1,71 @@
+{
+  "causal_recovery": "NOT_YET_MEASURED -- II-C",
+  "future_metric_ii_c": {
+    "defined_for": "a given budget, to be evaluated once a causal predictor exists",
+    "formula": "fraction_of_oracle_headroom_recovered = (causal_baseline_miss_bytes - predictor_miss_bytes) / (causal_baseline_miss_bytes - oracle_miss_bytes)",
+    "formula_variables": {
+      "causal_baseline_miss_bytes": "miss bytes of a declared causal baseline (e.g. Global-LRU) at a given budget",
+      "oracle_miss_bytes": "miss bytes of Oracle-Global-Belady at that same budget (the denominator's anchor: the full informational upper bound this experiment, R2-04, establishes)",
+      "predictor_miss_bytes": "miss bytes of a future causal working-set predictor (II-C) at that same budget"
+    },
+    "name": "fraction_of_oracle_headroom_recovered",
+    "purpose": "the clean scientific bridge from II-A's upper bound (this experiment) to II-C's demonstrated causal recovery -- documented now so II-C has an unambiguous, predeclared metric to report against, never computed here (no predictor exists yet).",
+    "status": "NOT_YET_SUPPORTED -- no causal predictor exists yet (II-C, R2-09..R2-12)"
+  },
+  "not_yet_supported": [
+    {
+      "claim": "A causal predictor will recover X% of the Oracle headroom.",
+      "reason": "no causal predictor exists yet; this is II-C's (R2-09..R2-12) job, not R2-04's."
+    },
+    {
+      "claim": "The Oracle gap itself is recoverable by a practical predictor.",
+      "reason": "the Oracle comparison establishes an informational upper bound only; II-B investigates whether routing contains exploitable structure, and II-C determines what fraction of this upper bound can be recovered causally (section 17)."
+    },
+    {
+      "claim": "X% lower latency / X% faster inference / X% higher tokens/s / X% lower SSD traffic measured in production / X% real runtime improvement.",
+      "reason": "R2-04 is an offline miss-cost analysis; miss bytes are a proxy for expert data that would need to be serviced under the replay model, never a production performance measurement (section 16)."
+    },
+    {
+      "claim": "Causally recovered margin: any numeric percentage.",
+      "reason": "CAUSALLY RECOVERED MARGIN is NOT YET MEASURED -- II-C (section 4's terminology contract); never a fabricated figure."
+    },
+    {
+      "claim": "fraction_of_oracle_headroom_recovered = (causal_baseline_miss_bytes - predictor_miss_bytes) / (causal_baseline_miss_bytes - oracle_miss_bytes)",
+      "reason": "NOT_YET_SUPPORTED -- no causal predictor exists yet (II-C, R2-09..R2-12)"
+    }
+  ],
+  "supported_now": [
+    {
+      "basis": "policy_information_headroom at budget_bytes=4294967296",
+      "claim": "At the tested 4 GiB budget, Oracle-Global-Belady establishes an upper-bound information headroom of 0.5859 relative miss-byte reduction over Global-LRU."
+    },
+    {
+      "basis": "policy_information_headroom at budget_bytes=1610612736",
+      "claim": "At the tested 1.5 GiB budget, the Oracle-Global-Belady comparison establishes a potentially recoverable information headroom (upper bound) of 0.4411 relative miss-byte reduction, and 103574900736 absolute miss-byte reduction, over Global-LRU."
+    },
+    {
+      "basis": "policy_information_headroom at budget_bytes=2147483648",
+      "claim": "At the tested 2 GiB budget, the Oracle-Global-Belady comparison establishes a potentially recoverable information headroom (upper bound) of 0.4755 relative miss-byte reduction, and 93423513600 absolute miss-byte reduction, over Global-LRU."
+    },
+    {
+      "basis": "policy_information_headroom at budget_bytes=4294967296",
+      "claim": "At the tested 4 GiB budget, the Oracle-Global-Belady comparison establishes a potentially recoverable information headroom (upper bound) of 0.5859 relative miss-byte reduction, and 59855155200 absolute miss-byte reduction, over Global-LRU."
+    },
+    {
+      "basis": "policy_information_headroom at budget_bytes=8589934592",
+      "claim": "At the tested 8 GiB budget, the Oracle-Global-Belady comparison establishes a potentially recoverable information headroom (upper bound) of 0.7066 relative miss-byte reduction, and 16179056640 absolute miss-byte reduction, over Global-LRU."
+    },
+    {
+      "basis": "policy_information_headroom at budget_bytes=17179869184",
+      "claim": "At the tested 16 GiB budget, the Oracle-Global-Belady comparison establishes a potentially recoverable information headroom (upper bound) of 0.0000 relative miss-byte reduction, and 0 absolute miss-byte reduction, over Global-LRU."
+    },
+    {
+      "basis": "effective_residency_budget (section 9)",
+      "claim": "At the 16 GiB budget (the first tested budget exhibiting policy convergence), Global-LRU and Oracle-Global-Belady produced identical miss counts, identical miss bytes, and zero evictions each; this is the observed effective-residency point for the tested sweep, not a claim about the mathematically minimal required capacity."
+    },
+    {
+      "basis": "curve_shape classification (section 12)",
+      "claim": "The observed relative information-headroom-fraction curve across the tested budget sweep is classified as: collapse_at_effective_residency."
+    }
+  ]
+}

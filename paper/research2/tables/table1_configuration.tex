@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{Experimental configuration for the II-A tranche.}
+\label{tab:configuration}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+Workload trace source & \texttt{run-00-4G} (coding workload, 30B-A3B MoE) \\
+Phase analyzed & decode \\
+Expert-memory budgets tested (GiB) & 1.5, 2, 4, 8, 16 \\
+Reproduction (anchor) budget & 4~GiB \\
+Causal baselines & Runtime-Sharded-LRU, Global-LRU, LFU \\
+Non-causal upper bound & Oracle-Global-Belady (offline, full future knowledge) \\
+Replay semantics & byte-budgeted residency, per-expert-per-layer granularity \\
+\bottomrule
+\end{tabular}
+\end{table}

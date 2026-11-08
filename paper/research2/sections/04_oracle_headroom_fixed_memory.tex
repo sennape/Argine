@@ -1,0 +1,50 @@
+\section{Oracle Headroom at Fixed Memory (R2-02)}
+\label{sec:oracle-headroom}
+
+Having established replay fidelity (Section~\ref{sec:replay-validation}),
+we next compare four retention policies at a single, fixed 4~GiB
+expert-memory budget -- the capture budget of the validated trace -- over
+the same decode-phase workload:
+\begin{itemize}
+ \item \textbf{Runtime-Sharded-LRU}: a statistically shard-matched LRU
+   (16 shards, the real runtime's own shard count at 4~GiB), causal.
+   Its shard-to-key mapping is statistical, not the runtime's exact
+   address-derived mapping (Limitation, Section~\ref{sec:limitations}).
+ \item \textbf{Global-LRU}: an unsharded, global-scope LRU, causal.
+ \item \textbf{LFU}: an unsharded, global-scope least-frequently-used
+   policy, causal. Treated as a secondary baseline only throughout this
+   report.
+ \item \textbf{Oracle-Global-Belady}: the non-causal upper bound
+   (Section~\ref{sec:problem-formulation}).
+\end{itemize}
+
+\newcommand{\fixthis}{}
+\input{tables/table2_r2_02_comparison}
+
+\paragraph{Primary comparison.} Table~ef{tab:r2-02-comparison}
+reports the full four-policy comparison. The primary, scientifically
+clean comparison is Global-LRU vs.\ Oracle-Global-Belady -- both at
+global cache scope, differing only in causal information availability.
+At 4~GiB, Oracle-Global-Belady reduces miss bytes relative to Global-LRU
+by a relative amount of $0.5859$ (an absolute reduction of
+$\mathbf{59{,}855{,}155{,}200}$ bytes), i.e.\ an information headroom
+$H_{4\text{GiB}}(\text{Global-LRU}) \approx 58.59\%$
+(Definition~\ref{def:information-headroom}).
+
+\paragraph{Structural sharding gap.} The Runtime-Sharded-LRU vs.\
+Global-LRU comparison isolates the cost of the runtime's own sharded
+retention architecture, holding causal information availability fixed.
+At 4~GiB this structural gap is small and, notably, of the \emph{opposite
+sign} at lower budgets than at this one (Section~\ref{sec:recoverable-envelope}):
+at 4~GiB, Runtime-Sharded-LRU incurs $1{,}200{,}218{,}112$ more miss bytes
+than Global-LRU (a relative structural cost of $1.16\%$), i.e.\ sharding
+itself is mildly disadvantageous relative to a global LRU at this
+specific budget. No Research Part~1 shard-constrained oracle exists, so
+the structural and policy-information gaps are decomposed using
+Global-LRU as a shared pivot (Section~\ref{sec:recoverable-envelope});
+this is a stated limitation, not hidden.
+
+\paragraph{LFU.} LFU underperforms Global-LRU at this budget (higher
+miss count and miss bytes) and is treated throughout this report as a
+secondary causal baseline only; it plays no role in the structural/
+information decomposition.

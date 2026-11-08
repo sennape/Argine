@@ -1,0 +1,31 @@
+\section{Conclusion (Provisional, II-A Only)}
+\label{sec:conclusion}
+
+This report establishes, under a behaviorally validated offline replay
+model of a real 30B-A3B MoE coding-workload trace
+(Section~\ref{sec:replay-validation}), that a substantial gap exists
+between causal LRU-family expert retention and a non-causal Belady-optimal
+upper bound, at every tested capacity-constrained expert-memory budget
+(Sections~\ref{sec:oracle-headroom}--\ref{sec:sensitivity-capacity}). We
+decompose this gap into a small, non-monotonically-signed structural
+component attributable to the runtime's sharded retention architecture,
+and a substantially larger policy-information headroom
+(Section~\ref{sec:recoverable-envelope}) -- the scientifically clean
+upper bound motivating future causal retention and prediction research.
+The largest tested relative headroom occurs near $8$~GiB ($70.66\%$) and
+the largest tested absolute headroom near $1.5$~GiB
+($\approx 103.57$~GB); the gap collapses entirely once the working set
+becomes effectively resident at $16$~GiB, the first tested such point.
+
+This is a provisional conclusion, limited strictly to Research II-A. It
+establishes an upper bound on recoverable retention performance; it does
+not establish, estimate, or imply any demonstrated causal recoverability,
+latency improvement, or production performance gain. Research II-B
+(whether exploitable routing structure exists) and Research II-C
+(whether a causal predictor can recover any of this headroom, and
+validation against the real runtime) remain future work, not yet
+started. The present II-A tranche is frozen as of the commit and run IDs
+recorded in Appendix~\ref{sec:provenance-appendix} and
+\texttt{II-A-FREEZE.json}, and is intended to be incorporated, without
+silent strengthening of its claims, into the eventual combined
+II-A+II-B+II-C Research Part 2 paper.

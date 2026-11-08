@@ -1,0 +1,30 @@
+\section{Provenance Appendix}
+\label{sec:provenance-appendix}
+
+\begin{table}[h]
+\centering
+\caption{Canonical run identity for this II-A tranche. See
+\texttt{II-A-FREEZE.json} for the full machine-readable manifest.}
+\label{tab:provenance}
+\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+Experiment & Run ID & Outcome & Git commit \\
+\midrule
+R2-01 & \texttt{bb6d8ca3\ldots} & PASS & \texttt{76baf459\ldots} \\
+R2-02 & \texttt{238c8ee7\ldots} & PASS & \texttt{7a36083b\ldots} \\
+R2-03 & \texttt{d9570770\ldots} & PASS & \texttt{0cdc657a\ldots} \\
+R2-04 & \texttt{cd2b58b0\ldots} & PASS & \texttt{b6f0fd79\ldots} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Validated source trace SHA-256:
+\texttt{e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1}.
+Candidate status for every run above: \texttt{CANDIDATE} (clean working
+tree at run time). Canonical digest of the R2-04 synthesis (two
+independent syntheses over identical upstream evidence):
+\texttt{a019475d67df\ldots}. This paper tranche is frozen at repository
+commit \texttt{b6f0fd79\ldots} (R2-04 implementation) on branch
+\texttt{r2-main}; the freeze commit itself is recorded in
+\texttt{II-A-FREEZE.json}.

@@ -1,0 +1,45 @@
+\section{Limitations}
+\label{sec:limitations}
+
+\begin{itemize}
+ \item \textbf{Single validated real workload/trace.} All results in
+   this report are computed against one captured trace (one coding
+   workload, one 30B-A3B model instance, one capture budget). Replay
+   fidelity (Section~\ref{sec:replay-validation}) is demonstrated for
+   this trace only; it is not evidence of fidelity for other workloads,
+   models, or capture configurations. Generality across workloads and
+   models is explicitly not established by II-A.
+ \item \textbf{Offline replay, not live measurement.} Every comparison in
+   this report is an offline replay against a fixed, already-captured
+   trace. It does not measure live runtime behavior under the compared
+   policies themselves (only Global-LRU's and the real runtime's
+   recorded behavior at the capture budget are directly observed; the
+   other policies and budgets are evaluated purely by replay).
+ \item \textbf{No latency or throughput claim.} Miss bytes are a proxy
+   for expert data that would need to be serviced under the replay
+   model. No latency, throughput, tokens/second, or SSD-traffic
+   measurement is made or implied anywhere in this report.
+ \item \textbf{No causal predictor exists yet.} The policy-information
+   headroom (Section~\ref{sec:recoverable-envelope}) is an upper bound,
+   not a demonstrated causal recovery. Whether, or how much of, it is
+   recoverable by a practical predictor is unmeasured
+   (Definition~\ref{def:ii-c-metric}; Section~\ref{sec:iic-placeholder}).
+ \item \textbf{Statistical, not exact, shard mapping.} The
+   Runtime-Sharded-LRU baseline matches the real runtime's \emph{shard
+   count} (16 shards at $4$~GiB) but not its exact address-derived
+   shard-to-key mapping, which is not reproducible offline. The
+   structural sharding gap (Eq.~\ref{eq:structural}) should be read with
+   this caveat.
+ \item \textbf{Finite, predeclared budget grid.} The budget sweep
+   (Section~\ref{sec:sensitivity-capacity}) tests five fixed points
+   ($1.5, 2, 4, 8, 16$~GiB). Behavior between tested points, and the
+   exact mathematically minimal budget at which policy convergence
+   occurs, are not characterized; $16$~GiB is reported only as the
+   \emph{first tested} point exhibiting convergence.
+ \item \textbf{No shard-constrained oracle.} No shard-constrained Belady
+   variant exists in the underlying implementation; the structural and
+   policy-information gaps are decomposed using Global-LRU as a shared
+   pivot rather than a true sharded-oracle comparison. This is a stated
+   methodological limitation of the decomposition in
+   Definition~\ref{def:decomposition}, not a hidden approximation.
+\end{itemize}

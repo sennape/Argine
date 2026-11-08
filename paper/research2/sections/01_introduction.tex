@@ -1,0 +1,47 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Mixture-of-experts (MoE) models route each token to a small subset of a
+much larger set of expert sub-networks~\cite{shazeer2017sparsely},
+decoupling total parameter count from per-token compute. When the full
+expert set does not fit resident in fast memory, inactive experts must
+be retained, fetched, and evicted under a dynamically changing,
+token-by-token routing workload -- a problem a growing line of
+memory-constrained MoE inference systems addresses by offloading,
+caching, or predicting expert demand~\cite{eliseev2023offloading,xue2025moeinfinity,kamahori2025fiddler}. The quality of the retention
+policy governing this process directly determines how much expert data
+must be re-fetched during inference.
+
+This report opens a three-stage research programme (``Research Part
+2''), organized around one central question: \emph{how much of the cost
+of imperfect expert retention is an irreducible property of the workload,
+and how much is recoverable by a better, practical retention policy?}
+The programme is structured as
+\begin{enumerate}
+ \item \textbf{Research II-A -- Oracle headroom.} Establish, under a
+   validated offline replay model, the \emph{upper bound} on recoverable
+   retention performance: the gap between realistic causal policies and a
+   non-causal, information-unbounded oracle.
+ \item \textbf{Research II-B -- Routing structure.} Characterize whether
+   the expert-routing process exhibits exploitable temporal or
+   statistical structure (frequency concentration, transition structure,
+   reuse-distance structure, drift) that could, in principle, explain and
+   motivate a causal predictor.
+ \item \textbf{Research II-C -- Causal recovery.} Build an actual causal
+   predictor and measure what fraction of the II-A upper bound it
+   recovers, including validation against the real runtime.
+\end{enumerate}
+
+This document reports only the completed first stage, Research II-A.
+Research II-B and Research II-C have not started (Sections
+\ref{sec:iib-placeholder} and \ref{sec:iic-placeholder} state their
+intended scope as placeholders only); no result, finding, or claim from
+either is made here. The central deliverable of this tranche is a single,
+carefully bounded quantity: the \emph{policy-information headroom}
+between causal retention policies and a non-causal oracle, decomposed
+from the \emph{structural} cost of the runtime's own sharded retention
+architecture, measured across a fixed sweep of expert-memory budgets on a
+real, validated routing trace. We are explicit throughout that this
+headroom is a theoretical upper bound on recoverable performance, not a
+demonstrated causal recoverability result -- that distinction is the
+central methodological concern of this report.

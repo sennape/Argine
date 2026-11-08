@@ -1,0 +1,92 @@
+\section{Oracle-Bounded Recoverable Envelope (R2-04)}
+\label{sec:recoverable-envelope}
+
+R2-04 synthesizes the R2-02/R2-03 evidence into a single decomposition,
+applied at every tested budget, and reported here as the headline II-A
+result. No new replay, model, or runtime invocation is performed in this
+step; it is a pure offline synthesis over already-registered evidence.
+
+\begin{definition}[Structural / information / total decomposition]
+\label{def:decomposition}
+Let $S$, $G$, $O$ denote the miss-byte totals (at a fixed budget
+$\budget$) of Runtime-Sharded-LRU, Global-LRU, and Oracle-Global-Belady
+respectively. Define
+\begin{align}
+\text{Structural sharding gap} &= S - G, \label{eq:structural} \\
+\text{Policy-information headroom} &= G - O, \label{eq:information} \\
+\text{Total observed upper-bound gap} &= S - O. \label{eq:total}
+\end{align}
+By construction, Eq.~\eqref{eq:structural} $+$ Eq.~\eqref{eq:information}
+$=$ Eq.~\eqref{eq:total} exactly, for both the miss-byte and miss-count
+views, independent of the sign of the structural term. The corresponding
+\emph{relative} fractions (each normalized by its own comparison's first
+operand) are \textbf{not} summed arithmetically, since their denominators
+differ -- see Table~\ref{tab:r2-03-sweep} vs.\ the structural
+percentages quoted in Section~\ref{sec:sensitivity-capacity}.
+\end{definition}
+
+The \emph{policy-information headroom} (Eq.~\ref{eq:information}) is the
+quantity of scientific interest for motivating II-B/II-C: it isolates the
+cost of imperfect \emph{causal information}, independent of the specific
+sharded retention architecture. The \emph{structural sharding gap}
+(Eq.~\ref{eq:structural}) is reported for completeness but is not the
+focus of this report, and carries the limitation that the offline
+Runtime-Sharded-LRU's shard-to-key mapping is statistical rather than the
+runtime's exact address-derived mapping.
+
+\input{tables/table4_r2_04_synthesis}
+
+\paragraph{Absolute vs.\ relative headroom occur at different budgets.}
+A single important distinction this synthesis makes explicit: the budget
+at which the \emph{relative} information headroom is maximized ($8$~GiB,
+$70.66\%$) is \textbf{not} the budget at which the \emph{absolute}
+miss-byte headroom is maximized ($1.5$~GiB, $103{,}574{,}900{,}736$
+bytes $\approx 103.57$~GB). Under more severe memory pressure (lower
+budgets), both Global-LRU and the Oracle incur far more total misses, so
+the \emph{absolute} volume of miss bytes the Oracle avoids can be larger
+even while its \emph{relative} advantage (as a fraction of Global-LRU's
+own, larger, miss-byte total) is smaller. Neither framing is more
+``correct''; they answer different engineering questions (fraction of
+traffic avoidable vs.\ total bytes avoidable) and are reported
+separately, never conflated into one number.
+
+\paragraph{Headroom persistence under pressure.} At every one of the
+four capacity-constrained tested budgets ($1.5$--$8$~GiB, where
+Global-LRU's own eviction count is nonzero), the Oracle strictly
+dominates Global-LRU: a strictly positive miss and miss-byte reduction
+is observed at each such point. The $16$~GiB
+policy-indifference point is excluded from this statement by definition
+(no policy has anything left to decide there, so ``the oracle strictly
+improves'' is not a meaningful comparison at that point).
+
+\paragraph{Observed curve shape.} The relative information-headroom
+curve (Figure~\ref{fig:headroom-vs-budget}) is classified, deterministically
+from the five tested points, as a \emph{rise followed by a collapse at
+the observed effective-residency budget}: non-decreasing across
+$1.5$--$8$~GiB, then dropping to its global minimum ($0$) exactly at
+$16$~GiB, the first tested budget exhibiting policy convergence. This
+classification is derived mechanically from the tested points, not
+assumed in advance.
+
+\begin{definition}[Future II-C metric -- documented, not evaluated]
+\label{def:ii-c-metric}
+For a causal baseline with miss bytes $B_\budget$ and a future causal
+predictor-driven policy with miss bytes $P_\budget$, both at budget
+$\budget$, define
+\begin{equation}
+\mathrm{FractionOfOracleHeadroomRecovered}_\budget \;=\;
+\frac{B_\budget - P_\budget}{B_\budget - O_\budget}, \label{eq:ii-c}
+\end{equation}
+where $O_\budget$ is the Oracle's miss bytes at that budget. This metric
+is defined now, as the scientific bridge from II-A's upper bound to
+II-C's demonstrated causal recovery, but \textbf{cannot be evaluated} --
+no causal predictor $P$ exists yet. It is reported here purely as a
+predeclared target metric for Research II-C.
+\end{definition}
+
+\paragraph{Causal recovery: explicitly unmeasured.} We emphasize, as
+strongly as the evidence allows: nothing in this section measures or
+estimates the fraction of the policy-information headroom that any
+practical causal predictor could actually recover. That quantity is
+\notyetmeasured{} and is the subject of Research II-C
+(Section~\ref{sec:iic-placeholder}), which has not started.
