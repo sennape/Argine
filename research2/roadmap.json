@@ -146,7 +146,7 @@
         "R2-07"
       ],
       "initial_state": "PLANNED",
-      "implemented": false,
+      "implemented": true,
       "requires_real_runtime": false,
       "purpose": "Characterize how routing structure drifts over time and across workloads.",
       "expected_output_categories": [

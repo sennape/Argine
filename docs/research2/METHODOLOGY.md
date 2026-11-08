@@ -1049,3 +1049,123 @@ outcome, and persists `summary.json`/`summary.md`, `reuse_events.csv`,
 Research2 evidence root. No manual data extraction step exists. R2-08
 remains LOCKED (not auto-started) after a R2-07 PASS; II-C remains
 FUTURE.
+
+
+## R2-08: Routing Drift and Workload Dependence
+
+Offline descriptive characterization of routing variability on the same
+canonical model/runtime protocol (Qwen3-30B-A3B-Q4_K_M), separating three
+phenomena that are never collapsed: (A) **temporal drift** within one execution
+of one workload, (B) **same-workload replicate variability** (seed 42 vs 43 under
+the same protocol; classified as seed replicates or reproducibility replicates
+according to actual sampling semantics), and (C) **cross-workload variability**
+between different workload families. Implemented in `argine/research2/r2_08/`.
+R2-08 is not a runtime performance benchmark, trains no predictor, changes no
+retention policy, and makes no cross-model claim.
+
+### Prerequisites and binding
+`r2_08.prerequisite.require_full_chain_pass()` reuses R2-07's full chain
+verification (R2-01/04/05/06/07 PASS) and re-verifies the canonical R2-01 trace
+reused as `coding-v1/seed-42` (run `bb6d8ca34dbc4537a43d54be30c9f3e1`, capture
+source `286a41477ce54d5fb9ccc24f4e508f22`, SHA-256
+`e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1`) is
+byte-identical on disk. No real 30B capture is executed during implementation.
+
+### Workload matrix and capture protocol
+Four canonical workload families × two replicates = 8 cells:
+`coding-v1/{42,43}`, `reasoning-v1/{42,43}`, `summarization-v1/{42,43}`,
+`instruction-v1/{42,43}`. `coding-v1/42` reuses the existing R2-01 trace and is
+never recaptured if byte-valid/protocol-compatible. Frozen workload definitions
+are recorded in `research2/workloads/r2_08/` (plus reuse of `workloads/v1/coding.json`)
+with workload id, version, immutable source path, SHA-256, semantic category,
+and description; `summarization-v1` embeds a committed local technical source
+(no web/network dependency).
+
+Canonical capture protocol is reconstructed from R2-01 provenance and held
+constant across captures (model/runtime/config identity, expert budget 4 GiB,
+context 4096, generation threads 4, batch threads 12, trace schema,
+instrumentation, generation parameters except seed/replicate). Only workload,
+workload prompt digest, and seed/replicate may differ across canonical cells.
+A persistent, resumable capture matrix (`capture_matrix.json`, outside Git)
+records validation/canonical status; failed/incomplete captures never enter
+canonical analysis. `argine.bat research2 run R2-08 --model <path>` performs
+only missing captures (zero captures when all 8 cells are valid) and then runs
+offline analysis.
+
+### Primary analysis domain
+Primary cross-workload analysis uses **decode routing only** (prefill excluded to
+avoid prompt-length confounding), with a **matched decode horizon**
+`H = min(512, minimum valid decode positions across all 8 canonical captures)`.
+Canonical PASS requires `H >= 256`; otherwise INCONCLUSIVE. The first `H` valid
+decode routing positions per layer are used; counts of total/prefill/decode/
+matched/discarded positions are recorded (no silent truncation).
+
+### Temporal windows and metrics
+`H` is split into exactly 8 contiguous chronological windows
+(`W=floor(H/8)`; final remainder beyond `8*W` trimmed and recorded). Primary
+drift metric is **Jensen-Shannon divergence** (log base 2, full nominal
+128-expert support including zeros, value in `[0,1]`). Per workload/replicate/
+layer, R2-08 computes adjacent-window JSD (median/max), first-vs-last JSD,
+normalized entropy per window and entropy range, and top-8/top-16 hot-set
+**Jaccard distance** (`1 - |A∩B|/|A∪B|`) between adjacent windows with
+deterministic tie-breaking by expert ID ascending.
+
+### Replicate and cross-workload variability
+Same-workload replicate variability compares seed 42 vs 43 over horizon `H`
+(frequency JSD, top-8/16 Jaccard distance, normalized entropy difference), plus
+workload-level structural metrics. Cross-workload variability computes
+layer-local frequency JSD and top-8/16 Jaccard distance for each pair of
+different workload families, preserving replicate identity (no averaging before
+raw pairwise evidence is persisted).
+
+### R2-05/R2-06/R2-07 bridges
+R2-08 reuses compatible definitions: R2-05 (expert frequency, normalized
+entropy, effective-expert fraction, top-k traffic share), R2-06 (NMI,
+self-transition lift), R2-07 (immediate reuse, reuse <=4, reuse <=16, median
+token reuse gap, W32/W128 working-set sizes). Bridge metrics for workload-level
+summaries are computed on the matched decode-horizon trace view for
+comparability; no incompatible metric variant is introduced.
+
+### Three-scale comparison and regime classification
+R2-08 compares median temporal JSD, median same-workload replicate JSD, and
+median cross-workload JSD, with descriptive ratios where denominators are > 0.
+Regime labels (predeclared before real execution, thresholds fixed in code and
+artifacts): `STABLE_ACROSS_WORKLOADS`, `TEMPORAL_DRIFT_DOMINANT`,
+`WORKLOAD_DEPENDENCE_DOMINANT`, `RUN_VARIABILITY_DOMINANT`, `MIXED`. Ratios are
+descriptive, not causal effect sizes.
+
+### Outcome rules and determinism
+PASS is methodological: prerequisites verified, 8 canonical cells valid,
+compatible fingerprints, decode phase available, `H >= 256`, deterministic
+windows/distributions/JSD/Jaccard, repeated offline synthesis produces identical
+canonical digest (volatile timestamps/current run dir/R2-08 run ID excluded;
+upstream R2-05/06/07 run IDs/digests, all 8 trace SHAs, all workload prompt
+SHAs, configuration fingerprint compatibility, horizon/windows/JSD/Jaccard
+definitions, regime thresholds, and canonical results bound), no forbidden
+claims. PASS does not require meaningful workload dependence. INCONCLUSIVE for
+missing/invalid captures, `H < 256`, unavailable decode phase, ambiguous
+protocol, or indefensible replicate semantics. FAIL for configuration drift
+outside allowed differences, wrong identity, invalid/malformed data,
+nondeterministic digest, post-hoc mutation, or unsupported claims.
+
+### Claims and scope
+Allowed (if supported): measurable temporal drift; cross-workload differences
+exceed/do not exceed replicate variability under the tested protocol;
+short-horizon reuse locality across tested workload families. Forbidden:
+cognitive/semantic specialization claims, Oracle-advantage explanation unless
+independently established, cache/runtime performance improvements, and
+cross-model generalization. Scope is limited to Qwen3-30B-A3B-Q4_K_M, tested
+workload families, and the tested consumer-machine protocol.
+
+### Evidence and automation
+`argine.bat research2 run R2-08 --model <path>` is the single human-facing
+command. Evidence is written under the Research2 evidence root (e.g.
+`summary.json`, `capture_matrix.json`, `workload_manifest.json`,
+`capture_diagnostics.json`, `temporal_drift.csv/.json`,
+`replicate_variability.csv/.json`, `cross_workload.csv/.json`,
+`layer_summary.csv/.json`, `workload_metrics.json`, `comparison.json`,
+`claims.json`, `figure_data.json`, `provenance.json`), referencing traces by
+path+SHA (no full trace copies). Before real execution R2-08 is IMPLEMENTED /
+READY FOR REAL ANALYSIS (not PASS). After a canonical R2-08 PASS, II-B is
+CLOSED/PASS and the next action is II-B paper freeze (not R2-09).
+`paper/research2/` is not modified by R2-08 implementation.

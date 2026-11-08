@@ -1,0 +1,19 @@
+{
+  "name": "summarization-v1",
+  "version": "r2-08-v1",
+  "description": "R2-08 fixed long technical-source summarization/synthesis workload (frozen for routing drift analysis).",
+  "n_predict": 512,
+  "source_input": {
+    "path": "research2/workloads/r2_08/sources/summarization_technical_source.txt",
+    "note": "Committed locally; no web/network dependency. Prompt embeds the fixed source text."
+  },
+  "splits": {
+    "dev": [
+      {
+        "id": "r2-08-summ-dev-1",
+        "segment": "summarization-v1",
+        "prompt": "Read the technical background below and produce a detailed synthesis for a research engineering audience. Your response must include: (1) a concise summary of how expert stores and routing traces work, (2) the key constraints involved in memory-tiered MoE inference, (3) clear definitions of temporal drift, workload dependence, and replicate variability, and (4) why these distinctions matter for designing a causal retention or prefetch mechanism. Use concrete terminology from the text and organize the answer with headings.\n\n--- TECHNICAL BACKGROUND ---\n# Argine Expert Store and Routing Trace: Technical Background (R2-08 source)\n\nSparse Mixture-of-Experts (MoE) transformer layers replace a dense feed-forward\nnetwork with a set of expert networks and a router. For each token, the router\nselects a small subset of experts (top-k) whose outputs are combined. In\nmemory-tiered inference, the full set of expert parameters may exceed available\nDRAM, so a runtime must decide which experts remain resident.\n\nAn expert store maps expert tensor slices to storage and loads them on demand.\nEach expert is typically represented by multiple slices (for example gate, up,\nand down projections). A hard byte budget constrains the total resident expert\nmemory. When a requested expert slice is not resident, the runtime issues a read\nfrom storage and may evict other slices according to a replacement policy such\nas least recently used (LRU), subject to pinning constraints.\n\nRouting traces record, for each forward pass and layer, the experts selected by\nthe router. These traces can be analyzed offline to characterize concentration,\ntransition structure, reuse distance, and working-set behavior. Replay engines\ncan evaluate counterfactual residency policies over the same trace under a fixed\nbudget, separating routing structure from runtime noise.\n\nTemporal drift refers to changes in routing distributions over the course of a\nsingle generation. Workload dependence refers to differences in routing\nstructure across task families such as coding, reasoning, summarization, and\ninstruction following. Replicate variability refers to differences between\nrepeated runs of the same workload under the same protocol. Distinguishing these\nsources of variability is necessary before using routing structure to guide a\ncausal retention or prefetch mechanism.\n\n--- END ---"
+      }
+    ]
+  }
+}

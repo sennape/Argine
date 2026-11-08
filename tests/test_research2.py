@@ -305,19 +305,16 @@ class StatusDoctorAuditSubprocessTests(_TempGitRepoCase):
         self.assertEqual(r.returncode, runner.EXIT_UNKNOWN_ID)
 
     def test_unimplemented_experiment_returns_not_implemented_no_evidence(self):
-        # R2-08 (not R2-01..R2-07): all seven are now real implementations
-        # (see their own test suites in tests/test_r2_01.py,
-        # tests/test_r2_02_*.py, tests/test_r2_03_*.py, tests/test_r2_04_*.py,
-        # tests/test_r2_05_*.py, tests/test_r2_06_*.py and
-        # tests/test_r2_07_*.py); this test exercises the generic
+        # R2-09 (not R2-01..R2-08): R2-01..R2-08 are now real implementations
+        # (see their own test suites). This test exercises the generic
         # "unimplemented experiment" path, which still needs an experiment
-        # that is genuinely unimplemented -- R2-08 (Phase II-B's fourth
-        # experiment) remains LOCKED by R2-07's own task instructions.
+        # that is genuinely unimplemented -- R2-09 (Phase II-C) remains
+        # unimplemented.
         env_root = tempfile.mkdtemp(prefix="argine3-evidence-")
         try:
             env = dict(os.environ)
             env["ARGINE3_RESEARCH_ROOT"] = env_root
-            r = subprocess.run([sys.executable, "-m", "argine", "research2", "run", "R2-08"],
+            r = subprocess.run([sys.executable, "-m", "argine", "research2", "run", "R2-09"],
                                cwd=self.tmp, env=env, capture_output=True, text=True, timeout=60)
             payload = json.loads(r.stdout)
             self.assertEqual(payload["outcome"], "NOT_IMPLEMENTED")
@@ -335,19 +332,19 @@ class StatusDoctorAuditSubprocessTests(_TempGitRepoCase):
         self.assertEqual(r.returncode, runner.EXIT_DIRTY_REFUSED)
 
     def test_allow_dirty_marks_non_candidate(self):
-        # R2-08: generic stub path (R2-01's..R2-07's real-implementation
+        # Uses R2-09: generic stub path (R2-01's..R2-08's real-implementation
         # variants of this are in their own tests/test_r2_0N_*.py suites).
-        # R2-08 remains genuinely unimplemented, so this still exercises
+        # R2-09 remains genuinely unimplemented, so this still exercises
         # run_experiment()'s own generic NOT_IMPLEMENTED/candidate_status
         # path, not an experiment implementation's.
         (Path(self.tmp) / "README.md").write_text(
             Path(self.tmp, "README.md").read_text(encoding="utf-8") + "\ndirty\n", encoding="utf-8")
-        r = self._run_in_shared("run", "R2-08", "--allow-dirty")
+        r = self._run_in_shared("run", "R2-09", "--allow-dirty")
         payload = json.loads(r.stdout)
         self.assertEqual(payload["candidate_status"], "NON-CANDIDATE")
 
     def test_analyse_unimplemented_returns_not_implemented(self):
-        r = self._run_in_shared("analyse", "R2-08")  # R2-01..R2-07 are now implemented
+        r = self._run_in_shared("analyse", "R2-09")  # R2-01..R2-08 are now implemented
         payload = json.loads(r.stdout)
         self.assertEqual(payload["outcome"], "NOT_IMPLEMENTED")
 
@@ -362,7 +359,7 @@ class StatusDoctorAuditSubprocessTests(_TempGitRepoCase):
         self.assertTrue(payload["implemented"])
 
     def test_mutable_local_state_does_not_dirty_repository(self):
-        r = self._run_in_shared("run", "R2-08", "--allow-dirty")  # still-unimplemented stub
+        r = self._run_in_shared("run", "R2-09", "--allow-dirty")  # still-unimplemented stub
         self.assertEqual(r.returncode, runner.EXIT_NOT_IMPLEMENTED)
         status = subprocess.run(["git", "-C", self.tmp, "status", "--porcelain"],
                                 capture_output=True, text=True, check=True)
