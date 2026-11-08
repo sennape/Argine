@@ -85,5 +85,13 @@
     "scope": "Removed residual active 'Oracle headroom'/'Oracle exploits' phrasing; scoped LFU/frequency claims to the 4 GiB anchor; clarified RecoveryOfBeladyGap as signed comparator-relative metric; extended manuscript verifier guards. No numerical or canonical-evidence changes.",
     "numerical_evidence_changed": false
   },
+  "lfu_sweep_reconciliation": {
+    "applied": true,
+    "commit_message": "Reconcile canonical R2-03 LFU sweep evidence",
+    "classification": "LFU_SWEEP_CANONICAL_AUXILIARY",
+    "scope": "R2-03 LFU auxiliary sweep evidence was already present in frozen canonical artifacts and is now explicitly reconciled into manuscript wording, claim ledger, and an auxiliary table generated from frozen data; no replay or evidence mutation occurred. Global-LRU vs O_B remains the preregistered primary R2-03 comparison.",
+    "canonical_r2_03_run_id": "d957077073374f1e9fd1e101a002946f",
+    "numerical_evidence_changed": false
+  },
   "notes": "Do not start R2-09. R2-09 remains NOT STARTED. Next action is R2-09B prerequisite/evaluation-design work including establishment of a held-out EVAL contract before causal baseline tournament or predictor evaluation."
 }

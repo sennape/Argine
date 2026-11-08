@@ -48,8 +48,13 @@ comparator exists, so the structural and comparator gaps are decomposed
 using Global-LRU as a shared pivot (Section~\ref{sec:recoverable-envelope});
 this is a stated limitation, not hidden.
 
-\paragraph{LFU.} LFU underperforms Global-LRU at this 4~GiB anchor budget
-(higher miss count and miss bytes) and is treated throughout this report as a
-secondary causal baseline only; it plays no role in the structural/
-comparator decomposition. This comparison does not generalize LFU ordering to
-other budgets.
+\paragraph{LFU.} At the 4~GiB anchor, LFU underperforms Global-LRU in
+both miss count and miss bytes and remains a secondary causal baseline in
+the primary R2-02 comparison. R2-03 additionally evaluated LFU as canonical
+auxiliary evidence across the full tested capacity sweep: LFU incurs more
+miss bytes than Global-LRU at 1.5, 2, 4, and 8~GiB and ties it at the
+16~GiB effective-residency point (Section~\ref{sec:sensitivity-capacity},
+Table~\ref{tab:r2-03-lfu-aux}). This measured ranking is specific to the
+canonical DEV trace and tested budget grid and is not generalized to other
+workloads, models, or capacities. It does not replace the leakage-safe
+multi-policy causal-baseline tournament planned for R2-09A.

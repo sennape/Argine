@@ -82,15 +82,17 @@ is $0.514$ (about $65.7$ of $128$ nominal experts), the median top-8
 traffic share is $0.300$, and the median number of experts required for
 80\% of traffic is $43$ (range $31$--$68$).
 
-This concentration does not imply that static frequency alone is sufficient
-for retention at all budgets. At the 4~GiB anchor, II-A showed that the
-frequency-driven LFU baseline underperforms Global-LRU
-(Table~\ref{tab:r2-02-comparison}). Aggregate popularity structure exists
-in the routing stream, but at that tested anchor aggregate frequency alone
-does not determine the better of the tested LFU and Global-LRU policies.
-This motivates examining temporal and sequential information beyond
-aggregate frequency. R2-06 and R2-07 test complementary sequential and
-temporal structure.
+This concentration does not imply that static frequency-based LFU is a
+sufficient retention policy in the tested pressure regime. R2-03's
+canonical auxiliary evidence shows that static LFU incurs more miss bytes
+than Global-LRU at every tested capacity-constrained budget from 1.5 to
+8~GiB on the same DEV trace, tying at 16~GiB
+(Table~\ref{tab:r2-03-lfu-aux}). Thus substantial aggregate frequency
+concentration exists, but static frequency-based LFU does not outperform
+recency-based Global-LRU anywhere in the tested pressure regime on this
+trace and budget grid. This motivates examining temporal and sequential
+information beyond aggregate frequency. R2-06 and R2-07 test complementary
+sequential and temporal structure.
 
 \subsection{R2-06: Routing Transition Structure}
 \label{sec:r2-06}
@@ -208,11 +210,11 @@ this protocol.
 \label{sec:iib-synthesis}
 
 The II-B evidence forms a constrained chain. R2-05 shows that routing is
-non-uniform, while the II-A 4~GiB anchor result shows that aggregate
-frequency alone does not determine the better of the tested LFU and
-Global-LRU policies at that anchor. R2-06 shows that previous routing state
-carries measurable information about subsequent routing. R2-07 shows that
-this structure is
+non-uniform, while canonical auxiliary R2-03 evidence shows that static
+LFU does not outperform Global-LRU at any tested capacity-constrained
+point on the DEV trace (tying only at 16~GiB effective residency). R2-06
+shows that previous routing state carries measurable information about
+subsequent routing. R2-07 shows that this structure is
 strongest at short horizons, with reuse and working sets more compact than
 a shuffled null. R2-08 shows that the routing signature varies materially
 by workload under the tested protocol.

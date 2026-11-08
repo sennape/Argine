@@ -40,12 +40,14 @@ policy.
 The distinction among these categories is central:
 \begin{itemize}
  \item \textbf{Observed:} substantial causal-baseline-to-clairvoyant-comparator
-   gap (II-A); aggregate routing concentration, with LFU underperforming
-   Global-LRU at the II-A 4~GiB anchor budget; measurable same-layer
-   transition dependence (positive NMI in every tested layer); strong
-   short-horizon reuse relative to a shuffled null; and cross-workload
-   divergence exceeding temporal drift under the deterministic R2-08
-   protocol.
+   gap (II-A); aggregate routing concentration, with static LFU
+   underperforming Global-LRU at all four tested capacity-constrained
+   R2-03 budgets on the canonical DEV trace and tying it at the 16~GiB
+   effective-residency point (canonical auxiliary R2-03 evidence);
+   measurable same-layer transition dependence (positive NMI in every
+   tested layer); strong short-horizon reuse relative to a shuffled null;
+   and cross-workload divergence exceeding temporal drift under the
+   deterministic R2-08 protocol.
  \item \textbf{Inference/motivation:} these properties make stronger
    causal retention/prediction strategies scientifically worth testing.
    The short-horizon locality is the most relevant signal for that test;

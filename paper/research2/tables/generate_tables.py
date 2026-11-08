@@ -136,6 +136,54 @@ def table3() -> str:
     return "\n".join(lines) + "\n"
 
 
+def table3b_lfu_auxiliary() -> str:
+    """Canonical auxiliary R2-03 evidence: LFU vs Global-LRU across sweep.
+
+    Values are derived mechanically from frozen paper/research2/data/r2_03
+    artifacts; no independent numeric source is introduced.
+    """
+    budget_results = _load("r2_03", "budget_results.json")
+    budgets = sorted(int(b) for b in budget_results)
+    lines = [
+        r"\begin{table}[t]",
+        r"\centering",
+        r"\caption{Canonical auxiliary R2-03 evidence: LFU vs.\ Global-LRU "
+        r"across the tested expert-memory budget sweep. LFU and "
+        r"Runtime-Sharded-LRU were replayed as part of the declared R2-02 "
+        r"policy set at every budget; the preregistered primary R2-03 "
+        r"comparison remains Global-LRU vs.\ $O_B$ "
+        r"(Table~\ref{tab:r2-03-sweep}).}",
+        r"\label{tab:r2-03-lfu-aux}",
+        r"\footnotesize",
+        r"\setlength{\tabcolsep}{4pt}",
+        r"\begin{tabular}{@{}rrrrrl@{}}",
+        r"\toprule",
+        r"Budget (GiB) & Global-LRU miss bytes & LFU miss bytes & "
+        r"LFU $-$ Global-LRU (bytes) & Rel.\ diff. & Result \\",
+        r"\midrule",
+    ]
+    for b in budgets:
+        rows = {r["policy"]: r for r in budget_results[str(b)]}
+        glru, lfu = rows["Global-LRU"], rows["LFU"]
+        diff = lfu["miss_bytes"] - glru["miss_bytes"]
+        rel = (diff / glru["miss_bytes"]) if glru["miss_bytes"] else 0.0
+        label = b / GIB
+        if diff == 0:
+            rel_s = "0.00\\%"
+            result = "tie"
+        elif diff > 0:
+            rel_s = f"+{rel * 100:.2f}\\%"
+            result = "LFU loses"
+        else:
+            rel_s = f"{rel * 100:.2f}\\%"
+            result = "LFU beats"
+        lines.append(
+            f"{label:g} & {glru['miss_bytes']:,} & {lfu['miss_bytes']:,} & "
+            f"{diff:+,} & {rel_s} & {result} \\\\")
+    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    return "\n".join(lines) + "\n"
+
+
 def table4() -> str:
     margin = _load("r2_04", "recoverable_margin.json")
     summary = _load("r2_04", "summary.json")
@@ -367,6 +415,7 @@ def main() -> None:
     (HERE / "table1_configuration.tex").write_text(table1(), encoding="utf-8")
     (HERE / "table2_r2_02_comparison.tex").write_text(table2(), encoding="utf-8")
     (HERE / "table3_r2_03_sweep.tex").write_text(table3(), encoding="utf-8")
+    (HERE / "table3b_r2_03_lfu_auxiliary.tex").write_text(table3b_lfu_auxiliary(), encoding="utf-8")
     (HERE / "table4_r2_04_synthesis.tex").write_text(table4(), encoding="utf-8")
     # II-B
     (HERE / "table_b1_iib_map.tex").write_text(table_b1_map(), encoding="utf-8")
@@ -374,7 +423,7 @@ def main() -> None:
     (HERE / "table_b3_r2_06_transitions.tex").write_text(table_b3_r2_06(), encoding="utf-8")
     (HERE / "table_b4_r2_07_reuse_locality.tex").write_text(table_b4_r2_07(), encoding="utf-8")
     (HERE / "table_b5_r2_08_scale.tex").write_text(table_b5_r2_08(), encoding="utf-8")
-    print("wrote II-A table fragments (4) and II-B table fragments (5)")
+    print("wrote II-A table fragments (5) and II-B table fragments (5)")
 
 
 if __name__ == "__main__":

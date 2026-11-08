@@ -230,6 +230,8 @@ active_banned = [
     ("timing information that the Oracle exploits", "active 'Oracle exploits' phrasing"),
     ("The fraction in Eq.", "active 'fraction in Eq.' recovery phrasing"),
     ("same declared policy set", "ambiguous R2-03 'same declared policy set' phrasing"),
+    ("LFU outside 4 GiB is unmeasured", "stale claim that canonical R2-03 LFU sweep is unmeasured"),
+    ("This comparison does not generalize LFU ordering to other budgets", "stale claim contradicting canonical auxiliary R2-03 LFU sweep"),
 ]
 for path in [ROOT / "manuscript.tex", *sorted(sections_dir.glob("*.tex"))]:
     text = path.read_text(encoding="utf-8")

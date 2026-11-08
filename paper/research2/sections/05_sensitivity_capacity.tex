@@ -36,6 +36,19 @@ proven causal-recovery upper bound.}
 
 \input{tables/table3_r2_03_sweep}
 
+\paragraph{Auxiliary causal-baseline evidence.} Although the preregistered
+primary R2-03 comparison and the headline curve concern Global-LRU versus
+$O_B$, the declared R2-02 policy set was replayed at every budget. The
+frozen R2-03 artifacts therefore also contain deterministic LFU results
+across the full sweep (Table~\ref{tab:r2-03-lfu-aux}). LFU exceeds
+Global-LRU miss bytes by 4.37\%, 7.66\%, 9.76\%, and 11.98\% at 1.5, 2, 4,
+and 8~GiB respectively, and ties Global-LRU at 16~GiB. This auxiliary
+ranking is measured on the canonical DEV trace and is not a substitute for
+the leakage-safe multi-policy causal-baseline tournament planned for
+R2-09A.
+
+\input{tables/table3b_r2_03_lfu_auxiliary}
+
 \paragraph{Monotonicity and collapse.} Across the four capacity-constrained
 tested points ($1.5$--$8$~GiB, where Global-LRU incurs a nonzero eviction
 count), the relative Belady comparator gap rises from $44.11\%$ at

@@ -40,6 +40,11 @@
    tests five fixed points ($1.5, 2, 4, 8, 16$~GiB). Behavior between
    tested points and the exact mathematically minimal policy-convergence
    budget are not characterized.
+ \item \textbf{LFU auxiliary sweep scope.} The LFU-vs-Global-LRU ranking
+   across the R2-03 budget grid is canonical auxiliary R2-03 evidence from
+   the same single canonical DEV trace and tested budget grid. It is not
+   held-out evaluation and does not establish causal-baseline ordering
+   across other workloads, models, or capacities. R2-09A remains necessary.
  \item \textbf{No shard-constrained clairvoyant comparator.} The II-A
    structural and comparator decomposition uses Global-LRU as a shared
    pivot rather than a true sharded-clairvoyant comparison.

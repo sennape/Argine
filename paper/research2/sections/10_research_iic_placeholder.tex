@@ -17,8 +17,17 @@ fraction of maximum causal opportunity. The planned boundary is:
  \item \textbf{R2-09 -- Prediction Benchmark.}
    \begin{itemize}
     \item \textbf{R2-09A Causal Baseline Tournament:} evaluate causal
-      retention baselines under a leakage-safe selection contract;
-      select $B_\mathrm{best}$ on DEV only before held-out EVAL reporting.
+      retention baselines under a leakage-safe selection contract. R2-09A
+      begins from existing canonical DEV evidence (Global-LRU, LFU, and the
+      existing R2-03 capacity sweep, where LFU is canonical auxiliary
+      evidence) and extends the causal baseline frontier to additional
+      preregistered families such as 2Q, LRU-K, aged/decayed frequency, and
+      other precisely defined causal baselines. Existing LFU DEV evidence
+      does not replace R2-09A: R2-09A must still establish leakage-safe
+      DEV-only tuning, freeze policy hyperparameters, compare additional
+      causal baseline families, establish held-out EVAL reporting, and
+      determine $B_\mathrm{best}$ under the future benchmark contract.
+      Select $B_\mathrm{best}$ on DEV only before held-out EVAL reporting.
     \item \textbf{R2-09B Benchmark Contract / preregistration:} freeze
       DEV/EVAL roles and held-out EVAL acquisition/design; baseline
       selection without EVAL leakage; comparator semantics ($O_B$ unless a
