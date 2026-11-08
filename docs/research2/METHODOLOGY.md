@@ -877,3 +877,175 @@ persists `summary.json`/`summary.md`, `transition_metrics.csv`,
 `figure_data.json` under the Research2 evidence root. No manual data
 extraction step exists. R2-07/R2-08 remain LOCKED (not auto-started)
 after a R2-06 PASS; II-C remains FUTURE.
+
+## R2-07: Reuse Distance and Working-Set Structure
+
+Offline descriptive characterization of SAME-LAYER expert REUSE
+distance and rolling active-working-set growth on the validated R2-01
+trace, bridged against R2-05's canonical frequency evidence and R2-06's
+canonical transition evidence. R2-07 asks how far layer-local routing
+locality extends beyond R2-06's one-step conditional structure, and how
+quickly the active expert set grows as the observation window widens --
+it never trains a predictor, never reports accuracy/precision/recall/
+F1/AUC, never measures temporal/windowed drift or cross-workload
+generalization (R2-08's job), never converts a reuse finding into a
+retention-policy performance claim, and never claims R2-06 already
+proved long-range locality.
+
+### Prerequisite and binding (`r2_07.prerequisite`)
+
+`require_full_chain_pass()` reuses, never duplicates, R2-06's own
+`require_r2_01_pass_and_r2_05_pass()` (which itself reuses R2-05's
+`require_r2_01_pass_and_r2_04_pass()`, which reuses R2-02's
+`require_r2_01_pass()`) for the entire upstream chain, and adds: a R2-06
+PASS run must exist; its own recorded `r2_01_run_id` binding must agree
+with the CURRENT R2-01 binding; the trace SHA-256 is re-verified byte-
+identical on disk every run (fail-closed on a changed trace). No trace
+path, SHA, or run id is ever hard-coded.
+
+### The temporal unit (sections 5/6)
+
+`r2_07.temporal_unit.TEMPORAL_UNIT_DEFINITION`: the same `Trace.
+token_selections(layer)` accessor R2-05 and R2-06 already validated,
+re-numbered 0, 1, 2, ... in the ITERATOR'S OWN yielded order (never raw
+`token_index`), yielding a purely sequential, layer-local position
+stream. A REUSE EVENT occurs when an expert observed at position
+`t_now` was last observed (at that same layer) at an earlier position
+`t_prev`; `token_reuse_gap = t_now - t_prev`. A SEPARATE, never-conflated
+metric, `distinct_intervening_reuse_distance`, counts the number of
+DISTINCT experts observed at any position strictly between `t_prev` and
+`t_now` (excluding the reusing expert itself) -- a position's own
+internal tuple order is never used to compute either metric (no within-
+token-tuple ordering is invented). A duplicate expert within one
+token's own selection tuple is never silently deduplicated: it is
+counted as neither cold nor reused, via a third accounting term,
+`duplicate_within_position_count`, making the reconciliation identity
+exact: `raw_total_occurrences == cold_observation_count +
+len(reuse_events) + duplicate_within_position_count`, verified every
+run against an independently-coded second pass
+(`independent_reuse_accounting`) that walks `trace.steps`/`Step.routes`
+directly rather than via `token_selections`.
+
+### Distributions and the predeclared quantile method (`r2_07.reuse_stats`)
+
+`QUANTILE_METHOD_DEFINITION`: linear interpolation between order
+statistics (the NumPy/R "linear", type-7, convention), predeclared
+before any real execution. `TOKEN_GAP_THRESHOLDS = (1, 2, 4, 8, 16, 32,
+64, 128, 256)` and `DISTINCT_INTERVENING_THRESHOLDS = (4, 8, 16, 32,
+64)` are each fixed round-number conventions, never derived from
+observed results. `distribution_summary()` reports n, median, p75, p90,
+p95, max, and the within-threshold fraction at each predeclared
+threshold -- `None` throughout for an empty distribution, never a
+fabricated 0.
+
+### Rolling working-set structure (`r2_07.working_set`)
+
+`CANONICAL_WINDOWS = (1, 2, 4, 8, 16, 32, 64, 128, 256)` with `512` as an
+optional, non-headline secondary window. For each window W, the rolling
+distinct-expert count is computed over FULL WINDOWS ONLY (a layer with
+fewer than W observed positions contributes no windows of that size,
+reported as `available: False` with every numeric field `None`, never a
+truncated or padded partial window) via an O(n) sliding-window algorithm
+(`sliding_distinct_counts`) rather than an O(n*W) naive re-scan.
+`working_set_size` always means a plain EXPERT COUNT, never a memory or
+byte-weighted quantity, unless a clearly separated secondary analysis
+using genuine canonical per-expert-size metadata were added (not
+implemented here, not required for PASS). The growth curve
+(`growth_curve()`) reports the median rolling working-set size at each
+canonical window and is R2-07's primary artifact for showing how fast
+the active expert set grows as the observation window widens.
+
+### Frequency-preserving null baseline (`r2_07.null_baseline`)
+
+A single (`NULL_BASELINE_REPLICATE_COUNT = 1`), fixed-seed
+(`NULL_BASELINE_SEED = 1234`, predeclared before any real execution)
+WHOLE-TUPLE SHUFFLE of each layer's own position sequence: the per-
+position selection tuples are permuted as indivisible blocks, never
+split or individually reordered, which provably preserves token count,
+per-token cardinality, total occurrences, and per-expert marginal counts
+as multiset-invariant properties under any permutation --
+programmatically re-verified every run (`verify_shuffle_invariants`),
+fail-closed on any violation. The shuffled sequence is re-run through
+the IDENTICAL reuse-event and working-set computation as the observed
+pipeline (`compute_reuse_events_from_positions`, shared by both paths),
+producing a genuine frequency-preserving, order-destroyed comparison
+baseline rather than an independently-derived approximation.
+
+### R2-06 and R2-05 bridges (`r2_07.bridge`, sections 16/17)
+
+The R2-06 bridge is an explicit, required interpretive statement
+(`R206_BRIDGE_NOTE`): R2-06 identified one-step conditional structure;
+R2-07 measures whether that structure extends to a measurable multi-
+step horizon, and explicitly does NOT treat R2-06's finding as having
+already established long-range locality on its own. The R2-05 bridge
+(`R205_BRIDGE_NOTE`) distinguishes being FREQUENT (R2-05) from being
+REUSED SOON (R2-07) as logically separate properties, and computes an
+optional, SECONDARY, descriptive Spearman rank correlation
+(`frequency_vs_reuse_gap_correlation`, implemented from scratch --
+average/fractional tie-ranking plus Pearson correlation of the ranks, no
+scipy dependency) between per-expert request frequency and median token
+reuse gap, with no causal interpretation attached. The canonical digest
+explicitly binds BOTH R2-05's and R2-06's own run ids and canonical
+digests, not merely their existence as PASS prerequisites.
+
+### Global summary, heterogeneity, and observed-vs-null comparison (`r2_07.summary`)
+
+Cross-layer medians of the immediate (gap=1), within-4, and within-16
+reuse fractions, the median and p90 token reuse gap, the median
+distinct-intervening reuse distance, and the median working-set size at
+the four headline windows (`HEADLINE_WORKING_SET_WINDOWS = (8, 32, 128,
+256)`). `layer_heterogeneity()` reports which layers show the
+shortest/longest median reuse gap and the smallest/largest median
+working-set size, with an explicit disclaimer that no architectural
+cause is being claimed. `observed_vs_null_summary()` reports, per
+scalar metric and per working-set window, the median observed value,
+the median null (shuffled) value, their ratio, and their difference --
+a DESCRIPTIVE comparison only; R2-07 never computes or reports a formal
+significance test.
+
+### Claims and the forbidden-phrase guard (`r2_07.claims`)
+
+`build_claims()` splits SUPPORTED NOW vs NOT YET SUPPORTED, scanning
+ONLY `supported_now` with a forbidden-phrase guard (mirroring R2-05's/
+R2-06's guard design exactly, since `not_yet_supported` deliberately
+NAMES the forbidden phrases in order to disclaim them) covering:
+predictor accuracy/precision/recall/F1/AUC language; retention-policy-
+performance-improvement language ("this policy would reduce misses by
+X%" is forbidden; "structurally favorable to retention" is explicitly
+allowed as a descriptive, non-performance statement); temporal/
+windowed/workload-drift language; MoE-models-generally or Qwen-
+workloads-generally cross-workload generalization language; and an
+explicit guard against claiming R2-06 already proved long-range
+locality.
+
+### Outcome classification and determinism
+
+PASS requires: the full upstream chain (R2-01 PASS, R2-04/II-A PASS,
+R2-05 PASS, R2-06 PASS) verified, trace identity held, layer-local
+expert identity preserved throughout, the three-way reuse-accounting
+identity reconciled against an independently-coded second computation,
+working-set windows computed deterministically with full-windows-only
+semantics, null-baseline invariants (token count, per-token cardinality,
+total occurrences, per-expert marginal counts) verified preserved, and
+two independent in-process syntheses -- over the identically loaded
+trace, identical R2-05/R2-06 bridge evidence, AND the identical null-
+baseline seed/config -- producing an identical canonical digest. PASS
+never requires short reuse distance or a fast-growing working set
+anywhere: long or near-null reuse behavior is valid PASS science too,
+exactly as R2-05's uniform-routing result and R2-06's zero-NMI layers
+were. INCONCLUSIVE covers an unavailable authoritative nominal expert
+count. A synthesis error, a digest mismatch, or a generated claim
+tripping the forbidden-phrase guard are each an unconditional FAIL.
+
+### Evidence and automation
+
+`argine.bat research2 run R2-07` is the single human-facing command: it
+verifies the prerequisite, loads the validated R2-01 trace and the R2-05/
+R2-06 bridge evidence, computes everything above, classifies the
+outcome, and persists `summary.json`/`summary.md`, `reuse_events.csv`,
+`layer_reuse_summary.csv`, `working_set_by_window.csv`,
+`reuse_structure.json`, `null_baseline.json`, `bridge.json`,
+`provenance.json`, `claims.json`, and `figure_data.json` under the
+Research2 evidence root. No manual data extraction step exists. R2-08
+remains LOCKED (not auto-started) after a R2-07 PASS; II-C remains
+FUTURE.

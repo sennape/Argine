@@ -132,7 +132,7 @@
         "R2-06"
       ],
       "initial_state": "PLANNED",
-      "implemented": false,
+      "implemented": true,
       "requires_real_runtime": false,
       "purpose": "Characterize reuse distance and effective working-set structure of expert accesses.",
       "expected_output_categories": [
