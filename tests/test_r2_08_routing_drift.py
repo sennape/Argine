@@ -345,6 +345,24 @@ class OrchestratorTests(TempEvidenceMixin):
                     "out_dir": str(out_dir), "run_id": f"cap-{workload_id}-{seed}"}
         return fn
 
+    def _mock_execute_capture(self, calls, n_decode=300):
+        """Mock for capture_mod.execute_capture (default dispatch path).
+        Captures call args/kwargs for regression assertions; never spawns a process."""
+        def fn(**kwargs):
+            calls.append(dict(kwargs))
+            workload_id = kwargs["workload_id"]
+            seed = kwargs["seed"]
+            out_dir = Path(kwargs["out_dir"])
+            tr = make_decode_trace(n_decode=n_decode, seed=seed * 10 + (0 if "coding" in workload_id else hash(workload_id) % 7),
+                                   workload=workload_id, phase_bias=(hash(workload_id) + seed) % 5)
+            tp = out_dir / "run-00-4G" / "trace.jsonl.gz"
+            sha = write_trace(tr, tp)
+            return {"outcome": "CAPTURED", "trace_path": str(tp),
+                    "validation": {"ok": True, "trace_sha256": sha, "size_bytes": tp.stat().st_size,
+                                   "trace_meta": {"fingerprint": {"model_sha256": "msha", "runtime_sha256": "rsha"}}},
+                    "out_dir": str(out_dir), "run_id": f"cap-{workload_id}-{seed}"}
+        return fn
+
     def _patch_chain(self, binding):
         up = {"run_id": "u", "canonical_digest": "d" * 64, "headline": {}}
         return (mock.patch.object(prerequisite, "require_full_chain_pass", return_value=binding),
@@ -455,6 +473,77 @@ class OrchestratorTests(TempEvidenceMixin):
         with p1, p2, p3:
             res = orchestrator.run(allow_dirty=True, model_path=None)
         self.assertIn(res["outcome"], (orchestrator.OUTCOME_BLOCKED, orchestrator.OUTCOME_INCONCLUSIVE))
+
+    def test_default_capture_dispatch_runtime_path_passed_once(self):
+        """Regression (canonical R2-08 integration): real/default capture dispatch
+        must pass runtime_path exactly once. Reproduces the integration path where
+        per-cell kwargs already carried runtime_path and the wrapper duplicated it,
+        causing TypeError in capture_mod.execute_capture(). Uses the default dispatch
+        (capture_fn=None) with execute_capture mocked before any external process."""
+        rp, rsha = self._make_reused_trace()
+        binding = self._binding(rp, rsha)
+        calls = []
+        p1, p2, p3 = self._patch_chain(binding)
+        canonical_runtime = r"C:\runtimes\llama\llama-server.exe"
+        with p1, p2, p3, \
+             mock.patch.object(orchestrator.capture_mod, "execute_capture",
+                               side_effect=self._mock_execute_capture(calls)):
+            res = orchestrator.run(allow_dirty=True, model_path=r"M:\fake.gguf",
+                                   capture_fn=None, runtime_path=canonical_runtime)
+        self.assertEqual(res["outcome"], orchestrator.OUTCOME_PASS, res.get("message"))
+        self.assertEqual(len(calls), 7)  # coding-v1/seed-42 reused
+        self.assertNotIn(("coding-v1", 42), {(c["workload_id"], c["seed"]) for c in calls})
+        for c in calls:
+            self.assertIn("runtime_path", c)
+            self.assertEqual(c["runtime_path"], canonical_runtime)
+        # Single authoritative source: runtime_path lives only in kwargs (no wrapper duplication).
+        self.assertEqual(res["headline"]["newly_performed_capture_count"], 7)
+
+    def test_default_capture_dispatch_runtime_path_single_source_no_conflict(self):
+        """Architecture guard: kwargs owns runtime_path for the capture call; the
+        default dispatch forwards kwargs without injecting a second runtime_path.
+        After this fix the architecture does not permit two independent runtime_path
+        sources in the orchestrator dispatch path (conflict would require reintroducing
+        wrapper duplication), so there is no silent-choice path to exercise."""
+        rp, rsha = self._make_reused_trace()
+        binding = self._binding(rp, rsha)
+        calls = []
+        p1, p2, p3 = self._patch_chain(binding)
+        rt = r"C:\canonical\runtime.exe"
+        with p1, p2, p3, \
+             mock.patch.object(orchestrator.capture_mod, "execute_capture",
+                               side_effect=self._mock_execute_capture(calls)):
+            res = orchestrator.run(allow_dirty=True, model_path=r"M:\fake.gguf",
+                                   capture_fn=None, runtime_path=rt)
+        self.assertEqual(res["outcome"], orchestrator.OUTCOME_PASS, res.get("message"))
+        self.assertTrue(calls)
+        # Exactly the orchestrator run() runtime_path is propagated; no competing source.
+        self.assertTrue(all(c["runtime_path"] == rt for c in calls))
+        propagated = {c["runtime_path"] for c in calls}
+        self.assertEqual(propagated, {rt})
+
+    def test_injectable_capture_fn_still_receives_runtime_path(self):
+        """Injectable capture_fn path must keep working with runtime_path in kwargs."""
+        rp, rsha = self._make_reused_trace()
+        binding = self._binding(rp, rsha)
+        seen = []
+        created = {}
+
+        def spy_capture(model_path, workload_id, seed, out_dir, allow_dirty=False,
+                        runtime_path=None, dry_run=False, **kw):
+            seen.append(runtime_path)
+            return self._fake_capture(created)(model_path, workload_id, seed, out_dir,
+                                               allow_dirty=allow_dirty, runtime_path=runtime_path,
+                                               dry_run=dry_run, **kw)
+
+        p1, p2, p3 = self._patch_chain(binding)
+        rt = r"C:\rt\llama-server.exe"
+        with p1, p2, p3:
+            res = orchestrator.run(allow_dirty=True, model_path=r"M:\fake.gguf",
+                                   capture_fn=spy_capture, runtime_path=rt)
+        self.assertEqual(res["outcome"], orchestrator.OUTCOME_PASS, res.get("message"))
+        self.assertEqual(len(seen), 7)
+        self.assertTrue(all(s == rt for s in seen))
 
 
 class RunnerTests(TempEvidenceMixin):

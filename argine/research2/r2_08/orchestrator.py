@@ -421,7 +421,10 @@ def run(*, allow_dirty: bool = False, model_path: Optional[str] = None,
                     "message": "capture cells missing/invalid and no --model path provided; "
                                "offline analysis requires all 8 valid canonical captures.",
                     "capture_matrix": _cell_diagnostics(cells)}
-        do_capture = capture_fn or (lambda **kw: capture_mod.execute_capture(runtime_path=runtime_path, **kw))
+        # runtime_path ownership: kwargs is the single authoritative carrier for
+        # the capture call (execute_capture accepts and resolves it). The injectable
+        # capture_fn receives the same full kwargs; never duplicate runtime_path.
+        do_capture = capture_fn or capture_mod.execute_capture
         capture_dir_root = root / "R2-08" / "captures" / run_id
         for wid, seed in missing:
             if (wid, seed) == workloads.REUSED_CELL:
