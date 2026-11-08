@@ -83,9 +83,10 @@ interpreted as a proven upper bound on causal recovery.
 Research~II-B characterizes whether routing contains structure that could
 motivate causal working-set prediction. On the canonical validated trace,
 aggregate layer-local routing is concentrated (median effective expert
-fraction $0.514$, median top-8 traffic share $0.300$), while the earlier
-II-A result that LFU underperforms Global-LRU shows that aggregate
-popularity alone is insufficient for retention. Same-layer token-to-token
+fraction $0.514$, median top-8 traffic share $0.300$), while at the 4~GiB
+anchor the frequency-driven LFU baseline underperforms Global-LRU,
+showing that aggregate popularity alone does not determine the better of
+these tested causal baselines at that budget. Same-layer token-to-token
 routing exhibits measurable transition dependence (median NMI $0.099$,
 positive in every tested layer), strong short-horizon reuse locality that
 exceeds a deterministic shuffled null (median immediate reuse $0.426$ vs.

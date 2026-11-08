@@ -220,11 +220,19 @@ for path in [ROOT / "manuscript.tex", *sorted(sections_dir.glob("*.tex"))]:
         if re.search(name + r"\s*[=:]\s*[-+]?\d", text):
             check(False, f"{name} appears numerically populated in {path.relative_to(ROOT)}")
 
-# No active "Oracle-Bounded" framing in manuscript/sections (historical references belong in amendment/audit records).
+# No active post-audit Oracle-bound/headroom/exploit framing in manuscript/sections.
+# Historical policy name "Oracle-Global-Belady" and qualified historical provenance
+# outside manuscript/sections are not banned. "not a proven upper bound" is valid.
+active_banned = [
+    ("Oracle-Bounded", "active 'Oracle-Bounded' framing"),
+    ("recovers Oracle headroom", "active 'recovers Oracle headroom' phrasing"),
+    ("Oracle headroom", "active 'Oracle headroom' phrasing"),
+    ("timing information that the Oracle exploits", "active 'Oracle exploits' phrasing"),
+]
 for path in [ROOT / "manuscript.tex", *sorted(sections_dir.glob("*.tex"))]:
     text = path.read_text(encoding="utf-8")
-    check("Oracle-Bounded" not in text,
-          f"active 'Oracle-Bounded' framing found in {path.relative_to(ROOT)}")
+    for phrase, label in active_banned:
+        check(phrase not in text, f"{label} found in {path.relative_to(ROOT)}")
 
 # --- Report -----------------------------------------------------------------
 if errors:

@@ -79,5 +79,11 @@
   "amendment_commit_message": "Amend Research II-A and II-B Oracle semantics",
   "amendment_branch": "r2-main",
   "amendment_git_commit": "recorded by the single git commit with message 'Amend Research II-A and II-B Oracle semantics'",
+  "post_amendment_cleanup": {
+    "applied": true,
+    "commit_message": "Polish post-audit Research II-A and II-B semantics",
+    "scope": "Removed residual active 'Oracle headroom'/'Oracle exploits' phrasing; scoped LFU/frequency claims to the 4 GiB anchor; clarified RecoveryOfBeladyGap as signed comparator-relative metric; extended manuscript verifier guards. No numerical or canonical-evidence changes.",
+    "numerical_evidence_changed": false
+  },
   "notes": "Do not start R2-09. R2-09 remains NOT STARTED. Next action is R2-09B prerequisite/evaluation-design work including establishment of a held-out EVAL contract before causal baseline tournament or predictor evaluation."
 }
