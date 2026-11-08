@@ -1,19 +1,22 @@
 {
   "schema_version": 1,
-  "contract_version": "r2-09b-metrics-contract-v1",
+  "contract_version": "r2-09b-contract-v1.1",
   "prediction_metrics": {
     "primary_metric_id": "future_requested_expert_recall_at_k",
     "primary_metric_rationale": "For retention/admission decisions, failing to retain a future-requested expert causes a miss; recall over future requested experts directly measures coverage of needed items. It avoids misleading scalar accuracy on sparse top-k sets and is compatible with per-layer next-step targets. Precision/Jaccard/F1/ranking/byte-weighted variants remain diagnostic because over-prediction has cache-pressure costs evaluated in R2-11 retention metrics.",
     "metrics": [
       {
         "metric_id": "future_requested_expert_recall_at_k",
-        "name": "Recall of future requested experts",
+        "name": "Recall of future requested experts at k_tl",
         "direction": "higher",
         "primary": true,
         "applies_to": [
           "next_step_same_layer_routing",
           "short_horizon_future_working_set"
-        ]
+        ],
+        "k_tl": "router requested cardinality from trace metadata/event; expected 8 for canonical Qwen3-30B-A3B Research2 traces; exact target cardinality used if variable",
+        "fixed_output_cardinality": "exactly k_tl unique expert IDs / top-k_tl cutoff",
+        "tie_breaking": "score desc, then stable (layer,expert_id) asc"
       },
       {
         "metric_id": "precision_at_k",

@@ -1,15 +1,17 @@
 {
   "schema_version": 1,
-  "space_version": "r2-09b-baseline-space-v1",
-  "selection_prerequisite": "All hyperparameters, tie-breakers, and capacity semantics frozen before R2-09A DEV tournament runs. DEV only for selection/tuning; EVAL never used.",
+  "space_version": "r2-09b-baseline-space-v1.1",
+  "selection_prerequisite": "All hyperparameters, tie-breakers, byte/capacity/ghost/object-size semantics, cold-start/admission/eviction rules are frozen before R2-09A DEV tournament runs. DEV only for selection/tuning; EVAL never used.",
   "byte_capacity_semantics": {
     "unit": "bytes of expert cache residency, per Research2 replay/policy convention",
     "budget_parameter": "M in {1610612736,4294967296,8589934592} for primary budgets",
     "object_granularity": "per-expert-per-layer cache object (or repository-equivalent replay unit), sized by trace metadata; variable expert sizes respected where trace provides them",
-    "deterministic_tie_breaking": "All policies must define deterministic tie-breaking (e.g., stable expert key/layer/expert id order after primary score/recency key). Ties must not depend on hash-map iteration order.",
+    "deterministic_tie_breaking": "All policies must define deterministic tie-breaking (primary score/key, then last-access/LRU where specified, then stable (layer, expert_id) key ascending). Ties must not depend on hash-map iteration order.",
     "cold_start": "empty resident set at replay start unless an explicitly frozen warm-start variant is preregistered separately; primary contract uses canonical cold-start semantics.",
     "admission": "on miss/request, object is admitted if space available after eviction; objects required simultaneously by a step/union event must respect the same byte budget semantics used by Research2 replay.",
-    "eviction": "evict until admitting requested object(s) fits within M; if an object cannot fit M, follow frozen replay contract behavior and record violation."
+    "eviction": "evict until admitting requested object(s) fits within M; if an object cannot fit M, follow frozen replay contract behavior and record violation.",
+    "global_reference_time": "For LRU/LRU-K/LFU tie-break/recency metadata, use global causal access ordinal (monotonic integer incremented per served expert-object access in replay order). Deterministic.",
+    "object_size_S_ref": "S_ref(trace)=median of expert_bytes values over layers in trace metadata (deterministic). If unavailable, fallback S_ref=mean available expert_bytes; if none, count-based fallback S_ref=1 with explicit logging (canonical Research2 traces provide expert bytes)."
   },
   "baseline_families": [
     {
@@ -23,9 +25,14 @@
         "search_space": {},
         "fixed": {
           "scope": "global",
-          "recency": "last access/serving order per Research2 replay semantics"
+          "recency": "last access/serving order per Research2 replay semantics",
+          "eviction": "victim = resident object with least recent global causal access ordinal",
+          "admission": "on miss/request, admit object; evict LRU victims until bytes fit in M",
+          "tie_break": "if equal recency impossible by ordinal definition, stable (layer,expert_id) asc",
+          "cold_start": "empty resident set"
         }
-      }
+      },
+      "frozen_semantics_complete": true
     },
     {
       "family_id": "lfu",
@@ -38,10 +45,15 @@
         "search_space": {},
         "fixed": {
           "scope": "global",
-          "frequency": "cumulative causal access count",
-          "tie_break": "LRU-or-stable-key (must be frozen in implementation before run)"
-        }
-      }
+          "frequency": "cumulative causal access count (integer) per object while tracked; on first admission count=1 for the causing access",
+          "tie_break": "LRU-or-stable-key (must be frozen in implementation before run)",
+          "eviction": "victim = lowest frequency; tie-break 1 = least recent global access ordinal (LRU among ties); tie-break 2 = stable (layer,expert_id) asc",
+          "admission": "on miss/request, admit object with causal frequency count; evict until fit",
+          "cold_start": "empty resident set, zero counts"
+        },
+        "notes": "Tie-break fully frozen (no implementation-time choice)."
+      },
+      "frozen_semantics_complete": true
     },
     {
       "family_id": "twoq",
@@ -64,9 +76,25 @@
           ],
           "main_policy": [
             "LRU"
+          ],
+          "s_ref_formula": [
+            "median_trace_expert_bytes"
           ]
         },
-        "notes": "a1in_fraction is fraction of byte budget M assigned to A1in (remaining to Am, minus metadata represented logically; implementation must define deterministic byte accounting). a1out_slots_factor scales ghost history capacity relative to nominal object count implied by M/median object size or an explicitly frozen formula; exact formula frozen in implementation spec before R2-09A."
+        "notes": "All semantics frozen; no implementation-spec deferral."
+      },
+      "frozen_semantics_complete": true,
+      "frozen_semantics": {
+        "byte_partition": "M_a1in=floor(M*a1in_fraction); M_am=M-M_a1in. Both are resident byte budgets.",
+        "a1in": "FIFO probationary resident queue. Access to resident A1in object: no promotion, no FIFO reorder. Eviction victim: FIFO oldest. Evicting from A1in inserts key into A1out ghost.",
+        "am": "Main resident LRU. Access to resident Am object: update global recency/LRU. Eviction victim: LRU (least recent global access ordinal); tie stable (layer,expert_id) asc.",
+        "a1out_ghost": "Non-resident key/history only; does not consume M. Capacity G=max(1,floor(N_ref*a1out_slots_factor)), N_ref=max(1,floor(M/S_ref)). S_ref=median expert_bytes across trace layers (deterministic; fallbacks as global byte semantics). On overflow remove oldest ghost. Stores key identity only.",
+        "on_access_resident": "if in Am -> Am LRU update; if in A1in -> no change.",
+        "on_miss_key_in_a1out": "ghost hit: remove key from A1out; admit object to Am; evict Am LRU victims until fit.",
+        "on_miss_key_not_in_a1out": "admit object to A1in; evict A1in FIFO victims until fit; each evicted A1in key inserted into A1out (applying A1out capacity).",
+        "simultaneous_required_objects": "processed in deterministic stable (layer,expert_id) order; byte accounting/eviction per replay contract.",
+        "tie_break": "stable (layer,expert_id) asc where score/time equal.",
+        "cold_start": "all structures empty."
       }
     },
     {
@@ -86,9 +114,23 @@
             0,
             1,
             2
+          ],
+          "reference_time": [
+            "global_causal_access_ordinal"
+          ],
+          "history_for_new_object": [
+            "current_ordinal_padded"
           ]
         },
-        "notes": "K search space frozen prospectively (small finite grid). correlated_reference_period_objects is an optional short suppression window in object references/steps, default 0 unless evidence in implementation spec; if 0, standard LRU-K behavior."
+        "notes": "Semantics frozen prospectively; finite grid unchanged."
+      },
+      "frozen_semantics_complete": true,
+      "frozen_semantics": {
+        "reference_time": "global causal access ordinal (monotonic integer).",
+        "history": "maintain last K reference ordinals per tracked object. On access at ordinal t, append/update history causally; if correlated_reference_period_objects=p>0, ignore updates within p ordinals after previous recorded reference for LRU-K history (deterministic suppression window); p=0 means standard LRU-K.",
+        "eviction": "victim = resident object with smallest backward K-distance (oldest Kth reference). If fewer than K references, treat missing Kth reference as -infinity/oldest sentinel so insufficient-history objects are eviction-eligible by oldest available reference; tie-break by oldest last reference, then stable (layer,expert_id) asc.",
+        "admission": "on miss/request admit and record causal reference; evict until fit.",
+        "cold_start": "empty resident/history or empty history tables."
       }
     },
     {
@@ -115,9 +157,21 @@
           ],
           "admission": [
             "on_miss_insert"
+          ],
+          "score_update": [
+            "multiply_all_scores_by_decay_every_aging_interval_steps_then_increment_accessed"
           ]
         },
-        "notes": "Finite grid motivated by II-B short/medium locality evidence but not selected from descriptive evidence. Score update/eviction semantics must be deterministic and byte-capacity-aware."
+        "notes": "Semantics frozen prospectively; finite grid unchanged."
+      },
+      "frozen_semantics_complete": true,
+      "frozen_semantics": {
+        "score": "floating-point or fixed deterministic scaled score S(obj).",
+        "aging": "every aging_interval_steps global causal access ordinals (deterministic schedule), apply S(obj):=S(obj)*decay_factor for all tracked resident objects before processing accesses in that interval boundary as specified by implementation (must be deterministic and identical across runs).",
+        "access": "on causal access to object, after scheduled aging for current step, set/increment S(obj):=S(obj)+1.0 (admission access counts).",
+        "eviction": "victim = lowest S(obj); tie-break least recent global access ordinal, then stable (layer,expert_id) asc.",
+        "admission": "on miss admit with S initialized by access rule; evict until fit.",
+        "cold_start": "empty resident set, no scores."
       }
     },
     {
@@ -144,6 +198,11 @@
           ]
         },
         "notes": "Disabled by default in frozen space; enabling requires contract amendment/version bump before R2-09A."
+      },
+      "frozen_semantics_complete": true,
+      "frozen_semantics": {
+        "enabled": false,
+        "note": "Disabled; no semantics active. Any enablement requires amendment with full frozen semantics before R2-09A."
       }
     }
   ]

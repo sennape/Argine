@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "contract_version": "r2-09b-prediction-contract-v1",
+  "contract_version": "r2-09b-contract-v1.1",
   "primary_target": {
     "target_id": "next_step_same_layer_routing",
     "name": "Next-step same-layer routing prediction",
     "level": "primary_confirmatory_benchmark_target",
-    "definition": "For decode step t and each MoE layer l, predict the set of expert IDs E_{t,l} that will be routed/requested at step t in layer l (top-k experts as defined by trace/runtime semantics, k recorded in trace metadata). Input may use only information available at decision time before observing E_{t,l} and any future step t'>t.",
+    "definition": "For decode step t and each MoE layer l, predict the set of expert IDs E_{t,l} that will be routed/requested at step t in layer l. k_tl = |E_{t,l}| is the router's requested cardinality for that (step,layer) as recorded in trace metadata (trace.meta.top_k / per-event routing count). For the canonical Qwen3-30B-A3B Research2 trace contract this is expected to be 8; implementations must read actual k_tl from trace metadata/events and not assume 8 when trace evidence differs. Input may use only information available at the frozen causal decision boundary before observing E_{t,l}, forbidden same-step layers, and future steps.",
     "granularity": "per-layer, per-decode-step",
     "output_forms": [
       "binary_set",
@@ -32,7 +32,20 @@
     16
   ],
   "input_time_semantics": {
-    "causal_boundary": "At decision time for step t, predictor/baseline may use past observed routing, cache state, recency/frequency/transition history, and other preregistered causal features from steps < t (or repository-equivalent causal boundary). No access to E_{t,l}, future steps, future cache events, or EVAL labels."
+    "causal_boundary_name": "intrastep_cross_layer_causal_context",
+    "definition": "When predicting E_{t,l} (routing for layer l at decode step/token t), the predictor may use only causal information available before observing the target and forbidden elements.",
+    "allowed": [
+      "all completed prior decode steps t_prime < t (routing, cache state, recency/frequency/transition history, and other preregistered causal features)",
+      "intrastep cross-layer causal context: routing outcomes and causal features from layers < l of the same step t MAY be used because they have already occurred causally in the forward pass"
+    ],
+    "forbidden": [
+      "target E_{t,l} itself",
+      "any layer > l of the same step t",
+      "any future step t_prime > t",
+      "future expert IDs/routing/cache events",
+      "EVAL labels or post-hoc unavailable labels"
+    ],
+    "stricter_variant": "A prior-step-only (no same-step earlier-layer) variant may be reported only as secondary/diagnostic if separately preregistered; primary benchmark permits intrastep cross-layer causal context."
   },
   "allowed_feature_families": [
     {
@@ -58,7 +71,7 @@
     {
       "feature_family_id": "cross_layer_routing_history",
       "causal_only": true,
-      "note": "Candidate signal, not established superior signal."
+      "note": "Candidate signal; may include prior-step cross-layer history and/or intrastep layers < l of same step t under the frozen causal boundary. Not established superior."
     },
     {
       "feature_family_id": "observable_workload_family_context",
@@ -82,5 +95,14 @@
         "post-hoc workload labels unavailable at runtime"
       ]
     }
-  ]
+  ],
+  "primary_metric_cutoff": {
+    "metric_id": "future_requested_expert_recall_at_k",
+    "k_definition": "k_tl = router requested cardinality for target (t,l) from trace metadata/event (expected 8 for canonical Qwen3-30B-A3B Research2 traces).",
+    "predictor_output_cardinality": "Primary set prediction must output exactly k_tl unique expert IDs for target (t,l). A ranked/scored predictor is evaluated at cutoff k_tl.",
+    "ranking_cutoff": "top-k_tl by score",
+    "tie_breaking": "deterministic: higher score first; ties broken by lower stable (layer, expert_id) lexical/numeric key (expert_id ascending within layer) unless trace uses a different stable global key, which must be recorded; never hash-map order.",
+    "variable_cardinality": "Not expected for canonical top-k routing; if encountered, use actual |E_{t,l}| as k_tl for that target and require exactly |E_{t,l}| predicted unique experts.",
+    "anti_gaming": "Recall is computed at fixed cardinality k_tl; predicting more than k_tl experts is not permitted for the primary set metric (extra predictions ignored only if a reporting bug occurs and must be flagged; implementations must enforce exactly k_tl)."
+  }
 }

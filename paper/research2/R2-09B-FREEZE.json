@@ -1,23 +1,46 @@
 {
-  "freeze_version": "1.0.0",
+  "freeze_version": "1.1.0",
   "freeze_name": "Research-II-R2-09B-Benchmark-Evaluation-Contract-Freeze",
   "freeze_timestamp_utc": "2026-11-08T00:00:00Z",
   "status": "CONTRACT-FROZEN",
   "contract_state": "R2_09B_CONTRACT_FROZEN_WITH_RUNTIME_MATERIALITY_GATE",
-  "scope": "R2-09B preregistration/benchmark/evaluation contract only. No R2-09A experiments run, no EVAL traces captured/opened/inspected, no R2-10 predictor implemented, no R2-11 retention run, no R2-12 runtime validation, no model execution, no R2-01..R2-08 canonical evidence modified.",
-  "contract_version": "r2-09b-contract-v1",
+  "scope": "R2-09B preregistration/benchmark/evaluation contract v1.1 (hardened before R2-09A). No R2-09A experiments run, no EVAL traces captured/opened/inspected, no R2-10 predictor implemented, no R2-11 retention run, no R2-12 runtime validation, no model execution, no R2-01..R2-08 canonical evidence modified.",
+  "contract_version": "r2-09b-contract-v1.1",
   "contract_schema_version": 1,
-  "contract_digest": "2f4c0859c6ce3f589142cd8b1c6cb3c3a47946f1b222a5a2e875495cccaa6f5d",
+  "contract_digest": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28",
+  "previous_contract_version_v1_0": "r2-09b-contract-v1",
+  "previous_contract_digest_v1_0": "2f4c0859c6ce3f589142cd8b1c6cb3c3a47946f1b222a5a2e875495cccaa6f5d",
+  "amendment": {
+    "id": "R2-09B-v1.1-hardening",
+    "commit_message": "Harden R2-09B preregistration contract",
+    "reason": "Resolve preregistration ambiguities before R2-09A: EVAL instance-vs-family confirmatory scope, EVAL spec visibility model, exact B_selected DEV aggregation/normalization, primary recall fixed k_tl cutoff/cardinality/ties, explicit intrastep cross-layer causal decision boundary, and complete frozen baseline semantics.",
+    "changed_semantic_fields": [
+      "EVAL confirmatory scope limited to 4 held-out workload instances; family/category-level generalization unmeasured",
+      "EVAL spec visibility = EVAL_PROMPTS_VISIBLE_BUT_RESULTS_HELD_OUT (not fully blinded); prompt-specific engineering prohibited; EVAL results remain locked",
+      "B_selected(M) aggregation: mean miss_bytes/decode_step with equal weight per DEV instance; normalization/tie-breaking frozen",
+      "Primary recall future_requested_expert_recall_at_k uses k_tl from trace metadata/event (expected 8 for canonical Qwen3-30B-A3B); exactly k_tl output/cutoff; deterministic ties; variable-cardinality rule frozen",
+      "Intrastep cross-layer causal context explicitly allowed (layers < l of same step t); target/l>l/future forbidden",
+      "Baseline semantics fully frozen (2Q byte partition/ghost/A1in/Am rules, LFU/LRU/LRU-K/aged deterministic tie-breaks/details); no implementation-spec deferral"
+    ],
+    "unchanged_scientific_constraints": [
+      "CASE C semantics unchanged",
+      "EXP-025 P2 unsupported for arbitrary policy streams; threshold PENDING_POLICY_STREAM_CALIBRATION",
+      "stochastic profile UNRESOLVED",
+      "primary budgets 1.5/4/8 GiB",
+      "EVAL results locked; DEV-only selection; LFU auxiliary DEV evidence referenced not rerun",
+      "no R2-09A/R2-10 execution, no EVAL capture/open/inspection, no model run"
+    ]
+  },
   "contract_dir": "experiments/R2-09-prediction-benchmark",
   "contract_component_hashes": {
-    "contract.json": "8d6c2a427dc10eddacb9e875b6eafe1a0a79496453b487e1d5459563047adb18",
-    "eval_manifest.json": "3d10733a46d8c745719174d401666569188ff15ab08b3697b394c0fc3da5beae",
-    "baseline_space.json": "e88e5b46c17cac4b094020b19293ce0f40d36582aeda43ee995142049b979b3f",
-    "prediction_contract.json": "9a8d2b2d47dcce9d37a5b45b39ae76f5084c8a192e90b6eac72482cfd059726c",
-    "metrics_contract.json": "db886d4fe4c077994ef6c3e110d59f3b656c946527a9fe4ee5faad44c111b3b4",
-    "decision_rules.json": "fa927601d737f33fe60aa69baec2e9ab360b6bb13c20664d7dff515ac48f97a0",
-    "README.md": "0b47fe4f50c82af44c41f003bd42c16a5205e03f187b05e9a58a0f28b84d576c",
-    "PREREGISTRATION.md": "6eeb0234e179dceef98d35b2b94dd0dc595593d266c769bdebc3fcaa7e3406b7"
+    "contract.json": "292a50ca58c9c4dae45f940b36b3dad9e1fae91ae829b634f854ab329279dbb8",
+    "eval_manifest.json": "08ae0d065362e62a83e6ac445df6c5a5d66fc45fdadf2f5bd38aee12a97e57a8",
+    "baseline_space.json": "1e0ef89a76ca79d3b311778a23538dd7346cb9192ec72325212e13fd80662649",
+    "prediction_contract.json": "063f7febd3bb22ccc3a79241f2060bcac8ea7e7705a9b3789ce7b15ae10fbcaf",
+    "metrics_contract.json": "dbb11ec065061666793fdc1882e165482eda4715e0ba51f036e18e30fa26a7b3",
+    "decision_rules.json": "a2cde4b4e8a1337f19a1e12a80ba7295698da75bff58a64879dfa2db275deb2a",
+    "README.md": "0aa429225b1a25449ccc3491b69d6c8e0b8dfc709b44615a35428d10d52744c1",
+    "PREREGISTRATION.md": "01acee90be1d713c1333e0c5fec3be0107d6b8a4c5e1175e114a8e4877132df5"
   },
   "upstream": {
     "ii_a_ii_b_paper_baseline_commit": "4025a2ecdd30cb5d2604fdfdf5cb4966f594a11d",
@@ -36,28 +59,31 @@
     "lfu_rerun": false
   },
   "eval_status": "ACQUISITION_CONTRACT_FROZEN_NOT_EXECUTED",
-  "eval_visibility_state": "EVAL_LOCKED",
+  "eval_result_visibility_state": "EVAL_LOCKED",
+  "eval_spec_visibility_status": "EVAL_PROMPTS_VISIBLE_BUT_RESULTS_HELD_OUT",
+  "eval_confirmatory_scope": "4 held-out workload instances only (one per nominal category); family/category-level generalization unmeasured",
   "stochastic_profile_status": "UNRESOLVED (STOCHASTIC_PROFILE_UNRESOLVED; deterministic defined; stochastic robustness claims blocked until explicit profile + seeds frozen by contract amendment)",
   "practical_threshold_status": "PENDING_POLICY_STREAM_CALIBRATION (no numeric threshold fabricated; engineering-materiality claims blocked; R2-09A not blocked)",
   "r2_09a_readiness": {
+    "status": "R2_09A_READY",
     "may_start_dev_only": true,
-    "requires": [
+    "requires_all_satisfied": [
       "DEV/EVAL firewall frozen",
       "EVAL acquisition/specs frozen (acquisition contract; EVAL not opened)",
       "primary budgets frozen",
       "baseline families frozen",
-      "hyperparameter search spaces frozen",
-      "B_selected rule frozen",
-      "metrics frozen",
-      "CASE C semantics frozen",
-      "reporting granularity frozen",
-      "contract version/digest created"
+      "hyperparameter search spaces and baseline semantics fully frozen",
+      "B_selected rule frozen with exact aggregation/normalization/weights/ties",
+      "primary recall cutoff/cardinality and cross-layer causal boundary frozen",
+      "metrics/CASE C/reporting granularity frozen",
+      "contract version/digest created (v1.1)"
     ],
     "gates_not_blocking_r2_09a": [
       "PENDING_POLICY_STREAM_CALIBRATION blocks R2-11 engineering-materiality claims",
-      "STOCHASTIC_PROFILE_UNRESOLVED blocks stochastic robustness claims"
+      "STOCHASTIC_PROFILE_UNRESOLVED blocks stochastic robustness claims",
+      "EVAL_PROMPTS_VISIBLE_BUT_RESULTS_HELD_OUT: not fully blinded; prompt-specific engineering prohibited"
     ]
   },
   "historical_freezes_rewritten": false,
-  "notes": "Do not start R2-09A experiments in this freeze commit. II-A/II-B paper remains semantically closed."
+  "notes": "v1.1 amends v1.0; v1.0 digest preserved. II-A/II-B paper remains semantically closed."
 }

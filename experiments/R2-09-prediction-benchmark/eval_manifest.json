@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "manifest_version": "r2-09b-eval-manifest-v1",
+  "manifest_version": "r2-09b-eval-manifest-v1.1",
   "eval_status": "ACQUISITION_CONTRACT_FROZEN_NOT_EXECUTED",
   "eval_visibility_state": "EVAL_LOCKED",
   "opened_utc": null,
@@ -8,8 +8,10 @@
   "audit_result": "No existing untouched Research2 EVAL trace/capture artifacts found in repository evidence/data paths during R2-09B contract freeze (search over tracked repo paths for EVAL/r2 trace/capture artifacts). Absence is documented; R2-09B freezes acquisition/design contract only.",
   "design_decision": {
     "label": "DESIGN_DECISION_NOT_STATISTICALLY_POWERED",
-    "choice": "Smallest balanced held-out design supporting per-workload-family reporting: 4 new EVAL workload specifications (1 per family: coding, reasoning, summarization, instruction) x 1 deterministic capture each = 4 primary EVAL capture cells under the frozen deterministic condition. Replicate/robustness extensions require explicit contract amendment before EVAL opening if scientifically justified.",
-    "rationale": "Balances all four II-B workload families while keeping acquisition minimal and avoiding invented sample sizes. Supports per-(budget,workload-family) reporting for the frozen primary deterministic condition. Not a statistically powered sample-size claim."
+    "option": "A_MINIMAL_FOUR_INSTANCES",
+    "choice": "Retain minimal balanced held-out design: 4 new EVAL workload specifications = 1 held-out workload instance per nominal category (coding, reasoning, summarization, instruction), 1 deterministic capture each = 4 primary EVAL capture cells. No prospective expansion performed before R2-09A.",
+    "confirmatory_scope": "Primary confirmatory claims are limited to these four frozen held-out workload instances/specs. A single instance does not by itself establish generalization across an entire workload family/category. Family/category-level generalization is unmeasured.",
+    "rationale": "Minimal balanced design supports per-instance reporting without inventing sample size or adding EVAL instances post hoc. Not statistically powered."
   },
   "model_identity": {
     "name": "Qwen3-30B-A3B-Q4_K_M",
@@ -61,8 +63,10 @@
       "source_path": "research2/workloads/r2_09/coding-v1.json",
       "sha256": "a7af978474839e737e183105e4df945d7f6651d58e00862d8189f47bd48a5ff9",
       "n_predict": 512,
-      "description": "Held-out EVAL coding spec; new task, no reuse of Research2 DEV prompts.",
-      "source_input": null
+      "description": "Held-out EVAL coding spec; new task, no reuse of Research2 DEV prompts. Confirmatory scope is limited to this held-out instance; not a claim of generalization across the full nominal workload category.",
+      "source_input": null,
+      "scope_label": "held-out workload instance",
+      "nominal_workload_category": "coding"
     },
     {
       "workload_id": "reasoning-eval-v1",
@@ -72,8 +76,10 @@
       "source_path": "research2/workloads/r2_09/reasoning-v1.json",
       "sha256": "bd4d4b304ff3c5189720b23ab57ea2891adcdbb5f2af3c92768871604901306f",
       "n_predict": 512,
-      "description": "Held-out EVAL reasoning spec; new analytical task, no reuse of R2-08 DEV prompts.",
-      "source_input": null
+      "description": "Held-out EVAL reasoning spec; new analytical task, no reuse of R2-08 DEV prompts. Confirmatory scope is limited to this held-out instance; not a claim of generalization across the full nominal workload category.",
+      "source_input": null,
+      "scope_label": "held-out workload instance",
+      "nominal_workload_category": "reasoning"
     },
     {
       "workload_id": "summarization-eval-v1",
@@ -83,13 +89,15 @@
       "source_path": "research2/workloads/r2_09/summarization-v1.json",
       "sha256": "59e5540bbc3e357ee0e7cea8e895ae561ba398aa6e3f17b149b58e6b3fa03b4f",
       "n_predict": 512,
-      "description": "Held-out EVAL summarization spec with committed local source; no web/network dependency; no reuse of R2-08 DEV prompts.",
+      "description": "Held-out EVAL summarization spec with committed local source; no web/network dependency; no reuse of R2-08 DEV prompts. Confirmatory scope is limited to this held-out instance; not a claim of generalization across the full nominal workload category.",
       "source_input": {
         "path": "research2/workloads/r2_09/sources/summarization_eval_source.txt",
         "sha256": "7f4db155e906d5942a18f14a86844dfa644f3e0b7bf8847a833350bffcaf971a",
         "committed_locally": true,
         "web_network_dependency": false
-      }
+      },
+      "scope_label": "held-out workload instance",
+      "nominal_workload_category": "summarization"
     },
     {
       "workload_id": "instruction-eval-v1",
@@ -99,8 +107,22 @@
       "source_path": "research2/workloads/r2_09/instruction-v1.json",
       "sha256": "85e58d9a6d11a6364de18e8992f22ae36658d47c00094ff7888cc19e387bf4d5",
       "n_predict": 512,
-      "description": "Held-out EVAL instruction/expository spec; new task, no reuse of R2-08 DEV prompts.",
-      "source_input": null
+      "description": "Held-out EVAL instruction/expository spec; new task, no reuse of R2-08 DEV prompts. Confirmatory scope is limited to this held-out instance; not a claim of generalization across the full nominal workload category.",
+      "source_input": null,
+      "scope_label": "held-out workload instance",
+      "nominal_workload_category": "instruction"
     }
-  ]
+  ],
+  "spec_visibility": {
+    "status": "EVAL_PROMPTS_VISIBLE_BUT_RESULTS_HELD_OUT",
+    "fully_blinded": false,
+    "result_visibility": "EVAL_RESULT_LOCKED",
+    "rationale": "Exact EVAL workload spec/prompt files are stored in the tracked repository for immutable provenance and SHA binding. In a repository-accessible workflow this does not prevent reading prompt content before method freeze; therefore the benchmark is not claimed as fully blinded to EVAL task content.",
+    "controls": [
+      "EVAL performance/results remain locked and must not be inspected until B_selected and selected R2-10 predictor/config are frozen and EVAL opening is recorded.",
+      "Prompt-specific feature/model engineering tailored to exact EVAL prompt/task content is prohibited.",
+      "No EVAL result may be used for tuning/selection/metric/threshold/falsification changes or candidate addition/removal while reporting held-out EVAL.",
+      "Violation or prompt-content-driven overfitting risk must be reported as a benchmark-integrity limitation."
+    ]
+  }
 }

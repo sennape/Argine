@@ -11,8 +11,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
-CONTRACT_VERSION = "r2-09b-contract-v1"
+CONTRACT_VERSION = "r2-09b-contract-v1.1"
 SCHEMA_VERSION = 1
+CONTRACT_VERSION_V10 = "r2-09b-contract-v1"
+CONTRACT_DIGEST_V10 = "2f4c0859c6ce3f589142cd8b1c6cb3c3a47946f1b222a5a2e875495cccaa6f5d"
 
 # Frozen DEV identities that EVAL specs must not overlap.
 DEV_WORKLOAD_SPECS: Tuple[Dict[str, str], ...] = (
@@ -149,14 +151,22 @@ def validate_contract(contract_dir: Optional[Path] = None) -> List[str]:
     mc = c["_metrics_contract"]
     dr = c["_decision_rules"]
 
-    # versions
+    # versions / amendment
     _require(c.get("contract_version") == CONTRACT_VERSION, "contract_version mismatch", errors)
     _require(c.get("schema_version") == SCHEMA_VERSION, "schema_version mismatch", errors)
+    am = c.get("amendment", {})
+    _require(am.get("previous_contract_digest") == CONTRACT_DIGEST_V10, "v1.0 digest provenance missing/wrong", errors)
 
-    # no EVAL results populated
-    _require(em.get("eval_visibility_state") == "EVAL_LOCKED", "EVAL must be EVAL_LOCKED at freeze", errors)
+    # no EVAL results populated; spec visibility explicitly declared
+    _require(em.get("eval_visibility_state") == "EVAL_LOCKED", "EVAL results must be EVAL_LOCKED at freeze", errors)
+    sv = em.get("spec_visibility", {})
+    _require(sv.get("status") in {"EVAL_PROMPTS_VISIBLE_BUT_RESULTS_HELD_OUT", "EVAL_SPEC_HIDDEN"}, "spec visibility status must be declared", errors)
+    if sv.get("status") == "EVAL_PROMPTS_VISIBLE_BUT_RESULTS_HELD_OUT":
+        _require(sv.get("fully_blinded") is False, "visible-prompt status must not claim fully blinded", errors)
     _require(not em.get("eval_results"), "eval_results must be empty/absent", errors)
     _require(not em.get("opened_utc"), "EVAL must not be opened", errors)
+    scope = em.get("design_decision", {})
+    _require(scope.get("confirmatory_scope") or 'instance' in str(scope.get('choice','')).lower(), "EVAL confirmatory scope/instance limitation must be declared", errors)
 
     # budgets
     budgets = tuple(c.get("primary_budgets_gib", []))
@@ -185,7 +195,7 @@ def validate_contract(contract_dir: Optional[Path] = None) -> List[str]:
             actual = sha256_file(p)
             _require(actual == s["sha256"], f"hash mismatch for {s['source_path']}: {actual} != {s['sha256']}", errors)
 
-    # baseline families + hyperparam spaces
+    # baseline families + hyperparam spaces + complete semantics
     families = bs.get("baseline_families", [])
     fam_ids = [f["family_id"] for f in families]
     _require(len(fam_ids) == len(set(fam_ids)), "duplicate baseline family_id", errors)
@@ -198,6 +208,15 @@ def validate_contract(contract_dir: Optional[Path] = None) -> List[str]:
         tunable = bool(hp.get("tunable")) if isinstance(hp, dict) else False
         if tunable:
             _require(isinstance(search, dict) and search, f"tunable baseline {f['family_id']} missing frozen search_space", errors)
+        # v1.1: no outcome-relevant baseline semantics deferred to implementation spec
+        blob = _canon(f)
+        _require("exact formula frozen in implementation spec before R2-09A" not in blob, f"baseline {f.get('family_id')} leaves semantics deferred to implementation spec", errors)
+        if f.get("frozen_semantics_complete") is True or f.get("family_id") in {"global_lru","lfu","twoq","lru_k","aged_frequency"}:
+            sem = f.get("frozen_semantics") or hp.get("fixed") or {}
+            _require(bool(sem), f"baseline {f.get('family_id')} missing frozen semantics", errors)
+    twoq = next((f for f in families if f.get("family_id")=="twoq"), {})
+    tsem = twoq.get("frozen_semantics", {})
+    _require("a1out_ghost" in tsem and "byte_partition" in tsem, "2Q frozen semantics incomplete (ghost/byte partition)", errors)
 
     # LFU existing evidence referenced, not rerun
     refs = c.get("existing_dev_evidence", {})
@@ -205,18 +224,27 @@ def validate_contract(contract_dir: Optional[Path] = None) -> List[str]:
     _require(refs.get("lfu_classification") == "LFU_SWEEP_CANONICAL_AUXILIARY", "LFU classification missing/wrong", errors)
     _require(refs.get("rerun_lfu_sweep") is False, "LFU sweep must not be rerun", errors)
 
-    # prediction horizons/targets
+    # prediction horizons/targets + recall cutoff + causal boundary
     _require(pc.get("primary_target"), "missing primary prediction target", errors)
     horizons = pc.get("horizons", [])
     _require(isinstance(horizons, list) and horizons, "missing prediction horizons", errors)
     _require(all(f.get("causal_only") is True for f in pc.get("allowed_feature_families", [])), "all feature families must be causal_only", errors)
     _require(any(f.get("feature_family_id") == "future_information" for f in pc.get("forbidden_features", [])) or pc.get("forbidden_features"), "forbidden features must be declared", errors)
+    cutoff = pc.get("primary_metric_cutoff", {})
+    _require("k_tl" in str(cutoff.get("k_definition","")) or "router requested cardinality" in str(cutoff.get("k_definition","")), "primary recall k_tl/cutoff must be frozen", errors)
+    _require("exactly" in str(cutoff.get("predictor_output_cardinality","")), "primary recall output cardinality must be fixed (exactly k_tl)", errors)
+    its = pc.get("input_time_semantics", {})
+    allowed = _canon(its.get("allowed", []))
+    _require("layers < l" in allowed or "layers<l" in allowed or "same step t" in allowed, "intrastep cross-layer causal boundary must be explicit", errors)
+    _require("layer > l" in _canon(its.get("forbidden", [])) or "layers > l" in _canon(its.get("forbidden", [])), "cross-layer forbidden boundary must be explicit", errors)
 
     # metrics
     pm = mc.get("prediction_metrics", {})
-    _require(pm.get("primary_metric_id"), "missing primary prediction metric", errors)
+    _require(pm.get("primary_metric_id") in {"future_requested_expert_recall_at_k","future_requested_expert_recall_at_k_tl"}, "missing primary prediction metric", errors)
     pdir = {m["metric_id"]: m.get("direction") for m in pm.get("metrics", [])}
     _require(pdir.get(pm.get("primary_metric_id")) in {"higher", "lower"}, "primary prediction metric direction missing", errors)
+    pm0 = next((m for m in pm.get("metrics",[]) if m.get("metric_id")==pm.get("primary_metric_id")), {})
+    _require(pm0.get("fixed_output_cardinality") or "exactly k_tl" in _canon(pm0), "primary prediction metric must fix output cardinality/cutoff", errors)
     rm = mc.get("retention_metrics", {})
     _require(rm.get("primary_physical_replay_quantity") == "miss_bytes", "primary physical replay quantity must be miss_bytes", errors)
     for m in rm.get("metrics", []):
@@ -259,15 +287,22 @@ def validate_contract(contract_dir: Optional[Path] = None) -> List[str]:
         _require(h.get("metric_direction") in {"improve", "higher", "lower", "nonnegative", "lower_is_better_for_P"}, f"hypothesis {h['hypothesis_id']} missing direction", errors)
         _require(h.get("evaluation_state") in {"DEFINED", "EVAL_LOCKED"}, f"hypothesis {h['hypothesis_id']} state invalid", errors)
         _require(not h.get("eval_result"), f"hypothesis {h['hypothesis_id']} must not have eval_result", errors)
+        _require(h.get("workload_instance_id") or h.get("eval_workload_spec_id"), f"hypothesis {h['hypothesis_id']} missing workload instance id", errors)
+        _require("instance" in str(h.get("confirmatory_scope","")).lower(), f"hypothesis {h['hypothesis_id']} must limit confirmatory scope to instance", errors)
 
     # reporting granularity
     rg = dr.get("reporting_granularity", {})
-    _require(rg.get("primary_unit") == "budget_x_workload", "primary reporting granularity must be budget_x_workload", errors)
+    _require(rg.get("primary_unit") in {"budget_x_workload", "budget_x_workload_instance"}, "primary reporting granularity must be budget_x_workload_instance", errors)
+    _require("instance" in str(rg.get("confirmatory_scope","")).lower() or rg.get("primary_unit")=="budget_x_workload_instance", "confirmatory family-level generalization must not be implied", errors)
 
     # B_selected rule
     bsel = dr.get("b_selected_rule", {})
     _require(bsel.get("selected_from") == "DEV_ONLY", "B_selected must be selected from DEV only", errors)
     _require(bsel.get("eval_hindsight_diagnostic_only") is True, "EVAL hindsight baseline must be diagnostic only", errors)
+    agg = bsel.get("aggregation", {})
+    _require("decode_steps" in str(agg.get("formula","")) and "mean" in str(agg.get("formula","")), "B_selected aggregation must normalize by decode steps with equal instance weight", errors)
+    _require(agg.get("weights") and "equal" in str(agg.get("weights","")).lower(), "B_selected weights must be explicitly equal per instance", errors)
+    _require(agg.get("tie_breaking"), "B_selected tie-breaking must be frozen", errors)
 
     # digest
     expected = c.get("contract_digest")

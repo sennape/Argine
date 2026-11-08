@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "contract_version": "r2-09b-contract-v1",
+  "contract_version": "r2-09b-contract-v1.1",
   "name": "Research2 R2-09B Benchmark and Evaluation Contract",
   "status": "FROZEN_WITH_RUNTIME_MATERIALITY_GATE",
   "freeze_utc": "2026-11-08T00:00:00Z",
@@ -116,5 +116,28 @@
     "README.md",
     "PREREGISTRATION.md"
   ],
-  "contract_digest": "2f4c0859c6ce3f589142cd8b1c6cb3c3a47946f1b222a5a2e875495cccaa6f5d"
+  "contract_digest": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28",
+  "amendment": {
+    "amends_version": "r2-09b-contract-v1",
+    "previous_contract_digest": "2f4c0859c6ce3f589142cd8b1c6cb3c3a47946f1b222a5a2e875495cccaa6f5d",
+    "amendment_id": "R2-09B-v1.1-hardening",
+    "reason": "Resolve five preregistration ambiguities before R2-09A: EVAL instance-vs-family confirmatory scope, EVAL spec visibility model, exact B_selected DEV aggregation/normalization, primary recall fixed k_tl cutoff/cardinality/ties, explicit intrastep cross-layer causal decision boundary, and complete frozen baseline semantics (including 2Q/LFU tie-break details).",
+    "changed_semantic_fields": [
+      "eval_manifest.spec_visibility (EVAL_PROMPTS_VISIBLE_BUT_RESULTS_HELD_OUT, not fully blinded) and confirmatory scope limited to 4 held-out workload instances",
+      "decision_rules.b_selected_rule aggregation formula/normalization/weights/tie-breaking",
+      "metrics_contract/prediction_contract primary recall k_tl fixed cardinality/cutoff/tie/variable handling",
+      "prediction_contract input_time_semantics intrastep cross-layer causal context (layers < l of same step t allowed; target/l>l/future forbidden)",
+      "baseline_space complete frozen semantics for all candidate baselines (2Q ghost/byte/object-size/ties, LFU tie-break, LRU-K/aged details)",
+      "decision_rules/reporting/hypotheses terminology: held-out workload instance primary confirmatory scope; family/category metadata not family-level generalization"
+    ],
+    "unchanged_scientific_constraints": [
+      "no R2-09A/R2-10 execution, no EVAL capture/open/inspection, no model run",
+      "CASE C semantics unchanged (O_B not byte-optimal; RecoveryOfBeladyGap signed, negative/>1 allowed)",
+      "EXP-025 P2 unsupported for arbitrary policy streams; no direct bytes-to-seconds; threshold PENDING_POLICY_STREAM_CALIBRATION",
+      "stochastic profile UNRESOLVED (no fabricated profile)",
+      "primary budgets 1.5/4/8 GiB; 16 GiB excluded as primary pressured budget",
+      "EVAL results locked; DEV-only selection; LFU canonical auxiliary DEV evidence referenced not rerun",
+      "R2-01..R2-08 canonical evidence and II-A+II-B paper unchanged"
+    ]
+  }
 }
