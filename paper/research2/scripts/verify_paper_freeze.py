@@ -228,6 +228,8 @@ active_banned = [
     ("recovers Oracle headroom", "active 'recovers Oracle headroom' phrasing"),
     ("Oracle headroom", "active 'Oracle headroom' phrasing"),
     ("timing information that the Oracle exploits", "active 'Oracle exploits' phrasing"),
+    ("The fraction in Eq.", "active 'fraction in Eq.' recovery phrasing"),
+    ("same declared policy set", "ambiguous R2-03 'same declared policy set' phrasing"),
 ]
 for path in [ROOT / "manuscript.tex", *sorted(sections_dir.glob("*.tex"))]:
     text = path.read_text(encoding="utf-8")

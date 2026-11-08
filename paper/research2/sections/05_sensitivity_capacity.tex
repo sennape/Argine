@@ -4,11 +4,11 @@
 The 4~GiB comparison (Section~\ref{sec:oracle-headroom}) is a single
 point. We next test how the Global-LRU-vs-$O_B$ gap behaves across a
 fixed, predeclared sweep of five expert-memory budgets --
-$1.5, 2, 4, 8, 16$~GiB -- replaying the same declared policy set
-(Section~\ref{sec:oracle-headroom}) on the same validated trace at each
-budget. The 4~GiB point is a mandatory reproduction anchor: it must
-reproduce R2-02's registered Global-LRU and Oracle-Global-Belady ($O_B$)
-evidence exactly, and does (Table~\ref{tab:r2-03-sweep}).
+$1.5, 2, 4, 8, 16$~GiB -- replaying the Global-LRU and $O_B$ comparator
+pair on the same validated trace at each budget. The 4~GiB point is a
+mandatory reproduction anchor: it must reproduce R2-02's registered
+Global-LRU and Oracle-Global-Belady ($O_B$) evidence exactly, and does
+(Table~\ref{tab:r2-03-sweep}).
 
 \begin{figure}[t]
 \centering
