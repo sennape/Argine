@@ -1,0 +1,31 @@
+{
+  "accesses": 196224,
+  "budget_bytes": 8589934592,
+  "budget_gib": 8.0,
+  "budget_violations": 0,
+  "causal": true,
+  "cell_key": "8589934592__reasoning-v1__seed-43__aged_frequency__aged_frequency_decay-0p999_interval-1__3592b5938a15283e",
+  "cell_record_digest": "202d741ba5f2902155cfc6bcab892c757a06e3d5905f94b5e2dd7a159ec31de6",
+  "decode_steps": 511,
+  "deterministic": true,
+  "dev_instance_id": "reasoning-v1__seed-43",
+  "evictions": 15992,
+  "evidence_mode": "NEW_R2_09A_REPLAY",
+  "miss_bytes": 35627470848,
+  "miss_bytes_per_decode_step": 69721077.98043053,
+  "miss_rate": 0.0633714530332681,
+  "misses": 12435,
+  "misses_per_decode_step": 24.334637964774952,
+  "nominal_category": "reasoning",
+  "params": {
+    "aging_interval_steps": 1,
+    "decay_factor": 0.999,
+    "decay_form": "exponential_step_decay"
+  },
+  "peak_resident_bytes": 8589901824,
+  "policy_config_id": "aged_frequency/decay=0.999,interval=1",
+  "policy_family": "aged_frequency",
+  "result_digest": "9d99be07ec1921b7fba3c60af5450dbe7bcdc912c5ee0fd0dcdc255c7d52b299",
+  "source_run_id": "R2-09A",
+  "status": "OK"
+}

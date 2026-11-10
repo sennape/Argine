@@ -1,0 +1,49 @@
+{
+  "baseline_configs_digest": "f6f7a924d681d4a9f872c39865570fb3aada8778c86d6270f2da89be10247cf3",
+  "completed_cell_count": 624,
+  "creation_time_utc": "2026-11-10T12:58:07Z",
+  "dev_corpus_digest": "f758b77492eebc38bc81ba22d6b06ab8f19138d1099b635821369a4d022d9398",
+  "execution_generation_id": "bd19d2f6242d4612be4bcc495f0b80cf",
+  "execution_history": [
+    {
+      "completed": 0,
+      "event": "resume_or_start",
+      "pending": 624,
+      "pid": 48916,
+      "utc": "2026-11-10T12:58:08Z"
+    },
+    {
+      "event": "audit_rescan_reconcile",
+      "invalid_cells": 240,
+      "note": "post-audit rescan/reconcile; stale manifest count and tmp from 48916 PermissionError on atomic rename",
+      "utc": "2026-11-10T17:51:42Z",
+      "valid_cells": 0
+    },
+    {
+      "event": "audit_rescan_reconcile_corrected",
+      "invalid_cells": 0,
+      "note": "correct rescan: valid cell files are durable truth; reconciled stale manifest after 48916 PermissionError",
+      "utc": "2026-11-10T17:53:22Z",
+      "valid_cells": 240
+    },
+    {
+      "completed": 240,
+      "event": "resume_or_start",
+      "pending": 384,
+      "pid": 20804,
+      "utc": "2026-11-10T17:54:27Z"
+    },
+    {
+      "completed": 624,
+      "event": "complete",
+      "utc": "2026-11-10T21:54:00Z"
+    }
+  ],
+  "expected_cell_count": 624,
+  "failed_cell_count": 0,
+  "last_update_utc": "2026-11-10T21:54:00Z",
+  "pending_cell_count": 0,
+  "r2_09b_contract_digest": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28",
+  "runner_version": "r2-09a-checkpoint-runner-v1",
+  "schema_version": 1
+}

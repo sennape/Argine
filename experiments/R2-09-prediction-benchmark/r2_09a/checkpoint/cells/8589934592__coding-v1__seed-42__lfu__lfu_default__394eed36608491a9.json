@@ -1,0 +1,31 @@
+{
+  "accesses": 146304,
+  "budget_bytes": 8589934592,
+  "budget_gib": 8.0,
+  "budget_violations": 0,
+  "causal": true,
+  "cell_key": "8589934592__coding-v1__seed-42__lfu__lfu_default__394eed36608491a9",
+  "cell_record_digest": "1fbf4e5b3c175583074b37a142e58d73e81fe2086cbbafe2cacc436523cfb100",
+  "decode_steps": 381,
+  "deterministic": true,
+  "dev_instance_id": "coding-v1__seed-42",
+  "evictions": 13711,
+  "evidence_mode": "REUSED_CANONICAL_DEV_EVIDENCE",
+  "miss_bytes": 25641676800,
+  "miss_bytes_per_decode_step": 67300988.97637795,
+  "miss_rate": 0.061215004374453194,
+  "misses": 8956,
+  "misses_per_decode_step": 23.506561679790025,
+  "nominal_category": "coding",
+  "params": {
+    "halflife": 0,
+    "in_cache_only": false,
+    "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+  },
+  "peak_resident_bytes": 8589901824,
+  "policy_config_id": "lfu/default",
+  "policy_family": "lfu",
+  "result_digest": "d9f7867fab1918f012eca84adf25a15597c5f4551a501f1c7529b6b0567612ca",
+  "source_run_id": "d957077073374f1e9fd1e101a002946f",
+  "status": "OK"
+}

@@ -1,0 +1,30 @@
+{
+  "accesses": 146304,
+  "budget_bytes": 8589934592,
+  "budget_gib": 8.0,
+  "budget_violations": 0,
+  "causal": true,
+  "cell_key": "8589934592__coding-v1__seed-42__lru_k__lru_k_K-3_crp-2__e31ca82748dbd5c7",
+  "cell_record_digest": "a3e2e0c0309699441ff0e7d73780310b5a457bb83d3ae5503c62dad02bba5a49",
+  "decode_steps": 381,
+  "deterministic": true,
+  "dev_instance_id": "coding-v1__seed-42",
+  "evictions": 13177,
+  "evidence_mode": "NEW_R2_09A_REPLAY",
+  "miss_bytes": 23169687552,
+  "miss_bytes_per_decode_step": 60812828.22047244,
+  "miss_rate": 0.05533683289588801,
+  "misses": 8096,
+  "misses_per_decode_step": 21.249343832020998,
+  "nominal_category": "coding",
+  "params": {
+    "K": 3,
+    "correlated_reference_period_objects": 2
+  },
+  "peak_resident_bytes": 8589901824,
+  "policy_config_id": "lru_k/K=3,crp=2",
+  "policy_family": "lru_k",
+  "result_digest": "23ad7cb149336d10f08607ab90e8b43324d7788fc38e2edc17b73103e16d6c28",
+  "source_run_id": "R2-09A",
+  "status": "OK"
+}

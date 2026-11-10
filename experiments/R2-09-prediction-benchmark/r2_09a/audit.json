@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "experiment_id": "R2-09A",
+  "phase_completion": {
+    "phase_0_corpus_frozen": true,
+    "phase_1_baseline_validation": true,
+    "phase_2_tournament": true,
+    "phase_3_selection": true,
+    "phase_4_freeze_artifacts": true
+  },
+  "checks": {
+    "r2_09b_contract_valid": true,
+    "contract_digest_match": true,
+    "eval_locked_unpopulated": true,
+    "no_eval_inspection_or_opening": true,
+    "dev_corpus_frozen_before_tuning": true,
+    "all_preregistered_families_present": [
+      "global_lru",
+      "lfu",
+      "twoq",
+      "lru_k",
+      "aged_frequency"
+    ],
+    "all_parameter_grid_combinations_present": true,
+    "all_primary_budgets_present": [
+      1610612736,
+      4294967296,
+      8589934592
+    ],
+    "causal_flag_true_all_baselines": true,
+    "o_b_excluded_from_causal_ranking": true,
+    "cells_present": 624,
+    "expected_cells": 624,
+    "all_cells_ok": true,
+    "any_nondeterministic": false,
+    "any_budget_violations": false,
+    "determinism_policy": "two independent replay passes for newly generated/tunable cells; reuse verified by replay match; checkpoint only after validation",
+    "b_selected_mechanical": true,
+    "equal_instance_weight": true,
+    "decode_step_normalization": true,
+    "checkpoint_resume_hardened": true,
+    "phase0_provenance_correction_recorded": true,
+    "authoritative_dev_corpus_digest_preserved": true,
+    "checkpoint_cells_rescanned_validated": true,
+    "invalid_rejected_checkpoint_cells": 0,
+    "windows_checkpoint_manifest_robustness_fix": true
+  },
+  "outcome": "PASS",
+  "notes": [
+    "EVAL locked; no predictor/materiality claims; CASE C binding for O_B (not in causal ranking).",
+    "PHASE_0_PROVENANCE_CORRECTION recorded (NO_SCIENTIFIC_CHANGE_REPORTING_ERROR); authoritative digest f758b77 preserved; 240/240 checkpoint cells valid on rescan.",
+    "Closure-test completion correction recorded: initial timeout of two heavy suites; subsequent explicit rerun PASS for both; no scientific artifacts/results changed."
+  ],
+  "closure_test_completion_correction": {
+    "type": "closure_test_completion_correction",
+    "initial_closure_attempt": {
+      "status": "two required heavy test suites timed out during execution (environment timeout); completion gate not fully satisfied at that point",
+      "timed_out_suites": [
+        "tests/test_r2_09a_baseline_semantics.py",
+        "tests/test_r2_09a_tournament.py"
+      ]
+    },
+    "subsequent_explicit_rerun": {
+      "tests/test_r2_09a_baseline_semantics.py": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "execution_status": "PASS",
+        "timed_out": false,
+        "recomputed_heavy_canonical_replay": false,
+        "notes": "artifact/logic validation (completed in ~0.06s)"
+      },
+      "tests/test_r2_09a_tournament.py": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "execution_status": "PASS",
+        "timed_out": false,
+        "recomputed_heavy_canonical_replay": true,
+        "notes": "heavy canonical replay/verification (completed in ~1230.12s)"
+      }
+    },
+    "scientific_impact": "none",
+    "unchanged": [
+      "tournament cells (624/624)",
+      "B_selected values/configs",
+      "DEV corpus identity/digest",
+      "frozen Phase-0 manifest",
+      "tournament digest",
+      "policy families/configurations/semantics",
+      "selection rule",
+      "R2-09B contract"
+    ]
+  }
+}
