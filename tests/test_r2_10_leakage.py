@@ -46,7 +46,7 @@ LAYER1_BASE = [(5, 6)] * len(LAYER0_PREFIX)
 
 def test_causal_context_never_exposes_future_same_layer_entries():
     stream = [(i, LAYER0_PREFIX[i]) for i in range(len(LAYER0_PREFIX))]
-    for ctx in iter_causal_contexts(stream):
+    for ctx in iter_causal_contexts(stream, k=TOP_K):
         assert len(ctx.history) == ctx.position + 1
         assert ctx.history == tuple(stream[: ctx.position + 1])
         seen_positions = set(t for t, _ in ctx.history)
@@ -68,8 +68,8 @@ def test_same_layer_future_alteration_does_not_change_past_predictions():
     stream_T = same_layer_stream(trace_T, LAYER, phase="decode")
     stream_Tprime = same_layer_stream(trace_Tprime, LAYER, phase="decode")
 
-    ctx_T = list(iter_causal_contexts(stream_T))[i]
-    ctx_Tprime = list(iter_causal_contexts(stream_Tprime))[i]
+    ctx_T = list(iter_causal_contexts(stream_T, k=TOP_K))[i]
+    ctx_Tprime = list(iter_causal_contexts(stream_Tprime, k=TOP_K))[i]
     assert ctx_T == ctx_Tprime  # structural: history is bit-identical
 
     gfb = GlobalFrequencyBaseline(N_EXPERTS)
@@ -107,7 +107,7 @@ def test_target_at_horizon_indexing_and_end_of_trace_unavailable():
 def test_determinism_same_trace_config_horizon_identical_predictions():
     trace = _make_trace(LAYER0_PREFIX, LAYER1_BASE)
     stream = same_layer_stream(trace, LAYER, phase="decode")
-    contexts = list(iter_causal_contexts(stream))
+    contexts = list(iter_causal_contexts(stream, k=TOP_K))
     gfb1, gfb2 = GlobalFrequencyBaseline(N_EXPERTS), GlobalFrequencyBaseline(N_EXPERTS)
     for ctx in contexts:
         assert gfb1.predict(ctx, k=TOP_K) == gfb2.predict(ctx, k=TOP_K)
@@ -116,7 +116,7 @@ def test_determinism_same_trace_config_horizon_identical_predictions():
 def test_cold_start_position_zero_satisfies_cardinality():
     trace = _make_trace(LAYER0_PREFIX, LAYER1_BASE)
     stream = same_layer_stream(trace, LAYER, phase="decode")
-    ctx0 = next(iter_causal_contexts(stream))
+    ctx0 = next(iter_causal_contexts(stream, k=TOP_K))
     for predictor in (GlobalFrequencyBaseline(N_EXPERTS), LastObservationBaseline(N_EXPERTS)):
         pred = predictor.predict(ctx0, k=TOP_K)
         assert len(pred) == TOP_K == len(set(pred))

@@ -11,7 +11,7 @@ apply_output_contract, and never a member of any selection pool.
 from __future__ import annotations
 
 import random
-from typing import List, Sequence, Tuple
+from typing import List, Optional, Sequence, Tuple
 
 from .causal_walk import CausalContext, Entry
 from .output_contract import apply_output_contract
@@ -22,11 +22,13 @@ class GlobalFrequencyBaseline:
     including the current position. Deterministic; no hyperparameters."""
 
     family_id = "global_frequency"
+    config_id = "global_frequency/default"
 
     def __init__(self, n_experts: int):
         self.n_experts = n_experts
 
-    def predict(self, ctx: CausalContext, k: int) -> Tuple[int, ...]:
+    def predict(self, ctx: CausalContext, k: Optional[int] = None) -> Tuple[int, ...]:
+        k = ctx.k if k is None else k
         scores: List[float] = [0.0] * self.n_experts
         for _tok, experts in ctx.history:
             for e in experts:
@@ -42,11 +44,13 @@ class LastObservationBaseline:
     Deterministic; no hyperparameters."""
 
     family_id = "last_observation"
+    config_id = "last_observation/default"
 
     def __init__(self, n_experts: int):
         self.n_experts = n_experts
 
-    def predict(self, ctx: CausalContext, k: int) -> Tuple[int, ...]:
+    def predict(self, ctx: CausalContext, k: Optional[int] = None) -> Tuple[int, ...]:
+        k = ctx.k if k is None else k
         scores: List[float] = [0.0] * self.n_experts
         _tok, last_set = ctx.current
         for e in last_set:
