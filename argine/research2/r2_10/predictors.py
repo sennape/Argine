@@ -70,20 +70,63 @@ class MarkovTransitionPredictor:
 
     def __init__(self, n_experts: int):
         self.n_experts = n_experts
+        self.reset()
 
     @property
     def config_id(self) -> str:
         return "markov_transition/default"
 
-    def _transition_counts(self, history: Tuple) -> List[List[float]]:
-        counts = [[0.0] * self.n_experts for _ in range(self.n_experts)]
-        for j in range(1, len(history)):
+    def reset(self) -> None:
+        """Clear incremental cache. Does not change predict() output for
+        any given history -- purely an internal performance optimization.
+        Safe to call any time; _transition_counts falls back to a full
+        from-scratch recompute whenever the cache is absent/stale."""
+        self._cache: Dict[Tuple[int, int], float] = {}
+        self._cache_i: int = -1
+        self._cache_last_entry = None
+
+    def _transition_counts(self, history: Tuple) -> Dict[Tuple[int, int], float]:
+        # Sparse, incrementally-maintained accumulation. When called in
+        # the same strictly-increasing-position order the runner always
+        # uses (one new entry appended per call, within one layer walk),
+        # each call does O(top_k^2) work to add just the one new
+        # transition, instead of O(i * top_k^2) to recompute the whole
+        # history from scratch. Any call that is NOT a valid continuation
+        # of the cached state (non-monotonic history, as in standalone
+        # unit tests, or the first call of a fresh walk) safely falls back
+        # to the exact same full from-scratch recompute as before --
+        # correctness never depends on call order, only speed does. See
+        # PHASE2-PERFORMANCE-NOTE.md for the differential verification
+        # against the original dense implementation.
+        n = len(history)
+        i = n - 1
+        if i <= 0:
+            self._cache = {}
+            self._cache_i = i
+            self._cache_last_entry = history[i] if n else None
+            return self._cache
+        if self._cache_i == i - 1 and self._cache_last_entry == history[i - 1]:
+            src = history[i - 1][1]
+            tgt = history[i][1]
+            for c in src:
+                for e in tgt:
+                    key = (c, e)
+                    self._cache[key] = self._cache.get(key, 0.0) + 1.0
+            self._cache_i = i
+            self._cache_last_entry = history[i]
+            return self._cache
+        counts: Dict[Tuple[int, int], float] = {}
+        for j in range(1, n):
             src = history[j - 1][1]
             tgt = history[j][1]
             for c in src:
                 for e in tgt:
-                    counts[c][e] += 1.0
-        return counts
+                    key = (c, e)
+                    counts[key] = counts.get(key, 0.0) + 1.0
+        self._cache = counts
+        self._cache_i = i
+        self._cache_last_entry = history[i]
+        return self._cache
 
     def predict(self, ctx: CausalContext, k: Optional[int] = None) -> Tuple[int, ...]:
         k = ctx.k if k is None else k
@@ -91,9 +134,8 @@ class MarkovTransitionPredictor:
         _tok, current_set = ctx.current
         scores: List[float] = [0.0] * self.n_experts
         for c in current_set:
-            row = counts[c]
             for e in range(self.n_experts):
-                scores[e] += row[e]
+                scores[e] += counts.get((c, e), 0.0)
         return apply_output_contract(scores, k, self.n_experts)
 
 
@@ -110,33 +152,82 @@ class DecayedTransitionPredictor:
             raise ValueError(f"decay_factor={decay_factor} not in frozen grid {DECAYED_TRANSITION_GRID}")
         self.n_experts = n_experts
         self.decay_factor = decay_factor
+        self.reset()
 
     @property
     def config_id(self) -> str:
         return f"decayed_transition/decay={self.decay_factor}"
 
-    def _decayed_transition_counts(self, history: Tuple) -> List[List[float]]:
-        counts = [[0.0] * self.n_experts for _ in range(self.n_experts)]
-        for j in range(1, len(history)):
-            for row in counts:
-                for e in range(self.n_experts):
-                    row[e] *= self.decay_factor
+    def reset(self) -> None:
+        """Clear incremental cache. Does not change predict() output for
+        any given history -- purely an internal performance optimization."""
+        self._state: Dict[Tuple[int, int], Tuple[float, int]] = {}
+        self._cache_i: int = -1
+        self._cache_last_entry = None
+
+    def _decayed_state(self, history: Tuple) -> Tuple[Dict[Tuple[int, int], Tuple[float, int]], int]:
+        # Incrementally-maintained lazy-decay state: decaying every step by
+        # a constant factor telescopes (decay_factor**a * decay_factor**b
+        # == decay_factor**(a+b)), so each touched (c, e) cell only needs
+        # decay_factor**(elapsed steps since it was last touched) applied
+        # once, at the moment it is next touched or read -- never a full
+        # matrix rescale. When called in the same strictly-increasing-
+        # position order the runner always uses, each call does O(top_k^2)
+        # work for the one new transition, instead of O(i * n_experts^2)
+        # to rescale and rebuild the whole history from scratch. A call
+        # that is NOT a valid continuation (non-monotonic history, as in
+        # standalone unit tests, or the first call of a fresh walk) safely
+        # falls back to a full from-scratch recompute -- correctness never
+        # depends on call order, only speed does. See
+        # PHASE2-PERFORMANCE-NOTE.md for the differential verification
+        # against the original dense implementation.
+        n = len(history)
+        i = n - 1
+        if i <= 0:
+            self._state = {}
+            self._cache_i = i
+            self._cache_last_entry = history[i] if n else None
+            return self._state, i
+        if self._cache_i == i - 1 and self._cache_last_entry == history[i - 1]:
+            src = history[i - 1][1]
+            tgt = history[i][1]
+            for c in src:
+                for e in tgt:
+                    key = (c, e)
+                    val, last = self._state.get(key, (0.0, 0))
+                    val = val * (self.decay_factor ** (i - last)) + 1.0
+                    self._state[key] = (val, i)
+            self._cache_i = i
+            self._cache_last_entry = history[i]
+            return self._state, i
+        state: Dict[Tuple[int, int], Tuple[float, int]] = {}
+        for j in range(1, n):
             src = history[j - 1][1]
             tgt = history[j][1]
             for c in src:
                 for e in tgt:
-                    counts[c][e] += 1.0
-        return counts
+                    key = (c, e)
+                    val, last = state.get(key, (0.0, 0))
+                    val = val * (self.decay_factor ** (j - last)) + 1.0
+                    state[key] = (val, j)
+        self._state = state
+        self._cache_i = i
+        self._cache_last_entry = history[i]
+        return self._state, i
+
+    def _decayed_transition_counts(self, history: Tuple) -> Dict[Tuple[int, int], float]:
+        state, i = self._decayed_state(history)
+        return {key: val * (self.decay_factor ** (i - last)) for key, (val, last) in state.items()}
 
     def predict(self, ctx: CausalContext, k: Optional[int] = None) -> Tuple[int, ...]:
         k = ctx.k if k is None else k
-        counts = self._decayed_transition_counts(ctx.history)
+        state, i = self._decayed_state(ctx.history)
         _tok, current_set = ctx.current
         scores: List[float] = [0.0] * self.n_experts
         for c in current_set:
-            row = counts[c]
             for e in range(self.n_experts):
-                scores[e] += row[e]
+                val, last = state.get((c, e), (0.0, i))
+                scores[e] += val * (self.decay_factor ** (i - last))
         return apply_output_contract(scores, k, self.n_experts)
 
 
@@ -186,9 +277,8 @@ class RecencyFrequencyTransitionBlendPredictor:
         _tok, current_set = ctx.current
         transition_scores = [0.0] * self.n_experts
         for c in current_set:
-            row = counts[c]
             for e in range(self.n_experts):
-                transition_scores[e] += row[e]
+                transition_scores[e] += counts.get((c, e), 0.0)
 
         return recency_scores, freq_scores, transition_scores
 

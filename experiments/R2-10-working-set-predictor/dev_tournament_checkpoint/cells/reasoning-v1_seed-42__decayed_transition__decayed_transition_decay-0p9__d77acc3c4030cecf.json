@@ -1,0 +1,18 @@
+{
+  "cell_key": "reasoning-v1_seed-42__decayed_transition__decayed_transition_decay-0p9__d77acc3c4030cecf",
+  "cell_record_digest": "ffd4dfa8dd27e0867e7ac499add1860ada4159f8ee0da0a34dccbf2fdb40b872",
+  "config_id": "decayed_transition/decay=0.9",
+  "deterministic": true,
+  "dev_cell_id": "reasoning-v1/seed-42",
+  "family_id": "decayed_transition",
+  "recall_at_k_h1": 0.4218303625316863,
+  "recall_at_k_h16": 0.30218476774541086,
+  "recall_at_k_h4": 0.3353181027156097,
+  "result_digest": "eef061421e679c7b25b803ce16d1b2abf20921cd097a6f44e5f264b09699a663",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 24853,
+    "h16": 24133,
+    "h4": 24709
+  }
+}

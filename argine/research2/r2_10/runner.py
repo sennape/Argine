@@ -225,10 +225,20 @@ def run_checkpointed(
     trace_loader,
     n_experts: int = 128,
     progress_every: int = 5,
+    deadline_monotonic: Optional[float] = None,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     """Run (or resume) the R2-10 tournament over `dev_cell_ids` using
     `trace_loader(dev_cell_id) -> Trace`. One trace is held in memory at a
     time (freed after its cells complete), never the whole tournament.
+
+    `deadline_monotonic`, if given, is a `time.monotonic()` timestamp.
+    The runner checks it only at cell boundaries (never mid-cell, so every
+    write stays atomic and well-formed) and, once passed, stops cleanly,
+    persists a "paused_for_deadline" manifest event, and returns the rows
+    completed so far. This is a cooperative self-interruption used only to
+    fit work inside a bounded tool-call window; it changes no scientific
+    semantics, result, or digest for any cell that does complete, and a
+    call with no deadline behaves exactly as before.
     """
     env = validate_runner_env()
     expected_cells, full_configs = expected_cells_for_dev_subset(dev_cell_ids, n_experts)
@@ -303,9 +313,16 @@ def run_checkpointed(
             pending_by_cell.setdefault(dev_cell_id, []).append((family_id, config_id))
 
         done = len(completed)
+        paused = False
         for dev_cell_id, fam_cfgs in pending_by_cell.items():
+            if deadline_monotonic is not None and time.monotonic() >= deadline_monotonic:
+                paused = True
+                break
             trace = trace_loader(dev_cell_id)
             for family_id, config_id in fam_cfgs:
+                if deadline_monotonic is not None and time.monotonic() >= deadline_monotonic:
+                    paused = True
+                    break
                 predictor = next(p for p in full_configs[family_id] if p.config_id == config_id)
                 ck = cell_key(dev_cell_id, family_id, config_id)
                 r1 = run_predictor_against_trace(trace, predictor)
@@ -338,14 +355,17 @@ def run_checkpointed(
                     m["last_update_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
                     atomic_write_json(manifest_path, m)
             del trace  # free before loading the next DEV cell's trace
+            if paused:
+                break
 
         m["completed_cell_count"] = len(completed)
-        m["pending_cell_count"] = 0
+        m["pending_cell_count"] = expected_count - len(completed)
         m["last_update_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         m.setdefault("execution_history", []).append(
-            {"event": "complete", "utc": m["last_update_utc"], "completed": len(completed)}
+            {"event": "paused_for_deadline" if paused else "complete",
+             "utc": m["last_update_utc"], "completed": len(completed), "pending": expected_count - len(completed)}
         )
         atomic_write_json(manifest_path, m)
 
-    rows = [completed[cell_key(d, f, c)] for d, f, c in expected_cells]
+    rows = [completed[cell_key(d, f, c)] for d, f, c in expected_cells if cell_key(d, f, c) in completed]
     return rows, m

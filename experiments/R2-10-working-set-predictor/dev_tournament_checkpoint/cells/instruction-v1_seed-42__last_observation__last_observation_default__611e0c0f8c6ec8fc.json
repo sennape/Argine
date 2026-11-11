@@ -1,0 +1,18 @@
+{
+  "cell_key": "instruction-v1_seed-42__last_observation__last_observation_default__611e0c0f8c6ec8fc",
+  "cell_record_digest": "99309d85c82bd04038350b8e046f99f809970599d8f1f227ff85bbcc16860fe1",
+  "config_id": "last_observation/default",
+  "deterministic": true,
+  "dev_cell_id": "instruction-v1/seed-42",
+  "family_id": "last_observation",
+  "recall_at_k_h1": 0.4148561657614162,
+  "recall_at_k_h16": 0.2676299979283199,
+  "recall_at_k_h4": 0.3146068552466513,
+  "result_digest": "af3c8ed07b73cbdc3f5945ce1850d7ae14f67aabfd66a2417f79bc688ba3c7e7",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 24855,
+    "h16": 24135,
+    "h4": 24711
+  }
+}

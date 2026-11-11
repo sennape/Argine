@@ -1,0 +1,18 @@
+{
+  "cell_key": "summarization-v1_seed-42__last_observation__last_observation_default__9bc2cd2ea74ff2d4",
+  "cell_record_digest": "56b9cbcaad2dc9e8e6fe3f82f2650d5ca05c462ef61bedfd28a2bef8104aa0dc",
+  "config_id": "last_observation/default",
+  "deterministic": true,
+  "dev_cell_id": "summarization-v1/seed-42",
+  "family_id": "last_observation",
+  "recall_at_k_h1": 0.39186647624411636,
+  "recall_at_k_h16": 0.24896942453494636,
+  "recall_at_k_h4": 0.2859527374256464,
+  "result_digest": "ac6f449e043e603a80c94b0e49aa6fe252e235d75dd83b37bf3ea9e49417b460",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 24857,
+    "h16": 24137,
+    "h4": 24713
+  }
+}

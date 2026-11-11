@@ -1,0 +1,18 @@
+{
+  "cell_key": "instruction-v1_seed-42__decayed_transition__decayed_transition_decay-0p99__d843911626f4f456",
+  "cell_record_digest": "ed674b73d3e94561a27b9059f610c84d443ed987890bcbf2a8443e47450ccf49",
+  "config_id": "decayed_transition/decay=0.99",
+  "deterministic": true,
+  "dev_cell_id": "instruction-v1/seed-42",
+  "family_id": "decayed_transition",
+  "recall_at_k_h1": 0.44851136592234964,
+  "recall_at_k_h16": 0.3450435052827843,
+  "recall_at_k_h4": 0.3663601230221359,
+  "result_digest": "9600b39c82b5f886b8ab8486f97886da9f27908ba785d6754fa015109ae2aee6",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 24855,
+    "h16": 24135,
+    "h4": 24711
+  }
+}

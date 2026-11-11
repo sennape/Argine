@@ -1,0 +1,18 @@
+{
+  "cell_key": "reasoning-v1_seed-42__global_frequency__global_frequency_default__345864d4e08d530a",
+  "cell_record_digest": "b035c31d59455e418b52e13cbfeca9c1e1335aa72e2f44cf67f9d358e99169f4",
+  "config_id": "global_frequency/default",
+  "deterministic": true,
+  "dev_cell_id": "reasoning-v1/seed-42",
+  "family_id": "global_frequency",
+  "recall_at_k_h1": 0.3164809077374965,
+  "recall_at_k_h16": 0.29618675672315914,
+  "recall_at_k_h4": 0.3085515399247238,
+  "result_digest": "1a5cc9292a63eaacec010b988dd1b01e3301097925b90a96905f95ea5bb0aad7",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 24853,
+    "h16": 24133,
+    "h4": 24709
+  }
+}
