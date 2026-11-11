@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-10-phase0-contract-v1.0",
+  "name": "R2-10 mechanically auditable ALLOWED/FORBIDDEN feature table",
+  "prediction_instant": {
+    "definition": "A prediction for target routing event (t+h, l) is considered made at the causal instant immediately AFTER the predictor has observed the routing decision at (t, l) (the 'current' same-layer observation) and BEFORE any information from (t+h, l) exists. For h=1 this is the instant between observing (t,l) and (t+1,l) in the SAME-LAYER iterator order defined by Trace.token_selections(l, phase) (the exact unit R2-06 already established as the canonical token-to-token same-layer transition unit). 't' here indexes positions in that iterator's own yielded order, not raw token_index, because a layer need not route every token and R2-06 already established that consecutive must mean consecutive-in-iterator-order.",
+    "horizon_semantics": "h counts SAME-LAYER iterator-yielded steps, never raw token_index distance and never cross-layer steps. Target for horizon h at iterator position i is the entry at iterator position i+h of the SAME Trace.token_selections(l, phase) stream. h=1/4/16 are therefore 1/4/16 same-layer routing EVENTS ahead, which may correspond to a different number of raw tokens if the layer has gaps (see Trace.token_selections docstring); this is deliberate and documented so h is never silently reinterpreted as token or wall-clock distance."
+  },
+  "allowed": [
+    {"id": "same_layer_history_upto_i", "definition": "All (token_index, expert_set) entries yielded by Trace.token_selections(l, phase) at iterator positions <= i (current observation and everything causally before it in the same layer's own stream). Backing feature families: recency, cumulative_frequency, decayed_aged_frequency, same_layer_transition_history (all already allowed by prediction_contract.json.allowed_feature_families)."},
+    {"id": "intrastep_cross_layer_lt_l", "definition": "Routing outcomes at layers < l of the SAME step/token t, because they have already executed earlier in the same forward pass. Matches prediction_contract.json.input_time_semantics.allowed verbatim ('layers < l of the same step t')."},
+    {"id": "prior_step_any_layer_history", "definition": "Routing/cache-state history from any layer at steps that completed strictly before the step containing iterator position i. Backing feature family: cross_layer_routing_history (allowed, candidate, not established superior)."},
+    {"id": "predictor_internal_state", "definition": "Deterministic internal state accumulated only from allowed events above (e.g. running counts, decay accumulators, last-seen maps). Must not be reset using any forbidden information."}
+  ],
+  "forbidden": [
+    {"id": "target_event_itself", "definition": "The expert set E_{t+h,l} being predicted."},
+    {"id": "same_layer_future", "definition": "Any Trace.token_selections(l, phase) entry at iterator position > i (anything causally after the prediction instant in the same layer's own stream, including the entries strictly between i and i+h for h>1)."},
+    {"id": "same_step_later_layer", "definition": "Any layer > l of the SAME step t containing iterator position i -- has not executed yet at the causal instant of prediction."},
+    {"id": "future_steps_other_layers", "definition": "Any routing/cache event at a step occurring after the step containing iterator position i, regardless of layer."},
+    {"id": "eval_labels", "definition": "Any EVAL trace, EVAL result, or post-hoc label not observable at runtime. R2-10 Phase 0 never opens experiments/R2-09-prediction-benchmark/eval_manifest.json's locked contents."}
+  ],
+  "mechanical_audit_requirement": "argine/research2/r2_10/causal_walk.py's CausalEvent generator must be the SOLE path by which any R2-10 predictor code receives trace-derived data; it must structurally be unable to yield same_layer_future, same_step_later_layer, or future_steps_other_layers data at iterator position i. tests/test_r2_10_leakage.py enforces this empirically via a synthetic-trace future-alteration invariance test (see decision_rules.json.leakage_audit).",
+  "relation_to_prediction_contract": "This table is a mechanical refinement of experiments/R2-09-prediction-benchmark/prediction_contract.json.input_time_semantics (intrastep_cross_layer_causal_context), not a replacement. Any conflict is resolved in favor of prediction_contract.json."
+}
