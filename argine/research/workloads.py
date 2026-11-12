@@ -117,11 +117,34 @@ def load(name: str, version: str = CURRENT) -> Workload:
     raw = p.read_bytes()
     d = json.loads(raw.decode("utf-8"))
     prompts: Dict[str, List[Prompt]] = {}
-    for split, items in d.get("splits", {}).items():
-        prompts[split] = [Prompt(id=str(it["id"]), segment=str(it.get("segment", d["name"])),
-                                 n_predict=int(it.get("n_predict", d.get("n_predict", 128))),
-                                 prompt=it.get("prompt"), turns=list(it.get("turns", [])))
-                          for it in items]
+    if "splits" in d:
+        for split, items in d.get("splits", {}).items():
+            prompts[split] = [Prompt(id=str(it["id"]), segment=str(it.get("segment", d["name"])),
+                                     n_predict=int(it.get("n_predict", d.get("n_predict", 128))),
+                                     prompt=it.get("prompt"), turns=list(it.get("turns", [])))
+                              for it in items]
+    elif "items" in d:
+        # Additive fallback for the frozen R2-09 EVAL workload schema (see
+        # research2/workloads/r2_09/*.json and experiments/R2-09-prediction-
+        # benchmark/eval_manifest.json). That schema is a flat {"items": [...]}
+        # list under the file's own top-level "split" field, not the nested
+        # {"splits": {dev: [...], eval: [...]}} shape every other workload file
+        # in this repository uses. This branch ONLY triggers when "splits" is
+        # absent from the file, so it changes nothing about how any existing
+        # ("splits"-shaped) workload file loads -- every currently-passing
+        # caller of this function takes the exact same code path as before.
+        # Never invented: the split name, item ids, segments and prompt text
+        # below are read byte-for-byte from the frozen file; nothing here
+        # rewrites, reorders, or normalizes them.
+        split_name = str(d.get("split") or "").strip()
+        if not split_name:
+            raise ValueError(f"{p}: 'items'-schema workload has no top-level 'split' field")
+        prompts[split_name] = [
+            Prompt(id=str(it["id"]), segment=str(it.get("segment", d["name"])),
+                  n_predict=int(it.get("n_predict", d.get("n_predict", 128))),
+                  prompt=it.get("prompt"), turns=list(it.get("turns", [])))
+            for it in d.get("items", [])
+        ]
     ids = [x.id for v in prompts.values() for x in v]
     if len(ids) != len(set(ids)):
         raise ValueError(f"{p}: duplicate prompt ids")
