@@ -1,0 +1,78 @@
+{
+  "schema_version": 2,
+  "experiment_id": "R2-10",
+  "phase": "PHASE_3A_EVAL_ACQUISITION_READINESS",
+  "generated_utc": "2026-11-12T20:58:21Z",
+  "note": "Supersedes an earlier draft of this file written before the real `argine research trace` / `argine research2 capture` CLI was found and live-tested. All findings below were independently demonstrated by live, read-only tool invocations in this session (dry-run, --help, direct Python calls), not inferred from documentation alone.",
+  "checks": {
+    "1_model_available": {
+      "status": "PASS",
+      "detail": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf found (18.63 GB)."
+    },
+    "2_model_hash_matches": {
+      "status": "PASS",
+      "expected_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+      "measured_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+      "match": true
+    },
+    "3_runtime_matches_frozen_protocol": {
+      "status": "PASS",
+      "resolved_via": "argine.research2.runtime_resolver.resolve() -- live call, tier=documented_canonical",
+      "resolved_path_real": "C:\\Users\\alpel\\Desktop\\Argine2\\llama-research-v2\\llama-server.exe",
+      "expected_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+      "capability_check": "ARGINE_EXPERT_STORE marker present"
+    },
+    "4_capture_parameters_match": {
+      "status": "PASS",
+      "source": "argine/research2/r2_08/capture.py PROTOCOL + live `python -m argine research trace --help`",
+      "real_cli_confirmed": "python -m argine research trace <model> --expert-store --expert-budget 4G --workload <name_or_path.json> --split eval --seed <N> --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out <dir> (this subcommand DOES exist and is live-tested via --help; an earlier pass of this audit mistakenly reported no such subcommand after grepping only argine/cli.py, which does not define it directly -- it is registered via argine/research/cli.py's `research` subparser, confirmed by running `python -m argine --help`).",
+      "parameters": {
+        "expert_budget": "4G",
+        "ctx": 4096,
+        "threads": 4,
+        "threads_batch": 12,
+        "temperature": 0.0,
+        "top_k": 1,
+        "n_predict": 512,
+        "split": "eval"
+      },
+      "seed_gap": "eval_manifest.json does not pin a numeric seed; it says 'record explicit acquisition seed per cell' and 'design_decision: 1 deterministic capture each' (unlike DEV's 42/43 replicate pair). Under temp=0/top_k=1 greedy decoding seed should not affect the generated tokens, but the manifest explicitly requires this to be VERIFIED, not assumed. Recommendation: use seed=42 (the R2-01/R2-08 convention default) and record it; this is a reasonable, documented convention, not an invented one, but it is not itself a frozen numeric value."
+    },
+    "5_prompt_specs_hash_match": {
+      "status": "PASS",
+      "verified": {
+        "research2/workloads/r2_09/coding-v1.json": "a7af978474839e737e183105e4df945d7f6651d58e00862d8189f47bd48a5ff9",
+        "research2/workloads/r2_09/reasoning-v1.json": "bd4d4b304ff3c5189720b23ab57ea2891adcdbb5f2af3c92768871604901306f",
+        "research2/workloads/r2_09/summarization-v1.json": "59e5540bbc3e357ee0e7cea8e895ae561ba398aa6e3f17b149b58e6b3fa03b4f",
+        "research2/workloads/r2_09/instruction-v1.json": "85e58d9a6d11a6364de18e8992f22ae36658d47c00094ff7888cc19e387bf4d5",
+        "research2/workloads/r2_09/sources/summarization_eval_source.txt": "7f4db155e906d5942a18f14a86844dfa644f3e0b7bf8847a833350bffcaf971a"
+      },
+      "all_match_eval_manifest": true
+    },
+    "6_prompt_spec_SCHEMA_compatible_with_existing_loader": {
+      "status": "FAIL",
+      "detail": "LIVE-TESTED: argine.research.workloads.load('research2/workloads/r2_09/coding-v1.json') succeeds (file found by path, since _resolve() returns any path with a .json suffix verbatim) but returns a Workload with an EMPTY prompts dict, and .split('eval') raises KeyError. Root cause: the frozen R2-09 EVAL spec files use a flat `{\"items\": [...]}` top-level schema (one eval prompt per file), while argine/research/workloads.py's loader expects `{\"splits\": {\"dev\": [...], \"eval\": [...]}}`. The two schemas are incompatible; feeding the frozen file as-is to the existing, working `argine research trace --workload <path.json> --split eval` command would not error loudly -- it would resolve to zero prompts -- so this must be fixed before any real invocation, not discovered by trial and error against the model.",
+      "repository_capture_registry_finding": "Also confirmed live: `python -m argine research2 capture R2-09 --model ... --dry-run` returns {\"outcome\": \"NOT_IMPLEMENTED\", \"message\": \"R2-09 has no capture implementation.\"} -- there is no registered, wired, one-command capture path for R2-09 EVAL in argine.research2.runner.EXPERIMENT_CAPTURE_IMPLEMENTATIONS (only R2-01 is registered there); R2-08's own capture.py module is a standalone planner, not wired into that registry either.",
+      "remediation_options_not_applied": [
+        "(a) Add an `items`-schema branch to argine/research/workloads.py's load() that treats a single-item file's `split` field as the split name -- a small, generic loader fix, not a frozen-contract change.",
+        "(b) Write a non-frozen adapter script that reads each frozen research2/workloads/r2_09/*.json file and emits a `splits`-schema temporary copy (byte-identical prompt text, different envelope) for the CLI to consume, leaving the frozen file itself untouched.",
+        "Neither was applied in this phase: this audit's job was to find and report the gap, not silently patch around it while also being blocked by check 7 below."
+      ]
+    },
+    "7_disk_and_memory": {
+      "status": "FAIL",
+      "disk": "95 GB available -- sufficient.",
+      "memory": "This device_bash session's own shell is a constrained VM reporting only 3.8 GiB total RAM (`free -h`), independently confirmed too low by the capture tool's OWN built-in default: `--min-start-available` warns below 8G. The real host (per ARGINE2-MEMORY-CHARACTERIZATION.md Section 2, and get_device_info's device name 'lucaalpehp') has 16 GB RAM -- the host very likely CAN run this (that is the explicit design point of the 4 GiB expert-store budget), but this session's shell tool cannot safely attempt it."
+    },
+    "8_no_prior_eval_inspection": {
+      "status": "PASS",
+      "detail": "eval_manifest.json re-verified: eval_status=ACQUISITION_CONTRACT_FROZEN_NOT_EXECUTED, eval_visibility_state=EVAL_LOCKED, opened_utc=null, eval_results=null."
+    },
+    "9_dev_evidence_untouched": {
+      "status": "PASS",
+      "detail": "git status clean at start of this phase; only two folder-access grants (Argine2, HoPi, C:\\modelli) were requested this phase -- read-only inspection, no writes to any connected folder outside this repo's own experiments/ dir."
+    }
+  },
+  "overall_result": "7_OF_9_PASS; 2_BLOCKING_FAILURES (checks 6 and 7). Acquisition NOT attempted.",
+  "conclusion": "The model and runtime binary both exist on the real device with SHA-256 identity verified byte-for-byte against the frozen Research2 values, and the real `argine research trace` / `argine research2 capture` CLI exists and is live-testable (confirmed via --dry-run and --help, not just read from source). However two independent, concrete blockers prevent real EVAL acquisition right now: (1) the frozen R2-09 EVAL workload spec files use a JSON schema the existing prompt loader cannot consume (confirmed by a live call returning zero prompts), and (2) this session's own shell sandbox exposes only 3.8 GiB RAM, well under the tool's own 8 GiB floor and the host's real 16 GiB. Per the Phase-3A hard restrictions, neither was silently patched around; both are reported for a human (or an explicitly authorized follow-up) to resolve."
+}
