@@ -1,0 +1,56 @@
+{
+  "artifact": "R2-10-PHASE3G-DEV-VS-EVAL-COMPARISON",
+  "note": "Required-analysis point 8 (DEV -> EVAL change) and Scientific Decision questions A-D",
+  "selected_predictor": {
+    "dev_mean_recall": {
+      "h1": 0.4393972693581131,
+      "h4": 0.3481974692653974,
+      "h16": 0.3224758371893329
+    },
+    "eval_mean_recall": {
+      "h1": 0.4498165836714136,
+      "h4": 0.3611200086137611,
+      "h16": 0.34028718014212944
+    },
+    "change_eval_minus_dev": {
+      "h1": 0.01041931431330051,
+      "h4": 0.012922539348363682,
+      "h16": 0.017811342952796516
+    }
+  },
+  "margin_over_last_observation_h1": {
+    "dev": 0.03258889879550175,
+    "eval": 0.048343565895888785,
+    "eval_margin_larger_than_dev_margin": true
+  },
+  "baselines_dev_vs_eval_h1": {
+    "global_frequency": {
+      "dev": 0.3327398851601756,
+      "eval": 0.34948001291273756
+    },
+    "last_observation": {
+      "dev": 0.4068083705626113,
+      "eval": 0.4014730177755248
+    }
+  },
+  "absolute_relative_improvement_h1": {
+    "vs_global_frequency": {
+      "absolute": 0.10033657075867602,
+      "relative_pct": 28.71024580845752
+    },
+    "vs_last_observation": {
+      "absolute": 0.048343565895888785,
+      "relative_pct": 12.041547938576304
+    }
+  },
+  "question_A_generalized_to_eval": true,
+  "question_B_beats_last_observation_on_eval": true,
+  "question_C_beats_global_frequency_on_eval": true,
+  "question_D_gain_consistent_across_workloads": {
+    "vs_last_observation_h1": true,
+    "vs_global_frequency_h1": true,
+    "vs_global_frequency_h16_caveat": {
+      "instruction-eval-v1": -0.0039218127490039945
+    }
+  }
+}
