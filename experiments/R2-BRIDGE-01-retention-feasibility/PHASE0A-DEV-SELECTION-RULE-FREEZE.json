@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "freeze_version": "1.0.0",
+  "freeze_name": "R2-BRIDGE-01-Phase0.1-DEV-Selection-Rule-Freeze",
+  "freeze_timestamp_utc": "2026-11-13T23:20:00Z",
+  "status": "FROZEN",
+  "outcome": "PHASE0.1_ADDENDUM_FROZEN_NOT_EXECUTED",
+  "addendum_file": "experiments/R2-BRIDGE-01-retention-feasibility/DEV-SELECTION-RULE-v1.json",
+  "addendum_version": "r2-bridge01-phase0.1-dev-selection-rule-v1.0",
+  "addendum_digest_sha256": "5954a0f6d13fcf427124f8b7f7d7f009d2d76fbe82e4b4e28c6aa2167fc8eb92",
+  "addendum_digest_method": "sha256 of json.dumps(addendum_object, sort_keys=True, separators=(',',':'), ensure_ascii=False)",
+  "original_phase0_contract_digest": "e4ef4268e6bc207f20d5f4a56c165b75b977536600ff9d6f7e59604f77a889fc",
+  "original_phase0_contract_digest_reverified_unchanged": true,
+  "original_phase0_freeze_untouched": "experiments/R2-BRIDGE-01-retention-feasibility/PHASE0-FREEZE.json and contract.json were not modified, read-only re-verified only.",
+  "git_head_before_this_freeze_commit": "63110af08fdbad2c19c56f9c98030695b79a15ad",
+  "no_dev_result_existed_before_this_freeze": true,
+  "dev_result_existence_check_method": "git status --porcelain scoped to experiments/R2-BRIDGE-01-retention-feasibility/ before authoring this addendum showed only the untracked addendum file itself; no retention-result JSON of any kind existed.",
+  "selection_budget_bytes": 4294967296,
+  "eligible_candidate_count": 3,
+  "mandatory_control_excluded_from_selection": "predictor_retention_score/budget=4294967296,bonus=0.0",
+  "referenced_prospectively_by": "R2-BRIDGE-01 Phase 1 DEV Retention Selection (this addendum must be committed before Phase 1 executes or inspects any DEV retention cell)."
+}
