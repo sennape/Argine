@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-bridge01-phase0-contract-v1.0",
+  "frozen_predictor": {
+    "family_id": "decayed_transition",
+    "config_id": "decayed_transition/decay=0.99",
+    "source": "argine.research2.r2_10.predictors.DecayedTransitionPredictor (R2-10 frozen, DEV-selected, EVAL-supported)",
+    "no_retuning": true,
+    "no_alternate_predictor_selection": true,
+    "no_future_or_clairvoyant_information": true,
+    "causal_semantics": "identical to experiments/R2-10-working-set-predictor/causal_boundary.json prediction_instant: prediction for the layer's NEXT same-layer event is made strictly after observing the current same-layer event and before the next one is observed"
+  },
+  "families": [
+    {
+      "family_id": "predicted_protect",
+      "name": "Predicted-Protect (hard shield)",
+      "implementation": "argine.research2.r2_bridge01.retention_policies.PredictedProtectPolicy",
+      "exact_state": "Identical to AgedFrequency(decay_factor, aging_interval_steps) state (resident bytes map, per-object score, per-object last_ref, global access ordinal t) PLUS one frozen DecayedTransitionPredictor instance and one growing same-layer history tuple per layer.",
+      "exact_eviction_rule": "Victim = min over resident objects of (score, last_ref, stable_obj_key), restricted to objects of the SAME layer being served whose expert id is NOT in that layer's current predicted-next set; if the restricted candidate set is empty for that layer, fall back to the unrestricted AgedFrequency choice over all resident objects (total, deterministic, guarantees no deadlock).",
+      "exact_predictor_use": "Causal protection signal only (membership test), never a continuous score; refreshed once per same-layer event, strictly after that event is served.",
+      "deterministic_tie_breaking": "(score, last_ref, (layer, expert_id)) ascending, exactly AgedFrequency's own tie-break, both inside and outside the protected-restricted candidate pool.",
+      "memory_accounting": "Reuses argine.research.policies.Context.bytes_of(layer) and the same resident_bytes <= budget invariant enforced every access() call by argine.research2.r2_09a.fast_replay.run_fast via InvariantViolation.",
+      "causal_boundary": "Identical to R2-10's; see frozen_predictor.causal_semantics above. Predictor never receives same-layer future, same-step-later-layer, or future-step data.",
+      "candidate_hyperparameters": "None beyond the already-frozen per-budget B_selected(M) base (decay_factor, aging_interval_steps) -- the smallest mechanism in this family: shield on, no tunable strength.",
+      "finite_grid": "1 config per budget (3 budgets x 1 config = 3 total cells for this family)."
+    },
+    {
+      "family_id": "predictor_retention_score",
+      "name": "Predictor Retention Score (soft additive bonus)",
+      "implementation": "argine.research2.r2_bridge01.retention_policies.PredictorRetentionScorePolicy",
+      "exact_state": "Identical to predicted_protect's state, plus one frozen scalar `bonus` per config.",
+      "exact_eviction_rule": "Victim = min over resident objects of (score + bonus_if_predicted, last_ref, stable_obj_key). The bonus is added ONLY at comparison time, never persisted into self.scores, so it cannot leak into aging or hit-scoring arithmetic.",
+      "exact_predictor_use": "Causal protection signal, applied as a fixed scalar nudge to the tie-break key rather than a hard restriction.",
+      "deterministic_tie_breaking": "(score + bonus_if_predicted, last_ref, (layer, expert_id)) ascending.",
+      "memory_accounting": "Identical to predicted_protect.",
+      "causal_boundary": "Identical to predicted_protect.",
+      "candidate_hyperparameters": "bonus in the frozen grid {0.0, 1.0, 4.0}. bonus=0.0 is the mandatory control cell: it must reproduce AgedFrequency / B_selected(M) bit-for-bit (first-class correctness check, see leakage_contract.json and tests/test_r2_bridge01_control_equivalence.py).",
+      "finite_grid": "3 bonus values per budget (3 budgets x 3 bonus values = 9 total cells for this family)."
+    }
+  ],
+  "total_grid_size": {
+    "mechanism_configs": 12,
+    "note": "predicted_protect (3 cells, one per budget) + predictor_retention_score (9 cells, 3 bonus values x 3 budgets) = 12 mechanism-config cells. Intentionally small: no large policy tournament, per the Phase-0 handoff instruction."
+  },
+  "no_prefetching": "This bridge does not add prefetching. Only resident-set retention/eviction decisions are affected; no additional I/O or timing semantics are introduced. Prefetch is explicitly out of scope and kept separable for any future protocol.",
+  "baseline_reuse": "Both families wrap, never replace, the already-frozen B_selected(M) implementation (argine.research2.r2_09a.policies.AgedFrequency) at each budget's frozen hyperparameters -- see contract.json.baseline_binding."
+}

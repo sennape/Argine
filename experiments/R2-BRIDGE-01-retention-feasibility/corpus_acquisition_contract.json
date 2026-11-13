@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-bridge01-phase0-contract-v1.0",
+  "acquisition_status": "ACQUISITION_CONTRACT_FROZEN_NOT_EXECUTED",
+  "corpus_visibility_state": "BRIDGE_LOCKED",
+  "opened_utc": null,
+  "bridge_results": null,
+  "eval_set_reuse_forbidden": true,
+  "eval_set_reuse_statement": "The already-opened R2-10 EVAL set (experiments/R2-09-prediction-benchmark/eval_manifest.json, EVAL_LOCKED but EVAL_OPENED for R2-10 purposes) MUST NOT be used as the BRIDGE holdout, for BRIDGE policy development, or for BRIDGE policy selection. A brand-new prospective corpus is required.",
+  "design_decision": {
+    "label": "DESIGN_DECISION_NOT_STATISTICALLY_POWERED",
+    "option": "A_MINIMAL_FOUR_INSTANCES",
+    "choice": "Minimal balanced held-out design mirroring R2-09B's own: 4 new BRIDGE workload specifications = 1 held-out instance per nominal category (coding, reasoning, summarization, instruction), 1 deterministic capture each = 4 primary BRIDGE capture cells.",
+    "confirmatory_scope": "Primary confirmatory claims limited to these four frozen held-out instances. A single instance does not establish generalization across an entire workload family/category.",
+    "rationale": "Mirrors the already-accepted R2-09B/R2-10 minimal-design discipline; no sample size invented or expanded post hoc."
+  },
+  "prompt_specification_requirement": "BRIDGE prompt specifications must be authored and frozen (hashed) BEFORE any capture, and MUST NOT be copied from any prior DEV or EVAL prompt text used in R2-09A/R2-09B/R2-10. New prompts only.",
+  "workload_instances_planned": [
+    {"workload_id": "bridge-coding-v1", "category": "coding"},
+    {"workload_id": "bridge-reasoning-v1", "category": "reasoning"},
+    {"workload_id": "bridge-summarization-v1", "category": "summarization"},
+    {"workload_id": "bridge-instruction-v1", "category": "instruction"}
+  ],
+  "model_identity": {
+    "name": "Qwen3-30B-A3B-Q4_K_M",
+    "status": "MUST_MATCH_FROZEN_RESEARCH2_PROTOCOL_AT_ACQUISITION; record actual artifact path/SHA in the acquisition manifest -- same model identity already used throughout Research 2, never substituted."
+  },
+  "runtime_identity": {
+    "status": "MUST_RECORD_ACTUAL_RUNTIME_BINARY/COMMIT/FLAGS_AT_ACQUISITION; follow Research2 runtime provenance conventions."
+  },
+  "deterministic_capture_conditions": {
+    "temperature": 0.0,
+    "top_k": 1,
+    "seed_policy": "Record explicit acquisition seed per cell; deterministic greedy decoding, same convention as R2-09B's eval_manifest.json.deterministic_capture_conditions.",
+    "n_predict_by_spec": 512,
+    "context_limits": "Record actual context/runtime limits in the acquisition manifest; must be consistent across a cell comparison unless explicitly versioned.",
+    "expert_memory_capture_budget_relevance": "Expert-memory budget (1.5/4/8 GiB) is a REPLAY/evaluation parameter applied after capture, not a capture-time constraint; capture-time budget/configuration must still be recorded and consistent with the Research2 trace schema/protocol, identical in spirit to eval_manifest.json's own note."
+  },
+  "trace_schema_and_validation": {
+    "trace_schema": "Research2 R2Trace/routing trace schema used by the canonical pipeline (or an explicitly versioned compatible schema)",
+    "validation_requirements": [
+      "capture completes without fatal error",
+      "trace parses and normalizes via argine.research2.r2_01.trace_contract.normalize/reconcile, identical to every prior Research2 corpus",
+      "phase/decode semantics recorded",
+      "model/runtime/workload/config fingerprints recorded",
+      "SHA256 recorded for trace and workload spec",
+      "replay contract compatibility checked before any cell is treated as valid",
+      "cardinality-availability fail-safe (trace.meta.top_k matches every observed per-event cardinality) re-checked exactly as CARDINALITY-AVAILABILITY-AUDIT-001 already established for R2-10"
+    ]
+  },
+  "capture_seal_open_state_machine": {
+    "states": [
+      "BRIDGE_ACQUISITION_PLANNED",
+      "BRIDGE_CAPTURED_SEALED",
+      "BRIDGE_OPENED",
+      "BRIDGE_EVALUATED_CLOSED"
+    ],
+    "transition_rule": "Each transition is recorded as a NEW additive provenance/state-record JSON file (never an in-place mutation of a frozen file), mirroring the R2-09B/R2-10 EVAL_* state-machine convention established in experiments/R2-10-working-set-predictor/PHASE3C-EVAL-OPENED.json and PHASE3L-FINAL-CLOSURE-RECORD.json.",
+    "phase_0_scope": "Phase 0 freezes this contract and state machine. It does NOT execute BRIDGE_ACQUISITION_PLANNED's capture step and does NOT create any trace file. Capture is a future, separately-authorized action."
+  },
+  "development_holdout_separation_reference": "dev_holdout_separation.json"
+}

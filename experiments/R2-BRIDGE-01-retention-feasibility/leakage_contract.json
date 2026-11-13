@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-bridge01-phase0-contract-v1.0",
+  "name": "R2-BRIDGE-01 mechanically auditable causality / memory-correctness / determinism contract",
+  "causality": {
+    "allowed": [
+      {"id": "current_resident_state", "definition": "The policy's own resident map, per-object score, per-object last_ref, and global access ordinal at the moment of the current access() call."},
+      {"id": "historical_baseline_state", "definition": "Exactly the AgedFrequency-identical state B_selected(M) itself would have accumulated up to and including the current access -- no additional history beyond what the frozen baseline already causally sees."},
+      {"id": "frozen_causal_predictor_state", "definition": "The DecayedTransitionPredictor's own internal state for the layer being served, built only from that layer's own same-layer history up to and including the most recently observed event of that layer -- identical causal boundary to experiments/R2-10-working-set-predictor/causal_boundary.json."},
+      {"id": "information_available_at_decision_boundary", "definition": "A retention/eviction decision made while serving event (step, layer) may use only information available strictly before or at that event; the predicted-next set consulted during that decision was computed from the PRIOR same-layer event, never the current or a future one."}
+    ],
+    "forbidden": [
+      {"id": "future_requests", "definition": "Any request/event at a step occurring after the step currently being served, in any layer, must never influence an eviction decision made for the current step."},
+      {"id": "same_layer_future", "definition": "Any same-layer event at iterator position > the current one for that layer."},
+      {"id": "eval_or_bridge_holdout_labels", "definition": "Any R2-10 EVAL content or not-yet-opened BRIDGE holdout content; Phase 0 opens neither."}
+    ],
+    "mechanical_audit_requirement": "argine.research2.r2_bridge01.retention_policies._BaseBridgePolicy._refresh_prediction_after_observing is the SOLE path by which a layer's predicted-next set is updated, and it is called only AFTER that layer's current event has been fully served -- so the predicted set consulted during access() for event j+1 was computed strictly from events 0..j. tests/test_r2_bridge01_leakage.py enforces this empirically: altering a synthetic trace's events strictly after a chosen decision boundary, while holding the visible prefix identical, must leave every retention decision up to and including that boundary (admission, eviction victim, resident set) bit-identical."
+  },
+  "memory_correctness": {
+    "invariants": [
+      {"id": "budget_never_exceeded", "definition": "resident_bytes must never exceed the configured budget at any point during or after any access() call.", "enforcement": "argine.research2.r2_09a.fast_replay.run_fast already raises InvariantViolation on violation; R2-BRIDGE-01 policies are driven through the same run_fast path unmodified."},
+      {"id": "correct_byte_size", "definition": "Every resident (layer, expert) object's accounted byte size must equal Context.bytes_of(layer) exactly, for every mechanism."},
+      {"id": "eviction_accounting_correctness", "definition": "Every eviction must decrement resident_bytes by exactly the evicted object's accounted size and increment self.evictions by exactly 1."},
+      {"id": "protected_experts_cannot_create_hidden_over_budget_state", "definition": "The PredictedProtectPolicy hard-shield fallback (falling back to the unrestricted choice when every resident object of a layer is protected) must be total and deterministic -- it must never leave an access() call unable to make room, which would otherwise silently violate the budget invariant."},
+      {"id": "deterministic_ties", "definition": "stable_obj_key(layer, expert_id) ascending is the final tie-break for every mechanism, identical to AgedFrequency's own, so no two runs can disagree on a tied victim."},
+      {"id": "fail_closed_on_impossible_configurations", "definition": "A config whose bonus is outside PredictorRetentionScorePolicy.FROZEN_BONUS_GRID, or a budget outside B_SELECTED_PARAMS_BY_BUDGET, must raise ValueError at construction time rather than silently substituting a default."}
+    ],
+    "zero_budget_violations_mandatory": true
+  },
+  "determinism": {
+    "requirement": "Repeated replay with identical trace, predictor, policy, budget, and config must produce bit-identical scientific results (miss_bytes, misses, evictions, peak_resident_bytes, per-layer breakdown).",
+    "mechanism": "Every mechanism's internal state is a pure function of the sequence of access() calls it receives, with no randomness, wall-clock reads, hashing-order dependence, or external I/O; DecayedTransitionPredictor's own correctness is already independent of call order (see argine.research2.r2_10.predictors.DecayedTransitionPredictor._decayed_state docstring: 'correctness never depends on call order, only speed does')."
+  },
+  "control_equivalence": {
+    "requirement": "PredictorRetentionScorePolicy with bonus=0.0 must reproduce AgedFrequency / B_selected(M) bit-for-bit on any trace and budget -- a first-class correctness check on the wrapper itself, not merely a scientific result.",
+    "test_reference": "tests/test_r2_bridge01_control_equivalence.py"
+  }
+}
