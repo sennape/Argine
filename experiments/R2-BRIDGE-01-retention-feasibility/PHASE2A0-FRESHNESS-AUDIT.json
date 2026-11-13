@@ -1,0 +1,81 @@
+{
+  "artifact": "PHASE2A0-FRESHNESS-AUDIT",
+  "method": "Exact byte-identity (sha256) and normalized-text-identity (lowercase, whitespace-collapsed, sha256) checks of every new bridge-*-v1 prompt and source text against every R2-08 DEV prompt+source, every R2-09 EVAL prompt+source, and every workloads/v1/coding.json dev+eval item (the underlying family referenced by the DEV coding-v1 trace reuse record); plus an 8-word-shingle overlap ratio as a qualitative paraphrase-proximity signal. No model output was inspected to produce this audit.",
+  "prior_corpus_item_count": 15,
+  "new_corpus_item_count": 5,
+  "per_new_item_checks": [
+    {
+      "new_source_file": "research2/workloads/r2_bridge01/bridge-coding-v1.json",
+      "new_workload_id": "bridge-coding-v1",
+      "new_item_id": "r2-bridge01-coding-001",
+      "new_sha256": "49aa12219f11867fb96f2bf85072856075b7f5728aa37289e48656ee67a4329f",
+      "new_normalized_sha256": "adff71c0a18021d6566457f9cdec5ffd180b0db90b5a8c1d7b18208dc95df10b",
+      "byte_identical_match": null,
+      "normalized_identical_match": null,
+      "max_8gram_overlap_ratio_vs_any_prior": 0.0,
+      "max_overlap_prior_source_file": null
+    },
+    {
+      "new_source_file": "research2/workloads/r2_bridge01/bridge-reasoning-v1.json",
+      "new_workload_id": "bridge-reasoning-v1",
+      "new_item_id": "r2-bridge01-reasoning-001",
+      "new_sha256": "00fb4a526d1fa2a2e0cd1a37b57a701457d61af2c6861edba03099927b139604",
+      "new_normalized_sha256": "ed55c062692cdf57fe279a0b5847b9b7edf56b8d8e4ebbff55b1b42c760ed7b9",
+      "byte_identical_match": null,
+      "normalized_identical_match": null,
+      "max_8gram_overlap_ratio_vs_any_prior": 0.021052631578947368,
+      "max_overlap_prior_source_file": "research2/workloads/r2_09/reasoning-v1.json"
+    },
+    {
+      "new_source_file": "research2/workloads/r2_bridge01/bridge-summarization-v1.json",
+      "new_workload_id": "bridge-summarization-v1",
+      "new_item_id": "r2-bridge01-summarization-001",
+      "new_sha256": "e883f4d37f57545b95d54f2771f57c83aa96869a8daece4cf7da0836ece8462e",
+      "new_normalized_sha256": "2e4fe8d42ec9fcc20e3eb682ae0556cfe8c36b8b37d4fe1df7adc75c3178655c",
+      "byte_identical_match": null,
+      "normalized_identical_match": null,
+      "max_8gram_overlap_ratio_vs_any_prior": 0.1157556270096463,
+      "max_overlap_prior_source_file": "research2/workloads/r2_09/summarization-v1.json"
+    },
+    {
+      "new_source_file": "research2/workloads/r2_bridge01/bridge-instruction-v1.json",
+      "new_workload_id": "bridge-instruction-v1",
+      "new_item_id": "r2-bridge01-instruction-001",
+      "new_sha256": "7a71612e4af8e0798314c0fa3583c2a09af522b277f3de2bab116a1d9b8ecf23",
+      "new_normalized_sha256": "a97bd9e2c5e59c9c897842277394df5265eb9d0889d5e56dd9b25c6fa58840d9",
+      "byte_identical_match": null,
+      "normalized_identical_match": null,
+      "max_8gram_overlap_ratio_vs_any_prior": 0.1568627450980392,
+      "max_overlap_prior_source_file": "research2/workloads/r2_09/instruction-v1.json"
+    },
+    {
+      "new_source_file": "research2/workloads/r2_bridge01/sources/summarization_bridge_source.txt",
+      "new_workload_id": "bridge-summarization-v1",
+      "new_item_id": null,
+      "new_sha256": "bcc91e62c5a04805644759a2de336fc8ebd04af229f0f490417b17265a062ed8",
+      "new_normalized_sha256": "f4d17494ff420a6bfa633f1eeae0ce12d19596e72fad5efbe49975d6b85f197e",
+      "byte_identical_match": null,
+      "normalized_identical_match": null,
+      "max_8gram_overlap_ratio_vs_any_prior": 0.0,
+      "max_overlap_prior_source_file": null
+    }
+  ],
+  "workload_id_reuse": [],
+  "item_id_reuse": [],
+  "any_byte_identical_match": false,
+  "any_normalized_identical_match": false,
+  "any_8gram_overlap_ratio_ge_0_5": false,
+  "global_max_8gram_overlap_ratio": 0.1568627450980392,
+  "global_max_8gram_overlap_pair": [
+    "research2/workloads/r2_bridge01/bridge-instruction-v1.json",
+    "research2/workloads/r2_09/instruction-v1.json",
+    0.1568627450980392
+  ],
+  "qualitative_review": {
+    "bridge-coding-v1": "Longest-increasing-subsequence (O(n log n), patience sorting + binary search). Prior coding prompts cover: merge overlapping intervals, a C bug, an LRU cache, k-most-frequent-words (Rust), a thread-pool URL downloader, a slow-SQL rewrite, and group_anagrams. Distinct algorithmic topic and framing.",
+    "bridge-reasoning-v1": "Warehouse camera/false-alarm expectation + conditional probability + a rate-change recomputation. Prior reasoning prompts cover machine-defect-rate and library-loan-fraction arithmetic. Distinct cover story, numbers, and final sub-question shape.",
+    "bridge-summarization-v1": "New source text on bicycle commuting/maintenance. Prior sources: Argine expert-store technical background, and home battery-backup. Distinct domain from both.",
+    "bridge-instruction-v1": "Weekly $120 grocery-budget planning for a household of 4. Prior instruction prompts: latency-incident investigation guide, and vegetable-garden planning. Distinct domain; deliberately avoids any garden theme."
+  },
+  "overall_pass": true
+}
