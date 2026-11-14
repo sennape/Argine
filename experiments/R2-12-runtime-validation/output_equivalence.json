@@ -1,0 +1,21 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "requirement": "Runtime comparison is INVALID if PredictedProtectPolicy and B_selected(M) produce meaningfully different model outputs under the deterministic configuration below. Any output divergence must be investigated and resolved/explained BEFORE interpreting any timing difference for that workload/budget cell.",
+  "fixed_for_comparison": {
+    "prompt": "identical, from the frozen runtime_corpus.json workload",
+    "model": "identical, see contract.json.model_identity",
+    "seed": 42,
+    "temperature": 0.0,
+    "top_k": 1,
+    "context": 4096,
+    "n_predict": 512
+  },
+  "equivalence_check": {
+    "method": "Compare the full sequence of generated token IDs (preferred) or, if token IDs are not directly exposed by the runtime's API, the exact generated output text, between a PredictedProtectPolicy run and a B_selected(M) run of the same workload/budget, holding every field above fixed.",
+    "requirement": "EXACT equality of the generated token-ID sequence (or text, if IDs unavailable), unless the runtime architecture makes exact equality impossible for a DOCUMENTED reason (e.g. a retention-policy difference that is architecturally guaranteed never to change sampled token identity at temperature=0/top_k=1 -- greedy decoding is a function of logits only, and the retention policy affects only which expert bytes are resident/served from the SAME underlying expert weights, never the weights' numerical content, so byte-identical output is the expected and required outcome, not a hopeful one).",
+    "on_divergence": "Treat as a scientific-validity failure (BLOCKED_INVALID per decision_rules.json) for that cell. Do not interpret timing. Investigate: (a) whether a budget violation forced a fallback/degraded path, (b) whether expert-store corruption or a read error occurred, (c) whether non-determinism exists in the runtime's own sampling/threading despite temperature=0/top_k=1 (e.g. floating-point non-associativity across different thread-scheduling orders) -- if (c) is confirmed as the documented cause, record it explicitly and require BIT-IDENTICAL output for repeated runs of the SAME policy as a weaker fallback equivalence bar, but still require output text to be semantically unchanged between policies.",
+    "where_checked": "Once per (workload,budget) pair before committing to interpret that cell's timing results -- not once per repetition (repetitions use the same fixed config and are expected to be internally consistent; this check is specifically policy-vs-policy)."
+  },
+  "frozen_before_execution": true
+}

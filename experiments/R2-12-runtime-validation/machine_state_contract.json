@@ -1,0 +1,21 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "required_conditions_for_publication_quality_runs": [
+    "No YouTube or other streaming video playing anywhere on the machine.",
+    "No active browser video playback (any tab, any browser).",
+    "No heavy background workloads (other builds, other model inference, large file transfers, backups, indexing).",
+    "No Windows Update / install activity in progress or scheduled to start during the run window.",
+    "No concurrent AI workloads of any kind (no other model loaded anywhere on the host).",
+    "Fixed power mode: the host's OS power plan must be set to the same fixed mode for every run of the campaign (recorded in HARDWARE-IDENTITY-STAMP.json at first run; 'Balanced' or 'High performance' is acceptable as long as it never changes mid-campaign -- never 'Power saver' for publication runs, since that mode deliberately throttles and would conflate measurement noise with a real effect).",
+    "Fixed runtime/model/expert-store paths: ARGINE_LLAMA_DIR, the model path, and the expert-store cache path must be byte-identical to the Phase-0/R2-11 frozen paths for every run.",
+    "Sufficient free RAM before each run: re-use argine.planner.plan() feasibility check (same mechanism as the R2-11 capture driver fix in commit f053059) for the run's configured budget; abort if infeasible.",
+    "No thermal throttling if measurable (see hardware_contract.json / cooldown policy below); if CPU temperature/frequency telemetry is unavailable on this host, the conservative fixed-pause cooldown policy (section 23 / below) substitutes for a live telemetry check.",
+    "Record CPU temperature/frequency where practical (best-effort; absence must be noted explicitly, not silently omitted)."
+  ],
+  "chrome_policy": {
+    "requirement": "Chrome (and any other browser) MUST be fully closed (not merely minimized, not just video-paused) for every publication-quality run. An idle browser with background tabs can still trigger periodic CPU/network/GC activity (tab throttling is not guaranteed to reach zero) that adds uncontrolled timing noise to a measurement this sensitive.",
+    "exploratory_runs": "A run performed with Chrome open may be used only for exploratory/debugging purposes and MUST be tagged non_publication_quality=true in its run record; it is never eligible to be aggregated into the primary/secondary statistics used for the R2-12 decision rule."
+  },
+  "pre_run_self_check": "The pre-run gate (execution_plan.json) must verify as many of the above as are machine-checkable (power mode via OS API if accessible, free RAM via argine.hardware.detect(), no concurrent writer lock, paths). Conditions that are not machine-checkable (no YouTube playing, Chrome fully closed) are operator attestations recorded in each run's record as a boolean 'operator_attested_clean_environment' field, not silently assumed."
+}

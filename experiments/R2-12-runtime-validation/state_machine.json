@@ -1,0 +1,25 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "states_in_order": [
+    "R2_12_PROTOCOL_FROZEN",
+    "R2_12_RUNTIME_READY",
+    "R2_12_RUNTIME_OPENED",
+    "R2_12_RUNTIME_COMPLETE",
+    "R2_12_EVALUATED_CLOSED"
+  ],
+  "transitions": {
+    "R2_12_PROTOCOL_FROZEN": "This Phase-0 freeze (this commit). All contract/metric/decision/corpus/ordering artifacts frozen; code module + tests written and passing; no execution performed.",
+    "R2_12_RUNTIME_READY": "Reached only once the pre-run machine gate (execution_plan.json) has been run and PASSED on the real target host, and HARDWARE-IDENTITY-STAMP.json has been written. NOT reached by this Phase-0 freeze -- requires access to real host telemetry this phase does not probe.",
+    "R2_12_RUNTIME_OPENED": "A separate explicit commit, analogous to R2_11_EVAL_OPENED, created strictly before any of the 144 runtime process launches begin. Requires R2_12_RUNTIME_READY first.",
+    "R2_12_RUNTIME_COMPLETE": "All 120 counted executions (plus 24 warmups) persisted, each independently and atomically, with the campaign-wide lock released.",
+    "R2_12_EVALUATED_CLOSED": "Statistical analysis, decision-rule classification, and closure artifacts written and committed, analogous to R2_11_EVALUATED_CLOSED."
+  },
+  "this_phase_ends_at": "R2_12_PROTOCOL_FROZEN",
+  "not_reached_this_phase": [
+    "R2_12_RUNTIME_READY",
+    "R2_12_RUNTIME_OPENED",
+    "R2_12_RUNTIME_COMPLETE",
+    "R2_12_EVALUATED_CLOSED"
+  ]
+}
