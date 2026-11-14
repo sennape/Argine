@@ -438,6 +438,25 @@ std::vector<uint32_t> PredictedProtectPolicy::predict_for_layer(uint32_t layer) 
     return std::vector<uint32_t>(ranked.begin(), ranked.begin() + k);
 }
 
+std::vector<uint32_t> PredictedProtectPolicy::protected_for(uint32_t layer) const {
+    // Sola lettura di predicted_next_, gia' calcolato da after_event() per
+    // l'evento causalmente PRECEDENTE su questo layer -- nessun nuovo
+    // calcolo, nessuna mutazione di stato, nessuna chiamata da
+    // choose_victim() o da qualunque altro punto decisionale (grep di
+    // "protected_for" in questo file: l'unica chiamata e' qui, la
+    // definizione stessa). L'ordinamento ascendente e' puramente per la
+    // leggibilita' della traccia e per corrispondere a sorted(frozenset)
+    // nel comparator Python -- choose_victim() esegue la propria verifica
+    // di appartenenza su predicted_next_ direttamente, indipendentemente da
+    // questo ordine, esattamente come faceva prima che questo metodo
+    // esistesse.
+    auto it = predicted_next_.find(layer);
+    if (it == predicted_next_.end()) { return {}; }
+    std::vector<uint32_t> out = it->second;
+    std::sort(out.begin(), out.end());
+    return out;
+}
+
 void PredictedProtectPolicy::after_event(uint32_t step, uint32_t layer,
                                           const std::vector<uint32_t> & served_sorted) {
     (void) step;

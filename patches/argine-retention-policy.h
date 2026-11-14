@@ -197,6 +197,24 @@ public:
     };
     Inspection inspect(uint32_t layer_for_protected_query) const;
 
+    // Accessore AGGIUNTIVO, di SOLA osservazione -- autorizzato esplicitamente
+    // dall'utente per chiudere il gap di visibilita' che inspect() non puo'
+    // chiudere (inspect() e' non-virtuale sulla classe base e non puo'
+    // raggiungere predicted_next_, che e' privato della classe derivata; vedi
+    // RETENTION-POLICY-TRACE-INSTRUMENTATION.md). NON partecipa ad alcuna
+    // decisione: nessun metodo di scelta della vittima, nessuna logica di
+    // sfratto, predittore o budget chiama questo metodo o dipende dal suo
+    // valore di ritorno -- choose_victim() continua a consultare
+    // predicted_next_ direttamente, esattamente come prima di questa
+    // aggiunta. Espone, in sola lettura, l'insieme protetto GIA' CALCOLATO
+    // per `layer` dall'evento causalmente precedente sullo stesso layer
+    // (dopo_evento/after_event di QUEL evento) -- lo stesso istante causale
+    // che choose_victim() stesso consulta durante l'evento corrente, non un
+    // valore ricalcolato o approssimato. La classe base ritorna sempre
+    // l'insieme vuoto (AgedFrequency pura non ha alcun concetto di
+    // protezione); solo PredictedProtectPolicy la sovrascrive.
+    virtual std::vector<uint32_t> protected_for(uint32_t layer) const { (void) layer; return {}; }
+
 protected:
     explicit RetentionPolicy(double decay_factor, uint32_t aging_interval_steps);
 
@@ -260,6 +278,11 @@ public:
     PredictedProtectPolicy(const AgedFrequencyParams & base, double predictor_decay,
                             uint32_t top_k, uint32_t n_experts);
     RetentionStats stats_with_id() const;
+
+    // Override di sola osservazione di RetentionPolicy::protected_for: vedi
+    // il commento sulla dichiarazione base. Legge predicted_next_, non lo
+    // muta, non viene chiamata da choose_victim() o da after_event().
+    std::vector<uint32_t> protected_for(uint32_t layer) const override;
 
 protected:
     Obj choose_victim(uint32_t layer_of_current_access) const override;

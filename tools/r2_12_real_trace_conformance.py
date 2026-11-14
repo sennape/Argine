@@ -13,31 +13,24 @@ This tool does not run any real model and does not touch llama.cpp/ggml. It
 only reads a trace file already produced by a real run (or, for the
 synthetic tests, a hand-built one) and the already-frozen Python classes.
 
-KNOWN STRUCTURAL GAP -- "protected_before" for predicted_protect:
-argine-retention-policy.h/.cpp (frozen, commit c2f9a68) declares
-`RetentionPolicy::inspect()` NON-VIRTUAL on the base class, and
-`PredictedProtectPolicy::predicted_next_` is a PRIVATE member of the
-derived class with no public accessor. The real runtime holds only a
-`std::unique_ptr<RetentionPolicy>` (base-class pointer), so
-`c->policy->inspect(layer)` can never reach `predicted_next_` for
-predicted_protect -- `Inspection::protected_experts_for_layer` is
-structurally always empty for ANY caller of the public API, not a defect
-in the C++ integration's instrumentation. This is NOT altered here: the
-frozen module is not touched by this tool or by the real-runtime
-integration. Consequently this comparator treats a "protected_before"
-disagreement for policy_id=="predicted_protect" as a reported, non-fatal
-API-coverage gap (see `protected_before_gap_events` in the result) rather
-than a conformance MISMATCH -- because the gap is in what the real trace
-can REPORT, not in what the real runtime DECIDES (choose_victim() inside
-PredictedProtectPolicy does consult predicted_next_ correctly internally;
-only external visibility into that value is unavailable). Closing it for
-real would require a minimal additive accessor on the frozen module
-itself (e.g. a virtual `protected_for(layer)` defaulting to empty on the
-base, overridden by PredictedProtectPolicy) -- out of scope here since it
-touches a frozen, already-committed artifact; flagged for the user to
-decide rather than done unilaterally. For policy_id=="b_selected" this
-field is still compared strictly (it is legitimately always empty on
-both sides there, so any disagreement WOULD be a real bug).
+"protected_before" (both policies, now a required comparison field):
+The real runtime's trace reports the ACTUAL protected set choose_victim()
+consults for predicted_protect, via RetentionPolicy::protected_for(layer)
+-- a minimal, read-only, additive accessor on the frozen module
+(argine-retention-policy.h/.cpp, commit c2f9a68 base; the accessor itself
+was added in a later, separately-committed, explicitly user-authorized
+change -- see RETENTION-POLICY-TRACE-INSTRUMENTATION.md). It participates
+in no decision: choose_victim() still reads predicted_next_ directly, as
+it always did; protected_for() only exposes the same already-computed
+value for the trace. This closes what was previously a known structural
+visibility gap (predicted_before was always [] for predicted_protect in
+any real trace, even though the real decision was correct) -- that gap no
+longer exists, so this field is now compared strictly for BOTH policies:
+for b_selected it is legitimately always [] on both sides; for
+predicted_protect it is the real, non-empty, causally-correct protected
+set after the first event on a layer. Any disagreement on this field is
+now treated exactly like any other decision-field mismatch: reported at
+the first occurrence, with the run stopped.
 
 Usage:
     python3 r2_12_real_trace_conformance.py <trace.jsonl>
@@ -207,7 +200,6 @@ def compare(events):
     policy = _build_policy(policy_id, params)
     policy.start(ctx)
     evicted_log = []
-    protected_before_gaps = []
     _patch_evict_one(policy, policy_id, evicted_log)
 
     for ev in events:
@@ -227,34 +219,8 @@ def compare(events):
         py_miss = sorted(missed)
         trace_protected = sorted(ev["protected_before"])
 
-        # "protected_before" is a known, structural API-coverage gap for
-        # predicted_protect (see module docstring): the real trace can
-        # only ever report [] for this field via the frozen module's
-        # public inspect(), regardless of whether the runtime's actual
-        # eviction decision correctly consulted the real protected set
-        # internally. Report the gap; do not fail the run over it. For
-        # b_selected there is no such gap (protected is legitimately []
-        # on both sides), so a disagreement there is a genuine bug.
-        if policy_id == "predicted_protect":
-            if trace_protected != [] or protected_before != trace_protected:
-                protected_before_gaps.append({
-                    "step": ev["step"], "layer": ev["layer"],
-                    "python_protected_before": protected_before,
-                    "real_runtime_protected_before": trace_protected,
-                })
-        elif protected_before != trace_protected:
-            return False, {
-                "step": ev["step"],
-                "layer": ev["layer"],
-                "requested_experts": trace_requested,
-                "resident_before": sorted([r["layer"], r["expert"]] for r in ev["resident_before"]),
-                "protected_before_trace": trace_protected,
-                "field": "protected_before",
-                "python_value": protected_before,
-                "real_runtime_value": trace_protected,
-            }, None
-
         checks = [
+            ("protected_before", protected_before, trace_protected),
             ("hit_experts", py_hit, trace_hit),
             ("miss_experts", py_miss, trace_miss),
             ("evicted", py_evicted, trace_evicted),
@@ -274,25 +240,13 @@ def compare(events):
                     "real_runtime_value": trace_val,
                 }, None
 
-    summary = {
+    return True, None, {
         "events_compared": len(events),
         "policy_id": policy_id,
         "final_resident": sorted(list(o) for o in policy.resident.keys()),
         "final_resident_bytes": policy.resident_bytes,
         "total_evictions": policy.evictions,
-        "protected_before_gap_events": len(protected_before_gaps),
     }
-    if protected_before_gaps:
-        summary["protected_before_gap_note"] = (
-            "protected_before is structurally unreportable for predicted_protect "
-            "via the frozen module's public inspect() API (base class is "
-            "non-virtual; predicted_next_ is private to the derived class); "
-            "all OTHER decision fields (hit/miss/evicted/resident_after/bytes) "
-            "were compared strictly and matched for every one of these events. "
-            "See the module docstring for the exact root cause."
-        )
-        summary["protected_before_gap_sample"] = protected_before_gaps[:5]
-    return True, None, summary
 
 
 def main():

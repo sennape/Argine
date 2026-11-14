@@ -1486,8 +1486,18 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
     // choose_victim userebbe per questo layer (solo predicted_protect).
     const uint64_t resident_bytes_before = sh.resident;
     argine_retention::RetentionPolicy::Inspection insp_before;
+    std::vector<uint32_t> protected_before_real;
     if (c->policy_trace_fp) {
         insp_before = c->policy->inspect(layer);
+        // Accessore di sola osservazione (vedi
+        // RETENTION-POLICY-TRACE-INSTRUMENTATION.md): espone l'insieme
+        // protetto REALE che choose_victim() consultera' per questo stesso
+        // evento, non una ricostruzione. Chiamato PRIMA di access(), quindi
+        // riflette esattamente l'istante causale che la decisione userebbe
+        // -- nessuna differenza di comportamento rispetto a prima: questa
+        // chiamata e' pura lettura, non influisce su access() ne' su alcuna
+        // decisione sottostante.
+        protected_before_real = c->policy->protected_for(layer);
     }
 
     argine_retention::EventOutcome outcome =
@@ -1680,7 +1690,7 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
         fprintf(c->policy_trace_fp, ",\"miss_experts\":");
         emetti_uint_array(c->policy_trace_fp, outcome.missed);
         fprintf(c->policy_trace_fp, ",\"protected_before\":");
-        emetti_uint_array(c->policy_trace_fp, insp_before.protected_experts_for_layer);
+        emetti_uint_array(c->policy_trace_fp, protected_before_real);
         fprintf(c->policy_trace_fp, ",\"resident_before\":");
         emetti_resident(c->policy_trace_fp, insp_before);
         fprintf(c->policy_trace_fp, ",\"evicted\":[");

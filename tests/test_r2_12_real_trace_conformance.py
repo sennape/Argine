@@ -12,7 +12,11 @@ argine.research2.r2_bridge01.retention_policies.PredictedProtectPolicy) on a
 hand-chosen event sequence and capturing their real output -- never
 hand-computed/guessed expected values -- so a faithfully-built trace is
 guaranteed to reflect genuine frozen-reference behavior before any test
-deliberately corrupts a field to check detection.
+deliberately corrupts a field to check detection. protected_before is a
+normal, strictly-compared field for BOTH policies in these fixtures (the
+real runtime's RetentionPolicy::protected_for() accessor closed what was
+previously a reporting gap for predicted_protect -- see
+RETENTION-POLICY-TRACE-INSTRUMENTATION.md).
 """
 from __future__ import annotations
 
@@ -113,14 +117,13 @@ def _make_pp_trace(decay_factor, interval, budget, bytes_of_layer, layer, event_
         events.append({
             "step": step, "policy": "predicted_protect", "layer": layer, "bytes_of_layer": bytes_of_layer,
             "requested_experts": sorted(set(experts)), "hit_experts": hit, "miss_experts": sorted(missed),
-            # Known, documented structural gap (see module docstring of
-            # tools/r2_12_real_trace_conformance.py and
-            # RETENTION-POLICY-TRACE-INSTRUMENTATION.md): the real runtime's
-            # inspect() can never report this for predicted_protect, so a
-            # FAITHFUL real-runtime trace always writes [] here, never the
-            # true Python-side protected set. That is deliberately
-            # reproduced here, not an oversight.
-            "protected_before": [],
+            # RetentionPolicy::protected_for() (additive, read-only accessor
+            # on the frozen module, see RETENTION-POLICY-TRACE-INSTRUMENTATION.md)
+            # now exposes this exact value from the real runtime; this
+            # fixture's `protected_before` (computed just above from
+            # policy._predicted_next, before calling access()) is exactly
+            # what a real, correctly-instrumented trace now reports.
+            "protected_before": protected_before,
             "resident_before": resident_before_rich,
             "evicted": [{"layer": l, "expert": e} for l, e in evicted_log],
             "resident_after": resident_after_rich,
@@ -264,31 +267,53 @@ def test_protected_set_strict_for_bsel_mismatch_detected():
     assert mismatch["field"] == "protected_before"
 
 
-def test_protected_set_known_gap_for_predicted_protect_not_fatal():
-    # The real runtime structurally cannot report protected_before for
-    # predicted_protect (see module docstring): a faithful real trace always
-    # writes [], while the real Python reference has a genuine non-empty
-    # protected set after the first event. This must be reported as a
-    # non-fatal, explicit gap -- never silently ignored, and never treated
-    # as a MISMATCH that blocks the real conformance signal (hit/miss/
-    # evicted/resident_after/bytes).
+def test_protected_set_accessor_closes_gap_for_predicted_protect():
+    # RetentionPolicy::protected_for() (additive, read-only accessor on the
+    # frozen module) now lets the real runtime report the TRUE protected
+    # set for predicted_protect -- no more [] placeholder, no more
+    # tolerated gap. A faithfully-instrumented trace now matches the real
+    # Python reference's protected set exactly, event by event, including
+    # the genuine non-empty sets after the first event on a layer, and the
+    # summary carries no protected_before_gap_* keys at all (the field is
+    # a normal, strictly-compared field now, like any other).
     events = _make_pp_trace(0.99, 64, 6 * 3_000_000 + 4096, 3_000_000, 0,
                              [[0, 1, 2], [0, 1], [0, 1], [3, 4], [0, 1], [5, 6], [0, 1]])
+    assert any(e["protected_before"] for e in events), (
+        "fixture assumption wrong: expected a genuine non-empty protected set "
+        "to appear after the first event -- fix the fixture, not this test"
+    )
     ok, mismatch, summary = rtc.compare(rtc.parse_trace(_lines(events)))
     assert ok, mismatch
-    assert summary["protected_before_gap_events"] > 0
-    assert "protected_before_gap_note" in summary
-    # The gap must be visible, not swept away: every gap event records both
-    # sides' values.
-    sample = summary["protected_before_gap_sample"][0]
-    assert sample["python_protected_before"] != []
-    assert sample["real_runtime_protected_before"] == []
+    assert "protected_before_gap_events" not in summary
+    assert "protected_before_gap_note" not in summary
+    assert "protected_before_gap_sample" not in summary
 
 
-def test_protected_set_gap_does_not_mask_a_real_decision_bug():
-    # Even with the protected_before gap present, a genuinely wrong eviction
-    # decision for predicted_protect must still be caught -- the gap
-    # tolerance must never widen into tolerating a real conformance defect.
+def test_protected_set_mismatch_for_predicted_protect_now_detected():
+    # Before the accessor, a wrong protected_before for predicted_protect
+    # was invisible to the comparator (always [] on both the real and
+    # tolerated sides). Now that the accessor reports the real set, a wrong
+    # protected_before must be caught like any other field -- this is
+    # exactly the behavior upgrade this phase delivers.
+    events = _make_pp_trace(0.99, 64, 6 * 3_000_000 + 4096, 3_000_000, 0,
+                             [[0, 1, 2], [0, 1], [0, 1], [3, 4], [0, 1], [5, 6], [0, 1]])
+    step_with_protected = next(i for i, e in enumerate(events) if e["protected_before"])
+    events[step_with_protected]["protected_before"] = [123456]
+    ok, mismatch, summary = rtc.compare(rtc.parse_trace(_lines(events)))
+    assert not ok
+    assert mismatch["step"] == step_with_protected
+    assert mismatch["field"] == "protected_before"
+    assert mismatch["real_runtime_value"] == [123456]
+
+
+def test_protected_set_strict_check_does_not_mask_a_real_decision_bug():
+    # protected_before is now compared strictly and first in the checks
+    # list for predicted_protect too. A genuinely wrong eviction decision
+    # must still be caught on its OWN field (evicted/resident_after), not
+    # just incidentally via a protected_before disagreement -- i.e. the new
+    # strict protected_before check must not become a different kind of
+    # blind spot that stops the comparison before reaching eviction fields
+    # in a scenario where protected_before happens to still agree.
     events = _make_pp_trace(0.99, 64, 6 * 3_000_000 + 4096, 3_000_000, 0,
                              [[0, 1, 2], [0, 1], [0, 1], [3, 4], [0, 1], [5, 6], [0, 1]])
     victim_step = next(i for i, e in enumerate(events) if e["evicted"])
@@ -472,7 +497,7 @@ def test_full_match_real_replay_predicted_protect():
     ok, mismatch, summary = rtc.compare(rtc.parse_trace(_lines(events)))
     assert ok, mismatch
     assert summary["policy_id"] == "predicted_protect"
-    assert summary["protected_before_gap_events"] > 0
+    assert "protected_before_gap_events" not in summary
 
 
 # ---------------------------------------------------------------------------
