@@ -222,6 +222,16 @@ int psx_retention_policy_requested(void);
 //
 // Se e' presente ed e' valida, sostituisce la selezione della vittima per
 // questa cache con la politica richiesta e ritorna 1.
+// Nota: un budget troppo piccolo rispetto al working set di un layer (vedi
+// psx_cache_min_budget) puo' far si' che il riferimento Python frozen -- e
+// questo modulo, che lo rispecchia -- scelga di sfrattare un membro
+// dell'evento CORRENTE prima che sia stato ammesso fisicamente. Questo non e'
+// verificato qui all'attach (richiederebbe assunzioni su quanti expert un
+// evento reale puo' richiedere, che questa funzione non conosce), ma viene
+// rilevato ed esplicitamente rifiutato, evento per evento, dentro
+// servi_evento_con_politica in argine-store.cpp, con un messaggio che lo
+// nomina per cosa e': un limite scientifico reale di questa integrazione,
+// non un'incoerenza da nascondere.
 int psx_cache_attach_retention_policy(struct psx_cache * c, const char ** error_out);
 
 // Sola lettura: una politica e' collegata a questa cache?

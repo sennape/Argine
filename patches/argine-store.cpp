@@ -804,6 +804,14 @@ struct psx_cache {
     std::string policy_rejection;       // messaggio statico per error_out se INVALID
     uint32_t    policy_step = 0;        // un passo per evento (una chiamata a ensure_many)
     uint32_t    policy_events = 0;      // eventi effettivamente serviti dalla politica
+    uint32_t    policy_top_k = 0;       // solo predicted_protect, per provenienza nella traccia
+    uint32_t    policy_n_experts = 0;   // solo predicted_protect, per provenienza nella traccia
+    double      policy_predictor_decay = 0.0;  // solo predicted_protect: RetentionPolicy::stats()
+                                                // (base, non virtuale) non lo riporta -- solo
+                                                // *::stats_with_id() lo fa, che questo integrazione
+                                                // non chiama -- quindi va tenuto qui, non riletto da
+                                                // stats(). Scoperto esercitando una traccia reale con
+                                                // predicted_protect in questo round.
     FILE *      policy_trace_fp = nullptr;  // ARGINE_RETENTION_TRACE, JSONL, o nullptr
     // Oggetto (layer, expert) -> slice (CacheKey) attualmente residenti per
     // quell'oggetto in questo settore. Serve a tradurre una vittima scelta
@@ -981,6 +989,9 @@ int psx_cache_attach_retention_policy(struct psx_cache * c, const char ** error_
         c->policy = std::make_unique<argine_retention::PredictedProtectPolicy>(
             cfg.base, cfg.predictor_decay, cfg.top_k, cfg.n_experts);
         c->policy_id = "predicted_protect";
+        c->policy_top_k = cfg.top_k;
+        c->policy_n_experts = cfg.n_experts;
+        c->policy_predictor_decay = cfg.predictor_decay;
     }
     c->policy->start(c->budget);
 
@@ -1021,7 +1032,7 @@ void psx_cache_get_retention_stats(const struct psx_cache * c, struct psx_retent
     snprintf(out->policy_id, sizeof(out->policy_id), "%s", c->policy_id.c_str());
     out->decay_factor          = s.decay_factor;
     out->aging_interval_steps  = s.aging_interval_steps;
-    out->predictor_decay       = s.predictor_decay;
+    out->predictor_decay       = c->policy_predictor_decay;
     out->hits                  = s.hits;
     out->misses                = s.misses;
     out->evictions             = s.evictions;
@@ -1465,6 +1476,20 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
     }
 
     const uint32_t step = c->policy_step++;
+
+    // --- istrumentazione: snapshot PRIMA della decisione --------------------
+    //
+    // Pura lettura (RetentionPolicy::inspect() e' const), non altera alcuna
+    // decisione. Serve a ricostruire, dal lato Python, esattamente lo stato
+    // su cui la decisione C++ si e' basata: resident set con punteggio/
+    // last_ref (per verificare il tie-breaking), e il set protetto che
+    // choose_victim userebbe per questo layer (solo predicted_protect).
+    const uint64_t resident_bytes_before = sh.resident;
+    argine_retention::RetentionPolicy::Inspection insp_before;
+    if (c->policy_trace_fp) {
+        insp_before = c->policy->inspect(layer);
+    }
+
     argine_retention::EventOutcome outcome =
         c->policy->access(step, layer, dedup_experts, bytes_of_layer);
     c->policy_events++;
@@ -1478,6 +1503,50 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
         return 0;
     }
 
+    // Snapshot DOPO la decisione: RetentionPolicy::access() ha gia' applicato
+    // sia gli sfratti che le ammissioni al proprio stato interno (resident_),
+    // esattamente come Policy.access() in Python fa in una sola chiamata:
+    // questo e' quindi lo stato logico finale dell'evento, non uno stato a
+    // meta' strada.
+    argine_retention::RetentionPolicy::Inspection insp_after;
+    if (c->policy_trace_fp) {
+        insp_after = c->policy->inspect(layer);
+    }
+
+    // Pre-scansione, PRIMA di applicare qualunque sfratto fisico: se una
+    // qualunque vittima scelta dalla politica e' un membro dell'evento
+    // CORRENTE (vedi il commento dettagliato piu' sotto), questo intero
+    // evento non e' servibile in modo sicuro dal runtime reale. Va rilevato
+    // ORA, non a meta' del ciclo di sfratto: processare gli sfratti uno per
+    // uno e fermarsi al primo problematico lascerebbe gli sfratti PRECEDENTI
+    // di quello stesso ciclo (innocui di per se') comunque applicati
+    // fisicamente, mentre RetentionPolicy::access() ha gia' mutato il proprio
+    // stato interno per l'intero evento in una sola chiamata atomica (non
+    // annullabile). Un'applicazione parziale lascerebbe la cache fisica e lo
+    // stato logico della politica disallineati in due modi diversi
+    // contemporaneamente, cosa peggiore del fallire subito e per intero.
+    for (const argine_retention::Obj & victim : outcome.evicted) {
+        const bool is_current_event_member_precheck =
+            (victim.layer == layer) &&
+            std::binary_search(dedup_experts.begin(), dedup_experts.end(), victim.expert);
+        if (is_current_event_member_precheck) {
+            char buf[700];
+            snprintf(buf, sizeof(buf),
+                     "retention policy: la politica ha scelto di sfrattare (layer=%u, expert=%u), "
+                     "membro dell'evento CORRENTE, prima che fosse fisicamente ammesso -- il budget "
+                     "attivo e' sotto il minimo che garantisce la simultaneita' richiesta da un vero "
+                     "nodo MoE (vedi psx_cache_min_budget); nessuno sfratto fisico di questo evento "
+                     "viene applicato (rilevato in pre-scansione, prima di mutare lo stato fisico). "
+                     "ATTENZIONE: RetentionPolicy::access() ha gia' mutato il proprio stato interno per "
+                     "l'intero evento in una chiamata atomica non annullabile: questa istanza di "
+                     "psx_cache non deve essere riusata dopo questo fallimento, perche' il suo stato "
+                     "logico non corrisponde piu' alla residenza fisica reale.",
+                     victim.layer, victim.expert);
+            s->fail(buf);
+            return 0;
+        }
+    }
+
     // Sfratta ogni oggetto scelto come vittima PRIMA di ammettere le nuove
     // slice: traduce l'Obj logico (layer, expert) nelle sue slice fisiche
     // davvero residenti in questo settore (fino a tre: gate/up/down),
@@ -1486,11 +1555,57 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
         const uint64_t  ok_key = psx_cache::policy_obj_key(victim.layer, victim.expert);
         auto             it_obj = c->policy_obj_slices.find(ok_key);
         if (it_obj == c->policy_obj_slices.end()) {
-            char buf[192];
-            snprintf(buf, sizeof(buf),
-                     "retention policy: sfratto di (layer=%u, expert=%u) richiesto ma nessuna slice "
-                     "fisica indicizzata per quell'oggetto in questo settore",
-                     victim.layer, victim.expert);
+            // Scoperto esercitando la traccia estesa su un evento reale
+            // (vedi RETENTION-POLICY-TRACE-INSTRUMENTATION.md): il
+            // riferimento Python frozen (AgedFrequency.access) NON esclude i
+            // membri dell'evento CORRENTE dalla selezione della vittima
+            // nelle sue iterazioni successive -- confermato replicando lo
+            // stesso evento, passo per passo, sia in Python che in questo
+            // modulo C++. Un expert ammesso un momento prima nello stesso
+            // evento puo' quindi, secondo la semantica frozen, essere scelto
+            // come vittima per farne spazio a un altro expert dello STESSO
+            // evento.
+            //
+            // Questo e' innocuo per la simulazione Python (un modello di
+            // cache puramente statistico), ma NON lo e' per il runtime
+            // reale: psx_cache_ensure_many deve restituire con TUTTI gli n
+            // slice del blocco residenti e bloccati insieme, perche' il nodo
+            // MoE reale ha bisogno dei pesi di ogni expert richiesto
+            // simultaneamente per il suo calcolo. Se la politica sfratta un
+            // membro dell'evento corrente prima che questa funzione lo abbia
+            // fisicamente ammesso, continuare in silenzio lascerebbe lo
+            // stato logico della politica (che crede l'oggetto non piu'
+            // residente) e lo stato fisico della cache (che lo riammette
+            // comunque in Fase 1, perche' il calcolo reale lo richiede)
+            // permanentemente disallineati -- un bug di contabilita' che si
+            // accumula silenziosamente nel tempo, non un caso innocuo.
+            //
+            // Fail-closed, non un no-op: questa e' la condizione che
+            // psx_cache_min_budget() esiste per prevenire (il budget deve
+            // bastare per l'intero working set di un layer, altrimenti
+            // nessuna politica -- ne' quella congelata ne' l'LRU esistente --
+            // puo' dare una garanzia reale). psx_cache_attach_retention_policy
+            // dovrebbe gia' aver rifiutato un budget insufficiente; se questo
+            // punto viene comunque raggiunto, e' un limite scientifico reale
+            // di questo round da riportare, non da nascondere.
+            const bool is_current_event_member =
+                (victim.layer == layer) &&
+                std::binary_search(dedup_experts.begin(), dedup_experts.end(), victim.expert);
+            char buf[400];
+            if (is_current_event_member) {
+                snprintf(buf, sizeof(buf),
+                         "retention policy: la politica ha scelto di sfrattare (layer=%u, expert=%u), "
+                         "membro dell'evento CORRENTE, prima che fosse fisicamente ammesso -- il budget "
+                         "attivo e' sotto il minimo che garantisce la simultaneita' richiesta da un vero "
+                         "nodo MoE (vedi psx_cache_min_budget); non si procede per non disallineare lo "
+                         "stato logico della politica da quello fisico della cache",
+                         victim.layer, victim.expert);
+            } else {
+                snprintf(buf, sizeof(buf),
+                         "retention policy: sfratto di (layer=%u, expert=%u) richiesto ma nessuna slice "
+                         "fisica indicizzata per quell'oggetto in questo settore",
+                         victim.layer, victim.expert);
+            }
             s->fail(buf);
             return 0;
         }
@@ -1516,17 +1631,75 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
             sh.order.erase(slot_it);
             sh.index.erase(it_slot);
             sh.evictions++;
-            if (c->policy_trace_fp) {
-                fprintf(c->policy_trace_fp,
-                        "{\"step\":%u,\"decision\":\"evict\",\"policy\":\"%s\",\"layer\":%u,"
-                        "\"expert\":%u,\"resident_bytes_after\":%llu}\n",
-                        step, c->policy_id.c_str(), victim.layer, victim.expert,
-                        (unsigned long long) sh.resident);
-            }
         }
         c->policy_obj_slices.erase(it_obj);
     }
+
+    // --- istrumentazione: una riga JSONL per EVENTO (non per sfratto) -------
+    //
+    // Pura scrittura di cio' che e' gia' stato deciso/applicato sopra: questo
+    // blocco non influenza in nessun modo decisione, sfratto, ammissione o
+    // budget. Se ARGINE_RETENTION_TRACE non e' impostato, c->policy_trace_fp
+    // e' nullptr e il blocco non fa nulla (nessun costo, nessuna differenza
+    // di comportamento).
     if (c->policy_trace_fp) {
+        auto emetti_resident = [](FILE * fp, const argine_retention::RetentionPolicy::Inspection & insp) {
+            fprintf(fp, "[");
+            for (size_t i = 0; i < insp.resident.size(); i++) {
+                fprintf(fp,
+                        "%s{\"layer\":%u,\"expert\":%u,\"score\":%.17g,\"last_ref\":%lld}",
+                        i ? "," : "", insp.resident[i].layer, insp.resident[i].expert,
+                        insp.resident_scores[i], (long long) insp.resident_last_ref[i]);
+            }
+            fprintf(fp, "]");
+        };
+        auto emetti_uint_array = [](FILE * fp, const std::vector<uint32_t> & v) {
+            fprintf(fp, "[");
+            for (size_t i = 0; i < v.size(); i++) {
+                fprintf(fp, "%s%u", i ? "," : "", v[i]);
+            }
+            fprintf(fp, "]");
+        };
+
+        std::vector<uint32_t> hit_experts;
+        for (uint32_t e : dedup_experts) {
+            if (!std::binary_search(outcome.missed.begin(), outcome.missed.end(), e)) {
+                hit_experts.push_back(e);
+            }
+        }
+
+        const argine_retention::RetentionStats rstats = c->policy->stats();
+
+        fprintf(c->policy_trace_fp,
+                "{\"step\":%u,\"policy\":\"%s\",\"layer\":%u,\"bytes_of_layer\":%llu,",
+                step, c->policy_id.c_str(), layer, (unsigned long long) bytes_of_layer);
+        fprintf(c->policy_trace_fp, "\"requested_experts\":");
+        emetti_uint_array(c->policy_trace_fp, dedup_experts);
+        fprintf(c->policy_trace_fp, ",\"hit_experts\":");
+        emetti_uint_array(c->policy_trace_fp, hit_experts);
+        fprintf(c->policy_trace_fp, ",\"miss_experts\":");
+        emetti_uint_array(c->policy_trace_fp, outcome.missed);
+        fprintf(c->policy_trace_fp, ",\"protected_before\":");
+        emetti_uint_array(c->policy_trace_fp, insp_before.protected_experts_for_layer);
+        fprintf(c->policy_trace_fp, ",\"resident_before\":");
+        emetti_resident(c->policy_trace_fp, insp_before);
+        fprintf(c->policy_trace_fp, ",\"evicted\":[");
+        for (size_t i = 0; i < outcome.evicted.size(); i++) {
+            fprintf(c->policy_trace_fp, "%s{\"layer\":%u,\"expert\":%u}", i ? "," : "",
+                    outcome.evicted[i].layer, outcome.evicted[i].expert);
+        }
+        fprintf(c->policy_trace_fp, "],\"resident_after\":");
+        emetti_resident(c->policy_trace_fp, insp_after);
+        fprintf(c->policy_trace_fp,
+                ",\"cache_resident_bytes_before\":%llu,\"cache_resident_bytes_after\":%llu,"
+                "\"policy_resident_bytes_after\":%llu,\"budget_bytes\":%llu,",
+                (unsigned long long) resident_bytes_before, (unsigned long long) sh.resident,
+                (unsigned long long) rstats.resident_bytes, (unsigned long long) c->budget);
+        fprintf(c->policy_trace_fp,
+                "\"policy_params\":{\"decay_factor\":%.17g,\"aging_interval_steps\":%u,"
+                "\"predictor_decay\":%.17g,\"top_k\":%u,\"n_experts\":%u}}\n",
+                rstats.decay_factor, rstats.aging_interval_steps, c->policy_predictor_decay,
+                c->policy_top_k, c->policy_n_experts);
         fflush(c->policy_trace_fp);
     }
 
