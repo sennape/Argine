@@ -1,0 +1,43 @@
+{
+  "llama_cpp_commit": "254b177307b14d055bbe4c050c9c441a1e06d8a4",
+  "llama_cpp_repo": "https://github.com/ggml-org/llama.cpp",
+  "patches": [
+    "0001-argine-route-log.patch",
+    "0002-argine-expert-store.patch",
+    "0003-argine-research-trace.patch",
+    "0004-argine-retention-policy-cmake.patch (unchanged since v3)",
+    "argine-store.{h,cpp} (current repo version, R2-12 commit 34997c2: adds psx_admission_failure_diag + psx_cache_get_last_admission_failure, and instruments every admission-failure return point in servi_evento_con_politica; no retention-policy decision, parameter, or eviction logic changed)",
+    "argine-experts.{h,cpp} (current repo version, R2-12 commit 34997c2: under an active retention policy, LETTURA_BLOCCO now issues exactly ONE psx_cache_ensure_many call per real MoE node, from ith==0 only, covering every kind for every requested expert -- no more c.blocco sub-chunking and no more per-thread racing of the shared slice counter under a policy; the non-policy LRU path is unchanged. The outer GGML_ABORT on admission failure now also prints psx_error() and the new diagnostic struct)",
+    "argine-research.{h,cpp} (unchanged since v3)",
+    "argine-retention-policy.{h,cpp} (unchanged since v4 -- NOT touched by this fix; the bug was entirely on the caller side)"
+  ],
+  "realizes_commits": [
+    "ae71fbe", "70b93d4", "71bd3c0",
+    "f91c7f0 (v4: fail-closed ARGINE_EXPERT_READ guard + trace diagnostics)",
+    "34997c2 (this build: fix per-kind event fragmentation under LETTURA_BLOCCO + admission diagnostics)"
+  ],
+  "fixes_since_v4": {
+    "symptom": "Real Windows host run of llama-research-v4 (ARGINE_EXPERT_READ=blocco, ARGINE_EXPERT_SHARDS=1, b_selected, 4 GiB budget) reached the real blocking retention-policy path (the v4 fix worked) but then aborted on the first real MoE node: 'argine: impossibile rendere residenti gli expert del layer 0 (blk.0.ffn_gate_exps.weight). Residenti 9 MiB su un budget di 4096 MiB, questo nodo ne chiede 15 su 128.' Retries showed the same failure at roughly 12 MiB resident. The host evidence (tiny resident bytes against an ample budget, failure on the very first node) ruled out genuine capacity exhaustion.",
+    "root_cause": "ARGINE_EXPERT_READ=blocco given without :N defaults c.blocco to 2 slices (leggi_modo in argine-experts.cpp). The real LETTURA_BLOCCO dispatch loop fills sub-blocks of c.blocco slices at a time from the flat dove x da_leggere sequence, which is ordered PER KIND, not per expert: the first sub-block of a 15-expert node is 'expert0 gate, expert1 gate' -- two different experts of the SAME tensor kind. RetentionPolicy::access() (argine-retention-policy.cpp, unchanged) tracks residency per Obj{layer,expert}, not per (layer,expert,kind), and uses bytes_of_layer (the kinds seen in THAT one call) as the whole object's weight when marking it resident. After the first sub-block, the policy believes expert0 and expert1 are already fully resident, having admitted only their gate tensor. A later sub-block requesting expert0's up tensor is then treated as a logical HIT, but its CacheKey was never physically indexed -- caught and refused explicitly by servi_evento_con_politica's own consistency check ('non e' nell'indice ma la politica non lo elenca come mancante -- incoerenza fra stato logico e fisico'), which is the exact GGML_ABORT reported, with no budget problem at all. A second, related but secondary risk from the same fragmentation is cross-sub-block pin starvation under the existing self-eviction/pins>0 invariants. Also discovered: LETTURA_BLOCCO further fragments by THREAD -- every participating thread independently races the shared slice counter and calls psx_cache_ensure_many on its own sub-batch, so even a large c.blocco would still split one real node into up to N concurrent policy events under N threads.",
+    "fix": "Under an active retention policy, LETTURA_BLOCCO no longer sub-chunks by c.blocco or races across threads. Only ith==0 collects ALL slices for the node (every kind, every requested expert) and issues exactly ONE psx_cache_ensure_many call, restoring the atomicity servi_evento_con_politica's own comments already documented as required. Other threads skip this section; the barrier that already follows (unchanged) synchronizes before compute. The non-policy LRU path is completely untouched.",
+    "diagnostics_added": "psx_admission_failure_diag (argine-store.h): budget_bytes, resident_bytes_before, requested_bytes_total, requested_missing_bytes, reclaimable_bytes, requested_count, protected_count, candidate_victim_count, smallest_expert_bytes, largest_expert_bytes, and the exact failure reason string -- populated at every admission-failure return point inside servi_evento_con_politica, read via psx_cache_get_last_admission_failure(). The outer GGML_ABORT in argine-experts.cpp now also prints psx_error() (previously never surfaced at all) and this diagnostic, stating explicitly whether the budget is actually the problem instead of always suggesting ARGINE_EXPERT_BUDGET.",
+    "test_coverage": "patches/argine-retention-integration-test.cpp sections 11-12 (against the real Qwen_Qwen3-30B-A3B-Q4_K_M.psxs store, 128 experts/layer, matching the real shape): section 11 is the explicitly requested positive guarantee -- 15 experts on layer 0, budget 40x a single expert's footprint, cold cache, served with ONE psx_cache_ensure_many call, admitted with zero self-eviction and zero budget violations. Section 12 reproduces the real bug's exact mechanism (the same 15-expert node fragmented into 2-slice sub-blocks in the real per-kind order) and asserts the failure is the logical/physical inconsistency message, not a budget message. All 12 sections (51 checks total) pass."
+  },
+  "predecessor_runtime": {
+    "name": "llama-research-v4",
+    "sha256": "b035d3913e2b88a58860fe4120f912c908f1fd7be37f8e4341089bfad2ad4d2e",
+    "note": "left unchanged on disk at its original path (Argine2/llama-research-v4/); historical identity preserved, not overwritten. v4 remains the record of the run that discovered the per-node admission-fragmentation symptom."
+  },
+  "compiler": "x86_64-w64-mingw32-g++-posix (GCC) 10-posix 20220113",
+  "compiler_deviation_note": "Same toolchain and same _WIN32_WINNT=0x0A00/WINVER=0x0A00 deviation as v3/v4. Unchanged in this build: only ggml-cpu/argine-store.cpp and ggml-cpu/argine-experts.cpp were recompiled, and all four binaries relinked against the updated ggml-cpu.a. No new compiler-flag deviation introduced.",
+  "built_utc": "2026-11-14T20:18:00Z",
+  "built_on": "Same Argine2 build container (Linux) and same user-owned ~/toolchain/ prefix used for v3/v4. Incremental ninja rebuild (only the two changed .cpp files recompiled, four binaries relinked) against the already-configured build-win/ CMake tree.",
+  "runtime_tested": false,
+  "runtime_tested_note": "Not executed in this Linux build environment (PE32+ Windows binaries). Verified here only by static inspection: objdump import-table DLL names (identical per-binary shape to v3/v4), and 'strings' search confirming the new diagnostic format strings (the 'incoerenza fra stato logico e fisico' message, the 'Motivo esatto' / 'Diagnostica' GGML_ABORT message with all ten new fields) are present in llama-server.exe. Live confirmation that a real 15-expert node now admits successfully under ARGINE_EXPERT_READ=blocco with a retention policy active must happen on the real Windows host -- left to the user's own next run, not claimed here.",
+  "binaries": {
+    "llama-imatrix.exe": "dadca756289645d63bc183b86ceed478d87c56902d1a64868c0775d68cb84f7f",
+    "llama-perplexity.exe": "4dabf0dc0790603d789fe7a358fa0e2d699e0c1e9b076dfefaa92e74d2b166ab",
+    "llama-quantize.exe": "869668b9244132b320539f8a5af43668d9b61f7a659812923e585737dda47bba",
+    "llama-server.exe": "65f445c42ac145765735984582691964181dd4dd8019f4519edac1fa315df26c"
+  }
+}
