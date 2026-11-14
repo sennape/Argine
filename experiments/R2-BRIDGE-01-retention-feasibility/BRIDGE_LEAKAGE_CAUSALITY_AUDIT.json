@@ -1,0 +1,21 @@
+{
+  "artifact": "BRIDGE_LEAKAGE_CAUSALITY_AUDIT",
+  "causal_boundary_statement": "PredictedProtectPolicy's predicted set for position i+1 is computed strictly after observing position i and before position i+1 of that layer's own stream (verified directly from the module docstring in argine/research2/r2_bridge01/retention_policies.py, matching R2-10's causal_boundary.json prediction_instant verbatim). No change was made to this boundary or to the predictor for BRIDGE scoring.",
+  "method": "decision_rules.json leakage_audit: synthetic-trace future-alteration invariance -- alter events strictly after a decision boundary while holding the visible prefix identical; retention decisions up to that boundary must be bit-identical.",
+  "no_retuning_statement": "No predictor hyperparameters, policy selection, or aging/decay parameters were changed, retuned, or reselected based on holdout results. decayed_transition/decay=0.99 and the frozen B_SELECTED_PARAMS_BY_BUDGET were used exactly as frozen in PHASE1-SELECTION-FREEZE.json and R2-09A-FREEZE.json respectively.",
+  "pytest_summary_tail": [
+    "============================= test session starts ==============================",
+    "platform linux -- Python 3.10.12, pytest-9.2.0, pluggy-1.7.0",
+    "rootdir: /sessions/rcw-01m8e8kzl6gn7hgy1brzj9qg/mnt/Desktop--Argine3",
+    "configfile: pyproject.toml",
+    "collected 8 items",
+    "",
+    "tests/test_r2_bridge01_leakage.py ........                               [100%]",
+    "",
+    "============================== 8 passed in 0.47s ==============================="
+  ],
+  "re_run_this_turn": true,
+  "result": "PASS",
+  "schema_version": 1,
+  "test_file": "tests/test_r2_bridge01_leakage.py"
+}

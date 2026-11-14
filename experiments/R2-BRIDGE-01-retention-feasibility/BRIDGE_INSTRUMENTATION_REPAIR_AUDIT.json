@@ -1,0 +1,13 @@
+{
+  "artifact": "BRIDGE_INSTRUMENTATION_REPAIR_AUDIT",
+  "conclusion": "Instrumentation repair is applied consistently, scoped to graph-boundary attribution only, and does not affect holdout scoring correctness.",
+  "findings": {
+    "applied_consistently": "argine/research/rawlog.py:_absorb_split_tail_graphs() runs unconditionally inside to_trace() for every capture loaded, including all 4 BRIDGE workload traces re-captured after the repair. No per-workload special-casing exists.",
+    "coding_reasoning_instruction_traces_remain_valid": "These 3 workloads never exhibited the split-tail-graph defect (trace_completeness() returned complete=True on their first capture attempts, before the repair existed); the repair function's match condition (graph g missing exactly the single globally-highest layer, graph g+1 holding exactly that layer with a uniform smaller token count) is not met for any graph in these 3 traces, so _absorb_split_tail_graphs() is a no-op on them and their canonical trace SHA-256 values are unchanged from before the repair existed. This was independently confirmed by diffing the 4 canonical trace SHA-256 values recorded in BRIDGE_CAPTURED_SEALED.json against the pre-repair capture attempts for coding/reasoning/instruction: identical.",
+    "no_holdout_result_depends_on_preserved_incomplete_attempts": "The BRIDGE holdout evaluation in this turn used only the canonical, sealed, post-repair traces recorded in BRIDGE_CAPTURED_SEALED.json (verified by SHA-256 at BRIDGE_OPENED time); the earlier incomplete summarization capture attempts (classification C, genuine scientific incompleteness) were never loaded or scored in Substep 2.",
+    "repair_scope_is_attribution_only": "_absorb_split_tail_graphs() only reassigns which graph id a layer-47 R-record belongs to and deletes the now-empty phantom graph id; it does not alter any expert-routing field (route ids, n_tok, n_used) of any R record, and runs before Step construction, i.e. strictly upstream of any retention-policy decision logic. No retention policy code path reads graph ids directly.",
+    "summarization_trace_now_complete": "bridge-summarization-v1's recapture after the dbe8306 repair shows trace_completeness() complete=True with zero 'trace completeness (forward passes missing)' warnings, validated during the Phase 2A capture-validation step (commit 000d27f)."
+  },
+  "repair_reference": "PHASE2A1-INSTRUMENTATION-REPAIR.json, commit dbe8306",
+  "schema_version": 1
+}
