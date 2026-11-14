@@ -305,19 +305,31 @@ int main(int argc, char ** argv) {
         struct psx_retention_stats rst;
         psx_cache_get_retention_stats(c, &rst);
         check(rst.events_served == 3, "tre eventi osservati");
-        check(rst.trace_rows_attempted == 3, "tre righe tentate, una per evento");
-        check(rst.trace_rows_written == 3, "tre righe scritte, una per evento");
+        check(rst.trace_rows_attempted == 3, "tre righe di decisione tentate, una per evento");
+        check(rst.trace_rows_written == 3, "tre righe di decisione scritte, una per evento");
+        // R2-12 Phase F: additive -- ogni evento riuscito scrive ANCHE una
+        // riga di completamento separata (dopo Fase 1), quindi il file ha
+        // ora 2 righe per evento (decisione + completamento), non 1. Questo
+        // e' il comportamento voluto (vedi il commento sopra
+        // policy_trace_completions_written in argine-store.cpp), non una
+        // regressione: il conteggio qui sotto riflette il nuovo totale.
+        check(rst.trace_completions_written == 3, "tre righe di completamento scritte, una per evento");
 
         psx_cache_free(c);
         FILE * f = fopen(trace_path, "r");
         check(f != nullptr, "il file esiste");
         if (f) {
             int righe = 0;
+            int righe_complete = 0;
             char linebuf[4096];
             while (fgets(linebuf, sizeof(linebuf), f)) {
-                if (linebuf[0] != '\0' && linebuf[0] != '\n') righe++;
+                if (linebuf[0] != '\0' && linebuf[0] != '\n') {
+                    righe++;
+                    if (strstr(linebuf, "\"complete\":1") != nullptr) { righe_complete++; }
+                }
             }
-            check(righe == 3, "tre righe non vuote nel file, non una sola riga cumulativa");
+            check(righe == 6, "sei righe non vuote nel file: 3 di decisione + 3 di completamento");
+            check(righe_complete == 3, "esattamente 3 di quelle sei righe sono righe di completamento");
             fclose(f);
         }
         remove(trace_path);

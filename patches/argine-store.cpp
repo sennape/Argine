@@ -820,6 +820,17 @@ struct psx_cache {
     uint64_t    policy_trace_rows_attempted = 0;
     uint64_t    policy_trace_rows_written = 0;
     int         policy_trace_write_failed = 0;
+    // R2-12 Phase F: additive, non-breaking. The existing per-event row
+    // above is written BEFORE Fase 1 (physical commit of misses) runs, so
+    // its cache_resident_bytes_after can only reflect what eviction removed,
+    // never what this event's own admissions add -- discovered while
+    // investigating a host trace that looked like a logical/physical
+    // residency divergence but was this ordering artifact instead. Do NOT
+    // redefine the existing field (comparator-consumed); instead write a
+    // SEPARATE completion line after Fase 1 actually finishes, so host
+    // evidence can distinguish "decision emitted" from "physical service
+    // completed" from "node returned successfully".
+    uint64_t    policy_trace_completions_written = 0;
     bool        policy_trace_write_failed_detto = false;  // un solo stderr, non uno spam per riga
     // R2-12: diagnostica dell'ULTIMO fallimento di ammissione (vedi
     // psx_admission_failure_diag in argine-store.h). Scritta solo nei punti
@@ -1070,6 +1081,7 @@ void psx_cache_get_retention_stats(const struct psx_cache * c, struct psx_retent
     out->trace_rows_attempted  = c->policy_trace_rows_attempted;
     out->trace_rows_written    = c->policy_trace_rows_written;
     out->trace_write_failed    = c->policy_trace_write_failed;
+    out->trace_completions_written = c->policy_trace_completions_written;
 }
 
 int psx_cache_get_last_admission_failure(const struct psx_cache * c,
@@ -1999,6 +2011,29 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
         const CacheKey  key{ regions[i], offsets[i] };
         if (std::find(vec.begin(), vec.end(), key) == vec.end()) {
             vec.push_back(key);
+        }
+    }
+
+    // R2-12 Phase F: additive completion marker, written only once Fase 1
+    // has genuinely finished (every physical commit for this event's own
+    // misses has succeeded) -- NOT a redefinition of the existing
+    // cache_resident_bytes_after field above (which stays exactly as the
+    // comparator already consumes it). A single compact line per event,
+    // not a resident-set dump: step + the field the pre-Fase-1 line cannot
+    // carry (physical bytes AFTER this event's own admissions), so host
+    // evidence can tell "decision emitted" from "physical service
+    // completed" from "node returned successfully" (the three stages the
+    // original report asked to distinguish). Zero cost when
+    // ARGINE_RETENTION_TRACE is unset, same as the existing writer.
+    if (c->policy_trace_fp) {
+        fprintf(c->policy_trace_fp,
+                "{\"step\":%u,\"complete\":1,\"cache_resident_bytes_post_service\":%llu}\n",
+                step, (unsigned long long) sh.resident);
+        const int fflush_rc = fflush(c->policy_trace_fp);
+        if (fflush_rc == 0 && !ferror(c->policy_trace_fp)) {
+            c->policy_trace_completions_written++;
+        } else {
+            clearerr(c->policy_trace_fp);
         }
     }
 

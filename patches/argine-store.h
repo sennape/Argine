@@ -294,6 +294,13 @@ struct psx_retention_stats {
     uint64_t trace_rows_attempted; // righe che il writer ha iniziato a scrivere
     uint64_t trace_rows_written;   // di quelle, righe senza errori di stream (ferror pulito)
     int      trace_write_failed;   // almeno una riga ha fallito la scrittura
+    // R2-12 Phase F, additive: righe di COMPLETAMENTO scritte dopo che Fase 1
+    // (il commit fisico delle slice mancanti) e' davvero finita per
+    // quell'evento -- NON lo stesso contatore di trace_rows_written sopra,
+    // che conta la riga di DECISIONE scritta prima di Fase 1. Un evento che
+    // fallisce dentro Fase 1 ha una riga di decisione ma nessuna riga di
+    // completamento: il delta fra i due contatori e' quindi diagnostico.
+    uint64_t trace_completions_written;
 };
 
 // Provenienza/istrumentazione (sezione 9): quale politica, quali parametri,

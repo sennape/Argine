@@ -666,12 +666,13 @@ struct Contesto {
             psx_cache_get_retention_stats(cache, &rst);
             fprintf(stderr,
                     "argine: retention trace diagnostica: traccia_richiesta=%s traccia_aperta=%s "
-                    "eventi_osservati=%u righe_tentate=%llu righe_scritte=%llu%s\n",
+                    "eventi_osservati=%u righe_tentate=%llu righe_scritte=%llu righe_completate=%llu%s\n",
                     rst.trace_requested ? "si" : "no",
                     rst.trace_opened ? "si" : "no",
                     rst.events_served,
                     (unsigned long long) rst.trace_rows_attempted,
                     (unsigned long long) rst.trace_rows_written,
+                    (unsigned long long) rst.trace_completions_written,
                     rst.trace_write_failed
                         ? " ATTENZIONE: almeno una scrittura di traccia e' fallita"
                         : (rst.trace_requested && rst.events_served > 0 && rst.trace_rows_written == 0
