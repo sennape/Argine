@@ -237,6 +237,38 @@ int psx_cache_attach_retention_policy(struct psx_cache * c, const char ** error_
 // Sola lettura: una politica e' collegata a questa cache?
 int psx_cache_has_retention_policy(const struct psx_cache * c);
 
+// R2-12: diagnostica di UN fallimento di ammissione sotto una politica di
+// retention attiva -- indipendente dal testo di psx_error() e dalle sole
+// psx_cache_stats (budget/resident in MiB), che non bastano a distinguere un
+// vero esaurimento di capacita' da un rifiuto per un'altra ragione (per
+// esempio una vittima scelta dalla politica che e' ancora bloccata/pins>0 --
+// scoperto da un run reale con 15/128 expert richiesti, budget 4096 MiB
+// ampiamente sufficiente, e un messaggio che suggeriva comunque di alzare il
+// budget). Popolata SOLO nei punti di fallimento di servi_evento_con_politica
+// in argine-store.cpp, immediatamente prima di un `return 0`; non influenza
+// nessuna decisione della politica, nessun sfratto, nessuna ammissione.
+struct psx_admission_failure_diag {
+    uint32_t layer;
+    uint64_t budget_bytes;
+    uint64_t resident_bytes_before;
+    uint64_t requested_bytes_total;    // somma byte su tutti gli expert distinti richiesti in questo evento
+    uint64_t requested_missing_bytes;  // di quelli, la parte non ancora residente (outcome.missed)
+    uint64_t reclaimable_bytes;        // byte residenti in questo settore con pins==0 (davvero sfrattabili ora)
+    uint32_t requested_count;          // expert distinti richiesti in questo evento
+    uint32_t protected_count;          // expert protetti per questo layer (predicted_protect; 0 per b_selected)
+    uint32_t candidate_victim_count;   // expert che la politica ha scelto di sfrattare per questo evento
+    uint64_t smallest_expert_bytes;    // il piu' piccolo, fra gli expert richiesti in questo evento (somma kind)
+    uint64_t largest_expert_bytes;     // il piu' grande, fra gli expert richiesti in questo evento (somma kind)
+    char     reason[300];              // il testo esatto passato a s->fail() per questo fallimento
+};
+
+// Sola lettura: l'ultima diagnostica di fallimento di ammissione per questa
+// cache, se ce n'e' stata una da quando una politica e' stata collegata.
+// Ritorna 0 (out non toccato) se nessun fallimento di questo tipo e' ancora
+// avvenuto.
+int psx_cache_get_last_admission_failure(const struct psx_cache * c,
+                                          struct psx_admission_failure_diag * out);
+
 struct psx_retention_stats {
     char     policy_id[32];        // "b_selected" | "predicted_protect" | "" (nessuna)
     double   decay_factor;

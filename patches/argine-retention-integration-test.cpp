@@ -382,6 +382,155 @@ int main(int argc, char ** argv) {
     }
     unsetenv("ARGINE_RETENTION_TRACE");
 
+    // --- 11-12. Riproduzione della forma esatta del fallimento reale
+    // riportato dall'host Windows: 15 expert su 128 richiesti per il layer 0,
+    // budget 4096 MiB ampiamente sufficiente, eppure "impossibile rendere
+    // residenti" con solo 9-12 MiB residenti. La causa reale NON era il
+    // budget (vedi RUNTIME-REALIZATION-PROVENANCE-V5-ADMISSION-FIX.md):
+    // ARGINE_EXPERT_READ=blocco senza :N usa c.blocco=2 di default
+    // (leggi_modo in argine-experts.cpp), e OGNI thread partecipante chiama
+    // psx_cache_ensure_many sulla SUA sotto-fetta -- quindi anche con
+    // c.blocco grande, un nodo da 15 expert veniva comunque frammentato in
+    // piu' chiamate psx_cache_ensure_many indipendenti, ciascuna un "evento"
+    // distinto per la politica, mentre le slice ammesse da chiamate
+    // PRECEDENTI dello stesso nodo restavano bloccate (pins>0, sbloccate
+    // solo alla fine del nodo reale). Una chiamata successiva poteva quindi
+    // scegliere come vittima un oggetto del proprio STESSO nodo logico ma
+    // non del proprio sotto-blocco -- il controllo "membro dell'evento
+    // CORRENTE" non lo vede (guarda solo gli expert di QUESTA chiamata), e
+    // il fallimento emerge invece dall'invariante "pins>0" di
+    // servi_evento_con_politica.
+    //
+    // Sezione 11 e' la garanzia positiva richiesta esplicitamente: un nodo
+    // da 15 expert su un budget ampiamente sufficiente, servito con UNA
+    // sola chiamata psx_cache_ensure_many (la disciplina imposta dal fix in
+    // argine-experts.cpp), deve ammettere senza alcun autosfratto. Sezione
+    // 12 riproduce il MECCANISMO del bug originale -- la stessa richiesta
+    // frammentata in piu' chiamate separate con i pin della chiamata
+    // precedente ancora attivi -- per dimostrare che la causa individuata e'
+    // davvero sufficiente a spiegare il sintomo reale, non solo plausibile.
+    printf("11. nodo MoE reale: 15 expert su layer 0 (store da 128), budget ampio, UNA chiamata -> ammesso senza autosfratto\n");
+    {
+        REGION_CACHE.clear();
+        unsetenv("ARGINE_RETENTION_TRACE");
+        setenv("ARGINE_RETENTION_POLICY", "b_selected", 1);
+        setenv("ARGINE_RETENTION_DECAY", "0.99", 1);
+        setenv("ARGINE_RETENTION_INTERVAL", "64", 1);
+        // Budget ampiamente sufficiente per 15 expert, nello stesso spirito
+        // del run reale (4096 MiB per un nodo che ne chiede 15 su 128): qui
+        // 40 volte il bisogno di un solo expert, contro i 15 richiesti.
+        struct psx_cache * c = psx_cache_new_n(per_expert_bytes * 40, 1);
+        const char * err = nullptr;
+        int ok = psx_cache_attach_retention_policy(c, &err);
+        check(ok == 1, "attach riesce con budget ampio");
+
+        std::vector<uint32_t> quindici;
+        for (uint32_t e = 0; e < 15; e++) quindici.push_back(e);
+        // cache FREDDA: nessun expert residente prima di questa singola
+        // chiamata -- esattamente come il primo nodo del primo layer di un
+        // run reale appena avviato.
+        struct psx_cache_stats s_pre; psx_cache_get_stats(c, &s_pre);
+        check(s_pre.bytes_resident == 0, "cache fredda prima dell'evento (0 byte residenti)");
+
+        const int ok15 = evento(c, 0, quindici);
+        check(ok15 == 1, "i 15 expert richiesti sono ammessi in UNA chiamata, senza autosfratto");
+        if (!ok15) {
+            printf("    -> %s\n", psx_error(STORE) ? psx_error(STORE) : "(null)");
+        }
+
+        struct psx_cache_stats s_post; psx_cache_get_stats(c, &s_post);
+        check(s_post.evictions == 0, "zero sfratti: il budget basta abbondantemente per 15 expert");
+        check(s_post.violazioni == 0, "nessuna violazione del budget");
+        check(s_post.bytes_resident >= per_expert_bytes * 15,
+              "almeno i byte dei 15 expert richiesti sono effettivamente residenti");
+
+        struct psx_retention_stats rst; psx_cache_get_retention_stats(c, &rst);
+        check(rst.events_served == 1, "UN solo evento servito dalla politica per l'intero nodo");
+
+        psx_cache_free(c);
+    }
+
+    printf("12. stesso nodo frammentato come il vero c.blocco=2 (ordine per KIND, non per expert) -> riproduce esattamente il meccanismo del bug originale\n");
+    {
+        REGION_CACHE.clear();
+        setenv("ARGINE_RETENTION_POLICY", "b_selected", 1);
+        setenv("ARGINE_RETENTION_DECAY", "0.99", 1);
+        setenv("ARGINE_RETENTION_INTERVAL", "64", 1);
+        // L'ordine REALE con cui argine-experts.cpp costruisce il blocco
+        // (ramo LETTURA_BLOCCO, k da 0 a totale-1) e':
+        //   d = dove[k / n_serve];   x = da_leggere[k % n_serve];
+        // cioe' PER KIND, non per expert: tutti gli n_serve expert della
+        // stessa kind (es. tutti e 15 i "gate") prima di passare alla kind
+        // successiva. Con c.blocco=2 (il default quando ARGINE_EXPERT_READ
+        // =blocco e' dato senza :N -- vedi leggi_modo), il PRIMO sotto-
+        // blocco e' quindi {expert0-gate, expert1-gate}: due expert DIVERSI
+        // della STESSA kind, non due kind dello stesso expert.
+        //
+        // RetentionPolicy::access() (argine-retention-policy.cpp) traccia
+        // la residenza per Obj{layer,expert} -- non per (layer,expert,kind)
+        // -- e usa `bytes_of_layer` (le kind DISTINTE viste in QUESTA
+        // chiamata, qui solo "gate") come il "peso" dell'intero oggetto
+        // quando lo marca resident. Dopo questo primo sotto-blocco, la
+        // politica crede expert0 ed expert1 GIA' interamente residenti,
+        // pur avendone fisicamente ammessa solo la kind "gate". Un
+        // sotto-blocco SUCCESSIVO che richiede expert0-up (kind diversa,
+        // stesso expert) lo trova un HIT logico (find_resident non-null),
+        // ma fisicamente quella CacheKey non e' mai stata indicizzata --
+        // esattamente l'incoerenza che servi_evento_con_politica rileva ed
+        // rifiuta esplicitamente in Fase 1 (argine-store.cpp): "non e'
+        // nell'indice ma la politica non lo elenca come mancante".
+        struct psx_cache * c = psx_cache_new_n(per_expert_bytes * 40, 1);
+        const char * err = nullptr;
+        const int ok_attach12 = psx_cache_attach_retention_policy(c, &err);
+        check(ok_attach12 == 1, "attach riesce");
+        if (!ok_attach12) printf("    -> attach err: %s\n", err ? err : "(null)");
+
+        const uint32_t n_serve12 = 15;  // stesso nodo di sezione 11: 15 expert su layer 0
+        std::vector<enum psx_kind> dove12 = { PSX_GATE, PSX_UP, PSX_DOWN };  // ordine "dove[]" reale
+        const uint32_t totale12 = n_serve12 * (uint32_t) dove12.size();
+        bool fallito_in_frammento = false;
+        const char * motivo = nullptr;
+        for (uint32_t base = 0; base < totale12 && !fallito_in_frammento; base += 2) {
+            std::vector<struct psx_region*> regions;
+            std::vector<size_t> offsets;
+            std::vector<uint32_t> layers, exps;
+            std::vector<enum psx_kind> kinds;
+            for (uint32_t k = base; k < std::min<uint32_t>(base + 2, totale12); k++) {
+                const enum psx_kind kind = dove12[k / n_serve12];
+                const uint32_t      x    = k % n_serve12;
+                const struct psx_entry * ent = psx_get(STORE, 0, x);
+                if (!ent) { continue; }
+                struct psx_region * r = region_for(0, x, kind);
+                regions.push_back(r); offsets.push_back(0);
+                layers.push_back(0); exps.push_back(x); kinds.push_back(kind);
+            }
+            if (regions.empty()) continue;
+            const int ok_frammento = psx_cache_ensure_many(c, STORE, regions.size(), regions.data(),
+                                                            offsets.data(), layers.data(), exps.data(),
+                                                            kinds.data());
+            if (!ok_frammento) {
+                fallito_in_frammento = true;
+                motivo = psx_error(STORE);
+                break;
+            }
+            // Pin NON rilasciati fra sotto-blocchi, esattamente come il nodo
+            // reale (pin_miei si scarica solo all'inizio del nodo SUCCESSIVO
+            // in argine-experts.cpp, non fra i sotto-blocchi di LETTURA_BLOCCO
+            // dello stesso nodo).
+        }
+        check(fallito_in_frammento,
+              "la frammentazione per kind (come il vero c.blocco=2) riproduce il fallimento osservato sull'host reale");
+        if (fallito_in_frammento) {
+            printf("    -> %s\n", motivo ? motivo : "(null)");
+            check(motivo != nullptr && strstr(motivo, "incoerenza fra stato logico e fisico") != nullptr,
+                  "il fallimento e' la stessa incoerenza logico/fisico diagnosticata sul run reale -- non per budget insufficiente");
+        }
+        psx_cache_free(c);
+    }
+    unsetenv("ARGINE_RETENTION_POLICY");
+    unsetenv("ARGINE_RETENTION_DECAY");
+    unsetenv("ARGINE_RETENTION_INTERVAL");
+
     printf("\n%s: %d fallimenti\n", fallimenti == 0 ? "RISULTATO OK" : "RISULTATO FALLITO", fallimenti);
     return fallimenti == 0 ? 0 : 1;
 }

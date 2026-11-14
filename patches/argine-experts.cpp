@@ -311,6 +311,13 @@ struct Contesto {
     std::chrono::steady_clock::time_point inizio{};
     // indice condiviso per la distribuzione dinamica delle letture
     std::atomic<uint32_t> prossima_slice{ 0 };
+    // R2-12: sotto una politica di retention, LETTURA_BLOCCO serve l'intero
+    // nodo con UNA sola chiamata a psx_cache_ensure_many fatta dal solo
+    // thread 0 (vedi il ramo dedicato piu' sotto). Questo flag e' come gli
+    // altri thread scoprono l'esito senza dover anch'essi chiamare
+    // psx_cache_ensure_many: letto da tutti DOPO la barriera che segue
+    // quella chiamata, scritto solo dal thread 0 prima di quella barriera.
+    std::atomic<bool> nodo_fallito_policy{ false };
 
     // Contiene un mutex, quindi non e' copiabile ne' spostabile: si inizializza
     // sul posto, una volta sola, alla prima chiamata.
@@ -925,6 +932,7 @@ class ExpertTraits : public ggml::cpu::tensor_traits {
                         id.layer, src0->name, n_serve, nth);
             }
             c.prossima_slice.store(0, std::memory_order_relaxed);
+            c.nodo_fallito_policy.store(false, std::memory_order_relaxed);
         }
 
         // Argine2 research: router decision and forward-pass boundaries.
@@ -1097,9 +1105,105 @@ class ExpertTraits : public ggml::cpu::tensor_traits {
                 }
                 pin_miei.push_back(Contesto::Pin{ d.region, off });
             }
+        } else if (psx_cache_has_retention_policy(c.cache)) {
+            // Sotto una politica di retention attiva, UNA chiamata a
+            // psx_cache_ensure_many DEVE coprire l'INTERO nodo (tutte le
+            // `totale` slice di tutti gli n_serve expert richiesti), non un
+            // sotto-blocco a dimensione fissa `c.blocco`.
+            //
+            // servi_evento_con_politica (argine-store.cpp) tratta OGNI
+            // chiamata come un evento atomico della politica, e il suo
+            // controllo anti-autosfratto assume esplicitamente che "questa
+            // chiamata" == "l'intero working set simultaneo del nodo MoE
+            // reale" (vedi il commento su psx_cache_min_budget li' dentro).
+            // Spezzare in sotto-blocchi da `c.blocco` slice (default 2
+            // quando ARGINE_EXPERT_READ=blocco e' dato senza :N -- vedi
+            // leggi_modo) rompe questa assunzione, e nel modo piu'
+            // insidioso possibile: l'ordine REALE del blocco e' per KIND,
+            // non per expert (vedi `dove`/`da_leggere` sopra: k/n_serve
+            // sceglie la kind, k%n_serve l'expert), quindi un sotto-blocco
+            // da 2 e' tipicamente "due expert diversi della STESSA kind",
+            // non "due kind dello stesso expert". RetentionPolicy::access()
+            // (argine-retention-policy.cpp) traccia la residenza per
+            // Obj{layer,expert} -- NON per (layer,expert,kind) -- e usa
+            // bytes_of_layer (le sole kind viste in QUESTA chiamata) come
+            // peso dell'intero oggetto quando lo marca resident. Dopo un
+            // primo sotto-blocco che tocca solo la kind "gate" di due
+            // expert, la politica li crede GIA' interamente residenti; un
+            // sotto-blocco successivo che richiede la kind "up" di uno di
+            // quegli stessi expert lo trova un HIT logico, ma la sua
+            // CacheKey fisica non e' mai stata indicizzata -- rilevato ed
+            // rifiutato esplicitamente da servi_evento_con_politica ("non
+            // e' nell'indice ma la politica non lo elenca come mancante --
+            // incoerenza fra stato logico e fisico"), riprodotto
+            // deterministicamente nella sezione 12 di
+            // argine-retention-integration-test.cpp. Un budget
+            // insufficiente (invariante "pins>0", o il controllo "membro
+            // dell'evento corrente") e' un rischio collaterale della stessa
+            // frammentazione, ma non e' la causa del sintomo osservato.
+            // Scoperto da un run reale sull'host Windows con 15 expert su
+            // 128 richiesti e un budget di 4096 MiB ampiamente sufficiente,
+            // che falliva comunque con "impossibile rendere residenti" pur
+            // avendo solo 9-12 MiB residenti: non era una vera esaurimento
+            // di capacita', era questa frammentazione per kind.
+            //
+            // Nessuna chiamata a psx_cache_ensure_many qui sotto decide
+            // nulla sulla politica: questo e' solo il lato chiamante che
+            // smette di spezzare artificialmente un evento che la politica
+            // si aspetta intero. c.blocco resta usato COM'E' per il ramo
+            // senza politica qui sotto (comportamento LRU misurato, non
+            // toccato).
+            //
+            // Un dettaglio distinto dalla sola dimensione del blocco: anche
+            // con un blocco grande a sufficienza, il codice SENZA questo
+            // ramo fa correre OGNI thread sullo stesso contatore condiviso
+            // (c.prossima_slice), e ciascun thread chiama
+            // psx_cache_ensure_many per la SUA sotto-fetta -- quindi con N
+            // thread attivi un nodo verrebbe comunque frammentato in fino a
+            // N chiamate concorrenti, cioe' N "eventi" distinti per la
+            // politica, indipendentemente da c.blocco. Per questo l'intera
+            // raccolta e l'UNICA chiamata qui sotto sono fatte dal solo
+            // ith==0: gli altri thread non partecipano affatto a questa
+            // sezione e si limitano ad attendere la barriera qui sotto, che
+            // c'era gia' e che ora fa anche da punto di sincronizzazione fra
+            // "il thread 0 ha finito" e "tutti possono leggere la memoria
+            // appena resa residente".
+            if (ith == 0) {
+                std::vector<psx_region *>  rr_v(totale);
+                std::vector<size_t>        oo_v(totale);
+                std::vector<uint32_t>      ll_v(totale);
+                std::vector<uint32_t>      ee_v(totale);
+                std::vector<enum psx_kind> kk_v(totale);
+                for (uint32_t k = 0; k < totale; k++) {
+                    const Dove &   d = dove[k / n_serve];
+                    const uint32_t x = da_leggere[k % n_serve];
+                    rr_v[k] = d.region;
+                    oo_v[k] = d.t_off + (size_t) x * d.slab;
+                    ll_v[k] = id.layer;
+                    ee_v[k] = x;
+                    kk_v[k] = d.kind;
+                }
+                bool fallito = false;
+                if (totale > 0) {
+                    if (!psx_cache_ensure_many(c.cache, c.store, totale, rr_v.data(), oo_v.data(),
+                                                ll_v.data(), ee_v.data(), kk_v.data())) {
+                        fallito = true;
+                    } else {
+                        for (uint32_t k = 0; k < totale; k++) {
+                            pin_miei.push_back(Contesto::Pin{ rr_v[k], oo_v[k] });
+                        }
+                    }
+                }
+                c.nodo_fallito_policy.store(fallito, std::memory_order_relaxed);
+            }
         } else {
             // La seconda: blocchi di dimensione fissa, tutto-o-niente, con la
-            // fine del blocco come punto di attesa.
+            // fine del blocco come punto di attesa. Solo per il caso SENZA
+            // politica di retention (vedi il ramo dedicato subito sopra):
+            // qui spezzare in sotto-blocchi e' un'ottimizzazione pura di
+            // sovrapposizione I/O, misurata, e non spezza nessuna assunzione
+            // di atomicita' perche' non c'e' nessuna politica a cui un
+            // "evento" debba corrispondere.
             psx_region *  rr[ARGINE_BLOCCO_MAX];
             size_t        oo[ARGINE_BLOCCO_MAX];
             uint32_t      ll[ARGINE_BLOCCO_MAX];
@@ -1134,19 +1238,61 @@ class ExpertTraits : public ggml::cpu::tensor_traits {
                 }
             }
         }
+        // Sotto una politica di retention con LETTURA_BLOCCO, solo ith==0
+        // chiama davvero psx_cache_ensure_many (vedi il ramo dedicato piu'
+        // sopra): il suo esito passa per c.nodo_fallito_policy, non per il
+        // `guaio` locale di QUESTO thread, che per tutti gli altri thread
+        // resta false anche quando il nodo e' effettivamente fallito.
+        if (c.nodo_fallito_policy.load(std::memory_order_relaxed)) {
+            guaio = true;
+        }
         if (guaio) {
             // Non si puo' proseguire: la memoria non e' impegnata, e calcolare
             // qui sarebbe un crash o, peggio, un risultato sbagliato in
             // silenzio. Meglio fermarsi dicendo perche'.
+            //
+            // R2-12: il messaggio sotto SOLO (bytes_resident, budget) non
+            // basta a distinguere un vero esaurimento di capacita' da un
+            // rifiuto per un'altra ragione -- scoperto da un run reale con
+            // 15/128 expert richiesti e un budget di 4096 MiB ampiamente
+            // sufficiente, che falliva comunque con questo stesso messaggio
+            // (bytes_resident piccolo, ben sotto budget) perche' la causa
+            // reale era un'altra (vedi psx_admission_failure_diag). Si
+            // aggiunge quindi, quando disponibile, il testo esatto di
+            // psx_error() (prima mai letto qui) e la diagnostica dettagliata
+            // di argine-store.h, cosi' che il messaggio stesso dica se
+            // alzare il budget ha senso o no, invece di suggerirlo sempre.
             psx_cache_stats st;
             psx_cache_get_stats(c.cache, &st);
-            GGML_ABORT(
-                "argine: impossibile rendere residenti gli expert del layer %u (%s). "
-                "Residenti %" PRIu64 " MiB su un budget di %" PRIu64 " MiB, questo nodo "
-                "ne chiede %u su %u. Alza ARGINE_EXPERT_BUDGET: il minimo e' lo spazio "
-                "per tutti gli expert che un singolo ubatch puo' toccare.",
-                id.layer, src0->name, st.bytes_resident >> 20, st.budget >> 20, n_serve,
-                n_exp);
+            psx_admission_failure_diag diag;
+            const int ha_diag = psx_cache_get_last_admission_failure(c.cache, &diag);
+            const char * motivo = psx_error(c.store);
+            if (ha_diag) {
+                GGML_ABORT(
+                    "argine: impossibile rendere residenti gli expert del layer %u (%s). "
+                    "Residenti %" PRIu64 " MiB su un budget di %" PRIu64 " MiB, questo nodo "
+                    "ne chiede %u su %u. Motivo esatto: %s. Diagnostica (layer %u): budget_bytes=%"
+                    PRIu64 " resident_bytes_before=%" PRIu64 " requested_bytes_total=%" PRIu64
+                    " requested_missing_bytes=%" PRIu64 " reclaimable_bytes=%" PRIu64
+                    " requested_count=%u protected_count=%u candidate_victim_count=%u "
+                    "smallest_expert_bytes=%" PRIu64 " largest_expert_bytes=%" PRIu64 ". "
+                    "Se requested_bytes_total e' ben sotto budget_bytes, NON e' un problema di "
+                    "budget: alzare ARGINE_EXPERT_BUDGET non lo risolverebbe.",
+                    id.layer, src0->name, st.bytes_resident >> 20, st.budget >> 20, n_serve, n_exp,
+                    motivo ? motivo : "(non riportato)", diag.layer, diag.budget_bytes,
+                    diag.resident_bytes_before, diag.requested_bytes_total,
+                    diag.requested_missing_bytes, diag.reclaimable_bytes, diag.requested_count,
+                    diag.protected_count, diag.candidate_victim_count, diag.smallest_expert_bytes,
+                    diag.largest_expert_bytes);
+            } else {
+                GGML_ABORT(
+                    "argine: impossibile rendere residenti gli expert del layer %u (%s). "
+                    "Residenti %" PRIu64 " MiB su un budget di %" PRIu64 " MiB, questo nodo "
+                    "ne chiede %u su %u. Motivo: %s. Alza ARGINE_EXPERT_BUDGET: il minimo e' lo "
+                    "spazio per tutti gli expert che un singolo ubatch puo' toccare.",
+                    id.layer, src0->name, st.bytes_resident >> 20, st.budget >> 20, n_serve,
+                    n_exp, motivo ? motivo : "(non riportato)");
+            }
         }
 
         // tutti aspettano che le slice siano a posto, poi il kernel standard di

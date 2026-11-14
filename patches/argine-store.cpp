@@ -821,6 +821,13 @@ struct psx_cache {
     uint64_t    policy_trace_rows_written = 0;
     int         policy_trace_write_failed = 0;
     bool        policy_trace_write_failed_detto = false;  // un solo stderr, non uno spam per riga
+    // R2-12: diagnostica dell'ULTIMO fallimento di ammissione (vedi
+    // psx_admission_failure_diag in argine-store.h). Scritta solo nei punti
+    // di fallimento di servi_evento_con_politica, letta da
+    // psx_cache_get_last_admission_failure; zero costo sul percorso che non
+    // fallisce mai.
+    bool                         has_last_admission_failure = false;
+    psx_admission_failure_diag   last_admission_failure{};
     // Oggetto (layer, expert) -> slice (CacheKey) attualmente residenti per
     // quell'oggetto in questo settore. Serve a tradurre una vittima scelta
     // dalla politica (un Obj logico) nelle fino a tre slice fisiche
@@ -1063,6 +1070,24 @@ void psx_cache_get_retention_stats(const struct psx_cache * c, struct psx_retent
     out->trace_rows_attempted  = c->policy_trace_rows_attempted;
     out->trace_rows_written    = c->policy_trace_rows_written;
     out->trace_write_failed    = c->policy_trace_write_failed;
+}
+
+int psx_cache_get_last_admission_failure(const struct psx_cache * c,
+                                          struct psx_admission_failure_diag * out) {
+    if (!out) {
+        return 0;
+    }
+    if (!c || c->shards.empty() || !c->has_last_admission_failure) {
+        return 0;
+    }
+    // Stesso mutex sotto cui servi_evento_con_politica scrive questo campo,
+    // cosi' non si legge mai una struttura a meta' scrittura.
+    std::lock_guard<std::mutex> lk(c->shards[0]->mtx);
+    if (!c->has_last_admission_failure) {
+        return 0;
+    }
+    *out = c->last_admission_failure;
+    return 1;
 }
 
 void psx_cache_unpin(struct psx_cache * c, struct psx_region * region, size_t offset) {
@@ -1527,12 +1552,59 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
         c->policy->access(step, layer, dedup_experts, bytes_of_layer);
     c->policy_events++;
 
+    // R2-12: popola psx_admission_failure_diag (vedi argine-store.h) in
+    // ciascuno dei punti di fallimento qui sotto, SOLO li': zero costo sul
+    // percorso che ammette con successo (il caso comune). Pura contabilita'
+    // di sola lettura sullo stato gia' deciso sopra -- non influenza in
+    // nessun modo la decisione della politica, lo sfratto o l'ammissione.
+    auto popola_diag = [&](const char * reason, size_t n_evicted) {
+        psx_admission_failure_diag d{};
+        d.layer = layer;
+        d.budget_bytes = sh.budget;
+        d.resident_bytes_before = resident_bytes_before;
+        d.requested_count = (uint32_t) dedup_experts.size();
+        uint64_t total = 0, missing = 0;
+        uint64_t smallest = UINT64_MAX, largest = 0;
+        for (uint32_t e : dedup_experts) {
+            uint64_t eb = 0;
+            for (unsigned k = 0; k < PSX_N_KINDS; k++) {
+                if (seen_kind[k]) {
+                    eb += psx_slice_read_bytes(s, layer, e, (enum psx_kind) k);
+                }
+            }
+            total += eb;
+            if (eb < smallest) { smallest = eb; }
+            if (eb > largest) { largest = eb; }
+            if (std::binary_search(outcome.missed.begin(), outcome.missed.end(), e)) {
+                missing += eb;
+            }
+        }
+        d.requested_bytes_total = total;
+        d.requested_missing_bytes = missing;
+        d.smallest_expert_bytes = dedup_experts.empty() ? 0 : smallest;
+        d.largest_expert_bytes = largest;
+        uint64_t reclaim = 0;
+        for (const auto & slot : sh.order) {
+            if (slot.pins == 0) {
+                reclaim += slot.bytes;
+            }
+        }
+        d.reclaimable_bytes = reclaim;
+        d.protected_count = (uint32_t) c->policy->protected_for(layer).size();
+        d.candidate_victim_count = (uint32_t) n_evicted;
+        snprintf(d.reason, sizeof(d.reason), "%s", reason);
+        c->last_admission_failure = d;
+        c->has_last_admission_failure = true;
+    };
+
     if (outcome.overflow_events > 0 || outcome.overflow_misses > 0) {
         // L'evento non entra nel budget nemmeno vuotando tutto. Conservativo
         // per questa fase: fallisce in modo osservabile invece di ammettere
         // solo una parte in silenzio (nessuna evidenza reale lo esercita
         // ancora; vedi il report finale).
-        s->fail("retention policy: evento non servibile nemmeno dopo aver sfrattato tutto (overflow)");
+        const char * reason = "retention policy: evento non servibile nemmeno dopo aver sfrattato tutto (overflow)";
+        popola_diag(reason, outcome.evicted.size());
+        s->fail(reason);
         return 0;
     }
 
@@ -1575,6 +1647,7 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
                      "psx_cache non deve essere riusata dopo questo fallimento, perche' il suo stato "
                      "logico non corrisponde piu' alla residenza fisica reale.",
                      victim.layer, victim.expert);
+            popola_diag(buf, outcome.evicted.size());
             s->fail(buf);
             return 0;
         }
@@ -1639,6 +1712,7 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
                          "fisica indicizzata per quell'oggetto in questo settore",
                          victim.layer, victim.expert);
             }
+            popola_diag(buf, outcome.evicted.size());
             s->fail(buf);
             return 0;
         }
@@ -1654,6 +1728,7 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
                          "retention policy: sfratto di (layer=%u, expert=%u) ma una sua slice e' in "
                          "caricamento o bloccata (pins=%u) -- invariante di residenza violato",
                          victim.layer, victim.expert, slot_it->pins);
+                popola_diag(buf, outcome.evicted.size());
                 s->fail(buf);
                 return 0;
             }
@@ -1816,12 +1891,15 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
                      "retention policy: (layer=%u, expert=%u, kind=%u) non e' nell'indice ma la "
                      "politica non lo elenca come mancante -- incoerenza fra stato logico e fisico",
                      layers[i], experts[i], (unsigned) kinds[i]);
+            popola_diag(buf, outcome.evicted.size());
             s->fail(buf);
             return 0;
         }
         const struct psx_entry * e = psx_get(s, layers[i], experts[i]);
         if (!e) {
-            s->fail("retention policy: psx_get ha restituito null per una slice da leggere");
+            const char * reason = "retention policy: psx_get ha restituito null per una slice da leggere";
+            popola_diag(reason, outcome.evicted.size());
+            s->fail(reason);
             return 0;
         }
         const size_t need = psx_slice_read_bytes(s, layers[i], experts[i], kinds[i]);
@@ -1829,7 +1907,9 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
         const int    ok_commit = psx_region_commit(regions[i], offsets[i], need);
         c->ns_commit.fetch_add(ns_da(t_com), std::memory_order_relaxed);
         if (!ok_commit) {
-            s->fail("retention policy: psx_region_commit fallito dopo lo sfratto deciso dalla politica");
+            const char * reason = "retention policy: psx_region_commit fallito dopo lo sfratto deciso dalla politica";
+            popola_diag(reason, outcome.evicted.size());
+            s->fail(reason);
             return 0;
         }
         sh.misses++;
@@ -1902,7 +1982,9 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
             }
         }
         if (!tutte) {
-            s->fail("retention policy: lettura di una slice fallita dentro un evento");
+            const char * reason = "retention policy: lettura di una slice fallita dentro un evento";
+            popola_diag(reason, outcome.evicted.size());
+            s->fail(reason);
             return 0;
         }
     }
