@@ -186,6 +186,65 @@ unsigned           psx_debug_shard_index(const struct psx_cache * c, struct psx_
 void               psx_cache_free(struct psx_cache * c);
 void               psx_cache_get_stats(const struct psx_cache * c, struct psx_cache_stats * out);
 
+// --- R2-12: integrazione politica di retention nel percorso reale ----------
+//
+// Di default (nessuna variabile ARGINE_RETENTION_POLICY) questa cache si
+// comporta esattamente come prima: LRU puro, invariato. Quando una politica
+// e' richiesta, sostituisce la selezione della vittima con una delle due
+// classi C++ congelate in argine-retention-policy.h (B_selected / aged_frequency,
+// o PredictedProtectPolicy / decayed_transition), bit-per-bit conformi al
+// riferimento Python che resta la verita' semantica.
+//
+// Vincolo architetturale: la politica ragiona in unita' di oggetto (layer,
+// expert), non di singola slice (gate/up/down si muovono insieme). Questo
+// richiede un'unica sezione critica per evento (vedi argine-store.cpp), quindi
+// una politica attiva impone esattamente UN settore: psx_cache_new_n deve
+// essere chiamata con shards=1 quando psx_retention_policy_requested() torna
+// vero. psx_cache_attach_retention_policy rifiuta altrimenti.
+
+// Vero se il processo ha ARGINE_RETENTION_POLICY non vuota nell'ambiente. Il
+// chiamante (argine-experts.cpp, Contesto::inizializza) deve controllarlo
+// PRIMA di creare la cache, per forzare un solo settore.
+int psx_retention_policy_requested(void);
+
+// Legge la configurazione della politica dall'ambiente del processo
+// (ARGINE_RETENTION_POLICY/_DECAY/_INTERVAL/_PREDICTOR_DECAY/_TOPK/_NEXPERTS,
+// vedi argine-retention-policy.h) e la collega a questa cache.
+//
+// Fail-closed: se la configurazione e' assente (ARGINE_RETENTION_POLICY non
+// impostata), non fa nulla e ritorna 1 (nessun cambiamento di comportamento).
+// Se e' presente ma invalida (valore fuori dalla griglia congelata,
+// identificatore non riconosciuto, parametro mancante), o se la cache non ha
+// esattamente un settore, ritorna 0 e scrive in *error_out un messaggio
+// statico (valido per la vita del processo, non va liberato): IL CHIAMANTE
+// deve trattarlo come un errore fatale di avvio (GGML_ABORT o equivalente),
+// MAI ricadere silenziosamente su NONE o sulla B_selected esistente.
+//
+// Se e' presente ed e' valida, sostituisce la selezione della vittima per
+// questa cache con la politica richiesta e ritorna 1.
+int psx_cache_attach_retention_policy(struct psx_cache * c, const char ** error_out);
+
+// Sola lettura: una politica e' collegata a questa cache?
+int psx_cache_has_retention_policy(const struct psx_cache * c);
+
+struct psx_retention_stats {
+    char     policy_id[32];        // "b_selected" | "predicted_protect" | "" (nessuna)
+    double   decay_factor;
+    uint32_t aging_interval_steps;
+    double   predictor_decay;      // 0.0 se non applicabile
+    uint64_t hits;
+    uint64_t misses;
+    uint64_t evictions;
+    uint64_t resident_bytes;
+    uint64_t predictor_decisions;
+    uint64_t protected_fallbacks;
+    uint32_t events_served;        // numero di chiamate psx_cache_ensure_many servite dalla politica
+};
+
+// Provenienza/istrumentazione (sezione 9): quale politica, quali parametri,
+// cosa ha fatto. Non misura tempo, non serve a riportare uno speedup.
+void psx_cache_get_retention_stats(const struct psx_cache * c, struct psx_retention_stats * out);
+
 // Garantisce che la slice sia in memoria e leggibile all'indirizzo
 // `psx_region_base(region) + offset`, e la **blocca** finche' non si chiama
 // `psx_cache_unpin`. Se manca, sfratta quanto serve per rispettare il budget,

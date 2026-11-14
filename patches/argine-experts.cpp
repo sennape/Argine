@@ -336,8 +336,59 @@ struct Contesto {
             {
                 // ARGINE_EXPERT_SHARDS: 0 o assente = automatico
                 const char * sh = env_due_nomi("ARGINE_EXPERT_SHARDS");
-                const unsigned n = sh && *sh ? (unsigned) atoi(sh) : 0;
+                unsigned n = sh && *sh ? (unsigned) atoi(sh) : 0;
+                // R2-12: una politica di retention richiede esattamente un
+                // settore (vedi il commento su struct psx_cache::policy in
+                // argine-store.cpp): l'unita' di decisione e' l'oggetto
+                // (layer, expert), non la singola slice, e la sezione critica
+                // di un evento deve coprire tutte le sue slice in un unico
+                // settore. Se l'utente ha chiesto esplicitamente un numero di
+                // settori diverso da 1 insieme a una politica, e' una
+                // configurazione contraddittoria: fail-closed, non si ignora
+                // in silenzio la richiesta di settori.
+                if (psx_retention_policy_requested()) {
+                    if (sh && *sh && n != 1) {
+                        GGML_ABORT(
+                            "argine: ARGINE_RETENTION_POLICY e ARGINE_EXPERT_SHARDS=%u sono "
+                            "incompatibili: una politica di retention richiede esattamente un "
+                            "settore. Imposta ARGINE_EXPERT_SHARDS=1 o rimuovi la richiesta di "
+                            "piu' settori.",
+                            n);
+                    }
+                    n = 1;
+                }
                 c.cache = psx_cache_new_n(c.budget, n);
+            }
+            // R2-12: collega la politica di retention (se richiesta) alla
+            // cache appena creata. Fail-closed: una configurazione presente
+            // ma invalida (griglia congelata non rispettata, identificatore
+            // non riconosciuto, settori != 1) abortisce l'avvio -- non ricade
+            // mai in silenzio sull'LRU esistente o su B_selected.
+            {
+                const char * retention_err = nullptr;
+                if (!psx_cache_attach_retention_policy(c.cache, &retention_err)) {
+                    GGML_ABORT("argine: ARGINE_RETENTION_POLICY non valida: %s",
+                               retention_err ? retention_err : "(motivo non riportato)");
+                }
+                if (psx_cache_has_retention_policy(c.cache)) {
+                    // Provenienza: quale politica e con quali parametri, su
+                    // stderr come le altre righe diagnostiche di questa
+                    // funzione, cosi' resta visibile anche senza -v.
+                    struct psx_retention_stats rst;
+                    psx_cache_get_retention_stats(c.cache, &rst);
+                    char predictor_txt[40];
+                    if (rst.predictor_decay > 0.0) {
+                        snprintf(predictor_txt, sizeof(predictor_txt), ", predictor_decay=%.6g",
+                                 rst.predictor_decay);
+                    } else {
+                        predictor_txt[0] = '\0';
+                    }
+                    fprintf(stderr,
+                            "argine: retention policy attiva: %s (decay=%.6g, interval=%u%s) -- "
+                            "R2-12 runtime policy integration\n",
+                            rst.policy_id, rst.decay_factor, rst.aging_interval_steps,
+                            predictor_txt);
+                }
             }
             c.attivo = true;
             if (c.direct && !psx_direct(c.store)) {

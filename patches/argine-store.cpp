@@ -3,6 +3,9 @@
 
 #include "argine-store.h"
 #include "argine-research.h"
+#include "argine-retention-policy.h"
+
+#include <cstdio>
 
 #include <algorithm>
 #include <atomic>
@@ -787,6 +790,32 @@ struct psx_cache {
     // 0; it is exported so that every measurement can prove it, not assume it.
     std::atomic<uint64_t> violazioni{ 0 };
 
+    // --- R2-12: politica di retention ---------------------------------------
+    //
+    // Presente solo quando ARGINE_RETENTION_POLICY e' stata letta e validata.
+    // Con una politica attiva questa cache ha esattamente UN settore
+    // (vedi psx_cache_attach_retention_policy), e psx_cache_ensure_many
+    // sostituisce per intero la selezione della vittima del settore 0 con la
+    // decisione di `policy`, sotto lo stesso mutex del settore (shards[0]->mtx):
+    // nessun nuovo lock globale, si riusa quello che gia' serializza ogni
+    // accesso a quel settore.
+    std::unique_ptr<argine_retention::RetentionPolicy> policy;
+    std::string policy_id;              // "b_selected" | "predicted_protect"
+    std::string policy_rejection;       // messaggio statico per error_out se INVALID
+    uint32_t    policy_step = 0;        // un passo per evento (una chiamata a ensure_many)
+    uint32_t    policy_events = 0;      // eventi effettivamente serviti dalla politica
+    FILE *      policy_trace_fp = nullptr;  // ARGINE_RETENTION_TRACE, JSONL, o nullptr
+    // Oggetto (layer, expert) -> slice (CacheKey) attualmente residenti per
+    // quell'oggetto in questo settore. Serve a tradurre una vittima scelta
+    // dalla politica (un Obj logico) nelle fino a tre slice fisiche
+    // (gate/up/down) da sfrattare insieme, e viceversa per registrare cosa e'
+    // stato ammesso. Esiste solo quando `policy` e' attivo.
+    std::unordered_map<uint64_t, std::vector<CacheKey>> policy_obj_slices;
+
+    static uint64_t policy_obj_key(uint32_t layer, uint32_t expert) {
+        return ((uint64_t) layer << 32) | (uint64_t) expert;
+    }
+
     Shard & shard_of(const CacheKey & k) {
         return *shards[CacheKeyHash()(k) % shards.size()];
     }
@@ -881,6 +910,125 @@ void psx_cache_get_stats(const struct psx_cache * c, struct psx_cache_stats * ou
     out->blocchi     = c->blocchi.load();
     out->letture     = c->letture.load();
     out->violazioni  = c->violazioni.load();
+}
+
+// ===========================================================================
+// R2-12: integrazione politica di retention nel percorso reale
+// ===========================================================================
+//
+// Niente di questo blocco cambia il comportamento di default (nessuna
+// politica richiesta): psx_cache_ensure_many prende la strada esistente,
+// invariata, quando c->policy e' nullo.
+
+int psx_retention_policy_requested(void) {
+    const char * v = getenv("ARGINE_RETENTION_POLICY");
+    return (v && v[0] != '\0') ? 1 : 0;
+}
+
+int psx_cache_has_retention_policy(const struct psx_cache * c) {
+    return (c && c->policy) ? 1 : 0;
+}
+
+int psx_cache_attach_retention_policy(struct psx_cache * c, const char ** error_out) {
+    if (error_out) {
+        *error_out = nullptr;
+    }
+    if (!c) {
+        if (error_out) *error_out = "psx_cache_attach_retention_policy: cache nulla";
+        return 0;
+    }
+
+    argine_retention::RetentionConfig cfg = argine_retention::parse_retention_config_from_env();
+
+    if (cfg.kind == argine_retention::PolicyKind::NONE) {
+        // Nessuna politica richiesta: nessun cambiamento di comportamento.
+        return 1;
+    }
+
+    if (cfg.kind == argine_retention::PolicyKind::INVALID) {
+        c->policy_rejection = cfg.rejection_reason.empty()
+            ? "ARGINE_RETENTION_POLICY: configurazione non valida, nessun motivo riportato"
+            : cfg.rejection_reason;
+        if (error_out) {
+            *error_out = c->policy_rejection.c_str();
+        }
+        return 0;  // fail-closed: il chiamante NON deve ricadere su NONE/B_selected
+    }
+
+    // Vincolo architetturale (vedi commento sul campo `policy` in struct
+    // psx_cache): l'unita' di decisione della politica e' l'oggetto (layer,
+    // expert), non la singola slice, e un evento viene servito in un'unica
+    // sezione critica. Con piu' di un settore lo stesso oggetto potrebbe avere
+    // le sue tre slice (gate/up/down) sparse su mutex diversi, e due eventi su
+    // settori diversi potrebbero decidere in parallelo su stato (resident_,
+    // t_) che la classe RetentionPolicy non protegge da sola: deve farlo UN
+    // solo settore, UN solo mutex.
+    if (c->shards.size() != 1) {
+        c->policy_rejection =
+            "ARGINE_RETENTION_POLICY richiede esattamente un settore "
+            "(ARGINE_EXPERT_SHARDS=1); il chiamante deve forzarlo PRIMA di "
+            "creare la cache quando psx_retention_policy_requested() torna vero.";
+        if (error_out) {
+            *error_out = c->policy_rejection.c_str();
+        }
+        return 0;
+    }
+
+    if (cfg.kind == argine_retention::PolicyKind::B_SELECTED) {
+        c->policy = std::make_unique<argine_retention::BSelectedPolicy>(cfg.base);
+        c->policy_id = "b_selected";
+    } else {
+        c->policy = std::make_unique<argine_retention::PredictedProtectPolicy>(
+            cfg.base, cfg.predictor_decay, cfg.top_k, cfg.n_experts);
+        c->policy_id = "predicted_protect";
+    }
+    c->policy->start(c->budget);
+
+    // ARGINE_RETENTION_TRACE: istrumentazione opzionale, deterministica,
+    // disattivata di default. Un JSONL, una riga per decisione di sfratto/
+    // ammissione a livello di evento. Nessun timestamp a parete negli stessi
+    // campi usati per il confronto deterministico (si vedano i commenti dove
+    // viene scritta la riga).
+    if (const char * trace_path = getenv("ARGINE_RETENTION_TRACE")) {
+        if (trace_path[0] != '\0') {
+            c->policy_trace_fp = fopen(trace_path, "w");
+            if (!c->policy_trace_fp) {
+                c->policy_rejection = "ARGINE_RETENTION_TRACE: impossibile aprire il file per la scrittura";
+                if (error_out) {
+                    *error_out = c->policy_rejection.c_str();
+                }
+                c->policy.reset();
+                return 0;
+            }
+        }
+    }
+
+    return 1;
+}
+
+void psx_cache_get_retention_stats(const struct psx_cache * c, struct psx_retention_stats * out) {
+    if (!out) {
+        return;
+    }
+    memset(out, 0, sizeof(*out));
+    if (!c || !c->policy) {
+        return;
+    }
+    // shards[0]->mtx: stesso mutex sotto cui la politica decide, cosi' queste
+    // statistiche non sono mai lette a meta' di un evento.
+    std::lock_guard<std::mutex> lk(c->shards[0]->mtx);
+    const argine_retention::RetentionStats s = c->policy->stats();
+    snprintf(out->policy_id, sizeof(out->policy_id), "%s", c->policy_id.c_str());
+    out->decay_factor          = s.decay_factor;
+    out->aging_interval_steps  = s.aging_interval_steps;
+    out->predictor_decay       = s.predictor_decay;
+    out->hits                  = s.hits;
+    out->misses                = s.misses;
+    out->evictions             = s.evictions;
+    out->resident_bytes        = s.resident_bytes;
+    out->predictor_decisions   = s.predictor_decisions;
+    out->protected_fallbacks   = s.protected_fallbacks;
+    out->events_served         = c->policy_events;
 }
 
 void psx_cache_unpin(struct psx_cache * c, struct psx_region * region, size_t offset) {
@@ -1261,12 +1409,298 @@ int psx_cache_ensure(struct psx_cache * c, struct psx_store * s, struct psx_regi
     return psx_cache_ensure_many(c, s, 1, &region, &offset, &layer, &expert, &kind);
 }
 
+// ===========================================================================
+// R2-12: un intero evento MoE (un layer, le sue slice mancanti) servito
+// attraverso la politica di retention collegata a `c`. Vedi il commento sul
+// campo `policy` in struct psx_cache per il vincolo di un solo settore, e
+// argine-retention-policy.h per il nucleo deterministico riusato qui, non
+// riscritto: questa funzione traduce le sue decisioni (Obj logici) in
+// CacheKey fisiche, non ridecide nulla sulla matematica congelata.
+static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s, size_t n,
+                                      struct psx_region * const * regions, const size_t * offsets,
+                                      const uint32_t * layers, const uint32_t * experts,
+                                      const enum psx_kind * kinds) {
+    if (c->shards.size() != 1) {
+        s->fail("servi_evento_con_politica: la cache non ha un solo settore");
+        return 0;
+    }
+    Shard & sh = *c->shards[0];
+
+    // Il router decide una volta per layer (argine-experts.cpp): un blocco
+    // con layer misti sotto una politica attiva e' un errore del chiamante,
+    // non un caso da gestire in silenzio.
+    const uint32_t layer = layers[0];
+    for (size_t i = 1; i < n; i++) {
+        if (layers[i] != layer) {
+            s->fail("servi_evento_con_politica: blocco con layer misti sotto una politica di retention");
+            return 0;
+        }
+    }
+
+    using orologio = std::chrono::steady_clock;
+    auto ns_da = [](orologio::time_point t0) {
+        return (uint64_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
+                   orologio::now() - t0).count();
+    };
+
+    std::lock_guard<std::mutex> lk(sh.mtx);
+
+    std::vector<uint32_t> dedup_experts(experts, experts + n);
+    std::sort(dedup_experts.begin(), dedup_experts.end());
+    dedup_experts.erase(std::unique(dedup_experts.begin(), dedup_experts.end()), dedup_experts.end());
+
+    // bytes_of_layer: somma dei byte sui kind DISTINTI realmente presenti in
+    // QUESTO evento per questo layer (non un fisso "sempre tre": un kind puo'
+    // mancare perche' il suo tensore e' finito sul percorso normale, vedi
+    // argine-experts.cpp). Adattamento minimo di interfaccia, non una
+    // modifica della matematica congelata.
+    bool     seen_kind[PSX_N_KINDS] = { false, false, false };
+    uint64_t bytes_of_layer         = 0;
+    for (size_t i = 0; i < n; i++) {
+        const unsigned k = (unsigned) kinds[i];
+        if (k < PSX_N_KINDS && !seen_kind[k]) {
+            seen_kind[k] = true;
+            bytes_of_layer += psx_slice_read_bytes(s, layers[i], experts[i], kinds[i]);
+        }
+    }
+
+    const uint32_t step = c->policy_step++;
+    argine_retention::EventOutcome outcome =
+        c->policy->access(step, layer, dedup_experts, bytes_of_layer);
+    c->policy_events++;
+
+    if (outcome.overflow_events > 0 || outcome.overflow_misses > 0) {
+        // L'evento non entra nel budget nemmeno vuotando tutto. Conservativo
+        // per questa fase: fallisce in modo osservabile invece di ammettere
+        // solo una parte in silenzio (nessuna evidenza reale lo esercita
+        // ancora; vedi il report finale).
+        s->fail("retention policy: evento non servibile nemmeno dopo aver sfrattato tutto (overflow)");
+        return 0;
+    }
+
+    // Sfratta ogni oggetto scelto come vittima PRIMA di ammettere le nuove
+    // slice: traduce l'Obj logico (layer, expert) nelle sue slice fisiche
+    // davvero residenti in questo settore (fino a tre: gate/up/down),
+    // tracciate in c->policy_obj_slices, non assunte.
+    for (const argine_retention::Obj & victim : outcome.evicted) {
+        const uint64_t  ok_key = psx_cache::policy_obj_key(victim.layer, victim.expert);
+        auto             it_obj = c->policy_obj_slices.find(ok_key);
+        if (it_obj == c->policy_obj_slices.end()) {
+            char buf[192];
+            snprintf(buf, sizeof(buf),
+                     "retention policy: sfratto di (layer=%u, expert=%u) richiesto ma nessuna slice "
+                     "fisica indicizzata per quell'oggetto in questo settore",
+                     victim.layer, victim.expert);
+            s->fail(buf);
+            return 0;
+        }
+        for (const CacheKey & key : it_obj->second) {
+            auto it_slot = sh.index.find(key);
+            if (it_slot == sh.index.end()) {
+                continue;  // difensivo: gia' non residente
+            }
+            auto slot_it = it_slot->second;
+            if (!slot_it->ready || slot_it->pins > 0) {
+                char buf[192];
+                snprintf(buf, sizeof(buf),
+                         "retention policy: sfratto di (layer=%u, expert=%u) ma una sua slice e' in "
+                         "caricamento o bloccata (pins=%u) -- invariante di residenza violato",
+                         victim.layer, victim.expert, slot_it->pins);
+                s->fail(buf);
+                return 0;
+            }
+            const auto t_dec = orologio::now();
+            psx_region_decommit(slot_it->region, slot_it->offset, slot_it->bytes);
+            c->ns_decommit.fetch_add(ns_da(t_dec), std::memory_order_relaxed);
+            sh.resident -= std::min<uint64_t>(sh.resident, slot_it->bytes);
+            sh.order.erase(slot_it);
+            sh.index.erase(it_slot);
+            sh.evictions++;
+            if (c->policy_trace_fp) {
+                fprintf(c->policy_trace_fp,
+                        "{\"step\":%u,\"decision\":\"evict\",\"policy\":\"%s\",\"layer\":%u,"
+                        "\"expert\":%u,\"resident_bytes_after\":%llu}\n",
+                        step, c->policy_id.c_str(), victim.layer, victim.expert,
+                        (unsigned long long) sh.resident);
+            }
+        }
+        c->policy_obj_slices.erase(it_obj);
+    }
+    if (c->policy_trace_fp) {
+        fflush(c->policy_trace_fp);
+    }
+
+    // missed_set: quali expert di QUESTO evento vanno effettivamente letti da
+    // disco (non erano gia' residenti). Tutto cio' che e' in dedup_experts ma
+    // non in missed_set e' un hit: la politica lo considera gia' residente.
+    std::vector<uint8_t> is_missed(dedup_experts.size(), 0);
+    {
+        size_t mi = 0;
+        for (size_t di = 0; di < dedup_experts.size() && mi < outcome.missed.size(); di++) {
+            if (dedup_experts[di] == outcome.missed[mi]) {
+                is_missed[di] = 1;
+                mi++;
+            }
+        }
+    }
+    auto expert_is_missed = [&](uint32_t expert) -> bool {
+        auto it = std::lower_bound(dedup_experts.begin(), dedup_experts.end(), expert);
+        if (it == dedup_experts.end() || *it != expert) {
+            return false;
+        }
+        return is_missed[(size_t) (it - dedup_experts.begin())] != 0;
+    };
+
+    // Fase 1 (sotto lo stesso lock, niente rilascio fra "prendere posto" e
+    // "leggere": vedi il commento sopra questa funzione per il perche'):
+    // hit -> pin + splice in testa; miss -> impegna la memoria.
+    struct DaLeggere {
+        size_t                            i;
+        struct psx_region *               region;
+        size_t                            offset;
+        uint32_t                          layer, expert;
+        enum psx_kind                     kind;
+        size_t                            need;
+        unsigned char *                   dst;
+        uint64_t                          file_off;
+        size_t                            want;
+        size_t                            utili;
+    };
+    std::vector<DaLeggere> da_leggere;
+    da_leggere.reserve(n);
+
+    for (size_t i = 0; i < n; i++) {
+        const CacheKey key{ regions[i], offsets[i] };
+        auto            it = sh.index.find(key);
+        if (it != sh.index.end()) {
+            // Hit: deve esserlo, la politica pensa che l'oggetto sia residente.
+            it->second->pins++;
+            sh.order.splice(sh.order.begin(), sh.order, it->second);
+            sh.hits++;
+            continue;
+        }
+        if (!expert_is_missed(experts[i])) {
+            char buf[192];
+            snprintf(buf, sizeof(buf),
+                     "retention policy: (layer=%u, expert=%u, kind=%u) non e' nell'indice ma la "
+                     "politica non lo elenca come mancante -- incoerenza fra stato logico e fisico",
+                     layers[i], experts[i], (unsigned) kinds[i]);
+            s->fail(buf);
+            return 0;
+        }
+        const struct psx_entry * e = psx_get(s, layers[i], experts[i]);
+        if (!e) {
+            s->fail("retention policy: psx_get ha restituito null per una slice da leggere");
+            return 0;
+        }
+        const size_t need = psx_slice_read_bytes(s, layers[i], experts[i], kinds[i]);
+        const auto   t_com = orologio::now();
+        const int    ok_commit = psx_region_commit(regions[i], offsets[i], need);
+        c->ns_commit.fetch_add(ns_da(t_com), std::memory_order_relaxed);
+        if (!ok_commit) {
+            s->fail("retention policy: psx_region_commit fallito dopo lo sfratto deciso dalla politica");
+            return 0;
+        }
+        sh.misses++;
+        sh.resident += need;
+        if (sh.budget > 0 && sh.resident > sh.budget) {
+            c->violazioni.fetch_add(1, std::memory_order_relaxed);
+        }
+        sh.order.push_front(Shard::Slot{ regions[i], offsets[i], need, false, 1 });
+        auto mia       = sh.order.begin();
+        mia->layer     = layers[i];
+        mia->expert    = experts[i];
+        mia->kind      = (uint32_t) kinds[i];
+        sh.index[key]  = mia;
+        sh.seq++;
+
+        DaLeggere d;
+        d.i        = i;
+        d.region   = regions[i];
+        d.offset   = offsets[i];
+        d.layer    = layers[i];
+        d.expert   = experts[i];
+        d.kind     = kinds[i];
+        d.need     = need;
+        d.dst      = (unsigned char *) psx_region_base(regions[i]) + offsets[i];
+        d.file_off = e->offset[kinds[i]];
+        d.want     = s->direct ? round_up(e->size[kinds[i]], s->alignment) : e->size[kinds[i]];
+        d.utili    = e->size[kinds[i]];
+        da_leggere.push_back(d);
+    }
+
+    // Fase 2: leggere, ancora sotto lock (vedi commento sopra: nessun altro
+    // thread puo' osservare "in caricamento" perche' nessun altro accesso a
+    // questo settore e' concorrente mentre lo teniamo).
+    if (!da_leggere.empty()) {
+        std::vector<uint64_t>      off(da_leggere.size());
+        std::vector<void *>        dst(da_leggere.size());
+        std::vector<size_t>        len(da_leggere.size());
+        std::vector<unsigned char> ok(da_leggere.size(), 0);
+        for (size_t i = 0; i < da_leggere.size(); i++) {
+            off[i] = da_leggere[i].file_off;
+            dst[i] = da_leggere[i].dst;
+            len[i] = da_leggere[i].want;
+        }
+        const auto t_read = orologio::now();
+        psx_read_many(s, da_leggere.size(), off.data(), dst.data(), len.data(), ok.data());
+        c->ns_read.fetch_add(ns_da(t_read), std::memory_order_relaxed);
+        c->blocchi.fetch_add(1, std::memory_order_relaxed);
+        c->letture.fetch_add(da_leggere.size(), std::memory_order_relaxed);
+
+        bool tutte = true;
+        for (size_t i = 0; i < da_leggere.size(); i++) {
+            const DaLeggere & d   = da_leggere[i];
+            const CacheKey    key{ d.region, d.offset };
+            auto              it = sh.index.find(key);
+            if (it == sh.index.end()) {
+                tutte = false;
+                continue;
+            }
+            if (ok[i]) {
+                it->second->ready = true;
+                sh.bytes_read += d.need;
+            } else {
+                tutte = false;
+                // Disfa esattamente come completa(..., false): rimette lo
+                // stato com'era prima della prenotazione.
+                psx_region_decommit(d.region, d.offset, d.need);
+                sh.resident -= std::min<uint64_t>(sh.resident, d.need);
+                sh.order.erase(it->second);
+                sh.index.erase(it);
+            }
+        }
+        if (!tutte) {
+            s->fail("retention policy: lettura di una slice fallita dentro un evento");
+            return 0;
+        }
+    }
+
+    // Registra, per ogni expert di questo evento, le sue slice come
+    // residenti per l'oggetto (layer, expert) -- indipendentemente da hit o
+    // miss -- cosi' un futuro sfratto di questo oggetto trova tutte le sue
+    // slice fisiche, non solo quella appena letta.
+    for (size_t i = 0; i < n; i++) {
+        const uint64_t ok_key = psx_cache::policy_obj_key(layers[i], experts[i]);
+        auto &          vec   = c->policy_obj_slices[ok_key];
+        const CacheKey  key{ regions[i], offsets[i] };
+        if (std::find(vec.begin(), vec.end(), key) == vec.end()) {
+            vec.push_back(key);
+        }
+    }
+
+    return 1;
+}
+
 int psx_cache_ensure_many(struct psx_cache * c, struct psx_store * s,
                           size_t n, struct psx_region * const * regions, const size_t * offsets,
                           const uint32_t * layers, const uint32_t * experts,
                           const enum psx_kind * kinds) {
     if (!c || !s || n == 0) {
         return 0;
+    }
+    if (c->policy) {
+        return servi_evento_con_politica(c, s, n, regions, offsets, layers, experts, kinds);
     }
     using orologio = std::chrono::steady_clock;
     auto ns_da = [](orologio::time_point t0) {
