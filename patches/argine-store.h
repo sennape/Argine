@@ -301,6 +301,13 @@ struct psx_retention_stats {
     // fallisce dentro Fase 1 ha una riga di decisione ma nessuna riga di
     // completamento: il delta fra i due contatori e' quindi diagnostico.
     uint64_t trace_completions_written;
+    // R2-12 Phase F, additive: conta ogni volta che Fase 1 ha dovuto servire
+    // fisicamente una kind che la politica riteneva un hit (Obj{layer,expert}
+    // gia' residente) ma che non era mai stata indicizzata fisicamente --
+    // vedi il commento sopra la guarigione in servi_evento_con_politica.
+    // Deve restare 0 su un run sano; un valore positivo e' diagnostico, non
+    // un errore fatale (il nodo e' stato servito correttamente comunque).
+    uint64_t policy_hit_sans_index_healed;
 };
 
 // Provenienza/istrumentazione (sezione 9): quale politica, quali parametri,

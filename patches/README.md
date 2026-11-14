@@ -201,3 +201,19 @@ ASAN_OPTIONS=handle_segv=0:handle_sigbus=0:handle_abort=0 ./argine-prefetch-race
 ```
 
 Part 1 forks a child that runs the pre-fix raw-touch logic racing a commit/decommit cycle and expects `SIGSEGV`/`SIGBUS` (observed on 5/5 and repeated full-suite runs, 100% reproducible). Part 2 runs the same race with the fixed logic for 20000 cycles in-process and requires zero crashes.
+
+---
+
+## Partial-kind admission under a retention policy (R2-12 Phase F, root cause)
+
+**What it fixes.** Real Windows host crash on v5: Application Error 1000, exception `0x40000015` (`STATUS_FATAL_APP_EXIT`, not an access violation), fault offset `0x6df7cc`, identical on both policies. Mapping that RVA against v5's own PE image lands inside `ggml_abort()`, at the instruction right after `call abort` — the standard signature of this UCRT's own `abort()` (via `GGML_ABORT`), with the `fprintf(stderr, ...)` message written to the stream buffer but never flushed before the fail-fast exit (`abort()` does not flush stdio; only `exit()` does). That explains "no useful abort text" despite a real message having been produced.
+
+`dove[]` (argine-experts.cpp) includes a kind other than the current node's own only once `c.posizioni` has registered it — true for every kind eventually, but not necessarily on a layer's *first* visit. `servi_evento_con_politica` (argine-store.cpp) computes `bytes_of_layer` from only the kinds present in that one call — a pre-existing, documented accommodation for tensors that permanently live on a different buffer path. `RetentionPolicy::access()` (frozen, faithful to the Python `AgedFrequency` reference) tracks residency per `Obj{layer,expert}`, and on a hit updates only `score`/`last_ref` — never `ObjState.bytes`. Combined: an object's very first admission under a transiently-incomplete `dove[]` permanently under-registers its weight; a later event needing a kind that was missing at first admission is a logical hit with no physical index entry for that kind. Fase 1 already detected this exact inconsistency and failed closed with `"non e' nell'indice ma la politica non lo elenca come mancante"` — correct to catch it, fatal in response.
+
+**The fix.** That branch no longer calls `s->fail()`+abort. It services the kind through the identical commit+read+index path already used for a genuine miss — a physical self-heal, with zero lines of `argine-retention-policy.{h,cpp}` touched (no score, residency, eviction, predictor, or budget field read or written). A new counter, `psx_retention_stats.policy_hit_sans_index_healed`, and a one-time `stderr` note make this visible without being fatal.
+
+**Proof.** `patches/argine-partial-kind-admission-test.cpp` drives the real compiled `argine-store.cpp`/`argine-retention-policy.cpp` against the real 30B store, no llama.cpp/ggml involved: event 1 admits 5 experts with only their `gate` kind; event 2 requests the same experts' `gate+up`. Built with `-DARGINE_PHASE_F_PRE_FIX_DEMO` against commit `6d07f4c` (pre-fix), event 2 fails with the exact host abort message. Built against this commit (post-fix), event 2 succeeds, `policy_hit_sans_index_healed` reads exactly 5, and a third repeat event confirms convergence (no further healing once both kinds are indexed). `patches/argine-retention-integration-test.cpp` section 12 (which used to assert the old fatal failure) now asserts the healing instead.
+
+**Harness.** `tools/r2-12-host-conformance.ps1` replaces an earlier rejected draft that waited on `llama-server.exe` as a one-shot batch process and called the wrong comparator. It runs the server as a background HTTP service, polls `/health`, drives one real `/completion` request per policy, and validates against `tools/r2_12_real_trace_conformance.py` (the real per-trace-vs-frozen-Python comparator) on the decision-line-only subset of the trace.
+
+Realized additively as `llama-research-v7` (never overwrites v5 or v6).

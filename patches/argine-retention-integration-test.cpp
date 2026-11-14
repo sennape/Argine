@@ -487,10 +487,19 @@ int main(int argc, char ** argv) {
         // pur avendone fisicamente ammessa solo la kind "gate". Un
         // sotto-blocco SUCCESSIVO che richiede expert0-up (kind diversa,
         // stesso expert) lo trova un HIT logico (find_resident non-null),
-        // ma fisicamente quella CacheKey non e' mai stata indicizzata --
-        // esattamente l'incoerenza che servi_evento_con_politica rileva ed
-        // rifiuta esplicitamente in Fase 1 (argine-store.cpp): "non e'
-        // nell'indice ma la politica non lo elenca come mancante".
+        // ma fisicamente quella CacheKey non e' mai stata indicizzata.
+        //
+        // R2-12 Phase F: questo e' esattamente il meccanismo dietro il
+        // crash host reale su v5 (STATUS_FATAL_APP_EXIT via GGML_ABORT,
+        // mappato all'RVA Windows 0x6df7cc dentro ggml_abort() -- vedi
+        // patches/argine-partial-kind-admission-test.cpp e BUILD-INFO.json
+        // di llama-research-v7). servi_evento_con_politica non rifiuta piu'
+        // questa incoerenza con un abort fatale: la guarisce fisicamente
+        // come il miss che davvero e' (psx_region_commit + lettura +
+        // indicizzazione), senza toccare nessuno stato della politica.
+        // Questa sezione ora verifica la guarigione, non il vecchio
+        // fallimento esplicito -- che resta riprodotto e provato contro il
+        // codice pre-fix in argine-partial-kind-admission-test.cpp.
         struct psx_cache * c = psx_cache_new_n(per_expert_bytes * 40, 1);
         const char * err = nullptr;
         const int ok_attach12 = psx_cache_attach_retention_policy(c, &err);
@@ -530,12 +539,18 @@ int main(int argc, char ** argv) {
             // in argine-experts.cpp, non fra i sotto-blocchi di LETTURA_BLOCCO
             // dello stesso nodo).
         }
-        check(fallito_in_frammento,
-              "la frammentazione per kind (come il vero c.blocco=2) riproduce il fallimento osservato sull'host reale");
+        check(!fallito_in_frammento,
+              "R2-12 Phase F: la frammentazione per kind (come il vero c.blocco=2) NON fallisce piu' -- "
+              "guarita fisicamente invece di GGML_ABORT");
         if (fallito_in_frammento) {
             printf("    -> %s\n", motivo ? motivo : "(null)");
-            check(motivo != nullptr && strstr(motivo, "incoerenza fra stato logico e fisico") != nullptr,
-                  "il fallimento e' la stessa incoerenza logico/fisico diagnosticata sul run reale -- non per budget insufficiente");
+        } else {
+            struct psx_cache_stats s_post12; psx_cache_get_stats(c, &s_post12);
+            check(s_post12.violazioni == 0, "nessuna violazione del budget nonostante la guarigione");
+            struct psx_retention_stats rst12; psx_cache_get_retention_stats(c, &rst12);
+            check(rst12.policy_hit_sans_index_healed > 0,
+                  "almeno una kind e' stata guarita come hit-logico-senza-indice-fisico "
+                  "(il meccanismo del bug originale e' stato davvero esercitato, non evitato)");
         }
         psx_cache_free(c);
     }

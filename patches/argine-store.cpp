@@ -832,6 +832,17 @@ struct psx_cache {
     // completed" from "node returned successfully".
     uint64_t    policy_trace_completions_written = 0;
     bool        policy_trace_write_failed_detto = false;  // un solo stderr, non uno spam per riga
+    // R2-12 Phase F: un oggetto che la politica considera residente (hit a
+    // livello di Obj{layer,expert}) ma di cui questa kind specifica non e'
+    // mai stata fisicamente indicizzata -- scoperto da un crash host reale
+    // (STATUS_FATAL_APP_EXIT via GGML_ABORT, non un access violation: vedi
+    // il commento sopra servi_evento_con_politica per il meccanismo esatto).
+    // Prima: s->fail() + abort. Ora: servito fisicamente come un miss vero,
+    // SENZA toccare lo stato logico della politica (nessun campo di
+    // RetentionPolicy e' letto o scritto qui) -- pura contabilita' e
+    // guarigione fisica, zero influenza sulle decisioni della politica.
+    uint64_t    policy_hit_sans_index_healed = 0;
+    bool        policy_hit_sans_index_detto = false;  // un solo stderr, non uno spam per evento
     // R2-12: diagnostica dell'ULTIMO fallimento di ammissione (vedi
     // psx_admission_failure_diag in argine-store.h). Scritta solo nei punti
     // di fallimento di servi_evento_con_politica, letta da
@@ -1082,6 +1093,7 @@ void psx_cache_get_retention_stats(const struct psx_cache * c, struct psx_retent
     out->trace_rows_written    = c->policy_trace_rows_written;
     out->trace_write_failed    = c->policy_trace_write_failed;
     out->trace_completions_written = c->policy_trace_completions_written;
+    out->policy_hit_sans_index_healed = c->policy_hit_sans_index_healed;
 }
 
 int psx_cache_get_last_admission_failure(const struct psx_cache * c,
@@ -1898,14 +1910,44 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
             continue;
         }
         if (!expert_is_missed(experts[i])) {
-            char buf[192];
-            snprintf(buf, sizeof(buf),
-                     "retention policy: (layer=%u, expert=%u, kind=%u) non e' nell'indice ma la "
-                     "politica non lo elenca come mancante -- incoerenza fra stato logico e fisico",
-                     layers[i], experts[i], (unsigned) kinds[i]);
-            popola_diag(buf, outcome.evicted.size());
-            s->fail(buf);
-            return 0;
+            // R2-12 Phase F: la politica (granularita' Obj{layer,expert},
+            // NON {layer,expert,kind} -- vedi RetentionPolicy::access()) ha
+            // visto questo expert come un hit, quindi non l'ha mai messo in
+            // outcome.missed; ma QUESTA kind specifica non e' mai stata
+            // fisicamente indicizzata -- tipicamente perche' il chiamante
+            // (argine-experts.cpp: dove[]/c.posizioni) ha presentato un
+            // n_dove inferiore a PSX_N_KINDS alla primissima ammissione di
+            // questo expert per questo layer, e la politica (fedele alla
+            // semantica Python congelata: una hit non aggiorna mai
+            // ObjState.bytes) non ha mai saputo che restava una kind da
+            // coprire. Prima: s->fail() + GGML_ABORT -- che su questa UCRT
+            // produce STATUS_FATAL_APP_EXIT (0x40000015) via abort(), con il
+            // messaggio scritto nel buffer di stderr ma MAI sincronizzato
+            // (abort() non fa fflush degli stream, a differenza di exit()):
+            // da qui "nessun testo utile di abort" nonostante il messaggio
+            // sia stato davvero prodotto -- scoperto mappando l'offset RVA
+            // Windows 0x6df7cc dentro ggml_abort() sull'eseguibile v5 reale.
+            //
+            // La correzione NON tocca nessun campo di RetentionPolicy (score,
+            // residency, budget, eviction, predictor: tutti frozen, tutti
+            // intonsi) e non maschera l'abort con un try/catch: ripara
+            // l'invariante violato alla radice, trattando questa kind come
+            // il miss fisico che in realta' e' -- esattamente lo stesso
+            // percorso di commit+indice+lettura usato per un miss vero, qui
+            // sotto. Un solo stderr informativo (non fatale, non uno per
+            // evento) cosi' l'operatore vede che e' successo.
+            c->policy_hit_sans_index_healed++;
+            if (!c->policy_hit_sans_index_detto) {
+                c->policy_hit_sans_index_detto = true;
+                fprintf(stderr,
+                        "argine: retention policy: (layer=%u, expert=%u, kind=%u) hit logico "
+                        "senza indice fisico -- guarito come miss fisico, nessuno stato della "
+                        "politica toccato (vedi R2-12 Phase F per il meccanismo)\n",
+                        layers[i], experts[i], (unsigned) kinds[i]);
+                fflush(stderr);
+            }
+            // niente "continue", niente "return 0": si cade nello stesso
+            // percorso di servizio fisico usato per un miss vero, qui sotto.
         }
         const struct psx_entry * e = psx_get(s, layers[i], experts[i]);
         if (!e) {
