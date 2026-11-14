@@ -110,3 +110,95 @@ def test_main_writes_report_to_requested_path_and_exit_code_matches_overall(tmp_
     data = json.loads(out_path.read_text())
     assert data["overall"] in (rd.PASS, rd.BLOCKING_FAILURE)
     assert rc == (0 if data["overall"] == rd.PASS else 1)
+
+
+# --- Power-mode GUID classification regression tests (localization bug fix) ---
+#
+# The original check_power_mode() matched the substring "risparmio" in
+# powercfg's RAW output to detect Power Saver. Italian powercfg output
+# always prints the fixed generic label "GUID combinazione risparmio
+# energia" before the GUID, regardless of which scheme is actually
+# active -- so that substring match misclassified an active Balanced (or
+# would have misclassified High Performance) scheme as Power Saver. The
+# live pre-fix readiness run on the real Windows host hit exactly this:
+# see experiments/R2-12-runtime-validation/
+# RUNTIME-READINESS-REPORT-ATTEMPT-1-POWER-MODE-FALSE-POSITIVE.json.
+# These tests classify by GUID only and must never regress to text matching.
+
+def _run_power_mode_check(monkeypatch, powercfg_output):
+    monkeypatch.setattr(rd, "_powershell_cim", lambda query: powercfg_output)
+    report = rd.ReadinessReport()
+    rd.check_power_mode(report, {})
+    assert len(report.checks) == 1
+    return report.checks[0]
+
+
+def test_italian_balanced_output_is_not_misclassified_as_power_saver(monkeypatch):
+    # Exact string observed on the real host's pre-fix failed readiness run.
+    raw = "GUID combinazione risparmio energia: 381b4222-f694-41f0-9685-ff5bb260df2e  (Bilanciato)"
+    check = _run_power_mode_check(monkeypatch, raw)
+    assert check.status == rd.PASS
+    assert "Balanced" in check.detail
+
+
+def test_italian_power_saver_output_is_still_correctly_blocked(monkeypatch):
+    raw = "GUID combinazione risparmio energia: a1841308-3541-4fab-bc81-f71556f20b4a  (Risparmio di energia)"
+    check = _run_power_mode_check(monkeypatch, raw)
+    assert check.status == rd.BLOCKING_FAILURE
+
+
+def test_english_power_saver_guid_is_blocking(monkeypatch):
+    raw = "Power Scheme GUID: a1841308-3541-4fab-bc81-f71556f20b4a  (Power saver)"
+    check = _run_power_mode_check(monkeypatch, raw)
+    assert check.status == rd.BLOCKING_FAILURE
+    assert "a1841308-3541-4fab-bc81-f71556f20b4a" in check.detail
+
+
+def test_english_balanced_guid_passes(monkeypatch):
+    raw = "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)"
+    check = _run_power_mode_check(monkeypatch, raw)
+    assert check.status == rd.PASS
+
+
+def test_high_performance_guid_passes_with_no_new_requirement_invented(monkeypatch):
+    raw = "Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)"
+    check = _run_power_mode_check(monkeypatch, raw)
+    assert check.status == rd.PASS
+    assert "High Performance" in check.detail
+
+
+def test_unknown_custom_guid_is_advisory_not_guessed(monkeypatch):
+    raw = "Some locale's label: deadbeef-dead-beef-dead-beefdeadbeef  (My Custom Plan)"
+    check = _run_power_mode_check(monkeypatch, raw)
+    assert check.status == rd.ADVISORY
+    assert "deadbeef-dead-beef-dead-beefdeadbeef" in check.detail
+
+
+def test_unparseable_output_is_advisory_not_guessed(monkeypatch):
+    raw = "no guid in this string at all"
+    check = _run_power_mode_check(monkeypatch, raw)
+    assert check.status == rd.ADVISORY
+
+
+def test_unqueryable_power_scheme_is_advisory(monkeypatch):
+    check = _run_power_mode_check(monkeypatch, None)
+    assert check.status == rd.ADVISORY
+
+
+def test_classification_is_guid_based_not_substring_based():
+    # A detail string containing "risparmio"/"power saver" as part of a
+    # GENERIC label (not the active scheme) must never drive the verdict --
+    # only the matched GUID may. This directly guards against reintroducing
+    # the original substring-matching bug.
+    import inspect
+    src = inspect.getsource(rd.check_power_mode)
+    assert '"power saver" in' not in src
+    assert '"risparmio" in' not in src
+    assert "_GUID_RE" in src
+
+
+def test_all_three_standard_guids_are_registered():
+    assert rd.POWER_SCHEME_GUIDS["381b4222-f694-41f0-9685-ff5bb260df2e"] == "Balanced"
+    assert rd.POWER_SCHEME_GUIDS["a1841308-3541-4fab-bc81-f71556f20b4a"] == "Power Saver"
+    assert rd.POWER_SCHEME_GUIDS["8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"] == "High Performance"
+    assert rd.POWER_SAVER_GUID == "a1841308-3541-4fab-bc81-f71556f20b4a"

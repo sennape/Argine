@@ -42,6 +42,7 @@ import argparse
 import json
 import os
 import platform
+import re
 import subprocess
 import sys
 import time
@@ -266,21 +267,71 @@ def check_windows_version(report: ReadinessReport) -> None:
                    f"CIM query unavailable; platform.platform()={platform.platform()!r}")
 
 
+# Standard Windows power-scheme GUIDs (locale-INDEPENDENT; powercfg's
+# descriptive text around the GUID is localized -- e.g. Italian output
+# always includes the generic label "GUID combinazione risparmio energia"
+# (literally "power-saving combination GUID") even when the ACTIVE scheme
+# is Balanced, because that phrase is part of the fixed label `powercfg`
+# prints before every GUID, not a description of which scheme is active.
+# A naive substring match on "power saver"/"risparmio" therefore
+# misclassifies Balanced (and would misclassify High Performance too,
+# under other locales) as a forbidden power-saving plan. Classification
+# here is by GUID only; the surrounding text is never matched again.
+POWER_SCHEME_GUIDS = {
+    "381b4222-f694-41f0-9685-ff5bb260df2e": "Balanced",
+    "a1841308-3541-4fab-bc81-f71556f20b4a": "Power Saver",
+    "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c": "High Performance",
+}
+POWER_SAVER_GUID = "a1841308-3541-4fab-bc81-f71556f20b4a"
+
+_GUID_RE = re.compile(
+    r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+)
+
+
 def check_power_mode(report: ReadinessReport, machine_state: dict) -> None:
+    """Classifies the active Windows power scheme by its GUID, never by the
+    localized descriptive text powercfg prints around it. machine_state_
+    contract.json's only requirement is that the scheme must never be
+    Power Saver (never 'Power saver' for publication runs, since that mode
+    deliberately throttles); it does not forbid Balanced and does not
+    require High Performance, so both of those PASS identically here --
+    this function invents no additional requirement for either. An
+    unrecognized/custom GUID is reported ADVISORY, never guessed into
+    PASS or BLOCKING_FAILURE."""
     active = _powershell_cim(
         "(powercfg /GETACTIVESCHEME)")
     if not active:
         report.add("power_mode", ADVISORY, "power scheme unqueryable on this host")
         return
-    low = active.lower()
-    if "power saver" in low or "risparmio" in low:
+
+    match = _GUID_RE.search(active)
+    if not match:
+        report.add("power_mode", ADVISORY,
+                   f"could not parse a scheme GUID out of powercfg output "
+                   f"(locale-independent GUID match failed); raw={active!r}")
+        return
+
+    guid = match.group(0).lower()
+    scheme_name = POWER_SCHEME_GUIDS.get(guid)
+
+    if scheme_name is None:
+        report.add("power_mode", ADVISORY,
+                   f"unrecognized/custom power-scheme GUID {guid} (raw={active!r}); "
+                   f"machine_state_contract.json names only Power Saver as forbidden, "
+                   f"so a custom scheme is neither confirmed-forbidden nor "
+                   f"confirmed-safe -- not guessed either way")
+        return
+
+    if guid == POWER_SAVER_GUID:
         report.add("power_mode", BLOCKING_FAILURE,
-                   f"active scheme is a power-saving plan, forbidden for publication "
-                   f"runs by machine_state_contract.json: {active!r}")
+                   f"active scheme is Power Saver ({guid}), forbidden for publication "
+                   f"runs by machine_state_contract.json: raw={active!r}")
     else:
         report.add("power_mode", PASS,
-                   f"active scheme (not Power saver; must stay fixed for the whole "
-                   f"campaign, recorded at first real run): {active!r}")
+                   f"active scheme is {scheme_name} ({guid}) -- not Power Saver; "
+                   f"must stay fixed for the whole campaign, recorded at first real "
+                   f"run; raw={active!r}")
 
 
 def check_free_ram(report: ReadinessReport, model_path: Optional[Path]) -> None:

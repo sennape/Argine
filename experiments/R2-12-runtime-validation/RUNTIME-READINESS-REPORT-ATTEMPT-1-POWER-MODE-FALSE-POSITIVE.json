@@ -1,0 +1,126 @@
+{
+  "overall": "BLOCKING_FAILURE",
+  "n_checks": 23,
+  "n_pass": 21,
+  "n_blocking_failure": 1,
+  "n_advisory": 1,
+  "checks": [
+    {
+      "name": "python_interpreter",
+      "status": "ADVISORY",
+      "detail": "C:\\Users\\alpel\\anaconda3\\python.exe (3.13.9)"
+    },
+    {
+      "name": "argine_importable",
+      "status": "PASS",
+      "detail": "C:\\Users\\alpel\\Desktop\\Argine3\\argine\\__init__.py"
+    },
+    {
+      "name": "model_path_exists",
+      "status": "PASS",
+      "detail": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf"
+    },
+    {
+      "name": "model_sha256_matches",
+      "status": "PASS",
+      "detail": "expected=a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32 actual=a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32"
+    },
+    {
+      "name": "ARGINE_LLAMA_DIR_set",
+      "status": "PASS",
+      "detail": "C:\\Users\\alpel\\Desktop\\Argine2\\llama-research-v2"
+    },
+    {
+      "name": "runtime_resolved",
+      "status": "PASS",
+      "detail": "tier=registered path=C:\\Users\\alpel\\Desktop\\Argine2\\llama-research-v2\\llama-server.exe stale_env_note=None"
+    },
+    {
+      "name": "runtime_sha256_matches",
+      "status": "PASS",
+      "detail": "expected=a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3 actual=a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3"
+    },
+    {
+      "name": "cpu_identity_collected",
+      "status": "PASS",
+      "detail": "13th Gen Intel(R) Core(TM) i5-1340P"
+    },
+    {
+      "name": "physical_ram_collected",
+      "status": "PASS",
+      "detail": "16876888064 bytes"
+    },
+    {
+      "name": "gpu_or_igpu_identity_collected",
+      "status": "PASS",
+      "detail": "Intel(R) Iris(R) Xe Graphics"
+    },
+    {
+      "name": "windows_version_collected",
+      "status": "PASS",
+      "detail": "Microsoft Windows 11 Home 10.0.26200"
+    },
+    {
+      "name": "power_mode",
+      "status": "BLOCKING_FAILURE",
+      "detail": "active scheme is a power-saving plan, forbidden for publication runs by machine_state_contract.json: 'GUID combinazione risparmio energia: 381b4222-f694-41f0-9685-ff5bb260df2e  (Bilanciato)'"
+    },
+    {
+      "name": "sufficient_free_ram",
+      "status": "PASS",
+      "detail": "argine.planner.plan() feasible=True estimate_total=6487947264 failure_reason=None free_ram=12066922496"
+    },
+    {
+      "name": "expert_store_path_exists",
+      "status": "PASS",
+      "detail": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs -- required for R2-12 (without a built store the PredictedProtectPolicy-vs-B_selected comparison degrades to plain mmap and is not the comparison this protocol measures; build it with `argine store build`)"
+    },
+    {
+      "name": "storage_device_hosting_expert_store_collected",
+      "status": "PASS",
+      "detail": "disk number 0 for C:"
+    },
+    {
+      "name": "no_concurrent_readiness_writer",
+      "status": "PASS",
+      "detail": "C:\\Users\\alpel\\Desktop\\Argine3\\tools\\.r2_12_readiness_driver.lock"
+    },
+    {
+      "name": "no_concurrent_execution_campaign",
+      "status": "PASS",
+      "detail": "C:\\Users\\alpel\\Desktop\\Argine3\\tools\\.r2_12_execution_driver.lock"
+    },
+    {
+      "name": "no_concurrent_llama_server_process",
+      "status": "PASS",
+      "detail": "0 llama-server.exe process(es) already running"
+    },
+    {
+      "name": "runtime_output_root_available",
+      "status": "PASS",
+      "detail": "C:\\Users\\alpel\\Desktop\\Argine3\\experiments\\R2-12-runtime-validation\\runtime_results does not exist yet; will be created by the execution driver on first write"
+    },
+    {
+      "name": "instrumentation_fields_contract_loadable",
+      "status": "PASS",
+      "detail": "8 fields: ['tokens_generated', 'decode_duration_seconds', 'ttft_seconds', 'total_wall_clock_seconds', 'expert_store_reads', 'expert_store_bytes_read', 'policy_cpu_time_seconds', 'predictor_cpu_time_seconds_if_applicable']"
+    },
+    {
+      "name": "output_equivalence_hashing_capability",
+      "status": "PASS",
+      "detail": "hashlib.sha256 available"
+    },
+    {
+      "name": "trace_comparison_machinery_importable",
+      "status": "PASS",
+      "detail": "argine.research2.r2_01.trace_contract importable (reused for separate scientific-behavior verification)"
+    },
+    {
+      "name": "operator_attested_clean_environment",
+      "status": "PASS",
+      "detail": "set via --operator-attests-clean-environment; covers the conditions machine_state_contract.json marks as not machine-checkable (no YouTube/streaming video, Chrome fully closed, no heavy background workloads, no Windows Update in progress) -- never defaulted to True"
+    }
+  ],
+  "generated_at_utc": "2026-11-14T14:30:56Z",
+  "note": "This report alone does NOT constitute R2_12_RUNTIME_READY. That state transition is a separate, explicit commit made only after this driver has been run for real on the target host with overall=PASS and the report has been reviewed."
+}
