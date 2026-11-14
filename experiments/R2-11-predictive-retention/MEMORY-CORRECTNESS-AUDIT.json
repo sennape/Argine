@@ -1,0 +1,12 @@
+{
+  "artifact": "R2_11_MEMORY_CORRECTNESS_AUDIT",
+  "generated_utc": "2026-11-14T09:40:00Z",
+  "method": "Every cell computed via argine.research2.r2_09a.fast_replay.run_fast, which itself raises InvariantViolation if resident bytes ever exceed the budget at any point during replay (fail-closed, checked after every single access()). Audited separately post-hoc: for every persisted cell, peak_resident <= budget_bytes, and the per-layer accesses/misses sums reconcile exactly with the cell's top-level accesses/misses totals.",
+  "n_cells_checked": 72,
+  "n_budget_violations": 0,
+  "max_peak_resident_minus_budget_across_all_cells": -16384,
+  "n_overflow_events_across_all_cells": 0,
+  "n_overflow_misses_across_all_cells": 0,
+  "expert_id_validity": "Already confirmed for all 12 underlying traces in R2_11_CAPTURED_SEALED.json (every routed expert id in [0,128) for every decision); replay only consumes expert ids already validated at sealing, introduces none of its own.",
+  "result": "PASS -- zero budget violations, valid resident-byte accounting, zero invalid expert IDs across all 72 cells."
+}
