@@ -1,0 +1,223 @@
+{
+  "artifact": "R2_11_EVAL_OPENED",
+  "schema_version": 1,
+  "state": "R2_11_EVAL_OPENED",
+  "opening_timestamp_utc": "2026-11-14T09:18:51Z",
+  "opening_parent_commit": "00ee4e3a5e43d979328d1d9eb53373a79646ba9f",
+  "opening_parent_commit_state": "R2_11_CAPTURED_SEALED",
+  "no_r2_11_result_was_inspected_before_opening": true,
+  "eval_manifest_results_field_at_opening": null,
+  "statement": "No R2-11 retention result (no miss_bytes_per_decode_step value, no delta, no aggregate, no bootstrap CI, no classification) was computed, inspected, or exists anywhere in this repository at the moment this artifact is written and committed. eval_manifest.json['results'] is still null. This artifact opens R2-11 EVAL strictly before any scoring begins, per the frozen protocol and this turn's explicit instruction not to compute results before this commit exists.",
+  "r2_11_phase0_contract_digest": "5dd3a3987aa74230693135d4ec20c5b8fd0a0de58a30b3b1646ccb2ce7b94f2a",
+  "r2_11_phase0_contract_digest_independently_recomputed_this_step": true,
+  "r2_11_phase0_contract_digest_match": true,
+  "sealed_trace_count": 12,
+  "sealed_trace_identities": [
+    {
+      "workload_id": "r2-11-coding-v1",
+      "category": "coding",
+      "trace_sha256": "da9a4535640fc1f64a2e7a3d8d01e456854c36daa08d70be99fb2e2a738d5ffd",
+      "normalized_trace_digest": "3f08a88e26fb8e6320edb033c47d547747ca01bd757a7fd8d557868b99109835",
+      "workload_spec_sha256": "3cc6a2f89fcc6600f894c967861e6ff5f53cb0b2d460fe7fc459481d8cca2019"
+    },
+    {
+      "workload_id": "r2-11-coding-v2",
+      "category": "coding",
+      "trace_sha256": "dfe19f93e42a809d44a45a22af238e049e4aaf8eb99219132cdf9b6e2313588b",
+      "normalized_trace_digest": "990c9f6ac6791959575a096cb620d8181c0314bc900ffcbc050e0c9b4a1f980f",
+      "workload_spec_sha256": "b229deb3824ea24d5820f0f102ba7e92f743784a73132f920dd38ace06be62e9"
+    },
+    {
+      "workload_id": "r2-11-coding-v3",
+      "category": "coding",
+      "trace_sha256": "40a29f54c02b3f23a558d6d601b59e60d3f67fdb29f8cd8005e45fbc2a97e98d",
+      "normalized_trace_digest": "9d9879593d698cd174fa93f46f03fc6c51b53f3c069a39dff820a5c89bc9f359",
+      "workload_spec_sha256": "9fa32b1641f17c017c8de7f5ca143b1d3edd3cb0e1045bdc998e258ce49b7d29"
+    },
+    {
+      "workload_id": "r2-11-instruction-v1",
+      "category": "instruction",
+      "trace_sha256": "085dca7571fced800a4605311ae11d6264e95b90bf953858e8dbabb9ff42bf08",
+      "normalized_trace_digest": "894f6384d51f9e0324de35a83de86853feca4a205ed59837339a47cabcf9b30b",
+      "workload_spec_sha256": "5a9c042b5d8ecac9ca92d189fe074f42c9f24747606ae8edc75567901d29266d"
+    },
+    {
+      "workload_id": "r2-11-instruction-v2",
+      "category": "instruction",
+      "trace_sha256": "6abad7c87176f18d0f28abf1d8cc2fa78e6dc14b5722a0f76dffb41daed4b54e",
+      "normalized_trace_digest": "f7db1d1ab44eb5dc205b14606539fd82797203e6de08cf997dab09c92fffb3fe",
+      "workload_spec_sha256": "19522635506886477ff466b0ac0178960e22917d011965e2f016141c435ecc09"
+    },
+    {
+      "workload_id": "r2-11-instruction-v3",
+      "category": "instruction",
+      "trace_sha256": "3b8d5090f2191c1f0125f1e32acdf986cd7cb3765b14d30ea564f1397b0b4319",
+      "normalized_trace_digest": "98cf25ca8aba5da0a973f4fd44fd80af94207f57f51c5e0e79518c30fcc0e6f5",
+      "workload_spec_sha256": "5797b1237e3cdd6bb441b8f8037f09af87675ce189bc3cce78e475e1235e5b3b"
+    },
+    {
+      "workload_id": "r2-11-reasoning-v1",
+      "category": "reasoning",
+      "trace_sha256": "d65807d8ea692a0dc7dbdd24492b4abe15d402b4d71bbe7c41befe5013c77a9e",
+      "normalized_trace_digest": "d7024038c1b985fa5920b091cc0366cf77d83f495ba6b25340fe19be3648e7df",
+      "workload_spec_sha256": "bb82afa21e35b94c1e93910be4d4d50378a0ca5d040d40f387e6890243aa5791"
+    },
+    {
+      "workload_id": "r2-11-reasoning-v2",
+      "category": "reasoning",
+      "trace_sha256": "bd77666adb5b568d7247438acb36a752ec17c0d0a2ee3bd5577ae9d96d4e23b2",
+      "normalized_trace_digest": "109307a57c33bfcfc30687969f402e01f18475c3fd22e35342fbe4c657aca0fc",
+      "workload_spec_sha256": "f286352e8f47d2a721f2858aa6cf5298a6ff99afb825635c7758fb2441cbae3d"
+    },
+    {
+      "workload_id": "r2-11-reasoning-v3",
+      "category": "reasoning",
+      "trace_sha256": "25912ff92747a52cabf13e48d535998f47b344272b04748671e2174d499fca73",
+      "normalized_trace_digest": "6e20844a484fedf019ce089884c1a5da641f4d191304e155743c71ad2e3c3ee3",
+      "workload_spec_sha256": "95204a47c6f380dd5dd63302e48216b62b9be8c92b9ffc968387cc5e1b527a56"
+    },
+    {
+      "workload_id": "r2-11-summarization-v1",
+      "category": "summarization",
+      "trace_sha256": "6df5f46d25149682b8e986d45ee4739ede271925433cd6b81205bd3d8ceacb9d",
+      "normalized_trace_digest": "164f9fc97904bd2e4e21e4c287f5c8bfe39f8a101be0a5ce0c91532304dd98cd",
+      "workload_spec_sha256": "ecc9425a9aeaec7e92a982d51cb742a804442e6765a192818bdac9b588820601"
+    },
+    {
+      "workload_id": "r2-11-summarization-v2",
+      "category": "summarization",
+      "trace_sha256": "44b1db845bb5f4c71b4ee5158f445e94706bcb1287bc8298ae5b712632d99b95",
+      "normalized_trace_digest": "31ff04346157541932c259ed66b3128c3fe6a96f1efa822d8cb35415cb888e2f",
+      "workload_spec_sha256": "03da7f3363d91b9f390475461c1ac675134f1ba577d0fcabcfe106ac564bc5c6"
+    },
+    {
+      "workload_id": "r2-11-summarization-v3",
+      "category": "summarization",
+      "trace_sha256": "eabe70fe56d2e1e33cdc6c6b9acc9820ed764aed38f369e5d514c6adfabf91fa",
+      "normalized_trace_digest": "848bc296dba4e709f7610e1aa2b11e3c5a4603a2c61b576811ad331d55b25516",
+      "workload_spec_sha256": "0abf4761b1b8fc6364afd1fa2e73c4a26c40b782707e8a54b718c0e76f511a8d"
+    }
+  ],
+  "frozen_predictor": {
+    "family": "decayed_transition",
+    "decay_factor": 0.99,
+    "source_module": "argine.research2.r2_bridge01.retention_policies.DecayedTransitionPredictor",
+    "constant_reference": "FROZEN_PREDICTOR_FAMILY='decayed_transition', FROZEN_PREDICTOR_DECAY=0.99 (re-read from source this step)",
+    "no_retuning": true,
+    "no_predictor_tournament": true
+  },
+  "frozen_retention_policy": {
+    "name": "PredictedProtectPolicy",
+    "module": "argine.research2.r2_bridge01.retention_policies.PredictedProtectPolicy",
+    "mechanism": "hard_shield_with_total_fallback",
+    "causal": true,
+    "causality_confirmed_by_source_inspection_this_step": "_refresh_prediction_after_observing() is called AFTER the current access() has been fully served, and its resulting prediction is only consulted by a subsequent access() call -- confirmed by direct reading of _BaseBridgePolicy.access() this step.",
+    "no_policy_tournament": true,
+    "no_bonus_policy_reselection": true
+  },
+  "frozen_baseline_mapping": {
+    "1610612736": {
+      "budget_gib": 1.5,
+      "config_id": "aged_frequency/decay=0.999,interval=1",
+      "family_id": "aged_frequency",
+      "params": {
+        "aging_interval_steps": 1,
+        "decay_factor": 0.999,
+        "decay_form": "exponential_step_decay"
+      }
+    },
+    "4294967296": {
+      "budget_gib": 4.0,
+      "config_id": "aged_frequency/decay=0.99,interval=64",
+      "family_id": "aged_frequency",
+      "params": {
+        "aging_interval_steps": 64,
+        "decay_factor": 0.99,
+        "decay_form": "exponential_step_decay"
+      }
+    },
+    "8589934592": {
+      "budget_gib": 8.0,
+      "config_id": "aged_frequency/decay=0.999,interval=16",
+      "family_id": "aged_frequency",
+      "params": {
+        "aging_interval_steps": 16,
+        "decay_factor": 0.999,
+        "decay_form": "exponential_step_decay"
+      }
+    }
+  },
+  "frozen_baseline_mapping_name": "B_selected(M) -- exact R2-09A frozen mapping, never reselected",
+  "frozen_baseline_mapping_never_reselect": true,
+  "primary_budget_bytes": 4294967296,
+  "primary_budget_gib": 4.0,
+  "primary_metric_id": "miss_bytes_per_decode_step",
+  "primary_metric_aggregation_rule": "Equal-weight arithmetic mean across the 12 fresh R2-11 evaluation instances. Never weighted by token count.",
+  "secondary_budgets_bytes": [
+    1610612736,
+    8589934592
+  ],
+  "bootstrap_rule": {
+    "applies_at": "primary 4 GiB budget",
+    "bootstrap_resamples": 100000,
+    "bootstrap_seed": 42,
+    "confidence_level": 0.95,
+    "implementation_reference": "argine.research2.r2_11.bootstrap.paired_bootstrap_ci (frozen in this Phase-0; not executed against real R2-11 data in this phase -- unit-tested only on synthetic/mock deltas).",
+    "input": "the 12 paired per-instance deltas (delta_i(4GiB) = PredictedProtectPolicy_i(4GiB) - B_selected_i(4GiB))",
+    "procedure": "paired bootstrap over workload instances: resample 12 instances WITH replacement as paired units (both policies' values for a resampled instance travel together; never resample policies independently; never use token-level pseudo-replication), compute the equal-weight mean delta of each resample, repeat for the frozen resample count, then take the empirical percentile interval of the resulting distribution of means as the confidence interval.",
+    "quantile_method": "linear interpolation of the empirical CDF (numpy.percentile default 'linear' method), taken at the 2.5th and 97.5th percentiles of the 100000 resampled means, for a two-sided 95% CI.",
+    "statistic": "equal-weight mean delta"
+  },
+  "decision_rule_reference": {
+    "primary_decision_rule": {
+      "R2_11_BLOCKED_INVALID": {
+        "applies_when": "a scientific-validity or instrumentation failure occurs (e.g. a budget violation, a leakage/causality test failure, a non-deterministic replay, or an incomplete/rejected trace that cannot be resolved by repair). This is NOT automatically R2_11_FAIL; it is a separate state used until repaired or resolved prospectively.",
+        "note": "A scientific-validity/instrumentation failure is not automatically R2_11_FAIL, per instruction #13."
+      },
+      "R2_11_FAIL": {
+        "applies_when": "primary 4 GiB mean delta >= 0, OR the selected policy is directionally worse on the primary aggregate."
+      },
+      "R2_11_INCONCLUSIVE": {
+        "applies_when": "the primary mean delta is negative but one or more robustness/CI/consistency requirements for PASS fail, AND there is no scientific-validity failure."
+      },
+      "R2_11_PASS": {
+        "requires_all": [
+          "primary 4 GiB equal-weight mean delta < 0",
+          "95% paired-bootstrap CI upper bound < 0",
+          "at least 9 of 12 fresh workloads have delta <= 0 at 4 GiB",
+          "no single workload contributes more than 50% of the total positive byte reduction among improving workloads",
+          "mean delta <= 0 at 1.5 GiB",
+          "mean delta <= 0 at 8 GiB",
+          "zero budget violations",
+          "zero causal/leakage failures",
+          "determinism checks pass"
+        ]
+      }
+    },
+    "r2_12_gate": {
+      "do_not_start_r2_12_automatically_under_any_outcome": true,
+      "if_R2_11_FAIL": "R2-12 is NOT proposed from this evidence.",
+      "if_R2_11_INCONCLUSIVE": "R2-12 is NOT automatically justified. Close R2-11 as inconclusive unless a separately designed prospective replication is later authorized.",
+      "if_R2_11_PASS": "R2-12 MAY BE PROPOSED FOR PROSPECTIVE RUNTIME VALIDATION.",
+      "r2_12_requires_its_own_phase_0_protocol": true
+    },
+    "no_post_hoc_thresholds": "These rules are frozen at Phase-0, before any R2-11 capture or scoring. No threshold may be added, removed, or adjusted after EVAL opening or after results exist. Do not change these rules after opening EVAL."
+  },
+  "evaluation_matrix_to_be_executed": {
+    "workloads": 12,
+    "budgets": 3,
+    "policies": 2,
+    "total_cells": 72
+  },
+  "forbidden_in_this_opening_and_all_subsequent_scoring": [
+    "retuning predictor or policy",
+    "policy tournament",
+    "predictor tournament",
+    "holdout-dependent config changes",
+    "alternate predictors beyond decayed_transition/decay=0.99",
+    "bonus policies beyond PredictedProtectPolicy and B_selected(M)",
+    "using R2-10 EVAL or R2-BRIDGE-01 holdout for selection",
+    "treating a timeout as PASS",
+    "amending this opening commit after seeing results"
+  ]
+}
