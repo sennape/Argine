@@ -61,7 +61,15 @@ sys.path.insert(0, str(REPO_ROOT))
 EVAL_MANIFEST = REPO_ROOT / "experiments" / "R2-11-predictive-retention" / "eval_manifest.json"
 ACQUISITION_PLAN = REPO_ROOT / "experiments" / "R2-11-predictive-retention" / "acquisition_plan.json"
 
-MIN_FREE_RAM_MULTIPLE_OF_MODEL = 1.5  # heuristic: require this much free RAM vs model file size
+# Fallback-only threshold, used ONLY if the real Argine memory planner cannot
+# be imported/invoked in this environment. This is NOT the authoritative
+# memory gate -- `argine research trace` (via argine.planner.plan()) remains
+# the authoritative, fail-closed memory check for every real capture; this
+# number only decides whether the DRIVER's own preflight warns ahead of time.
+# 8 GiB is the established publication-run free-RAM threshold already used
+# elsewhere for this expert-streaming (4G expert-store budget) configuration
+# on this hardware class.
+FALLBACK_MIN_FREE_RAM_BYTES = 8 * 1024 ** 3
 
 
 def sha256_file(path: Path) -> str:
@@ -91,6 +99,50 @@ def free_ram_bytes() -> int:
             return int(out.strip()) * 1024
         except Exception:
             return -1  # unknown
+
+
+def plan_feasibility_check(ap: dict, model_path: Path) -> dict:
+    """Reuse Argine's own memory planner (the same one `argine research
+    trace` uses) to decide whether the frozen 4 GiB expert-store
+    configuration is runnable on this host, instead of a model-file-size
+    heuristic that wrongly assumes the whole GGUF must be RAM-resident --
+    the expert-store/streaming architecture caps expert memory at the
+    configured budget, not at the file size.
+
+    Returns a dict with method='planner' and the real plan's feasibility,
+    or method='fallback' with an error if the planner could not be used
+    (e.g. hardware detection unavailable in this environment); the fallback
+    never substitutes for the authoritative gate inside the actual
+    `argine research trace` invocation, which re-plans and fails closed on
+    its own regardless of what this preflight concludes.
+    """
+    try:
+        from argine import hardware as hwmod
+        from argine import planner as planmod
+        from argine.gguf import find_gguf, read_gguf
+        from argine.util import parse_size
+
+        conditions = ap["deterministic_capture_conditions"]
+        gguf_path = find_gguf(str(model_path))
+        model = read_gguf(gguf_path)
+        hw = hwmod.detect(extra_disk_paths=[str(Path(model.path).parent)])
+        req = planmod.PlanRequest(
+            ctx=conditions["context"],
+            threads=conditions["threads"],
+            backend="cpu",
+            expert_store=True,
+            expert_store_budget=parse_size(conditions["expert_store_capture_budget"]),
+        )
+        plan = planmod.plan(model, hw, req)
+        return {
+            "method": "planner",
+            "feasible": bool(plan.feasible),
+            "failure_reason": plan.failure_reason,
+            "estimate_total": plan.estimate.total,
+            "budget": plan.budget,
+        }
+    except Exception as e:  # noqa: BLE001
+        return {"method": "fallback", "error": f"{type(e).__name__}: {e}"}
 
 
 def host_preflight(ap: dict) -> dict:
@@ -132,12 +184,22 @@ def host_preflight(ap: dict) -> dict:
         check("argine_importable", False, str(e))
 
     free_ram = free_ram_bytes()
-    if model_size and free_ram >= 0:
-        required = int(model_size * MIN_FREE_RAM_MULTIPLE_OF_MODEL)
-        check("sufficient_free_ram", free_ram >= required,
-              f"free={free_ram} required>={required} (model_size={model_size} x {MIN_FREE_RAM_MULTIPLE_OF_MODEL})")
+    plan_result = plan_feasibility_check(ap, model_path)
+    if plan_result["method"] == "planner":
+        check("sufficient_free_ram", plan_result["feasible"],
+              f"argine.planner.plan() feasible={plan_result['feasible']} "
+              f"estimate_total={plan_result['estimate_total']} "
+              f"failure_reason={plan_result['failure_reason']} "
+              f"free_ram={free_ram}")
     else:
-        check("sufficient_free_ram", False, f"could not determine (free_ram={free_ram}, model_size={model_size})")
+        # Fallback path only: the real planner could not be invoked here.
+        # This never weakens the authoritative gate inside `argine research
+        # trace` itself -- that command re-runs planmod.plan() on its own
+        # and refuses (EXIT_INFEASIBLE) independently of this driver.
+        check("sufficient_free_ram", free_ram >= 0 and free_ram >= FALLBACK_MIN_FREE_RAM_BYTES,
+              f"[FALLBACK -- planner unavailable: {plan_result['error']}] "
+              f"free={free_ram} required>={FALLBACK_MIN_FREE_RAM_BYTES} "
+              f"(fixed 8 GiB publication-run threshold, NOT a function of model file size)")
 
     em = load_json(EVAL_MANIFEST)
     out_root_template = ap["canonical_output_paths"]
