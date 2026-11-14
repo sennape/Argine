@@ -179,3 +179,25 @@ Checks: identical cache statistics with and without the trace (observation only)
 
 - Linux, synchronous POSIX read path: unit tests + end-to-end llama-server run (EXP-019).
 - Windows overlapped-I/O path (precise completion stamps with `WaitForMultipleObjects`, polling with `HasOverlappedIoCompleted`): compiled with MinGW-w64, **not yet executed** *(historical wording, 2026-10-03)*. [2026-10-12] It has since been executed on Windows: the 2026-10-03 smoke run (66.6% exact completions) and the EXP-019 validation of 2026-10-12 (63.4% exact, the rest upper bounds).
+
+---
+
+## `0005-argine-prefetch-race-fix.patch` (R2-12 Phase F)
+
+**What it fixes.** `0001-argine-route-log.patch` bundles two unrelated things under one name: the documented routing logger above, and an undocumented asynchronous prefetch subsystem (`argine_prefetch`, `argine_issue_prefetch`, `argine_worker_main`, gated by `ARGINE_PREFETCH`, default off) that was never mentioned in this file. Under `ARGINE_PREFETCH>0`, that subsystem spawns raw `CreateThread` worker threads, completely outside the ggml threadpool and its barrier, to warm pages for experts the router is predicted to need a few layers ahead. When `PrefetchVirtualMemory` cannot be resolved (`GetProcAddress` returns null), the pre-fix code fell back to touching one byte per page directly: `volatile const char * p = ...; (void) p[off];`.
+
+That fallback has zero coordination with `psx_region`/the retention policy. A page it touches can be one the policy has already evicted (`psx_region_decommit` → `VirtualFree(MEM_DECOMMIT)` → `PAGE_NOACCESS`) to make room for the current node's experts, from a thread that never waits on `ggml_barrier`. Dereferencing `PAGE_NOACCESS` memory is an unhandled Win32 access violation: silent (no `GGML_ABORT`, no assert, nothing our own code ever prints), on a thread outside the compute barrier — the same shape as the step-320 host crash (empty stderr, no admission message, process gone). `patches/argine-prefetch-race-test.cpp` reproduces the mechanism on Linux (`mprotect(PROT_NONE)` standing in for `VirtualFree(MEM_DECOMMIT)`): an unsynchronized raw-touch thread racing a commit/decommit cycle on the same pages segfaults on the first of five one-shot attempts, every time.
+
+**The fix.** `argine_serve()`'s fallback now does nothing instead of guessing at memory safety: it returns without touching the pages. `PrefetchVirtualMemory` is present on every target this project supports (`_WIN32_WINNT`/`WINVER` = `0x0A00`, i.e. Windows 10+); a null `fn` here means something unexpected (an EDR hooking `kernel32.dll`, say), not an older OS that needs hand-rolled prefetching. Losing a prefetch hint costs a few ms of extra I/O in the worst case; the raw touch it replaced could cost the process.
+
+**Status at the time this was found:** no documented R2-12 host run, launch script, or provenance file in this repository sets `ARGINE_PREFETCH`, and it defaults to 0 (disabled) when unset — so this is a real, demonstrated, now-fixed hazard on the exact "other threads consuming expert tensors" boundary, but it is **not confirmed** to be the trigger of the specific step-320/layer-10 host crash under investigation unless that host run's actual launch command set `ARGINE_PREFETCH`. It is fixed regardless, since leaving it in place is unsafe independent of whether it explains this particular crash.
+
+### Collaudo
+
+```bash
+g++ -std=c++17 -O1 -g -pthread -fsanitize=address,undefined \
+    -o argine-prefetch-race-test argine-prefetch-race-test.cpp
+ASAN_OPTIONS=handle_segv=0:handle_sigbus=0:handle_abort=0 ./argine-prefetch-race-test
+```
+
+Part 1 forks a child that runs the pre-fix raw-touch logic racing a commit/decommit cycle and expects `SIGSEGV`/`SIGBUS` (observed on 5/5 and repeated full-suite runs, 100% reproducible). Part 2 runs the same race with the fixed logic for 20000 cycles in-process and requires zero crashes.
