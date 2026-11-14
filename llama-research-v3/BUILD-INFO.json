@@ -1,0 +1,36 @@
+{
+  "llama_cpp_commit": "254b177307b14d055bbe4c050c9c441a1e06d8a4",
+  "llama_cpp_repo": "https://github.com/ggml-org/llama.cpp",
+  "patches": [
+    "0001-argine-route-log.patch",
+    "0002-argine-expert-store.patch",
+    "0003-argine-research-trace.patch",
+    "0004-argine-retention-policy-cmake.patch (NEW this build: wires argine-retention-policy.{h,cpp} into ggml-cpu CMakeLists.txt; no prior patch covered this file)",
+    "argine-store.{h,cpp} (current repo version, R2-12)",
+    "argine-experts.{h,cpp} (current repo version, R2-12)",
+    "argine-research.{h,cpp} (current repo version)",
+    "argine-retention-policy.{h,cpp} (NEW this build: R2-12 runtime-policy module realizing commits ae71fbe/70b93d4/71bd3c0)"
+  ],
+  "realizes_commits": [
+    "ae71fbe",
+    "70b93d4",
+    "71bd3c0"
+  ],
+  "predecessor_runtime": {
+    "name": "llama-research-v2",
+    "sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+    "note": "left unchanged on disk at its original path; predates R2-12 runtime-policy realization; historical identity preserved, not overwritten."
+  },
+  "compiler": "x86_64-w64-mingw32-g++-posix (GCC) 10-posix 20220113",
+  "compiler_deviation_note": "Original llama-research-v2 was built with x86_64-w64-mingw32-g++-posix (GCC) 13-posix. This build used mingw-w64 GCC 10.3.0-posix (Ubuntu 22.04 'jammy' universe) because the build environment has no root access to add a newer Ubuntu release pocket; GCC 13 mingw-w64 packages were not obtainable here. The MinGW-w64 header/runtime package used is also an older version (8.0.0, 2020) than whatever shipped with the GCC13 toolchain used for llama-research-v2; this required adding -D_WIN32_WINNT=0x0A00 -DWINVER=0x0A00 to the compile flags so that cpp-httplib's use of CreateFile2/WSAPoll/inet_pton/POLLIN/POLLOUT resolves against these older mingw-w64 headers (the newer header package presumably already defaults high enough; this define makes the older one behave the same way). This is disclosed as a build-environment deviation, not a silent substitution. It affects only the C/C++ toolchain and the Windows-API feature-level macro used by one vendored HTTP library; it does not touch, and could not touch, any R2-12 frozen parameter, retention-policy decision, or benchmark protocol -- none of which are compiled conditionally on _WIN32_WINNT. The resulting llama-server.exe links only against the same five system DLLs as the original (ADVAPI32, KERNEL32, SHELL32, WS2_32, msvcrt), confirming the same static-linked, no-OpenMP build shape as llama-research-v2.",
+  "built_utc": "2026-11-14T19:01:41Z",
+  "built_on": "Argine2 build container (Linux), cross-compiled. MinGW-w64 toolchain + cmake/ninja obtained without root via 'apt-get download' + 'dpkg-deb -x' into a user-owned prefix under ~/toolchain/; invoked via GCC_EXEC_PREFIX / --sysroot / -B compiler-driver overrides and LD_LIBRARY_PATH for cmake's own shared-library deps. No system install, no bind mounts, no elevated privileges of any kind.",
+  "runtime_tested": false,
+  "runtime_tested_note": "Not executed in this Linux build environment (it is a Windows PE32+ binary). Verified here only by static inspection: objdump import-table DLL names, and 'strings' search for the compiled-in retention-policy provenance line and env-var names (see verification log). Live confirmation that the startup line 'argine: retention policy attiva: ...' is actually printed before any real-model request is accepted must happen on the real Windows host -- this is R2-12 Phase C requirement #10 and is explicitly left to the user's own next run, not claimed here.",
+  "binaries": {
+    "llama-imatrix.exe": "03b05e36ebe33be6d41f979ea81732c229cefc24e00c6e8fc997e773287fd690",
+    "llama-perplexity.exe": "6e212b65d49e5ca150aa1df09e15a1fc6c68ef3478f0b6c65b3046b13240e4e0",
+    "llama-quantize.exe": "9c6b036475cae46596e9b8df5ed6dcd5185badd9091666729ff01cf6b1cfc80b",
+    "llama-server.exe": "ea72912f878340bc77e999a3870ace0caf94d532afc9afd14cee0b7296b37a7d"
+  }
+}
