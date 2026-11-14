@@ -308,6 +308,8 @@ struct psx_retention_stats {
     // Deve restare 0 su un run sano; un valore positivo e' diagnostico, non
     // un errore fatale (il nodo e' stato servito correttamente comunque).
     uint64_t policy_hit_sans_index_healed;
+    uint64_t policy_same_event_deferred_evictions;
+    uint64_t policy_same_event_physical_margin_evictions;
 };
 
 // Provenienza/istrumentazione (sezione 9): quale politica, quali parametri,

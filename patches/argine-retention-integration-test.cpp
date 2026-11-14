@@ -204,31 +204,42 @@ int main(int argc, char ** argv) {
 
     // --- 6. Budget sotto il working set di UN SOLO evento: il riferimento
     // Python puo' scegliere di sfrattare un membro dell'evento corrente
-    // prima di ammetterlo fisicamente. Deve fallire in modo esplicito e
-    // diagnostico, non ammettere comunque in silenzio (che disallineerebbe
-    // stato logico e fisico).
-    printf("6. budget sotto il working set di un evento -> fail-closed esplicito, non ammissione silenziosa\n");
+    // prima di ammetterlo fisicamente -- confermato FEDELE al riferimento
+    // Python congelato (RETENTION-POLICY-TRACE-INSTRUMENTATION.md sezione
+    // 4; RetentionPolicy::access() stesso), non un bug. R2-12 Phase F
+    // (sfratto reale sul layer 22, host Windows): questo NON deve piu'
+    // fallire -- il nodo reale ha comunque bisogno dei pesi dell'oggetto
+    // auto-sfrattato SOLO per la durata di questo evento (transient, vedi
+    // Shard::Slot::transient); una volta rilasciato l'ultimo pin,
+    // psx_cache_unpin() lo rimuove fisicamente, cosi' la residenza fisica
+    // finale coincide con quella che la politica ha gia' deciso, senza
+    // alcun sfratto sostitutivo inventato e senza toccare RetentionPolicy.
+    printf("6. budget sotto il working set di un evento -> auto-sfratto realizzato in modo transazionale, non piu' un fallimento\n");
     {
         REGION_CACHE.clear();
         // budget per soli 3 oggetti; evento 0 ne richiede 3 (ok, li riempie
         // esattamente); poi un hit ripetuto (sposta i punteggi); poi un
         // evento da 2 NUOVI expert, che forza un auto-sfratto interno
         // all'evento stesso -- lo stesso scenario isolato e verificato
-        // contro il riferimento Python in questo round.
+        // contro il riferimento Python in questo round (evicted=[(0,0),
+        // (0,3)]: 0 e' una vittima "sicura" sfrattata subito, 3 e' la
+        // vittima transient -- ammessa e sfrattata nella stessa chiamata
+        // atomica, contributo netto zero ai byte della politica).
         struct psx_cache * c = psx_cache_new_n(per_expert_bytes * 3 + 4096, 1);
         const char * err = nullptr;
         check(psx_cache_attach_retention_policy(c, &err) == 1, "attach riuscito (il rifiuto e' a livello di evento, non di attach)");
         check(evento(c, 0, {0, 1, 2}) == 1, "evento 1: riempie esattamente il budget");
         check(evento(c, 0, {0, 1, 2}) == 1, "evento 1b: hit ripetuto, sposta i punteggi");
         int ok2 = evento(c, 0, {3, 4});
-        check(ok2 == 0, "evento 2: fallisce in modo esplicito invece di ammettere in silenzio");
-        if (!ok2) {
-            printf("    -> %s\n", psx_error(STORE) ? psx_error(STORE) : "(null)");
-            check(strstr(psx_error(STORE), "membro dell'evento CORRENTE") != nullptr,
-                  "il messaggio nomina esplicitamente la causa (auto-sfratto nello stesso evento)");
-        }
+        check(ok2 == 1, "evento 2: realizzato con successo (auto-sfratto transazionale, non un fallimento)");
         struct psx_cache_stats s6; psx_cache_get_stats(c, &s6);
-        check(s6.violazioni == 0, "nessuna violazione del budget nonostante il fallimento dell'evento");
+        check(s6.violazioni == 0, "nessuna violazione del budget durante la realizzazione transazionale");
+        struct psx_retention_stats rs6; psx_cache_get_retention_stats(c, &rs6);
+        check(rs6.policy_same_event_deferred_evictions >= 1,
+              "almeno uno sfratto rimandato e' stato davvero realizzato (il meccanismo e' stato esercitato, non evitato)");
+        // Stato finale atteso, identico a quello che la politica ha deciso:
+        // {1,2,4} residenti (3 oggetti, budget pieno), 0 e 3 fuori.
+        check(s6.bytes_resident <= per_expert_bytes * 3 + 4096, "residenza fisica finale entro il budget");
         psx_cache_free(c);
     }
 

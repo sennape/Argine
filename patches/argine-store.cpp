@@ -22,7 +22,9 @@
 #include <mutex>
 #include <string>
 #include <thread>
+#include <set>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #if defined(_WIN32)
@@ -760,6 +762,25 @@ struct Shard {
         size_t              bytes;
         bool                ready;  // false = un thread la sta ancora leggendo
         unsigned            pins;   // > 0 = qualcuno la sta usando: non sfrattabile
+        // R2-12 Phase F: vero SOLO per una slice ammessa (o gia' residente)
+        // che la STESSA chiamata atomica a RetentionPolicy::access() ha
+        // anche scelto come vittima (membro dell'evento CORRENTE sfrattato
+        // per fare spazio ad un altro membro dello stesso evento -- vedi
+        // "la vittima scelta da evict_one() puo' comunque essere un membro
+        // appena ammesso in questo stesso evento" in
+        // argine-retention-policy.cpp). Il bytes-accounting della politica
+        // (resident_bytes_) ha GIA' tolto questi byte (ammissione+sfratto si
+        // annullano nella stessa chiamata atomica, o lo sfratto toglie
+        // permanentemente un hit preesistente): fisicamente la slice resta
+        // l'unico modo per il nodo reale di avere i pesi durante QUESTO
+        // calcolo (il nodo ne ha comunque bisogno simultaneamente), ma non
+        // deve restare residente dopo. transient=true dice a
+        // psx_cache_unpin() di rimuoverla fisicamente non appena pins arriva
+        // a zero, invece di lasciarla in cache per un hit futuro -- cosi' la
+        // residenza fisica finale coincide sempre con quella che la politica
+        // ha gia' deciso, senza inventare uno sfratto sostitutivo e senza
+        // toccare nessun campo di RetentionPolicy.
+        bool                transient = false;
         // Argine2 research metadata: only read when ARGINE_RESEARCH_TRACE is
         // active, so that evictions can be attributed to (layer, expert, kind)
         // and resident durations measured. They never influence a decision.
@@ -843,6 +864,20 @@ struct psx_cache {
     // guarigione fisica, zero influenza sulle decisioni della politica.
     uint64_t    policy_hit_sans_index_healed = 0;
     bool        policy_hit_sans_index_detto = false;  // un solo stderr, non uno spam per evento
+    // R2-12 Phase F: quante slice sono state rimandate (Shard::Slot::transient)
+    // perche' la politica le ha scelte come vittima di un membro dello STESSO
+    // evento che le aveva appena ammesse o che le teneva gia' residenti -- e
+    // quindi fisicamente rimosse in psx_cache_unpin() non appena l'ultimo pin
+    // si e' liberato, invece che subito nel ciclo di sfratto principale.
+    uint64_t    policy_same_event_deferred_evictions = 0;
+    // R2-12 Phase F: quante slice di oggetti NON membri dell'evento corrente
+    // sono state sfrattate fisicamente in anticipo (la politica non ne e'
+    // informata: le crede ancora residenti) per compensare il margine
+    // fisico momentaneamente mancante quando una vittima transient resta
+    // pinnata per il calcolo del nodo. Si auto-guariscono (vedi
+    // policy_hit_sans_index_healed) se e quando la politica li richiede di
+    // nuovo.
+    uint64_t    policy_same_event_physical_margin_evictions = 0;
     // R2-12: diagnostica dell'ULTIMO fallimento di ammissione (vedi
     // psx_admission_failure_diag in argine-store.h). Scritta solo nei punti
     // di fallimento di servi_evento_con_politica, letta da
@@ -1094,6 +1129,8 @@ void psx_cache_get_retention_stats(const struct psx_cache * c, struct psx_retent
     out->trace_write_failed    = c->policy_trace_write_failed;
     out->trace_completions_written = c->policy_trace_completions_written;
     out->policy_hit_sans_index_healed = c->policy_hit_sans_index_healed;
+    out->policy_same_event_deferred_evictions = c->policy_same_event_deferred_evictions;
+    out->policy_same_event_physical_margin_evictions = c->policy_same_event_physical_margin_evictions;
 }
 
 int psx_cache_get_last_admission_failure(const struct psx_cache * c,
@@ -1129,6 +1166,26 @@ void psx_cache_unpin(struct psx_cache * c, struct psx_region * region, size_t of
         it->second->pins--;
         if (it->second->pins > 0) {
             return;
+        }
+        // R2-12 Phase F: questa slice e' stata marcata transient perche' la
+        // STESSA chiamata atomica a RetentionPolicy::access() che l'ha
+        // ammessa (o che la teneva gia' residente) l'ha anche scelta come
+        // vittima per un altro membro dello stesso evento -- vedi il
+        // commento su Shard::Slot::transient. Ora che l'ultimo pin si e'
+        // appena liberato (il nodo reale che ne aveva bisogno ha finito), la
+        // teniamo fisicamente residente esattamente zero istanti di piu':
+        // la rimuoviamo qui, non quando "qualcuno aspetta spazio", cosi' la
+        // residenza fisica torna a coincidere con quella che la politica ha
+        // gia' deciso (nessun invariante di budget violato nel frattempo,
+        // nessuno sfratto sostitutivo inventato, nessun campo di
+        // RetentionPolicy toccato).
+        if (it->second->transient) {
+            psx_region_decommit(it->second->region, it->second->offset, it->second->bytes);
+            sh.resident -= std::min<uint64_t>(sh.resident, it->second->bytes);
+            sh.order.erase(it->second);
+            sh.index.erase(it);
+            sh.evictions++;
+            c->policy_same_event_deferred_evictions++;
         }
     }
     // una slice si e' liberata: chi aspettava spazio in questo settore puo' riprovare
@@ -1642,38 +1699,145 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
         insp_after = c->policy->inspect(layer);
     }
 
-    // Pre-scansione, PRIMA di applicare qualunque sfratto fisico: se una
-    // qualunque vittima scelta dalla politica e' un membro dell'evento
-    // CORRENTE (vedi il commento dettagliato piu' sotto), questo intero
-    // evento non e' servibile in modo sicuro dal runtime reale. Va rilevato
-    // ORA, non a meta' del ciclo di sfratto: processare gli sfratti uno per
-    // uno e fermarsi al primo problematico lascerebbe gli sfratti PRECEDENTI
-    // di quello stesso ciclo (innocui di per se') comunque applicati
-    // fisicamente, mentre RetentionPolicy::access() ha gia' mutato il proprio
-    // stato interno per l'intero evento in una sola chiamata atomica (non
-    // annullabile). Un'applicazione parziale lascerebbe la cache fisica e lo
-    // stato logico della politica disallineati in due modi diversi
-    // contemporaneamente, cosa peggiore del fallire subito e per intero.
+    // R2-12 Phase F: insieme delle chiavi fisiche (region,offset) che QUESTO
+    // evento richiede -- serve sotto per distinguere, per ogni vittima
+    // scelta dalla politica, le sue slice che il nodo reale usera' ORA
+    // (devono restare residenti fino a che il calcolo non le libera) da
+    // quelle che non servono a questo evento (sfrattabili subito, come
+    // sempre).
+    std::unordered_set<CacheKey, CacheKeyHash> event_keys;
+    event_keys.reserve(n);
+    for (size_t i = 0; i < n; i++) {
+        event_keys.insert(CacheKey{ regions[i], offsets[i] });
+    }
+
+    // Quali vittime sono anche membri dell'evento CORRENTE -- confermato
+    // (RETENTION-POLICY-TRACE-INSTRUMENTATION.md sezione 4, e
+    // RetentionPolicy::access() stesso: "la vittima scelta da evict_one()
+    // puo' comunque essere un membro appena ammesso in questo stesso
+    // evento se lo score lo rende il minimo") essere comportamento FEDELE
+    // al riferimento Python congelato, non un bug di questo modulo o del
+    // C++. Il bytes-accounting della politica (resident_bytes_) ha GIA'
+    // tolto questi oggetti: se erano una ammissione fresca di questo stesso
+    // evento, ammissione e sfratto si annullano a vicenda nella stessa
+    // chiamata atomica (contributo netto zero ai byte finali); se erano un
+    // hit preesistente, lo sfratto li toglie permanentemente, esattamente
+    // come per qualunque altra vittima. In entrambi i casi la residenza
+    // fisica finale che la politica si aspetta NON richiede alcun sfratto
+    // sostitutivo: basta realizzarla fisicamente nell'ordine giusto (vedi
+    // sotto) invece di fallire.
+    std::set<uint32_t> conflicting_experts;
     for (const argine_retention::Obj & victim : outcome.evicted) {
-        const bool is_current_event_member_precheck =
-            (victim.layer == layer) &&
-            std::binary_search(dedup_experts.begin(), dedup_experts.end(), victim.expert);
-        if (is_current_event_member_precheck) {
-            char buf[700];
-            snprintf(buf, sizeof(buf),
-                     "retention policy: la politica ha scelto di sfrattare (layer=%u, expert=%u), "
-                     "membro dell'evento CORRENTE, prima che fosse fisicamente ammesso -- il budget "
-                     "attivo e' sotto il minimo che garantisce la simultaneita' richiesta da un vero "
-                     "nodo MoE (vedi psx_cache_min_budget); nessuno sfratto fisico di questo evento "
-                     "viene applicato (rilevato in pre-scansione, prima di mutare lo stato fisico). "
-                     "ATTENZIONE: RetentionPolicy::access() ha gia' mutato il proprio stato interno per "
-                     "l'intero evento in una chiamata atomica non annullabile: questa istanza di "
-                     "psx_cache non deve essere riusata dopo questo fallimento, perche' il suo stato "
-                     "logico non corrisponde piu' alla residenza fisica reale.",
-                     victim.layer, victim.expert);
-            popola_diag(buf, outcome.evicted.size());
-            s->fail(buf);
-            return 0;
+        if (victim.layer == layer &&
+            std::binary_search(dedup_experts.begin(), dedup_experts.end(), victim.expert)) {
+            conflicting_experts.insert(victim.expert);
+        }
+    }
+
+    // R2-12 Phase F: RetentionPolicy::access() garantisce resident_bytes_ <=
+    // M_ dopo OGNI suo micro-passo logico (sfratta PRIMA di ammettere), ma
+    // quella garanzia assume che un oggetto appena "sfrattato" sia
+    // IMMEDIATAMENTE libero fisicamente -- vero per una simulazione pura,
+    // falso per una vittima transient che deve restare fisicamente pinnata
+    // per tutta la durata del calcolo di QUESTO nodo (vedi sopra). Senza
+    // compensazione, il picco fisico di questo evento (tutti i nuovi byte
+    // committed, compresi quelli transient, meno solo le vittime "sicure"
+    // gia' sfrattate subito) supererebbe il budget per esattamente i byte
+    // delle vittime transient -- dimostrato numericamente dal test di
+    // sezione 6 (patches/argine-retention-integration-test.cpp).
+    //
+    // Compensazione: sfratta fisicamente ALTRI oggetti -- non membri
+    // dell'evento corrente, non gia' scelti da outcome.evicted -- scelti
+    // con lo STESSO ordine di tie-break di RetentionPolicy::choose_victim()
+    // (score, last_ref, (layer,expert) ascendente), letto in sola lettura
+    // via RetentionPolicy::inspect() (nessuna chiamata che muta la
+    // politica), quanto basta a coprire i byte delle vittime transient. La
+    // politica NON viene informata e continua a crederli residenti: se e
+    // quando li richiedera' di nuovo, il percorso policy_hit_sans_index_healed
+    // (gia' in produzione, gia' testato dalla sezione 12) li ri-committera'
+    // fisicamente come il miss fisico che a quel punto sono -- nessun caso
+    // nuovo, nessuna doppia liberazione, nessun puntatore pendente
+    // (policy_obj_slices viene ri-registrato per ogni evento, hit o miss,
+    // piu' sotto in questa stessa funzione).
+    if (!conflicting_experts.empty()) {
+        uint64_t need_extra = (uint64_t) conflicting_experts.size() * bytes_of_layer;
+        if (need_extra > 0) {
+            const argine_retention::RetentionPolicy::Inspection insp_extra = c->policy->inspect(layer);
+            struct Candidato {
+                argine_retention::Obj obj;
+                double                score;
+                int64_t               last_ref;
+            };
+            std::vector<Candidato> candidati;
+            candidati.reserve(insp_extra.resident.size());
+            for (size_t ci = 0; ci < insp_extra.resident.size(); ci++) {
+                const argine_retention::Obj & o = insp_extra.resident[ci];
+                if (o.layer == layer &&
+                    std::binary_search(dedup_experts.begin(), dedup_experts.end(), o.expert)) {
+                    continue;  // membro dell'evento corrente: mai toccato da questa compensazione
+                }
+                bool gia_scelto = false;
+                for (const argine_retention::Obj & v : outcome.evicted) {
+                    if (v.layer == o.layer && v.expert == o.expert) {
+                        gia_scelto = true;
+                        break;
+                    }
+                }
+                if (gia_scelto) {
+                    continue;  // sicura o transient: gia' gestita altrove
+                }
+                candidati.push_back(Candidato{ o, insp_extra.resident_scores[ci], insp_extra.resident_last_ref[ci] });
+            }
+            std::sort(candidati.begin(), candidati.end(), [](const Candidato & a, const Candidato & b) {
+                if (a.score != b.score) { return a.score < b.score; }
+                if (a.last_ref != b.last_ref) { return a.last_ref < b.last_ref; }
+                if (a.obj.layer != b.obj.layer) { return a.obj.layer < b.obj.layer; }
+                return a.obj.expert < b.obj.expert;
+            });
+            uint64_t freed = 0;
+            for (const Candidato & cand : candidati) {
+                if (freed >= need_extra) {
+                    break;
+                }
+                const uint64_t ok_key2  = psx_cache::policy_obj_key(cand.obj.layer, cand.obj.expert);
+                auto            it_obj2 = c->policy_obj_slices.find(ok_key2);
+                if (it_obj2 == c->policy_obj_slices.end()) {
+                    continue;  // nessuna slice fisica tracciata: niente da liberare qui
+                }
+                bool oggetto_libero = true;
+                for (const CacheKey & key2 : it_obj2->second) {
+                    auto it_slot2 = sh.index.find(key2);
+                    if (it_slot2 == sh.index.end()) {
+                        continue;
+                    }
+                    if (!it_slot2->second->ready || it_slot2->second->pins > 0) {
+                        oggetto_libero = false;
+                        break;
+                    }
+                }
+                if (!oggetto_libero) {
+                    continue;  // in uso altrove in questo istante: non toccarlo
+                }
+                for (const CacheKey & key2 : it_obj2->second) {
+                    auto it_slot2 = sh.index.find(key2);
+                    if (it_slot2 == sh.index.end()) {
+                        continue;
+                    }
+                    auto       slot_it2 = it_slot2->second;
+                    const auto t_dec2    = orologio::now();
+                    psx_region_decommit(slot_it2->region, slot_it2->offset, slot_it2->bytes);
+                    c->ns_decommit.fetch_add(ns_da(t_dec2), std::memory_order_relaxed);
+                    const uint64_t qty = std::min<uint64_t>(sh.resident, slot_it2->bytes);
+                    sh.resident -= qty;
+                    freed += qty;
+                    sh.order.erase(slot_it2);
+                    sh.index.erase(it_slot2);
+                    sh.evictions++;
+                    c->policy_same_event_physical_margin_evictions++;
+                }
+                // NON erase da c->policy_obj_slices qui: la politica crede
+                // ancora questo oggetto residente (non e' in outcome.evicted).
+            }
         }
     }
 
@@ -1681,71 +1845,62 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
     // slice: traduce l'Obj logico (layer, expert) nelle sue slice fisiche
     // davvero residenti in questo settore (fino a tre: gate/up/down),
     // tracciate in c->policy_obj_slices, non assunte.
+    //
+    // Per una vittima che e' ANCHE un membro dell'evento corrente
+    // (conflicting_experts), questo nodo ha comunque bisogno dei suoi pesi
+    // ORA per il calcolo reale: non la sfrattiamo qui. Le sue slice che
+    // QUESTO evento richiede (event_keys) restano fisicamente residenti,
+    // marcate Shard::Slot::transient -- Fase 1 piu' sotto le pinna come
+    // qualunque altra slice di questo evento (hit se gia' indicizzate,
+    // commit fisico come un vero miss altrimenti: una vittima appena
+    // ammessa dalla stessa chiamata atomica non ha ancora nessuna slice in
+    // c->policy_obj_slices, esattamente come un miss mai visto prima) --
+    // e psx_cache_unpin() le rimuove fisicamente non appena l'ultimo pin si
+    // libera, cosi' la residenza fisica finale torna a coincidere con
+    // quella che la politica ha gia' deciso, senza alcun sfratto
+    // sostitutivo inventato. Le sue slice NON richieste da questo evento
+    // (altri kind dello stesso oggetto, se residenti da un evento
+    // precedente) non sono necessarie ora: vengono sfrattate subito, come
+    // qualunque altra vittima non in conflitto.
     for (const argine_retention::Obj & victim : outcome.evicted) {
         const uint64_t  ok_key = psx_cache::policy_obj_key(victim.layer, victim.expert);
         auto             it_obj = c->policy_obj_slices.find(ok_key);
+        const bool       is_current_event_member = conflicting_experts.count(victim.expert) != 0;
         if (it_obj == c->policy_obj_slices.end()) {
-            // Scoperto esercitando la traccia estesa su un evento reale
-            // (vedi RETENTION-POLICY-TRACE-INSTRUMENTATION.md): il
-            // riferimento Python frozen (AgedFrequency.access) NON esclude i
-            // membri dell'evento CORRENTE dalla selezione della vittima
-            // nelle sue iterazioni successive -- confermato replicando lo
-            // stesso evento, passo per passo, sia in Python che in questo
-            // modulo C++. Un expert ammesso un momento prima nello stesso
-            // evento puo' quindi, secondo la semantica frozen, essere scelto
-            // come vittima per farne spazio a un altro expert dello STESSO
-            // evento.
-            //
-            // Questo e' innocuo per la simulazione Python (un modello di
-            // cache puramente statistico), ma NON lo e' per il runtime
-            // reale: psx_cache_ensure_many deve restituire con TUTTI gli n
-            // slice del blocco residenti e bloccati insieme, perche' il nodo
-            // MoE reale ha bisogno dei pesi di ogni expert richiesto
-            // simultaneamente per il suo calcolo. Se la politica sfratta un
-            // membro dell'evento corrente prima che questa funzione lo abbia
-            // fisicamente ammesso, continuare in silenzio lascerebbe lo
-            // stato logico della politica (che crede l'oggetto non piu'
-            // residente) e lo stato fisico della cache (che lo riammette
-            // comunque in Fase 1, perche' il calcolo reale lo richiede)
-            // permanentemente disallineati -- un bug di contabilita' che si
-            // accumula silenziosamente nel tempo, non un caso innocuo.
-            //
-            // Fail-closed, non un no-op: questa e' la condizione che
-            // psx_cache_min_budget() esiste per prevenire (il budget deve
-            // bastare per l'intero working set di un layer, altrimenti
-            // nessuna politica -- ne' quella congelata ne' l'LRU esistente --
-            // puo' dare una garanzia reale). psx_cache_attach_retention_policy
-            // dovrebbe gia' aver rifiutato un budget insufficiente; se questo
-            // punto viene comunque raggiunto, e' un limite scientifico reale
-            // di questo round da riportare, non da nascondere.
-            const bool is_current_event_member =
-                (victim.layer == layer) &&
-                std::binary_search(dedup_experts.begin(), dedup_experts.end(), victim.expert);
-            char buf[400];
             if (is_current_event_member) {
-                snprintf(buf, sizeof(buf),
-                         "retention policy: la politica ha scelto di sfrattare (layer=%u, expert=%u), "
-                         "membro dell'evento CORRENTE, prima che fosse fisicamente ammesso -- il budget "
-                         "attivo e' sotto il minimo che garantisce la simultaneita' richiesta da un vero "
-                         "nodo MoE (vedi psx_cache_min_budget); non si procede per non disallineare lo "
-                         "stato logico della politica da quello fisico della cache",
-                         victim.layer, victim.expert);
-            } else {
-                snprintf(buf, sizeof(buf),
-                         "retention policy: sfratto di (layer=%u, expert=%u) richiesto ma nessuna slice "
-                         "fisica indicizzata per quell'oggetto in questo settore",
-                         victim.layer, victim.expert);
+                // Ammissione fresca di questo stesso evento, mai
+                // fisicamente residente prima: nulla da sfrattare qui.
+                // Fase 1 sotto la commettera' come un miss vero e la
+                // marchera' transient; dopo il suo uso in questo nodo,
+                // psx_cache_unpin() la rimuovera'.
+                continue;
             }
+            char buf[400];
+            snprintf(buf, sizeof(buf),
+                     "retention policy: sfratto di (layer=%u, expert=%u) richiesto ma nessuna slice "
+                     "fisica indicizzata per quell'oggetto in questo settore",
+                     victim.layer, victim.expert);
             popola_diag(buf, outcome.evicted.size());
             s->fail(buf);
             return 0;
         }
+        bool tutte_marcate_o_sfrattate = true;
         for (const CacheKey & key : it_obj->second) {
             auto it_slot = sh.index.find(key);
             if (it_slot == sh.index.end()) {
                 continue;  // difensivo: gia' non residente
             }
             auto slot_it = it_slot->second;
+            if (is_current_event_member && event_keys.count(key)) {
+                // Questa slice precisa serve a QUESTO evento ora: non la
+                // sfrattiamo, la marchiamo transient perche' Fase 1 (hit:
+                // e' gia' nell'indice qui) la pinni e la usi normalmente;
+                // psx_cache_unpin() la rimuovera' al rilascio dell'ultimo
+                // pin. Nessuna mutazione fisica qui: pins resta quello che
+                // Fase 1 imposterà.
+                slot_it->transient = true;
+                continue;
+            }
             if (!slot_it->ready || slot_it->pins > 0) {
                 char buf[192];
                 snprintf(buf, sizeof(buf),
@@ -1764,7 +1919,18 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
             sh.index.erase(it_slot);
             sh.evictions++;
         }
-        c->policy_obj_slices.erase(it_obj);
+        (void) tutte_marcate_o_sfrattate;
+        if (!is_current_event_member) {
+            c->policy_obj_slices.erase(it_obj);
+        }
+        // Se is_current_event_member: NON rimuoviamo policy_obj_slices qui.
+        // Le sue slice richieste da questo evento restano indicizzate
+        // (transient) finche' psx_cache_unpin() non le rimuove fisicamente;
+        // a quel punto la prossima volta che questo Obj viene richiesto
+        // (se mai), Fase 1 lo trovera' assente dall'indice e lo trattera'
+        // come il miss fisico che a quel punto e' -- esattamente lo stesso
+        // meccanismo gia' usato per "policy_hit_sans_index_healed" qui
+        // sotto, non un caso nuovo da gestire.
     }
 
     // --- istrumentazione: una riga JSONL per EVENTO (non per sfratto) -------
@@ -1907,6 +2073,14 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
             it->second->pins++;
             sh.order.splice(sh.order.begin(), sh.order, it->second);
             sh.hits++;
+            // R2-12 Phase F: se la politica ha scelto QUESTO expert come
+            // vittima nella stessa chiamata atomica (conflicting_experts),
+            // la slice resta pinnata per il calcolo di questo nodo, ma
+            // psx_cache_unpin() la rimuovera' fisicamente al rilascio
+            // dell'ultimo pin -- vedi Shard::Slot::transient.
+            if (conflicting_experts.count(experts[i])) {
+                it->second->transient = true;
+            }
             continue;
         }
         if (!expert_is_missed(experts[i])) {
@@ -1976,6 +2150,17 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
         mia->layer     = layers[i];
         mia->expert    = experts[i];
         mia->kind      = (uint32_t) kinds[i];
+        // R2-12 Phase F: una ammissione fresca di un expert che la STESSA
+        // chiamata atomica a RetentionPolicy::access() ha anche scelto come
+        // vittima (conflicting_experts) -- vedi Shard::Slot::transient.
+        // psx_cache_unpin() la rimuovera' fisicamente al rilascio
+        // dell'ultimo pin, invece di lasciarla residente: ammissione e
+        // sfratto si annullano a vicenda nel bytes-accounting della
+        // politica, e questo e' l'unico modo per il runtime reale di dare
+        // comunque al nodo corrente i pesi di cui ha bisogno ORA.
+        if (conflicting_experts.count(experts[i])) {
+            mia->transient = true;
+        }
         sh.index[key]  = mia;
         sh.seq++;
 
