@@ -245,6 +245,93 @@ def read_markers(path: str | Path) -> List[Dict[str, object]]:
     return out
 
 
+def _absorb_split_tail_graphs(by_graph: Dict[int, Dict[int, List[Tuple[int, ...]]]]
+                              ) -> List[Tuple[int, int, int]]:
+    """R2-BRIDGE-01 Phase 2A.1 instrumentation repair.
+
+    Root cause (confirmed from argine-experts.cpp and raw raw.tsv evidence,
+    not assumed): the C++ side's forward-pass boundary detector
+    (``if (layer < arx_last_layer) arx_graph++;``) infers a *new* forward
+    pass purely from the layer index going backwards. For some prefill
+    batches, llama.cpp revisits the layer axis a second time within the
+    *same* logical request -- a small trailing sub-batch that recomputes
+    layers with a smaller, uniform token count and, critically, is the only
+    place the final (output) layer's routing record for that request is
+    written. The boundary detector sees layer 0 again and starts a new
+    "graph" id for this trailing sub-batch, so the final layer's record ends
+    up filed under a different graph id than its sibling layers for the same
+    forward pass -- not lost, not corrupted, just mis-numbered.
+
+    This function detects that exact, narrow signature and absorbs the
+    trailing graph's record for the one layer missing from its predecessor
+    back into the predecessor, then drops the (now fully redundant) trailing
+    graph so it is not surfaced as a phantom extra step. It does not invent,
+    alter, or drop any expert id, token count, or timestamp that was
+    actually recorded -- it only re-attributes one already-recorded,
+    already-valid routing record to the graph id its sibling layers belong
+    to, and discards a graph that is a pure redundant recomputation (all of
+    whose other layers duplicate, at a smaller token count, data already
+    held by the predecessor).
+
+    Detection, applied only between chronologically adjacent graph ids g and
+    g+1:
+      - g is missing exactly one layer, and it is the globally highest layer
+        index (the output layer) -- not an arbitrary/middle layer, which
+        would be a different and more concerning signature;
+      - g+1 holds a record for exactly that layer;
+      - every layer g+1 holds (other than that one) has the *same*, uniform
+        token count, strictly smaller than g's own (uniform) token count --
+        the signature of a small trailing recompute, never of a genuine new
+        step (every genuine step in this log has a uniform token count
+        across all its layers).
+
+    Returns the list of (absorbed_graph, into_graph, layer) merges applied,
+    for provenance/audit -- this function changes nothing else: no expert
+    id, no eviction/IO/budget record, no decode-step accounting, is read or
+    modified here.
+    """
+    if not by_graph:
+        return []
+    all_layers = sorted({l for g in by_graph for l in by_graph[g]})
+    if not all_layers:
+        return []
+    top_layer = all_layers[-1]
+    merges: List[Tuple[int, int, int]] = []
+    for g in sorted(by_graph):
+        if g not in by_graph:
+            continue  # already absorbed as some earlier g2
+        g2 = g + 1
+        if g2 not in by_graph:
+            continue
+        g_layers = set(by_graph[g].keys())
+        missing = set(all_layers) - g_layers
+        if missing != {top_layer}:
+            continue
+        if top_layer not in by_graph[g2]:
+            continue
+        g2_layers = by_graph[g2]
+        other = {l: v for l, v in g2_layers.items() if l != top_layer}
+        if not other:
+            continue
+        other_lens = {len(v) for v in other.values()}
+        if len(other_lens) != 1:
+            continue
+        n_other = next(iter(other_lens))
+        g_lens = {len(v) for l, v in by_graph[g].items()}
+        if len(g_lens) != 1:
+            continue
+        n_g = next(iter(g_lens))
+        n_top_in_g2 = len(g2_layers[top_layer])
+        if not (n_other < n_g and n_top_in_g2 <= n_other):
+            continue
+        # Confirmed narrow signature: absorb the top layer's real, already
+        # recorded record into g, then drop the now fully-redundant g2.
+        by_graph[g][top_layer] = g2_layers[top_layer]
+        del by_graph[g2]
+        merges.append((g2, g, top_layer))
+    return merges
+
+
 def to_trace(log: RawLog, *, meta: Optional[TraceMeta] = None,
              markers: Optional[List[Dict[str, object]]] = None) -> Trace:
     """Build a router trace from the R records.
@@ -264,6 +351,8 @@ def to_trace(log: RawLog, *, meta: Optional[TraceMeta] = None,
         t0.setdefault(g, ts)
         t0[g] = min(t0[g], ts)
         top_k = max(top_k, k)
+
+    graph_merges = _absorb_split_tail_graphs(by_graph)
 
     starts: List[Tuple[int, str, str]] = []
     for mk in markers or []:
@@ -290,6 +379,11 @@ def to_trace(log: RawLog, *, meta: Optional[TraceMeta] = None,
         m.top_k = top_k
     if not m.n_experts and log.config.get("store_experts"):
         m.n_experts = int(log.config["store_experts"])
+    for absorbed, into, layer in graph_merges:
+        m.notes.append(
+            f"R2-BRIDGE-01 Phase 2A.1 instrumentation repair: graph {absorbed}'s "
+            f"layer {layer} record absorbed into graph {into} (split-tail forward "
+            f"pass, same logical request; see _absorb_split_tail_graphs)")
     return Trace(meta=m, steps=steps)
 
 
