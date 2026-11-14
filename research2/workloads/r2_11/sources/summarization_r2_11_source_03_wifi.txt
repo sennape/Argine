@@ -1,0 +1,38 @@
+Title: Diagnosing slow home Wi-Fi without replacing hardware
+
+Most reported "slow Wi-Fi" problems are not caused by an underpowered
+router but by one of a handful of fixable conditions, and working
+through them in order resolves the large majority of cases before any
+hardware purchase is needed.
+
+First, check for channel congestion. Older 2.4 GHz Wi-Fi has only three
+non-overlapping channels, and in dense housing many neighboring networks
+default to the same one or two channels, causing interference that looks
+like generic slowness rather than a dropped connection. Switching the
+router to a less congested channel, or moving latency-sensitive devices
+to the 5 GHz band where available, often fixes this immediately with no
+other change. A free Wi-Fi analyzer app run from a phone can show which
+channels are already crowded nearby.
+
+Second, consider physical obstruction and distance. Wi-Fi signal strength
+falls off faster through masonry, metal (such as a refrigerator or duct
+work), and water (such as a fish tank or even a bathroom wall) than
+through drywall or wood. A router placed in a closet or behind a TV
+stand loses far more range than the same router placed centrally and
+elevated. Before assuming the router itself is the bottleneck, it is
+worth testing speed from a few different distances and rooms to see how
+much of the problem is simply placement.
+
+Third, check for a saturated internet connection rather than a wireless
+problem at all. Running a wired speed test directly into the router,
+compared against a wireless speed test from the same room, isolates
+whether the bottleneck is the Wi-Fi link or the internet service itself.
+If the wired speed is already far below the plan's advertised rate, no
+Wi-Fi change will fix it, and the complaint is actually about the
+internet service, not the local wireless network.
+
+Finally, firmware age matters more than most people expect. Routers that
+have not had a firmware update in several years can have inefficient or
+buggy implementations of newer Wi-Fi standards, and a router reboot plus
+a firmware check resolves a meaningful fraction of reported slowdowns
+that have no other identifiable cause.

@@ -1,0 +1,37 @@
+{
+  "artifact": "R2-11-PROVENANCE",
+  "chain": [
+    {
+      "classification": "Category B",
+      "closure_artifact": "experiments/R2-10-working-set-predictor/PHASE3L-FINAL-CLOSURE-RECORD.json",
+      "historical_r2_11_decision": "NOT PROPOSED under the original frozen R2-10 decision rules",
+      "phase": "R2-10",
+      "status": "CLOSED"
+    },
+    {
+      "classification": "BRIDGE_POSITIVE",
+      "closure_artifact": "experiments/R2-BRIDGE-01-retention-feasibility/BRIDGE_EVALUATED_CLOSED.json",
+      "closure_commit": "58b36a1",
+      "opening_commit": "05e88f7",
+      "phase": "R2-BRIDGE-01",
+      "status": "BRIDGE_EVALUATED_CLOSED"
+    },
+    {
+      "phase": "R2-11 (this phase)",
+      "reason_this_phase_exists": "R2-BRIDGE-01's frozen decision_rules.json.relationship_to_r2_11, applied literally to the BRIDGE_POSITIVE classification, states: 'R2-11 MAY NOW BE PROPOSED UNDER NEW PROSPECTIVE BRIDGE EVIDENCE.' (BRIDGE_FINAL_INTERPRETATION.json). R2-11 exists ONLY because of this new prospective evidence.",
+      "status": "R2_11_PROTOCOL_FROZEN / R2_11_ACQUISITION_PLANNED"
+    }
+  ],
+  "freeze_git_head_before_this_phase0_commit": "58b36a1ce5d90827a4f7b639f511833257569cf9",
+  "historical_statements_unchanged": {
+    "r2_10_category_b": "Unchanged, not rewritten.",
+    "r2_11_not_proposed_under_original_r2_10_rules": "Unchanged, not rewritten. This R2-11 Phase-0 protocol does not retroactively satisfy, reinterpret, or reverse that historical decision; it is a wholly new, prospectively-justified protocol."
+  },
+  "pre_existing_stub_directory": {
+    "handling": "Evolved in this Phase-0 freeze; its historical planning provenance (original commit, original PLANNED state, original 'no result exists yet' statement) is preserved in this provenance.json rather than silently discarded.",
+    "original_state": "PLANNED (implemented: False), created by commit 77544a2 (R2-M0.1 infrastructure bootstrap), contained no result of any kind.",
+    "path": "experiments/R2-11-predictive-retention/README.md"
+  },
+  "r2_11_started_by": "new prospective R2-BRIDGE-01 evidence only",
+  "schema_version": 1
+}

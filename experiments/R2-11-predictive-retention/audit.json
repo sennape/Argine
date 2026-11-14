@@ -1,0 +1,87 @@
+{
+  "artifact": "R2-11-PHASE0-REPOSITORY-RECONSTRUCTION-AUDIT",
+  "checks": [
+    {
+      "expected": "r2-main",
+      "item": "branch",
+      "observed": "r2-main",
+      "status": "OK"
+    },
+    {
+      "expected": "58b36a1",
+      "item": "HEAD (at start of this phase)",
+      "observed": "58b36a1ce5d90827a4f7b639f511833257569cf9",
+      "status": "OK"
+    },
+    {
+      "expected": "clean",
+      "item": "working tree",
+      "observed": "clean (git status --porcelain empty)",
+      "status": "OK"
+    },
+    {
+      "expected": "CLOSED / Category B / r2_11_proposed=False / r2_11_started=False",
+      "item": "R2-10 final closure",
+      "observed": "confirmed fresh from experiments/R2-10-working-set-predictor/PHASE3L-FINAL-CLOSURE-RECORD.json",
+      "status": "OK"
+    },
+    {
+      "expected": "present, unchanged",
+      "item": "historical R2-11 NOT PROPOSED decision",
+      "observed": "confirmed fresh from PHASE3J-FINAL-INTERPRETATION.json.r2_11_recommendation = 'NOT PROPOSED. ...'",
+      "status": "OK"
+    },
+    {
+      "expected": "BRIDGE_EVALUATED_CLOSED",
+      "item": "R2-BRIDGE-01 final closure",
+      "observed": "confirmed fresh from experiments/R2-BRIDGE-01-retention-feasibility/BRIDGE_EVALUATED_CLOSED.json",
+      "status": "OK"
+    },
+    {
+      "expected": "BRIDGE_POSITIVE",
+      "item": "BRIDGE_POSITIVE classification",
+      "observed": "confirmed fresh from BRIDGE_EVALUATED_CLOSED.json.classification and BRIDGE_DECISION_RULE_APPLICATION.json",
+      "status": "OK"
+    },
+    {
+      "expected": "1.5GiB: aged_frequency decay=0.999/interval=1; 4GiB: decay=0.99/interval=64; 8GiB: decay=0.999/interval=16",
+      "item": "B_selected(M) mapping",
+      "observed": "independently re-read from experiments/R2-09-prediction-benchmark/r2_09a/R2-09A-FREEZE.json.selected_baselines; exact match",
+      "status": "OK"
+    },
+    {
+      "expected": "Qwen3-30B-A3B-Q4_K_M, sha256 a015794b...",
+      "item": "model identity",
+      "observed": "independently re-read from paper/research2/II-B-FREEZE.json-referenced value via R2-BRIDGE-01's own PHASE2A-ACQUISITION-PLAN-v1.json.model_identity; previously cross-confirmed against a manually-run full on-disk SHA-256 in the R2-BRIDGE-01 phase",
+      "status": "OK"
+    },
+    {
+      "expected": "llama-research-v2, sha256 a0063720...",
+      "item": "runtime identity",
+      "observed": "independently re-read from the same source chain",
+      "status": "OK"
+    },
+    {
+      "expected": "identical to R2-10's causal_boundary.json",
+      "item": "causal boundary",
+      "observed": "read R2-10's causal_boundary.json fresh and reused verbatim (byte-for-byte) in this phase's own causal_boundary.json",
+      "status": "OK"
+    },
+    {
+      "expected": "none exists",
+      "item": "absence of any prior R2-11 result",
+      "observed": "grep across the repository for R2_11_RESULT / R2-11-RESULT / r2_11 result patterns returned nothing; experiments/R2-11-predictive-retention/ contained only the original stub README.md before this phase",
+      "status": "OK"
+    },
+    {
+      "expected": "none / to be created in this phase",
+      "item": "existing R2-11 python package",
+      "observed": "argine/research2/r2_11/ did not exist before this phase",
+      "status": "OK (created in this phase, contract machinery only, no execution)"
+    }
+  ],
+  "discrepancies_found": [],
+  "fail_closed_policy": "Any discrepancy found below would have halted this phase before any Phase-0 artifact was written. None was found.",
+  "result": "ALL CHECKS PASSED -- proceeded with Phase-0 design/authoring/freeze.",
+  "schema_version": 1
+}

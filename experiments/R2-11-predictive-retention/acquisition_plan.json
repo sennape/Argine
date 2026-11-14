@@ -1,0 +1,76 @@
+{
+  "artifact": "R2-11-ACQUISITION-PLAN",
+  "canonical_output_paths": {
+    "r2-11-coding-v1": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v1",
+    "r2-11-coding-v2": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v2",
+    "r2-11-coding-v3": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v3",
+    "r2-11-instruction-v1": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v1",
+    "r2-11-instruction-v2": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v2",
+    "r2-11-instruction-v3": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v3",
+    "r2-11-reasoning-v1": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v1",
+    "r2-11-reasoning-v2": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v2",
+    "r2-11-reasoning-v3": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v3",
+    "r2-11-summarization-v1": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v1",
+    "r2-11-summarization-v2": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v2",
+    "r2-11-summarization-v3": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v3"
+  },
+  "capture_failure_rules": [
+    "Never overwrite an existing valid capture; a valid capture is immutable once sealed.",
+    "Preserve failed/partial attempts under a separate, provenance-labelled sibling path, never inside the canonical output directory.",
+    "A pre-launch failure does not count as a scientific capture and is excluded from sealing.",
+    "A capture is canonical only after: trace file existence is confirmed, normalize() succeeds, reconcile() returns [], AND the explicit trace_completeness() check (argine/research/runner.py) also passes -- a trace is never accepted solely because normalize()/reconcile() are clean (instruction #20).",
+    "A malformed or incomplete trace is rejected, its provenance is preserved for the record, and it is never reused or silently discarded.",
+    "A retry must use the identical frozen acquisition parameters -- no parameter may be changed in response to a prior failure or in response to any observed model output.",
+    "No prompt or configuration change is permitted in response to model output at any point in this protocol.",
+    "No parallel capture writers: captures are executed strictly sequentially, one workload at a time.",
+    "A timeout during capture is not a PASS and must not be recorded as a successful cell."
+  ],
+  "cli_split_flag_gap_and_resolution": "Identical gap/resolution as R2-BRIDGE-01: argine.research.cli's 'research trace --split' only supports {dev, eval}. The 12 R2-11 workload files' CLI-facing 'split' field is set to 'eval' (already-supported value); true provenance identity is tracked via provenance_split_identity='r2_11_eval', workload_id/path, and this eval_manifest.json -- never a new CLI value.",
+  "deterministic_capture_conditions": {
+    "context": 4096,
+    "expert_store_capture_budget": "4G",
+    "n_predict": 512,
+    "seed": 42,
+    "temperature": 0.0,
+    "threads": 4,
+    "threads_batch": 12,
+    "top_k": 1
+  },
+  "explicitly_not_performed_in_this_phase": [
+    "No preflight executed on a real host.",
+    "No R2-11 trace capture executed.",
+    "No R2_11_CAPTURED_SEALED transition (no real trace exists).",
+    "No R2_11_EVAL_OPENED transition.",
+    "No R2-11 performance/result computed, inspected, or claimed."
+  ],
+  "model_identity": {
+    "model_path_windows": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf",
+    "name": "Qwen3-30B-A3B-Q4_K_M",
+    "quantization": "Q4_K_M",
+    "sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+    "sha256_source": "paper/research2/II-B-FREEZE.json.canonical_headline_metrics.r2_08.canonical_model_sha256, as independently re-read from source during this Phase-0 freeze, and previously cross-confirmed in R2-BRIDGE-01 Phase 2A against a manually-run full on-disk SHA-256."
+  },
+  "note": "Additive, out-of-band provenance record for the 12 fresh R2-11 EVAL cells, chosen prospectively, before any capture. No capture executed in this phase. Values independently re-verified against canonical Research-2 evidence (paper/research2/II-B-FREEZE.json, R2-BRIDGE-01's own acquisition plan), not merely copied from the governing handoff prompt.",
+  "planned_capture_commands_windows_powershell": {
+    "r2-11-coding-v1": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_11\\r2-11-coding-v1.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v1\"",
+    "r2-11-coding-v2": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_11\\r2-11-coding-v2.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v2\"",
+    "r2-11-coding-v3": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_11\\r2-11-coding-v3.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v3\"",
+    "r2-11-instruction-v1": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_11\\r2-11-instruction-v1.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v1\"",
+    "r2-11-instruction-v2": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_11\\r2-11-instruction-v2.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v2\"",
+    "r2-11-instruction-v3": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_11\\r2-11-instruction-v3.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v3\"",
+    "r2-11-reasoning-v1": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_11\\r2-11-reasoning-v1.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v1\"",
+    "r2-11-reasoning-v2": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_11\\r2-11-reasoning-v2.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v2\"",
+    "r2-11-reasoning-v3": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_11\\r2-11-reasoning-v3.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v3\"",
+    "r2-11-summarization-v1": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_11\\r2-11-summarization-v1.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v1\"",
+    "r2-11-summarization-v2": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_11\\r2-11-summarization-v2.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v2\"",
+    "r2-11-summarization-v3": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_11\\r2-11-summarization-v3.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v3\""
+  },
+  "runtime_identity": {
+    "name": "llama-research-v2",
+    "sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+    "sha256_source": "paper/research2/II-B-FREEZE.json.canonical_headline_metrics.r2_08.canonical_runtime_sha256, same canonical reference as model identity, independently re-read from source during this Phase-0 freeze (not merely copied from the governing handoff)."
+  },
+  "schema_version": 1,
+  "state": "R2_11_ACQUISITION_PLANNED",
+  "trace_schema": "Research2 R2Trace/routing trace schema used by R2-08/R2-09/R2-10/R2-BRIDGE-01 (argine.research2.r2_01.trace_contract.normalize/reconcile); identical schema and validation pipeline, no versioning deviation."
+}
