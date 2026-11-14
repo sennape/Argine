@@ -170,3 +170,125 @@ def test_host_preflight_passes_sufficient_free_ram_check_via_real_planner(tmp_pa
     report = drv.host_preflight(ap)
     ram_check = next(c for c in report["checks"] if c["name"] == "sufficient_free_ram")
     assert ram_check["ok"] is True, ram_check["detail"]
+
+
+def test_resolve_capture_argv_uses_explicit_interpreter_not_literal_python():
+    """Regression test for the 9009 ('Python non e` stato trovato...')
+    failure: under the old shell=True + raw-string invocation, the literal
+    token 'python' was resolved by cmd.exe's PATH search, which on the real
+    host hit the Microsoft Store Python app-execution-alias stub instead of
+    the already-running Anaconda interpreter. The fix must build an argv
+    list whose first element is the resolved interpreter (sys.executable,
+    or an explicitly supplied resolved interpreter), never the bare string
+    'python', and the resulting argv must contain no stray 'python' token
+    anywhere else."""
+    ap = drv.load_json(drv.ACQUISITION_PLAN)
+    fake_interpreter = r"C:\Users\alpel\anaconda3\python.exe"
+
+    for wl_id, cmd in ap["planned_capture_commands_windows_powershell"].items():
+        assert cmd.split()[0] == "python", (
+            f"frozen command for {wl_id} unexpectedly does not start with the "
+            "literal 'python' token this test is regression-testing against"
+        )
+
+        argv = drv.resolve_capture_argv(cmd, python_executable=fake_interpreter)
+
+        assert isinstance(argv, list)
+        assert argv[0] == fake_interpreter, (
+            f"{wl_id}: expected argv[0] to be the explicitly resolved "
+            f"interpreter {fake_interpreter!r}, got {argv[0]!r}"
+        )
+        assert "python" not in argv[1:], (
+            f"{wl_id}: no token after the interpreter should be the bare, "
+            f"PATH-dependent string 'python': {argv}"
+        )
+        # None of the frozen scientific parameters may be altered by the
+        # interpreter-resolution rewrite.
+        assert argv[1:5] == ["-m", "argine", "research", "trace"]
+        assert "--expert-store" in argv
+        assert "4G" in argv
+        assert "--ctx" in argv and "4096" in argv
+        assert "--threads" in argv and "4" in argv
+        assert "--llama-arg=--threads-batch" in argv
+        assert "--seed" in argv and "42" in argv
+
+
+def test_resolve_capture_argv_defaults_to_sys_executable(monkeypatch):
+    """With no interpreter explicitly supplied, resolve_capture_argv must use
+    sys.executable (the already-running interpreter), never shell out to a
+    bare 'python' that depends on PATH resolution."""
+    ap = drv.load_json(drv.ACQUISITION_PLAN)
+    any_cmd = next(iter(ap["planned_capture_commands_windows_powershell"].values()))
+
+    fake_sys_executable = r"C:\fake\env\python.exe"
+    monkeypatch.setattr(drv.sys, "executable", fake_sys_executable)
+
+    argv = drv.resolve_capture_argv(any_cmd)
+    assert argv[0] == fake_sys_executable
+
+
+def test_resolve_capture_argv_refuses_unexpected_leading_executable():
+    """If a frozen command string were ever to start with something other
+    than the literal 'python' token this fix was written for, the driver
+    must fail loudly rather than silently trusting shell PATH resolution for
+    an unrecognized executable."""
+    import pytest
+
+    with pytest.raises(ValueError):
+        drv.resolve_capture_argv("notpython -m argine research trace", python_executable="X")
+
+
+def test_resolve_capture_argv_expands_percent_style_env_vars_in_out_path():
+    """The frozen --out path contains a Windows %LOCALAPPDATA%-style
+    reference. Under the old shell=True invocation, cmd.exe expanded this
+    automatically; with shell=False (argv list, no shell), the driver itself
+    must expand it so the resolved output path is unchanged."""
+    import os
+
+    os.environ["LOCALAPPDATA"] = r"C:\Users\alpel\AppData\Local"
+    ap = drv.load_json(drv.ACQUISITION_PLAN)
+    any_wl, any_cmd = next(iter(ap["planned_capture_commands_windows_powershell"].items()))
+
+    argv = drv.resolve_capture_argv(any_cmd, python_executable="X")
+    out_idx = argv.index("--out")
+    out_path = argv[out_idx + 1]
+    assert "%LOCALAPPDATA%" not in out_path
+    assert "AppData" in out_path
+
+
+def test_run_capture_invokes_subprocess_with_shell_false_and_logged_argv(monkeypatch, capsys):
+    """run_capture() must invoke subprocess.run with an argv list and
+    shell=False (never shell=True with a raw PATH-dependent string), and
+    must print the exact argv before executing it."""
+    import subprocess as _subprocess
+
+    captured = {}
+
+    class _FakeCompletedProcess:
+        returncode = 0
+        stdout = ""
+        stderr = ""
+
+    def _fake_run(argv, shell=None, cwd=None, capture_output=None, text=None, env=None):
+        captured["argv"] = argv
+        captured["shell"] = shell
+        captured["env"] = env
+        return _FakeCompletedProcess()
+
+    monkeypatch.setattr(_subprocess, "run", _fake_run)
+    monkeypatch.setattr(drv, "subprocess", _subprocess)
+    monkeypatch.setenv("ARGINE_LLAMA_DIR", r"C:\llama-research-v2")
+
+    ap = drv.load_json(drv.ACQUISITION_PLAN)
+    any_wl, any_cmd = next(iter(ap["planned_capture_commands_windows_powershell"].items()))
+
+    drv.run_capture(any_wl, any_cmd)
+
+    assert captured["shell"] is False
+    assert isinstance(captured["argv"], list)
+    assert captured["argv"][0] != "python"
+    assert captured["env"]["ARGINE_LLAMA_DIR"] == r"C:\llama-research-v2"
+
+    out = capsys.readouterr().out
+    assert "[argv]" in out
+    assert "ARGINE_LLAMA_DIR" in out

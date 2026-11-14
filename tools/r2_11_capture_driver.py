@@ -49,6 +49,7 @@ import gzip
 import hashlib
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import sys
@@ -214,14 +215,99 @@ def host_preflight(ap: dict) -> dict:
     return report
 
 
+import re as _re
+
+
+def _expand_windows_percent_vars(token: str) -> str:
+    """Expand %VAR% references the way Windows cmd.exe does, without relying
+    on ntpath.expandvars() (which only expands %VAR% when actually running
+    under Windows -- os.path.expandvars on POSIX only understands $VAR).
+    Written this way so the substitution is deterministic and testable on
+    any platform, even though this driver is only ever run on the real
+    Windows host."""
+    def _sub(m):
+        name = m.group(1)
+        return os.environ.get(name, m.group(0))
+    return _re.sub(r"%([^%]+)%", _sub, token)
+
+
+def resolve_capture_argv(cmd: str, python_executable: str | None = None) -> list:
+    """Turn a frozen command STRING from acquisition_plan.json into an argv
+    LIST suitable for subprocess.run(..., shell=False), without touching the
+    frozen string itself (acquisition_plan.json is never edited -- its
+    contract digest must stay unchanged).
+
+    Fixes the 9009 ("Python non e` stato trovato...") failure mode: under
+    `shell=True` on Windows, the literal token "python" is resolved by
+    cmd.exe's own PATH search, which on this host finds the Microsoft Store
+    Python app-execution-alias stub instead of the real Anaconda interpreter
+    that is already running this driver (`sys.executable`). Running with an
+    explicit argv list and shell=False removes shell PATH resolution from the
+    picture entirely for the interpreter token; every other token (module
+    name, flags, workload path, seed, ctx, threads, expert budget, output
+    path, etc.) is preserved exactly as frozen.
+
+    The only token-level transform applied, besides the python->sys.executable
+    substitution, is os.path.expandvars() on each token, because cmd.exe
+    (under the old shell=True path) used to expand %LOCALAPPDATA% in the
+    frozen --out path itself; with shell=False nothing else will expand it,
+    so this driver must do it explicitly to keep the exact same resolved
+    output path as before.
+    """
+    python_executable = python_executable or sys.executable
+
+    # Windows-style tokenization that preserves backslash path separators
+    # (posix=False disables backslash-escape interpretation) and respects
+    # double-quoted segments (e.g. quoted paths containing spaces/backslashes).
+    raw_tokens = shlex.split(cmd, posix=False)
+
+    argv: list = []
+    for i, tok in enumerate(raw_tokens):
+        if len(tok) >= 2 and tok[0] == '"' and tok[-1] == '"':
+            tok = tok[1:-1]
+        if i == 0:
+            if tok != "python":
+                # Nothing else in the frozen command strings is a bare,
+                # PATH-dependent executable name; if that ever changes,
+                # fail loudly rather than silently trusting PATH resolution
+                # for an executable this function was not written to handle.
+                raise ValueError(
+                    f"resolve_capture_argv: expected leading token 'python', got {tok!r}; "
+                    "refusing to guess how to resolve this executable"
+                )
+            argv.append(python_executable)
+            continue
+        argv.append(_expand_windows_percent_vars(tok))
+    return argv
+
+
 def run_capture(wl_id: str, cmd: str) -> dict:
-    """Run one frozen capture command; returns a result dict. Never edits cmd."""
+    """Run one frozen capture command; returns a result dict. Never edits the
+    frozen `cmd` string itself (it is recorded verbatim in the result for
+    provenance). Execution uses an explicit argv list and shell=False so the
+    Python interpreter is never resolved via shell PATH search -- see
+    resolve_capture_argv()."""
+    argv = resolve_capture_argv(cmd)
+    print(f"  [argv] {argv}")
+
+    env = os.environ.copy()
+    llama_dir = env.get("ARGINE_LLAMA_DIR")
+    print(f"  [env] ARGINE_LLAMA_DIR={llama_dir!r}")
+
     t0 = time.time()
-    proc = subprocess.run(cmd, shell=True, cwd=str(REPO_ROOT), capture_output=True, text=True)
+    proc = subprocess.run(
+        argv,
+        shell=False,
+        cwd=str(REPO_ROOT),
+        capture_output=True,
+        text=True,
+        env=env,
+    )
     elapsed = time.time() - t0
     return {
         "workload_id": wl_id,
         "command": cmd,
+        "argv": argv,
         "returncode": proc.returncode,
         "stdout_tail": proc.stdout[-4000:],
         "stderr_tail": proc.stderr[-4000:],
