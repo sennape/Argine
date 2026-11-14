@@ -1,0 +1,76 @@
+{
+  "artifact": "R2-12-RUNTIME-READINESS-PREPARATION",
+  "schema_version": 1,
+  "state_context": "R2_12_PROTOCOL_FROZEN (unchanged by this artifact -- this is additive preparation, not a state transition)",
+  "r2_12_phase0_contract_digest_at_time_of_writing": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad",
+  "purpose": "Describes what must be checked on the real Windows target host before R2_12_RUNTIME_READY may be declared, and the two preparation tools that implement those checks without performing any runtime benchmark.",
+  "tools_prepared_this_step": {
+    "readiness_driver": {
+      "path": "tools/r2_12_readiness_driver.py",
+      "what_it_does": "Runs ~20 host-identity/capability/machine-state checks against the live host, reading every scientific constant (model/runtime identity, frozen SHA-256 values) directly from hardware_contract.json rather than duplicating them. Each check reports PASS, BLOCKING_FAILURE, or ADVISORY. Writes experiments/R2-12-runtime-validation/RUNTIME-READINESS-REPORT.json and exits 0 only if there are zero BLOCKING_FAILUREs.",
+      "what_it_explicitly_does_not_do": [
+        "does not invoke any of the 120 counted benchmark runs",
+        "does not execute any measured policy comparison",
+        "does not create or populate any runtime-result artifact",
+        "does not create R2_12_RUNTIME_OPENED",
+        "does not, by itself, mark R2_12_RUNTIME_READY"
+      ],
+      "checks_implemented": [
+        "model_path_exists",
+        "model_sha256_matches",
+        "ARGINE_LLAMA_DIR_set (advisory)",
+        "runtime_resolved (reuses argine.research2.runtime_resolver, never a hand-rolled discovery)",
+        "runtime_sha256_matches",
+        "argine_importable",
+        "python_interpreter (advisory)",
+        "cpu_identity_collected (advisory -- no frozen expected value exists yet)",
+        "physical_ram_collected (advisory)",
+        "gpu_or_igpu_identity_collected (advisory -- first-run stamp field)",
+        "windows_version_collected (advisory)",
+        "power_mode (blocking only if detected as a power-saving plan; advisory if unqueryable)",
+        "sufficient_free_ram (reuses argine.planner.plan() feasibility, the same authoritative gate `argine research trace` itself uses; fixed 8 GiB fallback threshold reused from tools/r2_11_capture_driver.py, not newly invented)",
+        "expert_store_path_exists (model_path.with_suffix('.psxs'); blocking for R2-12 specifically, since without a built store the comparison degrades to plain mmap)",
+        "storage_device_hosting_expert_store_collected (advisory)",
+        "no_concurrent_readiness_writer / no_concurrent_execution_campaign (lock-file checks)",
+        "no_concurrent_llama_server_process (advisory if unqueryable)",
+        "runtime_output_root_available",
+        "instrumentation_fields_contract_loadable",
+        "output_equivalence_hashing_capability",
+        "trace_comparison_machinery_importable (advisory)",
+        "operator_attested_clean_environment (blocking unless the operator explicitly passes --operator-attests-clean-environment; never defaulted to True)"
+      ]
+    },
+    "execution_driver_preparation": {
+      "path": "tools/r2_12_execution_driver.py",
+      "what_it_does": "Implements exact 144-run matrix generation (24 discarded warmups + 120 counted executions), partitioned into three separable 40-counted-execution budget sessions (4 GiB primary / 1.5 GiB stress / 8 GiB null-control), preserving the frozen ABBA/alternating-opener sequence and warmup ordering from run_order.json exactly. Implements atomic per-run persistence, duplicate-run-ID mismatch detection, a campaign-duration exclusive lock, and full resumability.",
+      "what_it_explicitly_does_not_do": [
+        "real execution is not implemented in this file: _execute_cell_NOT_IMPLEMENTED() always raises NotImplementedError, regardless of CLI flags -- there is no code path in this file capable of launching a real benchmark",
+        "the CLI refuses to run at all unless --mock is passed, and --mock only writes synthetic_test_record=True / real_execution=False placeholder records used to exercise persistence/resumability logic",
+        "does not create R2_12_RUNTIME_OPENED"
+      ],
+      "matrix_verified": "4 workloads x 3 budgets x 2 policies x 5 repetitions = 120 counted, + 4x3x2x1 = 24 warmup, = 144 total; verified by unit test, not merely asserted",
+      "session_partition_verified": "exactly 40 counted + 8 warmup = 48 runs per budget session (1.5/4/8 GiB), verified by unit test"
+    }
+  },
+  "what_this_artifact_does_not_authorize": [
+    "This artifact does NOT mark R2_12_RUNTIME_READY.",
+    "R2_12_RUNTIME_READY may only be declared, in a separate later commit, after the readiness driver has actually been run on the real Windows target host and its RUNTIME-READINESS-REPORT.json reviewed and found overall=PASS.",
+    "This artifact does NOT create R2_12_RUNTIME_OPENED.",
+    "No runtime benchmark, measured policy comparison, or tokens/s measurement was performed to produce this artifact."
+  ],
+  "tests_added_this_step": {
+    "test_r2_12_readiness_driver.py": 12,
+    "test_r2_12_execution_driver_prep.py": 15,
+    "total_new": 27
+  },
+  "regressions_reverified_this_step": {
+    "r2_10_r2_bridge01_r2_11_full_set": 225,
+    "r2_12_full_suite_including_new": 85,
+    "all_passed": true
+  },
+  "digests_reverified_unchanged": {
+    "r2_11_phase0_contract_digest": "5dd3a3987aa74230693135d4ec20c5b8fd0a0de58a30b3b1646ccb2ce7b94f2a",
+    "r2_12_phase0_contract_digest": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad"
+  },
+  "next_required_step_before_runtime_ready": "Run `python tools\\r2_12_readiness_driver.py --operator-attests-clean-environment` on the real Windows target host. If overall=PASS, review the report, then (in a separate turn/commit) author R2_12_RUNTIME_READY referencing that report."
+}
