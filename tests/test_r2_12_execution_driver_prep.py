@@ -177,3 +177,92 @@ def test_cli_without_mock_flag_refuses_and_does_not_execute(monkeypatch, capsys)
     assert rc == 2
     captured = capsys.readouterr()
     assert "not implemented" in captured.err.lower()
+
+
+# --- Lock-path late-binding fix regression tests ---
+#
+# acquire_lock()/release_lock() originally took `lock_path: Path = LOCK_PATH`
+# as a default parameter, which Python evaluates ONCE at module-import time.
+# Reassigning the module-level `drv.LOCK_PATH` attribute afterward (as a test
+# fixture, or future tooling, might do to redirect the lock into an isolated
+# directory) silently had NO effect on calls made with no explicit argument --
+# they kept using whatever LOCK_PATH equaled at import time. This caused a
+# real stray lock file at the true repo path during this session's own
+# testing. The fix resolves the module-level LOCK_PATH fresh on every call
+# via a `None` sentinel. These tests guard against regressing back to the
+# bound-default pattern.
+
+def test_module_level_lock_path_reassignment_is_respected_by_acquire_release(tmp_path):
+    original_lock_path = drv.LOCK_PATH
+    try:
+        drv.LOCK_PATH = tmp_path / ".reassigned.lock"
+        drv.acquire_lock()
+        assert drv.LOCK_PATH.exists()
+        # the ORIGINAL default path must NOT have been touched
+        assert not original_lock_path.exists()
+        drv.release_lock()
+        assert not drv.LOCK_PATH.exists()
+    finally:
+        drv.LOCK_PATH = original_lock_path
+
+
+def test_explicit_lock_path_override_works_independent_of_module_attribute(tmp_path):
+    explicit_path = tmp_path / ".explicit.lock"
+    drv.acquire_lock(explicit_path)
+    assert explicit_path.exists()
+    drv.release_lock(explicit_path)
+    assert not explicit_path.exists()
+
+
+def test_acquire_and_release_use_the_exact_same_resolved_path(tmp_path, monkeypatch):
+    target = tmp_path / ".symmetric.lock"
+    monkeypatch.setattr(drv, "LOCK_PATH", target)
+    drv.acquire_lock()
+    assert target.exists()
+    # release with NO argument must resolve to the SAME path acquire used
+    drv.release_lock()
+    assert not target.exists()
+
+
+def test_duplicate_writer_still_detected_after_fix(tmp_path, monkeypatch):
+    monkeypatch.setattr(drv, "LOCK_PATH", tmp_path / ".dup.lock")
+    drv.acquire_lock()
+    try:
+        with pytest.raises(RuntimeError):
+            drv.acquire_lock()
+    finally:
+        drv.release_lock()
+
+
+def test_no_lock_residue_after_run_session_normal_completion(scratch_driver):
+    plan = scratch_driver.generate_full_plan()
+    scratch_driver.run_session(1.5, mock=True, plan=plan)
+    assert not scratch_driver.LOCK_PATH.exists()
+
+
+def test_no_lock_residue_after_run_session_raises(scratch_driver):
+    plan = scratch_driver.generate_full_plan()
+    with pytest.raises(NotImplementedError):
+        scratch_driver.run_session(4.0, mock=False, plan=plan)
+    assert not scratch_driver.LOCK_PATH.exists()
+
+
+def test_run_session_acquire_and_release_agree_on_reassigned_path(scratch_driver):
+    # Regression for the exact bug: run_session's internal acquire/release
+    # must both honor the scratch_driver fixture's LOCK_PATH reassignment,
+    # never falling back to the real repo-level default.
+    plan = scratch_driver.generate_full_plan()
+    scratch_driver.run_session(8.0, mock=True, plan=plan)
+    real_default_lock = drv.REPO_ROOT / "tools" / ".r2_12_execution_driver.lock"
+    assert not real_default_lock.exists(), (
+        "run_session must never touch the real repo-level lock path when "
+        "LOCK_PATH has been reassigned"
+    )
+
+
+def test_acquire_lock_docstrings_do_not_reintroduce_bound_default():
+    import inspect
+    sig_acquire = inspect.signature(drv.acquire_lock)
+    sig_release = inspect.signature(drv.release_lock)
+    assert sig_acquire.parameters["lock_path"].default is None
+    assert sig_release.parameters["lock_path"].default is None

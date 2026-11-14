@@ -194,7 +194,20 @@ def atomic_write_json(path: Path, obj: dict) -> None:
     os.replace(tmp, path)
 
 
-def acquire_lock(lock_path: Path = LOCK_PATH) -> None:
+def acquire_lock(lock_path: Optional[Path] = None) -> None:
+    """Acquires the campaign-duration exclusive lock. `lock_path` is
+    resolved at CALL time, not at import/def time: a bare `lock_path: Path
+    = LOCK_PATH` default parameter is evaluated once when this module is
+    first imported and binds to whatever LOCK_PATH equaled at that
+    instant, so a later `module.LOCK_PATH = <other path>` reassignment
+    (as tests or future campaign tooling might do to redirect the lock
+    into an isolated directory) would silently have no effect -- this
+    function would keep locking the original path. Resolving the
+    module-level LOCK_PATH fresh on every call (via the `None` sentinel)
+    fixes that: a reassignment of LOCK_PATH takes effect immediately for
+    every subsequent call that does not pass an explicit override."""
+    if lock_path is None:
+        lock_path = LOCK_PATH
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     try:
         fd = os.open(str(lock_path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
@@ -207,7 +220,20 @@ def acquire_lock(lock_path: Path = LOCK_PATH) -> None:
         )
 
 
-def release_lock(lock_path: Path = LOCK_PATH) -> None:
+def release_lock(lock_path: Optional[Path] = None) -> None:
+    """Releases the lock acquired by acquire_lock(). Resolves the
+    module-level LOCK_PATH fresh at call time for the same reason
+    acquire_lock() does -- see its docstring. Callers that pass an
+    explicit lock_path to acquire_lock() must pass the SAME explicit
+    lock_path here; run_session() does exactly that (see below) so
+    acquire/release always agree on the exact path, even across a
+    LOCK_PATH reassignment that happens mid-call (acquire_lock() resolves
+    once per call, and so does release_lock(), independently -- callers
+    that need both calls to agree on one resolved value across a
+    reassignment window should resolve it once themselves and pass it to
+    both, as run_session() does)."""
+    if lock_path is None:
+        lock_path = LOCK_PATH
     try:
         lock_path.unlink()
     except FileNotFoundError:
@@ -292,7 +318,15 @@ def run_session(budget_gib: float, *, mock: bool = False,
     if budget_gib not in sessions:
         raise ValueError(f"no such budget session: {budget_gib}")
 
-    acquire_lock()
+    # Resolve the lock path ONCE for this call and pass it explicitly to
+    # both acquire and release, so they are guaranteed to agree on the
+    # exact same path even if LOCK_PATH were reassigned mid-call (acquire
+    # and release each resolve the `None` sentinel independently, so two
+    # separate no-arg calls could in principle observe different values
+    # of LOCK_PATH if it changed between them -- resolving once here and
+    # passing it explicitly removes that possibility entirely).
+    resolved_lock_path = LOCK_PATH
+    acquire_lock(resolved_lock_path)
     try:
         done, skipped = 0, 0
         for spec in sessions[budget_gib]:
@@ -312,7 +346,7 @@ def run_session(budget_gib: float, *, mock: bool = False,
         return {"budget_gib": budget_gib, "computed": done, "skipped_already_recorded": skipped,
                 "total_in_session": len(sessions[budget_gib])}
     finally:
-        release_lock()
+        release_lock(resolved_lock_path)
 
 
 def main() -> int:
