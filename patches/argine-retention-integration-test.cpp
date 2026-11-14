@@ -232,6 +232,156 @@ int main(int argc, char ** argv) {
         psx_cache_free(c);
     }
 
+    // --- 7-10. ARGINE_RETENTION_TRACE attraverso il VERO punto di ingresso
+    // dell'inferenza reale (psx_cache_ensure_many via evento(), la stessa
+    // funzione chiamata da servi_evento_con_politica nel runtime realizzato
+    // llama-research-v3/v4 quando ARGINE_EXPERT_READ=blocco). Queste quattro
+    // sezioni esistono perche' un run reale sull'host Windows ha mostrato un
+    // file di traccia aperto correttamente ma rimasto a 0 byte: la causa
+    // reale (ARGINE_EXPERT_READ=asincrono di default, che non chiama mai
+    // questa funzione) e' ora un fail-closed in argine-experts.cpp e non e'
+    // esercitabile da QUESTO file (che parla con psx_cache direttamente, non
+    // con Contesto::inizializza() -- richiederebbe l'intero contesto
+    // ggml/llama.cpp per istanziare quel controllo). Qui si verifica invece
+    // che, una volta raggiunto il vero punto di ingresso, lo scrittore di
+    // traccia produca davvero righe non vuote, una per evento, nessuna
+    // quando non richiesta, e segnali un fallimento di scrittura invece di
+    // ignorarlo in silenzio.
+    printf("7. ARGINE_RETENTION_TRACE attraverso psx_cache_ensure_many: un evento -> una riga JSONL non vuota\n");
+    {
+        REGION_CACHE.clear();
+        const char * trace_path = "/tmp/argine-retention-test-trace-7.jsonl";
+        remove(trace_path);
+        setenv("ARGINE_RETENTION_TRACE", trace_path, 1);
+        struct psx_cache * c = psx_cache_new_n(per_expert_bytes * 6 + 4096, 1);
+        const char * err = nullptr;
+        int ok = psx_cache_attach_retention_policy(c, &err);
+        check(ok == 1, "attach con traccia richiesta riesce");
+
+        struct psx_retention_stats rst_pre;
+        psx_cache_get_retention_stats(c, &rst_pre);
+        check(rst_pre.trace_requested == 1, "trace_requested riportato vero");
+        check(rst_pre.trace_opened == 1, "trace_opened riportato vero (fopen riuscita)");
+        check(rst_pre.trace_rows_written == 0, "zero righe scritte prima di qualunque evento reale");
+
+        check(evento(c, 0, {0, 1, 2}) == 1, "evento reale servito attraverso psx_cache_ensure_many");
+
+        struct psx_retention_stats rst_post;
+        psx_cache_get_retention_stats(c, &rst_post);
+        check(rst_post.events_served == 1, "esattamente un evento osservato dalla politica");
+        check(rst_post.trace_rows_attempted == 1, "esattamente una riga tentata dal writer");
+        check(rst_post.trace_rows_written == 1, "esattamente una riga scritta senza errori di stream");
+        check(rst_post.trace_write_failed == 0, "nessun fallimento di scrittura riportato");
+
+        psx_cache_free(c);
+        FILE * f = fopen(trace_path, "r");
+        check(f != nullptr, "il file di traccia esiste dopo la chiusura della cache");
+        if (f) {
+            char buf[4096];
+            size_t n = fread(buf, 1, sizeof(buf) - 1, f);
+            buf[n] = '\0';
+            check(n > 0, "il file di traccia non e' vuoto (il bug reale esercitato: 0 byte)");
+            check(strstr(buf, "\"policy_id\"") != nullptr || strstr(buf, "b_selected") != nullptr,
+                  "la riga scritta contiene davvero i campi della politica, non e' un file vuoto spacciato per pieno");
+            fclose(f);
+        }
+        remove(trace_path);
+    }
+
+    printf("8. piu' eventi reali -> piu' righe JSONL (una per evento, non una per processo)\n");
+    {
+        REGION_CACHE.clear();
+        const char * trace_path = "/tmp/argine-retention-test-trace-8.jsonl";
+        remove(trace_path);
+        setenv("ARGINE_RETENTION_TRACE", trace_path, 1);
+        struct psx_cache * c = psx_cache_new_n(per_expert_bytes * 6 + 4096, 1);
+        const char * err = nullptr;
+        check(psx_cache_attach_retention_policy(c, &err) == 1, "attach con traccia riesce");
+
+        check(evento(c, 0, {0, 1}) == 1, "evento 1");
+        check(evento(c, 0, {2, 3}) == 1, "evento 2");
+        check(evento(c, 0, {4, 5}) == 1, "evento 3");
+
+        struct psx_retention_stats rst;
+        psx_cache_get_retention_stats(c, &rst);
+        check(rst.events_served == 3, "tre eventi osservati");
+        check(rst.trace_rows_attempted == 3, "tre righe tentate, una per evento");
+        check(rst.trace_rows_written == 3, "tre righe scritte, una per evento");
+
+        psx_cache_free(c);
+        FILE * f = fopen(trace_path, "r");
+        check(f != nullptr, "il file esiste");
+        if (f) {
+            int righe = 0;
+            char linebuf[4096];
+            while (fgets(linebuf, sizeof(linebuf), f)) {
+                if (linebuf[0] != '\0' && linebuf[0] != '\n') righe++;
+            }
+            check(righe == 3, "tre righe non vuote nel file, non una sola riga cumulativa");
+            fclose(f);
+        }
+        remove(trace_path);
+    }
+
+    printf("9. ARGINE_RETENTION_TRACE non impostata -> nessun file creato, politica comunque attiva\n");
+    {
+        REGION_CACHE.clear();
+        const char * trace_path = "/tmp/argine-retention-test-trace-9.jsonl";
+        remove(trace_path);
+        unsetenv("ARGINE_RETENTION_TRACE");
+        struct psx_cache * c = psx_cache_new_n(per_expert_bytes * 6 + 4096, 1);
+        const char * err = nullptr;
+        check(psx_cache_attach_retention_policy(c, &err) == 1, "attach riesce senza traccia richiesta");
+
+        struct psx_retention_stats rst_pre;
+        psx_cache_get_retention_stats(c, &rst_pre);
+        check(rst_pre.trace_requested == 0, "trace_requested falso: nessuna variabile d'ambiente impostata");
+        check(rst_pre.trace_opened == 0, "trace_opened falso: nessun fopen tentato");
+
+        check(evento(c, 0, {0, 1}) == 1, "la politica serve comunque l'evento senza traccia");
+
+        struct psx_retention_stats rst_post;
+        psx_cache_get_retention_stats(c, &rst_post);
+        check(rst_post.events_served == 1, "l'evento e' stato osservato dalla politica anche senza traccia");
+        check(rst_post.trace_rows_attempted == 0, "zero righe tentate: non c'e' uno stream a cui scrivere");
+
+        psx_cache_free(c);
+        FILE * f = fopen(trace_path, "r");
+        check(f == nullptr, "nessun file di traccia creato quando la variabile non e' impostata");
+        if (f) fclose(f);
+    }
+
+    printf("10. scrittura di traccia fallita -> segnalata (trace_write_failed), non ignorata in silenzio\n");
+    {
+        REGION_CACHE.clear();
+        // /dev/full: fopen("w") riesce (e' un carattere device valido), ma
+        // ogni write successivo fallisce con ENOSPC -- esattamente il tipo
+        // di fallimento silenzioso che un fflush() senza controllo del
+        // valore di ritorno nasconderebbe (il bug che questa sezione
+        // esercita direttamente, non per analogia).
+        setenv("ARGINE_RETENTION_TRACE", "/dev/full", 1);
+        struct psx_cache * c = psx_cache_new_n(per_expert_bytes * 6 + 4096, 1);
+        const char * err = nullptr;
+        int ok = psx_cache_attach_retention_policy(c, &err);
+        check(ok == 1, "attach riesce: /dev/full si apre correttamente in scrittura");
+
+        struct psx_retention_stats rst_pre;
+        psx_cache_get_retention_stats(c, &rst_pre);
+        check(rst_pre.trace_opened == 1, "trace_opened vero: il fallimento e' nella scrittura, non nell'apertura");
+
+        check(evento(c, 0, {0, 1}) == 1, "l'evento reale e' comunque servito dalla politica nonostante lo scrittore fallisca");
+
+        struct psx_retention_stats rst_post;
+        psx_cache_get_retention_stats(c, &rst_post);
+        check(rst_post.events_served == 1, "l'evento e' stato osservato dalla politica");
+        check(rst_post.trace_rows_attempted == 1, "una riga e' stata tentata");
+        check(rst_post.trace_write_failed == 1, "il fallimento di scrittura e' segnalato nelle statistiche");
+        check(rst_post.trace_rows_written == 0, "la riga fallita non e' contata come scritta con successo");
+
+        psx_cache_free(c);
+    }
+    unsetenv("ARGINE_RETENTION_TRACE");
+
     printf("\n%s: %d fallimenti\n", fallimenti == 0 ? "RISULTATO OK" : "RISULTATO FALLITO", fallimenti);
     return fallimenti == 0 ? 0 : 1;
 }

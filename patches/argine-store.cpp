@@ -813,6 +813,14 @@ struct psx_cache {
                                                 // stats(). Scoperto esercitando una traccia reale con
                                                 // predicted_protect in questo round.
     FILE *      policy_trace_fp = nullptr;  // ARGINE_RETENTION_TRACE, JSONL, o nullptr
+    // Diagnostica del writer (vedi psx_retention_stats in argine-store.h):
+    // pura contabilita', zero influenza su qualunque decisione della politica.
+    int         policy_trace_requested = 0;
+    int         policy_trace_opened = 0;
+    uint64_t    policy_trace_rows_attempted = 0;
+    uint64_t    policy_trace_rows_written = 0;
+    int         policy_trace_write_failed = 0;
+    bool        policy_trace_write_failed_detto = false;  // un solo stderr, non uno spam per riga
     // Oggetto (layer, expert) -> slice (CacheKey) attualmente residenti per
     // quell'oggetto in questo settore. Serve a tradurre una vittima scelta
     // dalla politica (un Obj logico) nelle fino a tre slice fisiche
@@ -1002,6 +1010,7 @@ int psx_cache_attach_retention_policy(struct psx_cache * c, const char ** error_
     // viene scritta la riga).
     if (const char * trace_path = getenv("ARGINE_RETENTION_TRACE")) {
         if (trace_path[0] != '\0') {
+            c->policy_trace_requested = 1;
             c->policy_trace_fp = fopen(trace_path, "w");
             if (!c->policy_trace_fp) {
                 c->policy_rejection = "ARGINE_RETENTION_TRACE: impossibile aprire il file per la scrittura";
@@ -1011,6 +1020,15 @@ int psx_cache_attach_retention_policy(struct psx_cache * c, const char ** error_
                 c->policy.reset();
                 return 0;
             }
+            c->policy_trace_opened = 1;
+            // Diagnostica richiesta esplicitamente: la prova che il file si e'
+            // aperto deve stare su stderr, non solo implicita nell'esistenza
+            // del file -- un file aperto in "w" esiste anche se poi non viene
+            // mai scritto (vedi il controllo fail-closed su ARGINE_EXPERT_READ
+            // in argine-experts.cpp, che e' la causa reale osservata quando la
+            // traccia resta a 0 byte pur essendosi aperta correttamente).
+            fprintf(stderr, "argine: ARGINE_RETENTION_TRACE: aperta con successo: %s\n", trace_path);
+            fflush(stderr);
         }
     }
 
@@ -1040,6 +1058,11 @@ void psx_cache_get_retention_stats(const struct psx_cache * c, struct psx_retent
     out->predictor_decisions   = s.predictor_decisions;
     out->protected_fallbacks   = s.protected_fallbacks;
     out->events_served         = c->policy_events;
+    out->trace_requested       = c->policy_trace_requested;
+    out->trace_opened          = c->policy_trace_opened;
+    out->trace_rows_attempted  = c->policy_trace_rows_attempted;
+    out->trace_rows_written    = c->policy_trace_rows_written;
+    out->trace_write_failed    = c->policy_trace_write_failed;
 }
 
 void psx_cache_unpin(struct psx_cache * c, struct psx_region * region, size_t offset) {
@@ -1710,7 +1733,32 @@ static int servi_evento_con_politica(struct psx_cache * c, struct psx_store * s,
                 "\"predictor_decay\":%.17g,\"top_k\":%u,\"n_experts\":%u}}\n",
                 rstats.decay_factor, rstats.aging_interval_steps, c->policy_predictor_decay,
                 c->policy_top_k, c->policy_n_experts);
-        fflush(c->policy_trace_fp);
+
+        // Diagnostica: questa riga e' stata TENTATA indipendentemente da come
+        // va a finire -- il contatore sale prima di guardare lo stato dello
+        // stream, cosi' "tentate" e' sempre vero conteggio dei rami sopra
+        // eseguiti, non solo di quelli riusciti.
+        c->policy_trace_rows_attempted++;
+        const int fflush_rc = fflush(c->policy_trace_fp);
+        if (fflush_rc != 0 || ferror(c->policy_trace_fp)) {
+            // Scrittura fallita: non si ignora in silenzio. Un solo stderr
+            // (non uno per riga, altrimenti su un run lungo lo stesso guasto
+            // disco/permessi diventerebbe esso stesso il collo di bottiglia),
+            // ma il contatore sale per OGNI riga fallita, cosi' la diagnostica
+            // finale a fine processo riporta il numero esatto.
+            c->policy_trace_write_failed = 1;
+            if (!c->policy_trace_write_failed_detto) {
+                c->policy_trace_write_failed_detto = true;
+                fprintf(stderr,
+                        "argine: ARGINE_RETENTION_TRACE: scrittura di una riga fallita (step=%u, "
+                        "ferror=%d) -- il resto della traccia e' sospetto, va verificato\n",
+                        step, ferror(c->policy_trace_fp));
+                fflush(stderr);
+            }
+            clearerr(c->policy_trace_fp);
+        } else {
+            c->policy_trace_rows_written++;
+        }
     }
 
     // missed_set: quali expert di QUESTO evento vanno effettivamente letti da

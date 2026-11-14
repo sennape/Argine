@@ -249,6 +249,19 @@ struct psx_retention_stats {
     uint64_t predictor_decisions;
     uint64_t protected_fallbacks;
     uint32_t events_served;        // numero di chiamate psx_cache_ensure_many servite dalla politica
+
+    // Diagnostica ARGINE_RETENTION_TRACE (non cambia nessuna decisione):
+    // prova, su stderr, che lo scrittore della traccia e' stato raggiunto e
+    // ha scritto, senza dover fidarsi del solo file JSONL (che su un host
+    // reale puo' restare a 0 byte per un motivo del tutto diverso dalla
+    // scrittura in se', ad es. ARGINE_EXPERT_READ!=blocco che non chiama
+    // mai psx_cache_ensure_many -- vedi il controllo fail-closed in
+    // argine-experts.cpp).
+    int      trace_requested;      // ARGINE_RETENTION_TRACE era impostata (non vuota)
+    int      trace_opened;         // fopen() della traccia e' riuscita
+    uint64_t trace_rows_attempted; // righe che il writer ha iniziato a scrivere
+    uint64_t trace_rows_written;   // di quelle, righe senza errori di stream (ferror pulito)
+    int      trace_write_failed;   // almeno una riga ha fallito la scrittura
 };
 
 // Provenienza/istrumentazione (sezione 9): quale politica, quali parametri,

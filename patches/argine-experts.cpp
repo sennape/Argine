@@ -356,6 +356,33 @@ struct Contesto {
                             n);
                     }
                     n = 1;
+                    // Fail-closed, stesso principio del controllo sui settori appena
+                    // sopra: psx_cache_ensure_many e' l'UNICO punto da cui
+                    // servi_evento_con_politica (decisione E traccia) viene mai
+                    // chiamato. I modi LETTURA_SINCRONA e LETTURA_ASINCRONA (il
+                    // default) chiamano invece psx_cache_ensure/psx_cache_avvia,
+                    // che non sanno nulla della politica: con una politica attiva
+                    // e uno di quei due modi, l'integrazione verrebbe creata (e
+                    // stamperebbe "retention policy attiva") ma non consultata da
+                    // NESSUN evento reale -- scoperto da un run reale sull'host
+                    // Windows con ARGINE_EXPERT_READ non impostato (quindi
+                    // "asincrono", il default): startup corretto, inferenza
+                    // completata, ma ARGINE_RETENTION_TRACE restava a 0 byte,
+                    // perche' la traccia non e' mai stata il problema -- il
+                    // percorso che la scrive semplicemente non veniva mai
+                    // eseguito. Si aborta qui, non si lascia che una politica
+                    // "attiva" sia in realta' inerte in silenzio.
+                    if (c.modo != LETTURA_BLOCCO) {
+                        GGML_ABORT(
+                            "argine: ARGINE_RETENTION_POLICY richiede ARGINE_EXPERT_READ=blocco "
+                            "(o blocco:N): e' l'unica modalita' che chiama psx_cache_ensure_many, "
+                            "il solo punto da cui la politica di retention (decisioni E traccia) "
+                            "viene davvero consultata. Con ARGINE_EXPERT_READ=%s la politica "
+                            "verrebbe creata ma non consultata da nessun evento reale, e "
+                            "ARGINE_RETENTION_TRACE produrrebbe un file sempre vuoto nonostante "
+                            "l'apertura riuscita. Imposta ARGINE_EXPERT_READ=blocco.",
+                            nome_modo(c.modo));
+                    }
                 }
                 c.cache = psx_cache_new_n(c.budget, n);
             }
@@ -620,6 +647,32 @@ struct Contesto {
     }
 
     ~Contesto() {
+        // Diagnostica di ARGINE_RETENTION_TRACE su stderr, SENZA dipendere da
+        // -v e SENZA fidarsi del solo file JSONL: prova indipendente che il
+        // writer e' stato raggiunto e ha scritto, richiesta esplicitamente
+        // dopo che un run reale ha mostrato un file di traccia a 0 byte la
+        // cui causa (ARGINE_EXPERT_READ asincrono di default che bypassa
+        // interamente psx_cache_ensure_many) non era altrimenti visibile
+        // senza rileggere il codice C++.
+        if (attivo && cache && psx_cache_has_retention_policy(cache)) {
+            struct psx_retention_stats rst;
+            psx_cache_get_retention_stats(cache, &rst);
+            fprintf(stderr,
+                    "argine: retention trace diagnostica: traccia_richiesta=%s traccia_aperta=%s "
+                    "eventi_osservati=%u righe_tentate=%llu righe_scritte=%llu%s\n",
+                    rst.trace_requested ? "si" : "no",
+                    rst.trace_opened ? "si" : "no",
+                    rst.events_served,
+                    (unsigned long long) rst.trace_rows_attempted,
+                    (unsigned long long) rst.trace_rows_written,
+                    rst.trace_write_failed
+                        ? " ATTENZIONE: almeno una scrittura di traccia e' fallita"
+                        : (rst.trace_requested && rst.events_served > 0 && rst.trace_rows_written == 0
+                               ? " ATTENZIONE: eventi osservati ma zero righe scritte -- la politica "
+                                 "e' stata consultata ma il writer non ha prodotto nulla"
+                               : ""));
+            fflush(stderr);
+        }
         if (attivo && verbose) {
             resoconto("fine");
         }
