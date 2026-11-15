@@ -156,10 +156,61 @@ def make_run_id(workload_id: str, budget_gib: float, policy_id: str,
     return hashlib.sha256(key.encode("utf-8")).hexdigest()[:24]
 
 
-def build_4gib_plan(frozen: dict) -> tuple:
-    cells = [c for c in frozen["run_order"]["cell_sequence_table"] if c["budget_gib"] == 4.0]
+# Frozen budgets (contract.json/run_order.json) -- not a general-purpose
+# GiB converter; only these three budgets are part of the frozen protocol.
+BUDGET_SESSION_IDS = {
+    4.0: "4gib-primary",
+    1.5: "1.5gib-stress",
+    8.0: "8gib-control",
+}
+
+BUDGET_FILENAME_LABELS = {
+    4.0: "4GIB",
+    1.5: "1_5GIB",
+    8.0: "8GIB",
+}
+
+
+def budget_gib_to_bytes(budget_gib: float) -> int:
+    """Exact byte count for a frozen budget_gib, matching
+    contract.json.frozen_baseline.mapping_by_budget_bytes's keys precisely
+    (1.5->1610612736, 4.0->4294967296, 8.0->8589934592). Refuses any
+    budget_gib outside the frozen set rather than silently computing one."""
+    if budget_gib not in BUDGET_SESSION_IDS:
+        raise ValueError(f"budget_gib={budget_gib!r} is not one of the frozen R2-12 budgets {sorted(BUDGET_SESSION_IDS)}")
+    return int(round(budget_gib * (1024 ** 3)))
+
+
+def resolve_baseline_params_for_budget(frozen: dict, budget_bytes: int) -> dict:
+    """Reads contract.json.frozen_baseline.mapping_by_budget_bytes for the
+    exact aged_frequency decay_factor/aging_interval_steps AT THIS BUDGET --
+    per item 5, never inferred or copied blindly from another budget."""
+    mapping = frozen["contract"]["frozen_baseline"]["mapping_by_budget_bytes"]
+    key = str(budget_bytes)
+    if key not in mapping:
+        raise KeyError(f"contract.json.frozen_baseline.mapping_by_budget_bytes has no entry for budget_bytes={budget_bytes}")
+    params = mapping[key]["params"]
+    return {"decay_factor": params["decay_factor"], "aging_interval_steps": params["aging_interval_steps"]}
+
+
+def resolve_predictor_decay_factor(frozen: dict) -> float:
+    """The frozen predictor's own decay (contract.json.frozen_predictor) --
+    identical at every budget; verified from the frozen contract, not
+    copied from the 4 GiB baseline mapping."""
+    return frozen["contract"]["frozen_predictor"]["decay_factor"]
+
+
+def build_budget_plan(frozen: dict, budget_gib: float) -> tuple:
+    """Budget-aware generalization of the original 4-GiB-only plan builder.
+    budget_gib=4.0 reproduces the exact 4 GiB plan byte-for-byte (only the
+    literal 4.0 is replaced by the parameter); 1.5/8.0 come from the SAME
+    frozen run_order.json.cell_sequence_table -- no separately authored
+    schedule exists or is derived here."""
+    if budget_gib not in BUDGET_SESSION_IDS:
+        raise ValueError(f"budget_gib={budget_gib!r} is not one of the frozen R2-12 budgets {sorted(BUDGET_SESSION_IDS)}")
+    cells = [c for c in frozen["run_order"]["cell_sequence_table"] if c["budget_gib"] == budget_gib]
     if len(cells) != 4:
-        raise AssertionError(f"expected exactly 4 cells at budget_gib=4.0, found {len(cells)}")
+        raise AssertionError(f"expected exactly 4 cells at budget_gib={budget_gib}, found {len(cells)}")
     warmups_per_policy = frozen["repetition_plan"]["warmup_runs_per_cell"]
     if warmups_per_policy != 1:
         raise AssertionError(f"repetition_plan.json warmup_runs_per_cell changed to {warmups_per_policy}; this driver assumes 1")
@@ -174,8 +225,8 @@ def build_4gib_plan(frozen: dict) -> tuple:
         for label in (opener, other):
             policy = POLICY_LABEL_TO_ID[label]
             launches.append({
-                "run_id": make_run_id(wl, 4.0, policy, 0, "warmup", cell_index, None),
-                "workload_id": wl, "budget_gib": 4.0, "policy_id": policy,
+                "run_id": make_run_id(wl, budget_gib, policy, 0, "warmup", cell_index, None),
+                "workload_id": wl, "budget_gib": budget_gib, "policy_id": policy,
                 "repetition_index": 0, "ordering_block": "warmup",
                 "cell_index": cell_index, "position_in_abba_sequence": None,
                 "warmup": True, "counted": False,
@@ -186,13 +237,22 @@ def build_4gib_plan(frozen: dict) -> tuple:
             policy = POLICY_LABEL_TO_ID[label]
             rep_counter[policy] += 1
             launches.append({
-                "run_id": make_run_id(wl, 4.0, policy, rep_counter[policy], "counted", cell_index, position),
-                "workload_id": wl, "budget_gib": 4.0, "policy_id": policy,
+                "run_id": make_run_id(wl, budget_gib, policy, rep_counter[policy], "counted", cell_index, position),
+                "workload_id": wl, "budget_gib": budget_gib, "policy_id": policy,
                 "repetition_index": rep_counter[policy], "ordering_block": "counted",
                 "cell_index": cell_index, "position_in_abba_sequence": position,
                 "warmup": False, "counted": True,
             })
     return cells, launches
+
+
+def build_4gib_plan(frozen: dict) -> tuple:
+    """Preserved for exact backward compatibility with existing callers
+    (selftest, primary-analysis script): identical to
+    build_budget_plan(frozen, 4.0). Do not remove -- existing canonical
+    4 GiB run_ids/records depend on this code path producing the exact
+    same plan it always has."""
+    return build_budget_plan(frozen, 4.0)
 
 
 # ---------------------------------------------------------------------------
@@ -201,13 +261,29 @@ def build_4gib_plan(frozen: dict) -> tuple:
 # Get-ArginePolicySpecificEnv -- not a redefinition of policy semantics)
 # ---------------------------------------------------------------------------
 
-def policy_specific_env(policy_id: str, n_experts: int) -> dict:
+def policy_specific_env(policy_id: str, n_experts: int,
+                         decay_factor: float, aging_interval_steps: int,
+                         predictor_decay_factor: float) -> dict:
+    """Budget-aware generalization (item 5). decay_factor/aging_interval_steps
+    are the frozen aged_frequency baseline params FOR THE CALLER'S BUDGET
+    (contract.json.frozen_baseline.mapping_by_budget_bytes), required by
+    patches/argine-retention-policy.cpp's parse_retention_config_from_env()
+    UNCONDITIONALLY -- for predicted_protect too, since PredictedProtectPolicy's
+    predictor sits on top of the SAME underlying aged_frequency mechanics,
+    modulated by the separate, budget-independent predictor_decay_factor/
+    top_k/n_experts fields. At decay_factor=0.99/aging_interval_steps=64
+    (the 4 GiB values) this reproduces the previous hardcoded env byte-for-byte."""
+    base = {
+        "ARGINE_RETENTION_DECAY": str(decay_factor),
+        "ARGINE_RETENTION_INTERVAL": str(aging_interval_steps),
+    }
     if policy_id == "b_selected":
-        return {"ARGINE_RETENTION_DECAY": "0.99", "ARGINE_RETENTION_INTERVAL": "64"}
+        return base
     if policy_id == "predicted_protect":
         return {
-            "ARGINE_RETENTION_DECAY": "0.99", "ARGINE_RETENTION_INTERVAL": "64",
-            "ARGINE_RETENTION_PREDICTOR_DECAY": "0.99", "ARGINE_RETENTION_TOPK": "8",
+            **base,
+            "ARGINE_RETENTION_PREDICTOR_DECAY": str(predictor_decay_factor),
+            "ARGINE_RETENTION_TOPK": "8",
             "ARGINE_RETENTION_NEXPERTS": str(n_experts),
         }
     raise ValueError(f"unknown policy_id {policy_id!r}")
@@ -230,6 +306,8 @@ def policy_specific_env(policy_id: str, n_experts: int) -> dict:
 # explicit conformance-style caller passes enable_trace=True.
 def build_child_env(policy_id: str, abs_expert_store: str, abs_trace_path: str,
                      budget_bytes: int, n_experts: int,
+                     decay_factor: float, aging_interval_steps: int,
+                     predictor_decay_factor: float,
                      enable_trace: bool = False) -> dict:
     env = {
         "ARGINE_EXPERT_STORE": abs_expert_store,
@@ -241,7 +319,7 @@ def build_child_env(policy_id: str, abs_expert_store: str, abs_trace_path: str,
     }
     if enable_trace:
         env["ARGINE_RETENTION_TRACE"] = abs_trace_path
-    env.update(policy_specific_env(policy_id, n_experts))
+    env.update(policy_specific_env(policy_id, n_experts, decay_factor, aging_interval_steps, predictor_decay_factor))
     return env
 
 
@@ -651,9 +729,12 @@ def _execute_one_launch(launch: dict, runtime_exe: Path, model_path: Path, store
         if p.exists():
             p.unlink()
 
-    budget_bytes = int(4.0 * (1024 ** 3))
+    budget_bytes = budget_gib_to_bytes(launch["budget_gib"])
+    baseline_params = resolve_baseline_params_for_budget(frozen, budget_bytes)
+    predictor_decay_factor = resolve_predictor_decay_factor(frozen)
     env_map = build_child_env(launch["policy_id"], str(store_path), str(trace_path), budget_bytes, 128,
-                               enable_trace=enable_trace)
+                               baseline_params["decay_factor"], baseline_params["aging_interval_steps"],
+                               predictor_decay_factor, enable_trace=enable_trace)
     if not enable_trace:
         # Hard, fail-closed assertion: this is the exact defect (unconditional
         # ARGINE_RETENTION_TRACE) that produced the 2026-11-15 14.4 GiB/launch,
@@ -904,7 +985,23 @@ def _static_check_no_stub() -> dict:
 
 
 def cmd_preflight(args) -> int:
-    report: dict[str, Any] = {"mode": "preflight", "generated_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    budget_gib = getattr(args, "budget_gib", 4.0)
+    if budget_gib not in BUDGET_SESSION_IDS:
+        print(f"Refusing: budget_gib={budget_gib!r} is not one of the frozen R2-12 budgets "
+              f"{sorted(BUDGET_SESSION_IDS)}.", file=sys.stderr)
+        return 2
+    budget_bytes = budget_gib_to_bytes(budget_gib)
+    target_session_id = BUDGET_SESSION_IDS[budget_gib]
+    filename_label = BUDGET_FILENAME_LABELS[budget_gib]
+
+    report: dict[str, Any] = {
+        "mode": "preflight", "generated_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "target_budget_gib": budget_gib, "target_budget_bytes": budget_bytes,
+        "target_session_id": target_session_id,
+        "runtime_identity_expected_sha256": EXPECTED_RUNTIME_SHA256,
+        "model_identity_expected_sha256": EXPECTED_MODEL_SHA256,
+        "store_identity_expected_sha256": EXPECTED_STORE_SHA256,
+    }
     ok = True
 
     compile_result = subprocess.run([sys.executable, "-m", "py_compile", str(Path(__file__))],
@@ -925,12 +1022,16 @@ def cmd_preflight(args) -> int:
         report["contract_digest_check"] = {"valid": False, "error": f"{type(e).__name__}: {e}"}
         ok = False
 
-    cells, launches = build_4gib_plan(frozen)
+    cells, launches = build_budget_plan(frozen, budget_gib)
+    baseline_params = resolve_baseline_params_for_budget(frozen, budget_bytes)
+    predictor_decay_factor = resolve_predictor_decay_factor(frozen)
     run_ids = [l["run_id"] for l in launches]
     n_warmup = sum(1 for l in launches if l["ordering_block"] == "warmup")
     n_counted = sum(1 for l in launches if l["ordering_block"] == "counted")
     opening_a = sum(1 for c in cells if c["opening_policy"] == "A")
     opening_b = sum(1 for c in cells if c["opening_policy"] == "B")
+    n_a_counted = sum(1 for l in launches if l["counted"] and l["policy_id"] == "b_selected")
+    n_b_counted = sum(1 for l in launches if l["counted"] and l["policy_id"] == "predicted_protect")
 
     schedule_checks = {
         "n_cells": len(cells) == 4,
@@ -938,19 +1039,59 @@ def cmd_preflight(args) -> int:
         "n_warmup": n_warmup == 8,
         "n_counted": n_counted == 40,
         "run_ids_unique": len(set(run_ids)) == len(run_ids),
-        "opening_policy_balanced_within_4gib": opening_a == opening_b,
+        "opening_policy_balanced_within_budget": opening_a == opening_b,
+        "policy_counted_runs_balanced": n_a_counted == n_b_counted == 20,
         "workload_ids_match_corpus": {c["workload_id"] for c in cells} ==
             {w["workload_id"] for w in frozen["runtime_corpus"]["workloads"]},
+        "baseline_params_resolved_from_frozen_contract": set(baseline_params.keys()) == {"decay_factor", "aging_interval_steps"},
     }
     report["schedule_checks"] = schedule_checks
     ok = ok and all(v is True for v in schedule_checks.values() if isinstance(v, bool))
     report["n_launches"] = len(launches)
+    report["expected_launches"] = {
+        "physical_launches": len(launches), "warmups": n_warmup, "counted": n_counted,
+        "policy_counts": {"b_selected_counted": n_a_counted, "predicted_protect_counted": n_b_counted},
+    }
+    report["resolved_policy_params"] = {
+        "budget_gib": budget_gib, "budget_bytes": budget_bytes,
+        "baseline_decay_factor": baseline_params["decay_factor"],
+        "baseline_aging_interval_steps": baseline_params["aging_interval_steps"],
+        "predictor_decay_factor": predictor_decay_factor,
+        "source": "contract.json.frozen_baseline.mapping_by_budget_bytes / contract.json.frozen_predictor",
+    }
+
+    # Existing canonical progress for this exact budget (item 7).
+    n_canonical_already_done = sum(
+        1 for l in launches
+        if run_record_path(l["run_id"]).exists()
+        and (lambda rp=run_record_path(l["run_id"]): (
+            json.loads(rp.read_text()).get("ok") is True and json.loads(rp.read_text()).get("canonical") is True
+        ))()
+    )
+    report["existing_canonical_progress"] = {
+        "canonical_completed": n_canonical_already_done, "of_total": len(launches),
+    }
+
+    # Parent-environment trace-variable visibility (informational; the real
+    # defense is the per-launch pre-Popen assertion in _execute_one_launch).
+    report["trace_env_absent_in_parent"] = {
+        "retention_trace_env_present": "ARGINE_RETENTION_TRACE" in os.environ,
+        "trace_output_variables_present": trace_output_variables_present(os.environ),
+    }
+
+    disk_check_report = check_disk_space_margin(WORK_DIR)
+    report["disk_space_status"] = disk_check_report
+    ok = ok and disk_check_report["ok"]
 
     # Performance path (default, enable_trace unset -> False): trace must be ABSENT.
-    env_a = build_child_env("b_selected", "C:\\modelli\\m.psxs", "C:\\run\\b.trace.jsonl", 4294967296, 128)
-    env_b = build_child_env("predicted_protect", "C:\\modelli\\m.psxs", "C:\\run\\p.trace.jsonl", 4294967296, 128)
+    env_a = build_child_env("b_selected", "C:\\modelli\\m.psxs", "C:\\run\\b.trace.jsonl", budget_bytes, 128,
+                             baseline_params["decay_factor"], baseline_params["aging_interval_steps"], predictor_decay_factor)
+    env_b = build_child_env("predicted_protect", "C:\\modelli\\m.psxs", "C:\\run\\p.trace.jsonl", budget_bytes, 128,
+                             baseline_params["decay_factor"], baseline_params["aging_interval_steps"], predictor_decay_factor)
     # Conformance path (explicit opt-in): trace must be PRESENT.
-    env_a_traced = build_child_env("b_selected", "C:\\modelli\\m.psxs", "C:\\run\\b.trace.jsonl", 4294967296, 128, enable_trace=True)
+    env_a_traced = build_child_env("b_selected", "C:\\modelli\\m.psxs", "C:\\run\\b.trace.jsonl", budget_bytes, 128,
+                                    baseline_params["decay_factor"], baseline_params["aging_interval_steps"], predictor_decay_factor,
+                                    enable_trace=True)
     assertion_raised = False
     try:
         assert_trace_absent_for_performance(env_a_traced)
@@ -1102,7 +1243,7 @@ def cmd_preflight(args) -> int:
         Path(args.runtime) if args.runtime else None,
         Path(args.model) if args.model else None,
         Path(args.store) if args.store else None,
-        budget_bytes=4294967296,
+        budget_bytes=budget_bytes,
         operator_attested_clean_environment=False,
     )
     report["pre_run_gate_dry_run"] = gate
@@ -1117,11 +1258,17 @@ def cmd_preflight(args) -> int:
         "within_cell_seconds": COOLDOWN_SECONDS_WITHIN_CELL,
         "between_cells_seconds": COOLDOWN_SECONDS_BETWEEN_CELLS,
     }
+    # "whether launch is currently safe" (item 7): everything above EXCEPT
+    # operator_attested_clean_environment (which is never true at preflight
+    # time -- it is only ever asserted explicitly by the operator at
+    # --execute time) and the campaign not yet being fully done.
+    report["launch_currently_safe"] = ok and n_canonical_already_done < len(launches)
     report["overall_ok"] = ok
 
-    out_path = RESULTS_DIR / f"PREFLIGHT-4GIB-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}.json"
+    out_path = RESULTS_DIR / f"PREFLIGHT-{filename_label}-{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}.json"
     atomic_write_json(out_path, report)
-    print(json.dumps({"overall_ok": ok, "report_path": str(out_path),
+    print(json.dumps({"overall_ok": ok, "target_budget_gib": budget_gib, "target_session_id": target_session_id,
+                       "launch_currently_safe": report["launch_currently_safe"], "report_path": str(out_path),
                        "n_launches": len(launches), "n_warmup": n_warmup, "n_counted": n_counted}, indent=2))
     return 0 if ok else 1
 
@@ -1130,8 +1277,27 @@ def cmd_preflight(args) -> int:
 # Execute mode -- real runtime launches, gated by explicit flags + the gate.
 # ---------------------------------------------------------------------------
 
+def classify_existing_record_for_resume(existing: dict) -> str:
+    """Pure classification of an existing on-disk record found at a
+    launch's run_id path, used by cmd_execute's resume logic. Factored out
+    (same pattern as build_execute_gate) so this exact fail-closed
+    behavior -- a precanonical/diagnostic record is NEVER silently treated
+    as a completed canonical launch -- can be tested directly, without
+    argparse, a lock, or a launch loop.
+    Returns one of: "skip" (genuinely completed AND canonical -- safe to
+    reuse), "halt_precanonical" (ok=true but canonical!=true -- a
+    quarantined/diagnostic attempt; must halt), "halt_failed" (a recorded
+    failure; must halt)."""
+    if existing.get("ok") is True and existing.get("canonical") is True:
+        return "skip"
+    if existing.get("ok") is True and existing.get("canonical") is not True:
+        return "halt_precanonical"
+    return "halt_failed"
+
+
 def build_execute_gate(runtime_exe: Path, model_path: Path, store_path: Path,
-                        operator_attested_clean_environment: bool) -> dict:
+                        operator_attested_clean_environment: bool,
+                        budget_bytes: int = 4294967296) -> dict:
     """Builds the full pre-execute gate: host_preflight_gate()'s checks
     (hash/RAM/lock/operator-attestation) PLUS the disk-space margin check
     and parent-environment trace-variable visibility, all merged into the
@@ -1142,7 +1308,7 @@ def build_execute_gate(runtime_exe: Path, model_path: Path, store_path: Path,
     element #0 has length 3; 2 is required") can be exercised and tested
     in isolation, with no argparse, no lock, no launch loop, and no
     possibility of reaching _execute_one_launch."""
-    gate = host_preflight_gate(runtime_exe, model_path, store_path, 4294967296,
+    gate = host_preflight_gate(runtime_exe, model_path, store_path, budget_bytes,
                                 operator_attested_clean_environment=operator_attested_clean_environment)
     disk_check = check_disk_space_margin(WORK_DIR)
     # Report, at the parent-environment level, exactly what the 2026-11-15
@@ -1169,20 +1335,33 @@ def build_execute_gate(runtime_exe: Path, model_path: Path, store_path: Path,
 
 
 def cmd_execute(args) -> int:
-    if not args.i_understand_this_starts_real_inference or args.confirm_session != "4gib-primary":
-        print("Refusing to execute: both --i-understand-this-starts-real-inference "
-              "and --confirm-session=4gib-primary must be given explicitly.", file=sys.stderr)
+    budget_gib = getattr(args, "budget_gib", 4.0)
+    if budget_gib not in BUDGET_SESSION_IDS:
+        print(f"Refusing to execute: budget_gib={budget_gib!r} is not one of the frozen "
+              f"R2-12 budgets {sorted(BUDGET_SESSION_IDS)}.", file=sys.stderr)
+        return 2
+    expected_session_id = BUDGET_SESSION_IDS[budget_gib]
+    # Fail-closed session/budget mismatch (item 3): the operator confirmation
+    # must name the EXACT session for the requested budget -- "4gib-primary"
+    # is never accepted for a 1.5/8 GiB run, and vice versa, so a copy-pasted
+    # or stale --confirm-session can never silently start the wrong campaign.
+    if not args.i_understand_this_starts_real_inference or args.confirm_session != expected_session_id:
+        print(f"Refusing to execute: both --i-understand-this-starts-real-inference "
+              f"and --confirm-session={expected_session_id} (matching --budget-gib={budget_gib}) "
+              "must be given explicitly.", file=sys.stderr)
         return 2
 
+    budget_bytes = budget_gib_to_bytes(budget_gib)
     frozen = load_frozen_protocol()
-    cells, launches = build_4gib_plan(frozen)
+    cells, launches = build_budget_plan(frozen, budget_gib)
 
     runtime_exe = Path(args.runtime)
     model_path = Path(args.model)
     store_path = Path(args.store)
 
     gate = build_execute_gate(runtime_exe, model_path, store_path,
-                               args.operator_attested_clean_environment)
+                               args.operator_attested_clean_environment,
+                               budget_bytes=budget_bytes)
     if not gate["ok"]:
         atomic_write_json(RESULTS_DIR / f"GATE-FAILURE-{int(time.time())}.json", gate)
         print("Pre-run gate FAILED -- see recorded gate-failure artifact. Campaign not started.", file=sys.stderr)
@@ -1203,10 +1382,11 @@ def cmd_execute(args) -> int:
             rec_path = run_record_path(launch["run_id"])
             if rec_path.exists():
                 existing = json.loads(rec_path.read_text())
-                if existing.get("ok") is True and existing.get("canonical") is True:
+                verdict = classify_existing_record_for_resume(existing)
+                if verdict == "skip":
                     records_by_run_id[launch["run_id"]] = existing
                     continue  # genuinely completed AND canonical -- skip, never rerun
-                if existing.get("ok") is True and existing.get("canonical") is not True:
+                if verdict == "halt_precanonical":
                     # ok=true but not canonical (e.g. a precanonical trace-enabled
                     # attempt from before this fix, or a diagnostic record) must
                     # NEVER be silently treated as a completed canonical launch.
@@ -1343,13 +1523,20 @@ def main() -> int:
     pf.add_argument("--runtime", default=r"C:\Users\alpel\Desktop\Argine2\llama-research-v8\llama-server.exe")
     pf.add_argument("--model", default=r"C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf")
     pf.add_argument("--store", default=r"C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs")
+    pf.add_argument("--budget-gib", type=float, default=4.0, dest="budget_gib",
+                     choices=(4.0, 1.5, 8.0),
+                     help="Which frozen R2-12 budget to preflight (default 4.0, the already-completed primary).")
     pf.set_defaults(func=cmd_preflight)
 
-    ex = sub.add_parser("execute", help="Real 4 GiB primary campaign execution. DO NOT RUN without authorization.")
+    ex = sub.add_parser("execute", help="Real campaign execution for one frozen budget. DO NOT RUN without authorization.")
     ex.add_argument("--runtime", default=r"C:\Users\alpel\Desktop\Argine2\llama-research-v8\llama-server.exe")
     ex.add_argument("--model", default=r"C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf")
     ex.add_argument("--store", default=r"C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs")
     ex.add_argument("--port", type=int, default=PORT)
+    ex.add_argument("--budget-gib", type=float, default=4.0, dest="budget_gib",
+                     choices=(4.0, 1.5, 8.0),
+                     help="Which frozen R2-12 budget to execute. --confirm-session must name the matching "
+                          "session (4gib-primary / 1.5gib-stress / 8gib-control) or the run is refused.")
     ex.add_argument("--i-understand-this-starts-real-inference", action="store_true", dest="i_understand_this_starts_real_inference")
     ex.add_argument("--confirm-session", default="", dest="confirm_session")
     ex.add_argument("--operator-attested-clean-environment", action="store_true", dest="operator_attested_clean_environment")

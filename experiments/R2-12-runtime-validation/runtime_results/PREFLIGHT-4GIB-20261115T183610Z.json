@@ -1,0 +1,232 @@
+{
+  "mode": "preflight",
+  "generated_at_utc": "2026-11-15T18:36:04Z",
+  "target_budget_gib": 4.0,
+  "target_budget_bytes": 4294967296,
+  "target_session_id": "4gib-primary",
+  "runtime_identity_expected_sha256": "f4d93061b0d4ce41bc4c5f0abce3420e16768ff5dba5ce53212b49ca25dcf087",
+  "model_identity_expected_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+  "store_identity_expected_sha256": "fef943ae0bc017864a47d41c1fc90d422016045f7e8705b1d138b7defd8c5146",
+  "py_compile": {
+    "ok": true,
+    "stderr": ""
+  },
+  "static_no_stub_check": {
+    "ok": true,
+    "checked": "_execute_one_launch body"
+  },
+  "contract_digest_check": {
+    "valid": true,
+    "contract_dir": "/sessions/rcw-01m8e8kzl6gn7hgy1brzj9qg/mnt/Desktop--Argine3/experiments/R2-12-runtime-validation",
+    "digest": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad"
+  },
+  "schedule_checks": {
+    "n_cells": true,
+    "n_total_launches": true,
+    "n_warmup": true,
+    "n_counted": true,
+    "run_ids_unique": true,
+    "opening_policy_balanced_within_budget": true,
+    "policy_counted_runs_balanced": true,
+    "workload_ids_match_corpus": true,
+    "baseline_params_resolved_from_frozen_contract": true
+  },
+  "n_launches": 48,
+  "expected_launches": {
+    "physical_launches": 48,
+    "warmups": 8,
+    "counted": 40,
+    "policy_counts": {
+      "b_selected_counted": 20,
+      "predicted_protect_counted": 20
+    }
+  },
+  "resolved_policy_params": {
+    "budget_gib": 4.0,
+    "budget_bytes": 4294967296,
+    "baseline_decay_factor": 0.99,
+    "baseline_aging_interval_steps": 64,
+    "predictor_decay_factor": 0.99,
+    "source": "contract.json.frozen_baseline.mapping_by_budget_bytes / contract.json.frozen_predictor"
+  },
+  "existing_canonical_progress": {
+    "canonical_completed": 48,
+    "of_total": 48
+  },
+  "trace_env_absent_in_parent": {
+    "retention_trace_env_present": false,
+    "trace_output_variables_present": []
+  },
+  "disk_space_status": {
+    "path": "/sessions/rcw-01m8e8kzl6gn7hgy1brzj9qg/mnt/Desktop--Argine3/tools/r2-12-benchmark-run",
+    "free_bytes": 96613335040,
+    "total_bytes": 510677479424,
+    "min_free_bytes_required": 5368709120,
+    "ok": true
+  },
+  "env_checks": {
+    "b_selected_has_required_keys": true,
+    "predicted_protect_has_extra_keys": true,
+    "argine_prefetch_explicitly_none": true,
+    "argine_expert_shards_is_1": true,
+    "argine_prefetch_removed_from_os_environ": true,
+    "trace_absent_by_default_on_performance_path": true,
+    "trace_present_when_explicitly_enabled": true,
+    "hard_assertion_fires_on_traced_env": true,
+    "assert_trace_absent_passes_on_performance_env": true
+  },
+  "workload_resolution_checks": {
+    "r2-11-coding-v1": {
+      "ok": true,
+      "sha256": "3cc6a2f89fcc6600f894c967861e6ff5f53cb0b2d460fe7fc459481d8cca2019"
+    },
+    "r2-11-instruction-v1": {
+      "ok": true,
+      "sha256": "5a9c042b5d8ecac9ca92d189fe074f42c9f24747606ae8edc75567901d29266d"
+    },
+    "r2-11-reasoning-v1": {
+      "ok": true,
+      "sha256": "bb82afa21e35b94c1e93910be4d4d50378a0ca5d040d40f387e6890243aa5791"
+    },
+    "r2-11-summarization-v1": {
+      "ok": true,
+      "sha256": "ecc9425a9aeaec7e92a982d51cb742a804442e6765a192818bdac9b588820601"
+    }
+  },
+  "resume_checks": {
+    "sample_record_persisted": true,
+    "duplicate_run_id_detected_for_resume_skip": true,
+    "fresh_run_id_not_skipped": true,
+    "stale_precanonical_record_not_treated_as_canonical_completed": true,
+    "output_schema_fields_present": true
+  },
+  "resume_checks_detail": {
+    "truly_fresh_run_id_found": null,
+    "stale_precanonical_run_id_found": null
+  },
+  "output_equivalence_check_selftest": {
+    "detects_match": true,
+    "detects_mismatch": true
+  },
+  "fake_runtime_integration_test": {
+    "ok": true,
+    "sub_results": {
+      "happy_path": {
+        "status_completed_ok": true,
+        "ok_true": true,
+        "has_output_digest": true,
+        "has_decode_tps": true,
+        "has_ttft": true,
+        "process_cleanup_ok": true,
+        "pid_recorded": true,
+        "workload_identity_recorded": true
+      },
+      "atomic_persistence": {
+        "ok": true
+      },
+      "resume_logic": {
+        "completed_record_detected_for_skip": true,
+        "fresh_run_id_not_found": true
+      },
+      "failure_path": {
+        "status_failed": true,
+        "ok_false": true,
+        "crash_or_failure_set": true,
+        "process_was_cleaned_up": true
+      },
+      "output_mismatch_path": {
+        "both_runs_completed_ok": true,
+        "mismatch_detected": true
+      },
+      "output_match_path": {
+        "not_flagged": true
+      }
+    }
+  },
+  "inherited_env_regression_test": {
+    "ok": true,
+    "sub_results": {
+      "diagnose_child_env_clean": true,
+      "execute_child_env_clean": true,
+      "real_launch_completed_ok_despite_poisoned_parent_env": true,
+      "no_trace_file_created": true,
+      "record_pre_popen_check": {
+        "retention_trace_env_present": false,
+        "trace_output_variables_present": []
+      },
+      "assertion_is_sensitive_to_the_exact_host_variable": true
+    }
+  },
+  "trace_enabled_overrides_stale_inherited_test": {
+    "ok": true,
+    "sub_results": {
+      "explicit_path_applied": true,
+      "stale_path_not_used": true
+    }
+  },
+  "gate_enrichment_regression_test": {
+    "ok": true,
+    "sub_results": {
+      "no_crash_on_gate_enrichment": true,
+      "checks_is_a_list": true,
+      "existing_checks_preserved": true,
+      "disk_space_margin_entry_present": true,
+      "disk_space_margin_entry_schema_ok": true,
+      "gate_has_parent_env_visibility_fields": true,
+      "disk_space_pass_case_ok_true": true,
+      "gate_ok_true_when_disk_passes_and_others_not_reachable": true,
+      "disk_space_fail_case_ok_false": true,
+      "gate_ok_false_on_disk_fail": true,
+      "schema_intact_on_fail_path": true,
+      "gate_failure_return_precedes_acquire_lock_in_source": true
+    }
+  },
+  "pre_run_gate_dry_run": {
+    "ok": false,
+    "checks": [
+      {
+        "name": "runtime_hash_matches_frozen_identity",
+        "ok": null,
+        "detail": "not reachable from this environment: C:\\Users\\alpel\\Desktop\\Argine2\\llama-research-v8\\llama-server.exe"
+      },
+      {
+        "name": "model_hash_matches_frozen_identity",
+        "ok": null,
+        "detail": "not reachable from this environment: C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf"
+      },
+      {
+        "name": "store_hash_matches_frozen_identity",
+        "ok": null,
+        "detail": "not reachable from this environment: C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs"
+      },
+      {
+        "name": "hardware_identity_matches_stamp_or_first_run",
+        "ok": true,
+        "detail": "no stamp yet -- this would be the first real run, which creates it"
+      },
+      {
+        "name": "sufficient_free_ram",
+        "ok": null,
+        "detail": "model not reachable from this environment; cannot plan"
+      },
+      {
+        "name": "no_concurrent_benchmark_process",
+        "ok": true,
+        "detail": "/sessions/rcw-01m8e8kzl6gn7hgy1brzj9qg/mnt/Desktop--Argine3/experiments/R2-12-runtime-validation/runtime_results/.campaign.lock"
+      },
+      {
+        "name": "operator_attested_clean_environment",
+        "ok": false,
+        "detail": "must be passed explicitly by the operator at --execute time; never assumed true"
+      }
+    ]
+  },
+  "result_dir": "/sessions/rcw-01m8e8kzl6gn7hgy1brzj9qg/mnt/Desktop--Argine3/experiments/R2-12-runtime-validation/runtime_results",
+  "lock_path": "/sessions/rcw-01m8e8kzl6gn7hgy1brzj9qg/mnt/Desktop--Argine3/experiments/R2-12-runtime-validation/runtime_results/.campaign.lock",
+  "frozen_cooldown_policy": {
+    "within_cell_seconds": 15,
+    "between_cells_seconds": 60
+  },
+  "launch_currently_safe": false,
+  "overall_ok": true
+}

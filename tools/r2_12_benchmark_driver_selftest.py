@@ -207,7 +207,7 @@ def run_inherited_env_regression_test() -> dict:
         # with enable_trace=False) may carry the poisoned value through.
         env_map = drv.build_child_env("b_selected", "C:\\modelli\\m.psxs",
                                        "C:\\run\\should-not-be-used.trace.jsonl",
-                                       4294967296, 128, enable_trace=False)
+                                       4294967296, 128, 0.99, 64, 0.99, enable_trace=False)
         os_env = drv.build_os_environ(env_map)
         diagnose_clean = "ARGINE_RETENTION_TRACE" not in os_env
         execute_clean = diagnose_clean  # identical code path; same assertion
@@ -265,7 +265,7 @@ def run_trace_enabled_overrides_stale_inherited_test() -> dict:
     os.environ["ARGINE_RETENTION_TRACE"] = stale
     try:
         env_map = drv.build_child_env("b_selected", "C:\\modelli\\m.psxs", intended,
-                                       4294967296, 128, enable_trace=True)
+                                       4294967296, 128, 0.99, 64, 0.99, enable_trace=True)
         os_env = drv.build_os_environ(env_map)
         present = os_env.get("ARGINE_RETENTION_TRACE") == intended
         not_stale = os_env.get("ARGINE_RETENTION_TRACE") != stale
