@@ -31,14 +31,24 @@ RESULTS_DIR = drv.RESULTS_DIR
 WORKLOAD_ORDER = ["r2-11-coding-v1", "r2-11-instruction-v1", "r2-11-reasoning-v1", "r2-11-summarization-v1"]
 
 
-def load_canonical_records() -> dict:
+def load_canonical_records(budget_gib: float = 4.0) -> dict:
+    """Loads ONLY canonical records whose budget_gib matches the given
+    budget (default 4.0, the primary budget this module analyzes).
+
+    This filter is required, not optional: multiple budgets' canonical
+    records coexist as sibling files under the same RESULTS_DIR (the
+    frozen schedule runs 4.0/1.5/8.0 GiB side by side), so scanning
+    "canonical is True" alone -- with no budget check -- silently mixes
+    budgets together the moment more than one budget has been executed.
+    Never rely on directory state or an assumption that only one budget's
+    data is present on disk."""
     records = {}
     for f in RESULTS_DIR.glob("*.json"):
         try:
             d = json.loads(f.read_text())
         except Exception:
             continue
-        if d.get("canonical") is True:
+        if d.get("canonical") is True and d.get("budget_gib") == budget_gib:
             records[d["run_id"]] = d
     return records
 
@@ -310,7 +320,7 @@ def main() -> int:
 
     frozen = drv.load_frozen_protocol()
     digest = drv.verify_contract_digest()
-    records = load_canonical_records()
+    records = load_canonical_records(budget_gib=4.0)
 
     integrity = verify_integrity(records, frozen)
     oe = check_output_equivalence(records)

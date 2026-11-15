@@ -75,15 +75,12 @@ SECONDARY_LABEL = {1.5: "1.5gib-stress", 8.0: "8gib-null-control"}
 
 
 def load_canonical_records_for_budget(budget_gib: float) -> dict:
-    records = {}
-    for f in primary.RESULTS_DIR.glob("*.json"):
-        try:
-            d = json.loads(f.read_text())
-        except Exception:
-            continue
-        if d.get("canonical") is True and d.get("budget_gib") == budget_gib:
-            records[d["run_id"]] = d
-    return records
+    """Thin wrapper over the shared, budget-scoped loader
+    (tools.r2_12_primary_analysis.load_canonical_records), factored out
+    there so the primary 4 GiB path and this secondary-budget path use
+    the exact same filtered-loading logic -- one source of truth, no
+    parallel re-implementation of the budget filter."""
+    return primary.load_canonical_records(budget_gib=budget_gib)
 
 
 def verify_integrity_for_budget(records: dict, frozen: dict, budget_gib: float) -> dict:
