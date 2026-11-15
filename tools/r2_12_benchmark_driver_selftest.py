@@ -278,16 +278,131 @@ def run_trace_enabled_overrides_stale_inherited_test() -> dict:
             os.environ["ARGINE_RETENTION_TRACE"] = old
 
 
+def run_gate_enrichment_regression_test() -> dict:
+    """Reproduces and fixes the exact confirmed cmd_execute crash
+    (2026-11-15): `gate["checks"] = dict(gate.get("checks") or {}, ...)`
+    raised `ValueError: dictionary update sequence element #0 has length
+    3; 2 is required`, because host_preflight_gate()'s "checks" is a LIST
+    of {"name","ok","detail"} dicts, not a mapping -- dict() tried to read
+    each 3-key dict as a 2-tuple. The fix (build_execute_gate()) appends
+    in the same list schema instead. This test calls build_execute_gate()
+    directly -- no argparse, no lock, no launch loop -- so it can never
+    reach _execute_one_launch and can never launch real inference."""
+    import r2_12_benchmark_driver as drv
+    results = {}
+    ok = True
+
+    # --- gate enrichment doesn't crash, and existing checks are preserved ---
+    fake_runtime = Path("/this/path/does/not/exist/llama-server.exe")
+    fake_model = Path("/this/path/does/not/exist/model.gguf")
+    fake_store = Path("/this/path/does/not/exist/model.psxs")
+    try:
+        # operator_attested_clean_environment=True here: that specific check
+        # is an unrelated hard gate (must be explicitly attested at real
+        # --execute time) and is not what this test is about -- using False
+        # would force gate["ok"]=False regardless of the disk-space result,
+        # which is not what "gate_ok_true_when_disk_passes" is testing.
+        gate = drv.build_execute_gate(fake_runtime, fake_model, fake_store,
+                                       operator_attested_clean_environment=True)
+        crashed = False
+    except Exception as e:
+        gate = None
+        crashed = True
+        results["crash_error"] = f"{type(e).__name__}: {e}"
+    results["no_crash_on_gate_enrichment"] = not crashed
+    ok = ok and not crashed
+
+    if gate is not None:
+        results["checks_is_a_list"] = isinstance(gate.get("checks"), list)
+        ok = ok and results["checks_is_a_list"]
+
+        names = [c["name"] for c in gate.get("checks", []) if isinstance(c, dict) and "name" in c]
+        # Existing host_preflight_gate checks must all still be present
+        # (existing checks preserved; no schema mutation of their entries).
+        expected_preexisting = {
+            "runtime_hash_matches_frozen_identity", "model_hash_matches_frozen_identity",
+            "store_hash_matches_frozen_identity", "hardware_identity_matches_stamp_or_first_run",
+            "sufficient_free_ram", "no_concurrent_benchmark_process",
+            "operator_attested_clean_environment",
+        }
+        results["existing_checks_preserved"] = expected_preexisting.issubset(set(names))
+        ok = ok and results["existing_checks_preserved"]
+
+        # The new disk_space_margin entry must be appended in the SAME
+        # {"name","ok","detail"} schema, not merged/coerced into anything else.
+        disk_entries = [c for c in gate["checks"] if c.get("name") == "disk_space_margin"]
+        results["disk_space_margin_entry_present"] = len(disk_entries) == 1
+        results["disk_space_margin_entry_schema_ok"] = (
+            len(disk_entries) == 1 and set(disk_entries[0].keys()) == {"name", "ok", "detail"}
+        )
+        ok = ok and results["disk_space_margin_entry_present"] and results["disk_space_margin_entry_schema_ok"]
+
+        results["gate_has_parent_env_visibility_fields"] = (
+            "retention_trace_env_present" in gate and "trace_output_variables_present" in gate
+        )
+        ok = ok and results["gate_has_parent_env_visibility_fields"]
+
+    # --- disk-space PASS: with the real (small) margin requirement, this
+    # sandbox's disk should satisfy it, so disk_space_margin.ok is True and
+    # does not by itself force gate.ok False (hash checks are None --
+    # "not reachable" -- for the nonexistent fake paths, which is NOT a
+    # failure per host_preflight_gate's own ok=all(c["ok"] is not False...)).
+    disk_pass_detail = next((c for c in gate["checks"] if c["name"] == "disk_space_margin"), None)
+    results["disk_space_pass_case_ok_true"] = bool(disk_pass_detail and disk_pass_detail["ok"] is True)
+    ok = ok and results["disk_space_pass_case_ok_true"]
+    results["gate_ok_true_when_disk_passes_and_others_not_reachable"] = bool(gate and gate["ok"] is True)
+    ok = ok and results["gate_ok_true_when_disk_passes_and_others_not_reachable"]
+
+    # --- disk-space FAIL: force an impossibly large margin requirement and
+    # prove gate.ok becomes False, the schema is still intact, and (since
+    # cmd_execute returns 3 before acquire_lock()/the launch loop whenever
+    # gate["ok"] is False) no path to real inference exists.
+    old_margin = drv.MIN_FREE_DISK_BYTES_CAMPAIGN_START
+    drv.MIN_FREE_DISK_BYTES_CAMPAIGN_START = 10 ** 18  # ~1 exabyte: always fails
+    try:
+        gate_fail = drv.build_execute_gate(fake_runtime, fake_model, fake_store,
+                                            operator_attested_clean_environment=False)
+        disk_fail_entry = next((c for c in gate_fail["checks"] if c["name"] == "disk_space_margin"), None)
+        results["disk_space_fail_case_ok_false"] = bool(disk_fail_entry and disk_fail_entry["ok"] is False)
+        results["gate_ok_false_on_disk_fail"] = gate_fail["ok"] is False
+        results["schema_intact_on_fail_path"] = isinstance(gate_fail["checks"], list) and all(
+            isinstance(c, dict) and set(c.keys()) == {"name", "ok", "detail"} for c in gate_fail["checks"])
+        ok = ok and results["disk_space_fail_case_ok_false"] and results["gate_ok_false_on_disk_fail"] \
+            and results["schema_intact_on_fail_path"]
+    finally:
+        drv.MIN_FREE_DISK_BYTES_CAMPAIGN_START = old_margin
+
+    # --- no inference launched on gate failure: cmd_execute's own code
+    # returns 3 immediately after `if not gate["ok"]:`, strictly before
+    # acquire_lock() and the launch loop that could ever call
+    # _execute_one_launch/default_process_launcher. Verified structurally
+    # by reading cmd_execute's own source rather than by actually invoking
+    # it with argparse (which would need a full Namespace) -- this proves
+    # the early-return ordering itself, not just a belief about it.
+    import inspect
+    src_text = inspect.getsource(drv.cmd_execute)
+    gate_check_idx = src_text.find('if not gate["ok"]:')
+    acquire_lock_idx = src_text.find("acquire_lock()")
+    results["gate_failure_return_precedes_acquire_lock_in_source"] = (
+        gate_check_idx != -1 and acquire_lock_idx != -1 and gate_check_idx < acquire_lock_idx
+    )
+    ok = ok and results["gate_failure_return_precedes_acquire_lock_in_source"]
+
+    return {"ok": ok, "sub_results": results}
+
+
 if __name__ == "__main__":
     import json
     r1 = run_fake_runtime_integration_test()
     r2 = run_inherited_env_regression_test()
     r3 = run_trace_enabled_overrides_stale_inherited_test()
+    r4 = run_gate_enrichment_regression_test()
     combined = {
-        "ok": r1["ok"] and r2["ok"] and r3["ok"],
+        "ok": r1["ok"] and r2["ok"] and r3["ok"] and r4["ok"],
         "fake_runtime_integration": r1,
         "inherited_env_regression": r2,
         "trace_enabled_overrides_stale_inherited": r3,
+        "gate_enrichment_regression": r4,
     }
     print(json.dumps(combined, indent=2))
     sys.exit(0 if combined["ok"] else 1)

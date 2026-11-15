@@ -590,13 +590,24 @@ def _try_psutil_metrics(pid: int) -> dict:
 MIN_FREE_DISK_BYTES_CAMPAIGN_START = 5 * (1024 ** 3)  # 5 GiB fail-closed margin
 
 
-def check_disk_space_margin(path: Path, min_free_bytes: int = MIN_FREE_DISK_BYTES_CAMPAIGN_START) -> dict:
+def check_disk_space_margin(path: Path, min_free_bytes: Optional[int] = None) -> dict:
     """Fail-closed disk-space preflight (item 9). Stops BEFORE any model
     launch if free space is already below the margin. On the fixed
     performance path (no per-launch multi-GiB trace) this margin is far
     more than any single launch should ever need; it exists as a guard
     against a future regression, not because the fixed path is expected to
-    use it."""
+    use it.
+
+    min_free_bytes defaults to None rather than directly defaulting to
+    MIN_FREE_DISK_BYTES_CAMPAIGN_START: a plain `= MIN_FREE_DISK_BYTES_CAMPAIGN_START`
+    default is bound ONCE at function-definition time, so a test (or any
+    caller) that reassigns the module-level constant afterward would be
+    silently ignored by every call that doesn't pass an explicit override.
+    Reading the module constant inside the function body instead makes
+    that override actually take effect, which is also what the regression
+    test for the disk-space-FAIL case depends on."""
+    if min_free_bytes is None:
+        min_free_bytes = MIN_FREE_DISK_BYTES_CAMPAIGN_START
     path = Path(path)
     path.mkdir(parents=True, exist_ok=True)
     usage = shutil.disk_usage(path)
@@ -1058,12 +1069,12 @@ def cmd_preflight(args) -> int:
     try:
         from tools.r2_12_benchmark_driver_selftest import (
             run_fake_runtime_integration_test, run_inherited_env_regression_test,
-            run_trace_enabled_overrides_stale_inherited_test)
+            run_trace_enabled_overrides_stale_inherited_test, run_gate_enrichment_regression_test)
     except Exception:
         sys.path.insert(0, str(REPO_ROOT / "tools"))
         from r2_12_benchmark_driver_selftest import (  # type: ignore
             run_fake_runtime_integration_test, run_inherited_env_regression_test,
-            run_trace_enabled_overrides_stale_inherited_test)
+            run_trace_enabled_overrides_stale_inherited_test, run_gate_enrichment_regression_test)
     try:
         fake_result = run_fake_runtime_integration_test()
     except Exception as e2:
@@ -1076,11 +1087,16 @@ def cmd_preflight(args) -> int:
         trace_override_result = run_trace_enabled_overrides_stale_inherited_test()
     except Exception as e2:
         trace_override_result = {"ok": False, "error": f"{type(e2).__name__}: {e2}"}
+    try:
+        gate_enrichment_result = run_gate_enrichment_regression_test()
+    except Exception as e2:
+        gate_enrichment_result = {"ok": False, "error": f"{type(e2).__name__}: {e2}"}
     report["fake_runtime_integration_test"] = fake_result
     report["inherited_env_regression_test"] = inherited_env_result
     report["trace_enabled_overrides_stale_inherited_test"] = trace_override_result
+    report["gate_enrichment_regression_test"] = gate_enrichment_result
     ok = ok and bool(fake_result.get("ok")) and bool(inherited_env_result.get("ok")) \
-        and bool(trace_override_result.get("ok"))
+        and bool(trace_override_result.get("ok")) and bool(gate_enrichment_result.get("ok"))
 
     gate = host_preflight_gate(
         Path(args.runtime) if args.runtime else None,
@@ -1114,6 +1130,44 @@ def cmd_preflight(args) -> int:
 # Execute mode -- real runtime launches, gated by explicit flags + the gate.
 # ---------------------------------------------------------------------------
 
+def build_execute_gate(runtime_exe: Path, model_path: Path, store_path: Path,
+                        operator_attested_clean_environment: bool) -> dict:
+    """Builds the full pre-execute gate: host_preflight_gate()'s checks
+    (hash/RAM/lock/operator-attestation) PLUS the disk-space margin check
+    and parent-environment trace-variable visibility, all merged into the
+    SAME {"ok": bool, "checks": [ {"name","ok","detail"}, ... ]} schema
+    host_preflight_gate() already uses. Factored out of cmd_execute so the
+    enrichment logic (previously broken: dict(gate["checks"], ...) crashed
+    because "checks" is a LIST, not a dict -- "dictionary update sequence
+    element #0 has length 3; 2 is required") can be exercised and tested
+    in isolation, with no argparse, no lock, no launch loop, and no
+    possibility of reaching _execute_one_launch."""
+    gate = host_preflight_gate(runtime_exe, model_path, store_path, 4294967296,
+                                operator_attested_clean_environment=operator_attested_clean_environment)
+    disk_check = check_disk_space_margin(WORK_DIR)
+    # Report, at the parent-environment level, exactly what the 2026-11-15
+    # host failure was: an inherited ARGINE_RETENTION_TRACE (or equivalent)
+    # the operator's own shell was carrying before the driver even runs.
+    # This is informational here (the real defense is the per-launch
+    # pre-Popen assertion, which strips/checks the CHILD env regardless of
+    # what the parent carries) -- surfaced early so the operator sees it
+    # before approving anything.
+    parent_trace_vars = trace_output_variables_present(os.environ)
+    gate["retention_trace_env_present"] = "ARGINE_RETENTION_TRACE" in os.environ
+    gate["trace_output_variables_present"] = parent_trace_vars
+    # host_preflight_gate()'s "checks" is a LIST of {"name","ok","detail"}
+    # entries (built by its own rec() helper), never a dict -- dict(gate["checks"], ...)
+    # blew up with "dictionary update sequence element #0 has length 3; 2 is
+    # required" because dict() tried to read each 3-key check dict as a
+    # 2-tuple. Append in the SAME schema instead of coercing the type.
+    gate["checks"] = list(gate.get("checks") or []) + [
+        {"name": "disk_space_margin", "ok": disk_check["ok"], "detail": json.dumps(disk_check)}
+    ]
+    gate["disk_space_margin_detail"] = disk_check
+    gate["ok"] = gate["ok"] and disk_check["ok"]
+    return gate
+
+
 def cmd_execute(args) -> int:
     if not args.i_understand_this_starts_real_inference or args.confirm_session != "4gib-primary":
         print("Refusing to execute: both --i-understand-this-starts-real-inference "
@@ -1127,22 +1181,8 @@ def cmd_execute(args) -> int:
     model_path = Path(args.model)
     store_path = Path(args.store)
 
-    gate = host_preflight_gate(runtime_exe, model_path, store_path, 4294967296,
-                                operator_attested_clean_environment=args.operator_attested_clean_environment)
-    disk_check = check_disk_space_margin(WORK_DIR)
-    # Report, at the parent-environment level, exactly what the 2026-11-15
-    # host failure was: an inherited ARGINE_RETENTION_TRACE (or equivalent)
-    # the operator's own shell was carrying before the driver even runs.
-    # This is informational here (the real defense is the per-launch
-    # pre-Popen assertion, which strips/checks the CHILD env regardless of
-    # what the parent carries) -- surfaced early so the operator sees it
-    # before approving anything.
-    parent_trace_vars = trace_output_variables_present(os.environ)
-    gate["retention_trace_env_present"] = "ARGINE_RETENTION_TRACE" in os.environ
-    gate["trace_output_variables_present"] = parent_trace_vars
-    gate["checks"] = dict(gate.get("checks") or {}, disk_space_margin=disk_check["ok"])
-    gate["disk_space_margin_detail"] = disk_check
-    gate["ok"] = gate["ok"] and disk_check["ok"]
+    gate = build_execute_gate(runtime_exe, model_path, store_path,
+                               args.operator_attested_clean_environment)
     if not gate["ok"]:
         atomic_write_json(RESULTS_DIR / f"GATE-FAILURE-{int(time.time())}.json", gate)
         print("Pre-run gate FAILED -- see recorded gate-failure artifact. Campaign not started.", file=sys.stderr)
