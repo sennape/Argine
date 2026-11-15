@@ -52,7 +52,7 @@ param(
     [string] $Model,
     [string] $ExpertStore = "",
     [string] $ExpectedSha256 = "",
-    [string] $Python = "python",
+    [string] $Python = "",
     [string] $WorkDir = "",
     [int]    $Port = 8734,
     [int]    $BudgetMiB = 4096,
@@ -76,6 +76,30 @@ function Resolve-AbsolutePath {
     # why every artifact path in this harness is run through this function
     # once, up front, rather than built as a relative Join-Path later.
     return [System.IO.Path]::GetFullPath($Path)
+}
+
+function Resolve-ArginePython {
+    # -Python left unset: never fall back to a bare "python" lookup
+    # without inspecting what it resolves to. On a stock Windows install
+    # with no real Python on PATH, "python" and "python3" are Microsoft
+    # Store alias stubs living under .../WindowsApps/ that either launch
+    # the Store listing or silently no-op -- the exact failure mode this
+    # harness hit before being patched to a hardcoded personal path,
+    # which is not portable and does not belong in a tracked script.
+    # The official "py" launcher (py.exe, installed by the real Python
+    # installer, not the Store) is tried first because it is never the
+    # Store alias. Whatever is found, its resolved path is rejected if
+    # it lives under WindowsApps, with a clear error naming -Python as
+    # the fix, rather than running a stub that would silently misbehave.
+    param([Parameter(Mandatory = $true)][string] $Requested)
+    if ($Requested) { return $Requested }
+    foreach ($candidate in @("py", "python", "python3")) {
+        $cmd = Get-Command $candidate -ErrorAction SilentlyContinue
+        if ($cmd -and $cmd.Source -and ($cmd.Source -notmatch '\\WindowsApps\\')) {
+            return $cmd.Source
+        }
+    }
+    Fail "no usable Python interpreter found on PATH (only the Microsoft Store alias stub, or nothing at all, was resolvable). Pass -Python <path to real python.exe> explicitly."
 }
 
 # ---------------------------------------------------------------------------
@@ -264,8 +288,50 @@ function Test-ArgineHarnessSelfTest {
     Assert (-not ($gateSrc -match 'finally\s*\{[^}]*BOTH MATCH')) "'BOTH MATCH' text does not appear inside any finally block in this script"
 
     Write-Host "8. PowerShell parser hazards from the previous draft are absent"
-    Assert (-not ($gateSrc -match '\$\w+:[^\s"]')) 'no bare "$Variable:" interpolation (must be "${Variable}:") appears anywhere in this script'
-    Assert (-not ($gateSrc -match '\\"')) 'no C-style \" escape sequence appears anywhere in this script'
+    # Both checks below used to grep $gateSrc (this script's own raw text)
+    # for the two historical hazard shapes directly. That is
+    # self-referential: the Assert call that DESCRIBES a hazard
+    # necessarily contains the hazard's own pattern as a literal string
+    # (in its '...' regex argument and message), so the check flagged
+    # itself every run -- two permanent false positives, never a real
+    # regression. The original patterns were also too broad: a bare
+    # "\$\w+:" matches PowerShell's OWN legitimate scope syntax
+    # ($env:, $script:, etc.), used correctly elsewhere in this very
+    # script (e.g. $script:ArgineSelfTestFailures just above).
+    #
+    # Fixed, AST-aware version: re-tokenize this file with the real
+    # PowerShell parser and inspect only DOUBLE-QUOTED string tokens
+    # (StringLiteral/StringExpandable tokens whose raw text starts with
+    # '"'). Both historical hazards are specifically about what a
+    # double-quoted string's own interpolation does; a single-quoted
+    # '...' literal (where the two Assert lines' own pattern/message
+    # text live, and where this file's one legitimate "\", for native
+    # argv escaping, also lives) can never exhibit either hazard, so
+    # restricting the scan to double-quoted tokens resolves the
+    # self-reference and the scope-syntax false positive at the same
+    # time, without weakening what is actually being checked.
+    $parseTokens = $null
+    $parseErrors = $null
+    [void][System.Management.Automation.Language.Parser]::ParseFile($PSCommandPath, [ref]$parseTokens, [ref]$parseErrors)
+    Assert ($parseErrors.Count -eq 0) "this script parses with zero PowerShell parser errors"
+
+    $knownScopes = 'env|global|local|script|private|variable|function|alias|using|workflow'
+    $bareScopeColonPattern = "(?<!\`$\()\`$(?!\()(?!(?:$knownScopes):)\w+:[^\s`"]"
+    $cStyleEscapePattern = '\\"'
+    $dqHazards = @()
+    foreach ($t in $parseTokens) {
+        if (($t.Kind -eq 'StringExpandable' -or $t.Kind -eq 'StringLiteral') -and
+            $t.Text.Length -gt 0 -and $t.Text[0] -eq '"') {
+            if ($t.Text -match $bareScopeColonPattern) {
+                $dqHazards += "line $($t.Extent.StartLineNumber): bare `$Word: interpolation in $($t.Text)"
+            }
+            if ($t.Text -match $cStyleEscapePattern) {
+                $dqHazards += "line $($t.Extent.StartLineNumber): C-style \`" escape in $($t.Text)"
+            }
+        }
+    }
+    Assert ($dqHazards.Count -eq 0) "no bare `"`$Variable:`" interpolation or C-style \`" escape inside any double-quoted string token (checked via the real parser's own tokens, not a self-referential raw-text grep)"
+    foreach ($h in $dqHazards) { Write-Host "    -> $h" -ForegroundColor Red }
 
     Write-Host ""
     if ($script:ArgineSelfTestFailures -eq 0) {
@@ -294,6 +360,7 @@ function Fail([string] $Reason) {
 }
 
 if (-not $LlamaServerExe -or -not $Model) { Fail "both -LlamaServerExe and -Model are required for a real run (use -SelfTest for the no-model check)" }
+$Python = Resolve-ArginePython -Requested $Python
 
 $AbsExe   = Resolve-AbsolutePath $LlamaServerExe
 $AbsModel = Resolve-AbsolutePath $Model
@@ -448,7 +515,7 @@ function Test-RunOnePolicy {
         }
     } finally {
         $stdoutWriter.Flush(); $stderrWriter.Flush()
-        if (-not $proc.HasExited) { $proc.Kill($true) }
+        if (-not $proc.HasExited) { $proc.Kill() }
         Start-Sleep -Milliseconds 200
         $stdoutWriter.Close(); $stderrWriter.Close()
     }

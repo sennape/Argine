@@ -1,0 +1,79 @@
+{
+  "manifest_kind": "R2-12 host-conformance configuration record",
+  "generated_from": "preserved evidence in this directory and in ../conformance_traces/; no model run performed to produce this manifest",
+  "runtime": {
+    "path_on_host": "C:\\Users\\alpel\\Desktop\\Argine2\\llama-research-v8\\llama-server.exe",
+    "sha256": "f4d93061b0d4ce41bc4c5f0abce3420e16768ff5dba5ce53212b49ca25dcf087",
+    "sha256_matches_expected": true,
+    "predecessor_runtimes_reverified_unchanged": {
+      "llama-research-v5/llama-server.exe": "65f445c42ac145765735984582691964181dd4dd8019f4519edac1fa315df26c",
+      "llama-research-v6/llama-server.exe": "6a0d48663f23e4b4d3358cf2b7ef9c6a4c9261099ba9a0ab9ee938e1d9ef1ded",
+      "llama-research-v7/llama-server.exe": "cec063535698e394139c7cc93b8f2aa63200e45f17894fb439b21672e6a0183a"
+    }
+  },
+  "model": {
+    "path": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf",
+    "sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+    "bytes": 18632184480
+  },
+  "expert_store": {
+    "path": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs",
+    "sha256": "fef943ae0bc017864a47d41c1fc90d422016045f7e8705b1d138b7defd8c5146",
+    "bytes": 17553387520,
+    "layers": 48,
+    "experts_per_layer": 128
+  },
+  "configuration": {
+    "budget_bytes": 4294967296,
+    "budget_mib": 4096,
+    "ARGINE_EXPERT_SHARDS": 1,
+    "ARGINE_EXPERT_READ": "blocco",
+    "ARGINE_EXPERT_READ_note": "host stderr shows 'lettura blocco:2' (blocco mode with 2 threads per read, per the argine-experts.cpp block-read path); ARGINE_EXPERT_SHARDS=1 confirmed by stderr's 'settori di cache' count",
+    "ARGINE_PREFETCH": "absent/unset (confirmed: no ARGINE_PREFETCH-related stderr line in either host log; default is disabled)",
+    "ARGINE_RETENTION_TRACE": "set to the per-policy trace path on the host (confirmed by stderr's 'ARGINE_RETENTION_TRACE: aperta con successo' line in both logs)"
+  },
+  "policies": {
+    "b_selected": {
+      "startup_line": "argine: retention policy attiva: b_selected (decay=0.99, interval=64) -- R2-12 runtime policy integration",
+      "frozen_params": {"decay_factor": 0.99, "aging_interval_steps": 64, "predictor_decay": 0, "top_k": 0, "n_experts": 0},
+      "reference_class": "argine.research2.r2_09a.policies.AgedFrequency"
+    },
+    "predicted_protect": {
+      "startup_line": "argine: retention policy attiva: predicted_protect (decay=0.99, interval=64, predictor_decay=0.99) -- R2-12 runtime policy integration",
+      "frozen_params": {"decay_factor": 0.99, "aging_interval_steps": 64, "predictor_decay": 0.99, "top_k": 8, "n_experts": 128},
+      "reference_class": "argine.research2.r2_bridge01.retention_policies.PredictedProtectPolicy"
+    }
+  },
+  "comparator": {
+    "frozen_tool_path": "tools/r2_12_real_trace_conformance.py",
+    "frozen_tool_unmodified": true,
+    "python_executable_used_for_this_formalization": "python3 -I (Linux sandbox; the host run itself and any on-host re-check would use C:\\Users\\alpel\\anaconda3\\python.exe)",
+    "note": "the frozen comparator OOMs in this formalization's ~3.9 GiB sandbox on the full 9504-event trace (f.readlines() + full in-memory event list); re-verified instead with streaming_conformance.py in this directory, which imports the identical frozen policy classes and reproduces the identical field-by-field comparison without materializing the whole trace at once -- see this directory's README.md"
+  },
+  "run_result": {
+    "completion_token_count": {"b_selected": 64, "predicted_protect": 64},
+    "trace_rows": {"b_selected": 19008, "predicted_protect": 19008},
+    "decision_rows": {"b_selected": 9504, "predicted_protect": 9504},
+    "completion_rows": {"b_selected": 9504, "predicted_protect": 9504},
+    "comparator_result": {"b_selected": "MATCH", "predicted_protect": "MATCH"},
+    "host_conformance_final_result": "R2-12 HOST CONFORMANCE: BOTH MATCH",
+    "harness_exit_code": 0
+  },
+  "timestamps_from_preserved_files_utc": {
+    "b_selected.stdout.log_mtime": "2026-11-15T07:48:34.798550800Z",
+    "b_selected.trace.jsonl_mtime": "2026-11-15T07:49:59.187214700Z",
+    "b_selected.stderr.log_mtime": "2026-11-15T07:49:59.213039800Z",
+    "b_selected.decisions.jsonl_mtime": "2026-11-15T07:50:15.747248000Z",
+    "predicted_protect.stdout.log_mtime": "2026-11-15T07:51:23.577800800Z",
+    "predicted_protect.trace.jsonl_mtime": "2026-11-15T07:52:48.676223800Z",
+    "predicted_protect.stderr.log_mtime": "2026-11-15T07:52:48.691936400Z",
+    "predicted_protect.decisions.jsonl_mtime": "2026-11-15T07:53:05.971423100Z",
+    "note": "filesystem mtimes of the preserved-from files as mounted; no historical timestamp has been invented or inferred beyond what these files and their stderr logs (relative ms-since-start markers) already carry"
+  },
+  "host_os_architecture": "not independently obtainable from this formalization without changing the preserved evidence; host stderr logs show no OS version string. llama-server.exe is a PE32+ x86-64 Windows binary (per its own build provenance); the host path prefix C:\\Users\\alpel\\... confirms Windows.",
+  "benchmark_status_at_time_of_this_manifest": {
+    "runtime_benchmark_executed": false,
+    "counted_benchmark": "0/120",
+    "physical_launches_performed": "0/144"
+  }
+}
