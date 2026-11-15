@@ -170,6 +170,11 @@ BUDGET_FILENAME_LABELS = {
     8.0: "8GIB",
 }
 
+# Single shared source of truth for every --budget-gib argparse choices=
+# list (preflight/execute/diagnose) -- never redefine this tuple literal
+# at a second call site.
+FROZEN_BUDGET_CHOICES = tuple(sorted(BUDGET_SESSION_IDS))
+
 
 def budget_gib_to_bytes(budget_gib: float) -> int:
     """Exact byte count for a frozen budget_gib, matching
@@ -1441,7 +1446,17 @@ def cmd_diagnose(args) -> int:
     frozen schedule, or RESULTS_DIR's canonical record set. The 48-launch
     campaign remains LOCKED regardless of this diagnostic's outcome --
     running this does not unlock it."""
+    budget_gib = getattr(args, "budget_gib", 4.0)
+    if budget_gib not in BUDGET_SESSION_IDS:
+        print(f"Diagnostic refused: budget_gib={budget_gib!r} is not one of the frozen "
+              f"R2-12 budgets {FROZEN_BUDGET_CHOICES}.", file=sys.stderr)
+        return 2
+    budget_bytes = budget_gib_to_bytes(budget_gib)
+    filename_label = BUDGET_FILENAME_LABELS[budget_gib]
+
     frozen = load_frozen_protocol()
+    baseline_params = resolve_baseline_params_for_budget(frozen, budget_bytes)
+    predictor_decay_factor = resolve_predictor_decay_factor(frozen)
     runtime_exe = Path(args.runtime)
     model_path = Path(args.model)
     store_path = Path(args.store)
@@ -1456,21 +1471,28 @@ def cmd_diagnose(args) -> int:
     parent_trace_vars = trace_output_variables_present(os.environ)
     retention_trace_env_present_in_parent = "ARGINE_RETENTION_TRACE" in os.environ
 
+    # Identity/path reflect the selected budget (item 4): the hash key and
+    # the output filename both carry budget_gib, so a 1.5/4/8 GiB diagnostic
+    # run in quick succession can never collide or be mistaken for another.
     diag_run_id = "DIAG-" + hashlib.sha256(
-        f"diagnostic-{time.time()}".encode()).hexdigest()[:16]
+        f"diagnostic-{budget_gib}-{time.time()}".encode()).hexdigest()[:16]
     launch = {
         "run_id": diag_run_id, "workload_id": "r2-11-coding-v1", "policy_id": "b_selected",
-        "budget_gib": 4.0, "repetition_index": 0, "ordering_block": "diagnostic",
+        "budget_gib": budget_gib, "repetition_index": 0, "ordering_block": "diagnostic",
         "cell_index": -1, "position_in_abba_sequence": -1,
         "warmup": False, "counted": False,
     }
 
+    # _execute_one_launch() derives budget_bytes/baseline decay/interval/
+    # predictor_decay from launch["budget_gib"] itself (budget_gib_to_bytes +
+    # resolve_baseline_params_for_budget + resolve_predictor_decay_factor,
+    # same as build_budget_plan's launches) -- nothing else to pass here.
     record = _execute_one_launch(launch, runtime_exe, model_path, store_path, frozen,
                                   port=args.port, enable_trace=False, diagnostic_only=True)
 
     diag_dir = RESULTS_DIR / "DIAGNOSTIC-ONLY-NOT-CANONICAL"
     diag_dir.mkdir(parents=True, exist_ok=True)
-    out_path = diag_dir / f"{diag_run_id}.json"
+    out_path = diag_dir / f"{filename_label}-{diag_run_id}.json"
     atomic_write_json(out_path, record)
 
     ts = record.get("timestamps", {})
@@ -1490,6 +1512,16 @@ def cmd_diagnose(args) -> int:
         "canonical": record.get("canonical"),
         "diagnostic_only": record.get("diagnostic_only"),
         "trace_enabled": record.get("trace_enabled"),
+        "budget_gib": budget_gib,
+        "budget_bytes": budget_bytes,
+        "resolved_policy_params": {
+            "baseline_decay_factor": baseline_params["decay_factor"],
+            "baseline_aging_interval_steps": baseline_params["aging_interval_steps"],
+            "predictor_decay_factor": predictor_decay_factor,
+        },
+        "actual_child_env_retention_decay": record.get("environment", {}).get("ARGINE_RETENTION_DECAY"),
+        "actual_child_env_retention_interval": record.get("environment", {}).get("ARGINE_RETENTION_INTERVAL"),
+        "actual_child_env_expert_budget": record.get("environment", {}).get("ARGINE_EXPERT_BUDGET"),
         "process_start_to_model_ready_seconds": dt(t0, t1_ready),
         "model_ready_to_request_sent_seconds": dt(t1_ready, t2),
         "ttft_seconds": dt(t2, t3),
@@ -1514,7 +1546,11 @@ def cmd_diagnose(args) -> int:
     return 0 if record.get("ok") else 4
 
 
-def main() -> int:
+def build_arg_parser():
+    """Factored out of main() so tests can parse an explicit argv list
+    (e.g. build_arg_parser().parse_args(["diagnose", "--budget-gib", "1.5", ...]))
+    and assert on the resulting namespace -- the SAME parser main() uses,
+    not a duplicated test-only one."""
     import argparse
     p = argparse.ArgumentParser(description=__doc__)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -1524,7 +1560,7 @@ def main() -> int:
     pf.add_argument("--model", default=r"C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf")
     pf.add_argument("--store", default=r"C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs")
     pf.add_argument("--budget-gib", type=float, default=4.0, dest="budget_gib",
-                     choices=(4.0, 1.5, 8.0),
+                     choices=FROZEN_BUDGET_CHOICES,
                      help="Which frozen R2-12 budget to preflight (default 4.0, the already-completed primary).")
     pf.set_defaults(func=cmd_preflight)
 
@@ -1534,7 +1570,7 @@ def main() -> int:
     ex.add_argument("--store", default=r"C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs")
     ex.add_argument("--port", type=int, default=PORT)
     ex.add_argument("--budget-gib", type=float, default=4.0, dest="budget_gib",
-                     choices=(4.0, 1.5, 8.0),
+                     choices=FROZEN_BUDGET_CHOICES,
                      help="Which frozen R2-12 budget to execute. --confirm-session must name the matching "
                           "session (4gib-primary / 1.5gib-stress / 8gib-control) or the run is refused.")
     ex.add_argument("--i-understand-this-starts-real-inference", action="store_true", dest="i_understand_this_starts_real_inference")
@@ -1548,9 +1584,18 @@ def main() -> int:
     dg.add_argument("--model", default=r"C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf")
     dg.add_argument("--store", default=r"C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs")
     dg.add_argument("--port", type=int, default=PORT)
+    dg.add_argument("--budget-gib", type=float, default=4.0, dest="budget_gib",
+                     choices=FROZEN_BUDGET_CHOICES,
+                     help="Which frozen R2-12 budget's env/policy params this ONE diagnostic launch uses "
+                          "(default 4.0). Same source of truth as preflight/execute -- never a separate "
+                          "hardcoded value. Does not touch or require any campaign session confirmation.")
     dg.set_defaults(func=cmd_diagnose)
 
-    args = p.parse_args()
+    return p
+
+
+def main() -> int:
+    args = build_arg_parser().parse_args()
     return args.func(args)
 
 
