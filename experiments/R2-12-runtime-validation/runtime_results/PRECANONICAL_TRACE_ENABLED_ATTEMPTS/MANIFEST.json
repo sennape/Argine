@@ -1,0 +1,90 @@
+{
+  "attempts": [
+    {
+      "cell_index": 0,
+      "decode_tokens_per_second": 0.8289852785095444,
+      "ordering_block": "counted",
+      "original_path_edited_in_place": "experiments/R2-12-runtime-validation/runtime_results/07fc14bd46b3f49b23ac94b4.json",
+      "persisted_result_json": true,
+      "policy_id": "predicted_protect",
+      "quarantine_copy_path": "experiments/R2-12-runtime-validation/runtime_results/PRECANONICAL_TRACE_ENABLED_ATTEMPTS/07fc14bd46b3f49b23ac94b4.json",
+      "run_id": "07fc14bd46b3f49b23ac94b4",
+      "status": "completed_ok (trace-enabled, precanonical)",
+      "wall_clock_seconds": 637.1389414999867,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "cell_index": 0,
+      "decode_tokens_per_second": 0.8361639583277876,
+      "ordering_block": "counted",
+      "original_path_edited_in_place": "experiments/R2-12-runtime-validation/runtime_results/316633d558d8d384686598c0.json",
+      "persisted_result_json": true,
+      "policy_id": "predicted_protect",
+      "quarantine_copy_path": "experiments/R2-12-runtime-validation/runtime_results/PRECANONICAL_TRACE_ENABLED_ATTEMPTS/316633d558d8d384686598c0.json",
+      "run_id": "316633d558d8d384686598c0",
+      "status": "completed_ok (trace-enabled, precanonical)",
+      "wall_clock_seconds": 631.5104674999893,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "cell_index": 0,
+      "decode_tokens_per_second": 0.8601265980783988,
+      "ordering_block": "warmup",
+      "original_path_edited_in_place": "experiments/R2-12-runtime-validation/runtime_results/44bebf1f6c37a031cac0ab0c.json",
+      "persisted_result_json": true,
+      "policy_id": "b_selected",
+      "quarantine_copy_path": "experiments/R2-12-runtime-validation/runtime_results/PRECANONICAL_TRACE_ENABLED_ATTEMPTS/44bebf1f6c37a031cac0ab0c.json",
+      "run_id": "44bebf1f6c37a031cac0ab0c",
+      "status": "completed_ok (trace-enabled, precanonical)",
+      "wall_clock_seconds": 615.6194535999966,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "cell_index": 0,
+      "decode_tokens_per_second": 0.8426471235328532,
+      "ordering_block": "counted",
+      "original_path_edited_in_place": "experiments/R2-12-runtime-validation/runtime_results/7c6ba31aa8bc6e9bf500f217.json",
+      "persisted_result_json": true,
+      "policy_id": "b_selected",
+      "quarantine_copy_path": "experiments/R2-12-runtime-validation/runtime_results/PRECANONICAL_TRACE_ENABLED_ATTEMPTS/7c6ba31aa8bc6e9bf500f217.json",
+      "run_id": "7c6ba31aa8bc6e9bf500f217",
+      "status": "completed_ok (trace-enabled, precanonical)",
+      "wall_clock_seconds": 627.1991557000147,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "cell_index": 0,
+      "decode_tokens_per_second": 0.8339194337249033,
+      "ordering_block": "warmup",
+      "original_path_edited_in_place": "experiments/R2-12-runtime-validation/runtime_results/9b330e6df0fd1c218645e133.json",
+      "persisted_result_json": true,
+      "policy_id": "predicted_protect",
+      "quarantine_copy_path": "experiments/R2-12-runtime-validation/runtime_results/PRECANONICAL_TRACE_ENABLED_ATTEMPTS/9b330e6df0fd1c218645e133.json",
+      "run_id": "9b330e6df0fd1c218645e133",
+      "status": "completed_ok (trace-enabled, precanonical)",
+      "wall_clock_seconds": 633.378165800008,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "note": "Result-record persistence itself failed with OSError [Errno 28] No space left on device. No run_id is recoverable from a persisted JSON (none was written). The corresponding ~9.6 GiB partial trace.jsonl under tools/r2-12-benchmark-run/ is the only artifact; it is NOT reconstructed into a result record -- a missing result is left missing, never fabricated.",
+      "original_path_edited_in_place": null,
+      "persisted_result_json": false,
+      "quarantine_copy_path": null,
+      "run_id": "UNKNOWN_6TH_ATTEMPT_DISK_FULL",
+      "status": "incomplete_disk_full"
+    }
+  ],
+  "canonical_state_after_quarantine": {
+    "canonical_counted_launches_completed": 0,
+    "canonical_counted_launches_total": 40,
+    "canonical_launches_completed": 0,
+    "canonical_launches_total": 48,
+    "canonical_warmup_launches_completed": 0,
+    "canonical_warmup_launches_total": 8,
+    "historical_precanonical_attempts": 6
+  },
+  "classification": "PRECANONICAL_TRACE_ENABLED_ATTEMPTS",
+  "generated_utc": "2026-11-15T12:30:00Z",
+  "note_on_quarantine_method": "The connected folder this repo lives in has file deletion disabled by default for this session, so the ORIGINAL result JSONs under runtime_results/ could not be moved out. Instead each original was edited in place (non-destructive: same file, same path, content amended) to add canonical:false and a precanonical_classification field, and a verbatim COPY of each was additionally written here for a single, obvious place to look. The driver's resume-skip logic was changed to require canonical==true, so these in-place-edited originals can no longer be silently treated as completed canonical launches even though they remain in runtime_results/ and still have ok:true.",
+  "reason": "Produced by the pre-fix driver, which set ARGINE_RETENTION_TRACE unconditionally on every launch. Not scientifically admissible as canonical performance-path results: the trace-heavy run mode was never calibrated against a minimal-instrumentation mode per instrumentation_contract.json, and empirically shows ~0.83-0.86 decode tokens/s with a ~7.5-8x CPU/wall-clock ratio, consistent with synchronous per-decode-step trace I/O dominating runtime -- not a measurement of true decode performance."
+}

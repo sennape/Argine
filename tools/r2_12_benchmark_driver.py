@@ -25,6 +25,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import socket
 import subprocess
 import sys
@@ -212,19 +213,48 @@ def policy_specific_env(policy_id: str, n_experts: int) -> dict:
     raise ValueError(f"unknown policy_id {policy_id!r}")
 
 
+# Per instrumentation_contract.json ("overhead_must_be_measured_or_bounded" /
+# "minimal_instrumentation_mode_requirement"): heavy structured
+# ARGINE_RETENTION_TRACE logging is required for conformance/scientific
+# replay, NOT for the performance/timing path. The frozen
+# fields_recorded_per_run (expert_store_reads, expert_store_bytes_read,
+# decode timings, ...) are all available from the runtime's unconditional
+# stderr diagnostics (patches/argine-experts.cpp Contesto::~Contesto(), the
+# "banda"/"copertura" block, explicitly printed "SENZA dipendere da"
+# ARGINE_RETENTION_TRACE) and from the native /completion SSE "timings"
+# object -- neither needs the trace file. Retention-policy DECISION
+# behavior itself is unaffected by the trace flag (patches/argine-store.cpp:
+# "Se ARGINE_RETENTION_TRACE non e' impostato ... nessun costo, nessuna
+# differenza di comportamento"). enable_trace therefore defaults to False
+# here: the performance/counted campaign path never sets it, and only an
+# explicit conformance-style caller passes enable_trace=True.
 def build_child_env(policy_id: str, abs_expert_store: str, abs_trace_path: str,
-                     budget_bytes: int, n_experts: int) -> dict:
+                     budget_bytes: int, n_experts: int,
+                     enable_trace: bool = False) -> dict:
     env = {
         "ARGINE_EXPERT_STORE": abs_expert_store,
         "ARGINE_EXPERT_BUDGET": str(budget_bytes),
         "ARGINE_EXPERT_SHARDS": "1",
         "ARGINE_EXPERT_READ": "blocco",
         "ARGINE_RETENTION_POLICY": policy_id,
-        "ARGINE_RETENTION_TRACE": abs_trace_path,
         "ARGINE_PREFETCH": None,  # explicitly removed, not just empty
     }
+    if enable_trace:
+        env["ARGINE_RETENTION_TRACE"] = abs_trace_path
     env.update(policy_specific_env(policy_id, n_experts))
     return env
+
+
+def assert_trace_absent_for_performance(env_map: dict) -> None:
+    """Hard assertion for the canonical performance/counted execution path:
+    ARGINE_RETENTION_TRACE must never be present. Raises AssertionError
+    (fail-closed) rather than silently continuing if it is."""
+    if "ARGINE_RETENTION_TRACE" in env_map:
+        raise AssertionError(
+            "ARGINE_RETENTION_TRACE present in a canonical performance-path "
+            "child environment -- this is the exact defect that caused the "
+            "storage/time explosion on the 2026-11-15 run and must never "
+            "recur on the canonical path.")
 
 
 def build_os_environ(env_map: dict) -> dict:
@@ -522,9 +552,32 @@ def _try_psutil_metrics(pid: int) -> dict:
 # The real per-launch execution body
 # ---------------------------------------------------------------------------
 
+MIN_FREE_DISK_BYTES_CAMPAIGN_START = 5 * (1024 ** 3)  # 5 GiB fail-closed margin
+
+
+def check_disk_space_margin(path: Path, min_free_bytes: int = MIN_FREE_DISK_BYTES_CAMPAIGN_START) -> dict:
+    """Fail-closed disk-space preflight (item 9). Stops BEFORE any model
+    launch if free space is already below the margin. On the fixed
+    performance path (no per-launch multi-GiB trace) this margin is far
+    more than any single launch should ever need; it exists as a guard
+    against a future regression, not because the fixed path is expected to
+    use it."""
+    path = Path(path)
+    path.mkdir(parents=True, exist_ok=True)
+    usage = shutil.disk_usage(path)
+    return {
+        "path": str(path), "free_bytes": usage.free, "total_bytes": usage.total,
+        "min_free_bytes_required": min_free_bytes,
+        "ok": usage.free >= min_free_bytes,
+    }
+
+
 def _execute_one_launch(launch: dict, runtime_exe: Path, model_path: Path, store_path: Path,
                          frozen: dict, port: int = PORT,
-                         process_launcher: Optional[Callable] = None) -> dict:
+                         process_launcher: Optional[Callable] = None,
+                         enable_trace: bool = False,
+                         diagnostic_only: bool = False,
+                         max_artifact_bytes: Optional[int] = None) -> dict:
     """Full real lifecycle for one scheduled launch: construct env, launch
     the runtime, wait for readiness, confirm store/policy activation,
     send the frozen workload request, capture the frozen metrics and
@@ -553,8 +606,17 @@ def _execute_one_launch(launch: dict, runtime_exe: Path, model_path: Path, store
             p.unlink()
 
     budget_bytes = int(4.0 * (1024 ** 3))
-    env_map = build_child_env(launch["policy_id"], str(store_path), str(trace_path), budget_bytes, 128)
+    env_map = build_child_env(launch["policy_id"], str(store_path), str(trace_path), budget_bytes, 128,
+                               enable_trace=enable_trace)
+    if not enable_trace:
+        # Hard, fail-closed assertion: this is the exact defect (unconditional
+        # ARGINE_RETENTION_TRACE) that produced the 2026-11-15 14.4 GiB/launch,
+        # ~10-11 min/launch explosion. Never allow it to silently recur.
+        assert_trace_absent_for_performance(env_map)
     record["environment"] = {k: v for k, v in env_map.items()}
+    record["canonical"] = (not diagnostic_only) and (not enable_trace)
+    record["diagnostic_only"] = diagnostic_only
+    record["trace_enabled"] = enable_trace
     os_env = build_os_environ(env_map)
     args = build_child_arguments(str(model_path), port, FROZEN_GEN_PARAMS["context"])
 
@@ -573,13 +635,20 @@ def _execute_one_launch(launch: dict, runtime_exe: Path, model_path: Path, store
             )
             return _finalize_failed(record, proc, stdout_f, stderr_f, t0)
 
-        trace_marker = wait_for_log_marker(proc, stderr_path, "ARGINE_RETENTION_TRACE: aperta con successo", MARKER_TIMEOUT_SEC)
-        if not trace_marker["found"]:
-            record["crash_or_failure"] = (
-                "runtime exited before TRACE OPEN marker" if trace_marker["died"]
-                else f"TRACE OPEN marker not seen within {MARKER_TIMEOUT_SEC}s"
-            )
-            return _finalize_failed(record, proc, stdout_f, stderr_f, t0)
+        if enable_trace:
+            trace_marker = wait_for_log_marker(proc, stderr_path, "ARGINE_RETENTION_TRACE: aperta con successo", MARKER_TIMEOUT_SEC)
+            if not trace_marker["found"]:
+                record["crash_or_failure"] = (
+                    "runtime exited before TRACE OPEN marker" if trace_marker["died"]
+                    else f"TRACE OPEN marker not seen within {MARKER_TIMEOUT_SEC}s"
+                )
+                return _finalize_failed(record, proc, stdout_f, stderr_f, t0)
+        # enable_trace is False on the canonical performance path: ARGINE_RETENTION_TRACE
+        # is absent from the child env (asserted above), so the runtime never opens a
+        # trace file and never emits the TRACE OPEN marker -- waiting for it here would
+        # just be a guaranteed MARKER_TIMEOUT_SEC stall on every single launch. Only
+        # STORE/POLICY READY (already awaited above) and /health (awaited below) gate
+        # the performance path.
 
         t1 = time.monotonic()
         record["timestamps"]["t1_model_ready_check_started"] = t1
@@ -648,6 +717,32 @@ def _execute_one_launch(launch: dict, runtime_exe: Path, model_path: Path, store
         if not wait_port_free(port):
             record["crash_or_failure"] = f"port {port} did not become free after cleanup"
             return _finalize_failed(record, proc, stdout_f, stderr_f, t0, skip_stop=True)
+
+        # Per-launch unexpected-artifact-growth guard (item 9): on the
+        # performance path (enable_trace=False) stdout+stderr for one launch
+        # should be at most a few MB. The 2026-11-15 run showed ~14.4 GiB/
+        # launch from an unconditional trace file; this guard would have
+        # caught that on launch 1 instead of filling the disk on launch 6.
+        # Never truncates an artifact -- only halts by returning a failed
+        # record, leaving every byte written on disk exactly as it is.
+        artifact_bytes = sum(
+            fp.stat().st_size for fp in (trace_path, stdout_path, stderr_path) if fp.exists()
+        )
+        record["artifact_bytes_written"] = artifact_bytes
+        ceiling = max_artifact_bytes if max_artifact_bytes is not None else (
+            200 * 1024 * 1024 if not enable_trace else None
+        )
+        if ceiling is not None and artifact_bytes > ceiling:
+            record["crash_or_failure"] = (
+                f"artifact-growth guard triggered: {artifact_bytes} bytes written "
+                f"(trace+stdout+stderr) exceeds ceiling {ceiling} bytes for this "
+                "launch. Nothing was truncated; the run artifacts are left on disk "
+                "for inspection. Campaign halted rather than risking a repeat of "
+                "the 2026-11-15 storage explosion."
+            )
+            record["status"] = "failed_artifact_growth_guard"
+            record["ok"] = False
+            return record
 
         record["status"] = "completed_ok"
         record["ok"] = True
@@ -750,18 +845,34 @@ def cmd_preflight(args) -> int:
     ok = ok and all(v is True for v in schedule_checks.values() if isinstance(v, bool))
     report["n_launches"] = len(launches)
 
+    # Performance path (default, enable_trace unset -> False): trace must be ABSENT.
     env_a = build_child_env("b_selected", "C:\\modelli\\m.psxs", "C:\\run\\b.trace.jsonl", 4294967296, 128)
     env_b = build_child_env("predicted_protect", "C:\\modelli\\m.psxs", "C:\\run\\p.trace.jsonl", 4294967296, 128)
+    # Conformance path (explicit opt-in): trace must be PRESENT.
+    env_a_traced = build_child_env("b_selected", "C:\\modelli\\m.psxs", "C:\\run\\b.trace.jsonl", 4294967296, 128, enable_trace=True)
+    assertion_raised = False
+    try:
+        assert_trace_absent_for_performance(env_a_traced)
+    except AssertionError:
+        assertion_raised = True
     env_checks = {
         "b_selected_has_required_keys": all(k in env_a for k in (
             "ARGINE_EXPERT_STORE", "ARGINE_EXPERT_BUDGET", "ARGINE_EXPERT_SHARDS",
-            "ARGINE_EXPERT_READ", "ARGINE_RETENTION_POLICY", "ARGINE_RETENTION_TRACE",
+            "ARGINE_EXPERT_READ", "ARGINE_RETENTION_POLICY",
             "ARGINE_RETENTION_DECAY", "ARGINE_RETENTION_INTERVAL")),
         "predicted_protect_has_extra_keys": all(k in env_b for k in (
             "ARGINE_RETENTION_PREDICTOR_DECAY", "ARGINE_RETENTION_TOPK", "ARGINE_RETENTION_NEXPERTS")),
         "argine_prefetch_explicitly_none": env_a.get("ARGINE_PREFETCH", "MISSING") is None and env_b.get("ARGINE_PREFETCH", "MISSING") is None,
         "argine_expert_shards_is_1": env_a["ARGINE_EXPERT_SHARDS"] == "1" and env_b["ARGINE_EXPERT_SHARDS"] == "1",
         "argine_prefetch_removed_from_os_environ": "ARGINE_PREFETCH" not in build_os_environ(env_a),
+        "trace_absent_by_default_on_performance_path": "ARGINE_RETENTION_TRACE" not in env_a
+            and "ARGINE_RETENTION_TRACE" not in env_b,
+        "trace_present_when_explicitly_enabled": "ARGINE_RETENTION_TRACE" in env_a_traced,
+        "hard_assertion_fires_on_traced_env": assertion_raised,
+        "assert_trace_absent_passes_on_performance_env": (
+            assert_trace_absent_for_performance(env_a) is None
+            and assert_trace_absent_for_performance(env_b) is None
+        ) if True else False,
     }
     report["env_checks"] = env_checks
     ok = ok and all(env_checks.values())
@@ -794,16 +905,51 @@ def cmd_preflight(args) -> int:
     def would_skip(run_id):
         return run_record_path(run_id).exists() if run_id != selftest_run_id else selftest_path.exists()
 
+    def is_canonical_completed(run_id):
+        """Mirrors cmd_execute's actual resume-skip predicate: a record is
+        only ever skipped (treated as already done) when it exists, is
+        ok==True, AND canonical==True. Mere path existence (e.g. a
+        quarantined PRECANONICAL_TRACE_ENABLED_ATTEMPTS record left in place
+        because this environment cannot delete files) is NOT enough."""
+        rp = run_record_path(run_id)
+        if not rp.exists():
+            return False
+        try:
+            rec = json.loads(rp.read_text())
+        except Exception:
+            return False
+        return rec.get("ok") is True and rec.get("canonical") is True
+
+    # Find a launch run_id that genuinely has no record at all on disk, to
+    # test the true "never seen before" path -- distinct from a run_id whose
+    # path exists but is correctly non-canonical (tested separately below).
+    truly_fresh_run_id = next((l["run_id"] for l in launches if not run_record_path(l["run_id"]).exists()), None)
+    # Any launch run_id whose on-disk record exists with ok==true but
+    # canonical!=true (a quarantined precanonical attempt): resume MUST NOT
+    # silently treat it as completed.
+    stale_precanonical_run_id = next(
+        (l["run_id"] for l in launches
+         if run_record_path(l["run_id"]).exists()
+         and json.loads(run_record_path(l["run_id"]).read_text()).get("ok") is True
+         and json.loads(run_record_path(l["run_id"]).read_text()).get("canonical") is not True),
+        None)
+
     resume_checks = {
         "sample_record_persisted": selftest_path.exists(),
         "duplicate_run_id_detected_for_resume_skip": would_skip(selftest_run_id),
-        "fresh_run_id_not_skipped": not would_skip(launches[0]["run_id"]),
+        "fresh_run_id_not_skipped": (truly_fresh_run_id is None) or (not is_canonical_completed(truly_fresh_run_id)),
+        "stale_precanonical_record_not_treated_as_canonical_completed": (
+            stale_precanonical_run_id is None) or (not is_canonical_completed(stale_precanonical_run_id)),
         "output_schema_fields_present": set(sample_record.keys()) >= {
             "run_id", "workload_id", "policy_id", "budget_gib", "repetition_index",
             "ordering_block", "cell_index", "position_in_abba_sequence",
             "timestamps", "environment", "runtime_metrics", "output_token_digest"},
     }
     report["resume_checks"] = resume_checks
+    report["resume_checks_detail"] = {
+        "truly_fresh_run_id_found": truly_fresh_run_id,
+        "stale_precanonical_run_id_found": stale_precanonical_run_id,
+    }
     ok = ok and all(resume_checks.values())
 
     oe_checks = {
@@ -879,6 +1025,10 @@ def cmd_execute(args) -> int:
 
     gate = host_preflight_gate(runtime_exe, model_path, store_path, 4294967296,
                                 operator_attested_clean_environment=args.operator_attested_clean_environment)
+    disk_check = check_disk_space_margin(WORK_DIR)
+    gate["checks"] = dict(gate.get("checks") or {}, disk_space_margin=disk_check["ok"])
+    gate["disk_space_margin_detail"] = disk_check
+    gate["ok"] = gate["ok"] and disk_check["ok"]
     if not gate["ok"]:
         atomic_write_json(RESULTS_DIR / f"GATE-FAILURE-{int(time.time())}.json", gate)
         print("Pre-run gate FAILED -- see recorded gate-failure artifact. Campaign not started.", file=sys.stderr)
@@ -899,9 +1049,19 @@ def cmd_execute(args) -> int:
             rec_path = run_record_path(launch["run_id"])
             if rec_path.exists():
                 existing = json.loads(rec_path.read_text())
-                if existing.get("ok") is True:
+                if existing.get("ok") is True and existing.get("canonical") is True:
                     records_by_run_id[launch["run_id"]] = existing
-                    continue  # genuinely completed -- skip, never rerun
+                    continue  # genuinely completed AND canonical -- skip, never rerun
+                if existing.get("ok") is True and existing.get("canonical") is not True:
+                    # ok=true but not canonical (e.g. a precanonical trace-enabled
+                    # attempt from before this fix, or a diagnostic record) must
+                    # NEVER be silently treated as a completed canonical launch.
+                    print(f"CAMPAIGN HALTED: run_id={launch['run_id']} has an existing "
+                          "record with ok=true but canonical != true (a precanonical "
+                          "or diagnostic attempt). It is not reused. Move it aside under "
+                          "a precanonical/diagnostic quarantine path before resuming.",
+                          file=sys.stderr)
+                    return 7
                 print(f"CAMPAIGN HALTED: run_id={launch['run_id']} has a FAILED record on disk "
                       f"({existing.get('crash_or_failure') or existing.get('status')}). "
                       "A failed run is never silently treated as completed or auto-rerun. "
@@ -916,7 +1076,8 @@ def cmd_execute(args) -> int:
                 time.sleep(COOLDOWN_SECONDS_WITHIN_CELL)
             prior_cell_index = launch["cell_index"]
 
-            record = _execute_one_launch(launch, runtime_exe, model_path, store_path, frozen, port=args.port)
+            record = _execute_one_launch(launch, runtime_exe, model_path, store_path, frozen, port=args.port,
+                                          enable_trace=False)  # canonical performance path: trace OFF
             atomic_write_json(rec_path, record)
             records_by_run_id[launch["run_id"]] = record
 
@@ -934,6 +1095,81 @@ def cmd_execute(args) -> int:
     finally:
         release_lock()
     return 0
+
+
+def cmd_diagnose(args) -> int:
+    """Single-launch, NON-COUNTED, NON-CANONICAL diagnostic (item 10). Real
+    model, real runtime, same performance path as the canonical campaign
+    (enable_trace=False), but: one workload, one policy, not part of the
+    frozen 4 GiB plan's run_ids, never written into a path the canonical
+    resume logic reads, and explicitly tagged canonical=False/
+    diagnostic_only=True. Does not touch the 48-launch campaign lock, the
+    frozen schedule, or RESULTS_DIR's canonical record set. The 48-launch
+    campaign remains LOCKED regardless of this diagnostic's outcome --
+    running this does not unlock it."""
+    frozen = load_frozen_protocol()
+    runtime_exe = Path(args.runtime)
+    model_path = Path(args.model)
+    store_path = Path(args.store)
+
+    disk_check = check_disk_space_margin(WORK_DIR)
+    if not disk_check["ok"]:
+        print("Diagnostic refused: disk-space margin check failed.", file=sys.stderr)
+        print(json.dumps(disk_check, indent=2), file=sys.stderr)
+        return 3
+
+    diag_run_id = "DIAG-" + hashlib.sha256(
+        f"diagnostic-{time.time()}".encode()).hexdigest()[:16]
+    launch = {
+        "run_id": diag_run_id, "workload_id": "r2-11-coding-v1", "policy_id": "b_selected",
+        "budget_gib": 4.0, "repetition_index": 0, "ordering_block": "diagnostic",
+        "cell_index": -1, "position_in_abba_sequence": -1,
+        "warmup": False, "counted": False,
+    }
+
+    record = _execute_one_launch(launch, runtime_exe, model_path, store_path, frozen,
+                                  port=args.port, enable_trace=False, diagnostic_only=True)
+
+    diag_dir = RESULTS_DIR / "DIAGNOSTIC-ONLY-NOT-CANONICAL"
+    diag_dir.mkdir(parents=True, exist_ok=True)
+    out_path = diag_dir / f"{diag_run_id}.json"
+    atomic_write_json(out_path, record)
+
+    ts = record.get("timestamps", {})
+    rm = record.get("runtime_metrics", {})
+    t0 = ts.get("t0_process_start")
+    t1_ready = ts.get("t1_model_ready")
+    t2 = ts.get("t2_request_sent")
+    t3 = ts.get("t3_first_token")
+    t4 = ts.get("t4_last_token")
+
+    def dt(a, b):
+        return (b - a) if (a is not None and b is not None) else None
+
+    breakdown = {
+        "ok": record.get("ok"),
+        "crash_or_failure": record.get("crash_or_failure"),
+        "canonical": record.get("canonical"),
+        "diagnostic_only": record.get("diagnostic_only"),
+        "trace_enabled": record.get("trace_enabled"),
+        "process_start_to_model_ready_seconds": dt(t0, t1_ready),
+        "model_ready_to_request_sent_seconds": dt(t1_ready, t2),
+        "ttft_seconds": dt(t2, t3),
+        "decode_duration_seconds": dt(t3, t4),
+        "total_wall_clock_seconds": dt(t0, t4),
+        "decode_tokens_per_second": rm.get("decode_tokens_per_second"),
+        "cpu_time_seconds": rm.get("cpu_time_seconds"),
+        "peak_resident_memory_bytes": rm.get("peak_resident_memory_bytes"),
+        "artifact_bytes_written": record.get("artifact_bytes_written"),
+        "target_seconds_per_launch": "2-4 minutes (120-240s)",
+        "stop_and_investigate_threshold_seconds": 300,
+        "exceeds_stop_threshold": (dt(t0, t4) or 0) > 300,
+        "output_path": str(out_path),
+        "note": "Non-counted, non-canonical. Does NOT unlock or advance the "
+                "48-launch campaign, which remains LOCKED.",
+    }
+    print(json.dumps(breakdown, indent=2))
+    return 0 if record.get("ok") else 4
 
 
 def main() -> int:
@@ -956,6 +1192,14 @@ def main() -> int:
     ex.add_argument("--confirm-session", default="", dest="confirm_session")
     ex.add_argument("--operator-attested-clean-environment", action="store_true", dest="operator_attested_clean_environment")
     ex.set_defaults(func=cmd_execute)
+
+    dg = sub.add_parser("diagnose", help="ONE non-counted, non-canonical real-model diagnostic launch. "
+                                          "Does not start or unlock the 48-launch campaign.")
+    dg.add_argument("--runtime", default=r"C:\Users\alpel\Desktop\Argine2\llama-research-v8\llama-server.exe")
+    dg.add_argument("--model", default=r"C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf")
+    dg.add_argument("--store", default=r"C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs")
+    dg.add_argument("--port", type=int, default=PORT)
+    dg.set_defaults(func=cmd_diagnose)
 
     args = p.parse_args()
     return args.func(args)
