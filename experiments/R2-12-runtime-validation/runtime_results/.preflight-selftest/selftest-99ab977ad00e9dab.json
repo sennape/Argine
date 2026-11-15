@@ -7,6 +7,10 @@
   "ordering_block": "counted",
   "cell_index": 0,
   "position_in_abba_sequence": 0,
+  "warmup": false,
+  "counted": true,
+  "status": "completed_ok",
+  "ok": true,
   "timestamps": {
     "t0": 0.0,
     "t1": 0.0,
