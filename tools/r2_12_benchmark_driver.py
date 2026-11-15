@@ -257,18 +257,53 @@ def assert_trace_absent_for_performance(env_map: dict) -> None:
             "recur on the canonical path.")
 
 
+# Confirmed host defect (2026-11-15): a prior session's shell had exported
+# ARGINE_RETENTION_TRACE=C:\modelli\conformance\v5\predicted_protect.jsonl.
+# build_os_environ started from dict(os.environ) and only popped keys
+# EXPLICITLY present in env_map with value None -- since enable_trace=False
+# simply OMITS ARGINE_RETENTION_TRACE from env_map (never sets it to None),
+# the stale inherited value passed straight through into the child process,
+# and llama-server wrote a 14.389 GiB trace file despite the driver
+# reporting trace_enabled=false. Fix: strip every inherited ARGINE_*/
+# PICOSTAR_* variable from the base copy BEFORE layering env_map on top,
+# the same allowlist discipline already proven in tools/exp022_run.py's
+# base_env()/ALLOWED_ARGINE_ENV and tools/exp024_run.py (which refuse to
+# start if the parent carries any such variable). This kills the whole
+# class of inherited-ARGINE-state leaks, not just this one variable.
+KNOWN_TRACE_OUTPUT_ENV_VARS = {"ARGINE_RETENTION_TRACE", "ARGINE_RESEARCH_TRACE"}
+
+
+def strip_inherited_argine_env(base: dict) -> dict:
+    """Remove every ARGINE_*/PICOSTAR_* key from `base` (a copy of
+    os.environ or an equivalent inherited-environment representation).
+    Nothing in this driver's own env_map construction depends on any
+    inherited ARGINE_*/PICOSTAR_* value, so stripping unconditionally is
+    safe; build_child_env's own keys are layered back on top afterward."""
+    return {k: v for k, v in base.items()
+            if not (k.upper().startswith("ARGINE_") or k.upper().startswith("PICOSTAR_"))}
+
+
 def build_os_environ(env_map: dict) -> dict:
     """Start from a copy of this process's own environment (same default as
-    .NET ProcessStartInfo.EnvironmentVariables), then add/override every key
+    .NET ProcessStartInfo.EnvironmentVariables), with every inherited
+    ARGINE_*/PICOSTAR_* variable stripped first (see
+    strip_inherited_argine_env -- this is the fix for the confirmed
+    2026-11-15 inherited-trace-variable leak), then add/override every key
     in env_map by name, removing any whose value is None -- mirrors
-    New-ArgineProcessStartInfo exactly."""
-    merged = dict(os.environ)
+    New-ArgineProcessStartInfo exactly, plus the sanitization step."""
+    merged = strip_inherited_argine_env(dict(os.environ))
     for k, v in env_map.items():
         if v is None:
             merged.pop(k, None)
         else:
             merged[k] = v
     return merged
+
+
+def trace_output_variables_present(env: dict) -> list:
+    """List of KNOWN_TRACE_OUTPUT_ENV_VARS actually present in `env`, for
+    machine-readable diagnostics (diagnose/preflight/execute reports)."""
+    return sorted(k for k in KNOWN_TRACE_OUTPUT_ENV_VARS if k in env)
 
 
 # ---------------------------------------------------------------------------
@@ -620,6 +655,41 @@ def _execute_one_launch(launch: dict, runtime_exe: Path, model_path: Path, store
     os_env = build_os_environ(env_map)
     args = build_child_arguments(str(model_path), port, FROZEN_GEN_PARAMS["context"])
 
+    # --- Pre-Popen fail-closed assertion (confirmed host defect fix) -------
+    # env_map alone never contained the stale inherited ARGINE_RETENTION_TRACE
+    # (it simply omitted the key); the leak happened in os_env, AFTER merging
+    # with the parent process's environment. This is the actual environment
+    # handed to subprocess.Popen -- checking anything earlier would have
+    # missed the exact bug just confirmed on the real host. FAILS BEFORE
+    # the model is launched; never sanitizes silently at a later stage.
+    present = trace_output_variables_present(os_env)
+    retention_trace_env_present = "ARGINE_RETENTION_TRACE" in os_env
+    record["pre_popen_env_check"] = {
+        "retention_trace_env_present": retention_trace_env_present,
+        "trace_output_variables_present": present,
+    }
+    if not enable_trace and present:
+        record["crash_or_failure"] = (
+            "pre-Popen fail-closed assertion: trace-output environment "
+            f"variable(s) present despite enable_trace=False: {present}. "
+            "Model was NOT launched. This is the exact class of inherited-"
+            "process-environment leak confirmed on the real host on "
+            "2026-11-15 (ARGINE_RETENTION_TRACE inherited from a prior "
+            "shell session)."
+        )
+        record["status"] = "failed_pre_popen_env_check"
+        record["ok"] = False
+        return record
+    if enable_trace and "ARGINE_RETENTION_TRACE" not in os_env:
+        record["crash_or_failure"] = (
+            "pre-Popen fail-closed assertion: enable_trace=True but "
+            "ARGINE_RETENTION_TRACE is absent from the child environment "
+            "(explicit path was not applied)."
+        )
+        record["status"] = "failed_pre_popen_env_check"
+        record["ok"] = False
+        return record
+
     proc = None
     stdout_f = stderr_f = None
     try:
@@ -718,27 +788,47 @@ def _execute_one_launch(launch: dict, runtime_exe: Path, model_path: Path, store
             record["crash_or_failure"] = f"port {port} did not become free after cleanup"
             return _finalize_failed(record, proc, stdout_f, stderr_f, t0, skip_stop=True)
 
-        # Per-launch unexpected-artifact-growth guard (item 9): on the
-        # performance path (enable_trace=False) stdout+stderr for one launch
-        # should be at most a few MB. The 2026-11-15 run showed ~14.4 GiB/
-        # launch from an unconditional trace file; this guard would have
-        # caught that on launch 1 instead of filling the disk on launch 6.
-        # Never truncates an artifact -- only halts by returning a failed
-        # record, leaving every byte written on disk exactly as it is.
-        artifact_bytes = sum(
+        # Per-launch unexpected-artifact-growth guard (item 9). IMPORTANT
+        # SEMANTICS (corrected 2026-11-15 after the host confirmed llama-server
+        # wrote 14.389 GiB to an EXTERNAL, hardcoded conformance path --
+        # C:\modelli\conformance\v5\predicted_protect.jsonl -- that is not
+        # under WORK_DIR and this guard never saw): this field measures ONLY
+        # the three files THIS driver itself manages and names
+        # (trace_path/stdout_path/stderr_path under WORK_DIR). It is NOT a
+        # measurement of total filesystem writes by the child process, and
+        # must never be read as such. The real defense against an external,
+        # unmanaged trace path is the pre-Popen fail-closed assertion above
+        # (which now prevents ARGINE_RETENTION_TRACE from ever reaching the
+        # child with a stale/inherited value in the first place) -- this
+        # guard is a secondary safety net for the driver's OWN artifacts only.
+        # external_trace_output_detected is left None rather than approximated:
+        # detecting an arbitrary external path would require either an
+        # expensive full-disk scan (explicitly avoided per item 7) or
+        # hardcoding host-specific paths like C:\modelli\conformance\v5\,
+        # which this driver does not do.
+        driver_managed_artifact_bytes = sum(
             fp.stat().st_size for fp in (trace_path, stdout_path, stderr_path) if fp.exists()
         )
-        record["artifact_bytes_written"] = artifact_bytes
+        record["driver_managed_artifact_bytes_written"] = driver_managed_artifact_bytes
+        record["external_trace_output_detected"] = None
+        record["external_trace_output_note"] = (
+            "Not scanned (avoids expensive full-disk scanning per-launch). "
+            "The pre-Popen fail-closed assertion above is the actual defense "
+            "against an external/inherited trace path being used by the "
+            "child process; this field documents the limit rather than "
+            "silently implying full coverage."
+        )
         ceiling = max_artifact_bytes if max_artifact_bytes is not None else (
             200 * 1024 * 1024 if not enable_trace else None
         )
-        if ceiling is not None and artifact_bytes > ceiling:
+        if ceiling is not None and driver_managed_artifact_bytes > ceiling:
             record["crash_or_failure"] = (
-                f"artifact-growth guard triggered: {artifact_bytes} bytes written "
-                f"(trace+stdout+stderr) exceeds ceiling {ceiling} bytes for this "
-                "launch. Nothing was truncated; the run artifacts are left on disk "
-                "for inspection. Campaign halted rather than risking a repeat of "
-                "the 2026-11-15 storage explosion."
+                f"artifact-growth guard triggered: {driver_managed_artifact_bytes} "
+                f"driver-managed bytes written (trace+stdout+stderr under WORK_DIR) "
+                f"exceeds ceiling {ceiling} bytes for this launch. Nothing was "
+                "truncated; the run artifacts are left on disk for inspection. "
+                "This guard covers only driver-managed files -- see "
+                "external_trace_output_note."
             )
             record["status"] = "failed_artifact_growth_guard"
             record["ok"] = False
@@ -966,17 +1056,31 @@ def cmd_preflight(args) -> int:
     ok = ok and all(oe_checks.values())
 
     try:
-        from tools.r2_12_benchmark_driver_selftest import run_fake_runtime_integration_test
+        from tools.r2_12_benchmark_driver_selftest import (
+            run_fake_runtime_integration_test, run_inherited_env_regression_test,
+            run_trace_enabled_overrides_stale_inherited_test)
+    except Exception:
+        sys.path.insert(0, str(REPO_ROOT / "tools"))
+        from r2_12_benchmark_driver_selftest import (  # type: ignore
+            run_fake_runtime_integration_test, run_inherited_env_regression_test,
+            run_trace_enabled_overrides_stale_inherited_test)
+    try:
         fake_result = run_fake_runtime_integration_test()
-    except Exception as e:
-        try:
-            sys.path.insert(0, str(REPO_ROOT / "tools"))
-            from r2_12_benchmark_driver_selftest import run_fake_runtime_integration_test  # type: ignore
-            fake_result = run_fake_runtime_integration_test()
-        except Exception as e2:
-            fake_result = {"ok": False, "error": f"{type(e2).__name__}: {e2}"}
+    except Exception as e2:
+        fake_result = {"ok": False, "error": f"{type(e2).__name__}: {e2}"}
+    try:
+        inherited_env_result = run_inherited_env_regression_test()
+    except Exception as e2:
+        inherited_env_result = {"ok": False, "error": f"{type(e2).__name__}: {e2}"}
+    try:
+        trace_override_result = run_trace_enabled_overrides_stale_inherited_test()
+    except Exception as e2:
+        trace_override_result = {"ok": False, "error": f"{type(e2).__name__}: {e2}"}
     report["fake_runtime_integration_test"] = fake_result
-    ok = ok and bool(fake_result.get("ok"))
+    report["inherited_env_regression_test"] = inherited_env_result
+    report["trace_enabled_overrides_stale_inherited_test"] = trace_override_result
+    ok = ok and bool(fake_result.get("ok")) and bool(inherited_env_result.get("ok")) \
+        and bool(trace_override_result.get("ok"))
 
     gate = host_preflight_gate(
         Path(args.runtime) if args.runtime else None,
@@ -1026,6 +1130,16 @@ def cmd_execute(args) -> int:
     gate = host_preflight_gate(runtime_exe, model_path, store_path, 4294967296,
                                 operator_attested_clean_environment=args.operator_attested_clean_environment)
     disk_check = check_disk_space_margin(WORK_DIR)
+    # Report, at the parent-environment level, exactly what the 2026-11-15
+    # host failure was: an inherited ARGINE_RETENTION_TRACE (or equivalent)
+    # the operator's own shell was carrying before the driver even runs.
+    # This is informational here (the real defense is the per-launch
+    # pre-Popen assertion, which strips/checks the CHILD env regardless of
+    # what the parent carries) -- surfaced early so the operator sees it
+    # before approving anything.
+    parent_trace_vars = trace_output_variables_present(os.environ)
+    gate["retention_trace_env_present"] = "ARGINE_RETENTION_TRACE" in os.environ
+    gate["trace_output_variables_present"] = parent_trace_vars
     gate["checks"] = dict(gate.get("checks") or {}, disk_space_margin=disk_check["ok"])
     gate["disk_space_margin_detail"] = disk_check
     gate["ok"] = gate["ok"] and disk_check["ok"]
@@ -1117,6 +1231,10 @@ def cmd_diagnose(args) -> int:
         print("Diagnostic refused: disk-space margin check failed.", file=sys.stderr)
         print(json.dumps(disk_check, indent=2), file=sys.stderr)
         return 3
+    # Same parent-environment visibility as cmd_execute (informational; the
+    # real defense is _execute_one_launch's own pre-Popen assertion below).
+    parent_trace_vars = trace_output_variables_present(os.environ)
+    retention_trace_env_present_in_parent = "ARGINE_RETENTION_TRACE" in os.environ
 
     diag_run_id = "DIAG-" + hashlib.sha256(
         f"diagnostic-{time.time()}".encode()).hexdigest()[:16]
@@ -1160,7 +1278,11 @@ def cmd_diagnose(args) -> int:
         "decode_tokens_per_second": rm.get("decode_tokens_per_second"),
         "cpu_time_seconds": rm.get("cpu_time_seconds"),
         "peak_resident_memory_bytes": rm.get("peak_resident_memory_bytes"),
-        "artifact_bytes_written": record.get("artifact_bytes_written"),
+        "driver_managed_artifact_bytes_written": record.get("driver_managed_artifact_bytes_written"),
+        "external_trace_output_detected": record.get("external_trace_output_detected"),
+        "pre_popen_env_check": record.get("pre_popen_env_check"),
+        "parent_environment_trace_output_variables_present": parent_trace_vars,
+        "parent_environment_retention_trace_env_present": retention_trace_env_present_in_parent,
         "target_seconds_per_launch": "2-4 minutes (120-240s)",
         "stop_and_investigate_threshold_seconds": 300,
         "exceeds_stop_threshold": (dt(t0, t4) or 0) > 300,
