@@ -1,0 +1,54 @@
+{
+  "ok": false,
+  "checks": [
+    {
+      "name": "runtime_hash_matches_frozen_identity",
+      "ok": null,
+      "detail": "not reachable from this environment: C:\\Users\\alpel\\Desktop\\Argine2\\llama-research-v8\\llama-server.exe"
+    },
+    {
+      "name": "model_hash_matches_frozen_identity",
+      "ok": null,
+      "detail": "not reachable from this environment: C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf"
+    },
+    {
+      "name": "store_hash_matches_frozen_identity",
+      "ok": null,
+      "detail": "not reachable from this environment: C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs"
+    },
+    {
+      "name": "hardware_identity_matches_stamp_or_first_run",
+      "ok": true,
+      "detail": "no stamp yet -- this would be the first real run, which creates it"
+    },
+    {
+      "name": "sufficient_free_ram",
+      "ok": null,
+      "detail": "model not reachable from this environment; cannot plan"
+    },
+    {
+      "name": "no_concurrent_benchmark_process",
+      "ok": true,
+      "detail": "/sessions/rcw-01m8e8kzl6gn7hgy1brzj9qg/mnt/Desktop--Argine3/experiments/R2-12-runtime-validation/runtime_results/.campaign.lock"
+    },
+    {
+      "name": "operator_attested_clean_environment",
+      "ok": false,
+      "detail": "must be passed explicitly by the operator at --execute time; never assumed true"
+    },
+    {
+      "name": "disk_space_margin",
+      "ok": true,
+      "detail": "{\"path\": \"/sessions/rcw-01m8e8kzl6gn7hgy1brzj9qg/mnt/Desktop--Argine3/tools/r2-12-benchmark-run\", \"free_bytes\": 96870977536, \"total_bytes\": 510677479424, \"min_free_bytes_required\": 5368709120, \"ok\": true}"
+    }
+  ],
+  "retention_trace_env_present": false,
+  "trace_output_variables_present": [],
+  "disk_space_margin_detail": {
+    "path": "/sessions/rcw-01m8e8kzl6gn7hgy1brzj9qg/mnt/Desktop--Argine3/tools/r2-12-benchmark-run",
+    "free_bytes": 96870977536,
+    "total_bytes": 510677479424,
+    "min_free_bytes_required": 5368709120,
+    "ok": true
+  }
+}
