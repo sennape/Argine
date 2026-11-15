@@ -20,6 +20,42 @@ This directory holds everything else: the decision-only subset the comparator
 actually consumes, the host stdout/stderr, and the independent re-verification
 performed from this preservation (not from the live host run).
 
+## Two distinct verifications -- do not conflate
+
+There are two separate verification events in this evidence set, of
+different status, and they must not be presented as equivalent or merged:
+
+1. **The real host comparator run (authoritative).** As part of the same
+   campaign execution that produced this evidence, `tools/r2-12-host-conformance.ps1`
+   itself invoked the unmodified frozen comparator,
+   `tools/r2_12_real_trace_conformance.py`, directly on the Windows host
+   (full RAM available there; no memory constraint) against each policy's
+   `*.decisions.jsonl` as it was generated. This produced the result recorded
+   in `../R2_12_RUNTIME_POLICY_CONFORMANCE_PASS.json` and in
+   `CONFORMANCE-MANIFEST.json`'s `run_result.comparator_result`:
+   `b_selected = MATCH` (9504 events), `predicted_protect = MATCH` (9504
+   events), overall `R2-12 HOST CONFORMANCE: BOTH MATCH`, harness exit 0.
+   **This host-side run of the actual frozen comparator is the authoritative
+   conformance result.**
+
+2. **The sandbox streaming audit (supplemental, post-hoc).** This
+   formalization was carried out in a separate, memory-constrained sandbox
+   (~3.9 GiB RAM, no swap) that cannot run the frozen comparator's
+   `f.readlines()`-based, fully-in-memory implementation against the
+   preserved ~1.9 GiB trace files without being OOM-killed. `streaming_conformance.py`
+   (in this directory) is an additive, non-modifying driver written only to
+   let this agent independently re-check the *preserved copies* of the
+   evidence under that constraint, by importing the identical frozen policy
+   classes and replaying the identical comparison logic across two bounded
+   passes. Its result (see "Independent re-verification result" below and
+   `comparator-b_selected.json` / `comparator-predicted_protect.json`) is
+   **supplemental corroboration that the preserved files are internally
+   consistent with the frozen policies**, not a replacement for, not equal
+   in status to, and not the source of, the host's own MATCH finding in (1).
+   `tools/r2_12_real_trace_conformance.py` itself was never modified and was
+   not re-run by this agent anywhere it would need to be -- it already ran,
+   successfully, on the host.
+
 ## Preserved artifacts
 
 | Canonical path (this dir unless noted) | SHA-256 | Bytes | Role | Policy | Source path (on the mounted host tree) |
@@ -56,7 +92,7 @@ memory at a time. It does not alter, and was not used in place of, the
 original tool anywhere it could actually run; it is additive tooling for
 this preservation, not a replacement for `tools/r2_12_real_trace_conformance.py`.
 
-## Independent re-verification result (from this preserved evidence, no model run)
+## Sandbox streaming-audit result (supplemental; the host's own comparator result in (1) above is authoritative)
 
 | | b_selected | predicted_protect |
 |---|---|---|

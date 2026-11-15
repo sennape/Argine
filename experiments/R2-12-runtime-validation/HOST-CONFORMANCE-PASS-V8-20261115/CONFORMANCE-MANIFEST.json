@@ -35,27 +35,55 @@
   "policies": {
     "b_selected": {
       "startup_line": "argine: retention policy attiva: b_selected (decay=0.99, interval=64) -- R2-12 runtime policy integration",
-      "frozen_params": {"decay_factor": 0.99, "aging_interval_steps": 64, "predictor_decay": 0, "top_k": 0, "n_experts": 0},
+      "frozen_params": {
+        "decay_factor": 0.99,
+        "aging_interval_steps": 64,
+        "predictor_decay": 0,
+        "top_k": 0,
+        "n_experts": 0
+      },
       "reference_class": "argine.research2.r2_09a.policies.AgedFrequency"
     },
     "predicted_protect": {
       "startup_line": "argine: retention policy attiva: predicted_protect (decay=0.99, interval=64, predictor_decay=0.99) -- R2-12 runtime policy integration",
-      "frozen_params": {"decay_factor": 0.99, "aging_interval_steps": 64, "predictor_decay": 0.99, "top_k": 8, "n_experts": 128},
+      "frozen_params": {
+        "decay_factor": 0.99,
+        "aging_interval_steps": 64,
+        "predictor_decay": 0.99,
+        "top_k": 8,
+        "n_experts": 128
+      },
       "reference_class": "argine.research2.r2_bridge01.retention_policies.PredictedProtectPolicy"
     }
   },
   "comparator": {
     "frozen_tool_path": "tools/r2_12_real_trace_conformance.py",
     "frozen_tool_unmodified": true,
-    "python_executable_used_for_this_formalization": "python3 -I (Linux sandbox; the host run itself and any on-host re-check would use C:\\Users\\alpel\\anaconda3\\python.exe)",
-    "note": "the frozen comparator OOMs in this formalization's ~3.9 GiB sandbox on the full 9504-event trace (f.readlines() + full in-memory event list); re-verified instead with streaming_conformance.py in this directory, which imports the identical frozen policy classes and reproduces the identical field-by-field comparison without materializing the whole trace at once -- see this directory's README.md"
+    "authoritative_result_source": "The frozen comparator above was run directly on the Windows host, by tools/r2-12-host-conformance.ps1 itself, as part of the same campaign execution that produced this evidence (full host RAM; no memory constraint there). That host-side run is the authoritative conformance result and is what run_result.comparator_result below reports.",
+    "supplemental_sandbox_audit": "This formalization was carried out in a separate, ~3.9 GiB RAM / no-swap sandbox, where the frozen comparator's f.readlines()-based full in-memory replay OOMs (exit 137) on the ~1.9 GiB preserved decisions files. streaming_conformance.py (this directory) is an additive, non-modifying driver that imports the identical frozen policy classes and reproduces the identical comparison logic across two bounded streaming passes, used only to independently re-check that the preserved copies of the evidence are internally consistent -- it is supplemental corroboration, not a replacement for, and not the source of, the host comparator result above. See this directory's README.md, section 'Two distinct verifications -- do not conflate'.",
+    "python_executable_used_for_supplemental_sandbox_audit": "python3 -I (Linux sandbox; the host run itself used C:\\Users\\alpel\\anaconda3\\python.exe or the harness's resolved interpreter)"
   },
   "run_result": {
-    "completion_token_count": {"b_selected": 64, "predicted_protect": 64},
-    "trace_rows": {"b_selected": 19008, "predicted_protect": 19008},
-    "decision_rows": {"b_selected": 9504, "predicted_protect": 9504},
-    "completion_rows": {"b_selected": 9504, "predicted_protect": 9504},
-    "comparator_result": {"b_selected": "MATCH", "predicted_protect": "MATCH"},
+    "completion_token_count": {
+      "b_selected": 64,
+      "predicted_protect": 64
+    },
+    "trace_rows": {
+      "b_selected": 19008,
+      "predicted_protect": 19008
+    },
+    "decision_rows": {
+      "b_selected": 9504,
+      "predicted_protect": 9504
+    },
+    "completion_rows": {
+      "b_selected": 9504,
+      "predicted_protect": 9504
+    },
+    "comparator_result": {
+      "b_selected": "MATCH",
+      "predicted_protect": "MATCH"
+    },
     "host_conformance_final_result": "R2-12 HOST CONFORMANCE: BOTH MATCH",
     "harness_exit_code": 0
   },

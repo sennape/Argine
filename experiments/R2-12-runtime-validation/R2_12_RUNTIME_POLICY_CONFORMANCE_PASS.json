@@ -16,25 +16,33 @@
     "store_path_windows": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs",
     "budget_bytes": 4294967296,
     "budget_mib": 4096,
-    "policies_executed": ["b_selected", "predicted_protect"],
+    "policies_executed": [
+      "b_selected",
+      "predicted_protect"
+    ],
     "per_policy_result": {
       "b_selected": {
         "status": "STORE READY / POLICY READY / TRACE OPEN / health READY / REQUEST OK",
         "completion_tokens": 64,
         "trace_rows": 19008,
         "decision_rows": 9504,
-        "completion_rows": 9504
+        "completion_rows": 9504,
+        "comparator_result": "MATCH",
+        "comparator_result_source": "real host run of tools/r2_12_real_trace_conformance.py (authoritative)"
       },
       "predicted_protect": {
         "status": "STORE READY / POLICY READY / TRACE OPEN / health READY / REQUEST OK",
         "completion_tokens": 64,
         "trace_rows": 19008,
         "decision_rows": 9504,
-        "completion_rows": 9504
+        "completion_rows": 9504,
+        "comparator_result": "MATCH",
+        "comparator_result_source": "real host run of tools/r2_12_real_trace_conformance.py (authoritative)"
       }
     },
     "host_harness_final_result": "R2-12 HOST CONFORMANCE: BOTH MATCH",
-    "host_harness_exit_code": 0
+    "host_harness_exit_code": 0,
+    "authoritative_comparator_note": "The comparator_result values in per_policy_result below (and in host_harness_final_result) come from the unmodified frozen tool, tools/r2_12_real_trace_conformance.py, run directly on the Windows host by tools/r2-12-host-conformance.ps1 itself as part of this same execution. This host-side run is the authoritative conformance result; see independent_reverification_performed_by_this_agent below for the separate, supplemental, post-hoc check performed by this agent."
   },
   "independent_reverification_performed_by_this_agent": {
     "method": "Re-ran comparison of the preserved raw trace files against the frozen Python reference policies, independently of and without re-running llama-server or any host process. Because the frozen comparator tool (tools/r2_12_real_trace_conformance.py) fully materializes each trace in memory and could not complete in this sandbox's constrained (~3.9 GiB, no swap) memory, a streaming-equivalent driver (streaming_conformance.py, preserved alongside this evidence) was used instead. It imports the identical frozen policy classes from the identical frozen tool and reproduces its comparison logic verbatim across two bounded streaming passes rather than one in-memory pass; it does not modify, replace, or alter tools/r2_12_real_trace_conformance.py in any way.",
@@ -49,7 +57,8 @@
       "budget_violations_policy_resident": 0
     },
     "b_selected_comparator_result": "MATCH",
-    "predicted_protect_comparator_result": "MATCH"
+    "predicted_protect_comparator_result": "MATCH",
+    "status": "supplemental post-hoc corroboration performed in this agent's sandbox; NOT a replacement for, and not the source of, the authoritative host comparator result recorded in host_execution_summary above"
   },
   "frozen_evidence_digest_verification": {
     "method": "argine.research2.r2_12.contract.assert_valid() executed against the unmodified repository tree",
@@ -107,7 +116,11 @@
   },
   "frozen_phase0_benchmark_design_restated_not_executed": {
     "workloads": 4,
-    "budgets_gib": [1.5, 4, 8],
+    "budgets_gib": [
+      1.5,
+      4,
+      8
+    ],
     "policies": 2,
     "counted_repetitions_per_cell": 5,
     "discarded_warmups_per_cell_per_policy": 1,
