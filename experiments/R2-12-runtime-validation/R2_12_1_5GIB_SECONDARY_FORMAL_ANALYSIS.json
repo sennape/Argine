@@ -1,0 +1,309 @@
+{
+  "artifact_type": "R2_12_1_5GIB_SECONDARY_FORMAL_ANALYSIS",
+  "budget_gib": 1.5,
+  "budget_role": "1.5gib-stress",
+  "analysis_timestamp_utc": "2026-11-15T22:56:52Z",
+  "repository_commit_head": "1c773229e7374340504df910248deed302f1c138",
+  "frozen_contract_digest": {
+    "valid": true,
+    "contract_dir": "/sessions/rcw-01m8e8kzl6gn7hgy1brzj9qg/mnt/Desktop--Argine3/experiments/R2-12-runtime-validation",
+    "digest": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad"
+  },
+  "runtime_v8_identity_sha256": "f4d93061b0d4ce41bc4c5f0abce3420e16768ff5dba5ce53212b49ca25dcf087",
+  "model_identity_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+  "store_identity_sha256": "fef943ae0bc017864a47d41c1fc90d422016045f7e8705b1d138b7defd8c5146",
+  "canonical_acquisition_integrity": {
+    "budget_gib": 1.5,
+    "budget_bytes": 1610612736,
+    "session_id": "1.5gib-stress",
+    "n_canonical_records_found": 48,
+    "n_expected_frozen_launches": 48,
+    "missing_run_ids": [],
+    "unexpected_run_ids": [],
+    "no_duplicate_canonical_run_id": true,
+    "n_warmup": 8,
+    "n_counted": 40,
+    "counted_per_policy": {
+      "b_selected": 20,
+      "predicted_protect": 20
+    },
+    "exactly_20_per_policy": true,
+    "exactly_5_per_workload_per_policy": true,
+    "all_records_ok_true": true,
+    "all_counted_ok_true": true,
+    "all_budget_gib_matches_target": true,
+    "schedule_order_matches_frozen_plan": true,
+    "schedule_order_mismatches": [],
+    "trace_disabled_all_records": true,
+    "n_predict_512_all_records": true,
+    "retention_params_correct_all_records": true,
+    "expected_baseline_decay_factor": 0.999,
+    "expected_baseline_aging_interval_steps": 1,
+    "expected_predictor_decay_factor": 0.99,
+    "no_precanonical_contamination": true,
+    "contaminated_run_ids": [],
+    "peak_resident_memory_bytes_range": {
+      "min": 2932686848,
+      "max": 3362807808
+    },
+    "budget_violations_is_a_driver_constant_not_independently_measured": true,
+    "runtime_identity_verified_once_at_campaign_start_not_per_record": true
+  },
+  "output_equivalence": {
+    "n_cells_checked": 4,
+    "n_matching": 4,
+    "n_mismatching": 0,
+    "per_cell": {
+      "1": {
+        "reason": null,
+        "workload_id": "r2-11-coding-v1"
+      },
+      "7": {
+        "reason": null,
+        "workload_id": "r2-11-reasoning-v1"
+      },
+      "10": {
+        "reason": null,
+        "workload_id": "r2-11-summarization-v1"
+      },
+      "4": {
+        "reason": null,
+        "workload_id": "r2-11-instruction-v1"
+      }
+    },
+    "digest_evidence_unique_digests_per_policy_per_cell": {
+      "1": {
+        "b_selected": [
+          "9d7f18190a03757c4310388d5bc0d51d92d55896735f358faa5b54a2e16f7f03"
+        ],
+        "predicted_protect": [
+          "9d7f18190a03757c4310388d5bc0d51d92d55896735f358faa5b54a2e16f7f03"
+        ]
+      },
+      "7": {
+        "b_selected": [
+          "6faab96f99b92bacd21156dd6e2b5840e6766ff7ae02d02bcdc667cfd470a271"
+        ],
+        "predicted_protect": [
+          "6faab96f99b92bacd21156dd6e2b5840e6766ff7ae02d02bcdc667cfd470a271"
+        ]
+      },
+      "10": {
+        "predicted_protect": [
+          "1dbe98c75ab7d40eb9f11f3a4e180007564df907ca81d47bec69f258c2a7139d"
+        ],
+        "b_selected": [
+          "1dbe98c75ab7d40eb9f11f3a4e180007564df907ca81d47bec69f258c2a7139d"
+        ]
+      },
+      "4": {
+        "b_selected": [
+          "a6c5d80691af1aadd9dc77e64f03b57b9655249a97cdd181ea70a0b5e8fb2dd7"
+        ],
+        "predicted_protect": [
+          "a6c5d80691af1aadd9dc77e64f03b57b9655249a97cdd181ea70a0b5e8fb2dd7"
+        ]
+      }
+    },
+    "primary_performance_comparison_admissible": true
+  },
+  "official_statistical_method": {
+    "unit_of_analysis": "paired per-repetition delta_tps within (workload, 1.5 GiB) cell; PredictedProtectPolicy - B_selected (statistical_analysis.json, secondary_budget_statistics: identical procedure to the 4 GiB primary, own bootstrap CI, not pooled with the primary 4 GiB budget)",
+    "primary_aggregate": "equal-weight mean of 4 per-workload mean deltas",
+    "uncertainty_method": "paired bootstrap, 100000 resamples, seed 42, 95% CI, argine.research2.r2_11.bootstrap.paired_bootstrap_ci (reused unmodified -- same call as the 4 GiB primary analysis)",
+    "note": "compute_primary_statistics() and check_output_equivalence() are imported from tools/r2_12_primary_analysis.py and called UNMODIFIED on this budget's own record set; no parallel statistical implementation exists."
+  },
+  "official_secondary_statistics": {
+    "per_workload_mean_delta_tps_PP_minus_B": {
+      "r2-11-coding-v1": -0.10558990252104791,
+      "r2-11-instruction-v1": -0.06051703420789876,
+      "r2-11-reasoning-v1": -0.052962276571947076,
+      "r2-11-summarization-v1": -0.056254530489226795
+    },
+    "per_workload_pairs": {
+      "r2-11-coding-v1": [
+        {
+          "repetition_index": 1,
+          "predicted_protect_tps": 2.3017590637348615,
+          "b_selected_tps": 2.3547550127861125,
+          "delta_tps": -0.052995949051251046
+        },
+        {
+          "repetition_index": 2,
+          "predicted_protect_tps": 2.221194368029973,
+          "b_selected_tps": 2.3467247735927237,
+          "delta_tps": -0.12553040556275086
+        },
+        {
+          "repetition_index": 3,
+          "predicted_protect_tps": 2.302823487822566,
+          "b_selected_tps": 2.3442199657838385,
+          "delta_tps": -0.04139647796127255
+        },
+        {
+          "repetition_index": 4,
+          "predicted_protect_tps": 2.2544323795007877,
+          "b_selected_tps": 2.4751301969342427,
+          "delta_tps": -0.22069781743345507
+        },
+        {
+          "repetition_index": 5,
+          "predicted_protect_tps": 2.248475666602523,
+          "b_selected_tps": 2.335804529199033,
+          "delta_tps": -0.08732886259651007
+        }
+      ],
+      "r2-11-instruction-v1": [
+        {
+          "repetition_index": 1,
+          "predicted_protect_tps": 2.3117562973112404,
+          "b_selected_tps": 2.3096990895550387,
+          "delta_tps": 0.002057207756201773
+        },
+        {
+          "repetition_index": 2,
+          "predicted_protect_tps": 2.304853583679944,
+          "b_selected_tps": 2.3049674669629483,
+          "delta_tps": -0.00011388328300432349
+        },
+        {
+          "repetition_index": 3,
+          "predicted_protect_tps": 2.265639842628923,
+          "b_selected_tps": 2.3312710632735705,
+          "delta_tps": -0.06563122064464766
+        },
+        {
+          "repetition_index": 4,
+          "predicted_protect_tps": 2.263011140480557,
+          "b_selected_tps": 2.4539431134494976,
+          "delta_tps": -0.1909319729689405
+        },
+        {
+          "repetition_index": 5,
+          "predicted_protect_tps": 2.2444604476084864,
+          "b_selected_tps": 2.2924257495075895,
+          "delta_tps": -0.047965301899103086
+        }
+      ],
+      "r2-11-reasoning-v1": [
+        {
+          "repetition_index": 1,
+          "predicted_protect_tps": 2.2394705965136272,
+          "b_selected_tps": 2.300614083873186,
+          "delta_tps": -0.06114348735955888
+        },
+        {
+          "repetition_index": 2,
+          "predicted_protect_tps": 2.3371397121904374,
+          "b_selected_tps": 2.3088551775650377,
+          "delta_tps": 0.028284534625399704
+        },
+        {
+          "repetition_index": 3,
+          "predicted_protect_tps": 2.219720179120385,
+          "b_selected_tps": 2.305605906148376,
+          "delta_tps": -0.08588572702799091
+        },
+        {
+          "repetition_index": 4,
+          "predicted_protect_tps": 2.3506221160632412,
+          "b_selected_tps": 2.386342220948157,
+          "delta_tps": -0.03572010488491584
+        },
+        {
+          "repetition_index": 5,
+          "predicted_protect_tps": 2.2661498242649594,
+          "b_selected_tps": 2.376496422477629,
+          "delta_tps": -0.11034659821266946
+        }
+      ],
+      "r2-11-summarization-v1": [
+        {
+          "repetition_index": 1,
+          "predicted_protect_tps": 2.205092056400973,
+          "b_selected_tps": 2.2584740753827024,
+          "delta_tps": -0.05338201898172956
+        },
+        {
+          "repetition_index": 2,
+          "predicted_protect_tps": 2.2004758462271132,
+          "b_selected_tps": 2.237902243165912,
+          "delta_tps": -0.03742639693879868
+        },
+        {
+          "repetition_index": 3,
+          "predicted_protect_tps": 2.1900714307440508,
+          "b_selected_tps": 2.2424065236494304,
+          "delta_tps": -0.05233509290537963
+        },
+        {
+          "repetition_index": 4,
+          "predicted_protect_tps": 2.2013159906393667,
+          "b_selected_tps": 2.2347244339871586,
+          "delta_tps": -0.033408443347791916
+        },
+        {
+          "repetition_index": 5,
+          "predicted_protect_tps": 2.1290077539795633,
+          "b_selected_tps": 2.2337284542519975,
+          "delta_tps": -0.10472070027243419
+        }
+      ]
+    },
+    "primary_aggregate_statistic": {
+      "definition": "equal-weight mean of the 4 per-workload mean delta_tps (PredictedProtectPolicy - B_selected) at 4 GiB, per statistical_analysis.json.primary_aggregate_statistic",
+      "observed_mean_delta_tps": -0.06883093594753013
+    },
+    "bootstrap_95ci": {
+      "lower": -0.09325605951309263,
+      "upper": -0.054608403530586935,
+      "resamples": 100000,
+      "seed": 42,
+      "implementation": "argine.research2.r2_11.bootstrap.paired_bootstrap_ci (reused unmodified)"
+    },
+    "ci_excludes_zero_in_favor_of_predicted_protect": false,
+    "pair_direction_counts": {
+      "predicted_protect_wins": 2,
+      "b_selected_wins": 18,
+      "ties": 0
+    },
+    "n_pairs": 20,
+    "descriptive_central_estimates": {
+      "predicted_protect_mean_tps": 2.252873589177179,
+      "b_selected_mean_tps": 2.3217045251247095
+    },
+    "consistency_workloads_with_delta_ge_0": 0,
+    "consistency_requirement_met_3_of_4": false,
+    "improving_workloads": [],
+    "dominance_test_applicable": false,
+    "ttft_latency_tolerance_check": {
+      "predicted_protect_mean": 13.694893159996719,
+      "b_selected_mean": 13.570067335000203,
+      "regression_seconds": 0.12482582499651507,
+      "tolerance_seconds": 0.6785033667500102,
+      "exceeds_tolerance": false
+    },
+    "end_to_end_latency_tolerance_check": {
+      "predicted_protect_mean": 240.64718533000124,
+      "b_selected_mean": 233.84025785499688,
+      "regression_seconds": 6.806927475004358,
+      "tolerance_seconds": 11.692012892749844,
+      "exceeds_tolerance": false
+    },
+    "budget_violations_total": 0
+  },
+  "secondary_classification_determination": {
+    "no_R2_12_classification_label_assigned": true,
+    "reason": "decision_rules.json.primary_decision_rule defines R2_12_PASS / R2_12_FAIL / R2_12_INCONCLUSIVE / R2_12_BLOCKED_INVALID strictly in terms of the primary 4 GiB mean delta_tps and the primary 4 GiB bootstrap CI. No alternative classification scheme for a secondary budget is defined anywhere in decision_rules.json or statistical_analysis.json. statistical_analysis.json.secondary_budget_statistics specifies only that the identical per-cell/aggregate/bootstrap PROCEDURE is applied independently at each secondary budget (own CI, not pooled with 4 GiB) -- it does not say a PASS/FAIL/INCONCLUSIVE label follows from that procedure's output at a secondary budget.",
+    "frozen_interpretive_stance": "decision_rules.json.budget_specific_interpretive_stance_frozen_before_execution.1_5gib_stress",
+    "frozen_interpretive_stance_text": "R2-11 showed a LARGER retention improvement at 1.5 GiB. 1.5 GiB is treated as a stress/secondary condition in R2-12 and must NOT replace the 4 GiB primary budget as the basis for the R2_12_PASS/FAIL/INCONCLUSIVE classification, even if its own effect size is larger.",
+    "forbidden_claims_reminder": "This secondary-budget magnitude must not be used to override, soften, or re-derive the already-committed primary 4 GiB R2_12_FAIL classification, and no causal attribution (e.g. 'memory pressure caused X') may be made from a descriptive magnitude comparison alone."
+  },
+  "limitations": [
+    "prediction_overhead_seconds / retention_policy_overhead_seconds are None for every record, same as the 4 GiB primary analysis; not needed here since no PASS/FAIL overhead-dominance clause applies to a secondary budget.",
+    "budget_violations is a constant 0 written by the driver, not an independently measured counter from runtime instrumentation.",
+    "peak_resident_memory_bytes was checked only for gross sanity (range 2932686848-3362807808 bytes), not against the correct planner-derived allowance (requires the real model file, not reachable from this analysis environment).",
+    "Runtime/model/store identity hashes are verified once at campaign start (host_preflight_gate), not independently re-verified per record in this analysis -- identical caveat to the 4 GiB primary analysis."
+  ],
+  "explicit_statement": "No model inference was performed by this analysis script. The 1.5 GiB campaign itself was already executed and committed as canonical evidence prior to this analysis step."
+}
