@@ -1,0 +1,7 @@
+GitHub transport mirror of the canonical Argine3 repository.
+Canonical repository history was not modified.
+Public GitHub history was rewritten only to replace blobs larger than 100 MB with Git LFS pointers.
+Canonical final commit: 4ce35fef61cd9c8155c3b88222cb6b52a3f62fb6
+Public mirror equivalent commit: ebd8e50bb616bb15ed286a4d8e0408ddc0cfbe70
+Frozen PDF SHA256: 8972ed242c46d1e556eafa18e21103b2fe7701d3f6fc6a9e0a7fa02b2a5d1b72
+See PUBLIC_MIRROR_COMMIT_MAP.csv for the complete canonical-to-public commit mapping.
