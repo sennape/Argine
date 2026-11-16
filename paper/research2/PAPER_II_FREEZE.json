@@ -27,8 +27,8 @@
   "research_2_closure_commit_provenance": {
     "r2_12_8gib_evidence_and_analysis_commit": "5e9d93d",
     "r2_12_final_closure_commit": "3356845",
-    "research_2_final_closure_commit": "PENDING_THIS_TASK_COMMIT_A",
-    "paper_ii_freeze_commit": "PENDING_THIS_TASK_COMMIT_B"
+    "research_2_final_closure_commit": "6c20408",
+    "paper_ii_freeze_commit": "3a8565b"
   },
   "build_environment": {
     "tex_engine": "pdfTeX 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian)",
