@@ -123,10 +123,10 @@ entirely below zero. 9 of the 12 workload instances individually improved
 generous enough, on these workloads, that eviction pressure -- and hence any
 opportunity for a predictive eviction policy to change which object is
 evicted -- is minimal or absent. R-11's frozen decision rule classifies
-this primary-budget result \textsc{r2\_11\_pass}.
+this primary-budget result R-11 PASS.
 
 We state explicitly, as the programme's evidence-level distinction requires:
-\textsc{r2\_11\_pass} is a statement about
+R-11 PASS is a statement about
 miss bytes per decode step under offline replay. It is
 \emph{not} a runtime, latency, or throughput measurement, and it does not by
 itself establish that any real decode-time benefit follows. That question is
@@ -179,7 +179,7 @@ bootstrap CI $[-0.259917,\,-0.091642]$, entirely at or below zero;
 \texttt{B\_selected(M)} won 18 of 20 counted pairs. Per the frozen primary
 decision rule, this is sufficient on its own for a negative classification;
 the separate overhead-dominance clause need not be evaluated. \textbf{R-12's
-primary classification is \textsc{r2\_12\_fail}.}
+primary classification is R-12 FAIL.}
 
 At the \textbf{1.5~GiB stress budget} (descriptive only, no independent
 classification), the observed delta was $-0.068831$ TPS ($-2.9238\%$), 95\%
@@ -225,7 +225,7 @@ descriptive only.}
 \caption{R-12: mean paired delta in decode tokens/second
 (PredictedProtect $-$ B\_selected(M)) by budget, each with its own frozen
 95\% paired bootstrap CI (not pooled across budgets). The primary 4~GiB
-classification is \textsc{R2\_12\_FAIL}; 1.5/8~GiB are descriptive only and
+classification is R-12 FAIL; 1.5/8~GiB are descriptive only and
 do not carry an independent classification.}
 \label{fig:c5-r2-12-delta}
 \end{figure}
@@ -256,8 +256,8 @@ the scope of the quantity each stage measures.}
 Level & Finding & Scope \\
 \midrule
 1. Prediction (R-09/R-10) & Positive (Category B; EVAL-confirmed margin) & Prediction quality only \\
-2. Replay retention (R-BRIDGE-01/R-11) & Positive (\textsc{bridge\_positive}; \textsc{r2\_11\_pass}) & Replay miss-byte metric only \\
-3. Real runtime (R-12) & Negative (\textsc{r2\_12\_fail}) & Real decode throughput, primary budget \\
+2. Replay retention (R-BRIDGE-01/R-11) & Positive (\textsc{bridge\_positive}; R-11 PASS) & Replay miss-byte metric only \\
+3. Real runtime (R-12) & Negative (R-12 FAIL) & Real decode throughput, primary budget \\
 \bottomrule
 \end{tabularx}
 \end{minipage}

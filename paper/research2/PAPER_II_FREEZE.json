@@ -57,27 +57,28 @@
     "Abstract condensed to Paper I length (335 words) so the first page follows Paper I's TITLE/AUTHOR/DATE/ABSTRACT/MAIN TEXT rhythm; every quantitative claim and classification is retained verbatim.",
     "placeins section-level float barrier removed to eliminate a large vertical gap on page 4; float placement parameters retained.",
     "Figure 9 given a taller canvas, title padding and y-label padding so the axis label and title no longer crowd each other; no data or scale changed.",
+    "Reader-facing classification names R2_11_PASS / R2_12_FAIL were replaced by R-11 PASS / R-12 FAIL; canonical machine-readable values in repository JSON and provenance are unchanged.",
     "Hash Registry object column made flexible (tabularx X) to remove the last underfull alignment; digests unchanged."
   ],
   "manuscript_source_hashes_sha256": {
-    "manuscript.tex": "903c6eb588629793e2a80ab20a3430118bec61627d8329d5b17d586863c9329a",
+    "manuscript.tex": "8d37251075642b00c08c94de1285560932aeac946a8defe2f39cd0b95aab06cf",
     "references.bib": "84fc2b1ef546561572e3b87a3197057c885ee0f10fc05828d32d8ee8c90ec49b"
   },
   "section_hashes_sha256": {
-    "sections/01_introduction.tex": "8b2f81628bddab79e2072a65f30b901fde0e57ffbebac1792af0bece3a21e59d",
+    "sections/01_introduction.tex": "f7448ac7642bfa6a1eb87377153a76bb369ecd5175903a45757f1d2e204dba2a",
     "sections/02_problem_formulation.tex": "845088113dee464b903e206dfcde54e4a53c19d6ad1e1d9b8acd11a7a0b87e6f",
     "sections/03_methodology_replay_validation.tex": "385caa1cc1c0424982b6dde3420b4abfab719bcc438e50fadea4666abcfcf870",
     "sections/04_oracle_headroom_fixed_memory.tex": "83b5cc2d0e511befd5ad1b00fcb66d867e7c4d1b3a89b510d6104b0d470d2d24",
     "sections/05_sensitivity_capacity.tex": "ec8a1a928bc15e2093a78423f1b95d721f568145ad5f36cad2d6bd19bc3d41b0",
     "sections/06_recoverable_envelope.tex": "e41e05b33e00567bd8ee6d86be1a3ed9bed7107b08bc6a4cf494ed108c070964",
     "sections/07_discussion.tex": "f5bfa6f58909be62369f3c17355b5e45e768fa9ff90822838138ee5bee4f0706",
-    "sections/08_limitations.tex": "96d9d8e1401a7fb843edd4ad9f7f37445c44ae09e8f8b5c64dfd4d2a70477080",
+    "sections/08_limitations.tex": "544d6a9e4c009abaed55b24576a3b734ed9bf25c47e9bad0039ac474b36aa4f8",
     "sections/09_research_iib.tex": "20cbad7692a69637cce826098b714e8a8bfab002103e45b5567073f6358e6540",
     "sections/09_research_iib_placeholder.tex": "6ce8a9b18749b25c62fd37e6d0554b1dd5598bd5c2d23e9ab8e3532aa19ecf9a",
-    "sections/10_research_iic.tex": "93af277f957ff3d4b6716998ade4f743c83f6aea72b477174495edbd8b3b74dd",
+    "sections/10_research_iic.tex": "1d4b973802ef397458a473e8a8ee906450d368e82f669e74ecc2887f7bb720ab",
     "sections/10_research_iic_placeholder.tex": "686687b9da9dd97a30d64830f383c205fc5385bdac40286814d5d59aa2adec1a",
-    "sections/11_conclusion.tex": "c168d9fcd71417272aba9ea164d560c5475e0cf62fa13ab594ecdb20a40bb72b",
-    "sections/12_provenance_appendix.tex": "e4b3856b0188f7c87d0e98c3e31875dac48ab35ae53f5d5b3d15d5aaad87faf7"
+    "sections/11_conclusion.tex": "e39330809cb9fffd2f338606dd5788e03b88d2707042951779ee855b026eee81",
+    "sections/12_provenance_appendix.tex": "fd4848193bd156ce20c03673869ebfa7420e876d5c006e7eba03883778d61f2c"
   },
   "table_hashes_sha256": {
     "tables/table1_configuration.tex": "4efbfeb2c4cf14a9786d6b0800773f53c272864f4cd889d55cf636e1f46c00a0",
@@ -90,10 +91,10 @@
     "tables/table_b3_r2_06_transitions.tex": "8dca3d099c8992146e6692d8d1e323e0e35b7390fa1a242c229c34e240128e18",
     "tables/table_b4_r2_07_reuse_locality.tex": "5bfef1961758086d379364d1a8b660d0171fc487889c79a700a0cdb42f45c81d",
     "tables/table_b5_r2_08_scale.tex": "048be5c2ecd8a2938a80c08414b728cf8e3e642ddcea923ed9f59d4cf1e20064",
-    "tables/table_c1_milestone_summary.tex": "4a8ac91949c4182f48ab8106baface146e06eb513ef3afd16a12c5a07efbada8",
+    "tables/table_c1_milestone_summary.tex": "41d18ee159354ecace244c210158e634c2d4899de6639959464636eb0120e443",
     "tables/table_c2_predictor_performance.tex": "44238a39d5edd5f4780a21f2590a441c16d258093dbe11e52589a12b7ab3cc01",
-    "tables/table_c3_retention_replay.tex": "6c40cf007681812ce452e0d8edb22402d05e644df4183bbb999dbc9508a97096",
-    "tables/table_c4_runtime_results.tex": "3cf9563c67ae513deb4c37b8fcb19f2f330939a074d9eb68af65977185c4ad27"
+    "tables/table_c3_retention_replay.tex": "a9f91966d0b4d6ad58ca4f31e650b96c8a35ecfb43ba1252fa75e52eb2d99b50",
+    "tables/table_c4_runtime_results.tex": "33f40cfe9ce8e3e1cefd7100aa6d4df89c657de48ba60ddc9c402c5083ed59e2"
   },
   "figure_hashes_sha256": {
     "figures/figure1_miss_rate_vs_budget.pdf": "62a4d7a26efa5d614d0154b68ea21406a16a31f68bdafd997035f1a9730d2818",
@@ -190,7 +191,7 @@
   "final_compiled_pdf": {
     "path": "paper/research2/manuscript.pdf",
     "pages": 29,
-    "sha256": "ba3e871b3c0660708bbb8c33565b3086ecc3d6d68d434a8b31057ec488848bcb"
+    "sha256": "d4b02cb73de2e87916c430102f142dcb54dc52674fbda5d5c04ed74a0663bf54"
   },
   "freeze_conditions_checked": {
     "overfull_hbox": 0,
