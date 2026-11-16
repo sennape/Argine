@@ -1,4 +1,4 @@
-\section{Methodology and Replay Validation (R2-01)}
+\section{Methodology and Replay Validation (R-01)}
 \label{sec:replay-validation}
 
 All retention-policy comparisons in this report are computed by
@@ -6,7 +6,7 @@ All retention-policy comparisons in this report are computed by
 re-running the model. This is substantially cheaper and more reproducible
 than live experimentation, but it is only scientifically meaningful if
 the replay model's accounting of hits, misses, and evictions agrees with
-what the real runtime actually does. R2-01 establishes this agreement
+what the real runtime actually does. R-01 establishes this agreement
 before any policy is compared.
 
 \input{tables/table1_configuration}
@@ -33,7 +33,7 @@ reports the measured agreement.
 \begin{table}[t]
 \centering
 \caption{Level-D behavioral validation: real-runtime telemetry vs.\
-independent offline replay, over the measured workload (R2-01, run
+independent offline replay, over the measured workload (R-01, run
 \texttt{bb6d8ca3\ldots}).}
 \label{tab:level-d}
 \small

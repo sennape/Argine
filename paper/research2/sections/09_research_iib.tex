@@ -1,65 +1,64 @@
-\section{Research II-B -- Routing Characterization}
+\section{Routing Characterization}
 \label{sec:iib}
 
-Research~II-A measured a substantial miss-byte gap between Global-LRU
+The clairvoyant-comparator-gap analysis measured a substantial miss-byte gap between Global-LRU
 and the implemented clairvoyant Belady-style comparator $O_B$ under
 constrained memory (Sections~\ref{sec:oracle-headroom}--\ref{sec:recoverable-envelope}).
 After \textsc{AUDIT-ORACLE-001}, that comparator gap is not interpreted as a
 proven byte-optimal bound or a proven upper bound on causal recovery; it
 shows separation from a non-causal comparator, not whether a causal policy
-can close it. Research~II-B asks the necessary prior question:
+can close it. This section asks the necessary prior question:
 
 \begin{quote}
 \emph{Is MoE expert routing sufficiently structured, local, and
-workload-dependent to justify attempting causal working-set prediction in
-Research~II-C?}
+workload-dependent to justify attempting causal working-set prediction?}
 \end{quote}
 
-II-B is a descriptive characterization tranche. It does \emph{not}
+This is a descriptive characterization stage. It does \emph{not}
 answer whether a predictor works, whether prefetch improves runtime,
 whether a new retention policy reduces the measured clairvoyant-comparator
 gap or improves on selected causal baselines, whether inference
 becomes faster, or whether the result generalizes across models. Those
-questions belong to Research~II-C or later work.
+questions belong to the causal-prediction and real-runtime validation
+stage or later work.
 
-\subsection{II-B Evidence Base and Scope}
+\subsection{Evidence Base and Scope}
 \label{sec:iib-scope}
 
 Table~\ref{tab:iib-map} lists the four canonical PASS experiments.
-R2-05--R2-07 are offline analyses over the same validated R2-01 coding
-trace used throughout II-A
-(SHA-256 {\small\texttt{e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1}}),
+R-05--R-07 are offline analyses over the same validated R-01 coding
+trace used throughout the clairvoyant-comparator-gap analysis
+(the canonical trace identified by H-TRACE-R01; Appendix~\ref{sec:hash-registry}),
 with layer-local expert identity, no new model/runtime invocation, and no
-new trace capture. R2-08 adds controlled captures for four workload
+new trace capture. R-08 adds controlled captures for four workload
 families (coding, reasoning, summarization, instruction), two replicates
 each, under a fixed Qwen3-30B-A3B-Q4\_K\_M / 4~GiB expert-budget
 consumer-machine protocol with deterministic decoding
-(temperature~$=0.0$, top-$k=1$). One coding-v1/seed-42 cell reuses the
-canonical R2-01 trace; seven cells were newly captured for R2-08. All
+(temperature~$=0.0$, top-$k=1$). One \code{coding-v1/seed-42} cell reuses the
+canonical R-01 trace; seven cells were newly captured for R-08. All
 analysis is layer-local and descriptive.
 
 \input{tables/table_b1_iib_map}
 
-\paragraph{R2-08 capture-provenance audit.}
-In the canonical R2-08 capture matrix, the reused
-\texttt{coding-v1/seed-42} cell records \texttt{capture\_run\_id} and
-\texttt{capture\_source} from the upstream R2-01 capture, while the seven
-R2-08-managed new captures have \texttt{capture\_run\_id = null} and
-\texttt{capture\_source = null}. This is treated as an intentional
-provenance representation of R2-08-internal captures, not as a missing
+\paragraph{R-08 capture-provenance audit.}
+In the canonical R-08 capture matrix, the reused
+\code{coding-v1/seed-42} cell records the run identifier and capture
+source of the upstream R-01 capture, while the seven
+R-08-managed new captures carry a null run identifier and a null capture
+source. This is treated as an intentional
+provenance representation of R-08-internal captures, not as a missing
 scientific trace: every canonical cell records a trace path, trace
-SHA-256, workload identity, seed, model SHA-256, runtime SHA-256,
+digest, workload identity, seed, model digest, runtime digest,
 configuration fingerprint, validation state, and canonical status, all
-bound to canonical R2-08 run
-\texttt{6165471a12574e05b48932aac2f1626c}
-(digest \texttt{f5db4e0bf43ce4243edb303441e82ceefa5a0aeb5754143292f1230f220527c3}).
+bound to the canonical R-08 run and its canonical digest
+(H-R08-CANONICAL; Appendix~\ref{sec:hash-registry}).
 The paper freeze does not invent capture IDs and does not modify
 scientific traces.
 
-\subsection{R2-05: Expert Frequency and Concentration}
+\subsection{R-05: Expert Frequency and Concentration}
 \label{sec:r2-05}
 
-R2-05 measures aggregate layer-local routing frequency on the validated
+R-05 measures aggregate layer-local routing frequency on the validated
 trace. Table~\ref{tab:r2-05-summary} and Figure~\ref{fig:b1-concentration}
 summarize the result.
 
@@ -68,7 +67,7 @@ summarize the result.
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.78\linewidth]{figures/figure_b1_r2_05_concentration.pdf}
-\caption{Layer-wise R2-05 routing concentration on the validated coding
+\caption{Layer-wise R-05 routing concentration on the validated coding
 trace. Bars show effective expert fraction (effective experts divided by
 128 nominal experts); the line shows top-8 traffic share per layer. The
 figure measures aggregate non-uniformity across layers, not temporal
@@ -83,7 +82,7 @@ traffic share is $0.300$, and the median number of experts required for
 80\% of traffic is $43$ (range $31$--$68$).
 
 This concentration does not imply that static frequency-based LFU is a
-sufficient retention policy in the tested pressure regime. R2-03's
+sufficient retention policy in the tested pressure regime. R-03's
 canonical auxiliary evidence shows that static LFU incurs more miss bytes
 than Global-LRU at every tested capacity-constrained budget from 1.5 to
 8~GiB on the same DEV trace, tying at 16~GiB
@@ -91,13 +90,13 @@ than Global-LRU at every tested capacity-constrained budget from 1.5 to
 concentration exists, but static frequency-based LFU does not outperform
 recency-based Global-LRU anywhere in the tested pressure regime on this
 trace and budget grid. This motivates examining temporal and sequential
-information beyond aggregate frequency. R2-06 and R2-07 test complementary
+information beyond aggregate frequency. R-06 and R-07 test complementary
 sequential and temporal structure.
 
-\subsection{R2-06: Routing Transition Structure}
+\subsection{R-06: Routing Transition Structure}
 \label{sec:r2-06}
 
-R2-06 asks whether the previous same-layer routing state carries
+R-06 asks whether the previous same-layer routing state carries
 information about the next same-layer routing state beyond marginal
 frequency. The unit is a \emph{pairwise set-to-set transition
 observation}: for consecutive token selections in a layer, every expert in
@@ -111,7 +110,7 @@ relationships; they are \emph{not} 1.64~million independent samples.
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.78\linewidth]{figures/figure_b2_r2_06_transitions.pdf}
-\caption{R2-06 same-layer transition structure by layer. Top: normalized
+\caption{R-06 same-layer transition structure by layer. Top: normalized
 mutual information (NMI) between consecutive token-to-token expert
 selections. Bottom: median self-transition lift. Dashed lines mark medians
 across layers. NMI measures measurable dependence, not predictor accuracy.}
@@ -124,12 +123,12 @@ positive NMI $=1.0$). Median NMI is $0.099$ (range $0.083$--$0.137$),
 with median conditional entropy $3.735$. This means the previous routing
 state provides a measurable reduction in uncertainty about the next
 routing state at the measured resolution. NMI is not translated into
-prediction accuracy, and R2-06 does not train or evaluate a predictor.
+prediction accuracy, and R-06 does not train or evaluate a predictor.
 
-\subsection{R2-07: Reuse Distance and Working-Set Structure}
+\subsection{R-07: Reuse Distance and Working-Set Structure}
 \label{sec:r2-07}
 
-R2-07 measures layer-local reuse distance and working-set growth, and
+R-07 measures layer-local reuse distance and working-set growth, and
 compares observed routing to a deterministic shuffled null that preserves
 marginals while destroying temporal order. Table~\ref{tab:r2-07-summary}
 and Figure~\ref{fig:b3-reuse} summarize the result.
@@ -139,7 +138,7 @@ and Figure~\ref{fig:b3-reuse} summarize the result.
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.92\linewidth]{figures/figure_b3_r2_07_reuse_locality.pdf}
-\caption{R2-07 observed routing locality versus a deterministic shuffled
+\caption{R-07 observed routing locality versus a deterministic shuffled
 null. Left: fraction of reuse events at immediate, $\leq 4$, and
 $\leq 16$ position horizons. Right: median working-set size at windows
 $W_8, W_{32}, W_{128}, W_{256}$. The departure from the null is strongest
@@ -161,10 +160,10 @@ narrows at longer horizons. This is a descriptive locality result, not a
 prediction result. It motivates short-horizon causal prediction as the
 scientifically relevant next test.
 
-\subsection{R2-08: Routing Drift and Workload Dependence}
+\subsection{R-08: Routing Drift and Workload Dependence}
 \label{sec:r2-08}
 
-R2-08 tests whether routing structure is stable within a workload over
+R-08 tests whether routing structure is stable within a workload over
 time, reproducible under the same workload and protocol, and dependent on
 workload category. The canonical matrix has four workloads
 (\texttt{coding-v1}, \texttt{reasoning-v1}, \texttt{summarization-v1},
@@ -178,7 +177,7 @@ length 48.
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.68\linewidth]{figures/figure_b4_r2_08_scale_comparison.pdf}
-\caption{R2-08 scale comparison of median layer-frequency Jensen--Shannon
+\caption{R-08 scale comparison of median layer-frequency Jensen--Shannon
 divergence (JSD): temporal drift within captures, same-workload replicate
 divergence, and cross-workload divergence. The same-workload replicate bar
 is $0.000$ under the deterministic decoding protocol (temperature~$=0.0$,
@@ -206,17 +205,17 @@ strengthens attribution of the observed differences to temporal position
 and workload category within this protocol; it does not generalize beyond
 this protocol.
 
-\subsection{II-B Synthesis and Connection to II-C}
+\subsection{Synthesis and Connection to Causal Prediction}
 \label{sec:iib-synthesis}
 
-The II-B evidence forms a constrained chain. R2-05 shows that routing is
-non-uniform, while canonical auxiliary R2-03 evidence shows that static
+This evidence forms a constrained chain. R-05 shows that routing is
+non-uniform, while canonical auxiliary R-03 evidence shows that static
 LFU does not outperform Global-LRU at any tested capacity-constrained
-point on the DEV trace (tying only at 16~GiB effective residency). R2-06
+point on the DEV trace (tying only at 16~GiB effective residency). R-06
 shows that previous routing state carries measurable information about
-subsequent routing. R2-07 shows that this structure is
+subsequent routing. R-07 shows that this structure is
 strongest at short horizons, with reuse and working sets more compact than
-a shuffled null. R2-08 shows that the routing signature varies materially
+a shuffled null. R-08 shows that the routing signature varies materially
 by workload under the tested protocol.
 
 The central restrained claim is therefore:
@@ -230,14 +229,15 @@ structure that can motivate causal working-set prediction, but do not
 themselves demonstrate predictive accuracy or runtime improvement.}
 \end{quote}
 
-This characterization connects to II-A through the measured
-clairvoyant-comparator gap. II-A measures the separation between a simple
-causal baseline and the implemented comparator $O_B$; II-B assesses whether
+This characterization connects to the earlier analysis through the measured
+clairvoyant-comparator gap, which measures the separation between a simple
+causal baseline and the implemented comparator $O_B$; here we assess whether
 observable routing history contains structure that could, in principle,
 allow a stronger causal policy to reduce part of that measured gap.
-Research~II-C defines the signed comparator-relative recovery metric
+The causal-prediction and real-runtime validation stage defines the signed
+comparator-relative recovery metric
 \begin{equation}
-\label{eq:iib-iic-recovery}
+\label{eq:comparator-relative-recovery}
 \mathrm{RecoveryOfBeladyGap}
   = \frac{B - P}{B - O_B},
 \end{equation}
@@ -245,13 +245,13 @@ where $B$ is selected causal baseline miss bytes, $P$ is predictor-driven
 miss bytes, and $O_B$ is implemented comparator miss bytes, all at fixed
 budget and workload. The metric is signed; values $>1$ are possible under
 CASE~C and mean $P$ beats $O_B$, not $O^*$. This metric is not populated
-by II-B, and Research~II-C's actual reported evaluation
+by the routing characterization, and the actual reported evaluation
 (Section~\ref{sec:iic}) instead reports its predictor's performance via the
-R2-09B/R2-10 held-out recall$@k$ margin and its retention policy's
-performance via the frozen R2-11/R2-12 metrics
-(\texttt{miss\_bytes\_per\_decode\_step} and
-\texttt{decode\_tokens\_per\_second} respectively), which are the
-metrics the frozen II-C decision rules actually define and apply; this
-equation is retained here as the originally-planned connective metric
-between II-A/II-B and II-C, not as a value that was ultimately computed and
-reported.
+R-09B/R-10 held-out recall$@k$ margin and its retention policy's
+performance via the frozen R-11/R-12 metrics
+(miss bytes per decode step and decode tokens per second respectively),
+which are the
+metrics the frozen decision rules for that stage actually define and
+apply; this equation is retained here as the originally-planned
+connective metric between the earlier analyses and the causal-prediction
+stage, not as a value that was ultimately computed and reported.

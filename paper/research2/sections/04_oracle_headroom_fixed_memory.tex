@@ -1,4 +1,4 @@
-\section{Belady Comparator Gap at Fixed Memory (R2-02)}
+\section{Belady Comparator Gap at Fixed Memory (R-02)}
 \label{sec:oracle-headroom}
 
 Having established replay fidelity (Section~\ref{sec:replay-validation}),
@@ -43,18 +43,18 @@ sign} at lower budgets than at this one (Section~\ref{sec:recoverable-envelope})
 at 4~GiB, Runtime-Sharded-LRU incurs $1{,}200{,}218{,}112$ more miss bytes
 than Global-LRU (a relative structural cost of $1.16\%$), i.e.\ sharding
 itself is mildly disadvantageous relative to a global LRU at this
-specific budget. No Research Part~1 shard-constrained clairvoyant
-comparator exists, so the structural and comparator gaps are decomposed
+specific budget. No shard-constrained clairvoyant comparator is available,
+so the structural and comparator gaps are decomposed
 using Global-LRU as a shared pivot (Section~\ref{sec:recoverable-envelope});
 this is a stated limitation, not hidden.
 
 \paragraph{LFU.} At the 4~GiB anchor, LFU underperforms Global-LRU in
 both miss count and miss bytes and remains a secondary causal baseline in
-the primary R2-02 comparison. R2-03 additionally evaluated LFU as canonical
+the primary R-02 comparison. R-03 additionally evaluated LFU as canonical
 auxiliary evidence across the full tested capacity sweep: LFU incurs more
 miss bytes than Global-LRU at 1.5, 2, 4, and 8~GiB and ties it at the
 16~GiB effective-residency point (Section~\ref{sec:sensitivity-capacity},
 Table~\ref{tab:r2-03-lfu-aux}). This measured ranking is specific to the
 canonical DEV trace and tested budget grid and is not generalized to other
 workloads, models, or capacities. It does not replace the leakage-safe
-multi-policy causal-baseline tournament planned for R2-09A.
+multi-policy causal-baseline tournament planned for R-09A.

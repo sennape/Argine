@@ -1,26 +1,26 @@
 \section{Limitations}
 \label{sec:limitations}
 
-\subsection*{II-A limitations (preserved, amended for Oracle semantics)}
+\subsection*{Clairvoyant-Comparator-Gap Limitations (preserved, amended for Oracle semantics)}
 \begin{itemize}
- \item \textbf{Single validated real workload/trace for II-A.} The II-A
-   replay, comparator-gap, sensitivity, and decomposition analyses are
+ \item \textbf{Single validated real workload/trace.} The
+   clairvoyant-comparator-gap replay, sensitivity, and decomposition analyses are
    computed against one captured coding trace (one workload, one
    30B-A3B model instance, one capture budget). Replay fidelity
    (Section~\ref{sec:replay-validation}) is demonstrated for this trace
    only; it is not evidence of fidelity for other workloads, models, or
    capture configurations.
- \item \textbf{Offline replay, not live measurement.} II-A comparisons are
+ \item \textbf{Offline replay, not live measurement.} These comparisons are
    offline replays against a fixed, already-captured trace. They do not
    measure live runtime behavior under the compared policies themselves.
  \item \textbf{No latency or throughput claim.} Miss bytes are a proxy for
    expert data that would need to be serviced under the replay model. No
    latency, throughput, tokens/second, or SSD-traffic measurement is made
-   or implied by II-A or II-B.
+   or implied by either the comparator-gap or routing-characterization analyses.
  \item \textbf{No causal predictor exists yet.} The Belady comparator gap
    (Section~\ref{sec:recoverable-envelope}) is a measured separation from
    $O_B$, not a demonstrated causal recovery and not a proven bound on
-   causal recovery. II-B characterizes routing structure but does not
+   causal recovery. The routing characterization describes structure but does not
    evaluate a causal predictor or recover any fraction of that gap.
  \item \textbf{Comparator-objective limitation (\textsc{AUDIT-ORACLE-001},
    CASE~C).} Expert cache objects are $(\ell,e)$ pairs with two byte-size
@@ -36,67 +36,68 @@
    Runtime-Sharded-LRU baseline matches the real runtime's \emph{shard
    count} (16 shards at $4$~GiB) but not its exact address-derived
    shard-to-key mapping, which is not reproducible offline.
- \item \textbf{Finite, predeclared budget grid.} The II-A budget sweep
+ \item \textbf{Finite, predeclared budget grid.} The budget sweep
    tests five fixed points ($1.5, 2, 4, 8, 16$~GiB). Behavior between
    tested points and the exact mathematically minimal policy-convergence
    budget are not characterized.
  \item \textbf{LFU auxiliary sweep scope.} The LFU-vs-Global-LRU ranking
-   across the R2-03 budget grid is canonical auxiliary R2-03 evidence from
+   across the R-03 budget grid is canonical auxiliary R-03 evidence from
    the same single canonical DEV trace and tested budget grid. It is not
    held-out evaluation and does not establish causal-baseline ordering
-   across other workloads, models, or capacities. R2-09A remains necessary.
- \item \textbf{No shard-constrained clairvoyant comparator.} The II-A
+   across other workloads, models, or capacities. R-09A remains necessary.
+ \item \textbf{No shard-constrained clairvoyant comparator.} The
    structural and comparator decomposition uses Global-LRU as a shared
    pivot rather than a true sharded-clairvoyant comparison.
 \end{itemize}
 
-\subsection*{II-B limitations}
+\subsection*{Routing-Characterization Limitations}
 \begin{itemize}
- \item \textbf{Model, quantization, and runtime scope.} II-B evidence is
+ \item \textbf{Model, quantization, and runtime scope.} This evidence is
    limited to Qwen3-30B-A3B-Q4\_K\_M under one consumer-machine runtime
    protocol and one expert-budget configuration context for the tested
    captures. No cross-model, cross-quantization, cross-machine, or
    cross-runtime generalization is measured.
- \item \textbf{Workload scope.} R2-08 tests four workload families
+ \item \textbf{Workload scope.} R-08 tests four workload families
    (coding, reasoning, summarization, instruction), two replicates each.
    The \texttt{WORKLOAD\_DEPENDENCE\_DOMINANT} classification is
    conditional on this tested workload set and protocol.
- \item \textbf{Deterministic decoding protocol.} R2-08 uses
+ \item \textbf{Deterministic decoding protocol.} R-08 uses
    temperature~$=0.0$, top-$k=1$. Same-workload replicate JSD $=0.0$ is
    therefore interpreted only as reproducibility at the reported
    resolution under deterministic decoding, not as general evidence of
    zero stochastic run-to-run variability.
- \item \textbf{Finite matched horizon.} R2-08 comparisons use matched
+ \item \textbf{Finite matched horizon.} R-08 comparisons use matched
    decode horizon $H=388$ with 8 temporal windows of length 48. Longer
    horizons and other windowing choices are not evaluated.
- \item \textbf{Layer-local descriptive analysis.} II-B metrics are
+ \item \textbf{Layer-local descriptive analysis.} These metrics are
    layer-local and descriptive. No cross-layer primary transition claim is
-   made from R2-06, and no causal or mechanistic explanation of routing is
+   made from R-06, and no causal or mechanistic explanation of routing is
    established.
- \item \textbf{No predictive or runtime evaluation.} II-B includes no
+ \item \textbf{No predictive or runtime evaluation.} This stage includes no
    causal predictor, no predictor accuracy/precision/recall/F1 measurement,
    no prefetch or admission mechanism, no retention-policy replacement, no
    runtime speedup or latency/throughput measurement, and no
    comparator-gap recovery measurement. The comparator-relative metric in
-   Eq.~\eqref{eq:iib-iic-recovery} remains \notyetmeasured{}.
- \item \textbf{R2-08 capture-provenance representation.} New R2-08-managed
-   capture cells record \texttt{capture\_run\_id}/\texttt{capture\_source}
-   as null while preserving trace path, trace SHA, configuration, model
-   and runtime SHAs, validation state, and canonical R2-08 run identity.
-   This is documented as an intentional representation for internal R2-08
+   Eq.~\eqref{eq:comparator-relative-recovery} remains \notyetmeasured{}.
+ \item \textbf{R-08 capture-provenance representation.} New R-08-managed
+   capture cells record a null run identifier and a null capture source
+   while preserving trace path, trace digest, configuration, model and
+   runtime digests, validation state, and canonical R-08 run identity.
+   This is documented as an intentional representation for internal R-08
    captures; no capture IDs are invented and no scientific traces are
    modified.
 \end{itemize}
 
-\subsection*{DEV/EVAL, EXP-025, and II-C evaluation transparency}
+\subsection*{DEV/EVAL, EXP-025, and Evaluation Transparency}
 \begin{itemize}
- \item \textbf{DEV characterization evidence.} The canonical R2-01 coding
+ \item \textbf{DEV characterization evidence.} The canonical R-01 coding
    trace is documented as a \texttt{dev} split in inspected provenance, and
-   the inspected R2-08 workload captures are also documented as
-   \texttt{dev}-split characterization captures. Research~II-A and II-B are
-   characterization/development tranches, not held-out predictive
-   evaluation. Research~II-C's R2-09B contract subsequently froze DEV/EVAL
-   roles before any EVAL capture, and R2-10/R2-BRIDGE-01/R2-11/R2-12 each
+   the inspected R-08 workload captures are also documented as
+   \texttt{dev}-split characterization captures. The comparator-gap and
+   routing-characterization analyses are characterization/development
+   stages, not held-out predictive evaluation. The R-09B contract
+   subsequently froze DEV/EVAL
+   roles before any EVAL capture, and R-10/R-BRIDGE-01/R-11/R-12 each
    captured and sealed their held-out instances before scoring; see
    Section~\ref{sec:iic} for results and Section~\ref{sec:iic-limitations}
    below for this stage's own limitations.
@@ -114,35 +115,35 @@
    latency, time-to-first answer, or throughput.
  \item \textbf{No numeric practical-effect threshold.} No numeric
    practical-effect threshold is preregistered by this amendment. Any
-   future threshold must be derived and frozen in R2-09B using a metric
+   future threshold must be derived and frozen in R-09B using a metric
    justified by the evaluation/performance-model contract.
 \end{itemize}
 
-\subsection*{II-C limitations}
+\subsection*{Causal-Prediction and Real-Runtime-Validation Limitations}
 \label{sec:iic-limitations}
 \begin{itemize}
  \item \textbf{One tested predictive-retention realization.} Only one
    causal predictor (\texttt{decayed\_transition}, decay $0.99$) driving
    one reactive retention-policy realization (\texttt{PredictedProtectPolicy})
-   was built and evaluated. Negative results at R2-12 are results about
+   was built and evaluated. Negative results at R-12 are results about
    this specific realization, not a general statement about predictive
    retention as a design category.
- \item \textbf{Hardware/model/workload scope.} All of R2-09 through R2-12
+ \item \textbf{Hardware/model/workload scope.} All of R-09 through R-12
    were evaluated on one model family (Qwen3-30B-A3B), one consumer host,
    and workload instances drawn from four families (coding, instruction,
    reasoning, summarization). No cross-model, cross-quantization,
    cross-machine, or cross-runtime generalization is claimed.
- \item \textbf{Replay-level benefit does not imply runtime benefit.} R2-11's
-   positive replay-level result (\textsc{r2\_11\_pass}) and R2-12's negative
+ \item \textbf{Replay-level benefit does not imply runtime benefit.} R-11's
+   positive replay-level result (\textsc{r2\_11\_pass}) and R-12's negative
    real-runtime result (\textsc{R2\_12\_FAIL}) are not in tension: they
    measure different quantities (miss bytes per decode step vs. decode
    tokens per second) under different experimental apparatus (offline
    replay vs. the real runtime). Neither bounds the other.
- \item \textbf{Runtime failure does not invalidate predictor quality.} R2-10's
+ \item \textbf{Runtime failure does not invalidate predictor quality.} R-10's
    held-out-confirmed prediction-quality margin (Section~\ref{sec:r2-10})
-   is not weakened, retracted, or reclassified by R2-12's negative result.
+   is not weakened, retracted, or reclassified by R-12's negative result.
  \item \textbf{Secondary budgets are not primary decision endpoints.} The
-   1.5~GiB and 8~GiB R2-12 budgets are reported descriptively only; neither
+   1.5~GiB and 8~GiB R-12 budgets are reported descriptively only; neither
    can, under the frozen decision rule, override the primary 4~GiB
    classification, regardless of their own effect sizes or direction.
  \item \textbf{Telemetry gap limits causal attribution at 8~GiB.} The real
@@ -164,18 +165,19 @@
    predictive information into real-runtime throughput gain in this problem
    class.
  \item \textbf{Host/environment constraints are exactly those frozen in the
-   protocol, no more.} R2-12's machine-state and readiness gates
-   (AC power, operator-attested clean environment, thermal cooldown policy,
-   power mode) are exactly the conditions frozen in
+   protocol, no more.} R-12's machine-state and readiness gates
+   (operator-attested clean environment, a fixed/applicable power-mode
+   condition, fixed thermal-cooldown pauses, and the frozen hardware-identity
+   and readiness checks) are exactly the conditions frozen in
    \texttt{machine\_state\_contract.json} and \texttt{execution\_plan.json}
    before acquisition. No condition not formally frozen there (e.g., a
    specific battery-percentage or ambient-temperature threshold used
    elsewhere in the Argine programme) is retroactively applied as an
-   exclusion criterion to R2-12's evidence.
+   exclusion criterion to R-12's evidence.
  \item \textbf{Runtime conformance was reached iteratively.} The runtime
-   binary realizing the retention-policy integration for R2-12 required
+   binary realizing the retention-policy integration for R-12 required
    several realization/conformance iterations before reaching an accepted
-   conformance state; it is not byte-identical to the R2-01 validated
+   conformance state; it is not byte-identical to the R-01 validated
    replay-comparison runtime. This is disclosed rather than assumed from a
    single attempt.
 \end{itemize}

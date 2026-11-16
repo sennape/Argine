@@ -1,16 +1,20 @@
 \begin{table}[t]
 \centering
-\caption{Replay-level retention results: mean paired delta in miss\_bytes\_per\_decode\_step (PredictedProtect $-$ B\_selected(M)).}
+\caption{Replay-level retention results: mean paired delta in miss bytes
+per decode step (PredictedProtect $-$ B\_selected(M)).}
 \label{tab:c3-retention}
 \small
-\begin{tabular}{@{}llrrrl@{}}
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X
+  >{\raggedleft\arraybackslash}p{1.9cm} >{\raggedleft\arraybackslash}p{1.6cm}
+  >{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{3.2cm}@{}}
 \toprule
-Stage & Budget & $\Delta$ (bytes/step) & Relative & 95\% CI & Status \\
+Stage and budget & $\Delta$ (bytes/step) & Relative & 95\% CI & Status \\
 \midrule
-R2-BRIDGE-01 (prospective) & 4 GiB (primary) & -57,784.86 & -0.0231\% & --- & BRIDGE\_POSITIVE \\
-R2-11 (confirmatory) & 1.5 GiB (stress) & -779,296.06 & --- & --- & descriptive \\
-R2-11 (confirmatory) & 4 GiB (primary) & -87,476.85 & --- & [-154,123.32, -27,178.93] & R2\_11\_PASS \\
-R2-11 (confirmatory) & 8 GiB (null-control) & 0.00 & 0.0000\% & --- & exact tie \\
+R-BRIDGE-01 (prospective), 4~GiB primary & $-57{,}784.86$ & $-0.0231\%$ & --- & BRIDGE\_POSITIVE \\
+R-11 (confirmatory), 1.5~GiB stress & $-779{,}296.06$ & --- & --- & descriptive \\
+R-11 (confirmatory), 4~GiB primary & $-87{,}476.85$ & --- & $[-154{,}123.32,$ $-27{,}178.93]$ & R2\_11\_PASS \\
+R-11 (confirmatory), 8~GiB null-control & $0.00$ & $0.0000\%$ & --- & exact tie \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}

@@ -1,7 +1,7 @@
 \section{Discussion}
 \label{sec:discussion}
 
-\paragraph{What II-A establishes.} Under a validated offline replay
+\paragraph{What the clairvoyant-comparator-gap analysis establishes.} Under a validated offline replay
 model of a real 30B-A3B MoE coding workload, a substantial miss-byte gap
 exists between causal LRU-family retention and the implemented
 non-causal clairvoyant Belady-style comparator $O_B$ at every tested
@@ -14,7 +14,7 @@ $16$~GiB). The gap persists after decomposing away the specific cost of
 the runtime's sharded retention architecture, which is small and not
 consistently signed across the sweep.
 
-\paragraph{What II-A does not establish.} \textsc{AUDIT-ORACLE-001}
+\paragraph{What the clairvoyant-comparator-gap analysis does not establish.} \textsc{AUDIT-ORACLE-001}
 (CASE~C) shows that $O_B$ is not proven byte-optimal for the
 variable-size, byte-capacity miss-byte objective, because expert cache
 objects have two byte-size classes across layers and the implementation
@@ -26,11 +26,11 @@ $B-O_B$ is not interpreted as an upper bound on causal recovery $B-C^*$,
 and the full comparator gap is not established as recoverable or as the
 maximum causal opportunity.
 
-\paragraph{What II-B establishes.} Under the tested
+\paragraph{What the routing characterization establishes.} Under the tested
 Qwen3-30B-A3B-Q4\_K\_M protocol, routing is descriptively non-uniform,
 sequentially dependent at one-step same-layer resolution, and temporally
 local at short horizons relative to a shuffled null. At the same time,
-R2-08 shows that cross-workload routing differences exceed temporal drift
+R-08 shows that cross-workload routing differences exceed temporal drift
 under the predeclared comparison (ratio $2.21\times$), with
 \texttt{WORKLOAD\_DEPENDENCE\_DOMINANT} as the regime classification.
 These results characterize the routing stream; they do not evaluate a
@@ -40,14 +40,14 @@ policy.
 The distinction among these categories is central:
 \begin{itemize}
  \item \textbf{Observed:} substantial causal-baseline-to-clairvoyant-comparator
-   gap (II-A); aggregate routing concentration, with static LFU
+   gap; aggregate routing concentration, with static LFU
    underperforming Global-LRU at all four tested capacity-constrained
-   R2-03 budgets on the canonical DEV trace and tying it at the 16~GiB
-   effective-residency point (canonical auxiliary R2-03 evidence);
+   R-03 budgets on the canonical DEV trace and tying it at the 16~GiB
+   effective-residency point (canonical auxiliary R-03 evidence);
    measurable same-layer transition dependence (positive NMI in every
    tested layer); strong short-horizon reuse relative to a shuffled null;
    and cross-workload divergence exceeding temporal drift under the
-   deterministic R2-08 protocol.
+   deterministic R-08 protocol.
  \item \textbf{Inference/motivation:} these properties make stronger
    causal retention/prediction strategies scientifically worth testing.
    The short-horizon locality is the most relevant signal for that test;
@@ -67,19 +67,19 @@ The distinction among these categories is central:
 comparator uses future information no real system has at decision time.
 Treating a large comparator gap as an implicit promise of recoverable
 performance would conflate a measured separation from a non-causal
-comparator with demonstrated causal recovery. II-B adds structure, not
-recovery.
+comparator with demonstrated causal recovery. The routing characterization
+adds structure, not recovery.
 
-\paragraph{Why II-B structure is not automatically predictive.}
+\paragraph{Why routing structure is not automatically predictive.}
 Concentration, transition dependence, reuse locality, and workload
 dependence are descriptive properties of observed traces. Each can
 motivate a hypothesis about future routing, but none is the same object as
-a causal predictor evaluated on future decisions. Research~II-C
-(Section~\ref{sec:iic}) closes this gap: a causal predictor was built and
-evaluated, and Eq.~\eqref{eq:iib-iic-recovery}'s comparator-relative
-recovery notion is superseded there by the frozen R2-11/R2-12 decision
-rules' own metrics (\texttt{miss\_bytes\_per\_decode\_step} and
-\texttt{decode\_tokens\_per\_second} respectively) rather than evaluated in
+a causal predictor evaluated on future decisions. The causal-prediction
+and real-runtime validation stage (Section~\ref{sec:iic}) closes this gap: a causal predictor was built and
+evaluated, and Eq.~\eqref{eq:comparator-relative-recovery}'s comparator-relative
+recovery notion is superseded there by the frozen R-11/R-12 decision
+rules' own metrics (miss bytes per decode step, and decode tokens per
+second respectively) rather than evaluated in
 its original form; see Section~\ref{sec:iic} for the measured results and
 Section~\ref{sec:iic-limitations} for why the comparator-relative framing is
 not the metric ultimately reported.

@@ -16,8 +16,8 @@ After \textsc{AUDIT-ORACLE-001} (CASE~C), this gap is interpreted as a
 measured separation from $O_B$, not as a proven byte-optimal bound or a
 proven upper bound on causal recovery.
 
-Research~II-B adds a descriptive characterization of routing structure on
-the validated trace and on controlled workload captures
+The routing characterization that follows adds a descriptive characterization
+of routing structure on the validated trace and on controlled workload captures
 (Section~\ref{sec:iib}). Under the tested
 Qwen3-30B-A3B-Q4\_K\_M protocol, routing is non-uniform in aggregate;
 same-layer routing exhibits measurable transition dependence (positive NMI
@@ -25,22 +25,24 @@ in every tested layer); reuse is concentrated at short horizons relative to
 a deterministic shuffled null; and cross-workload divergence exceeds
 temporal drift under the predeclared comparison
 ($2.21\times$, \texttt{WORKLOAD\_DEPENDENCE\_DOMINANT}). The canonical
-auxiliary R2-03 sweep provides an additional constraint on interpretation:
+auxiliary R-03 sweep provides an additional constraint on interpretation:
 despite aggregate routing concentration, static LFU incurs more miss bytes
 than Global-LRU at each tested capacity-constrained budget (1.5--8~GiB)
-and ties it at 16~GiB on the DEV trace. The II-B result is correspondingly
+and ties it at 16~GiB on the DEV trace. This result is correspondingly
 bounded: structure exists, but structure is not a measured causal recovery.
 
-Research~II-C (Section~\ref{sec:iic}) closes this programme. A strictly
-causal predictor was built and confirmed on held-out EVAL data to beat
+The programme then moves from routing structure to causal prediction, to
+replay-level retention, and finally to real-runtime validation
+(Section~\ref{sec:iic}). A strictly causal predictor was built and
+confirmed on held-out EVAL data to beat
 trivial baselines at a measurable, if frozen-rule-insufficient-on-its-own,
-margin (R2-09/R2-10). A predictor-driven reactive retention policy was then
+margin (R-09/R-10). A predictor-driven reactive retention policy was then
 shown, prospectively and confirmatorily, to improve a replay-level
-retention metric at the frozen primary budget (R2-BRIDGE-01
-\textsc{bridge\_positive}; R2-11 \textsc{r2\_11\_pass}, $72/72$ cells, CI
+retention metric at the frozen primary budget (R-BRIDGE-01
+\textsc{bridge\_positive}; R-11 \textsc{r2\_11\_pass}, $72/72$ cells, CI
 entirely below zero). Finally, real-runtime validation on the actual
 30B-class runtime found that this same policy does \emph{not} improve
-measured decode throughput at the frozen primary 4~GiB budget (R2-12
+measured decode throughput at the frozen primary 4~GiB budget (R-12
 \textsc{R2\_12\_FAIL}, $144/144$ physical canonical launches accounted for
 across all three tested budgets, $0$ unresolved protocol violations).
 
@@ -50,26 +52,27 @@ and can improve replay-level retention metrics, but the tested reactive
 predictive-retention realization does not convert that information into
 improved end-to-end decode throughput on the evaluated runtime
 configuration.} This negative real-runtime finding does not invalidate the
-positive prediction-quality (R2-10) or replay-retention (R2-BRIDGE-01/R2-11)
+positive prediction-quality (R-10) or replay-retention (R-BRIDGE-01/R-11)
 findings that precede it; the three levels measure different quantities
 under different experimental apparatus, and a negative result at the
 real-runtime level does not retroactively weaken, retract, or reclassify a
 positive result at an earlier, differently-scoped level. Causal attribution
-of the R2-12 runtime deficit does not exceed the available evidence: the
+of the R-12 runtime deficit does not exceed the available evidence: the
 8~GiB null-control budget's real canonical records carry no
 retention-traffic telemetry, so any non-retention-overhead explanation of
 that budget's larger measured delta remains an explicitly unverified
 hypothesis. No runtime speedup is claimed anywhere in this report, and this
-report does not open, scope, or begin Research~3; the open question that
-Research~3 would need to address -- how useful predictive expert
-information might be converted into end-to-end runtime value when reactive
-predictive retention alone does not -- is stated but not pursued here.
+report does not open, scope, or begin any follow-on research effort; the
+open question that future work would need to address -- how useful
+predictive expert information might be converted into end-to-end runtime
+value when reactive predictive retention alone does not -- is stated but
+not pursued here.
 
-The II-A tranche remains frozen as recorded in
-\texttt{II-A-FREEZE.json}; the II-B tranche is frozen as recorded in
-\texttt{II-B-FREEZE.json}; the II-C tranche is frozen as recorded in
-\texttt{RESEARCH\_2\_FINAL\_CLOSURE.json} (repository root) and
-\texttt{paper/research2/PAPER\_II\_FREEZE.json}; the Oracle-semantics
-scientific amendment is recorded in \texttt{ORACLE-SEMANTICS-AMENDMENT.json}
-and Appendix~\ref{sec:provenance-appendix}. This document is the complete,
-frozen Research Part~2 publication.
+The frozen records of every stage of this research programme remain
+preserved unchanged, including the stage-level freeze manifests that
+precede this publication and the repository-level closure record for the
+final stage. The manuscript-level freeze and the machine-readable
+claim-to-artifact provenance mapping are stored with this paper; the
+provenance appendix (Appendix~\ref{sec:provenance-appendix}) is their
+human-readable counterpart. This document is the complete, frozen
+publication of the research programme it reports.

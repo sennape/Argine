@@ -41,8 +41,8 @@ and that the sole non-causal policy is in fact built from full-trace
 future information before replay begins.
 
 \paragraph{Implemented clairvoyant comparator ($O_B$).} The offline
-comparator used in II-A is the implemented \textsc{Oracle-Global-Belady}
-policy (code label \texttt{belady-global}, \texttt{BeladyGlobal})
+comparator used in the clairvoyant-comparator-gap analysis is the implemented \textsc{Oracle-Global-Belady}
+policy (code labels \code{belady-global} and \code{BeladyGlobal})
 \cite{belady1966replacement}. It has full future knowledge of the trace,
 operates globally across layers, uses byte capacity, and represents cache
 objects as $(\ell,e)$ pairs with byte size $\mathrm{bytes}(\ell)$ taken

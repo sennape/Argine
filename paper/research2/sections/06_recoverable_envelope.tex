@@ -1,9 +1,9 @@
-\section{Clairvoyant-Comparator Gap Decomposition (R2-04)}
+\section{Clairvoyant-Comparator Gap Decomposition (R-04)}
 \label{sec:recoverable-envelope}
 
-R2-04 synthesizes the R2-02/R2-03 evidence into a single decomposition,
-applied at every tested budget, and reported here as the headline II-A
-result. No new replay, model, or runtime invocation is performed in this
+R-04 synthesizes the R-02/R-03 evidence into a single decomposition,
+applied at every tested budget, and reported here as the headline
+clairvoyant-comparator-gap result. No new replay, model, or runtime invocation is performed in this
 step; it is a pure offline synthesis over already-registered evidence.
 
 \begin{definition}[Structural, Belady-comparator, and total decomposition]
@@ -28,7 +28,8 @@ percentages quoted in Section~\ref{sec:sensitivity-capacity}.
 
 The \emph{Belady comparator gap} (Eq.~\ref{eq:information}) is the measured
 miss-byte separation between the selected global causal baseline and the
-implemented clairvoyant comparator. It motivates II-B/II-C as a measurement
+implemented clairvoyant comparator. It motivates the routing-characterization
+and causal-prediction stages as a measurement
 of unexplained separation from $O_B$, not as a proven maximum causal
 opportunity: $O_B$ is not established as byte-optimal, and there is no
 guaranteed ordering between $O_B$ and the causal optimum $C^*$
@@ -70,16 +71,16 @@ $16$~GiB, the first tested budget exhibiting policy convergence. This
 classification is derived mechanically from the tested points, not
 assumed in advance.
 
-\begin{definition}[Future II-C comparator-relative metric -- documented,
+\begin{definition}[Future causal-prediction comparator-relative metric -- documented,
 not evaluated]
-\label{def:ii-c-metric}
+\label{def:comparator-relative-metric}
 For a selected causal baseline with miss bytes $B_\budget$, the implemented
 clairvoyant comparator $O_B$ with miss bytes $O_{B,\budget}$, and a future
 causal policy or predictor-driven policy with miss bytes $P_\budget$, all
 at budget $\budget$, define
 \begin{equation}
 \mathrm{RecoveryOfBeladyGap}_\budget \;=\;
-\frac{B_\budget - P_\budget}{B_\budget - O_{B,\budget}}, \label{eq:ii-c}
+\frac{B_\budget - P_\budget}{B_\budget - O_{B,\budget}}, \label{eq:comparator-relative}
 \end{equation}
 when $B_\budget \ne O_{B,\budget}$. This metric is signed (negative values
 are allowed when $P_\budget > B_\budget$) and values $>1$ are
@@ -87,7 +88,8 @@ mathematically possible under CASE~C if $P_\budget < O_{B,\budget}$; a
 value $>1$ means $P$ beats $O_B$ on miss bytes, not that $P$ beats the true
 offline optimum $O^*$. The denominator is a measured comparator gap, not a
 proven maximum causal-recovery gap. The metric is defined here as a
-predeclared comparator-relative target for Research~II-C, but
+predeclared comparator-relative target for the causal-prediction and
+real-runtime validation stage, but
 \textbf{cannot be evaluated} -- no causal predictor/policy $P$ exists yet.
 \end{definition}
 
@@ -95,10 +97,11 @@ predeclared comparator-relative target for Research~II-C, but
 emphasize, as strongly as the evidence allows: nothing in \emph{this
 section} measures or estimates the fraction of any proven causal-recovery
 opportunity that a practical causal predictor could recover. The
-comparator-relative quantity in Eq.~\eqref{eq:ii-c} is not evaluated in
-Research~II-A/II-B; Research~II-C (Section~\ref{sec:iic}) reports its
-causal predictor and retention-policy evaluation using the frozen R2-11/
-R2-12 decision rules' own metrics rather than this exact comparator-relative
+comparator-relative quantity in Eq.~\eqref{eq:comparator-relative} is not evaluated in
+the clairvoyant-comparator-gap or routing-characterization analyses;
+Section~\ref{sec:iic} reports its
+causal predictor and retention-policy evaluation using the frozen R-11/
+R-12 decision rules' own metrics rather than this exact comparator-relative
 form (see Section~\ref{sec:iib-synthesis} for why). A separate metric
 $\mathrm{Recovery\_vs\_LRU} = (B-P)/B$ may also have been useful, but
 neither metric is evaluated here.

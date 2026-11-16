@@ -275,13 +275,14 @@ def figure_b4_r2_08_scale() -> None:
     fig, ax = plt.subplots(figsize=(4.6, 3.2))
     bars = ax.bar(labels, vals, color=colors, width=0.55)
     ax.set_ylabel("Median layer-frequency JSD")
-    ax.set_ylim(0, max(vals) * 1.28)
+    ax.set_ylim(0, max(vals) * 1.45)
     for b, v in zip(bars, vals):
         txt = f"{v:.3f}" if v > 0 else "0.000"
         ax.annotate(txt, (b.get_x() + b.get_width() / 2, v), textcoords="offset points",
                     xytext=(0, 5), ha="center", fontsize=8.5)
     ax.annotate("deterministic decoding\n(temp=0, top_k=1)",
-                xy=(1, vals[1]), xytext=(1.35, max(vals) * 0.55),
+                xy=(1.0, max(vals) * 0.03),
+                xytext=(0.95, max(vals) * 0.62),
                 fontsize=7.5, ha="center",
                 arrowprops=dict(arrowstyle="->", linewidth=0.7, color="#444444"))
     ratio = float(h["cross_workload_to_temporal_ratio"])
@@ -317,14 +318,17 @@ def figure_c1_predictor_comparison() -> None:
         h1 = cells[key]["h1"]
         names.append(label)
         vals.append(sum(h1.values()) / len(h1))
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(4.9, 3.0))
     colors = ["#2a6f97", "#a9a9a9", "#a9a9a9"]
     bars = ax.bar(names, vals, color=colors, width=0.55)
     for b, v in zip(bars, vals):
         ax.annotate(f"{v:.4f}", (b.get_x() + b.get_width() / 2, v),
                     textcoords="offset points", xytext=(0, 5), ha="center", fontsize=8.5)
-    ax.set_ylabel("held-out EVAL mean recall@k (h=1)")
-    ax.set_title("R2-09/R2-10: predictor vs. trivial baselines")
+    ax.set_ylabel("held-out EVAL mean recall@k (h=1)", fontsize=8.5)
+    ax.set_title("R-09/R-10: predictor vs. trivial baselines",
+                 fontsize=9.5, pad=8)
+    ax.tick_params(axis="x", labelsize=7.5)
+    ax.tick_params(axis="y", labelsize=8)
     fig.tight_layout()
     fig.savefig(HERE / "figure_c1_r2_10_predictor_comparison.pdf")
     fig.savefig(HERE / "figure_c1_r2_10_predictor_comparison.png", dpi=200)
@@ -344,8 +348,8 @@ def figure_c2_bridge_miss_bytes() -> None:
     for b, v in zip(bars, vals):
         ax.annotate(f"{v:,.0f}", (b.get_x() + b.get_width() / 2, v),
                     textcoords="offset points", xytext=(0, 5), ha="center", fontsize=8)
-    ax.set_ylabel("mean miss_bytes_per_decode_step (4 GiB)")
-    ax.set_title(f"R2-BRIDGE-01: {r['relative_difference_pct']:.4f}% relative difference")
+    ax.set_ylabel("mean miss bytes per decode step (4 GiB)")
+    ax.set_title(f"R-BRIDGE-01: {r['relative_difference_pct']:.4f}% relative difference")
     fig.tight_layout()
     fig.savefig(HERE / "figure_c2_r2_bridge01_miss_bytes.pdf")
     fig.savefig(HERE / "figure_c2_r2_bridge01_miss_bytes.png", dpi=200)
@@ -359,19 +363,24 @@ def figure_c3_r2_11_replay_effect() -> None:
     boot = _load_json("r2_11", "BOOTSTRAP-RESULT.json")
     budgets = ["1.5 GiB\n(stress)", "4 GiB\n(primary)", "8 GiB\n(null-control)"]
     vals = [d["mean_delta_1_5gib"], d["mean_delta_4gib_primary"], d["mean_delta_8gib"]]
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(4.9, 3.4))
     bars = ax.bar(budgets, vals, color=["#8fb8d6", "#2a6f97", "#8fb8d6"], width=0.55)
     ax.errorbar([1], [d["mean_delta_4gib_primary"]],
                 yerr=[[d["mean_delta_4gib_primary"] - boot["ci_lower_95"]],
                       [boot["ci_upper_95"] - d["mean_delta_4gib_primary"]]],
                 fmt="none", ecolor="black", capsize=4, linewidth=1)
     ax.axhline(0, color="#444444", linewidth=0.7)
-    for b, v in zip(bars, vals):
+    ax.set_ylim(min(vals) * 1.32, 0)
+    for i, (b, v) in enumerate(zip(bars, vals)):
         ax.annotate(f"{v:,.0f}", (b.get_x() + b.get_width() / 2, v),
-                    textcoords="offset points", xytext=(0, 6 if v >= 0 else -14),
-                    ha="center", fontsize=8)
-    ax.set_ylabel("mean paired delta, miss_bytes/decode-step\n(PredictedProtect - B_selected)")
-    ax.set_title("R2-11: replay-level retention effect by budget (R2_11_PASS)")
+                    textcoords="offset points",
+                    xytext=(22 if i == 1 else 0, -8), va="top",
+                    ha="left" if i == 1 else "center", fontsize=8)
+    ax.set_ylabel("mean paired delta, miss bytes per decode step\n(PredictedProtect - B_selected)", fontsize=8)
+    ax.set_title("R-11: replay retention effect by budget",
+                 loc="left", fontsize=9.5, pad=8)
+    ax.tick_params(axis="x", labelsize=8)
+    ax.tick_params(axis="y", labelsize=8)
     fig.tight_layout()
     fig.savefig(HERE / "figure_c3_r2_11_replay_effect.pdf")
     fig.savefig(HERE / "figure_c3_r2_11_replay_effect.png", dpi=200)
@@ -408,8 +417,8 @@ def figure_c4_r2_12_throughput_by_budget() -> None:
     ax.bar([i + width / 2 for i in x], pp_vals, width=width, label="PredictedProtect", color="#2a6f97")
     ax.set_xticks(list(x))
     ax.set_xticklabels(budgets)
-    ax.set_ylabel("mean decode tokens/second")
-    ax.set_title("R2-12: real-runtime throughput by policy and budget")
+    ax.set_ylabel("mean decode tokens per second")
+    ax.set_title("R-12: throughput by policy and budget", fontsize=9.5)
     ax.legend(fontsize=8)
     fig.tight_layout()
     fig.savefig(HERE / "figure_c4_r2_12_throughput_by_budget.pdf")
@@ -444,8 +453,11 @@ def figure_c5_r2_12_delta_by_budget_ci() -> None:
     colors = ["#8fb8d6", "#b83232", "#8fb8d6"]
     ax.bar(budgets, deltas, yerr=[lo, hi], color=colors, capsize=4, width=0.55)
     ax.axhline(0, color="#444444", linewidth=0.7)
-    ax.set_ylabel("mean paired delta, decode TPS\n(PredictedProtect - B_selected)")
-    ax.set_title("R2-12: TPS delta by budget, own 95% CI each (not pooled)")
+    ax.set_ylabel("mean paired delta, decode tokens per second\n(PredictedProtect - B_selected)", fontsize=8)
+    ax.set_title("R-12: TPS delta by budget and 95% CI",
+                 loc="left", fontsize=9.5, pad=8)
+    ax.tick_params(axis="x", labelsize=8)
+    ax.tick_params(axis="y", labelsize=8)
     fig.tight_layout()
     fig.savefig(HERE / "figure_c5_r2_12_delta_by_budget_ci.pdf")
     fig.savefig(HERE / "figure_c5_r2_12_delta_by_budget_ci.png", dpi=200)
@@ -458,9 +470,9 @@ def figure_c6_evidence_chain() -> None:
     fig, ax = plt.subplots(figsize=(5.2, 2.6))
     ax.axis("off")
     stages = [
-        ("Prediction\n(R2-09/R2-10)", "+", "#2a6f97"),
-        ("Replay Retention\n(R2-BRIDGE-01/R2-11)", "+", "#2a6f97"),
-        ("Real Runtime\n(R2-12)", "−", "#b83232"),
+        ("Prediction\n(R-09/R-10)", "+", "#2a6f97"),
+        ("Replay Retention\n(R-BRIDGE-01/R-11)", "+", "#2a6f97"),
+        ("Real Runtime\n(R-12)", "−", "#b83232"),
     ]
     n = len(stages)
     xs = [0.12 + i * 0.38 for i in range(n)]
@@ -475,7 +487,7 @@ def figure_c6_evidence_chain() -> None:
                     arrowprops=dict(arrowstyle="->", linewidth=1.2, color="#444444"))
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
-    ax.set_title("Research II-C evidence chain (sign of each stage's finding)", fontsize=9.5)
+    ax.set_title("Evidence chain: prediction to replay retention to real runtime", fontsize=9.5)
     fig.tight_layout()
     fig.savefig(HERE / "figure_c6_evidence_chain.pdf")
     fig.savefig(HERE / "figure_c6_evidence_chain.png", dpi=200)

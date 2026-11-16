@@ -1,26 +1,156 @@
 {
   "artifact": "PAPER_II_FREEZE",
-  "scope": "Freeze record for the Research II-C addition to paper/research2/manuscript.tex (the complete II-A + II-B + II-C manuscript). II-A/II-B freeze provenance is separately recorded in II-A-FREEZE.json and II-B-FREEZE.json and is unchanged by this freeze.",
+  "scope": "Freeze record for the publication-normalized manuscript paper/research2/manuscript.tex after the final editorial correction pass (publication nomenclature, hash registry, layout). The file name is retained for repository continuity; the manuscript itself carries no numbered-paper framing. Canonical repository artifacts are not renamed: publication identifiers R-01..R-12 / R-09A / R-09B / R-BRIDGE-01 map to the unchanged repository identifiers in publication_id_mapping.",
+  "nomenclature_normalization": {
+    "reader_facing_ids": [
+      "R-01",
+      "R-02",
+      "R-03",
+      "R-04",
+      "R-05",
+      "R-06",
+      "R-07",
+      "R-08",
+      "R-09A",
+      "R-09B",
+      "R-10",
+      "R-BRIDGE-01",
+      "R-11",
+      "R-12"
+    ],
+    "canonical_repository_ids_unchanged": true,
+    "renamed_repository_artifacts": [],
+    "hash_registry_appendix": "Appendix A.2 (Table 18)",
+    "publication_mapping_appendix": "Appendix A.1 (Table 17)"
+  },
+  "publication_id_mapping": {
+    "R-01": "R2-01",
+    "R-02": "R2-02",
+    "R-03": "R2-03",
+    "R-04": "R2-04",
+    "R-05": "R2-05",
+    "R-06": "R2-06",
+    "R-07": "R2-07",
+    "R-08": "R2-08",
+    "R-09A": "R2-09A",
+    "R-09B": "R2-09B",
+    "R-10": "R2-10",
+    "R-BRIDGE-01": "R2-BRIDGE-01",
+    "R-11": "R2-11",
+    "R-12": "R2-12"
+  },
+  "previous_freeze": {
+    "commit": "3a8565b",
+    "final_compiled_pdf_sha256": "df5a061859e8441fd690b09004d72464197eb854b1a88bc8c513128305ba2dfe",
+    "pages": 32,
+    "note": "Preserved as historical provenance. The earlier PDF was built on a Debian TeX Live environment with Latin Modern substituted for NewTX; that build-environment limitation no longer applies."
+  },
   "manuscript_source_hashes_sha256": {
-    "manuscript.tex": "7a27d8fe474177bbc9143ae146716518cf4d8327b114120c29e82cd41afb2fad",
-    "sections/10_research_iic.tex": "340b53084281beaecad38191a5ffc988af0c9adf514b6bb58889be9932633fb5",
+    "manuscript.tex": "defbdba449ddebdc6fb0d5e0eb424478deea2725986e77257fd00dca1a794820",
     "references.bib": "84fc2b1ef546561572e3b87a3197057c885ee0f10fc05828d32d8ee8c90ec49b"
   },
-  "new_figure_hashes_sha256": {
-    "figures/figure_c1_r2_10_predictor_comparison.pdf": "c7ae6c38b1607fa02bf5b9817510a68af17db4c83bf117b1f594b749d7e9215e",
-    "figures/figure_c2_r2_bridge01_miss_bytes.pdf": "aedc0a11dfd79b813d930405985c56cffa6dee28f36b366290698e3e51c5c8ff",
-    "figures/figure_c3_r2_11_replay_effect.pdf": "0d20133730c9a917008554d435323f0a5262be54ce50fb6f10beaf54cbb9fb8a",
-    "figures/figure_c4_r2_12_throughput_by_budget.pdf": "9830c721584e2b788533bf79f7ffed6f732af246dc80cb325fa9c8f7c97edbf2",
-    "figures/figure_c5_r2_12_delta_by_budget_ci.pdf": "78a96a349bfcfcdebf78fcd46c360340398db968dcc79760cdf16d5654431583",
-    "figures/figure_c6_evidence_chain.pdf": "027e09f499fd42daf8391523b65cd65284927005b6fe50e70e0c086681fddebe"
+  "section_hashes_sha256": {
+    "sections/01_introduction.tex": "8b2f81628bddab79e2072a65f30b901fde0e57ffbebac1792af0bece3a21e59d",
+    "sections/02_problem_formulation.tex": "845088113dee464b903e206dfcde54e4a53c19d6ad1e1d9b8acd11a7a0b87e6f",
+    "sections/03_methodology_replay_validation.tex": "385caa1cc1c0424982b6dde3420b4abfab719bcc438e50fadea4666abcfcf870",
+    "sections/04_oracle_headroom_fixed_memory.tex": "83b5cc2d0e511befd5ad1b00fcb66d867e7c4d1b3a89b510d6104b0d470d2d24",
+    "sections/05_sensitivity_capacity.tex": "ec8a1a928bc15e2093a78423f1b95d721f568145ad5f36cad2d6bd19bc3d41b0",
+    "sections/06_recoverable_envelope.tex": "e41e05b33e00567bd8ee6d86be1a3ed9bed7107b08bc6a4cf494ed108c070964",
+    "sections/07_discussion.tex": "f5bfa6f58909be62369f3c17355b5e45e768fa9ff90822838138ee5bee4f0706",
+    "sections/08_limitations.tex": "659def0f27ad37b5b4862c93c8606fa49f5b9e15f9b0b27891b96217d583b074",
+    "sections/09_research_iib.tex": "20cbad7692a69637cce826098b714e8a8bfab002103e45b5567073f6358e6540",
+    "sections/09_research_iib_placeholder.tex": "6ce8a9b18749b25c62fd37e6d0554b1dd5598bd5c2d23e9ab8e3532aa19ecf9a",
+    "sections/10_research_iic.tex": "93af277f957ff3d4b6716998ade4f743c83f6aea72b477174495edbd8b3b74dd",
+    "sections/10_research_iic_placeholder.tex": "686687b9da9dd97a30d64830f383c205fc5385bdac40286814d5d59aa2adec1a",
+    "sections/11_conclusion.tex": "c168d9fcd71417272aba9ea164d560c5475e0cf62fa13ab594ecdb20a40bb72b",
+    "sections/12_provenance_appendix.tex": "b6a493fb71d444c5689a06a476d26b9011972284fe07c230a8176a7349f05cf0"
   },
-  "new_table_hashes_sha256": {
-    "tables/table_c1_milestone_summary.tex": "51f1bd759b0c688be9a216e32ea988c776bc7fe32f36bc6fe19adf4acb8ed278",
-    "tables/table_c2_predictor_performance.tex": "4d4ebae5b78aead5851ed571d67101fb97758a80e7d9b14dceb0ef1cfa6c20a6",
-    "tables/table_c3_retention_replay.tex": "b21e5f1d5381b7e0a86424d6f880c2456a416ea86c518831e08fe57749654618",
-    "tables/table_c4_runtime_results.tex": "bf4ce5a477c9a85338faf35370e63e3cf854f4d24a6f85b034176c0d3b495a41"
+  "table_hashes_sha256": {
+    "tables/table1_configuration.tex": "4efbfeb2c4cf14a9786d6b0800773f53c272864f4cd889d55cf636e1f46c00a0",
+    "tables/table2_r2_02_comparison.tex": "2f9d73961e755cd86ca6b5d65b804cfa10c629654219fab6a5776311037db484",
+    "tables/table3_r2_03_sweep.tex": "a4dc7ee54e25726d8658069cb089ac50aa7ad590cea68968dd979843628a70bd",
+    "tables/table3b_r2_03_lfu_auxiliary.tex": "97d541b4125c1c13d37a85821e96b234a1a3134ece0581bc047bfa6090449faa",
+    "tables/table4_r2_04_synthesis.tex": "f57ab38a3a1db7aee8d964f3f92e35421189f1a42005c2af278a92d995a70ffd",
+    "tables/table_b1_iib_map.tex": "2fe7a596f98384d2897533d1d2e90dafbc9efd084c45a957fe9afaf027440e25",
+    "tables/table_b2_r2_05_concentration.tex": "d8516a3176f26916f8d83c16b47a123846d7a36f69801f8baabbcaea3de287bb",
+    "tables/table_b3_r2_06_transitions.tex": "8dca3d099c8992146e6692d8d1e323e0e35b7390fa1a242c229c34e240128e18",
+    "tables/table_b4_r2_07_reuse_locality.tex": "5bfef1961758086d379364d1a8b660d0171fc487889c79a700a0cdb42f45c81d",
+    "tables/table_b5_r2_08_scale.tex": "048be5c2ecd8a2938a80c08414b728cf8e3e642ddcea923ed9f59d4cf1e20064",
+    "tables/table_c1_milestone_summary.tex": "4a8ac91949c4182f48ab8106baface146e06eb513ef3afd16a12c5a07efbada8",
+    "tables/table_c2_predictor_performance.tex": "44238a39d5edd5f4780a21f2590a441c16d258093dbe11e52589a12b7ab3cc01",
+    "tables/table_c3_retention_replay.tex": "6c40cf007681812ce452e0d8edb22402d05e644df4183bbb999dbc9508a97096",
+    "tables/table_c4_runtime_results.tex": "3cf9563c67ae513deb4c37b8fcb19f2f330939a074d9eb68af65977185c4ad27"
   },
-  "bibliography_snapshot": "paper/research2/references.bib, II-C additions appended under the pre-existing 'II-B / II-C related-work scaffold' comment; retrieval date 2026-11-16 for all new entries.",
+  "figure_hashes_sha256": {
+    "figures/figure1_miss_rate_vs_budget.pdf": "62a4d7a26efa5d614d0154b68ea21406a16a31f68bdafd997035f1a9730d2818",
+    "figures/figure2_relative_headroom_vs_budget.pdf": "f3546446dd29fd2ffe7a6180b991497fe5923dbcc1b7e5da28bb3b30486c7735",
+    "figures/figure_b1_r2_05_concentration.pdf": "b2889cef009825cfe7a181005f390b7b2f082aa90a3ff0cefdf3b8b17267759a",
+    "figures/figure_b2_r2_06_transitions.pdf": "0b770a111b99dd5ed8a41346ef2ee4109a4df968fdee0a22f76a7d3f308dd94a",
+    "figures/figure_b3_r2_07_reuse_locality.pdf": "edc9ed6f0c3fed7cb1ab7efb80d6e98c51c6be6e07296f382254c47684d6ea87",
+    "figures/figure_b4_r2_08_scale_comparison.pdf": "f209cd98c99437b77644c5157bcdfa56787c6ed0c18793c67f253ed3597e3d4b",
+    "figures/figure_c1_r2_10_predictor_comparison.pdf": "bcfc19e1b0acf3787233bb18c83518feef966ae5469b27d70b69734e7a8d7515",
+    "figures/figure_c2_r2_bridge01_miss_bytes.pdf": "fc8c046dda2e46529fd65ee132bfe1c01513f3a82ad5084e41ba4941f6581044",
+    "figures/figure_c3_r2_11_replay_effect.pdf": "c29d4c0a62a22b68d592941fe34f8f49032e911fbf1304f89ab0e106d79f7d58",
+    "figures/figure_c4_r2_12_throughput_by_budget.pdf": "87ac9bf977e547522acf982f8f01544da55e418315fb4a9b38f56756baecbdf8",
+    "figures/figure_c5_r2_12_delta_by_budget_ci.pdf": "661b905ca6703eb6cc442f57c9a3b32a4341938f3a35da93e14e2e746af1db9b",
+    "figures/figure_c6_evidence_chain.pdf": "4b6e71bf033e9b36722af8a6e6d5520c78c60b8a6dc959c9f37f6c96f352d38f"
+  },
+  "figure_preview_hashes_sha256": {
+    "figures/figure1_miss_rate_vs_budget.png": "bc79a3112e74c0bbc5ba549ab2866a5d20e6b3167e2c9b97e48044d3715b32c4",
+    "figures/figure2_relative_headroom_vs_budget.png": "80be6ea4b3bd4f7c3a6fd40547b166ba1771e9df5aed27441a4f51c136f54e36",
+    "figures/figure_b1_r2_05_concentration.png": "f6a5729ee6d1892bcf735b69c3ff1041b0a35c0169ca83a26ee048b7b27e286c",
+    "figures/figure_b2_r2_06_transitions.png": "cb0a9272cc43d7078a1934da6a0abf96b6f01099ce823a62903d0c21d560f925",
+    "figures/figure_b3_r2_07_reuse_locality.png": "c4d90ceb827b377b126b521d58b4da43c52c080337f331942d2e046f54198114",
+    "figures/figure_b4_r2_08_scale_comparison.png": "a594e8cf8327ff9880d868b9d607f8fa40bcdb5d853f2ac47d59e4ce0e464de0",
+    "figures/figure_c1_r2_10_predictor_comparison.png": "a63bf32f55b62ecff220ac63b237ef701411b18784423e960f779799894f9057",
+    "figures/figure_c2_r2_bridge01_miss_bytes.png": "4e785b55e9c9fa3d15b3733e4ed66826b91a8ee866d887ead24ff79fb8f3453d",
+    "figures/figure_c3_r2_11_replay_effect.png": "dc74908fcd6b9c59364688e2c7cea4ece3881745a5cdc5435ffef32362c9d63a",
+    "figures/figure_c4_r2_12_throughput_by_budget.png": "c0bf4a97b1024a844dc15dd846516cca9fd79d1798e923dda0917a7d3da4acad",
+    "figures/figure_c5_r2_12_delta_by_budget_ci.png": "765e4089962cab348baf0f7a12b29a45c8c7c16c8d47b67289f97dff45a80819",
+    "figures/figure_c6_evidence_chain.png": "f1727e7d459d5ecaaa96189741e0d6dfb88e9f247fcc42b3d4ac439bc569e3b4"
+  },
+  "hash_registry": {
+    "H-TRACE-R01": {
+      "object": "validated coding trace (R-01; reused by R-05 to R-07)",
+      "sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+      "canonical_source": "R-01"
+    },
+    "H-R05-CANONICAL": {
+      "object": "R-05 canonical digest",
+      "sha256": "4a1b72cdfcd37144446fc1a106b6fa8d559d10bc0729e1baf16dda7c1fa620df",
+      "canonical_source": "R-05"
+    },
+    "H-R06-CANONICAL": {
+      "object": "R-06 canonical digest",
+      "sha256": "a727edf42735286420d326baad481687167d3d0aba0444a527183c084140926e",
+      "canonical_source": "R-06"
+    },
+    "H-R07-CANONICAL": {
+      "object": "R-07 canonical digest",
+      "sha256": "ad36e615970b196b64ba3a3fdc2559e252cc8627e5d17d0d830d16742f59281a",
+      "canonical_source": "R-07"
+    },
+    "H-R08-CANONICAL": {
+      "object": "R-08 canonical digest",
+      "sha256": "f5db4e0bf43ce4243edb303441e82ceefa5a0aeb5754143292f1230f220527c3",
+      "canonical_source": "R-08"
+    },
+    "H-MODEL-30B": {
+      "object": "Qwen3-30B-A3B-Q4_K_M model artifact",
+      "sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+      "canonical_source": "model artifact"
+    },
+    "H-RUNTIME-R08": {
+      "object": "R-08 capture runtime binary",
+      "sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+      "canonical_source": "R-08"
+    },
+    "H-R12-CONTRACT": {
+      "object": "R-12 frozen Phase-0 contract bundle",
+      "sha256": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad",
+      "canonical_source": "R-12"
+    }
+  },
   "frozen_experiment_digests_referenced": {
     "R2-12_contract_digest": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad"
   },
@@ -28,23 +158,37 @@
     "r2_12_8gib_evidence_and_analysis_commit": "5e9d93d",
     "r2_12_final_closure_commit": "3356845",
     "research_2_final_closure_commit": "6c20408",
-    "paper_ii_freeze_commit": "3a8565b"
+    "previous_paper_freeze_commit": "3a8565b",
+    "provenance_sha_commit": "30a33b8"
   },
   "build_environment": {
-    "tex_engine": "pdfTeX 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian)",
-    "build_command": "latexmk -pdf -interaction=nonstopmode manuscript.tex",
-    "known_limitation": "amsmath/amssymb + Latin Modern fonts substituted for newtxtext/newtxmath per paper/research2/README.md (texlive-fonts-extra unavailable in this build environment); documented, not a content choice."
+    "tex_engine": "MiKTeX-pdfTeX 4.27 (MiKTeX 26.5), LaTeX2e <2026-06-01>",
+    "fonts": "newtxtext 2024/04/01 v1.744 + newtxmath 2024/09/22 v1.754 (same font system as the preceding paper; no Computer Modern or Latin Modern substitution)",
+    "additional_packages": [
+      "tabularx",
+      "array",
+      "seqsplit",
+      "capt-of"
+    ],
+    "build_command": "pdflatex manuscript.tex (x2) + bibtex manuscript + pdflatex manuscript.tex (x2)",
+    "output": "paper/research2/manuscript.pdf"
   },
   "final_compiled_pdf": {
     "path": "paper/research2/manuscript.pdf",
-    "pages": 32,
-    "sha256": "df5a061859e8441fd690b09004d72464197eb854b1a88bc8c513128305ba2dfe"
+    "pages": 29,
+    "sha256": "5e57bb7733e6e4fa0fd1392384d28b54847dfe6533884139dcc517c894383d7f"
   },
   "freeze_conditions_checked": {
+    "overfull_hbox": 0,
+    "visible_margin_violations": 0,
+    "pages_visually_inspected": "1-29",
     "no_undefined_references": true,
     "no_undefined_citations": true,
-    "no_literal_double_question_mark_in_text": true,
+    "reader_facing_numbered_paper_framing": 0,
+    "full_sha256_outside_hash_registry": 0,
     "verify_paper_freeze_py_passes": true,
-    "all_ii_a_ii_b_artifacts_byte_identical_before_after": true
+    "canonical_evidence_byte_identical": true,
+    "no_experimental_data_created": true,
+    "no_canonical_result_changed": true
   }
 }
