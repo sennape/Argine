@@ -1,5 +1,7 @@
 # Publication Provenance Manifest
 
+Edition: **final-corrected-edition**, superseding commit `0348e04` editorially (R-12 host-condition wording; Paper I-length abstract; layout). No claim, experiment identifier or canonical artifact mapping changed.
+
 Machine-readable form: `PAPER_II_PROVENANCE.json`. This file keeps its historical name for repository continuity; the manuscript it documents carries no numbered-paper framing. Reader-facing identifiers are R-01 ... R-12, R-09A/R-09B and R-BRIDGE-01; the canonical repository identifiers are unchanged and appear once in the mapping table.
 
 ## Publication-ID mapping

@@ -39,14 +39,28 @@
     "R-11": "R2-11",
     "R-12": "R2-12"
   },
+  "edition": "final-corrected-edition",
+  "supersedes": {
+    "commit": "0348e04",
+    "final_compiled_pdf_sha256": "5e57bb7733e6e4fa0fd1392384d28b54847dfe6533884139dcc517c894383d7f",
+    "pages": 29,
+    "note": "Superseded editorially, not historically: every digest recorded here is recomputed for the corrected edition, while the earlier freeze remains preserved below as provenance."
+  },
   "previous_freeze": {
     "commit": "3a8565b",
     "final_compiled_pdf_sha256": "df5a061859e8441fd690b09004d72464197eb854b1a88bc8c513128305ba2dfe",
     "pages": 32,
     "note": "Preserved as historical provenance. The earlier PDF was built on a Debian TeX Live environment with Latin Modern substituted for NewTX; that build-environment limitation no longer applies."
   },
+  "editorial_corrections_final_edition": [
+    "R-12 host-condition wording now states explicitly that AC connection, a battery-percentage threshold and a TZS0 numerical ceiling were not frozen R-12 gates, and that clean environment, power mode, fixed cooldown pauses and the readiness/identity checks are the applicable controls.",
+    "Abstract condensed to Paper I length (335 words) so the first page follows Paper I's TITLE/AUTHOR/DATE/ABSTRACT/MAIN TEXT rhythm; every quantitative claim and classification is retained verbatim.",
+    "placeins section-level float barrier removed to eliminate a large vertical gap on page 4; float placement parameters retained.",
+    "Figure 9 given a taller canvas, title padding and y-label padding so the axis label and title no longer crowd each other; no data or scale changed.",
+    "Hash Registry object column made flexible (tabularx X) to remove the last underfull alignment; digests unchanged."
+  ],
   "manuscript_source_hashes_sha256": {
-    "manuscript.tex": "defbdba449ddebdc6fb0d5e0eb424478deea2725986e77257fd00dca1a794820",
+    "manuscript.tex": "903c6eb588629793e2a80ab20a3430118bec61627d8329d5b17d586863c9329a",
     "references.bib": "84fc2b1ef546561572e3b87a3197057c885ee0f10fc05828d32d8ee8c90ec49b"
   },
   "section_hashes_sha256": {
@@ -57,13 +71,13 @@
     "sections/05_sensitivity_capacity.tex": "ec8a1a928bc15e2093a78423f1b95d721f568145ad5f36cad2d6bd19bc3d41b0",
     "sections/06_recoverable_envelope.tex": "e41e05b33e00567bd8ee6d86be1a3ed9bed7107b08bc6a4cf494ed108c070964",
     "sections/07_discussion.tex": "f5bfa6f58909be62369f3c17355b5e45e768fa9ff90822838138ee5bee4f0706",
-    "sections/08_limitations.tex": "659def0f27ad37b5b4862c93c8606fa49f5b9e15f9b0b27891b96217d583b074",
+    "sections/08_limitations.tex": "96d9d8e1401a7fb843edd4ad9f7f37445c44ae09e8f8b5c64dfd4d2a70477080",
     "sections/09_research_iib.tex": "20cbad7692a69637cce826098b714e8a8bfab002103e45b5567073f6358e6540",
     "sections/09_research_iib_placeholder.tex": "6ce8a9b18749b25c62fd37e6d0554b1dd5598bd5c2d23e9ab8e3532aa19ecf9a",
     "sections/10_research_iic.tex": "93af277f957ff3d4b6716998ade4f743c83f6aea72b477174495edbd8b3b74dd",
     "sections/10_research_iic_placeholder.tex": "686687b9da9dd97a30d64830f383c205fc5385bdac40286814d5d59aa2adec1a",
     "sections/11_conclusion.tex": "c168d9fcd71417272aba9ea164d560c5475e0cf62fa13ab594ecdb20a40bb72b",
-    "sections/12_provenance_appendix.tex": "b6a493fb71d444c5689a06a476d26b9011972284fe07c230a8176a7349f05cf0"
+    "sections/12_provenance_appendix.tex": "e4b3856b0188f7c87d0e98c3e31875dac48ab35ae53f5d5b3d15d5aaad87faf7"
   },
   "table_hashes_sha256": {
     "tables/table1_configuration.tex": "4efbfeb2c4cf14a9786d6b0800773f53c272864f4cd889d55cf636e1f46c00a0",
@@ -90,7 +104,7 @@
     "figures/figure_b4_r2_08_scale_comparison.pdf": "f209cd98c99437b77644c5157bcdfa56787c6ed0c18793c67f253ed3597e3d4b",
     "figures/figure_c1_r2_10_predictor_comparison.pdf": "bcfc19e1b0acf3787233bb18c83518feef966ae5469b27d70b69734e7a8d7515",
     "figures/figure_c2_r2_bridge01_miss_bytes.pdf": "fc8c046dda2e46529fd65ee132bfe1c01513f3a82ad5084e41ba4941f6581044",
-    "figures/figure_c3_r2_11_replay_effect.pdf": "c29d4c0a62a22b68d592941fe34f8f49032e911fbf1304f89ab0e106d79f7d58",
+    "figures/figure_c3_r2_11_replay_effect.pdf": "fd29107b50ab06c94222d6492d64bdd47170fe6a1e04d384e2019f4f62164b97",
     "figures/figure_c4_r2_12_throughput_by_budget.pdf": "87ac9bf977e547522acf982f8f01544da55e418315fb4a9b38f56756baecbdf8",
     "figures/figure_c5_r2_12_delta_by_budget_ci.pdf": "661b905ca6703eb6cc442f57c9a3b32a4341938f3a35da93e14e2e746af1db9b",
     "figures/figure_c6_evidence_chain.pdf": "4b6e71bf033e9b36722af8a6e6d5520c78c60b8a6dc959c9f37f6c96f352d38f"
@@ -104,7 +118,7 @@
     "figures/figure_b4_r2_08_scale_comparison.png": "a594e8cf8327ff9880d868b9d607f8fa40bcdb5d853f2ac47d59e4ce0e464de0",
     "figures/figure_c1_r2_10_predictor_comparison.png": "a63bf32f55b62ecff220ac63b237ef701411b18784423e960f779799894f9057",
     "figures/figure_c2_r2_bridge01_miss_bytes.png": "4e785b55e9c9fa3d15b3733e4ed66826b91a8ee866d887ead24ff79fb8f3453d",
-    "figures/figure_c3_r2_11_replay_effect.png": "dc74908fcd6b9c59364688e2c7cea4ece3881745a5cdc5435ffef32362c9d63a",
+    "figures/figure_c3_r2_11_replay_effect.png": "ead1ce3f2cd602eee52a0e30106bd1dc0cde6a7cdb5e03475ec74ad8476f946a",
     "figures/figure_c4_r2_12_throughput_by_budget.png": "c0bf4a97b1024a844dc15dd846516cca9fd79d1798e923dda0917a7d3da4acad",
     "figures/figure_c5_r2_12_delta_by_budget_ci.png": "765e4089962cab348baf0f7a12b29a45c8c7c16c8d47b67289f97dff45a80819",
     "figures/figure_c6_evidence_chain.png": "f1727e7d459d5ecaaa96189741e0d6dfb88e9f247fcc42b3d4ac439bc569e3b4"
@@ -176,10 +190,11 @@
   "final_compiled_pdf": {
     "path": "paper/research2/manuscript.pdf",
     "pages": 29,
-    "sha256": "5e57bb7733e6e4fa0fd1392384d28b54847dfe6533884139dcc517c894383d7f"
+    "sha256": "ba3e871b3c0660708bbb8c33565b3086ecc3d6d68d434a8b31057ec488848bcb"
   },
   "freeze_conditions_checked": {
     "overfull_hbox": 0,
+    "underfull_hbox": 0,
     "visible_margin_violations": 0,
     "pages_visually_inspected": "1-29",
     "no_undefined_references": true,

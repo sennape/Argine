@@ -363,7 +363,7 @@ def figure_c3_r2_11_replay_effect() -> None:
     boot = _load_json("r2_11", "BOOTSTRAP-RESULT.json")
     budgets = ["1.5 GiB\n(stress)", "4 GiB\n(primary)", "8 GiB\n(null-control)"]
     vals = [d["mean_delta_1_5gib"], d["mean_delta_4gib_primary"], d["mean_delta_8gib"]]
-    fig, ax = plt.subplots(figsize=(4.9, 3.4))
+    fig, ax = plt.subplots(figsize=(5.0, 3.6))
     bars = ax.bar(budgets, vals, color=["#8fb8d6", "#2a6f97", "#8fb8d6"], width=0.55)
     ax.errorbar([1], [d["mean_delta_4gib_primary"]],
                 yerr=[[d["mean_delta_4gib_primary"] - boot["ci_lower_95"]],
@@ -376,9 +376,10 @@ def figure_c3_r2_11_replay_effect() -> None:
                     textcoords="offset points",
                     xytext=(22 if i == 1 else 0, -8), va="top",
                     ha="left" if i == 1 else "center", fontsize=8)
-    ax.set_ylabel("mean paired delta, miss bytes per decode step\n(PredictedProtect - B_selected)", fontsize=8)
+    ax.set_ylabel("mean paired delta, miss bytes per decode step\n(PredictedProtect - B_selected)",
+                  fontsize=8, labelpad=5)
     ax.set_title("R-11: replay retention effect by budget",
-                 loc="left", fontsize=9.5, pad=8)
+                 loc="left", fontsize=9.5, pad=11)
     ax.tick_params(axis="x", labelsize=8)
     ax.tick_params(axis="y", labelsize=8)
     fig.tight_layout()

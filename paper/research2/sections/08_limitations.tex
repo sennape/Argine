@@ -164,16 +164,20 @@
    compute/I/O overlap -- Section~\ref{sec:iic-related-work}) can convert
    predictive information into real-runtime throughput gain in this problem
    class.
- \item \textbf{Host/environment constraints are exactly those frozen in the
-   protocol, no more.} R-12's machine-state and readiness gates
-   (operator-attested clean environment, a fixed/applicable power-mode
-   condition, fixed thermal-cooldown pauses, and the frozen hardware-identity
-   and readiness checks) are exactly the conditions frozen in
-   \texttt{machine\_state\_contract.json} and \texttt{execution\_plan.json}
-   before acquisition. No condition not formally frozen there (e.g., a
-   specific battery-percentage or ambient-temperature threshold used
-   elsewhere in the Argine programme) is retroactively applied as an
-   exclusion criterion to R-12's evidence.
+ \item \textbf{Host/environment admissibility is exactly what was frozen in
+    the protocol, no more.} The controls actually frozen for R-12, and
+    applied to every canonical launch, were: an operator-attested clean
+    environment, which includes full closure of every browser as well as
+    streaming and heavy background workloads; a fixed power-mode condition
+    that is never Power Saver; thermal control \emph{only} as the frozen
+    fixed-pause cooldown policy, with no numeric temperature threshold used
+    as an admissibility criterion; and the frozen hardware-identity, free-RAM
+    and readiness checks. Three conditions that appear elsewhere in the
+    Argine programme were \textbf{not} R-12 frozen gates and are not
+    introduced here retroactively: an AC-connection requirement; a
+    battery-percentage threshold; and a TZS0 numerical ceiling. No canonical
+    launch was admitted, excluded, or reclassified on the basis of any of
+    the three, and none is treated as a confound in the results above.
  \item \textbf{Runtime conformance was reached iteratively.} The runtime
    binary realizing the retention-policy integration for R-12 required
    several realization/conformance iterations before reaching an accepted

@@ -1,6 +1,16 @@
 {
   "artifact": "PAPER_II_PROVENANCE",
   "scope": "Maps every quantitative claim in the publication-normalized paper/research2/manuscript.tex to its figure/table, source artifact, experiment, commit and digest. Publication identifiers (R-01..R-12, R-09A/B, R-BRIDGE-01) are display names; the canonical repository identifiers are unchanged and listed once in publication_id_mapping. Provenance for the earlier stages of the programme remains governed by paper/research2/claims/claim_ledger.md and the stage freeze manifests II-A-FREEZE.json / II-B-FREEZE.json.",
+  "edition": "final-corrected-edition",
+  "supersedes_editorially": {
+    "commit": "0348e04",
+    "pdf_sha256": "5e57bb7733e6e4fa0fd1392384d28b54847dfe6533884139dcc517c894383d7f",
+    "scope": "The manuscript text and layout were corrected in this edition; no claim, experiment identifier or canonical artifact mapping changed."
+  },
+  "editorial_corrections_affecting_provenance": [
+    "R-12 host-condition statement corrected: AC connection, battery percentage and a TZS0 ceiling are explicitly not frozen R-12 gates.",
+    "Abstract condensed to Paper I length with all claims retained."
+  ],
   "publication_id_mapping": {
     "R-01": "R2-01",
     "R-02": "R2-02",
