@@ -1,0 +1,29 @@
+{
+  "artifact": "R2-10-PHASE3L-FINAL-CLOSURE-RECORD",
+  "generated_utc": "2026-11-13T21:22:05.913802Z",
+  "overlay_state": "EVAL_EVALUATED_CLOSED",
+  "supersedes_overlay_state": "EVAL_OPENED",
+  "supersedes_reference": "experiments/R2-10-working-set-predictor/PHASE3C-EVAL-OPENED.json",
+  "git_head_before_closure_commit": "0f9f26a455417381a05f0e52bcfdfa4a4d2df0b9",
+  "closure_artifacts": [
+    "PHASE3C-EVAL-OPENED.json (committed separately, prior commit 0f9f26a455417381a05f0e52bcfdfa4a4d2df0b9)",
+    "PHASE3D-EVAL-RESULTS.json",
+    "PHASE3E-PER-WORKLOAD-ANALYSIS.json",
+    "PHASE3F-PER-HORIZON-ANALYSIS.json",
+    "PHASE3G-DEV-VS-EVAL-COMPARISON.json",
+    "PHASE3H-LEAKAGE-DETERMINISM-AUDIT.json",
+    "PHASE3I-FROZEN-DIGEST-VERIFICATION.json",
+    "PHASE3J-FINAL-INTERPRETATION.json",
+    "PHASE3K-PROVENANCE.json"
+  ],
+  "eval_manifest_json_still_eval_locked_and_byte_identical": true,
+  "no_new_model_selection_tournament_run": true,
+  "no_retuning_performed": true,
+  "frozen_scoring_code_reused_verbatim": true,
+  "dev_classification_before_eval": "B (MEASURABLE_IMPROVEMENT_INSUFFICIENT_FOR_RETENTION)",
+  "dev_classification_after_eval": "B (MEASURABLE_IMPROVEMENT_INSUFFICIENT_FOR_RETENTION) -- SUPPORTED by held-out EVAL, not promoted (frozen rules are DEV-anchored)",
+  "r2_11_proposed": false,
+  "r2_11_started": false,
+  "final_status": "R2-10 CLOSED",
+  "statement": "Per explicit handoff instruction, work stops here. R2-11 is not started."
+}

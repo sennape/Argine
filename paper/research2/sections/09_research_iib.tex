@@ -235,8 +235,7 @@ clairvoyant-comparator gap. II-A measures the separation between a simple
 causal baseline and the implemented comparator $O_B$; II-B assesses whether
 observable routing history contains structure that could, in principle,
 allow a stronger causal policy to reduce part of that measured gap.
-Research~II-C will, under a preregistered held-out contract, compute the
-signed comparator-relative recovery metric
+Research~II-C defines the signed comparator-relative recovery metric
 \begin{equation}
 \label{eq:iib-iic-recovery}
 \mathrm{RecoveryOfBeladyGap}
@@ -245,5 +244,14 @@ signed comparator-relative recovery metric
 where $B$ is selected causal baseline miss bytes, $P$ is predictor-driven
 miss bytes, and $O_B$ is implemented comparator miss bytes, all at fixed
 budget and workload. The metric is signed; values $>1$ are possible under
-CASE~C and mean $P$ beats $O_B$, not $O^*$. This metric is
-\notyetmeasured{} and is not populated by II-B.
+CASE~C and mean $P$ beats $O_B$, not $O^*$. This metric is not populated
+by II-B, and Research~II-C's actual reported evaluation
+(Section~\ref{sec:iic}) instead reports its predictor's performance via the
+R2-09B/R2-10 held-out recall$@k$ margin and its retention policy's
+performance via the frozen R2-11/R2-12 metrics
+(\texttt{miss\_bytes\_per\_decode\_step} and
+\texttt{decode\_tokens\_per\_second} respectively), which are the
+metrics the frozen II-C decision rules actually define and apply; this
+equation is retained here as the originally-planned connective metric
+between II-A/II-B and II-C, not as a value that was ultimately computed and
+reported.

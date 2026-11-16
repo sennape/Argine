@@ -1,0 +1,23 @@
+{
+  "artifact": "BRIDGE_EVALUATED_CLOSED",
+  "artifacts_this_phase": [
+    "BRIDGE_OPENED.json (commit 05e88f7, prior to this closure)",
+    "BRIDGE_HOLDOUT_RAW_RESULTS.json",
+    "BRIDGE_PER_WORKLOAD_COMPARISON.json",
+    "BRIDGE_AGGREGATE_COMPARISON.json",
+    "BRIDGE_DETERMINISM_AUDIT.json",
+    "BRIDGE_LEAKAGE_CAUSALITY_AUDIT.json",
+    "BRIDGE_INSTRUMENTATION_REPAIR_AUDIT.json",
+    "BRIDGE_DECISION_RULE_APPLICATION.json",
+    "BRIDGE_FINAL_INTERPRETATION.json"
+  ],
+  "classification": "BRIDGE_POSITIVE",
+  "closure_parent_commit": "05e88f725f36ecfce1293be67fa821f12c40a5cc",
+  "no_prior_frozen_artifact_mutated": true,
+  "opening_commit": "05e88f7",
+  "r2_11_prospective_statement": "R2-11 MAY NOW BE PROPOSED UNDER NEW PROSPECTIVE BRIDGE EVIDENCE.",
+  "r2_12_status": "NOT STARTED (out of scope for this phase; not started this turn)",
+  "schema_version": 1,
+  "state": "BRIDGE_EVALUATED_CLOSED",
+  "stop_condition": "Per explicit instruction: stop after bridge closure; R2-11 and R2-12 are not started."
+}

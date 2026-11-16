@@ -1,0 +1,49 @@
+{
+  "artifact": "R2_11_PER_BUDGET_COMPARISON",
+  "generated_utc": "2026-11-14T09:40:00Z",
+  "mean_delta_1_5gib": -779296.0626223087,
+  "mean_delta_4gib_primary": -87476.85322895646,
+  "mean_delta_8gib": 0.0,
+  "per_workload_delta_1_5gib": {
+    "r2-11-coding-v1": -457156.884540081,
+    "r2-11-coding-v2": -731148.0234833956,
+    "r2-11-coding-v3": -765126.3874754906,
+    "r2-11-instruction-v1": -659728.5322896242,
+    "r2-11-instruction-v2": -1015094.6066536903,
+    "r2-11-instruction-v3": -820674.8806262016,
+    "r2-11-reasoning-v1": -658429.9960861206,
+    "r2-11-reasoning-v2": -1175968.8140900135,
+    "r2-11-reasoning-v3": -621782.4187866449,
+    "r2-11-summarization-v1": -498782.1839530468,
+    "r2-11-summarization-v2": -933719.6712329388,
+    "r2-11-summarization-v3": -1013940.3522504568
+  },
+  "per_workload_delta_4gib": {
+    "r2-11-coding-v1": -11181.839530318975,
+    "r2-11-coding-v2": -74377.2681017518,
+    "r2-11-coding-v3": -201994.52054792643,
+    "r2-11-instruction-v1": 27052.83757340908,
+    "r2-11-instruction-v2": -53528.5479452014,
+    "r2-11-instruction-v3": -59516.24266144633,
+    "r2-11-reasoning-v1": -240734.1839530468,
+    "r2-11-reasoning-v2": -135264.1878669262,
+    "r2-11-reasoning-v3": 59516.24266144633,
+    "r2-11-summarization-v1": -324056.9236790538,
+    "r2-11-summarization-v2": -72357.32289627194,
+    "r2-11-summarization-v3": 36719.71819961071
+  },
+  "per_workload_delta_8gib": {
+    "r2-11-coding-v1": 0.0,
+    "r2-11-coding-v2": 0.0,
+    "r2-11-coding-v3": 0.0,
+    "r2-11-instruction-v1": 0.0,
+    "r2-11-instruction-v2": 0.0,
+    "r2-11-instruction-v3": 0.0,
+    "r2-11-reasoning-v1": 0.0,
+    "r2-11-reasoning-v2": 0.0,
+    "r2-11-reasoning-v3": 0.0,
+    "r2-11-summarization-v1": 0.0,
+    "r2-11-summarization-v2": 0.0,
+    "r2-11-summarization-v3": 0.0
+  }
+}

@@ -1,4 +1,4 @@
-\section{Conclusion (Provisional, II-A + II-B)}
+\section{Conclusion}
 \label{sec:conclusion}
 
 This report establishes, under a behaviorally validated offline replay
@@ -31,19 +31,45 @@ than Global-LRU at each tested capacity-constrained budget (1.5--8~GiB)
 and ties it at 16~GiB on the DEV trace. The II-B result is correspondingly
 bounded: structure exists, but structure is not a measured causal recovery.
 
-This is a provisional conclusion, limited to Research~II-A and
-Research~II-B. It establishes a measured clairvoyant-comparator gap and a
-descriptive routing-structure basis for testing causal prediction; it does
-not establish, estimate, or imply predictor accuracy, causal recovery of a
-proven maximum, prefetch benefit, retention-policy improvement,
-latency/throughput gain, or cross-model generalization. Research~II-C --
-whether a strictly causal predictor can improve on selected causal
-baselines and what comparator-relative recovery it achieves under a
-preregistered held-out contract -- remains future work, not yet started.
+Research~II-C (Section~\ref{sec:iic}) closes this programme. A strictly
+causal predictor was built and confirmed on held-out EVAL data to beat
+trivial baselines at a measurable, if frozen-rule-insufficient-on-its-own,
+margin (R2-09/R2-10). A predictor-driven reactive retention policy was then
+shown, prospectively and confirmatorily, to improve a replay-level
+retention metric at the frozen primary budget (R2-BRIDGE-01
+\textsc{bridge\_positive}; R2-11 \textsc{r2\_11\_pass}, $72/72$ cells, CI
+entirely below zero). Finally, real-runtime validation on the actual
+30B-class runtime found that this same policy does \emph{not} improve
+measured decode throughput at the frozen primary 4~GiB budget (R2-12
+\textsc{R2\_12\_FAIL}, $144/144$ physical canonical launches accounted for
+across all three tested budgets, $0$ unresolved protocol violations).
+
+The programme's central conclusion is accordingly conservative:
+\emph{predictive expert information is measurably useful for forecasting
+and can improve replay-level retention metrics, but the tested reactive
+predictive-retention realization does not convert that information into
+improved end-to-end decode throughput on the evaluated runtime
+configuration.} This negative real-runtime finding does not invalidate the
+positive prediction-quality (R2-10) or replay-retention (R2-BRIDGE-01/R2-11)
+findings that precede it; the three levels measure different quantities
+under different experimental apparatus, and a negative result at the
+real-runtime level does not retroactively weaken, retract, or reclassify a
+positive result at an earlier, differently-scoped level. Causal attribution
+of the R2-12 runtime deficit does not exceed the available evidence: the
+8~GiB null-control budget's real canonical records carry no
+retention-traffic telemetry, so any non-retention-overhead explanation of
+that budget's larger measured delta remains an explicitly unverified
+hypothesis. No runtime speedup is claimed anywhere in this report, and this
+report does not open, scope, or begin Research~3; the open question that
+Research~3 would need to address -- how useful predictive expert
+information might be converted into end-to-end runtime value when reactive
+predictive retention alone does not -- is stated but not pursued here.
+
 The II-A tranche remains frozen as recorded in
 \texttt{II-A-FREEZE.json}; the II-B tranche is frozen as recorded in
-\texttt{II-B-FREEZE.json}; the Oracle-semantics scientific amendment is
-recorded in \texttt{ORACLE-SEMANTICS-AMENDMENT.json} and
-Appendix~\ref{sec:provenance-appendix}, and is intended to be incorporated,
-without silent strengthening of claims, into the eventual combined
-Research Part~2 paper.
+\texttt{II-B-FREEZE.json}; the II-C tranche is frozen as recorded in
+\texttt{RESEARCH\_2\_FINAL\_CLOSURE.json} (repository root) and
+\texttt{paper/research2/PAPER\_II\_FREEZE.json}; the Oracle-semantics
+scientific amendment is recorded in \texttt{ORACLE-SEMANTICS-AMENDMENT.json}
+and Appendix~\ref{sec:provenance-appendix}. This document is the complete,
+frozen Research Part~2 publication.

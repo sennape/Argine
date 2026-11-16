@@ -95,9 +95,11 @@
    the inspected R2-08 workload captures are also documented as
    \texttt{dev}-split characterization captures. Research~II-A and II-B are
    characterization/development tranches, not held-out predictive
-   evaluation. No II-C EVAL set has been frozen. This is not retrospective
-   leakage because II-C has not started; R2-09B must establish and freeze a
-   held-out evaluation contract before tuning/evaluating predictors.
+   evaluation. Research~II-C's R2-09B contract subsequently froze DEV/EVAL
+   roles before any EVAL capture, and R2-10/R2-BRIDGE-01/R2-11/R2-12 each
+   captured and sealed their held-out instances before scoring; see
+   Section~\ref{sec:iic} for results and Section~\ref{sec:iic-limitations}
+   below for this stage's own limitations.
  \item \textbf{EXP-025 applicability.} \textsc{AUDIT-ORACLE-001} classifies
    EXP-025 as a stream/distribution-dependent performance model (P2) whose
    transferability to arbitrary policy-induced miss streams is
@@ -114,4 +116,66 @@
    practical-effect threshold is preregistered by this amendment. Any
    future threshold must be derived and frozen in R2-09B using a metric
    justified by the evaluation/performance-model contract.
+\end{itemize}
+
+\subsection*{II-C limitations}
+\label{sec:iic-limitations}
+\begin{itemize}
+ \item \textbf{One tested predictive-retention realization.} Only one
+   causal predictor (\texttt{decayed\_transition}, decay $0.99$) driving
+   one reactive retention-policy realization (\texttt{PredictedProtectPolicy})
+   was built and evaluated. Negative results at R2-12 are results about
+   this specific realization, not a general statement about predictive
+   retention as a design category.
+ \item \textbf{Hardware/model/workload scope.} All of R2-09 through R2-12
+   were evaluated on one model family (Qwen3-30B-A3B), one consumer host,
+   and workload instances drawn from four families (coding, instruction,
+   reasoning, summarization). No cross-model, cross-quantization,
+   cross-machine, or cross-runtime generalization is claimed.
+ \item \textbf{Replay-level benefit does not imply runtime benefit.} R2-11's
+   positive replay-level result (\textsc{r2\_11\_pass}) and R2-12's negative
+   real-runtime result (\textsc{R2\_12\_FAIL}) are not in tension: they
+   measure different quantities (miss bytes per decode step vs. decode
+   tokens per second) under different experimental apparatus (offline
+   replay vs. the real runtime). Neither bounds the other.
+ \item \textbf{Runtime failure does not invalidate predictor quality.} R2-10's
+   held-out-confirmed prediction-quality margin (Section~\ref{sec:r2-10})
+   is not weakened, retracted, or reclassified by R2-12's negative result.
+ \item \textbf{Secondary budgets are not primary decision endpoints.} The
+   1.5~GiB and 8~GiB R2-12 budgets are reported descriptively only; neither
+   can, under the frozen decision rule, override the primary 4~GiB
+   classification, regardless of their own effect sizes or direction.
+ \item \textbf{Telemetry gap limits causal attribution at 8~GiB.} The real
+   8~GiB canonical records carry no retention-traffic telemetry
+   (\texttt{expert\_bytes\_read}/\texttt{expert\_read\_count}/
+   \texttt{expert\_miss\_bytes} and every \texttt{expert\_io\_best\_effort}
+   sub-field are \texttt{None} for both policies). Any non-retention-overhead
+   explanation of the 8~GiB delta is therefore reported as an unverified
+   hypothesis, never as a finding.
+ \item \textbf{Cross-budget ordering is descriptive.} The ordering of
+   measured deltas across 1.5/4/8~GiB (smallest to largest in magnitude) is
+   reported as an observation over three tested points, not as evidence of
+   a monotonic causal relationship between memory budget and policy
+   overhead.
+ \item \textbf{Results do not establish universal impossibility.} A negative
+   result for one tested reactive-retention realization does not establish
+   that no predictive mechanism (e.g., active prefetch, scheduling, or
+   compute/I/O overlap -- Section~\ref{sec:iic-related-work}) can convert
+   predictive information into real-runtime throughput gain in this problem
+   class.
+ \item \textbf{Host/environment constraints are exactly those frozen in the
+   protocol, no more.} R2-12's machine-state and readiness gates
+   (AC power, operator-attested clean environment, thermal cooldown policy,
+   power mode) are exactly the conditions frozen in
+   \texttt{machine\_state\_contract.json} and \texttt{execution\_plan.json}
+   before acquisition. No condition not formally frozen there (e.g., a
+   specific battery-percentage or ambient-temperature threshold used
+   elsewhere in the Argine programme) is retroactively applied as an
+   exclusion criterion to R2-12's evidence.
+ \item \textbf{Runtime conformance was reached iteratively.} The runtime
+   binary realizing the retention-policy integration for R2-12 required
+   several realization/conformance iterations before reaching an accepted
+   conformance state; it is not byte-identical to the R2-01 validated
+   replay-comparison runtime. This is disclosed rather than assumed from a
+   single attempt.
 \end{itemize}

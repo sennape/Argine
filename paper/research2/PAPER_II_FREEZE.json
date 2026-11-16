@@ -1,0 +1,50 @@
+{
+  "artifact": "PAPER_II_FREEZE",
+  "scope": "Freeze record for the Research II-C addition to paper/research2/manuscript.tex (the complete II-A + II-B + II-C manuscript). II-A/II-B freeze provenance is separately recorded in II-A-FREEZE.json and II-B-FREEZE.json and is unchanged by this freeze.",
+  "manuscript_source_hashes_sha256": {
+    "manuscript.tex": "7a27d8fe474177bbc9143ae146716518cf4d8327b114120c29e82cd41afb2fad",
+    "sections/10_research_iic.tex": "340b53084281beaecad38191a5ffc988af0c9adf514b6bb58889be9932633fb5",
+    "references.bib": "84fc2b1ef546561572e3b87a3197057c885ee0f10fc05828d32d8ee8c90ec49b"
+  },
+  "new_figure_hashes_sha256": {
+    "figures/figure_c1_r2_10_predictor_comparison.pdf": "c7ae6c38b1607fa02bf5b9817510a68af17db4c83bf117b1f594b749d7e9215e",
+    "figures/figure_c2_r2_bridge01_miss_bytes.pdf": "aedc0a11dfd79b813d930405985c56cffa6dee28f36b366290698e3e51c5c8ff",
+    "figures/figure_c3_r2_11_replay_effect.pdf": "0d20133730c9a917008554d435323f0a5262be54ce50fb6f10beaf54cbb9fb8a",
+    "figures/figure_c4_r2_12_throughput_by_budget.pdf": "9830c721584e2b788533bf79f7ffed6f732af246dc80cb325fa9c8f7c97edbf2",
+    "figures/figure_c5_r2_12_delta_by_budget_ci.pdf": "78a96a349bfcfcdebf78fcd46c360340398db968dcc79760cdf16d5654431583",
+    "figures/figure_c6_evidence_chain.pdf": "027e09f499fd42daf8391523b65cd65284927005b6fe50e70e0c086681fddebe"
+  },
+  "new_table_hashes_sha256": {
+    "tables/table_c1_milestone_summary.tex": "51f1bd759b0c688be9a216e32ea988c776bc7fe32f36bc6fe19adf4acb8ed278",
+    "tables/table_c2_predictor_performance.tex": "4d4ebae5b78aead5851ed571d67101fb97758a80e7d9b14dceb0ef1cfa6c20a6",
+    "tables/table_c3_retention_replay.tex": "b21e5f1d5381b7e0a86424d6f880c2456a416ea86c518831e08fe57749654618",
+    "tables/table_c4_runtime_results.tex": "bf4ce5a477c9a85338faf35370e63e3cf854f4d24a6f85b034176c0d3b495a41"
+  },
+  "bibliography_snapshot": "paper/research2/references.bib, II-C additions appended under the pre-existing 'II-B / II-C related-work scaffold' comment; retrieval date 2026-11-16 for all new entries.",
+  "frozen_experiment_digests_referenced": {
+    "R2-12_contract_digest": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad"
+  },
+  "research_2_closure_commit_provenance": {
+    "r2_12_8gib_evidence_and_analysis_commit": "5e9d93d",
+    "r2_12_final_closure_commit": "3356845",
+    "research_2_final_closure_commit": "PENDING_THIS_TASK_COMMIT_A",
+    "paper_ii_freeze_commit": "PENDING_THIS_TASK_COMMIT_B"
+  },
+  "build_environment": {
+    "tex_engine": "pdfTeX 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian)",
+    "build_command": "latexmk -pdf -interaction=nonstopmode manuscript.tex",
+    "known_limitation": "amsmath/amssymb + Latin Modern fonts substituted for newtxtext/newtxmath per paper/research2/README.md (texlive-fonts-extra unavailable in this build environment); documented, not a content choice."
+  },
+  "final_compiled_pdf": {
+    "path": "paper/research2/manuscript.pdf",
+    "pages": 32,
+    "sha256": "df5a061859e8441fd690b09004d72464197eb854b1a88bc8c513128305ba2dfe"
+  },
+  "freeze_conditions_checked": {
+    "no_undefined_references": true,
+    "no_undefined_citations": true,
+    "no_literal_double_question_mark_in_text": true,
+    "verify_paper_freeze_py_passes": true,
+    "all_ii_a_ii_b_artifacts_byte_identical_before_after": true
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "artifact": "R2_11_BOOTSTRAP_RESULT",
+  "generated_utc": "2026-11-14T09:40:00Z",
+  "implementation": "argine.research2.r2_11.bootstrap.paired_bootstrap_ci (frozen Phase-0 implementation, unmodified)",
+  "resamples": 100000,
+  "seed": 42,
+  "confidence_level": 0.95,
+  "statistic": "equal-weight mean delta across the 12 paired per-workload-instance deltas at the primary 4 GiB budget",
+  "paired_resampling_unit": "workload instance",
+  "observed_mean": -87476.85322895646,
+  "ci_lower_95": -154123.32211349523,
+  "ci_upper_95": -27178.93385517557,
+  "ci_upper_below_zero": true
+}

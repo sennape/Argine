@@ -1,11 +1,15 @@
-# Argine Research Part 2 — Paper Tree (II-A + II-B cumulative freeze)
+# Argine Research Part 2 — Paper Tree (II-A + II-B + II-C, complete)
 
-This directory holds the cumulative publication-oriented manuscript for
+This directory holds the complete publication-oriented manuscript for
 Argine Research Part 2, covering the completed and closed **Research
-II-A** programme (R2-01 through R2-04) and the completed and closed
-**Research II-B** programme (R2-05 through R2-08). Research II-C has not
-started; the manuscript includes an II-C placeholder section and makes no
-II-C claims.
+II-A** programme (R2-01 through R2-04), the completed and closed
+**Research II-B** programme (R2-05 through R2-08), and the completed and
+closed **Research II-C** programme (R2-09/R2-10 causal prediction,
+R2-BRIDGE-01/R2-11 replay-level predictive retention, R2-12 real-runtime
+validation). Research II-C's primary real-runtime result is negative
+(`R2_12_FAIL`); this is reported, not concealed, and does not invalidate
+the positive II-C prediction-quality or replay-retention findings that
+precede it. Research 3 has not started and is out of scope.
 
 This is a separate, sibling tree to the pre-existing `paper/` directory
 (the finished Part 1 manuscript, "Argine: Expert Streaming Under Hard
@@ -16,7 +20,7 @@ Memory Constraints"). Nothing in `paper/` was modified by these freezes.
 ```
 paper/research2/
 ├── manuscript.tex            # main LaTeX file; \input's sections/ in order
-├── sections/                  # numbered paper sections (II-A, II-B, II-C placeholder)
+├── sections/                  # numbered paper sections (II-A, II-B, II-C)
 ├── tables/
 │   ├── generate_tables.py     # reads data/, emits II-A and II-B table fragments
 │   └── table*.tex             # generated LaTeX table fragments
@@ -79,7 +83,7 @@ python scripts/verify_paper_freeze.py
 - Research II-A: **CLOSED / PASS / PAPER-FROZEN** (`II-A-FREEZE.json` preserved; scientific Oracle-semantics amendment applied, see `ORACLE-SEMANTICS-AMENDMENT.json`).
 - Research II-B: **CLOSED / PASS / PAPER-FROZEN** (`II-B-FREEZE.json`; scientific Oracle-semantics amendment applied, see `ORACLE-SEMANTICS-AMENDMENT.json`).
 - `AUDIT-ORACLE-001`: **CLOSED / CASE C / resolved by paper amendment**.
-- Research II-C: **FUTURE / NOT STARTED** (placeholder only).
+- Research II-C: **CLOSED / PAPER-FROZEN** (`PAPER_II_FREEZE.json`; primary real-runtime result `R2_12_FAIL`; see `PAPER_II_PROVENANCE.json`/`.md` for claim-to-artifact traceability and `../../RESEARCH_2_FINAL_CLOSURE.json` at the repository root for the overall Research 2 closure record).
 
 The R2-08 capture-ID audit found seven R2-08-managed new capture cells
 with `capture_run_id`/`capture_source` null while preserving trace SHA,
@@ -88,6 +92,9 @@ canonical R2-08 run binding. This is documented as an intentional
 R2-08-internal provenance representation; no capture IDs were invented and
 no scientific traces were modified.
 
-Next action: **R2-09B prerequisite/evaluation-design work** (including a
-held-out EVAL contract) before the causal baseline tournament or predictor
-evaluation. R2-09 remains **not started**.
+**Research Part 2 is complete.** No further milestone is planned under
+this document; the unresolved problem Research~II-C leaves open (how
+useful predictive expert information might be converted into end-to-end
+runtime value when reactive predictive retention alone does not) is stated
+in the manuscript's conclusion as a question for future work, not pursued
+here. Research 3 has not started.

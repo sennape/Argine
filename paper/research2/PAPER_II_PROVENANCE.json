@@ -1,0 +1,97 @@
+{
+  "artifact": "PAPER_II_PROVENANCE",
+  "scope": "Maps every quantitative claim in the Research II-C portion of paper/research2/manuscript.tex to its figure/table, source artifact, experiment, commit, and digest. II-A/II-B provenance is unchanged and remains governed by paper/research2/claims/claim_ledger.md, II-A-FREEZE.json, and II-B-FREEZE.json.",
+  "claims": [
+    {
+      "claim": "DEV h=1 mean recall margin +0.032589 over last_observation (Category B)",
+      "section": "10.1 (R2-09/R2-10)",
+      "table_or_figure": null,
+      "artifact": "paper/research2/data/r2_09/PHASE2-SELECTION-RECORD.json",
+      "source_artifact": "experiments/R2-10-working-set-predictor/PHASE2-SELECTION-RECORD.json",
+      "experiment": "R2-10 Phase 2",
+      "commit": "9ac0aba"
+    },
+    {
+      "claim": "EVAL h=1 mean recall 0.449817 vs 0.401473 (+12.04%) vs 0.349480 (+28.71%)",
+      "section": "10.1 (R2-09/R2-10); abstract",
+      "table_or_figure": "Table c2 (tab:c2-predictor); Figure c1 (fig:c1-predictor)",
+      "artifact": "paper/research2/data/r2_10/PHASE3D-EVAL-RESULTS.json, PHASE3J-FINAL-INTERPRETATION.json",
+      "source_artifact": "experiments/R2-10-working-set-predictor/PHASE3D-EVAL-RESULTS.json, PHASE3J-FINAL-INTERPRETATION.json",
+      "experiment": "R2-10 Phase 3",
+      "commit": "e13d89f"
+    },
+    {
+      "claim": "R2-BRIDGE-01 primary 4 GiB: -57784.861 bytes/step, -0.023084% relative, BRIDGE_POSITIVE",
+      "section": "10.2 (R2-BRIDGE-01)",
+      "table_or_figure": "Table c3 (tab:c3-retention); Figure c2 (fig:c2-bridge)",
+      "artifact": "paper/research2/data/r2_bridge01/BRIDGE_AGGREGATE_COMPARISON.json, BRIDGE_FINAL_INTERPRETATION.json",
+      "source_artifact": "experiments/R2-BRIDGE-01-retention-feasibility/BRIDGE_AGGREGATE_COMPARISON.json",
+      "experiment": "R2-BRIDGE-01 Substep 2",
+      "commit": "58b36a1"
+    },
+    {
+      "claim": "R2-11 primary 4 GiB: -87476.85 bytes/step, CI [-154123.32,-27178.93], R2_11_PASS, 72/72 cells",
+      "section": "10.3 (R2-11); abstract",
+      "table_or_figure": "Table c3 (tab:c3-retention); Figure c3 (fig:c3-r2-11)",
+      "artifact": "paper/research2/data/r2_11/PER-BUDGET-COMPARISON.json, BOOTSTRAP-RESULT.json, R2_11_EVALUATED_CLOSED.json",
+      "source_artifact": "experiments/R2-11-predictive-retention/PER-BUDGET-COMPARISON.json, BOOTSTRAP-RESULT.json",
+      "experiment": "R2-11 Phase 2",
+      "commit": "0ccd36d"
+    },
+    {
+      "claim": "R2-11 secondary: 1.5 GiB -779296.06; 8 GiB exact tie 0.0",
+      "section": "10.3 (R2-11)",
+      "table_or_figure": "Table c3 (tab:c3-retention); Figure c3 (fig:c3-r2-11)",
+      "artifact": "paper/research2/data/r2_11/PER-BUDGET-COMPARISON.json",
+      "source_artifact": "experiments/R2-11-predictive-retention/PER-BUDGET-COMPARISON.json",
+      "experiment": "R2-11 Phase 2",
+      "commit": "0ccd36d"
+    },
+    {
+      "claim": "R2-12 primary 4 GiB: -0.171721 TPS, CI [-0.259917,-0.091642], R2_12_FAIL",
+      "section": "10.4 (R2-12); abstract; conclusion",
+      "table_or_figure": "Table c4 (tab:c4-runtime); Figure c4 (fig:c4-r2-12-throughput); Figure c5 (fig:c5-r2-12-delta)",
+      "artifact": "paper/research2/data/r2_12/R2_12_4GIB_PRIMARY_FORMAL_ANALYSIS.json",
+      "source_artifact": "experiments/R2-12-runtime-validation/R2_12_4GIB_PRIMARY_FORMAL_ANALYSIS.json",
+      "experiment": "R2-12",
+      "commit": "51420d3 (runtime); 3356845 (closure)",
+      "digest": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad"
+    },
+    {
+      "claim": "R2-12 secondary 1.5 GiB: -0.068831 TPS, CI [-0.093256,-0.054608]",
+      "section": "10.4 (R2-12)",
+      "table_or_figure": "Table c4 (tab:c4-runtime); Figure c4/c5",
+      "artifact": "paper/research2/data/r2_12/R2_12_1_5GIB_SECONDARY_FORMAL_ANALYSIS.json",
+      "source_artifact": "experiments/R2-12-runtime-validation/R2_12_1_5GIB_SECONDARY_FORMAL_ANALYSIS.json",
+      "experiment": "R2-12",
+      "commit": "0bc3388"
+    },
+    {
+      "claim": "R2-12 secondary 8 GiB: -0.4373259 TPS, CI [-0.531584,-0.366601]; no retention telemetry at 8 GiB",
+      "section": "10.4 (R2-12)",
+      "table_or_figure": "Table c4 (tab:c4-runtime); Figure c4/c5",
+      "artifact": "paper/research2/data/r2_12/R2_12_8GIB_SECONDARY_FORMAL_ANALYSIS.json",
+      "source_artifact": "experiments/R2-12-runtime-validation/R2_12_8GIB_SECONDARY_FORMAL_ANALYSIS.json",
+      "experiment": "R2-12",
+      "commit": "5e9d93d"
+    },
+    {
+      "claim": "144/144 physical canonical launches; 0 unresolved protocol violations; R2-12 closure",
+      "section": "10.4 (R2-12); conclusion",
+      "table_or_figure": "Table c1 (tab:c1-milestones)",
+      "artifact": "paper/research2/data/r2_12/R2_12_FINAL_CLOSURE.json",
+      "source_artifact": "experiments/R2-12-runtime-validation/R2_12_FINAL_CLOSURE.json; RESEARCH_2_FINAL_CLOSURE.json (repository root)",
+      "experiment": "R2-12 closure",
+      "commit": "3356845"
+    },
+    {
+      "claim": "Evidence-chain sign summary (prediction +, replay retention +, real runtime -)",
+      "section": "10.5 (Cross-Stage Synthesis)",
+      "table_or_figure": "Figure c6 (fig:c6-evidence-chain)",
+      "artifact": "Derived from the claims above; no independent source file",
+      "source_artifact": "n/a",
+      "experiment": "synthesis",
+      "commit": "n/a"
+    }
+  ]
+}

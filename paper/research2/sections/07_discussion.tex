@@ -74,6 +74,12 @@ recovery.
 Concentration, transition dependence, reuse locality, and workload
 dependence are descriptive properties of observed traces. Each can
 motivate a hypothesis about future routing, but none is the same object as
-a causal predictor evaluated on future decisions. This is why
-Eq.~\eqref{eq:iib-iic-recovery} remains \notyetmeasured{} until
-Research~II-C.
+a causal predictor evaluated on future decisions. Research~II-C
+(Section~\ref{sec:iic}) closes this gap: a causal predictor was built and
+evaluated, and Eq.~\eqref{eq:iib-iic-recovery}'s comparator-relative
+recovery notion is superseded there by the frozen R2-11/R2-12 decision
+rules' own metrics (\texttt{miss\_bytes\_per\_decode\_step} and
+\texttt{decode\_tokens\_per\_second} respectively) rather than evaluated in
+its original form; see Section~\ref{sec:iic} for the measured results and
+Section~\ref{sec:iic-limitations} for why the comparator-relative framing is
+not the metric ultimately reported.
