@@ -1,0 +1,115 @@
+{
+  "artifact": "RESEARCH_2_FINAL_CLAIM_LEDGER",
+  "scope": "Every claim Paper II (paper/research2/manuscript.tex) makes or will make about Research 2 as a whole, cross-referenced to repository evidence. Complements, and does not replace, paper/research2/claims/claim_ledger.md (II-A/II-B scoped) which this ledger extends in spirit for II-C.",
+  "claims": [
+    {
+      "id": "C-SUP-1",
+      "text": "decayed_transition (decay=0.99) improves held-out causal prediction quality over both trivial causal baselines at the primary horizon (h=1): EVAL mean recall 0.449817 vs last_observation 0.401473 (+12.04% relative) and vs global_frequency 0.349480 (+28.71% relative).",
+      "evidence_source": "R2-10",
+      "experiment": "R2-10 Phase 3 (held-out EVAL)",
+      "artifact": "experiments/R2-10-working-set-predictor/PHASE3D-EVAL-RESULTS.json, PHASE3J-FINAL-INTERPRETATION.json",
+      "commit": "e13d89f",
+      "statistical_support": "4 held-out instances, deterministic bit-identical double-scoring",
+      "scope": "Prediction quality only; DEV-anchored Category B classification SUPPORTED not promoted by EVAL",
+      "status": "SUPPORTED_WITH_SCOPE"
+    },
+    {
+      "id": "C-SUP-2",
+      "text": "Predictive information about future expert routing contains exploitable structure beyond trivial frequency/recency baselines (synthesis of R2-05/06/07 descriptive structure + R2-09/10 predictor margin).",
+      "evidence_source": "R2-05, R2-06, R2-07, R2-09, R2-10",
+      "experiment": "II-B + R2-09/10",
+      "artifact": "paper/research2/data/r2_05..r2_08; experiments/R2-10-working-set-predictor/PHASE2-SELECTION-RECORD.json",
+      "commit": "22b721e, 2e00b46, 0472a46, c3469b6, 9ac0aba",
+      "statistical_support": "Descriptive (II-B) + DEV/EVAL tournament margin (R2-10)",
+      "scope": "Structure and exploitability of a measurable margin; not a proof of maximal exploitability.",
+      "status": "SUPPORTED_WITH_SCOPE"
+    },
+    {
+      "id": "C-SUP-3",
+      "text": "Replay-level retention (miss_bytes_per_decode_step) improves under the predictor-driven PredictedProtect policy relative to B_selected(M) at the primary 4 GiB budget: mean delta -87,476.85 bytes/decode-step, 95% CI [-154123.32, -27178.93] entirely below zero. Classification R2_11_PASS.",
+      "evidence_source": "R2-BRIDGE-01, R2-11",
+      "experiment": "R2-BRIDGE-01 (prospective) + R2-11 (confirmatory)",
+      "artifact": "experiments/R2-BRIDGE-01-retention-feasibility/BRIDGE_AGGREGATE_COMPARISON.json; experiments/R2-11-predictive-retention/BOOTSTRAP-RESULT.json, FINAL-INTERPRETATION.json",
+      "commit": "58b36a1, 0ccd36d",
+      "statistical_support": "R2-BRIDGE-01: 4 held-out instances, all workloads <=0. R2-11: 72/72 cells, paired bootstrap 95% CI, 100000 resamples.",
+      "scope": "Replay-level metric only (miss_bytes_per_decode_step); NOT a runtime/latency/throughput measurement.",
+      "status": "SUPPORTED_WITH_SCOPE"
+    },
+    {
+      "id": "C-SUP-4",
+      "text": "The tested real-runtime PredictedProtect realization does NOT improve real-runtime decode throughput (tokens/second) over B_selected(M) at the frozen primary 4 GiB budget: observed mean delta_tps = -0.171721, 95% CI [-0.259917, -0.091642], entirely <=0.",
+      "evidence_source": "R2-12",
+      "experiment": "R2-12 real-runtime validation, primary 4 GiB",
+      "artifact": "experiments/R2-12-runtime-validation/R2_12_4GIB_PRIMARY_FORMAL_ANALYSIS.json",
+      "commit": "51420d3 (final realized runtime), 5e9d93d (8GiB evidence), 3356845 (closure)",
+      "statistical_support": "40 counted launches (20/policy), paired bootstrap 95% CI per frozen statistical_analysis.json",
+      "scope": "Real-runtime decode throughput at the primary 4 GiB budget, this host/runtime/model configuration only.",
+      "status": "SUPPORTED"
+    },
+    {
+      "id": "C-SUP-5",
+      "text": "The primary R2-12 result is negative: classification R2_12_FAIL, based strictly on the frozen 4 GiB primary endpoint.",
+      "evidence_source": "R2-12",
+      "experiment": "R2-12 closure",
+      "artifact": "experiments/R2-12-runtime-validation/R2_12_4GIB_PRIMARY_FORMAL_ANALYSIS.json, R2_12_FINAL_CLOSURE.json",
+      "commit": "3356845",
+      "statistical_support": "Same as C-SUP-4",
+      "scope": "Primary classification only; secondary 1.5/8 GiB budgets do not override it.",
+      "status": "SUPPORTED"
+    },
+    {
+      "id": "C-NOT-1",
+      "text": "Predictive retention universally fails (as a general proposition beyond the tested realization/host/model/workloads).",
+      "reason_not_supported": "Only one reactive predictive-retention realization was tested, on one host/model/workload family. R2-11's replay-level result was positive; only the specific real-runtime conversion failed.",
+      "status": "NOT_SUPPORTED"
+    },
+    {
+      "id": "C-NOT-2",
+      "text": "The R2-10 predictor is useless.",
+      "reason_not_supported": "R2-10 demonstrated a measurable, held-out-confirmed prediction-quality margin over trivial baselines (C-SUP-1). R2-12's negative runtime result does not invalidate this, as prediction quality and real-runtime throughput are different, separately-scoped measurements.",
+      "status": "NOT_SUPPORTED"
+    },
+    {
+      "id": "C-NOT-3",
+      "text": "The R2-11 replay-level retention benefit was invalid or an artifact.",
+      "reason_not_supported": "R2-11 used a frozen, preregistered protocol, a paired bootstrap with 100,000 resamples, and a 95% CI entirely below zero across 72/72 cells with 0 failures. It is not invalidated by R2-12's unrelated real-runtime measurement.",
+      "status": "NOT_SUPPORTED"
+    },
+    {
+      "id": "C-NOT-4",
+      "text": "Policy/non-retention overhead is proven to cause the R2-12 runtime loss.",
+      "reason_not_supported": "The real 8 GiB null-control canonical records contain no retention-traffic telemetry for either policy (expert_bytes_read/expert_read_count/expert_miss_bytes and expert_io_best_effort sub-fields are all None). Any overhead attribution therefore remains an unverified hypothesis.",
+      "status": "HYPOTHESIS_ONLY"
+    },
+    {
+      "id": "C-NOT-5",
+      "text": "The 8 GiB real-runtime loss proves a monotonic memory-budget effect on policy overhead.",
+      "reason_not_supported": "Only three budget points were tested (1.5/4/8 GiB); ordered magnitudes (smallest at 1.5 GiB, largest at 8 GiB) are an observation, not a proof of monotonic causal dependence.",
+      "status": "NOT_SUPPORTED"
+    },
+    {
+      "id": "C-NOT-6",
+      "text": "Increasing memory budget necessarily increases predictive-policy overhead in general.",
+      "reason_not_supported": "No causal mechanism was isolated; the observed ordering at three tested points is descriptive only.",
+      "status": "NOT_SUPPORTED"
+    },
+    {
+      "id": "C-NOT-7",
+      "text": "R2-12 proves that predictive prefetch (as opposed to the tested reactive retention realization) would fail.",
+      "reason_not_supported": "R2-12 tested one reactive retention policy realization, not a prefetch/overlap/scheduling design. These are explicitly out of scope and left as future-work directions, not refuted findings.",
+      "status": "NOT_SUPPORTED"
+    },
+    {
+      "id": "C-NOT-8",
+      "text": "R2-12 proves that no predictive runtime optimization can succeed in this problem class.",
+      "reason_not_supported": "A single negative result for one tested realization on one host/model/workload configuration does not establish impossibility for the broader design space.",
+      "status": "NOT_SUPPORTED"
+    },
+    {
+      "id": "C-HIST-1",
+      "text": "R2-11 was NOT PROPOSED under the original frozen R2-10 decision rules.",
+      "status": "HISTORICAL_ONLY",
+      "note": "Remains true and unchanged under the R2-10 decision rules' own DEV-anchored text. R2-BRIDGE-01's prospective evidence, generated under a new, separate, later-frozen contract, subsequently justified proposing R2-11 as its own protocol. This does not rewrite the historical statement; both are true simultaneously."
+    }
+  ]
+}
