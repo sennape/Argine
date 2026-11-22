@@ -173,7 +173,7 @@ class VerifierIsolation(unittest.TestCase):
         self.assertEqual(len(m.CLEANUP_FAILURES), 1)
         self.assertIn("HARNESS CLEANUP ERROR", err.getvalue()); self.assertNotIn("verifier failed", err.getvalue().lower())
         with mock.patch.object(m, "_rmtree", return_value=True):
-            rc = m.run("tools/check_links.py", "--no-such-flag-for-failure")
+            rc = m.run("experiments/R4-00-causal-eviction-distillation/phase0.py", "bogus-subcommand")
         self.assertNotEqual(rc, 0, "a failing verifier keeps its non-zero code")
         for t in m.CLEANUP_FAILURES: _rm(t)
         self.assertEqual(_git(self.caller, "status", "--porcelain").stdout, "", "caller untouched")
