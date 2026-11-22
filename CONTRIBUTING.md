@@ -1,10 +1,23 @@
-# Contributing to Argine2
+# Contributing to Argine4
 
-Argine2 is a research project. The most valuable contributions produce evidence — including evidence that something does not work.
+Argine is a research project on memory-constrained Mixture-of-Experts inference. This repository, **Argine4**, contains the project through the completion of **Research 3** (Research 1 CLOSED; Research 2 CLOSED / FROZEN; Research 3 CLOSED; Research 4 NOT OPENED). The most valuable contributions produce evidence — including evidence that something does not work.
+
+## Scope of this repository
+
+- Frozen scientific evidence (experiment records, `FREEZE.json` files, result JSON, classification labels, measured numbers, raw-data manifests and the frozen papers, including the Research 3 closure and paper) **must not be modified**.
+- New scientific work is **additive**: it adds new records and never edits or reinterprets old ones.
+- Protocol and decision rules are frozen **before** evaluation, wherever the experiment has an evaluation.
+- Scientific history is not rewritten: no history rewriting, no amended or force-pushed commits on published history.
+- Reader-facing scientific names and canonical repository identifiers (`EXP-NNN`, `R2-NN`, `R3-NN`, classification labels) are distinct things: identifiers are permanent and stay in provenance material; prose uses descriptive names.
+- Every claim maps to evidence: name the experiment or milestone and the artifact that supports it (`paper/research3/SOURCE_MAP.md` shows the convention).
+- Validators and tests stay green: `python experiments/R3-final-closure/closure.py verify`, `python paper/research3/scripts/verify_paper.py`, the per-stage `verify` commands, and the rule-9 checks below; for documentation, `python tools/check_links.py` and `python strumenti/controlla_readme.py`.
+- Large raw artifacts that are omitted from Git or from the public snapshot remain represented through hashes and manifests.
+- Documentation-only changes must not alter any scientific classification, number or label.
+- **Research 4 is not opened.** If it is opened, it must start with a separately frozen protocol and must not alter the Research 3 closure.
 
 ## Good contributions
 
-- **Reproduce an existing experiment** (`EXP-NNN`) and report whether you get the same result.
+- **Reproduce an existing experiment** (`EXP-NNN` or a Research 2 or Research 3 milestone) and report whether you get the same result.
 - **Add a workload** to `workloads/v1/` (or propose `v2`), with disjoint `dev` and `eval` prompts.
 - **Test an open hypothesis** (`RQ-NNN` in [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md)).
 - **Implement a baseline policy** in `argine/research/policies.py` (ARC, LeCaR, a published MoE policy) — with a test that it never exceeds its budget.

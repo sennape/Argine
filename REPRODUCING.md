@@ -1,6 +1,6 @@
-# Reproducing Argine2
+# Reproducing Argine4
 
-Argine2 distinguishes between **artifact reproduction** and **experimental replication**.
+This repository (Argine4, the project through Research 3) distinguishes between **artifact reproduction** and **experimental replication**.
 
 Artifact reproduction verifies analyses, tables, checks, and figures from the
 evidence committed to this repository. Full reprocessing of experiments whose
@@ -120,7 +120,7 @@ sole copy of an experimental result.
 
 ## 6. Experimental replication with models
 
-Model weights are not distributed with Argine2.
+Model weights are not distributed with this repository.
 
 The evaluated runtime is based on a pinned llama.cpp revision plus the patches
 in `patches/`. Build instructions are given in the main `README.md`.

@@ -1,4 +1,100 @@
-# Argine2 — expert memory as a resource-allocation problem
+# Argine4 — memory-constrained Mixture-of-Experts inference: the project through Research 3
+
+**Argine** is an experimental research project on memory-constrained Mixture-of-Experts (MoE) inference, expert offloading, retention and runtime behaviour. The work runs on one consumer PC (16 GB RAM, NVMe, no discrete GPU) with a hard-capped expert store built into llama.cpp, and it is organised as a sequence of prospectively specified research programmes whose results — including negative ones — are kept as evidence.
+
+## Current status
+
+This repository, **Argine4**, contains the project **through the completion of Research 3**. It descends from Argine3 (the project through Research 2), which descends from Argine2 (Research 1).
+
+| programme | state |
+|---|---|
+| Research 1 — observation campaign (`EXP-001`..`EXP-027`) | **CLOSED** |
+| Research 2 — oracle retention, routing characterization, causal prediction, predictive retention and real-runtime validation | **CLOSED / FROZEN** |
+| Research 3 — can predictive expert information become real-runtime retention value? | **CLOSED** |
+| Research 4 | **NOT OPENED** (future work) |
+
+Research 3 final classification: `R3_CLOSED_NEGATIVE_PREDICTIVE_RETENTION_NOT_VIABLE_IN_TESTED_REGIME`. Closure record: [`experiments/R3-final-closure/`](experiments/R3-final-closure/README.md), commit `3aa389eb31da6962711d74413b992803ae20b544`; final paper-preparation commit `337000808896e54955de0278686c5b7dae001b4e` (canonical repository commit identifiers).
+
+Naming note: *Argine2* and *Argine3* in older documents (and in the Research 1 record kept below) name earlier repository generations, not this repository. Experiment and milestone identifiers (`EXP-NNN`, `R2-NN`, `R3-NN`, classification labels) are permanent provenance identifiers and are never renamed; the narrative uses reader-facing names.
+
+## Research progression
+
+### Research 2 (closed / frozen)
+
+Research 2 moved from oracle feasibility to real-runtime validation in thirteen stages. Canonical repository identifiers are in the last column (provenance only).
+
+| # | Stage | Scientific question | Outcome | Repository ID |
+|---|---|---|---|---|
+| 1 | Oracle Trace Contract and Replay Validation | Does offline replay of a runtime trace agree with runtime telemetry? | Zero event disagreements on the measured coding trace. | R2-01 |
+| 2 | Oracle vs Retention Baselines | How far is a causal LRU baseline from a clairvoyant comparator? | Comparator has 58.59% fewer miss bytes at 4 GiB. | R2-02 |
+| 3 | Expert-Memory Budget Sensitivity | How does that gap depend on the memory budget? | 44.11% at 1.5 GiB, 70.66% at 8 GiB, none at 16 GiB. | R2-03 |
+| 4 | Recoverable-Margin Analysis | Is the gap a recoverable margin? | Gap rises, then collapses at full residency; not a proven bound on causal recovery. | R2-04 |
+| 5 | Expert Frequency and Concentration | Is layer-local routing non-uniform? | Yes. | R2-05 |
+| 6 | Routing Transition Structure | Does the previous routing state inform the next? | Yes. | R2-06 |
+| 7 | Reuse Distance and Working-Set Structure | Is short-horizon reuse stronger than chance? | Yes, against a shuffled null. | R2-07 |
+| 8 | Routing Drift and Workload Dependence | Does routing change more across workloads than over time? | Cross-workload divergence exceeds temporal drift. | R2-08 |
+| 9 | Prediction Benchmark | Which causal baselines set the bar for prediction? | Benchmark contract frozen; development tournament run. | R2-09 |
+| 10 | Causal Working-Set Predictor | Does the selected causal predictor beat trivial baselines on sealed data? | Yes at horizon 1. | R2-10 |
+| 11 | Retention Feasibility Bridge | Can predictions reduce miss bytes in prospective replay? | Positive (`BRIDGE_POSITIVE`). | R2-BRIDGE-01 |
+| 12 | Prediction-Driven Retention | Does the predictor-driven reactive policy reduce miss bytes in confirmatory replay? | Yes (72 of 72 cells). | R2-11 |
+| 13 | Real-Runtime Decode Throughput | Does that policy raise real decode throughput? | No improvement at 4 GiB as recorded in Research 2 (`R2_12_FAIL`); re-examined in Research 3 (Runtime Semantic Equivalence). | R2-12 |
+
+### Research 3 (closed)
+
+Research 3 asked whether the predictive expert information established in Research 2 can be converted into useful real-runtime retention value. It proceeded through prospectively frozen gates:
+
+| Stage | Scientific question | Outcome | Repository ID |
+|---|---|---|---|
+| Runtime Semantic Equivalence | Does the corrected runtime realize the reference event semantics? | The earlier runtime issued 144 policy calls per decode token where the reference defines 48; after correction, conformance passed. | R3-03A |
+| Predictor Cost Attribution | Does policy bookkeeping explain the sham-over-baseline overhead? | Yes (explained). | R3-03B |
+| Real-Runtime Retention Evaluation | Does the real predictive policy beat the baseline end to end? | Net loss of 15.83 ms/token at 1.5 GiB (95% CI [10.46, 21.19]). | R3-04 |
+| Offline Replay Fidelity | Does offline replay reproduce the runtime counters? | Yes, integer-exactly. | R3-05 R1 |
+| Clairvoyant Retention Headroom | Is there clairvoyant headroom worth at least 10 ms/token? | Yes: a Belady-style comparator removes 40.673% of baseline misses (not a causal target). | R3-05 R2 |
+| Current-Event Shielding | Is the original predictive mechanism's effect reproduced by a zero-cost shield? | Yes (0.559% vs 0.230% of the oracle byte headroom); the original mechanism is retired. | R3-05 R3 |
+| Causal Next-Use Eviction | Does causal next-use eviction clear the zero-cost floor? | It captured up to 8.79% of the headroom. | R3-05 R4 |
+| Prospective Viability Test | Does the best causal candidate clear the frozen 10 ms/token floor before any computation cost? | No: 8.11 ms/token at best. | R3-05 R4 (K4 rule) |
+
+**Main Research 3 conclusion.** Predictive structure in MoE expert routing was measurable, but within the tested regime (one model, host, memory budget, workload and runtime) it did not translate into economically useful prediction-led retention control. This is a bounded result: it is not a statement about all retention policies or all MoE inference, and routes such as oracle-distilled eviction, prefetch, compute/I/O overlap and admission control were not tested.
+
+## Papers
+
+- [`paper/research3/`](paper/research3/README.md) — Research 3 manuscript ([`research3.pdf`](paper/research3/research3.pdf)), claim audit and source map.
+- [`paper/research2/`](paper/research2/README.md) — Research 2 manuscript ([`manuscript.pdf`](paper/research2/manuscript.pdf)), claim ledger, provenance and freeze records.
+- [`paper/`](paper/main.tex) — Research 1 manuscript, *Argine: Expert Streaming Under Hard Memory Constraints*.
+
+## Repository structure
+
+| path | contents |
+|---|---|
+| [`argine/`](argine) | runtime and tooling in Python; [`argine/research/`](argine/research) (Research 1 toolchain) and [`argine/research2/`](argine/research2) (Research 2 milestone code) |
+| [`experiments/`](experiments) | one folder per experiment or milestone: `EXP-NNN-*` (Research 1), `R2-*` (Research 2), `R3-*` (Research 3, including the closure in `R3-final-closure/`); registry in [`experiments/INDEX.md`](experiments/INDEX.md) |
+| [`paper/`](paper) | Research 1 paper sources, [`paper/research2/`](paper/research2) and [`paper/research3/`](paper/research3) |
+| [`docs/`](docs) | architecture, methodology, history and per-programme documentation |
+| [`research2/`](research2) | Research 2 protocol, baseline and workload configuration |
+| [`workloads/`](workloads) | frozen workload sets with disjoint dev and eval prompts |
+| [`patches/`](patches) | llama.cpp patches (expert store, instrumentation) with their C++ tests |
+| [`tools/`](tools) | analysis, conformance, closure and verification scripts |
+| [`tests/`](tests) | test suite |
+| [`data/`](data) | historical raw logs, processed data and the external raw manifest |
+| [`audits/`](audits) | audit records |
+| `llama-research*/` | build metadata of the instrumented runtime binaries (binaries are not tracked) |
+| [`strumenti/`](strumenti) | README consistency checker |
+
+## Reproducibility and evidence
+
+Each stage froze its protocol, endpoints and decision rules before its data were analysed, recorded SHA-256 hashes of its evidence in a `FREEZE.json`, and was committed separately; frozen evidence is never edited. Research 3's closure re-verifies the whole chain offline (`python experiments/R3-final-closure/closure.py verify`), and the Research 3 paper's numerical claims are recomputed from the frozen artifacts by `paper/research3/scripts/verify_paper.py`.
+
+Compact evidence (protocols, result JSON, freezes, evidence manifests) is committed. Very large raw host traces are **not** stored in Git: they are kept outside the repository, omitted from the public GitHub snapshot because of hosting limits, and remain identified through evidence manifests and SHA-256 hashes (for example [`experiments/R3-03A-runtime-semantic-conformance/EVIDENCE_MANIFEST.json`](experiments/R3-03A-runtime-semantic-conformance/EVIDENCE_MANIFEST.json); for Research 1, [`data/external_raw_manifest.csv`](data/external_raw_manifest.csv)). Model weights and llama.cpp binaries are not distributed. See [`REPRODUCING.md`](REPRODUCING.md) and [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## Future work
+
+**Research 4 is not opened.** One question identified by Research 3 is how much of the clairvoyant memory-management optimum can be recovered by a cheap causal policy using only information available at decision time. It is future work: any such study must start with its own separately frozen protocol and must not alter the Research 3 closure.
+
+---
+
+## Research 1 record — the Argine2 generation (historical)
+
+*The remainder of this file is the Research 1 record as written in the Argine2 repository. "Argine2" below names that earlier generation; the numbers, tags and statuses are Research 1 results and are unchanged.*
 
 **An open, executable investigation of sparse Mixture-of-Experts (MoE) inference under a hard DRAM budget on one consumer PC: is expert residency better modelled as an online resource-allocation problem across layers than as a cache-replacement problem?**
 
@@ -23,6 +119,15 @@ Every statement below is tagged: **[MEASURED]** read from raw data, **[DERIVED]*
 
 <!-- indice: generato da strumenti/controlla_readme.py, non modificare a mano -->
 
+- [Current status](#current-status)
+- [Research progression](#research-progression)
+  - [Research 2 (closed / frozen)](#research-2-closed--frozen)
+  - [Research 3 (closed)](#research-3-closed)
+- [Papers](#papers)
+- [Repository structure](#repository-structure)
+- [Reproducibility and evidence](#reproducibility-and-evidence)
+- [Future work](#future-work)
+- [Research 1 record — the Argine2 generation (historical)](#research-1-record--the-argine2-generation-historical)
 - [Research status](#research-status)
 - [Research questions](#research-questions)
 - [Why this problem matters](#why-this-problem-matters)
@@ -387,7 +492,7 @@ The public reproduction entry point is [`REPRODUCING.md`](REPRODUCING.md). The c
 ### Without a model: re-derive every table in this repository
 
 ```bash
-# from the Argine2 folder; no install needed (python -m argine runs this folder's code)
+# from the repository root; no install needed (python -m argine runs this folder's code)
 python tools/build_historical_data.py          # EXP-001..006, 011..018 from data/raw/argine-v1
 python -m argine research analyze data/processed/legacy-30b-route-request1.jsonl.gz \
        --budgets 4G,3G,2G,1.5G,1G,768M,512M --out /tmp/pilot   # EXP-007/009/010 pilot
@@ -399,7 +504,7 @@ Outputs are deterministic (sorted keys, fixed float precision); replay timings g
 
 ### On the reference machine: instrumented runs
 
-From the Argine2 folder, in an Anaconda Prompt. `argine.bat` runs this folder's code without installing it, so an existing `pip install -e` of the original Argine keeps working untouched (do not run `install.bat` here unless you want Argine2 to replace it; an installed Argine2 provides the command `argine2`).
+From the repository root, in an Anaconda Prompt. `argine.bat` runs this folder's code without installing it, so an existing `pip install -e` of the original Argine keeps working untouched (do not run `install.bat` here unless you want Argine2 to replace it; an installed Argine2 provides the command `argine2`).
 
 ```bat
 set ARGINE_LLAMA_DIR=%CD%\llama-research
