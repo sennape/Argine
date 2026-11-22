@@ -50,7 +50,11 @@ def main() -> int:
     print()
     for name, rc in results:
         print(("PASS " if rc == 0 else "FAIL ") + name)
-    return 0 if all(rc == 0 for _, rc in results) else 1
+    if rfv.CLEANUP_FAILURES:
+        print("\nHARNESS CLEANUP ERROR (not a verifier failure): temporary clones left behind, remove them manually:")
+        for t in rfv.CLEANUP_FAILURES: print("  " + t)
+    if not all(rc == 0 for _, rc in results): return 1
+    return 3 if rfv.CLEANUP_FAILURES else 0  # 3: every verifier passed but the harness could not clean up
 
 
 if __name__ == "__main__":

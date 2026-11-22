@@ -19,6 +19,7 @@ Because the verifier sees only committed HEAD, the caller is first required to b
 verification, so a dirty-tree check inside a frozen verifier can never be bypassed by the isolation. Nothing is
 committed, staged, restored or filtered automatically. Untracked-file policy: any untracked, non-ignored file fails
 (stricter than the historical verifiers, and simpler and safer than distinguishing evidence paths).
+A persistent cleanup failure never changes the verifier's exit code; it is reported as HARNESS CLEANUP ERROR.
 Set ARGINE_KEEP_VERIFY_TREE=1 to keep the clone for diagnosis (its path is printed)."""
 from __future__ import annotations
 
@@ -28,15 +29,47 @@ import stat
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def _rmtree(path: str) -> None:
-    def onerror(func, p, _exc):  # read-only Git objects on Windows
-        os.chmod(p, stat.S_IWRITE); func(p)
-    shutil.rmtree(path, onerror=onerror)
+CLEANUP_FAILURES: list[str] = []  # temp clones that could not be removed (reported by verify_all)
+CLEANUP_ATTEMPTS = 8
+CLEANUP_DELAY = 0.1  # seconds, doubled each retry and capped at CLEANUP_MAX_DELAY: ~2.5 s in total, never unbounded
+CLEANUP_MAX_DELAY = 0.5
+
+
+def _clear_readonly_and_retry(func, path, _exc):
+    """rmtree error handler: read-only Git objects on Windows. One retry after clearing the attribute."""
+    try:
+        os.chmod(path, stat.S_IWRITE)
+    except OSError:
+        pass
+    func(path)
+
+
+def _rmtree(path: str) -> bool:
+    """Remove a directory tree robustly. Returns True when it is gone, False after bounded retries.
+
+    Windows deletes asynchronously: a file freed by the verifier (or still being scanned by an antivirus/indexer)
+    can leave its directory in a pending-delete state, so rmdir fails with WinError 145 (directory not empty) or
+    access denied. Retrying with a short, bounded backoff and re-enumerating the tree each time handles that."""
+    delay = CLEANUP_DELAY
+    for attempt in range(CLEANUP_ATTEMPTS):
+        try:
+            if sys.version_info >= (3, 12):
+                shutil.rmtree(path, onexc=_clear_readonly_and_retry)
+            else:
+                shutil.rmtree(path, onerror=_clear_readonly_and_retry)
+        except OSError:
+            pass
+        if not os.path.exists(path):
+            return True
+        if attempt + 1 < CLEANUP_ATTEMPTS:
+            time.sleep(delay); delay = min(delay * 2, CLEANUP_MAX_DELAY)
+    return False
 
 
 def make_clone(dest: str) -> None:
@@ -66,18 +99,28 @@ def run(script: str, *args: str) -> int:
     except DirtyCaller as e:
         print("VERIFICATION REFUSED:", e, file=sys.stderr)
         return 2
+    # Exit codes: the verifier's own code is returned unchanged (A: verifier failure); 2 = dirty caller;
+    # 4 = harness setup failure (B). A cleanup failure (C) never changes the verifier's code: it is reported
+    # separately as HARNESS CLEANUP ERROR and recorded in CLEANUP_FAILURES.
     tmp = tempfile.mkdtemp(prefix="arv")  # short path: Windows path-length limits
     clone = os.path.join(tmp, "r")
     try:
-        make_clone(clone)
+        try:
+            make_clone(clone)
+        except (subprocess.CalledProcessError, OSError) as e:
+            print(f"HARNESS SETUP ERROR: could not create the disposable clone of HEAD: {e}", file=sys.stderr)
+            return 4
         env = dict(os.environ); env["ARGINE_GITCOMPAT_ROOT"] = clone
         env["PYTHONPATH"] = os.path.join(clone, "shared", "tooling", "gitcompat") + os.pathsep + env.get("PYTHONPATH", "")
+        # subprocess.run waits for the verifier process and closes its pipes before returning, so no child of ours
+        # holds the clone when cleanup starts.
         return subprocess.run([sys.executable, os.path.join(clone, script), *args], cwd=clone, env=env).returncode
     finally:
         if os.environ.get("ARGINE_KEEP_VERIFY_TREE"):
             print("kept verification clone:", clone)
-        else:
-            _rmtree(tmp)
+        elif not _rmtree(tmp):
+            CLEANUP_FAILURES.append(tmp)
+            print(f"HARNESS CLEANUP ERROR: the verifier has finished (its result is unaffected) but the temporary clone could not be removed after {CLEANUP_ATTEMPTS} attempts: {tmp}", file=sys.stderr)
 
 
 if __name__ == "__main__":

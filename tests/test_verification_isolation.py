@@ -121,6 +121,71 @@ class VerifierIsolation(unittest.TestCase):
     def test_full_verify_clean(self):
         self.test_verify_all_passes_and_leaves_caller_clean()
 
+    # --- Windows temp-clone cleanup robustness ----------------------------------------------------------------
+    def _load_wrapper(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("rfv_caller", os.path.join(self.caller, "shared", "tooling", "run_frozen_verifier.py"))
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+        self.assertEqual(Path(m.ROOT).resolve(), Path(self.caller).resolve())
+        return m
+
+    def _tree(self):
+        d = tempfile.mkdtemp(prefix="arc", dir=self.tmp)
+        os.makedirs(os.path.join(d, "a", "b")); Path(d, "a", "b", "f.txt").write_text("x", encoding="utf-8")
+        ro = Path(d, "a", "ro.txt"); ro.write_text("y", encoding="utf-8"); os.chmod(ro, stat.S_IREAD)
+        return d
+
+    def test_cleanup_retries_after_simulated_winerror_145(self):
+        m = self._load_wrapper(); d = self._tree(); real = shutil.rmtree; calls = []
+        def flaky(path, **kw):
+            calls.append(1)
+            if len(calls) == 1:
+                err = OSError(39, "directory not empty"); err.winerror = 145; raise err
+            return real(path, **kw)
+        from unittest import mock
+        with mock.patch.object(m.shutil, "rmtree", flaky), mock.patch.object(m.time, "sleep"):
+            self.assertTrue(m._rmtree(d))
+        self.assertEqual(len(calls), 2); self.assertFalse(os.path.exists(d))
+
+    def test_cleanup_removes_readonly_files(self):
+        m = self._load_wrapper(); d = self._tree()
+        self.assertTrue(m._rmtree(d)); self.assertFalse(os.path.exists(d))
+
+    def test_cleanup_retry_is_bounded(self):
+        from unittest import mock
+        m = self._load_wrapper(); d = self._tree(); calls = []; sleeps = []
+        def always(path, **kw):
+            calls.append(1); raise OSError(39, "directory not empty")
+        with mock.patch.object(m.shutil, "rmtree", always), mock.patch.object(m.time, "sleep", sleeps.append):
+            self.assertFalse(m._rmtree(d))
+        self.assertEqual(len(calls), m.CLEANUP_ATTEMPTS)
+        self.assertEqual(len(sleeps), m.CLEANUP_ATTEMPTS - 1)
+        self.assertLessEqual(sum(sleeps), 5.0, "total backoff stays in the low seconds")
+        self.assertTrue(os.path.exists(d)); _rm(d)
+
+    def test_cleanup_failure_is_not_confused_with_verifier_result(self):
+        from unittest import mock
+        import io, contextlib
+        m = self._load_wrapper(); err = io.StringIO()
+        with mock.patch.object(m, "_rmtree", return_value=False), contextlib.redirect_stderr(err):
+            rc = m.run("tools/check_links.py")
+        self.assertEqual(rc, 0, "a passing verifier keeps its exit code when cleanup fails")
+        self.assertEqual(len(m.CLEANUP_FAILURES), 1)
+        self.assertIn("HARNESS CLEANUP ERROR", err.getvalue()); self.assertNotIn("verifier failed", err.getvalue().lower())
+        with mock.patch.object(m, "_rmtree", return_value=True):
+            rc = m.run("tools/check_links.py", "--no-such-flag-for-failure")
+        self.assertNotEqual(rc, 0, "a failing verifier keeps its non-zero code")
+        for t in m.CLEANUP_FAILURES: _rm(t)
+        self.assertEqual(_git(self.caller, "status", "--porcelain").stdout, "", "caller untouched")
+
+    def test_no_temp_clone_left_after_verify_all(self):
+        scratch = os.path.join(self.tmp, "tmpdir"); os.makedirs(scratch)
+        env = dict(self.env, TMPDIR=scratch, TEMP=scratch, TMP=scratch)
+        r = subprocess.run([sys.executable, "shared/tooling/verify_all.py", "--skip-unittest"], cwd=self.caller, env=env, capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stdout[-2000:] + r.stderr[-1500:])
+        self.assertEqual(os.listdir(scratch), [], "no disposable verifier clone may remain")
+        self.assertEqual(_git(self.caller, "status", "--porcelain").stdout, "")
+
 
 if __name__ == "__main__":
     unittest.main()
