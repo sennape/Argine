@@ -1,0 +1,84 @@
+{
+ "arms": {
+  "kind": {
+   "arm": "C (deferred-wait scheduler)",
+   "code": "argine-ets.h psx_ets_pre / psx_ets_io",
+   "issue": "identical to layer at the first node",
+   "pins": "identical to layer_touch",
+   "wait": "each node: psx_cache_attendi_kinds(bit of the kind it consumes) before the post-wait barrier; reads of later kinds stay in flight (reserved: ready == false, pinned) while earlier nodes compute"
+  },
+  "layer": {
+   "arm": "A (baseline)",
+   "code": "argine-experts.cpp existing LETTURA_ASINCRONA block, unchanged",
+   "issue": "first expert node of the layer event: psx_cache_avvia for every (kind, expert), kinds ordered [node kind, then gate, up, down], experts ascending, claimed dynamically from one shared counter",
+   "pins": "released by each thread at the start of every expert node; later nodes re-acquire the slices as hits (psx_cache_avvia -> HIT)",
+   "wait": "every thread psx_cache_attendi (all its reads) before the post-wait barrier, at every node"
+  },
+  "layer_touch": {
+   "arm": "C0 (bookkeeping control)",
+   "code": "argine-ets.h psx_ets_pre / psx_ets_io",
+   "issue": "identical to layer at the first node (same claim order, same counter)",
+   "pins": "held for the whole layer event; released at the next event's first node after waiting for any read still pending; later nodes psx_cache_touch each slice in the baseline claim order (same LRU move as a hit, no pin, no wait)",
+   "wait": "every thread psx_cache_attendi_kinds(all kinds) at the first node (baseline placement)"
+  }
+ },
+ "artifact": "R5-01-IMPLEMENTATION",
+ "causal_information": "only the router decision of the current layer, already consumed by the baseline hook; no prediction, no lookahead across layers, no new thread, no tunable parameter",
+ "fail_closed": [
+  "invalid value",
+  "layer_touch/kind without ARGINE_EXPERT_READ=asincrono",
+  "layer_touch/kind with ARGINE_RETENTION_POLICY",
+  "explicit ARGINE_EXPERT_WAIT with ARGINE_PREFETCH set to anything but 0"
+ ],
+ "frozen_runtime_sources_reused_lf_sha256": {
+  "patches/argine-experts.cpp": "20ea2a2f69cb3a421c69b1f67f89e4dd6f7d3491df34dec86036a457b405bf89",
+  "patches/argine-experts.h": "588d8417aaa8c734edc558bc676be3444ca2045b935f3d655062abb0d0fa6947",
+  "patches/argine-research.cpp": "64bcc35a52bd5a6bb3c5b208dc6a037fd6bcec7bcfa5eab9c30e7dbc75839f3a",
+  "patches/argine-research.h": "66b482f2d2c7dbec263ca3cc08563e5dc9cf46f3b10dcf49de613ca218c5d1a7",
+  "patches/argine-retention-policy.cpp": "dc6bd01631b4af5969a083f99ff636b7bfa2605aebad4ee030c8ea924c25d856",
+  "patches/argine-retention-policy.h": "8fd28954799df74f14b8b88da7fd3f91f20dfd9fd826d5a2999d0897e6be376b",
+  "patches/argine-store.cpp": "dc11824f9f3effaa80e7ea0bfa40bee0698c5888d06a0964f1d67de7780d8403",
+  "patches/argine-store.h": "a1bcc17b8afc282f26c84f07cfc7bfac911b982e68f15ca89f7b2e24ac17240c"
+ },
+ "implementation_choices": {
+  "barrier_placement": "unchanged: one barrier before issue (after the shared counter reset by thread 0), one after the wait; no barrier added or removed",
+  "event_identity": "per-thread psx_semantic_event_tracker (same layer and kind not yet seen = same event); deterministic and identical on every thread because every thread runs every node",
+  "failure_handling": "a failed read is fatal at the node that waits for it (GGML_ABORT), as in the baseline; an invalid or unrealisable arm aborts at startup",
+  "handle_release_point": "the thread's borrowed file handle is released, and its pending-read deque cleared, only when none of its reads is pending; entries are marked finished, never erased from the middle (the kernel holds OVERLAPPED addresses)",
+  "kind_unknown_at_first_node": "a kind whose tensor position is not yet registered at the first node is issued at its own node and waited there, as the baseline does",
+  "pin_release_point": "C0 and C: at the next layer event's first expert node, after waiting for any read of the thread still pending (counted as orphan_pending, must be 0)",
+  "touch_order": "C0 and C later nodes: psx_cache_touch over the same (kind, expert) claim sequence the baseline re-acquires, distributed by the same shared counter",
+  "trace_layout": "one T record per thread per expert node in every arm (INSTRUMENTATION_SCHEMA.json); I records unchanged in format; config keys expert_wait, expert_wait_explicit, ets_schema",
+  "wait_primitive": "per read GetOverlappedResult(bWait=TRUE) on the thread's borrowed handle, as psx_cache_attendi; with tracing, WaitForMultipleObjects one completion at a time first (as the baseline's arx_wait_precise)"
+ },
+ "invariants": [
+  "same slices requested, same claim order, same bytes read",
+  "same LRU access sequence (touch == hit recency move); hit COUNTERS differ by construction",
+  "same pinned footprint: the layer's slices, as in the baseline; in-flight slots are reserved (ready == false) and never evictable",
+  "budget unchanged; budget violations must stay 0"
+ ],
+ "layout_decision": "R1-R4 runtime sources in patches/ are hash-locked by the consolidation manifest; R5 sources are an additive copy in patches/r5-ets/ and the binary identity is llama-research-r5-ets/BUILD-INFO.json",
+ "phase0": {
+  "contract_digest": "9d480ccf1b5109fa9be6cd717261e824876122e1ec504a3ccd85e0e30e619e52",
+  "freeze_sha256": "21ed630b638ca56a19b6a392a6ce1e47782dcd4351b178d523d5e28a6c7f63ee"
+ },
+ "read_compute_overlap": "kind only: between the first expert node's wait and the waits of the second and third expert nodes of the same layer, reads of the later kinds are in flight (OVERLAPPED I/O needs no CPU thread) while ggml computes the earlier nodes",
+ "selector": "ARGINE_EXPERT_WAIT = layer | layer_touch | kind (unset = layer); anything else aborts",
+ "source_head": "6a178123134b4139e776bb5ee4664fb32b4cefae",
+ "sources_lf_sha256": {
+  "patches/r5-ets/R5_CHANGES.diff": "5874fcdf1745fada64516274c52f3ecdf718bf3bebdb270c8d09e2dd823065e4",
+  "patches/r5-ets/README.md": "e5ee64528e606da32dd70db334550eb7d4f214eb906dc488c307a7f34eada51e",
+  "patches/r5-ets/argine-ets-test.cpp": "42905db94dc03fca72340624581a4a8c26741543181c4b7be42970e8eda4be59",
+  "patches/r5-ets/argine-ets.h": "34547a52e478be31baf9c3acbf4d19c93acdb761a7a46421e2d5437001425b35",
+  "patches/r5-ets/argine-experts.cpp": "6d971fdab9f913659507e547ab968def85ff0e38aa017a2990d6a6349623e6e4",
+  "patches/r5-ets/argine-research.cpp": "14e35f20d9b0b2c62cb928db467a9ef2c9d67c43b8130c30de2b4ba395c6a259",
+  "patches/r5-ets/argine-research.h": "ee7aec2909f0c7dc9e8c056dc60cea024fe9929a5ad36f169c00d4c450248f9d",
+  "patches/r5-ets/argine-store.cpp": "25e27a50efd8f7a5f7b5c228197ad21bdaf3010f3bead1c2894be6dbe667ce47",
+  "patches/r5-ets/argine-store.h": "1a27039014e383bf54692add689b6c4dd65a1e95c6d425fe1dae5ba1d9be0737",
+  "patches/r5-ets/build-r5-ets.sh": "f0b19d808204931495455cb2c8e04be24ac317e777f7382c5870d56c2521d1dc",
+  "patches/r5-ets/mingw-toolchain-debs.sha256": "ef63583083cc60c6c8ace6b08e01a2879f6334b76dc885f45a6a5de6cb79aa61",
+  "patches/r5-ets/pe_normalized_sha256.py": "e8b6a72a78961865f6721bbe7a2f7344794fee99458cef6f71a596c9f7c6367b",
+  "patches/r5-ets/toolchain-mingw-w64.cmake": "8f24b6de35e8c174ae3842d3fc7d5f9c0fcd93d1bd2068f1ef852455a5dcf017"
+ },
+ "state": "R5_ETS_PHASE1A_IMPLEMENTED"
+}

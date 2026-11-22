@@ -1,0 +1,743 @@
+--- patches/argine-store.cpp
++++ patches/r5-ets/argine-store.cpp
+@@ -61,6 +61,8 @@
+     return false;
+ }
+ std::atomic<int>      g_pretouch{ 0 };
++// R5 tests only: POSIX reads postponed to the wait (see psx_debug_set_posix_deferred_reads).
++std::atomic<int>      g_posix_differite{ 0 };
+ 
+ constexpr size_t kMaxHandles = 64;  // un descrittore per thread, con un tetto
+ 
+@@ -2670,6 +2672,17 @@
+     uint64_t complete_ns = 0;
+     uint32_t flags       = 0;
+     bool     esito       = false;
++    // R5 (ETS): a read already completed and announced by psx_cache_attendi_kinds
++    // while other reads of the same thread stay in flight. Entries are never
++    // erased from the middle of the deque (the kernel holds the OVERLAPPED
++    // address): the deque is cleared only when every entry is finished.
++    bool     finita      = false;
++    // R5 (ETS), tests only: POSIX read postponed to the wait (deterministic
++    // stand-in for an asynchronous read still in flight).
++    bool     posix_differita = false;
++    // R5 (ETS), tests only: the postponed read was completed by
++    // psx_debug_complete_pending_reads, i.e. "in the background", before any wait.
++    bool     posix_di_fondo  = false;
+ #if defined(_WIN32)
+     OVERLAPPED ov;
+     size_t     i_evento = 0;
+@@ -2696,11 +2709,39 @@
+     std::vector<HANDLE> eventi;
+     Borrowed            preso{ -1, INVALID_HANDLE_VALUE };
+ #endif
++    // R5 (ETS): a thread must never end with a read in flight (the kernel would still
++    // hold the OVERLAPPED address and write into the slot). The R5 arms never leave a
++    // read pending past the last node of an event; this is the safety net: cancel and
++    // wait, then count (conformance requires the count to stay 0). The slot is left
++    // reserved: this runs only at thread or process exit.
++    ~StatoThread();
+ };
+ 
+ static_assert(std::is_same<decltype(StatoThread::sospese), std::deque<Sospesa>>::value,
+               "le sospese vogliono un contenitore con indirizzi stabili: il kernel "
+               "tiene il puntatore all'OVERLAPPED finche' la lettura e' in volo");
++
++std::atomic<uint64_t> g_drenate_a_fine_thread{ 0 };
++
++StatoThread::~StatoThread() {
++    uint64_t n = 0;
++    for (auto & so : sospese) {
++        if (so.finita) {
++            continue;
++        }
++#if defined(_WIN32)
++        if (so.emessa == 1 && preso.index >= 0) {
++            CancelIoEx(preso.h, &so.ov);
++            DWORD got = 0;
++            GetOverlappedResult(preso.h, &so.ov, &got, TRUE);
++        }
++#endif
++        n++;
++    }
++    if (n) {
++        g_drenate_a_fine_thread.fetch_add(n, std::memory_order_relaxed);
++    }
++}
+ 
+ StatoThread & mio_stato() {
+     static thread_local StatoThread st;
+@@ -2854,7 +2895,7 @@
+         if (arx) {
+             // completed inside ReadFile: observed the moment the call returned
+             so.complete_ns = arx_now_ns();
+-            so.flags |= ARX_FLAG_COMPLETE_EXACT;
++            so.flags |= ARX_FLAG_COMPLETE_EXACT | ARX_FLAG_SYNC_IN_ISSUE;  // R5: paid by the issuer, never "hidden"
+         }
+     } else if (GetLastError() == ERROR_IO_PENDING) {
+         so.emessa = 1;
+@@ -2867,6 +2908,13 @@
+     if (arx) {
+         so.issue_ns = arx_now_ns();
+     }
++    if (g_posix_differite.load(std::memory_order_relaxed)) {
++        // R5 tests: the read stays "in flight" until a wait (or
++        // psx_debug_complete_pending_reads) performs it.
++        so.posix_differita = true;
++        so.letta = false;
++        return 2;
++    }
+     so.letta = read_at(s, pr.file_off, pr.dst, pr.want);
+     if (arx) {
+         so.complete_ns = arx_now_ns();
+@@ -2903,6 +2951,10 @@
+             ok = GetOverlappedResult(st.preso.h, &so.ov, &got, TRUE) && got >= so.pr.want;
+         }
+ #else
++        if (so.posix_differita && !so.letta) {
++            so.letta = read_at(s, so.pr.file_off, so.pr.dst, so.pr.want);
++            so.posix_differita = false;
++        }
+         ok = so.letta;
+ #endif
+         if (ok && guasto_iniettato()) {
+@@ -2951,6 +3003,282 @@
+     return tutte;
+ }
+ 
++// --- R5 (ETS): deferred, kind-masked waits ---------------------------------------
++//
++// psx_cache_attendi waits for EVERY read pending on the calling thread. The R5
++// deferred-wait arms need to wait only for the reads of the weight kinds the
++// current node consumes and leave the others in flight (their slots stay
++// reserved: ready == false and pinned, so no eviction can touch them).
++// Nothing here changes which slices are read, in what order, or what is
++// evicted: only WHEN the issuing thread blocks for a read it already issued.
++
++namespace {
++
++constexpr uint32_t kLoggedFlag = 0x80000000u;  // internal: I record already written
++
++#if defined(_WIN32)
++// arx_wait_precise restricted to the unfinished entries selected by `mask` (tracing only).
++void arx_wait_precise_mask(StatoThread & st, uint32_t mask) {
++    arx_poll(st);
++    for (;;) {
++        HANDLE    h[MAXIMUM_WAIT_OBJECTS];
++        Sospesa * who[MAXIMUM_WAIT_OBJECTS];
++        DWORD     k = 0;
++        for (auto & so : st.sospese) {
++            if (!so.finita && (mask & (1u << (uint32_t) so.pr.kind)) && so.emessa == 1 && so.complete_ns == 0 &&
++                k < MAXIMUM_WAIT_OBJECTS) {
++                h[k]   = st.eventi[so.i_evento];
++                who[k] = &so;
++                k++;
++            }
++        }
++        if (k == 0) {
++            return;
++        }
++        const DWORD    r   = WaitForMultipleObjects(k, h, FALSE, INFINITE);
++        const uint64_t now = arx_now_ns();
++        if (r >= WAIT_OBJECT_0 && r < WAIT_OBJECT_0 + k) {
++            who[r - WAIT_OBJECT_0]->complete_ns = now;
++            who[r - WAIT_OBJECT_0]->flags |= ARX_FLAG_COMPLETE_EXACT;
++        } else {
++            return;  // wait failed: GetOverlappedResult below reports the error
++        }
++        for (auto & so : st.sospese) {
++            if (!so.finita && so.emessa == 1 && so.complete_ns == 0 && HasOverlappedIoCompleted(&so.ov)) {
++                so.complete_ns = now;
++                so.flags |= ARX_FLAG_COMPLETE_BOUND;
++            }
++        }
++    }
++}
++#endif
++
++// Has this read completed in the background, i.e. overlapped with other work and
++// without waiting? (tracing only). A read that completed inside ReadFile (emessa == 2)
++// or a synchronous POSIX read was paid by the issuing thread and is NOT counted.
++bool gia_completa(Sospesa & so) {
++#if defined(_WIN32)
++    return so.emessa == 1 && HasOverlappedIoCompleted(&so.ov);
++#else
++    return so.posix_di_fondo;
++#endif
++}
++
++// Tracing only: stamp the completion of this thread's reads that have finished in the
++// background since the last look. The stamp is an UPPER bound taken BEFORE any wait.
++void timbra_completate(StatoThread & st) {
++    uint64_t now = 0;
++    for (auto & so : st.sospese) {
++        if (!so.finita && so.complete_ns == 0 && gia_completa(so)) {
++            if (!now) {
++                now = arx_now_ns();
++            }
++            so.complete_ns = now;
++            so.flags |= ARX_FLAG_COMPLETE_BOUND;
++        }
++    }
++}
++
++}  // namespace
++
++int psx_cache_attendi_kinds(struct psx_cache * c, struct psx_store * s, uint32_t kind_mask,
++                            struct psx_wait_report * rep) {
++    struct psx_wait_report r{};
++    if (!c || !s) {
++        if (rep) {
++            *rep = r;
++        }
++        return 1;
++    }
++    StatoThread & st  = mio_stato();
++    const bool    arx = arx_enabled() != 0;
++    using orologio = std::chrono::steady_clock;
++    const auto t0 = orologio::now();
++    if (arx) {
++        timbra_completate(st);  // completions observed BEFORE the wait begins
++    }
++    r.wait_start_ns = arx_now_ns();
++    r.wait_mask     = kind_mask;
++    // What is about to be awaited and, when tracing, how much of it is already done.
++    // The poll only reads the completion state: it decides nothing.
++    for (auto & so : st.sospese) {
++        if (so.finita || !(kind_mask & (1u << (uint32_t) so.pr.kind))) {
++            continue;
++        }
++        r.n_awaited++;
++        r.bytes_awaited += so.pr.utili;
++        if (arx && gia_completa(so)) {
++            r.n_done_at_wait++;
++            r.bytes_done_at_wait += so.pr.utili;
++        }
++    }
++    int tutte = 1;
++    if (r.n_awaited > 0) {
++#if defined(_WIN32)
++        if (arx) {
++            arx_wait_precise_mask(st, kind_mask);
++        }
++#endif
++        for (auto & so : st.sospese) {
++            if (so.finita || !(kind_mask & (1u << (uint32_t) so.pr.kind))) {
++                continue;
++            }
++            bool ok = false;
++#if defined(_WIN32)
++            if (so.emessa) {
++                DWORD got = 0;
++                ok = GetOverlappedResult(st.preso.h, &so.ov, &got, TRUE) && got >= so.pr.want;
++            }
++#else
++            if (so.posix_differita && !so.letta) {
++                so.letta = read_at(s, so.pr.file_off, so.pr.dst, so.pr.want);
++                so.posix_differita = false;
++                if (arx) {
++                    so.complete_ns = arx_now_ns();
++                    so.flags |= ARX_FLAG_COMPLETE_EXACT;
++                }
++            }
++            ok = so.letta;
++#endif
++            if (ok && guasto_iniettato()) {
++                ok = false;  // guasto iniettato per i test
++            }
++            completa(c, so.pr, ok);
++            so.esito  = ok;
++            so.finita = true;
++            if (!ok) {
++                tutte = 0;
++            }
++        }
++        r.wait_end_ns = arx_now_ns();
++        if (arx) {
++            for (auto & so : st.sospese) {
++                if (!so.finita || (so.flags & kLoggedFlag) || !(kind_mask & (1u << (uint32_t) so.pr.kind))) {
++                    continue;
++                }
++                uint64_t done  = so.complete_ns;
++                uint32_t flags = so.flags;
++                if (!done) {
++                    done = r.wait_end_ns;
++                    flags |= ARX_FLAG_COMPLETE_BOUND;
++                }
++                arx_io(so.req, so.pr.layer, so.pr.expert, (uint32_t) so.pr.kind, so.pr.utili, so.issue_ns, done,
++                       r.wait_start_ns, r.wait_end_ns, so.esito, flags);
++                so.flags |= kLoggedFlag;
++            }
++        }
++        c->ns_read.fetch_add(
++            (uint64_t) std::chrono::duration_cast<std::chrono::nanoseconds>(orologio::now() - t0).count(),
++            std::memory_order_relaxed);
++        c->blocchi.fetch_add(1, std::memory_order_relaxed);
++        c->letture.fetch_add(r.n_awaited, std::memory_order_relaxed);
++    } else {
++        r.wait_end_ns = r.wait_start_ns;
++    }
++    uint32_t restanti = 0;
++    for (const auto & so : st.sospese) {
++        if (!so.finita) {
++            restanti++;
++        }
++    }
++    r.pending_after = restanti;
++    if (restanti == 0 && !st.sospese.empty()) {
++#if defined(_WIN32)
++        if (st.preso.index >= 0) {
++            release_handle(s, st.preso.index);
++            st.preso.index = -1;
++        }
++#endif
++        st.sospese.clear();
++    }
++    if (!tutte) {
++        s->fail("una lettura sospesa non e' arrivata");
++    }
++    if (rep) {
++        *rep = r;
++    }
++    return tutte;
++}
++
++uint32_t psx_cache_pending_reads(uint32_t kind_mask, uint64_t * bytes_out) {
++    StatoThread & st = mio_stato();
++    uint32_t      n  = 0;
++    uint64_t      b  = 0;
++    for (const auto & so : st.sospese) {
++        if (!so.finita && (kind_mask & (1u << (uint32_t) so.pr.kind))) {
++            n++;
++            b += so.pr.utili;
++        }
++    }
++    if (bytes_out) {
++        *bytes_out = b;
++    }
++    return n;
++}
++
++uint32_t psx_cache_pending_done(uint32_t kind_mask, uint64_t * bytes_out) {
++    StatoThread & st = mio_stato();
++    uint32_t      n  = 0;
++    uint64_t      b  = 0;
++    for (auto & so : st.sospese) {
++        if (!so.finita && (kind_mask & (1u << (uint32_t) so.pr.kind)) && gia_completa(so)) {
++            n++;
++            b += so.pr.utili;
++        }
++    }
++    if (bytes_out) {
++        *bytes_out = b;
++    }
++    return n;
++}
++
++void psx_cache_poll_pending(void) {
++    timbra_completate(mio_stato());
++}
++
++uint64_t psx_debug_reads_drained_at_thread_exit(void) {
++    return g_drenate_a_fine_thread.load();
++}
++
++int psx_cache_touch_checked(struct psx_cache * c, struct psx_region * region, size_t offset) {
++    if (!c || !region) {
++        return 0;
++    }
++    const CacheKey key{ region, offset };
++    Shard &        sh = c->shard_of(key);
++    std::lock_guard<std::mutex> lk(sh.mtx);
++    auto it = sh.index.find(key);
++    if (it == sh.index.end()) {
++        return 0;
++    }
++    sh.order.splice(sh.order.begin(), sh.order, it->second);  // identical to psx_cache_touch
++    return 1;
++}
++
++void psx_debug_set_posix_deferred_reads(int on) {
++    g_posix_differite.store(on ? 1 : 0);
++}
++
++void psx_debug_complete_pending_reads(struct psx_store * s, uint32_t kind_mask) {
++#if defined(_WIN32)
++    (void) s;
++    (void) kind_mask;
++#else
++    StatoThread & st = mio_stato();
++    for (auto & so : st.sospese) {
++        if (!so.finita && so.posix_differita && !so.letta && (kind_mask & (1u << (uint32_t) so.pr.kind))) {
++            so.letta           = read_at(s, so.pr.file_off, so.pr.dst, so.pr.want);
++            so.posix_differita = false;
++            so.posix_di_fondo  = true;
++            if (arx_enabled()) {
++                so.complete_ns = arx_now_ns();
++                so.flags |= ARX_FLAG_COMPLETE_EXACT;
++            }
++        }
++    }
++#endif
++}
++
+ // --- iniezioni per i test ---------------------------------------------------
+ 
+ void psx_debug_set_read_delay_us(unsigned us) {
+--- patches/argine-store.h
++++ patches/r5-ets/argine-store.h
+@@ -497,6 +497,53 @@
+ // Marca la slice come usata di recente senza leggerla (per il prefetch).
+ void psx_cache_touch(struct psx_cache * c, struct psx_region * region, size_t offset);
+ 
++// --- R5 (ETS): deferred, kind-masked waits ---------------------------------
++//
++// Research 5 tests whether the wait for an expert-weight kind can be moved from
++// the first expert node of a layer to the node that consumes that kind, so that
++// reads of later kinds overlap the compute of earlier nodes. These functions
++// change only WHEN the calling thread blocks for reads it already issued with
++// psx_cache_avvia; they never issue, skip, reorder or evict anything.
++// psx_cache_attendi (all pending reads of the thread) is unchanged and remains
++// the baseline's wait. kind_mask: bit (1u << psx_kind) for every kind to wait for.
++
++#define PSX_KIND_BIT(k) (1u << (uint32_t) (k))
++#define PSX_ALL_KINDS   ((1u << PSX_N_KINDS) - 1u)
++
++struct psx_wait_report {
++    uint32_t n_awaited;           // reads of the selected kinds pending at the call
++    uint64_t bytes_awaited;       // their useful bytes
++    uint32_t n_done_at_wait;      // tracing only: of those, already complete at wait start
++    uint64_t bytes_done_at_wait;  // tracing only
++    uint32_t pending_after;       // reads of this thread still in flight after the call
++    uint64_t wait_start_ns;       // arx_now_ns() clock (steady_clock)
++    uint64_t wait_end_ns;
++    uint32_t wait_mask;           // the kind mask actually waited for
++};
++
++// Wait for the calling thread's pending reads of the kinds in kind_mask and
++// announce them (ready). The others stay in flight, reserved and pinned. Returns
++// 1 if all awaited reads arrived, 0 otherwise (fatal for the node, exactly as
++// for psx_cache_attendi). Never mix with psx_cache_attendi on one pending set.
++int psx_cache_attendi_kinds(struct psx_cache * c, struct psx_store * s, uint32_t kind_mask,
++                            struct psx_wait_report * rep);
++
++// Reads of the calling thread still pending for the kinds in kind_mask.
++uint32_t psx_cache_pending_reads(uint32_t kind_mask, uint64_t * bytes_out);
++// Tracing only: of those, how many have completed in the background (polled, nothing waited for).
++// Reads that completed inside the issuing call are not counted.
++uint32_t psx_cache_pending_done(uint32_t kind_mask, uint64_t * bytes_out);
++
++// Tracing only: stamp (upper bound, before any wait) the completion of this thread's reads
++// that have finished in the background. Observation only: decides nothing.
++void psx_cache_poll_pending(void);
++
++// psx_cache_touch that reports whether the slice was in the cache (1) or not (0). Same LRU move.
++int psx_cache_touch_checked(struct psx_cache * c, struct psx_region * region, size_t offset);
++
++// Reads found still in flight when a thread ended (cancelled and waited; must stay 0).
++uint64_t psx_debug_reads_drained_at_thread_exit(void);
++
+ // --- solo per i test -------------------------------------------------------
+ //
+ // Allarga a comando la finestra fra "la slice e' stata annunciata nell'indice"
+@@ -528,6 +575,14 @@
+ // strada e' smettere di impegnare e rilasciare pagine a ogni slice.
+ void psx_debug_set_pretouch(int on);
+ 
++// R5 tests only. With `on`, a POSIX psx_cache_avvia reserves the slot and leaves
++// the read pending until a wait performs it: a deterministic stand-in for an
++// asynchronous read still in flight (no sleeps, no timing). No effect on Windows.
++void psx_debug_set_posix_deferred_reads(int on);
++// R5 tests only (POSIX): complete now the calling thread's postponed reads of the
++// kinds in kind_mask, as if the device had finished them in the background.
++void psx_debug_complete_pending_reads(struct psx_store * s, uint32_t kind_mask);
++
+ #ifdef __cplusplus
+ }
+ #endif
+--- patches/argine-experts.cpp
++++ patches/r5-ets/argine-experts.cpp
+@@ -41,6 +41,7 @@
+ #include "argine-experts.h"
+ #include "argine-store.h"
+ #include "argine-research.h"
++#include "argine-ets.h"
+ 
+ #include "ggml-backend-impl.h"
+ #include "ggml-cpu.h"
+@@ -326,6 +327,15 @@
+     // psx_cache_ensure_many: letto da tutti DOPO la barriera che segue
+     // quella chiamata, scritto solo dal thread 0 prima di quella barriera.
+     std::atomic<bool> nodo_fallito_policy{ false };
++    // R5 (ETS): wait placement arm (ARGINE_EXPERT_WAIT, see argine-ets.h). layer = the
++    // unchanged baseline path below; layer_touch / kind go through argine-ets.h.
++    psx_wait_mode    attesa           = PSX_WAIT_LAYER;
++    int              attesa_esplicita = 0;
++    psx_ets_counters ets;
++    static psx_ets_thread & ets_thread() {
++        static thread_local psx_ets_thread t;
++        return t;
++    }
+ 
+     // Contiene un mutex, quindi non e' copiabile ne' spostabile: si inizializza
+     // sul posto, una volta sola, alla prima chiamata.
+@@ -432,6 +442,19 @@
+                             predictor_txt);
+                 }
+             }
++            {
++                // R5 (ETS): fail-closed arm selection. An invalid value, or an arm
++                // that cannot be realised exactly, aborts: it never falls back.
++                const char * w = env_due_nomi("ARGINE_EXPERT_WAIT");
++                if (!psx_wait_mode_parse(w, &c.attesa, &c.attesa_esplicita)) {
++                    GGML_ABORT("argine: ARGINE_EXPERT_WAIT=%s non riconosciuto (layer | layer_touch | kind)", w);
++                }
++                const char * werr = nullptr;
++                if (!psx_wait_mode_check(c.attesa, c.attesa_esplicita, c.modo == LETTURA_ASINCRONA,
++                                         psx_cache_has_retention_policy(c.cache), getenv("ARGINE_PREFETCH"), &werr)) {
++                    GGML_ABORT("argine: configurazione R5 non valida: %s", werr);
++                }
++            }
+             c.attivo = true;
+             if (c.direct && !psx_direct(c.store)) {
+                 // chiesta ma non concessa: succede su certi filesystem e certi
+@@ -472,6 +495,14 @@
+                     "%u settori di cache, cache dell'OS %s, lettura %s\n",
+                     path, psx_n_layers(c.store), psx_n_experts(c.store), budget_txt,
+                     psx_cache_shards(c.cache), c.direct ? "scavalcata" : "attiva", modo_txt);
++            {
++                // R5 (ETS) launch identity: a separate line, so the line above stays
++                // byte-identical for every existing parser.
++                const char * pf = getenv("ARGINE_PREFETCH");
++                fprintf(stderr, "argine: attesa expert: %s (%s), ARGINE_PREFETCH=%s, schema r5-ets-v1\n",
++                        psx_wait_mode_name(c.attesa), c.attesa_esplicita ? "esplicita" : "default",
++                        pf && *pf ? pf : "(non impostata)");
++            }
+             if (arx_enabled()) {
+                 // Argine2: the configuration travels inside the trace, so that a
+                 // raw log can never be separated from the conditions that made it.
+@@ -489,6 +520,9 @@
+                 snprintf(num, sizeof(num), "%u", psx_n_experts(c.store));
+                 arx_config("store_experts", num);
+                 arx_config("pretouch", env_flag("ARGINE_EXPERT_PRETOUCH", false) ? "1" : "0");
++                arx_config("expert_wait", psx_wait_mode_name(c.attesa));
++                arx_config("expert_wait_explicit", c.attesa_esplicita ? "1" : "0");
++                arx_config("ets_schema", "r5-ets-v1");
+                 arx_flush_thread();
+                 arx_flush_file(0);
+             }
+@@ -706,6 +740,31 @@
+             }
+             fflush(stderr);
+         }
++        if (attivo && cache) {
++            // R5 (ETS): one end-of-run counter record in EVERY launch (all arms), used by
++            // the scheduling-purity and pending-read checks of the frozen protocol.
++            psx_cache_stats st;
++            psx_cache_get_stats(cache, &st);
++            const char * pf = getenv("ARGINE_PREFETCH");
++            fprintf(stderr,
++                    "argine: r5_counters {\"schema\":\"r5-ets-v1\",\"expert_wait\":\"%s\",\"explicit\":%d,"
++                    "\"read_mode\":\"%s\",\"prefetch\":\"%s\",\"hits\":%llu,\"misses\":%llu,\"evictions\":%llu,"
++                    "\"bytes_read\":%llu,\"violations\":%llu,\"budget\":%llu,\"moe_nodes\":%llu,"
++                    "\"deferred_reads\":%llu,\"deferred_bytes\":%llu,\"touches\":%llu,\"issued_followup\":%llu,"
++                    "\"orphan_pending\":%llu,\"pending_at_event_end\":%llu,\"first_nodes\":%llu,\"followup_nodes\":%llu,"
++                    "\"followup_mismatch\":%llu,\"touch_missing\":%llu,\"drained_at_thread_exit\":%llu}\n",
++                    psx_wait_mode_name(attesa), attesa_esplicita, nome_modo(modo), pf && *pf ? pf : "",
++                    (unsigned long long) st.hits, (unsigned long long) st.misses, (unsigned long long) st.evictions,
++                    (unsigned long long) st.bytes_read, (unsigned long long) st.violazioni,
++                    (unsigned long long) st.budget, (unsigned long long) nodi.load(),
++                    (unsigned long long) ets.deferred_reads.load(), (unsigned long long) ets.deferred_bytes.load(),
++                    (unsigned long long) ets.touches.load(), (unsigned long long) ets.issued_followup.load(),
++                    (unsigned long long) ets.orphan_pending.load(), (unsigned long long) ets.pending_at_event_end.load(),
++                    (unsigned long long) ets.first_nodes.load(), (unsigned long long) ets.followup_nodes.load(),
++                    (unsigned long long) ets.followup_mismatch.load(), (unsigned long long) ets.touch_missing.load(),
++                    (unsigned long long) psx_debug_reads_drained_at_thread_exit());
++            fflush(stderr);
++        }
+         if (attivo && verbose) {
+             resoconto("fine");
+         }
+@@ -1020,7 +1079,20 @@
+         // (salvo che questo nodo sia un seguito dello stesso evento semantico:
+         // i pin dell'evento restano fino al primo nodo dell'evento successivo).
+         // Nessun lock e nessuna barriera: tocco solo roba mia.
+-        if (!pol_followup) {
++        // R5 (ETS): layer_touch / kind keep the layer's pins for the whole event and
++        // release them (after waiting for anything still in flight) only at the
++        // next event's first node. The baseline (layer) path below is unchanged.
++        const bool ets = c.attesa != PSX_WAIT_LAYER;
++        int        ets_first = 1;
++        if (ets) {
++            int ets_ok = 1;
++            ets_first  = psx_ets_pre(Contesto::ets_thread(), c.cache, c.store, id.layer, id.kind, c.ets, &ets_ok);
++            if (!ets_ok) {
++                GGML_ABORT("argine: R5: una lettura rimasta in volo dall'evento precedente non e' arrivata (layer %u)",
++                           id.layer);
++            }
++        }
++        if (!pol_followup && !ets) {
+             auto & precedenti = Contesto::miei_pin();
+             for (const auto & p : precedenti) {
+                 psx_cache_unpin(c.cache, p.region, p.offset);
+@@ -1030,6 +1102,13 @@
+                 c.pol_event_pins.clear();
+                 c.pol_event_experts.clear();
+             }
++        }
++
++        // R5 (ETS), tracing only, every arm: stamp the reads of this thread that finished in the
++        // background during the previous nodes' compute, BEFORE this node's barrier (so before any
++        // thread of this node starts waiting). Observation only (polls completion state).
++        if (arx) {
++            psx_cache_poll_pending();
+         }
+ 
+         // Una sola barriera prima delle letture, per l'azzeramento del
+@@ -1119,7 +1198,27 @@
+         // I tre modi stanno qui accanto, selezionabili a runtime, perche' il
+         // confronto fra loro e' un risultato del progetto e un risultato va
+         // poter essere rifatto. Vedi `ModoLettura`.
+-        if (c.modo == LETTURA_ASINCRONA) {
++        // tracing only (all arms, symmetric): what this thread waits for and when
++        uint64_t tr_wait_start = 0, tr_wait_end = 0, tr_bytes = 0, tr_bytes_done = 0;
++        uint32_t tr_awaited = 0, tr_done = 0, tr_pending_after = 0, tr_mask = 0;
++        if (ets) {
++            psx_ets_slice sl[PSX_N_KINDS];
++            for (int q = 0; q < n_dove; q++) {
++                sl[q] = psx_ets_slice{ dove[q].region, dove[q].t_off, dove[q].slab, dove[q].kind };
++            }
++            struct psx_wait_report wr{};
++            if (!psx_ets_io(Contesto::ets_thread(), c.attesa, c.cache, c.store, id.layer, id.kind, sl, n_dove,
++                            da_leggere, n_serve, c.prossima_slice, ets_first, c.ets, &wr)) {
++                guaio = true;
++            }
++            tr_wait_start = wr.wait_start_ns; tr_wait_end = wr.wait_end_ns; tr_awaited = wr.n_awaited;
++            tr_bytes = wr.bytes_awaited; tr_done = wr.n_done_at_wait; tr_bytes_done = wr.bytes_done_at_wait;
++            tr_pending_after = wr.pending_after;
++            tr_mask = wr.wait_mask;
++            if (ith == 0) {
++                (ets_first ? c.ets.first_nodes : c.ets.followup_nodes).fetch_add(1, std::memory_order_relaxed);
++            }
++        } else if (c.modo == LETTURA_ASINCRONA) {
+             for (;;) {
+                 const uint32_t k = c.prossima_slice.fetch_add(1, std::memory_order_relaxed);
+                 if (k >= totale) {
+@@ -1140,8 +1239,17 @@
+             // Le letture emesse vanno attese QUI: da questo punto i byte si usano.
+             // Uno zero e' fatale per il nodo, e lo stato dei pin non e' piu' quello
+             // registrato sopra: si aborta, non si sblocca.
++            if (arx) {
++                tr_mask       = PSX_ALL_KINDS;
++                tr_awaited    = psx_cache_pending_reads(PSX_ALL_KINDS, &tr_bytes);
++                tr_done       = psx_cache_pending_done(PSX_ALL_KINDS, &tr_bytes_done);
++                tr_wait_start = arx_now_ns();
++            }
+             if (!psx_cache_attendi(c.cache, c.store)) {
+                 guaio = true;
++            }
++            if (arx) {
++                tr_wait_end = arx_now_ns();
+             }
+         } else if (c.modo == LETTURA_SINCRONA) {
+             // La prima versione: una slice, la si aspetta, la prossima. Coda 1
+@@ -1444,6 +1552,19 @@
+                 arx_node(c.arx_graph, id.layer, (uint32_t) id.kind, t_start, arx_now_ns(), n_serve,
+                          (uint32_t) nth);
+             }
++            // R5 (ETS): one per-thread node record in every arm (critical path =
++            // first thread in, last thread out; per-node wait = max over threads).
++            {
++                const uint64_t t_in = (uint64_t) std::chrono::duration_cast<std::chrono::nanoseconds>(
++                                          t_nostro.time_since_epoch()).count();
++                // baseline arm: classify the node for the record only (observation; the
++                // baseline path itself does not use this tracker)
++                static thread_local psx_semantic_event_tracker tr_evt;
++                const int tr_first = ets ? ets_first : (tr_evt.classify(id.layer, (uint32_t) id.kind).first_node ? 1 : 0);
++                arx_thread_node(c.arx_graph, id.layer, (uint32_t) id.kind, (uint32_t) c.attesa,
++                                tr_first ? 1u : 0u, t_in, tr_wait_start, tr_wait_end, arx_now_ns(),
++                                tr_mask, tr_awaited, tr_bytes, tr_done, tr_bytes_done, tr_pending_after);
++            }
+             arx_flush_thread();
+             if (ith == 0) {
+                 arx_flush_file(250);
+--- patches/argine-research.cpp
++++ patches/r5-ets/argine-research.cpp
+@@ -337,6 +337,26 @@
+     maybe_spill(t);
+ }
+ 
++void arx_thread_node(uint64_t graph, uint32_t layer, uint32_t kind, uint32_t mode, uint32_t first,
++                     uint64_t hook_in_ns, uint64_t wait_start_ns, uint64_t wait_end_ns, uint64_t hook_out_ns,
++                     uint32_t wait_mask, uint32_t n_awaited, uint64_t bytes_awaited, uint32_t n_done,
++                     uint64_t bytes_done, uint32_t pending_after) {
++    if (!arx_enabled()) {
++        return;
++    }
++    ThreadBuf &   t = tb();
++    std::string & s = t.buf;
++    const uint64_t v[] = { graph, layer, kind, arx_thread_id(), mode, first, hook_in_ns, wait_start_ns, wait_end_ns,
++                           hook_out_ns, wait_mask, n_awaited, bytes_awaited, n_done, bytes_done, pending_after };
++    s += "T";
++    for (uint64_t x : v) {
++        s += '\t';
++        append_u64(s, x);
++    }
++    s += '\n';
++    maybe_spill(t);
++}
++
+ void arx_node(uint64_t graph, uint32_t layer, uint32_t kind, uint64_t start_ns, uint64_t ready_ns,
+               uint32_t n_serve, uint32_t nth) {
+     if (!arx_enabled()) {
+--- patches/argine-research.h
++++ patches/r5-ets/argine-research.h
+@@ -42,6 +42,19 @@
+ //                                                     MUL_MAT_ID, measured by
+ //                                                     thread 0 from entry to the
+ //                                                     barrier after all reads)
++//   T  graph layer kind tid mode first hook_in_ns wait_start_ns wait_end_ns hook_out_ns
++//      wait_mask n_awaited bytes_awaited n_done_at_wait bytes_done_at_wait pending_after
++//                                                    (R5 "r5-ets-v1": one record per THREAD per
++//                                                     MoE node, every arm. hook_in = this thread's
++//                                                     entry, hook_out = after the post-wait barrier;
++//                                                     the critical path of a node is min(hook_in) ..
++//                                                     max(hook_out) over its threads, its exposed
++//                                                     wait is max(wait_end - wait_start). mode 0
++//                                                     layer, 1 layer_touch, 2 kind; first = first
++//                                                     expert node of the layer event; n_done/
++//                                                     bytes_done = awaited reads already complete
++//                                                     when the wait began (polled, never waited).
++//                                                     Legacy parsers count T as an unknown type.)
+ //   S  t_ns graph resident budget hits misses evictions bytes_read violations
+ //                                                    (cache snapshot, once per
+ //                                                     graph)
+@@ -73,6 +86,8 @@
+ //                       wait coincide, nothing is hidden.
+ //   8  FALLBACK         asynchronous read degraded to synchronous (no handle
+ //                       or no event available).
++//  16  SYNC_IN_ISSUE    (R5) the asynchronous read completed inside the issuing
++//                       ReadFile call: the issuer paid for it, nothing overlapped.
+ // ---------------------------------------------------------------------------
+ 
+ #ifndef ARGINE_RESEARCH_H
+@@ -89,6 +104,7 @@
+ #define ARX_FLAG_COMPLETE_BOUND 2u
+ #define ARX_FLAG_SYNCHRONOUS    4u
+ #define ARX_FLAG_FALLBACK       8u
++#define ARX_FLAG_SYNC_IN_ISSUE  16u  // R5: the read completed inside the issuing call (never overlapped)
+ 
+ // 1 if ARGINE_RESEARCH_TRACE is set and the log file could be opened.
+ // The first call reads the environment; later calls are one atomic load.
+@@ -125,6 +141,11 @@
+ void arx_node(uint64_t graph, uint32_t layer, uint32_t kind, uint64_t start_ns,
+               uint64_t ready_ns, uint32_t n_serve, uint32_t nth);
+ 
++void arx_thread_node(uint64_t graph, uint32_t layer, uint32_t kind, uint32_t mode, uint32_t first,
++                     uint64_t hook_in_ns, uint64_t wait_start_ns, uint64_t wait_end_ns, uint64_t hook_out_ns,
++                     uint32_t wait_mask, uint32_t n_awaited, uint64_t bytes_awaited, uint32_t n_done,
++                     uint64_t bytes_done, uint32_t pending_after);
++
+ void arx_snapshot(uint64_t graph, uint64_t resident, uint64_t budget, uint64_t hits,
+                   uint64_t misses, uint64_t evictions, uint64_t bytes_read,
+                   uint64_t violations);

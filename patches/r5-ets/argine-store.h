@@ -1,0 +1,590 @@
+// Argine — lettore dell'expert store e gestore di residenza.
+//
+// Autonomo per scelta: non include nulla di llama.cpp o di ggml, cosi' si
+// compila e si collauda da solo, contro uno store prodotto da
+// `argine store build`. Il buffer type che lo usa e' un altro file.
+//
+// Cosa risolve
+// ------------
+// Su una macchina da 16 GiB un MoE da 17 GiB non ci sta, quindi gli expert
+// vanno letti da disco mentre il modello gira. Farlo con la memoria mappata
+// costa 4.3x in throughput (310 contro 1324 MB/s misurati a un thread sullo
+// stesso disco, stessa slice, cache fredda in entrambi i casi) e, soprattutto,
+// lascia decidere la residenza al memory manager: il tetto di RAM diventa una
+// speranza, non un numero.
+//
+// Qui la residenza e' nostra: lo spazio di indirizzamento viene riservato per
+// intero, ma la memoria fisica si impegna una slice per volta e si rilascia
+// quando la cache e' piena. Il puntatore che ggml riceve resta valido e
+// contiguo per tutto il tensore, che e' la sua unica pretesa.
+
+#ifndef ARGINE_STORE_H
+#define ARGINE_STORE_H
+
+#include <stddef.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define PSX_MAGIC        0x53585350u  // 'PSXS'
+#define PSX_VERSION      2u
+#define PSX_HEADER_BYTES 256u
+#define PSX_N_KINDS      3u  // gate, up, down
+
+enum psx_kind {
+    PSX_GATE = 0,
+    PSX_UP   = 1,
+    PSX_DOWN = 2,
+};
+
+// Dove stanno le tre slice di un expert. Ogni offset e' multiplo
+// dell'allineamento dichiarato, quindi ogni slice si legge con l'I/O non
+// bufferizzato direttamente nella memoria del suo tensore.
+struct psx_entry {
+    uint64_t offset[PSX_N_KINDS];
+    uint32_t size[PSX_N_KINDS];
+};
+
+struct psx_store;
+
+// --- apertura --------------------------------------------------------------
+//
+// `direct` a 1 apre il file scavalcando la cache dell'OS: e' la condizione per
+// un budget rigido, perche' altrimenti ogni byte esiste due volte (nella nostra
+// cache e in quella di Windows) e il tetto che dichiariamo e' falso.
+// Costo misurato di questa scelta: 9% degli expert al secondo.
+struct psx_store * psx_open(const char * path, int direct);
+void               psx_close(struct psx_store * s);
+
+// Messaggio dell'ultimo errore, o NULL. La stringa vive nello store.
+const char * psx_error(const struct psx_store * s);
+
+// 1 se le letture scavalcano davvero la cache dell'OS. Puo' essere 0 anche
+// avendolo chiesto: alcuni filesystem e alcuni dispositivi non accettano
+// letture non bufferizzate, e in quel caso si ripiega su quelle normali. Vale
+// la pena saperlo, perche' con la cache dell'OS attiva la RAM viene contata due
+// volte e il budget non e' piu' rigido.
+int psx_direct(const struct psx_store * s);
+
+uint32_t psx_n_layers(const struct psx_store * s);
+uint32_t psx_n_experts(const struct psx_store * s);
+uint32_t psx_alignment(const struct psx_store * s);
+uint64_t psx_total_bytes(const struct psx_store * s);
+uint64_t psx_model_bytes(const struct psx_store * s);
+
+// Indice di riga del layer del modello, o -1 se lo store non lo contiene.
+int  psx_layer_row(const struct psx_store * s, uint32_t layer);
+// L'indice per un expert. Restituisce 0 se fuori intervallo.
+const struct psx_entry * psx_get(const struct psx_store * s, uint32_t layer, uint32_t expert);
+
+// --- lettura ---------------------------------------------------------------
+//
+// Legge una slice in `dst`. Con `direct` attivo, `dst` deve essere allineato
+// alla pagina e ci devono stare `psx_slice_read_bytes` byte, non `size`: l'I/O
+// non bufferizzato legge a multipli del settore, quindi la coda di
+// allineamento viene scritta anche lei.
+//
+// Thread safe: ogni thread usa il proprio descrittore, preso da un pool.
+// Restituisce i byte utili letti, oppure 0 in caso di errore.
+size_t psx_read_slice(struct psx_store * s, uint32_t layer, uint32_t expert, enum psx_kind kind,
+                      void * dst);
+
+// Buffer allineato alla pagina, da usare come destinazione delle letture.
+//
+// Non e' una comodita': con l'I/O non bufferizzato la destinazione deve essere
+// allineata al settore, e un buffer preso da malloc o da std::vector non lo e'.
+// Il primo utente di questa API (il codice di verifica del buffer type) ci e'
+// cascato subito, leggendo dentro un std::vector e ottenendo EINVAL.
+void * psx_alloc_aligned(const struct psx_store * s, size_t bytes);
+void   psx_free_aligned(void * p, size_t bytes);
+
+// Byte che una lettura tocca davvero (size arrotondato all'allineamento).
+size_t psx_slice_read_bytes(const struct psx_store * s, uint32_t layer, uint32_t expert,
+                            enum psx_kind kind);
+
+// --- residenza -------------------------------------------------------------
+//
+// Una regione e' lo spazio di un tensore: riservata per intero (indirizzi, non
+// memoria), impegnata a pezzi. Su 64 bit riservare 20 GiB non costa nulla, la
+// RAM occupata e' solo quella dei pezzi impegnati.
+struct psx_region;
+
+struct psx_region * psx_region_new(size_t bytes, size_t slot_bytes, size_t n_slots);
+void                psx_region_free(struct psx_region * r);
+void *              psx_region_base(const struct psx_region * r);
+size_t              psx_region_committed(const struct psx_region * r);
+
+// Impegna memoria fisica per [offset, offset+bytes) dentro la regione.
+// `offset` e `bytes` vengono allargati ai confini di pagina.
+int psx_region_commit(struct psx_region * r, size_t offset, size_t bytes);
+// La rilascia, tenendo gli indirizzi riservati: il puntatore di ggml resta valido.
+int psx_region_decommit(struct psx_region * r, size_t offset, size_t bytes);
+
+// --- cache -----------------------------------------------------------------
+//
+// LRU con budget rigido in byte. Le chiavi sono (regione, offset): una slice.
+struct psx_cache;
+
+struct psx_cache_stats {
+    uint64_t hits;
+    uint64_t misses;
+    uint64_t evictions;
+    uint64_t bytes_read;
+    uint64_t bytes_resident;
+    uint64_t budget;
+
+    // Blocchi di lettura emessi e letture che contenevano. Servono a interpretare
+    // ns_read, che con le letture sovrapposte e' il parete del blocco e non la
+    // somma delle singole: la profondita' di coda effettiva e'
+    // (ns_read/parete) x (letture/blocchi).
+    uint64_t blocchi;
+    uint64_t letture;
+
+    // Dove se ne va il tempo. Sono qui perche' due modelli di fila su cosa
+    // limitasse la generazione sono stati refutati da una misura: prima la
+    // banda del disco (tagliato il traffico del 32%, velocita' invariata), poi
+    // le sincronizzazioni in catena (tolte due terzi, guadagnato il 2%). La CPU
+    // sta al 35% e il disco a un decimo di quanto sa fare: qualcosa fa aspettare
+    // entrambi, e tirare a indovinare e' costato piu' tempo di quanto misurare
+    // ne richieda.
+    //
+    // Nanosecondi sommati su tutti i thread, quindi il totale puo' superare il
+    // tempo reale: e' il costo aggregato, non la durata.
+    uint64_t ns_commit;    // VirtualAlloc(MEM_COMMIT): Windows azzera le pagine
+    uint64_t ns_read;      // la lettura vera dallo store
+    uint64_t ns_decommit;  // rilascio della memoria sfrattata
+    uint64_t ns_attesa;    // fermi ad aspettare una slice che carica un altro
+    uint64_t ns_lock;      // fermi sul mutex della cache
+    uint64_t ns_fault;     // pagine nuove toccate prima della lettura (solo col pre-tocco)
+
+    // Argine2: admissions after which a shard exceeded its budget. The hard
+    // memory invariant (resident <= budget) says this must be 0; it is counted
+    // so that each measurement can demonstrate it instead of assuming it.
+    uint64_t violazioni;
+};
+
+// `shards` a 0 = scelta automatica. Il numero ottimale non e' deducibile: piu'
+// settori tolgono contesa sul mutex della cache, ma espongono la contesa sul
+// lock dello spazio di indirizzamento del processo, perche' commit e decommit
+// smettono di essere serializzati. Misurato su 16 settori: mutex dal 16% al 6%,
+// commit+decommit dal 5% al 16%. Va trovato per misura, non per ragionamento.
+struct psx_cache * psx_cache_new_n(uint64_t budget_bytes, unsigned shards);
+struct psx_cache * psx_cache_new(uint64_t budget_bytes);
+// Quanti settori indipendenti ha la cache. Serve a poter verificare che la
+// divisione sia davvero attiva invece di darla per scontata.
+unsigned           psx_cache_shards(const struct psx_cache * c);
+// Byte residenti in ciascun settore: serve a vedere se la divisione e'
+// equilibrata. Con un hash sbagliato tutte le chiavi finiscono in un settore
+// solo e la cache vale un sedicesimo di quella dichiarata, senza che niente lo
+// segnali.
+void               psx_cache_shard_load(const struct psx_cache * c, uint64_t * out, unsigned n);
+// Settore a cui finirebbe questa chiave (per i test sulla distribuzione).
+unsigned           psx_debug_shard_index(const struct psx_cache * c, struct psx_region * region,
+                                         size_t offset);
+void               psx_cache_free(struct psx_cache * c);
+void               psx_cache_get_stats(const struct psx_cache * c, struct psx_cache_stats * out);
+
+// --- R2-12: integrazione politica di retention nel percorso reale ----------
+//
+// Di default (nessuna variabile ARGINE_RETENTION_POLICY) questa cache si
+// comporta esattamente come prima: LRU puro, invariato. Quando una politica
+// e' richiesta, sostituisce la selezione della vittima con una delle due
+// classi C++ congelate in argine-retention-policy.h (B_selected / aged_frequency,
+// o PredictedProtectPolicy / decayed_transition), bit-per-bit conformi al
+// riferimento Python che resta la verita' semantica.
+//
+// Vincolo architetturale: la politica ragiona in unita' di oggetto (layer,
+// expert), non di singola slice (gate/up/down si muovono insieme). Questo
+// richiede un'unica sezione critica per evento (vedi argine-store.cpp), quindi
+// una politica attiva impone esattamente UN settore: psx_cache_new_n deve
+// essere chiamata con shards=1 quando psx_retention_policy_requested() torna
+// vero. psx_cache_attach_retention_policy rifiuta altrimenti.
+
+// Vero se il processo ha ARGINE_RETENTION_POLICY non vuota nell'ambiente. Il
+// chiamante (argine-experts.cpp, Contesto::inizializza) deve controllarlo
+// PRIMA di creare la cache, per forzare un solo settore.
+int psx_retention_policy_requested(void);
+
+// Legge la configurazione della politica dall'ambiente del processo
+// (ARGINE_RETENTION_POLICY/_DECAY/_INTERVAL/_PREDICTOR_DECAY/_TOPK/_NEXPERTS,
+// vedi argine-retention-policy.h) e la collega a questa cache.
+//
+// Fail-closed: se la configurazione e' assente (ARGINE_RETENTION_POLICY non
+// impostata), non fa nulla e ritorna 1 (nessun cambiamento di comportamento).
+// Se e' presente ma invalida (valore fuori dalla griglia congelata,
+// identificatore non riconosciuto, parametro mancante), o se la cache non ha
+// esattamente un settore, ritorna 0 e scrive in *error_out un messaggio
+// statico (valido per la vita del processo, non va liberato): IL CHIAMANTE
+// deve trattarlo come un errore fatale di avvio (GGML_ABORT o equivalente),
+// MAI ricadere silenziosamente su NONE o sulla B_selected esistente.
+//
+// Se e' presente ed e' valida, sostituisce la selezione della vittima per
+// questa cache con la politica richiesta e ritorna 1.
+// Nota: un budget troppo piccolo rispetto al working set di un layer (vedi
+// psx_cache_min_budget) puo' far si' che il riferimento Python frozen -- e
+// questo modulo, che lo rispecchia -- scelga di sfrattare un membro
+// dell'evento CORRENTE prima che sia stato ammesso fisicamente. Questo non e'
+// verificato qui all'attach (richiederebbe assunzioni su quanti expert un
+// evento reale puo' richiedere, che questa funzione non conosce), ma viene
+// rilevato ed esplicitamente rifiutato, evento per evento, dentro
+// servi_evento_con_politica in argine-store.cpp, con un messaggio che lo
+// nomina per cosa e': un limite scientifico reale di questa integrazione,
+// non un'incoerenza da nascondere.
+int psx_cache_attach_retention_policy(struct psx_cache * c, const char ** error_out);
+
+// Sola lettura: una politica e' collegata a questa cache?
+int psx_cache_has_retention_policy(const struct psx_cache * c);
+
+// R2-12: diagnostica di UN fallimento di ammissione sotto una politica di
+// retention attiva -- indipendente dal testo di psx_error() e dalle sole
+// psx_cache_stats (budget/resident in MiB), che non bastano a distinguere un
+// vero esaurimento di capacita' da un rifiuto per un'altra ragione (per
+// esempio una vittima scelta dalla politica che e' ancora bloccata/pins>0 --
+// scoperto da un run reale con 15/128 expert richiesti, budget 4096 MiB
+// ampiamente sufficiente, e un messaggio che suggeriva comunque di alzare il
+// budget). Popolata SOLO nei punti di fallimento di servi_evento_con_politica
+// in argine-store.cpp, immediatamente prima di un `return 0`; non influenza
+// nessuna decisione della politica, nessun sfratto, nessuna ammissione.
+struct psx_admission_failure_diag {
+    uint32_t layer;
+    uint64_t budget_bytes;
+    uint64_t resident_bytes_before;
+    uint64_t requested_bytes_total;    // somma byte su tutti gli expert distinti richiesti in questo evento
+    uint64_t requested_missing_bytes;  // di quelli, la parte non ancora residente (outcome.missed)
+    uint64_t reclaimable_bytes;        // byte residenti in questo settore con pins==0 (davvero sfrattabili ora)
+    uint32_t requested_count;          // expert distinti richiesti in questo evento
+    uint32_t protected_count;          // expert protetti per questo layer (predicted_protect; 0 per b_selected)
+    uint32_t candidate_victim_count;   // expert che la politica ha scelto di sfrattare per questo evento
+    uint64_t smallest_expert_bytes;    // il piu' piccolo, fra gli expert richiesti in questo evento (somma kind)
+    uint64_t largest_expert_bytes;     // il piu' grande, fra gli expert richiesti in questo evento (somma kind)
+    char     reason[300];              // il testo esatto passato a s->fail() per questo fallimento
+};
+
+// Sola lettura: l'ultima diagnostica di fallimento di ammissione per questa
+// cache, se ce n'e' stata una da quando una politica e' stata collegata.
+// Ritorna 0 (out non toccato) se nessun fallimento di questo tipo e' ancora
+// avvenuto.
+int psx_cache_get_last_admission_failure(const struct psx_cache * c,
+                                          struct psx_admission_failure_diag * out);
+
+struct psx_retention_stats {
+    char     policy_id[32];        // "b_selected" | "predicted_protect" | "" (nessuna)
+    double   decay_factor;
+    uint32_t aging_interval_steps;
+    double   predictor_decay;      // 0.0 se non applicabile
+    uint64_t hits;
+    uint64_t misses;
+    uint64_t evictions;
+    uint64_t resident_bytes;
+    uint64_t predictor_decisions;
+    uint64_t protected_fallbacks;
+    uint32_t events_served;        // numero di chiamate psx_cache_ensure_many servite dalla politica
+
+    // Diagnostica ARGINE_RETENTION_TRACE (non cambia nessuna decisione):
+    // prova, su stderr, che lo scrittore della traccia e' stato raggiunto e
+    // ha scritto, senza dover fidarsi del solo file JSONL (che su un host
+    // reale puo' restare a 0 byte per un motivo del tutto diverso dalla
+    // scrittura in se', ad es. ARGINE_EXPERT_READ!=blocco che non chiama
+    // mai psx_cache_ensure_many -- vedi il controllo fail-closed in
+    // argine-experts.cpp).
+    int      trace_requested;      // ARGINE_RETENTION_TRACE era impostata (non vuota)
+    int      trace_opened;         // fopen() della traccia e' riuscita
+    uint64_t trace_rows_attempted; // righe che il writer ha iniziato a scrivere
+    uint64_t trace_rows_written;   // di quelle, righe senza errori di stream (ferror pulito)
+    int      trace_write_failed;   // almeno una riga ha fallito la scrittura
+    // R2-12 Phase F, additive: righe di COMPLETAMENTO scritte dopo che Fase 1
+    // (il commit fisico delle slice mancanti) e' davvero finita per
+    // quell'evento -- NON lo stesso contatore di trace_rows_written sopra,
+    // che conta la riga di DECISIONE scritta prima di Fase 1. Un evento che
+    // fallisce dentro Fase 1 ha una riga di decisione ma nessuna riga di
+    // completamento: il delta fra i due contatori e' quindi diagnostico.
+    uint64_t trace_completions_written;
+    // R2-12 Phase F, additive: conta ogni volta che Fase 1 ha dovuto servire
+    // fisicamente una kind che la politica riteneva un hit (Obj{layer,expert}
+    // gia' residente) ma che non era mai stata indicizzata fisicamente --
+    // vedi il commento sopra la guarigione in servi_evento_con_politica.
+    // Deve restare 0 su un run sano; un valore positivo e' diagnostico, non
+    // un errore fatale (il nodo e' stato servito correttamente comunque).
+    uint64_t policy_hit_sans_index_healed;
+    uint64_t policy_same_event_deferred_evictions;
+    uint64_t policy_same_event_physical_margin_evictions;
+    // R3-03A, additive (appended; no existing field moves). Policy events that
+    // carried a STRUCTURAL semantic identity (pass, layer) via
+    // psx_cache_ensure_many_event(); gate/up/down nodes of an already-served
+    // event that were handled physically only (no policy state change); and
+    // semantic events refused because (pass, layer) was already served.
+    uint64_t semantic_events_served;
+    uint64_t followup_nodes_skipped;
+    uint64_t duplicate_semantic_events_refused;
+    // R3-03B, additive (appended): observational policy-path timing (ARGINE_POLICY_TIMING=1).
+    // All zero when disabled. Wall ns; not CPU time. See RetentionPolicy::PolicyTiming.
+    int      policy_timing_enabled;
+    uint64_t policy_timing_calls;
+    uint64_t ns_policy_total;
+    uint64_t ns_policy_prediction_update;
+    uint64_t ns_policy_victim_selection;
+    uint64_t policy_victim_calls;
+    uint64_t ns_event_lock_wait;      // time waiting for the shard lock in servi_evento_con_politica
+    uint64_t ns_event_locked_total;   // time the shard lock is held by servi_evento_con_politica (policy + physical admission)
+    uint64_t policy_timing_hist_log2[40];
+};
+
+// Provenienza/istrumentazione (sezione 9): quale politica, quali parametri,
+// cosa ha fatto. Non misura tempo, non serve a riportare uno speedup.
+void psx_cache_get_retention_stats(const struct psx_cache * c, struct psx_retention_stats * out);
+
+// Garantisce che la slice sia in memoria e leggibile all'indirizzo
+// `psx_region_base(region) + offset`, e la **blocca** finche' non si chiama
+// `psx_cache_unpin`. Se manca, sfratta quanto serve per rispettare il budget,
+// impegna la memoria e legge dallo store.
+//
+// Il blocco non e' un dettaglio: senza di esso un altro thread puo' sfrattare
+// la slice nell'istante fra il ritorno di questa funzione e il suo uso, e
+// l'accesso finisce su memoria decommitata, cioe' in un crash. E' il difetto
+// che il test da stress ha trovato con un segfault alla prima esecuzione.
+//
+// Restituisce 1 se la slice e' residente e bloccata, 0 in caso di errore
+// (compreso il caso in cui tutto lo spazio del budget e' bloccato da altri).
+int psx_cache_ensure(struct psx_cache * c, struct psx_store * s, struct psx_region * region,
+                     size_t offset, uint32_t layer, uint32_t expert, enum psx_kind kind);
+
+// Come sopra per n slice insieme, con **le letture tutte in volo** dove il
+// sistema lo permette (su Windows: handle con FILE_FLAG_OVERLAPPED).
+//
+// Esiste perche' il guadagno misurabile non sta nel leggere piu' byte per volta
+// ma nell'avere piu' letture contemporanee: a byte totali fissi per nodo MoE le
+// due cose si scambiano, e il dispositivo premia la seconda. Alla profondita' di
+// coda 2,49 misurata in generazione rende 2552 MB/s; a coda 7,5 ne rende 3522.
+//
+// **Tutto o niente.** Se ritorna 1 tutte le n slice sono residenti e bloccate, e
+// chi chiama deve sbloccarle tutte. Se ritorna 0 non ne resta bloccata nessuna,
+// nemmeno quelle lette con successo prima del guasto: chi chiama non ha modo di
+// sapere quali sarebbero, e un pin che nessuno sblocca occupa il budget per
+// sempre.
+//
+// Rifiuta subito, senza tentare, un blocco la cui somma supera il budget: le sue
+// slice devono stare residenti tutte insieme, quindi l'impossibilita' e'
+// calcolabile in partenza. Senza quel controllo ogni tentativo spendeva due
+// secondi di attese prima di arrendersi, e dal vivo sembrava uno stallo.
+//
+// Su POSIX le letture sono sequenziali: il risultato e' identico, manca il
+// guadagno. Il bersaglio del progetto e' Windows.
+int psx_cache_ensure_many(struct psx_cache * c, struct psx_store * s, size_t n,
+                          struct psx_region * const * regions, const size_t * offsets,
+                          const uint32_t * layers, const uint32_t * experts,
+                          const enum psx_kind * kinds);
+
+// R3-03A. Come psx_cache_ensure_many, ma l'evento della politica porta una
+// identita' semantica STRUTTURALE: (pass_id, layer) = una decisione del router
+// per layer per forward pass. psx_cache_ensure_many (senza identita') resta
+// identico a prima: ogni chiamata e' un evento (percorso legacy, usato dai test
+// e dalle tracce R2/R3-02). Con una identita':
+//   * la riga di traccia porta il blocco additivo "semantic_event";
+//   * una seconda chiamata per lo stesso (pass_id, layer) e' RIFIUTATA
+//     (fail-closed, conteggiata in duplicate_semantic_events_refused): il
+//     chiamante deve servire i nodi successivi dello stesso evento con
+//     psx_cache_note_followup_node(), non con un secondo evento di politica.
+// node_kind e' il tensore (gate/up/down) del nodo che ha innescato l'evento.
+#define PSX_NO_SEMANTIC_EVENT (UINT64_MAX)
+int psx_cache_ensure_many_event(struct psx_cache * c, struct psx_store * s, size_t n,
+                                struct psx_region * const * regions, const size_t * offsets,
+                                const uint32_t * layers, const uint32_t * experts,
+                                const enum psx_kind * kinds,
+                                uint64_t pass_id, uint32_t node_kind);
+
+// R3-03A. Un nodo gate/up/down successivo di un evento semantico gia' servito:
+// la sua disponibilita' fisica e' garantita dai pin dell'evento (verificata dal
+// chiamante), la politica NON viene toccata. Questa funzione e' sola
+// contabilita' (followup_nodes_skipped); no-op senza politica.
+void psx_cache_note_followup_node(struct psx_cache * c);
+
+// R3-03A. Disponibilita' FISICA di slice di un nodo successivo dello stesso
+// evento semantico che il primo nodo non aveva coperto (tipicamente: un kind
+// non ancora registrato in c.posizioni al momento del primo nodo). Hit ->
+// pin; assente -> commit + lettura, ESATTAMENTE come il percorso
+// policy_hit_sans_index_healed. NON tocca la politica: nessun access(), nessuna
+// storia, nessun clock; nessuno sfratto. Tutto-o-niente come ensure_many (se
+// ritorna 0 non resta nessun pin). Il chiamante sblocca con psx_cache_unpin.
+// Richiede una politica attiva; altrimenti fallisce senza effetti.
+int psx_cache_ensure_event_followup(struct psx_cache * c, struct psx_store * s, size_t n,
+                                    struct psx_region * const * regions, const size_t * offsets,
+                                    const uint32_t * layers, const uint32_t * experts,
+                                    const enum psx_kind * kinds);
+
+// R3-03A. Identita' strutturale di un evento semantico, header-only, senza
+// dipendenze (usata da argine-experts.cpp e dal test standalone). Un nodo MoE
+// (layer, kind) APPARTIENE allo stesso evento del nodo precedente se e solo se
+// ha lo stesso layer E il suo kind non e' ancora stato visto in questo evento;
+// altrimenti inizia un nuovo evento. Il pass avanza quando un nuovo evento ha
+// layer <= del layer dell'evento precedente (il layer non e' salito: nuovo
+// forward pass). Nessun confronto di insiemi di expert, nessun tempo.
+struct psx_semantic_event_tracker {
+    bool     have       = false;
+    uint64_t pass       = 0;
+    int64_t  last_layer = -1;
+    uint32_t kind_mask  = 0;
+    uint64_t event_index = 0;   // eventi iniziati finora (0-based dell'ultimo)
+    struct Result {
+        bool     first_node;    // true: questo nodo apre l'evento (aggiorna la politica)
+        uint64_t pass;
+        uint64_t event_index;
+    };
+    Result classify(uint32_t layer, uint32_t kind) {
+        const uint32_t bit = 1u << (kind & 31u);
+        if (have && (int64_t) layer == last_layer && (kind_mask & bit) == 0) {
+            kind_mask |= bit;
+            return Result{ false, pass, event_index };
+        }
+        if (have) {
+            if ((int64_t) layer <= last_layer) {
+                pass++;
+            }
+            event_index++;
+        }
+        have       = true;
+        last_layer = (int64_t) layer;
+        kind_mask  = bit;
+        return Result{ true, pass, event_index };
+    }
+};
+
+// Prenota una slice e **avvia** la sua lettura senza aspettarla, oppure la serve
+// subito se e' gia' residente.
+//
+// Ritorna 1 se era un hit (pronta, bloccata), 2 se la lettura e' partita (slice
+// bloccata, byte non ancora arrivati), 0 in caso di errore (niente bloccato).
+//
+// Esiste perche' il blocco di n slice non slega le due cose che servono: per
+// raccogliere piu' miss bisogna consumare piu' slice per lotto, e piu' slice per
+// lotto significa meno lotti e meno margine per il bilanciamento dinamico fra i
+// thread. Misurato: su 45 slice e 12 thread, lotti da 4 costano in attesa fra
+// thread piu' di quanto rendano in I/O.
+//
+// Qui le due cose si slegano, perche' i byte non servono al ritorno di questa
+// funzione ma alla barriera prima del calcolo: il thread prende una slice alla
+// volta — distribuzione fine — e la profondita' di coda diventa pari ai miss che
+// incontra, non a una costante scelta a priori.
+//
+// **Chi chiama deve invocare `psx_cache_attendi` prima di leggere i byte.**
+int psx_cache_avvia(struct psx_cache * c, struct psx_store * s, struct psx_region * region,
+                    size_t offset, uint32_t layer, uint32_t expert, enum psx_kind kind);
+
+// Attende tutte le letture avviate da QUESTO thread e le annuncia. Ritorna 1 se
+// sono arrivate tutte, 0 se almeno una no.
+//
+// Uno zero e' **fatale per il nodo**: i byte di una slice non ci sono, e calcolare
+// darebbe un risultato sbagliato in silenzio. Dopo uno zero lo stato dei pin non e'
+// quello che il chiamante ha registrato — le slice fallite non sono piu' bloccate —
+// quindi non va sbloccato niente: va abortito.
+int psx_cache_attendi(struct psx_cache * c, struct psx_store * s);
+
+// Sblocca la slice: da qui puo' essere sfrattata. Va chiamata una volta per
+// ogni `psx_cache_ensure` andato a buon fine.
+void psx_cache_unpin(struct psx_cache * c, struct psx_region * region, size_t offset);
+
+// Budget minimo utilizzabile, in byte: lo spazio che serve per tenere bloccate
+// insieme tutte le slice di una singola operazione.
+//
+// Con un budget piu' piccolo il motore non riesce a completare un layer e
+// `psx_cache_ensure` fallisce. Attenzione: durante l'elaborazione del prompt un
+// ubatch tocca molti piu' expert che durante la generazione (nel caso peggiore
+// tutti), quindi il minimo va calcolato sul caso prompt, non su
+// `expert_used_count`.
+uint64_t psx_cache_min_budget(const struct psx_store * s, uint32_t n_expert_per_op);
+
+// Marca la slice come usata di recente senza leggerla (per il prefetch).
+void psx_cache_touch(struct psx_cache * c, struct psx_region * region, size_t offset);
+
+// --- R5 (ETS): deferred, kind-masked waits ---------------------------------
+//
+// Research 5 tests whether the wait for an expert-weight kind can be moved from
+// the first expert node of a layer to the node that consumes that kind, so that
+// reads of later kinds overlap the compute of earlier nodes. These functions
+// change only WHEN the calling thread blocks for reads it already issued with
+// psx_cache_avvia; they never issue, skip, reorder or evict anything.
+// psx_cache_attendi (all pending reads of the thread) is unchanged and remains
+// the baseline's wait. kind_mask: bit (1u << psx_kind) for every kind to wait for.
+
+#define PSX_KIND_BIT(k) (1u << (uint32_t) (k))
+#define PSX_ALL_KINDS   ((1u << PSX_N_KINDS) - 1u)
+
+struct psx_wait_report {
+    uint32_t n_awaited;           // reads of the selected kinds pending at the call
+    uint64_t bytes_awaited;       // their useful bytes
+    uint32_t n_done_at_wait;      // tracing only: of those, already complete at wait start
+    uint64_t bytes_done_at_wait;  // tracing only
+    uint32_t pending_after;       // reads of this thread still in flight after the call
+    uint64_t wait_start_ns;       // arx_now_ns() clock (steady_clock)
+    uint64_t wait_end_ns;
+    uint32_t wait_mask;           // the kind mask actually waited for
+};
+
+// Wait for the calling thread's pending reads of the kinds in kind_mask and
+// announce them (ready). The others stay in flight, reserved and pinned. Returns
+// 1 if all awaited reads arrived, 0 otherwise (fatal for the node, exactly as
+// for psx_cache_attendi). Never mix with psx_cache_attendi on one pending set.
+int psx_cache_attendi_kinds(struct psx_cache * c, struct psx_store * s, uint32_t kind_mask,
+                            struct psx_wait_report * rep);
+
+// Reads of the calling thread still pending for the kinds in kind_mask.
+uint32_t psx_cache_pending_reads(uint32_t kind_mask, uint64_t * bytes_out);
+// Tracing only: of those, how many have completed in the background (polled, nothing waited for).
+// Reads that completed inside the issuing call are not counted.
+uint32_t psx_cache_pending_done(uint32_t kind_mask, uint64_t * bytes_out);
+
+// Tracing only: stamp (upper bound, before any wait) the completion of this thread's reads
+// that have finished in the background. Observation only: decides nothing.
+void psx_cache_poll_pending(void);
+
+// psx_cache_touch that reports whether the slice was in the cache (1) or not (0). Same LRU move.
+int psx_cache_touch_checked(struct psx_cache * c, struct psx_region * region, size_t offset);
+
+// Reads found still in flight when a thread ended (cancelled and waited; must stay 0).
+uint64_t psx_debug_reads_drained_at_thread_exit(void);
+
+// --- solo per i test -------------------------------------------------------
+//
+// Allarga a comando la finestra fra "la slice e' stata annunciata nell'indice"
+// e "i byte sono arrivati". Serve a rendere riproducibile una corsa che
+// altrimenti si vede una volta su diecimila: leggere 8 KiB dalla page cache
+// dura un microsecondo, avviare un thread ne dura cinquanta, quindi per caso
+// non ci si inciampa mai. Un bug che non si riesce a far scattare e' il tipo
+// peggiore di bug. In produzione il ritardo e' zero.
+void psx_debug_set_read_delay_us(unsigned us);
+
+// Fa fallire le prossime n letture (l'ultima richiesta di ogni blocco). Solo per
+// i test: il percorso "una slice del blocco non arriva" non si raggiunge
+// altrimenti, e il contratto tutto-o-niente resterebbe affermato invece che
+// verificato.
+void psx_debug_fail_next_reads(unsigned n);
+
+// Tocca le pagine appena impegnate PRIMA di leggerci dentro, cronometrandolo a
+// parte.
+//
+// Serve a separare due costi che altrimenti finiscono nello stesso secchio.
+// `VirtualAlloc(MEM_COMMIT)` costa 0.005 ms per slice, ma non e' li' che si paga
+// la memoria nuova: Windows azzera le pagine al primo accesso, e quel primo
+// accesso avviene dentro il DMA della lettura. Misurando solo il commit si
+// conclude che le pagine sono gratis, il che e' falso: su 55.715 miss da 227
+// pagine l'una i page fault misurati erano 14 milioni.
+//
+// Col pre-tocco attivo il costo dei fault si legge in `ns_fault` e la lettura
+// resta pulita. Se la somma non cambia, i fault sono inevitabili; se cala, la
+// strada e' smettere di impegnare e rilasciare pagine a ogni slice.
+void psx_debug_set_pretouch(int on);
+
+// R5 tests only. With `on`, a POSIX psx_cache_avvia reserves the slot and leaves
+// the read pending until a wait performs it: a deterministic stand-in for an
+// asynchronous read still in flight (no sleeps, no timing). No effect on Windows.
+void psx_debug_set_posix_deferred_reads(int on);
+// R5 tests only (POSIX): complete now the calling thread's postponed reads of the
+// kinds in kind_mask, as if the device had finished them in the background.
+void psx_debug_complete_pending_reads(struct psx_store * s, uint32_t kind_mask);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif  // ARGINE_STORE_H

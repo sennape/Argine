@@ -1,0 +1,35 @@
+{
+ "artifact": "R5-01-GATE",
+ "criteria": {
+  "address_ub_sanitizer_clean": true,
+  "baseline_path_unchanged": true,
+  "bookkeeping_control_exists": true,
+  "build_reproducible": true,
+  "existing_store_regressions_unchanged": true,
+  "fail_closed_mode_selection": true,
+  "identical_requests_bytes_eviction_lru": true,
+  "independent_review_resolved": true,
+  "instrumentation_complete_and_inert": true,
+  "kind_defers_waits": true,
+  "model_free_tests_pass": true,
+  "no_budget_violation": true,
+  "no_pending_io_eviction": true,
+  "runtime_identity_recorded": true,
+  "thread_sanitizer_clean": true,
+  "windows_build_succeeds": true
+ },
+ "evaluation": "LOCKED",
+ "gate": "R5_PHASE1A_IMPLEMENTATION_GATE",
+ "headroom_gate_G2": "NOT RUN",
+ "host_G1": {
+  "covers": "R5-00 gate G1 host part: identical tokens (all arms, 1.5 and 4 GiB, v5), zero violations and pending reads, purity <= 1%, baseline fidelity vs llama-research-v5 <= 2%, Windows model-free run, startup smoke and fail-closed refusals, instrumentation completeness",
+  "driver": "experiments/R5-01-ets-implementation/host_conformance.py",
+  "state": "PENDING"
+ },
+ "implementation_freeze": "after host G1 passes (R5-00 IMPLEMENTATION_FREEZE); any source or binary change before then requires a new commit and a new host G1",
+ "phase0_frozen_digests": {
+  "contract_digest": "9d480ccf1b5109fa9be6cd717261e824876122e1ec504a3ccd85e0e30e619e52",
+  "freeze_sha256": "21ed630b638ca56a19b6a392a6ce1e47782dcd4351b178d523d5e28a6c7f63ee"
+ },
+ "verdict": "R5_PHASE1A_IMPLEMENTATION_GATE_PASS"
+}

@@ -24,6 +24,7 @@ FROZEN = [
     ("R4 Phase 1", "experiments/R4-01-cfdc-training-validation/phase1.py", ["verify"]),
     ("R4 Phase 2", "experiments/R4-02-cfdc-prospective-eval/phase2.py", ["verify"]),
     ("R5 Phase 0", "experiments/R5-00-exposed-transfer-stall/phase0.py", ["verify"]),
+    ("R5 Phase 1a", "experiments/R5-01-ets-implementation/phase1a.py", ["verify"]),
     ("R2 paper freeze", "paper/research2/scripts/verify_paper_freeze.py", []),
 ]
 PLAIN = [
@@ -47,7 +48,7 @@ def main() -> int:
         results.append((name, subprocess.run([sys.executable, *cmd], cwd=str(ROOT)).returncode))
     if "--skip-unittest" not in sys.argv:
         results.append(("unittest (R1/R2, env-dependent)", subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests"], cwd=str(ROOT)).returncode))
-    order = ["R3 closure", "R3 paper", "R4 paper", "R4 Phase 0", "R4 Phase 1", "R4 Phase 2", "R5 Phase 0", "R1 registry", "R2 paper freeze", "README index", "links", "consolidation"]
+    order = ["R3 closure", "R3 paper", "R4 paper", "R4 Phase 0", "R4 Phase 1", "R4 Phase 2", "R5 Phase 0", "R5 Phase 1a", "R1 registry", "R2 paper freeze", "README index", "links", "consolidation"]
     results.sort(key=lambda r: order.index(r[0]) if r[0] in order else len(order))
     print()
     for name, rc in results:

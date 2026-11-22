@@ -1,0 +1,70 @@
+{
+ "I_record": "unchanged format; for C/C0 the wait_start/wait_end of a read are those of the wait that announced it (its consuming node in C)",
+ "T_record": {
+  "fields": [
+   "graph",
+   "layer",
+   "kind",
+   "tid",
+   "mode",
+   "first",
+   "hook_in_ns",
+   "wait_start_ns",
+   "wait_end_ns",
+   "hook_out_ns",
+   "wait_mask",
+   "n_awaited",
+   "bytes_awaited",
+   "n_done_at_wait",
+   "bytes_done_at_wait",
+   "pending_after"
+  ],
+  "requirement": "R5-00 INSTRUMENTATION to_add_in_phase1: per-thread hook start/end and wait start/end per expert node; node kind awaited; deferred reads already complete at their wait",
+  "written_by": "every thread, every expert node, every arm (B, C0_I, C_I identical layout)"
+ },
+ "artifact": "R5-01-INSTRUMENTATION-SCHEMA",
+ "config_keys": {
+  "ets_schema": "r5-ets-v1",
+  "expert_wait": "arm",
+  "expert_wait_explicit": "0|1"
+ },
+ "critical_path_reconstruction": {
+  "H": "per decode event min(T_tail, W) on B traces (ets_trace.metrics_from_log); one shot in Phase 1b",
+  "decode_tokens": "graphs whose R records have n_tokens == 1",
+  "exposed_store_ms_per_token": "sum over decode nodes of (max hook_out - min hook_in) / decode tokens",
+  "exposed_wait_ms_per_token": "sum over decode nodes of max over threads (wait_end - wait_start) / decode tokens",
+  "hidden_deferred_bytes_fraction": "deferred reads (issued in the first node's window, kind != first node's kind) whose completion <= earliest wait_start of their consuming node, by bytes",
+  "implementation": "ets_trace.py (structure() for Phase 1a, metrics() for Phase 1b/2 only)",
+  "node": "(graph, layer, kind); start = min over threads of hook_in_ns; store phase end = max over threads of hook_out_ns"
+ },
+ "not_measured": [
+  "true device completion of a read not observed before its wait (upper bound, conservative)",
+  "time inside the ggml kernel (bounded by hook gaps)"
+ ],
+ "schema": "r5-ets-v1",
+ "stderr_counters_line": {
+  "fields": [
+   "schema",
+   "expert_wait",
+   "explicit",
+   "read_mode",
+   "prefetch",
+   "hits",
+   "misses",
+   "evictions",
+   "bytes_read",
+   "violations",
+   "budget",
+   "moe_nodes",
+   "deferred_reads",
+   "deferred_bytes",
+   "touches",
+   "issued_followup",
+   "orphan_pending",
+   "pending_at_event_end"
+  ],
+  "text": "argine: r5_counters {json}",
+  "when": "process exit (graceful), every launch, every arm"
+ },
+ "stderr_identity_line": "argine: attesa expert: <layer|layer_touch|kind> (<esplicita|default>), ARGINE_PREFETCH=<value>, schema r5-ets-v1"
+}

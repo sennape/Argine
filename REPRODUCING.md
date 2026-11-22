@@ -37,6 +37,7 @@ All of this needs Python 3.9+ and no model weights or network.
 | Research 4 Phase 1 | `python shared/tooling/run_frozen_verifier.py experiments/R4-01-cfdc-training-validation/phase1.py verify` | frozen records |
 | Research 4 Phase 2 | `python shared/tooling/run_frozen_verifier.py experiments/R4-02-cfdc-prospective-eval/phase2.py verify` | frozen records |
 | Research 5 Phase 0 | `python shared/tooling/run_frozen_verifier.py experiments/R5-00-exposed-transfer-stall/phase0.py verify` | frozen protocol only; nothing external |
+| Research 5 Phase 1a | `python shared/tooling/run_frozen_verifier.py experiments/R5-01-ets-implementation/phase1a.py verify` | implementation record and gate; the C++ conformance test runs when g++ is available |
 | documentation | `python tools/check_links.py` and `python strumenti/controlla_readme.py` | nothing external |
 | consolidation | `python shared/tooling/verify_consolidation.py` | Git |
 

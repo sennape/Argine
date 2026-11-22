@@ -1,0 +1,77 @@
+{
+ "artifact": "R5-01-BUILD-INFO",
+ "binaries": {
+  "argine-ets-test.exe": "133a5ed0502e350b627f1f945d8c802fcb5e29975cf7e43f36bff967298f5164",
+  "llama-server.exe": "e8c94da8b777244237db9055993276ec488e84ac7c03fad47a88682a5d9d6ea2"
+ },
+ "binaries_location": "not in Git: place llama-server.exe and argine-ets-test.exe in this directory (local exclude, like local-archive); host_conformance.py checks both hashes",
+ "binaries_pe_normalized_sha256": {
+  "argine-ets-test.exe": "02185a65d23ee001f1b11d3667a1afb0e1f96836fec1ed5f148eff2a6c9ae0ee",
+  "llama-server.exe": "5093548f02d39381420c925ea8d0771ff1d455b0ac0032617f8a64b50f13c22c"
+ },
+ "build_command": "bash patches/r5-ets/build-r5-ets.sh <workdir>",
+ "built_on": "Linux build host (Ubuntu 24.04 container, root), cross-compiled; not the Windows host",
+ "built_utc": "2026-11-22T22:27:25Z",
+ "cmake_flags": "-DCMAKE_TOOLCHAIN_FILE=patches/r5-ets/toolchain-mingw-w64.cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DLLAMA_CURL=OFF -DLLAMA_OPENSSL=OFF -DGGML_NATIVE=OFF -DGGML_AVX=ON -DGGML_AVX2=ON -DGGML_FMA=ON -DGGML_F16C=ON -DGGML_BMI2=ON -DGGML_OPENMP=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_EXAMPLES=OFF -DCMAKE_C_FLAGS='-D_WIN32_WINNT=0x0A00 -DWINVER=0x0A00' -DCMAKE_CXX_FLAGS='-D_WIN32_WINNT=0x0A00 -DWINVER=0x0A00' -DCMAKE_EXE_LINKER_FLAGS='-static -static-libgcc -static-libstdc++'",
+ "compiler": "x86_64-w64-mingw32-g++-posix (GCC) 10-posix 20220113",
+ "compiler_note": "Same toolchain as llama-research-v3..v5 (Ubuntu 22.04 mingw-w64 GCC 10-posix 20220113, mingw-w64 headers 8.0.0), package hashes in patches/r5-ets/mingw-toolchain-debs.sha256; same -D_WIN32_WINNT=0x0A00 -DWINVER=0x0A00 deviation as v3..v5.",
+ "dll_dependencies": [
+  "ADVAPI32.dll",
+  "KERNEL32.dll",
+  "SHELL32.dll",
+  "WS2_32.dll",
+  "msvcrt.dll"
+ ],
+ "llama_cpp_commit": "254b177307b14d055bbe4c050c9c441a1e06d8a4",
+ "llama_cpp_repo": "https://github.com/ggml-org/llama.cpp",
+ "name": "llama-research-r5-ets",
+ "patches": [
+  "0001-argine-route-log.patch",
+  "0002-argine-expert-store.patch",
+  "0003-argine-research-trace.patch",
+  "0004-argine-retention-policy-cmake.patch (applied as its equivalent CMake edit: its context predates 0002/0003)",
+  "0005-argine-prefetch-race-fix.patch",
+  "0006-argine-msvc-atomic-shim.patch (no effect on mingw)",
+  "patches/argine-experts.h, patches/argine-retention-policy.{h,cpp} (frozen, unchanged)",
+  "patches/r5-ets/argine-store.{h,cpp}, argine-experts.cpp, argine-research.{h,cpp}, argine-ets.h (R5 copies; diff in patches/r5-ets/R5_CHANGES.diff)"
+ ],
+ "predecessor_runtime": {
+  "llama-server.exe_sha256": "65f445c42ac145765735984582691964181dd4dd8019f4519edac1fa315df26c",
+  "name": "llama-research-v5",
+  "role": "baseline-fidelity reference of R5-00 gate G1"
+ },
+ "reproducibility": {
+  "build2_raw_sha256": {
+   "argine-ets-test.exe": "a3e0e0191561886972ae4238f65b0e408e91aa91ce9b30f0fd0381c1f320e557",
+   "llama-server.exe": "6b352b78747df782ce2c59855866e082b47a77eb024eb100891b80c355e5ca1b"
+  },
+  "delivered_build": "build 1",
+  "normalized_sha256_identical": true,
+  "raw_difference": "PE TimeDateStamp and CheckSum only (zeroed by patches/r5-ets/pe_normalized_sha256.py)",
+  "raw_sha256_identical": false,
+  "second_clean_build_same_workdir": true
+ },
+ "runtime_modes": {
+  "ARGINE_EXPERT_WAIT": [
+   "layer (default when unset)",
+   "layer_touch",
+   "kind"
+  ],
+  "fail_closed": true
+ },
+ "runtime_tested": false,
+ "runtime_tested_note": "Not executed on Windows by the build host (no Windows execution environment). Verified statically (PE32+, import table identical in shape to v1..v5, identity/counter strings present). The first execution is the development-only host G1 step (experiments/R5-01-ets-implementation/host_conformance.py).",
+ "sources_lf_sha256": {
+  "patches/r5-ets/argine-ets-test.cpp": "42905db94dc03fca72340624581a4a8c26741543181c4b7be42970e8eda4be59",
+  "patches/r5-ets/argine-ets.h": "34547a52e478be31baf9c3acbf4d19c93acdb761a7a46421e2d5437001425b35",
+  "patches/r5-ets/argine-experts.cpp": "6d971fdab9f913659507e547ab968def85ff0e38aa017a2990d6a6349623e6e4",
+  "patches/r5-ets/argine-research.cpp": "14e35f20d9b0b2c62cb928db467a9ef2c9d67c43b8130c30de2b4ba395c6a259",
+  "patches/r5-ets/argine-research.h": "ee7aec2909f0c7dc9e8c056dc60cea024fe9929a5ad36f169c00d4c450248f9d",
+  "patches/r5-ets/argine-store.cpp": "25e27a50efd8f7a5f7b5c228197ad21bdaf3010f3bead1c2894be6dbe667ce47",
+  "patches/r5-ets/argine-store.h": "1a27039014e383bf54692add689b6c4dd65a1e95c6d425fe1dae5ba1d9be0737",
+  "patches/r5-ets/build-r5-ets.sh": "f0b19d808204931495455cb2c8e04be24ac317e777f7382c5870d56c2521d1dc",
+  "patches/r5-ets/mingw-toolchain-debs.sha256": "ef63583083cc60c6c8ace6b08e01a2879f6334b76dc885f45a6a5de6cb79aa61",
+  "patches/r5-ets/pe_normalized_sha256.py": "e8b6a72a78961865f6721bbe7a2f7344794fee99458cef6f71a596c9f7c6367b",
+  "patches/r5-ets/toolchain-mingw-w64.cmake": "8f24b6de35e8c174ae3842d3fc7d5f9c0fcd93d1bd2068f1ef852455a5dcf017"
+ }
+}

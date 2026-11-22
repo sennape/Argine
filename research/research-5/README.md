@@ -1,6 +1,6 @@
 # Research 5 — exposed transfer stall (ETS)
 
-**State: OPEN, Phase 0 FROZEN** (`R5_ETS_PHASE0_FROZEN`). Implementation: NOT STARTED. Evaluation: LOCKED. No runtime result exists.
+**State: OPEN, Phase 1a IMPLEMENTED** (`R5_ETS_PHASE1A_IMPLEMENTED`; protocol `R5_ETS_PHASE0_FROZEN`). Host conformance (G1): PENDING. Evaluation: LOCKED. No runtime result exists.
 
 **Question.** In the expert-store runtime (Qwen3-30B-A3B-Q4_K_M, asynchronous LRU read path, 1.5 GiB), can a causal deferred-wait scheduler lower decode wall time per token by at least 2%? The scheduler waits for each expert-weight kind only at the node that consumes it, instead of waiting for all kinds of the layer before any expert compute. It adds no prediction and changes no residency decision. The aim is to keep unavoidable transfer latency off the decode critical path.
 
@@ -9,7 +9,7 @@
 | phase | directory | state |
 |---|---|---|
 | Phase 0 — protocol freeze | [`R5-00-exposed-transfer-stall`](../../experiments/R5-00-exposed-transfer-stall/README.md) | frozen after independent adversarial review ([`REVIEW.md`](../../experiments/R5-00-exposed-transfer-stall/REVIEW.md)) |
-| Phase 1a — implementation and conformance (development prompts) | — | not started |
+| Phase 1a — implementation and conformance (development prompts) | [`R5-01-ets-implementation`](../../experiments/R5-01-ets-implementation/README.md) | implemented; model-free implementation gate PASS ([`GATE.json`](../../experiments/R5-01-ets-implementation/GATE.json)); host part of G1 pending; runtime sources [`patches/r5-ets`](../../patches/r5-ets/README.md), build [`llama-research-r5-ets`](../../llama-research-r5-ets/BUILD-INFO.json) |
 | Phase 1b — one-shot headroom gate | — | not started |
 | Phase 2 — evaluation (opened once) | — | locked |
 
@@ -29,4 +29,5 @@
 
 ```
 python shared/tooling/run_frozen_verifier.py experiments/R5-00-exposed-transfer-stall/phase0.py verify
+python shared/tooling/run_frozen_verifier.py experiments/R5-01-ets-implementation/phase1a.py verify
 ```
