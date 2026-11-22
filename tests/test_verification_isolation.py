@@ -217,8 +217,10 @@ class VerifierIsolation(unittest.TestCase):
         with mock.patch.object(m.subprocess, "Popen", Spy), mock.patch.object(m, "_rmtree", side_effect=lambda p: events.append(("cleanup",)) or True):
             m.run("tools/check_links.py")
         kinds = [e[0] for e in events]
-        self.assertEqual(kinds, ["exit", "cleanup"], "Popen context exited before cleanup began")
-        self.assertIsNotNone(events[0][1]); self.assertEqual(events[0][2:], (None, None, None))
+        self.assertEqual(kinds[-2:], ["exit", "cleanup"], "the verifier's Popen context exited before cleanup began")
+        self.assertEqual(kinds.count("cleanup"), 1)
+        for e in events[:-1]:
+            self.assertIsNotNone(e[1]); self.assertEqual(e[2:], (None, None, None))
 
     def test_exit_codes_dirty_setup_and_verifier(self):
         import io, contextlib

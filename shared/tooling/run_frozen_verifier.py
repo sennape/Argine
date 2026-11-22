@@ -157,6 +157,7 @@ def _debug_report(tmp: str, rc) -> None:
 
 
 def run(script: str, *args: str) -> int:
+    LAST_RUN.clear(); LAST_CLEANUP_ERROR.clear()
     try:
         preflight()
     except DirtyCaller as e:
@@ -165,7 +166,6 @@ def run(script: str, *args: str) -> int:
     # Exit codes: the verifier's own code is returned unchanged (A: verifier failure); 2 = dirty caller;
     # 4 = harness setup failure (B). A cleanup failure (C) never changes the verifier's code: it is reported
     # separately as HARNESS CLEANUP ERROR and recorded in CLEANUP_FAILURES.
-    LAST_RUN.clear(); LAST_CLEANUP_ERROR.clear()
     tmp = tempfile.mkdtemp(prefix="arv")  # short path: Windows path-length limits
     clone = os.path.join(tmp, "r")
     rc = 4
