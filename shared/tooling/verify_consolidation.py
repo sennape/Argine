@@ -5,7 +5,7 @@
 
 Checks: git status clean, branch main, optional expected HEAD, all legacy tags resolve to the recorded commits,
 research/papers/manifests/root documents present, R4 classification unchanged, freeze/digest artifacts present,
-raw-omission manifest present, every tracked file's SHA-256 equal to manifests/tracked-file-hashes.json."""
+raw-omission manifest present, every original file's committed blob SHA-256 equal to manifests/tracked-file-hashes.json."""
 from __future__ import annotations
 
 import hashlib
@@ -60,8 +60,18 @@ def main() -> int:
         # Files intentionally changed by the consolidation (documented in manifests/consolidation-path-changes.json)
         # plus the one file whose mixed line endings in the original cannot be reproduced by a per-file attribute.
         changed = {"README.md", "CITATION.cff", "CONTRIBUTING.md", "REPRODUCING.md", ".gitattributes", "experiments/R3-02B-acquisition-driver/README.md"}
-        mism = [p for p, h in files.items() if p not in changed and (not (ROOT / p).is_file() or hashlib.sha256((ROOT / p).read_bytes()).hexdigest() != h)]
-        ok(not mism, f"original-file SHA-256 unchanged ({len(files) - len(changed)} files checked, {len(changed)} documented exceptions; mismatches: {mism[:3]})")
+        # The manifest holds SHA-256 of Git blob content (LF-stored); compare against the committed blobs.
+        todo = [p for p in files if p not in changed]
+        proc = subprocess.run(["git", "cat-file", "--batch"], cwd=str(ROOT), input="".join(f"HEAD:{p}\n" for p in todo).encode("utf-8"), capture_output=True)
+        out, mism, pos = proc.stdout, [], 0
+        for p in todo:
+            nl = out.index(b"\n", pos); head = out[pos:nl].split(); pos = nl + 1
+            if len(head) != 3 or head[1] != b"blob":
+                mism.append(p); continue
+            size = int(head[2]); blob = out[pos:pos + size]; pos += size + 1
+            if hashlib.sha256(blob).hexdigest() != files[p]:
+                mism.append(p)
+        ok(not mism, f"committed blob SHA-256 equals original ({len(files) - len(changed)} files checked, {len(changed)} documented exceptions; mismatches: {mism[:3]})")
     print("\nFAILED: %d" % len(bad) if bad else "\nALL CONSOLIDATION CHECKS PASSED")
     return 1 if bad else 0
 
