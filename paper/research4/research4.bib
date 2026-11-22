@@ -1,0 +1,172 @@
+% References for the present paper.
+% Entries 1-13 are copied unchanged from the preceding paper's bibliography (paper/research3/research3.bib), which in turn inherited them
+% from the first study's frozen bibliography. Entries added for this paper were each checked against a fetched page on 2026-11-22:
+% Hawkeye (ISCA 2016; dblp record), Glider (MICRO-52, 2019; DOI 10.1145/3352460.3358319), Parrot (ICML 2020, PMLR 119; arXiv:2006.16239),
+% FlashMoE (arXiv:2601.17063v2), Bacon et al. (arXiv:2611.15842; title and authors only), Zhang (arXiv:2608.07911, submitted 2026-08-04).
+% The two internal entries describe frozen repository artifacts.
+
+@inproceedings{shazeer2017sparsely,
+  author    = {Noam Shazeer and Azalia Mirhoseini and Krzysztof Maziarz and Andy Davis and Quoc V. Le and Geoffrey E. Hinton and Jeff Dean},
+  title     = {Outrageously Large Neural Networks: The Sparsely-Gated {Mixture-of-Experts} Layer},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2017}
+}
+
+@article{fedus2022switch,
+  author  = {William Fedus and Barret Zoph and Noam Shazeer},
+  title   = {Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity},
+  journal = {Journal of Machine Learning Research},
+  volume  = {23},
+  number  = {120},
+  pages   = {1--39},
+  year    = {2022}
+}
+
+@misc{eliseev2023offloading,
+  author = {Artyom Eliseev and Denis Mazur},
+  title  = {Fast Inference of {Mixture-of-Experts} Language Models with Offloading},
+  year   = {2023},
+  note   = {arXiv preprint arXiv:2312.17238}
+}
+
+@misc{xue2025moeinfinity,
+  author = {Leyang Xue and Yao Fu and Zhan Lu and Chuanhao Sun and Luo Mai and Mahesh Marina},
+  title  = {{MoE-Infinity}: Efficient {MoE} Inference on Personal Machines with Sparsity-Aware Expert Cache},
+  year   = {2024},
+  note   = {arXiv preprint arXiv:2401.14361 (first submitted January 2024; metadata of v3, March 2025)}
+}
+
+@inproceedings{kamahori2025fiddler,
+  author    = {Keisuke Kamahori and Tian Tang and Yile Gu and Kan Zhu and Baris Kasikci},
+  title     = {{Fiddler}: {CPU-GPU} Orchestration for Fast Inference of {Mixture-of-Experts} Models},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2025}
+}
+
+@article{belady1966replacement,
+  author  = {L. A. Belady},
+  title   = {A Study of Replacement Algorithms for a Virtual-Storage Computer},
+  journal = {IBM Systems Journal},
+  volume  = {5},
+  number  = {2},
+  pages   = {78--101},
+  year    = {1966},
+  doi     = {10.1147/SJ.52.0078}
+}
+
+@misc{gerganov2023llamacpp,
+  author       = {Georgi Gerganov and llama.cpp contributors},
+  title        = {{llama.cpp}: {LLM} inference in {C/C++}},
+  year         = {2023},
+  howpublished = {GitHub repository},
+  url          = {https://github.com/ggml-org/llama.cpp}
+}
+
+@misc{qwen3technicalreport,
+  author        = {{Qwen Team}},
+  title         = {{Qwen3} Technical Report},
+  year          = {2025},
+  eprint        = {2505.09388},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2505.09388}
+}
+
+@misc{promoe2025,
+  author = {Xiaoniu Song and Zihang Zhong and Rong Chen and Haibo Chen},
+  title  = {{ProMoE}: Fast {MoE}-based {LLM} Serving using Proactive Caching},
+  year   = {2024},
+  note   = {arXiv preprint arXiv:2410.22134 (first submitted October 2024; latest revision v3, September 2025)}
+}
+
+@misc{layerscope2025,
+  author = {Enda Yu and Dezun Dong and Zhaoning Zhang and Zhe Bai and Weiling Yang and Haojie Wang and Dongsheng Li and Yongwei Wu and Xiangke Liao},
+  title  = {{LayerScope}: Predictive Cross-Layer Scheduling for Efficient Multi-Batch {MoE} Inference on Legacy Servers},
+  year   = {2026},
+  note   = {arXiv preprint arXiv:2509.23638 (v2, April 2026; stated venue ICS '26, Belfast, July 2026; first submitted September 2025 as ``PreScope: Unleashing the Power of Prefetching for Resource-Constrained {MoE} Inference'')}
+}
+
+@misc{expertflow2026,
+  author = {Xin He and Shunkang Zhang and Kaijie Tang and Shaohuai Shi and Yuxin Wang and Zihao Zeng and Zhenheng Tang and Xiaowen Chu and Haiyan Yin and Ivor W. Tsang and Yew Soon Ong},
+  title  = {{ExpertFlow}: Efficient {Mixture-of-Experts} Inference via Predictive Expert Caching and Token Scheduling},
+  year   = {2026},
+  note   = {arXiv preprint arXiv:2410.17954 (v2, April 2026; stated venue DAC '26, Long Beach, July 2026; first submitted October 2024 as ``ExpertFlow: Optimized Expert Activation and Token Allocation for Efficient {Mixture-of-Experts} Inference'')}
+}
+
+@misc{localroutingconsistency2025,
+  author = {Jingcong Liang and Siyuan Wang and Miren Tian and Yitong Li and Duyu Tang and Zhongyu Wei},
+  title  = {Not All Models Suit Expert Offloading: On Local Routing Consistency of Mixture-of-Expert Models},
+  year   = {2025},
+  note   = {arXiv preprint arXiv:2505.16056}
+}
+
+@misc{argine2paper,
+  author       = {sennape},
+  title        = {Clairvoyant-Comparator Expert Retention, Routing Structure, and Causal Predictive-Retention Validation in Memory-Constrained Mixture-of-Experts Inference},
+  year         = {2026},
+  howpublished = {Preceding-study manuscript (repository location in the provenance appendix)},
+  note         = {Final corrected edition, commit 4ce35fe}
+}
+
+@misc{argine3paper,
+  author       = {sennape},
+  title        = {Predictive Structure Is Not Retention Value: A Prospective Falsification of Prediction-Led Expert Retention in Memory-Constrained {Mixture-of-Experts} Inference},
+  year         = {2026},
+  howpublished = {Preceding-study manuscript (repository location in the provenance appendix)},
+  note         = {Published edition, paper commit 3370008}
+}
+
+@inproceedings{hawkeye2016,
+  author    = {Akanksha Jain and Calvin Lin},
+  title     = {Back to the Future: Leveraging {Belady}'s Algorithm for Improved Cache Replacement},
+  booktitle = {Proceedings of the 43rd Annual International Symposium on Computer Architecture (ISCA)},
+  pages     = {78--89},
+  year      = {2016}
+}
+
+@inproceedings{glider2019,
+  author    = {Zhan Shi and Xiangru Huang and Akanksha Jain and Calvin Lin},
+  title     = {Applying Deep Learning to the Cache Replacement Problem},
+  booktitle = {Proceedings of the 52nd Annual IEEE/ACM International Symposium on Microarchitecture (MICRO-52)},
+  year      = {2019},
+  doi       = {10.1145/3352460.3358319}
+}
+
+@inproceedings{parrot2020,
+  author    = {Evan Zheran Liu and Milad Hashemi and Kevin Swersky and Parthasarathy Ranganathan and Junwhan Ahn},
+  title     = {An Imitation Learning Approach for Cache Replacement},
+  booktitle = {Proceedings of the 37th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {119},
+  year      = {2020},
+  note      = {arXiv:2006.16239}
+}
+
+@misc{flashmoe2026,
+  author = {Byeongju Kim and Jungwan Lee and Donghyeon Han and Hoi-Jun Yoo and Sangyeob Kim},
+  title  = {{FlashMoE}: Reducing {SSD} {I/O} Bottlenecks via {ML}-Based Cache Replacement for {Mixture-of-Experts} Inference on Edge Devices},
+  year   = {2026},
+  note   = {arXiv:2601.17063, version 2}
+}
+
+@misc{bacon2026fewer,
+  author = {Pierre-Luc Bacon and Diego Calanzone and Jean-Maxime Larouche},
+  title  = {Fewer Expert Transfers Without Changing Routing: Expert Eviction for {MoE} Offloading},
+  year   = {2026},
+  note   = {arXiv:2611.15842; NeurIPS 2026 workshop paper}
+}
+
+@misc{zhang2026reproducible,
+  author = {Yu Zhang},
+  title  = {Reproducible Evaluation of {MoE} Expert Caching: Replay Semantics, Workload Contamination, and Operating Regimes},
+  year   = {2026},
+  note   = {arXiv:2608.07911, submitted 2026-08-04}
+}
+
+@misc{argine4evidence,
+  author       = {sennape},
+  title        = {{Argine} frozen evidence and closure record of the present study},
+  year         = {2026},
+  howpublished = {Frozen-evidence repository record (location in the provenance appendix)},
+  note         = {Closure freeze fc411ef578decf6f7f380832885651f278d8696d9f46d60d2c9d10dce0cb1fdd}
+}

@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Headroom capture (Eq.~\eqref{eq:capture}) of each causal policy against the clairvoyant reference, on the validation cohort (12 traces) and on the prospective held-out evaluation (4 traces). A negative value means the policy incurs more miss bytes than the baseline. The last column states whether the policy reaches the frozen sufficiency level of $25\%$ on both splits.}
+\label{tab:results}
+\small
+\begin{tabular}{llrrc}
+\toprule
+Policy & Class & Validation & Held-out & $\ge 25\%$ on both \\
+\midrule
+\textsc{nue-x} & causal, hand-built & $+7.42\%$ & $+9.37\%$ & no \\
+decayed count & causal, hand-built & $-5.60\%$ & $+3.05\%$ & no \\
+rich policy & causal, learned (GBRT) & $+15.45\%$ & $+19.11\%$ & no \\
+distilled cheap policy & causal, learned (CART, depth 3) & $-36.04\%$ & $-29.96\%$ & no \\
+\bottomrule
+\end{tabular}
+\end{table}

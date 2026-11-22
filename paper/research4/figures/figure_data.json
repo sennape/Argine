@@ -1,0 +1,105 @@
+{
+ "arms": [
+  "NUE_X",
+  "DECAYED_COUNT",
+  "RICH",
+  "CHEAP"
+ ],
+ "heldout": {
+  "CHEAP": -0.29956204882611787,
+  "DECAYED_COUNT": 0.03048837963090921,
+  "NUE_X": 0.09373404256464725,
+  "RICH": 0.1910686819862832
+ },
+ "heldout_per_trace": {
+  "CHEAP": {
+   "coding-eval-v1": -0.3307916245307741,
+   "instruction-eval-v1": -0.36019456925295323,
+   "reasoning-eval-v1": -0.18889005044037321,
+   "summarization-eval-v1": -0.3157152014464518
+  },
+  "DECAYED_COUNT": {
+   "coding-eval-v1": 0.0006895236067646273,
+   "instruction-eval-v1": 0.036597913191953775,
+   "reasoning-eval-v1": 0.02369159144960833,
+   "summarization-eval-v1": 0.05718897374473632
+  },
+  "NUE_X": {
+   "coding-eval-v1": 0.08858494566039676,
+   "instruction-eval-v1": 0.09114918198474134,
+   "reasoning-eval-v1": 0.10239033436051442,
+   "summarization-eval-v1": 0.09291610295889488
+  },
+  "RICH": {
+   "coding-eval-v1": 0.15834613606639042,
+   "instruction-eval-v1": 0.18997669100249226,
+   "reasoning-eval-v1": 0.19289671009021295,
+   "summarization-eval-v1": 0.2191561944331134
+  }
+ },
+ "threshold": 0.25,
+ "validation": {
+  "CHEAP": -0.3604404745698777,
+  "DECAYED_COUNT": -0.05601476218274752,
+  "NUE_X": 0.07416079626142207,
+  "RICH": 0.1545174653583959
+ },
+ "validation_per_trace": {
+  "CHEAP": {
+   "r2-11-coding-v1": -0.43052520686324863,
+   "r2-11-coding-v2": -0.2603681206669702,
+   "r2-11-coding-v3": -0.38720801199572036,
+   "r2-11-instruction-v1": -0.44388077216452504,
+   "r2-11-instruction-v2": -0.32321212932135346,
+   "r2-11-instruction-v3": -0.35776311953392786,
+   "r2-11-reasoning-v1": -0.1634480840290809,
+   "r2-11-reasoning-v2": -0.1612625119232474,
+   "r2-11-reasoning-v3": -0.48031588047713514,
+   "r2-11-summarization-v1": -0.472142255656306,
+   "r2-11-summarization-v2": -0.44105614413821964,
+   "r2-11-summarization-v3": -0.39553262095432823
+  },
+  "DECAYED_COUNT": {
+   "r2-11-coding-v1": 0.005070543186412853,
+   "r2-11-coding-v2": -0.11975039455292198,
+   "r2-11-coding-v3": -0.20776723505193057,
+   "r2-11-instruction-v1": -0.11380420113829724,
+   "r2-11-instruction-v2": 0.0037822952082529728,
+   "r2-11-instruction-v3": 0.03182311572356534,
+   "r2-11-reasoning-v1": -0.062457023202881545,
+   "r2-11-reasoning-v2": -0.1095646351911849,
+   "r2-11-reasoning-v3": -0.06351086039123731,
+   "r2-11-summarization-v1": -0.08363998689196914,
+   "r2-11-summarization-v2": -0.012611763200077678,
+   "r2-11-summarization-v3": 0.037184016561131183
+  },
+  "NUE_X": {
+   "r2-11-coding-v1": 0.07548159720917302,
+   "r2-11-coding-v2": 0.06397082405217541,
+   "r2-11-coding-v3": 0.11194955237863007,
+   "r2-11-instruction-v1": 0.06331338379393299,
+   "r2-11-instruction-v2": 0.10980076888754278,
+   "r2-11-instruction-v3": 0.08175506177014949,
+   "r2-11-reasoning-v1": 0.09018582919979498,
+   "r2-11-reasoning-v2": 0.08485443393496479,
+   "r2-11-reasoning-v3": 0.054234640959293305,
+   "r2-11-summarization-v1": 0.042911751395907034,
+   "r2-11-summarization-v2": 0.040443155070345335,
+   "r2-11-summarization-v3": 0.0722865905605725
+  },
+  "RICH": {
+   "r2-11-coding-v1": 0.14690616333472326,
+   "r2-11-coding-v2": 0.11149819686825597,
+   "r2-11-coding-v3": 0.12544993894751078,
+   "r2-11-instruction-v1": 0.11548729683741125,
+   "r2-11-instruction-v2": 0.1958810155764949,
+   "r2-11-instruction-v3": 0.18892425339679544,
+   "r2-11-reasoning-v1": 0.14765464940111347,
+   "r2-11-reasoning-v2": 0.16241086328408946,
+   "r2-11-reasoning-v3": 0.1520107631916715,
+   "r2-11-summarization-v1": 0.13457058194917806,
+   "r2-11-summarization-v2": 0.1733640223249173,
+   "r2-11-summarization-v3": 0.19257009329545416
+  }
+ }
+}

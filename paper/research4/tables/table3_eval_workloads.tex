@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Headroom capture on each held-out evaluation trace (one trace per workload category). The distilled cheap policy is worse than the baseline on every workload.}
+\label{tab:evalwl}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Workload & \textsc{nue-x} & decayed count & rich policy & distilled cheap policy \\
+\midrule
+coding & $+8.86\%$ & $+0.07\%$ & $+15.83\%$ & $-33.08\%$ \\
+instruction & $+9.11\%$ & $+3.66\%$ & $+19.00\%$ & $-36.02\%$ \\
+reasoning & $+10.24\%$ & $+2.37\%$ & $+19.29\%$ & $-18.89\%$ \\
+summarization & $+9.29\%$ & $+5.72\%$ & $+21.92\%$ & $-31.57\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}

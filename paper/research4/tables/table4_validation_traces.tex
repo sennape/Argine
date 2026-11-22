@@ -1,0 +1,24 @@
+\begin{table}[H]
+\centering
+\caption{Headroom capture on each validation trace (three versions of each workload category). No policy reaches $25\%$ on any individual trace; the distilled cheap policy is negative on all twelve.}
+\label{tab:valtr}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Trace & \textsc{nue-x} & decayed count & rich policy & distilled cheap policy \\
+\midrule
+coding v1 & $+7.55\%$ & $+0.51\%$ & $+14.69\%$ & $-43.05\%$ \\
+coding v2 & $+6.40\%$ & $-11.98\%$ & $+11.15\%$ & $-26.04\%$ \\
+coding v3 & $+11.19\%$ & $-20.78\%$ & $+12.54\%$ & $-38.72\%$ \\
+instruction v1 & $+6.33\%$ & $-11.38\%$ & $+11.55\%$ & $-44.39\%$ \\
+instruction v2 & $+10.98\%$ & $+0.38\%$ & $+19.59\%$ & $-32.32\%$ \\
+instruction v3 & $+8.18\%$ & $+3.18\%$ & $+18.89\%$ & $-35.78\%$ \\
+reasoning v1 & $+9.02\%$ & $-6.25\%$ & $+14.77\%$ & $-16.34\%$ \\
+reasoning v2 & $+8.49\%$ & $-10.96\%$ & $+16.24\%$ & $-16.13\%$ \\
+reasoning v3 & $+5.42\%$ & $-6.35\%$ & $+15.20\%$ & $-48.03\%$ \\
+summarization v1 & $+4.29\%$ & $-8.36\%$ & $+13.46\%$ & $-47.21\%$ \\
+summarization v2 & $+4.04\%$ & $-1.26\%$ & $+17.34\%$ & $-44.11\%$ \\
+summarization v3 & $+7.23\%$ & $+3.72\%$ & $+19.26\%$ & $-39.55\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}

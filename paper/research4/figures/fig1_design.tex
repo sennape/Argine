@@ -1,0 +1,17 @@
+% Figure 1: design of the study (reader-facing names; each box lists its role or frozen gate).
+\begin{tikzpicture}[
+  node distance=3.2mm and 2.4mm,
+  box/.style={draw, rounded corners=1.5pt, align=center, font=\scriptsize, text width=27mm, minimum height=17mm, inner sep=2pt},
+  ref/.style={box, fill=black!8},
+  arr/.style={-{Stealth[length=1.6mm]}, thin}]
+\node[box] (a) {Baseline $A$\\aged frequency\\[-1pt]\gate{causal, frozen}};
+\node[ref, right=of a] (b) {Clairvoyant\\reference\\[-1pt]\gate{Belady; defines the\\recoverable headroom}};
+\node[box, right=of b] (c) {Causal comparators\\\nuex, decayed count\\[-1pt]\gate{hand-built, causal}};
+\node[box, right=of c] (d) {Rich policy\\gradient-boosted trees\\[-1pt]\gate{16 causal features}};
+\node[box, below=of d] (e) {Distilled cheap policy\\CART, depth $\le 3$,\\$\le 4$ features};
+\node[box, left=of e] (f) {Validation\\12 traces, scored once\\[-1pt]\gate{train: 4 traces}};
+\node[box, left=of f] (g) {Prospective evaluation\\4 traces, opened once\\[-1pt]\gate{after fit and validation lock}};
+\node[ref, left=of g] (h) {Frozen rule\\capture $\ge 25\%$ on\\validation and evaluation};
+\draw[arr] (a) -- (b); \draw[arr] (b) -- (c); \draw[arr] (c) -- (d); \draw[arr] (d) -- (e);
+\draw[arr] (e) -- (f); \draw[arr] (f) -- (g); \draw[arr] (g) -- (h);
+\end{tikzpicture}

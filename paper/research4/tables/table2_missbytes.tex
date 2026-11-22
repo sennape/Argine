@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{Pooled decode miss bytes on the four prospective held-out traces at the 1.5~GiB budget, and the change relative to the baseline $A$ in bytes and in percent. The clairvoyant row is the reference used to define recoverable headroom; it is not a causal policy.}
+\label{tab:miss}
+\small
+\begin{tabular}{lrrr}
+\toprule
+Policy & miss bytes & change vs.\ $A$ (bytes) & change vs.\ $A$ (\%) \\
+\midrule
+baseline $A$ & 1{,}226{,}910{,}965{,}760 & --- & --- \\
+clairvoyant reference & 713{,}408{,}901{,}120 & $-$513{,}502{,}064{,}640 & $-41.85\%$ \\
+\textsc{nue-x} & 1{,}178{,}778{,}341{,}376 & $-$48{,}132{,}624{,}384 & $-3.92\%$ \\
+decayed count & 1{,}211{,}255{,}119{,}872 & $-$15{,}655{,}845{,}888 & $-1.28\%$ \\
+rich policy & 1{,}128{,}796{,}803{,}072 & $-$98{,}114{,}162{,}688 & $-8.00\%$ \\
+distilled cheap policy & 1{,}380{,}736{,}696{,}320 & $+$153{,}825{,}730{,}560 & $+12.54\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
