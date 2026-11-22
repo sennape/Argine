@@ -1,0 +1,51 @@
+{
+  "artifact": "R4-PAPER-PUBLICATION-FREEZE",
+  "author": "sennape",
+  "bib_lf_sha256": "b65cbe53412d647eafdf80ce23c2d1dd9a5b7ab9eb201a1d3aada659901994e1",
+  "build": {
+    "FORCE_SOURCE_DATE": "1",
+    "SOURCE_DATE_EPOCH": "1795305600",
+    "engine": "latexmk -pdf"
+  },
+  "claims_verified": 97,
+  "classification": "R4_CFDC_CAUSAL_STATE_INSUFFICIENT",
+  "date": "November 2026",
+  "figure_data_lf_sha256": "c436dd666272ad0bc6a939d0947ea1b61d3365179b4f56997e0eb1c36ad2393a",
+  "figure_pdf_sha256": {
+    "fig2_capture.pdf": "09f075d191a624f2e08079fe5a55193106accc75c14a18bd16ad5dfdd0075873",
+    "fig3_pertrace.pdf": "05e786f0f817b688b75374aeacdaa5655419d85d4803097b3263c4cfd04532ba"
+  },
+  "figure_tex_lf_sha256": "bcd664179ca081abe43d8395b7f44332a9cef24cf083ffb5de716920475a53d9",
+  "manuscript": "paper/research4/research4.tex",
+  "note": "Does not modify any frozen contract. The publication commit is the commit that adds this file; it cannot be recorded inside it.",
+  "pdf": "paper/research4/research4.pdf",
+  "pdf_sha256": "65368b263e5b695838e11ec5e0279bbb44fee0f5058a50fc67dee45f4947353e",
+  "r4_contract_digests": {
+    "R4-00": "fa0ff8d4c93b463a99bdba4a65625251fa00c8102f5b2d788f8f22e73a20d64e",
+    "R4-01": "8d89ecd8198db93000456cde58f995e4fa23124d554402b61170a776d9a0e74f",
+    "R4-02": "1b690816e6625333fbcac5bf188934ef2f51dbf8ab82ecd1ae7b59c3f02065e0"
+  },
+  "r4_freezes": {
+    "R4-00": "41e9aa82fcf59155b6c98504ff08bee6ca2feb74027675e3fbce10778ca318be",
+    "R4-01": "dbea96e96a386286e49b93e733fb1ed68b5fe22771d9b4d9cf7d8cf55f1756d5",
+    "R4-02": "fc411ef578decf6f7f380832885651f278d8696d9f46d60d2c9d10dce0cb1fdd"
+  },
+  "script_lf_sha256": {
+    "build_assets.py": "847d9648d8c61383a7f9c4f80dc27a1f18888a4cb650ee17ba3617a63f04610e",
+    "claims.py": "e0dba78ad91051de74e1eb1c8275285ffc056afeeb0c8ee8884495beaae3b835",
+    "frozen.py": "112ea917eab12593a228743e7ea0eeaae555d77a8f4f7b55937a1a7df3d02dea",
+    "verify_paper.py": "11947e9641de49af6f2603ba4a9a9f4dfea348862ec000391331a846c2e465e0"
+  },
+  "source_map_sha256": "a55a9e6d5913e102d84a82ac13c3b61f3e3081de53bfbc1a42770fa919e330d1",
+  "state": "R4_CFDC_CLOSED",
+  "table_lf_sha256": {
+    "tables/table1_results.tex": "e9319f68493c891123c586cb71834d939966ea1cfb8712c126f3b2f797d72b3a",
+    "tables/table2_missbytes.tex": "9dad95758a62f6fcc5f7403a5d7f82d36d1b1d0ed64848db35d700c1b9a34fd9",
+    "tables/table3_eval_workloads.tex": "f25b53e12902109a2af4791febab070850b27de284a51aa8597c7ecdac2e77ce",
+    "tables/table4_validation_traces.tex": "d37e4734f95f5eb8f6e72677c7e098795a28c6f334971c8534a61e1980632de8"
+  },
+  "tex_lf_sha256": "f6353c4e5ec88b82d0c2a202affebf05d576eed3b3748d2d95880abbb5c8cc17",
+  "title": "Causal State Is Not Enough: Prospective Evidence That Tested Causal Eviction Policies Recover Too Little Clairvoyant Headroom in Expert Retention",
+  "verifier": "paper/research4/scripts/verify_paper.py",
+  "verifier_result": "PASS"
+}

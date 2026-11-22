@@ -19,6 +19,7 @@ import run_frozen_verifier as rfv  # noqa: E402
 FROZEN = [
     ("R3 closure", "experiments/R3-final-closure/closure.py", ["verify"]),
     ("R3 paper", "paper/research3/scripts/verify_paper.py", []),
+    ("R4 paper", "paper/research4/scripts/verify_paper.py", []),
     ("R4 Phase 0", "experiments/R4-00-causal-eviction-distillation/phase0.py", ["verify"]),
     ("R4 Phase 1", "experiments/R4-01-cfdc-training-validation/phase1.py", ["verify"]),
     ("R4 Phase 2", "experiments/R4-02-cfdc-prospective-eval/phase2.py", ["verify"]),
@@ -45,7 +46,7 @@ def main() -> int:
         results.append((name, subprocess.run([sys.executable, *cmd], cwd=str(ROOT)).returncode))
     if "--skip-unittest" not in sys.argv:
         results.append(("unittest (R1/R2, env-dependent)", subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests"], cwd=str(ROOT)).returncode))
-    order = ["R3 closure", "R3 paper", "R4 Phase 0", "R4 Phase 1", "R4 Phase 2", "R1 registry", "R2 paper freeze", "README index", "links", "consolidation"]
+    order = ["R3 closure", "R3 paper", "R4 paper", "R4 Phase 0", "R4 Phase 1", "R4 Phase 2", "R1 registry", "R2 paper freeze", "README index", "links", "consolidation"]
     results.sort(key=lambda r: order.index(r[0]) if r[0] in order else len(order))
     print()
     for name, rc in results:
