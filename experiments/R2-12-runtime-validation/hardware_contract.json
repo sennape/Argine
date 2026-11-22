@@ -1,0 +1,44 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "fixed_identity_known_at_phase0": {
+    "model_identity": {
+      "model_path_windows": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf",
+      "name": "Qwen3-30B-A3B-Q4_K_M",
+      "quantization": "Q4_K_M",
+      "sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+      "sha256_source": "Reused verbatim from experiments/R2-11-predictive-retention/acquisition_plan.json.model_identity -- same canonical model used continuously since R2-08/R2-09A/R2-BRIDGE-01/R2-11. A different model would require a new R2-12 protocol version (section 8)."
+    },
+    "runtime_identity": {
+      "name": "llama-research-v2",
+      "sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+      "sha256_source": "Reused verbatim from experiments/R2-11-predictive-retention/acquisition_plan.json.runtime_identity."
+    },
+    "note": "Reused verbatim from R2-11; these are the only hardware/software identity fields already fixed at Phase-0 freeze time, since no runtime execution has occurred to probe live machine telemetry."
+  },
+  "fields_to_be_captured_and_stamped_at_first_real_run": {
+    "schema": [
+      "cpu_model",
+      "physical_ram_bytes",
+      "gpu_or_igpu",
+      "storage_device_hosting_expert_store",
+      "os_version",
+      "power_mode",
+      "runtime_binary_sha256",
+      "model_sha256"
+    ],
+    "method": "At the FIRST real pre-run-gate pass on the real host (the transition to R2_12_RUNTIME_READY, not performed in this Phase-0 freeze), the pre-run gate (see execution_plan.json) reads these fields from the live host and writes them into an additive HARDWARE-IDENTITY-STAMP.json record. That record becomes the frozen target hardware identity for the remainder of the campaign.",
+    "runtime_binary_sha256_must_equal": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+    "model_sha256_must_equal": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32"
+  },
+  "no_silent_hardware_change_rule": "Every subsequent run's pre-run gate re-reads cpu_model, physical_ram_bytes, gpu_or_igpu, storage_device_hosting_expert_store, os_version, and the two binary hashes, and compares them against HARDWARE-IDENTITY-STAMP.json. ANY mismatch fails the pre-run gate closed (abort that run, do not silently proceed). power_mode is checked against machine_state_contract.json's fixed_power_mode requirement, not against the stamp (it is a per-run control, not an identity field, but must still be fixed throughout).",
+  "new_protocol_version_required_if": [
+    "cpu_model changes",
+    "physical_ram_bytes changes materially (e.g. DIMM change)",
+    "gpu_or_igpu changes",
+    "storage_device_hosting_expert_store changes (e.g. different drive)",
+    "os_version changes (major update)",
+    "runtime_binary_sha256 changes",
+    "model_sha256 changes"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "anchor_commit": "ae25d2bc3c44827191f435939a29f4cf06a48e6f",
+  "artifact": "R3-02G-FREEZE",
+  "artifacts": {
+    "FEASIBILITY.json": "0872533dd9c8cfc995789ff89d9b4b0d9119a74eb1b64887d35bebcb19772f0b",
+    "PRECISION_SCALING.json": "c1b26718d67513244638b3f3ab1c37c9efaa739c3ae809b86114de4c93258243",
+    "PREREGISTRATION.json": "e025261e24b48b5d2efd9fcffae9d53516895de8f0e0aaae265b279ae50fc1bb",
+    "README.md": "548f5dfa638f5d52a345a0f31a7dab0d19851824278f4cd83f1c4eb362c3cb11",
+    "tests/test_design.py": "482f3c5c3da3429f301db75362389f2bdb98d7228f2b2890dabe29f3ca542472"
+  },
+  "chosen_N": 600,
+  "created_utc": "2026-11-18T22:19:28Z",
+  "expected_probability_pass": 0.907,
+  "no_model_loaded": true,
+  "phase": "R3-02G",
+  "protocol_digest": "f8d4b3199c4c74555353e5f796eaf7d7c3687da97883ee07f7d1c81233c9469c",
+  "sensitivity_probability_pass": 0.298,
+  "status": "PREREGISTRATION_FROZEN"
+}

@@ -1,0 +1,20 @@
+{
+  "artifact": "R2_11_LEAKAGE_CAUSALITY_AUDIT",
+  "generated_utc": "2026-11-14T09:40:00Z",
+  "tests_run": [
+    "tests/test_r2_11_causality.py",
+    "tests/test_r2_bridge01_leakage.py"
+  ],
+  "tests_passed": 11,
+  "tests_failed": 0,
+  "structural_enforcement": "argine.research2.r2_01.policy_interface.assert_causal() is called unconditionally inside run_fast() for every one of the 72 cells, raising PolicyInterfaceError if needs_future=True.",
+  "explicit_reconfirmation_this_step": {
+    "PredictedProtectPolicy.causal": true,
+    "PredictedProtectPolicy.needs_future": false,
+    "AgedFrequency.causal": true,
+    "AgedFrequency.needs_future": false,
+    "assert_causal_passed_for_both": true
+  },
+  "source_level_causality_confirmation": "_BaseBridgePolicy._refresh_prediction_after_observing() is invoked strictly AFTER the current access() event has been fully served inside access(); its resulting _predicted_next[layer] value is only consulted by a subsequent access() call on that layer, never the one that produced it -- confirmed by direct reading of argine/research2/r2_bridge01/retention_policies.py this step.",
+  "result": "PASS -- zero leakage/causality failures across all 72 cells."
+}

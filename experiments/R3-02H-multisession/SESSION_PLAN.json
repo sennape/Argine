@@ -1,0 +1,178 @@
+{
+  "artifact": "R3-02G-SESSION-PLAN",
+  "blocks_per_session": 30,
+  "counted_launches_per_session": 120,
+  "launches_total": 1200,
+  "pairs_per_session": 60,
+  "pairs_total": 600,
+  "schedule_digest": "ba7eb1b7e94f89ed1d5d02c4a9742f8307bc050860cc08fdd23aeae0832b5e40",
+  "session_table": [
+    {
+      "blocks": [
+        1,
+        30
+      ],
+      "first_block_orientation": "ABBA",
+      "first_launch": 1,
+      "last_launch": 120,
+      "launches": 120,
+      "pairs": [
+        1,
+        60
+      ],
+      "session": 1
+    },
+    {
+      "blocks": [
+        31,
+        60
+      ],
+      "first_block_orientation": "ABBA",
+      "first_launch": 121,
+      "last_launch": 240,
+      "launches": 120,
+      "pairs": [
+        61,
+        120
+      ],
+      "session": 2
+    },
+    {
+      "blocks": [
+        61,
+        90
+      ],
+      "first_block_orientation": "ABBA",
+      "first_launch": 241,
+      "last_launch": 360,
+      "launches": 120,
+      "pairs": [
+        121,
+        180
+      ],
+      "session": 3
+    },
+    {
+      "blocks": [
+        91,
+        120
+      ],
+      "first_block_orientation": "ABBA",
+      "first_launch": 361,
+      "last_launch": 480,
+      "launches": 120,
+      "pairs": [
+        181,
+        240
+      ],
+      "session": 4
+    },
+    {
+      "blocks": [
+        121,
+        150
+      ],
+      "first_block_orientation": "ABBA",
+      "first_launch": 481,
+      "last_launch": 600,
+      "launches": 120,
+      "pairs": [
+        241,
+        300
+      ],
+      "session": 5
+    },
+    {
+      "blocks": [
+        151,
+        180
+      ],
+      "first_block_orientation": "ABBA",
+      "first_launch": 601,
+      "last_launch": 720,
+      "launches": 120,
+      "pairs": [
+        301,
+        360
+      ],
+      "session": 6
+    },
+    {
+      "blocks": [
+        181,
+        210
+      ],
+      "first_block_orientation": "ABBA",
+      "first_launch": 721,
+      "last_launch": 840,
+      "launches": 120,
+      "pairs": [
+        361,
+        420
+      ],
+      "session": 7
+    },
+    {
+      "blocks": [
+        211,
+        240
+      ],
+      "first_block_orientation": "ABBA",
+      "first_launch": 841,
+      "last_launch": 960,
+      "launches": 120,
+      "pairs": [
+        421,
+        480
+      ],
+      "session": 8
+    },
+    {
+      "blocks": [
+        241,
+        270
+      ],
+      "first_block_orientation": "ABBA",
+      "first_launch": 961,
+      "last_launch": 1080,
+      "launches": 120,
+      "pairs": [
+        481,
+        540
+      ],
+      "session": 9
+    },
+    {
+      "blocks": [
+        271,
+        300
+      ],
+      "first_block_orientation": "ABBA",
+      "first_launch": 1081,
+      "last_launch": 1200,
+      "launches": 120,
+      "pairs": [
+        541,
+        600
+      ],
+      "session": 10
+    }
+  ],
+  "sessions": 10,
+  "warmups": [
+    {
+      "config_id": "A-4GiB",
+      "counted": false,
+      "n_predict": 512,
+      "policy": "A",
+      "warmup": 1
+    },
+    {
+      "config_id": "B-4GiB",
+      "counted": false,
+      "n_predict": 512,
+      "policy": "B",
+      "warmup": 2
+    }
+  ]
+}

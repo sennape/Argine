@@ -1,0 +1,34 @@
+{
+  "artifact": "R2-12-RUNTIME-BLOCKED-CAPABILITY",
+  "schema_version": 1,
+  "state": "R2_12_RUNTIME_BLOCKED_CAPABILITY",
+  "prior_state": "R2_12_RUNTIME_OPENED",
+  "state_machine_position": "additive side-branch opened after R2_12_RUNTIME_OPENED; does not advance R2_12_RUNTIME_OPENED -> R2_12_RUNTIME_COMPLETE; a separate conformance phase must complete and reach R2_12_RUNTIME_POLICY_CONFORMANCE_PASS before Session 1 execution may resume",
+  "parent_runtime_opened_commit": "2d85a36",
+  "discovery_context": "Immediately after R2_12_RUNTIME_OPENED (commit 2d85a36), before any warmup or counted run, independent investigation of the real execution path required by the operative Phase B handoff was performed. That investigation inspected: (1) argine/cli.py cmd_benchmark -- the only CLI path that performs real timed inference via the real llama-server.exe process (_run_common + benchmod.run_benchmark); it exposes no --policy/--retention/--eviction/--decay argument of any kind. (2) argine/cli.py cmd_experts -- the only CLI path with an args.policy parameter; confirmed to be simulation-only (its own log line reads 'simulazione: {tokens} token, policy={args.policy}...' and it calls a pure Python analytical cost model ec.simulate(...); it never starts llama-server.exe). (3) patches/argine-experts.cpp and patches/argine-experts.h -- the compiled C++ runtime patch. Its complete environment-variable surface is exactly: ARGINE_EXPERT_STORE, ARGINE_EXPERT_DIRECT, ARGINE_EXPERT_PRETOUCH, ARGINE_EXPERT_VERBOSE, ARGINE_EXPERT_READ, ARGINE_EXPERT_BUDGET, ARGINE_EXPERT_SHARDS. None of these select an eviction algorithm. There is no evict() function, no LRU/frequency/decay logic, no enum or function-pointer for pluggable policy anywhere in the patch -- only a hit/miss/eviction counter (st.evictions) for one fixed, hardcoded cache behavior.",
+  "finding": {
+    "statement": "the real compiled expert-store runtime currently exposes no configurable eviction/retention-policy mechanism",
+    "consequence": "the frozen conditions A = B_selected(M) and B = PredictedProtectPolicy using decayed_transition(decay=0.99) cannot currently produce different real runtime behavior",
+    "do_not_reinterpret_or_weaken": true
+  },
+  "python_only_constructs_confirmed": {
+    "command": "grep -rln \"AgedFrequency\\|PredictedProtectPolicy\\|decayed_transition\" --include=\"*.py\" . | grep -v \"/tests/\\|/research2/r2_09a/\\|/research2/r2_11/\\|/research2/r2_bridge01/\\|/research2/r2_12/\\|tools/r2_1\"",
+    "result": "only argine/research2/r2_10/predictors.py -- confirming these exact policy classes exist nowhere in the real runtime/CLI layer"
+  },
+  "campaign_state_at_time_of_this_artifact": {
+    "warmup_runs_executed": 0,
+    "counted_runs_executed": 0,
+    "benchmark_count": "0 / 120",
+    "tokens_per_second_result_exists": false,
+    "scientific_runtime_comparison_exists": false,
+    "runtime_performance_results_inspected": "NONE"
+  },
+  "scientific_validity_statement": "Running the current binary under the current fixed eviction behavior and tagging the output with different policy labels (A vs B) would be scientifically invalid: it would record identical real runtime behavior as if it reflected two distinct frozen retention policies, which it does not. This artifact exists specifically to prevent that outcome by stopping the campaign before any such run occurs.",
+  "frozen_policies_unaffected_reference": {
+    "A_B_selected_M": "verbatim from experiments/R2-12-runtime-validation/contract.json frozen_baseline -- unchanged, not reinterpreted, not retuned by this artifact",
+    "B_PredictedProtectPolicy": "verbatim from experiments/R2-12-runtime-validation/contract.json frozen_retention_policy / frozen_predictor -- unchanged, not reinterpreted, not retuned by this artifact"
+  },
+  "r2_12_phase0_contract_digest_reverified": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad",
+  "next_required_step": "Open a separate additive R2-12 runtime-policy realization/conformance phase: implement a genuine configurable eviction-policy mechanism in the real C++ runtime (implementation work only, no benchmark execution), build a deterministic cross-language Python/C++ conformance harness, and reach R2_12_RUNTIME_POLICY_CONFORMANCE_PASS before Session 1 / 4 GiB may resume.",
+  "stop_condition": "No warmup, no counted run, no benchmark, no tokens/s measurement, no scientific runtime comparison may occur until R2_12_RUNTIME_POLICY_CONFORMANCE_PASS is reached and separately committed."
+}

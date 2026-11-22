@@ -1,0 +1,10 @@
+{
+  "tournament_digest": "5b600d1451983dabafdfbd6ea6bfdc4c4c3bdcf9327c9ec4d57c25025759f847",
+  "components": {
+    "dev_corpus_manifest_digest": "f758b77492eebc38bc81ba22d6b06ab8f19138d1099b635821369a4d022d9398",
+    "baseline_manifest_digest": "8712b6b173e4e4427d1549527216c3db68c8d98f2578e5663bc08f57ca8849ca",
+    "rows_digest": "c727c91ecadcb5fd2972aa063e132aa8f00ac910ac590c8ef0686fe79837c6ae",
+    "selection_digest": "04f7ef69da142bf8df9fcab12927664e98b85c44e9a6f496b4f93514404b68cb",
+    "r2_09b_contract_digest": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28"
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "policy_labels": {
+    "A": "B_selected(M)",
+    "B": "PredictedProtectPolicy"
+  },
+  "within_cell_ordering": {
+    "scheme": "ABBA paired blocks, with the OPENING policy alternated deterministically across cells",
+    "sequence_if_opening_A": [
+      "A",
+      "B",
+      "B",
+      "A",
+      "A",
+      "B",
+      "B",
+      "A",
+      "A",
+      "B"
+    ],
+    "sequence_if_opening_B": [
+      "B",
+      "A",
+      "A",
+      "B",
+      "B",
+      "A",
+      "A",
+      "B",
+      "B",
+      "A"
+    ],
+    "note": "10 total runs per (workload,budget) cell: 5 A-runs (B_selected) and 5 B-runs (PredictedProtectPolicy). Within a cell, consecutive AB or BA pairs are temporally adjacent, canceling linear drift from thermals/background variation between the paired comparison. The OPENING policy of the ABBA block alternates deterministically across the 12 (workload,budget) cells (even cell_index opens with A, odd cell_index opens with B), specifically to avoid 'systematically always running one policy first' across the campaign as a whole, per section 13's explicit instruction -- a plain ABBA with a fixed opener would violate that instruction even though it is paired within a cell."
+  },
+  "cell_sequence_table": [
+    {
+      "cell_index": 0,
+      "workload_id": "r2-11-coding-v1",
+      "budget_gib": 4.0,
+      "opening_policy": "A",
+      "sequence": [
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B"
+      ]
+    },
+    {
+      "cell_index": 1,
+      "workload_id": "r2-11-coding-v1",
+      "budget_gib": 1.5,
+      "opening_policy": "B",
+      "sequence": [
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "cell_index": 2,
+      "workload_id": "r2-11-coding-v1",
+      "budget_gib": 8.0,
+      "opening_policy": "A",
+      "sequence": [
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B"
+      ]
+    },
+    {
+      "cell_index": 3,
+      "workload_id": "r2-11-instruction-v1",
+      "budget_gib": 4.0,
+      "opening_policy": "B",
+      "sequence": [
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "cell_index": 4,
+      "workload_id": "r2-11-instruction-v1",
+      "budget_gib": 1.5,
+      "opening_policy": "A",
+      "sequence": [
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B"
+      ]
+    },
+    {
+      "cell_index": 5,
+      "workload_id": "r2-11-instruction-v1",
+      "budget_gib": 8.0,
+      "opening_policy": "B",
+      "sequence": [
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "cell_index": 6,
+      "workload_id": "r2-11-reasoning-v1",
+      "budget_gib": 4.0,
+      "opening_policy": "A",
+      "sequence": [
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B"
+      ]
+    },
+    {
+      "cell_index": 7,
+      "workload_id": "r2-11-reasoning-v1",
+      "budget_gib": 1.5,
+      "opening_policy": "B",
+      "sequence": [
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "cell_index": 8,
+      "workload_id": "r2-11-reasoning-v1",
+      "budget_gib": 8.0,
+      "opening_policy": "A",
+      "sequence": [
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B"
+      ]
+    },
+    {
+      "cell_index": 9,
+      "workload_id": "r2-11-summarization-v1",
+      "budget_gib": 4.0,
+      "opening_policy": "B",
+      "sequence": [
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A"
+      ]
+    },
+    {
+      "cell_index": 10,
+      "workload_id": "r2-11-summarization-v1",
+      "budget_gib": 1.5,
+      "opening_policy": "A",
+      "sequence": [
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B"
+      ]
+    },
+    {
+      "cell_index": 11,
+      "workload_id": "r2-11-summarization-v1",
+      "budget_gib": 8.0,
+      "opening_policy": "B",
+      "sequence": [
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A",
+        "A",
+        "B",
+        "B",
+        "A"
+      ]
+    }
+  ],
+  "opening_policy_balance_check": {
+    "n_cells_opening_A": 6,
+    "n_cells_opening_B": 6,
+    "balanced": true
+  },
+  "across_cell_ordering": {
+    "outer_loop": "workload, in frozen runtime_corpus.json order: r2-11-coding-v1, r2-11-instruction-v1, r2-11-reasoning-v1, r2-11-summarization-v1",
+    "middle_loop": "budget_gib, in order: 4.0 (primary), 1.5 (stress), 8.0 (null/control)",
+    "inner_loop": "the 10-run sequence from cell_sequence_table above, preceded by 1 discarded warmup per policy (opening-policy warmup first, then the other) before the first counted run of that cell",
+    "note": "Workload/budget pair order itself is fixed, not randomized -- the within-cell alternating-opener ABBA scheme already addresses policy-order bias; there is no equivalent bias concern across cells that randomization would address, and a fixed order keeps the campaign log simplest to audit."
+  },
+  "frozen_before_execution": true,
+  "deterministic_no_rng_required": true
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "artifact": "R2-BRIDGE-01-PHASE0-PROVENANCE",
+  "generated_utc": "2026-11-13T22:00:00Z",
+  "repository_state_verified_before_contract_authored": {
+    "branch": "r2-main",
+    "head_full_sha": "e13d89f97ea50452d8e0605c2bbed1f4e4ce589f",
+    "head_matches_handoff_short_sha_e13d89f": true,
+    "working_tree_clean": true
+  },
+  "r2_10_closure_independently_reverified": {
+    "source_files": [
+      "experiments/R2-10-working-set-predictor/PHASE3L-FINAL-CLOSURE-RECORD.json",
+      "experiments/R2-10-working-set-predictor/PHASE3J-FINAL-INTERPRETATION.json",
+      "experiments/R2-10-working-set-predictor/PHASE3D-EVAL-RESULTS.json"
+    ],
+    "final_status": "R2-10 CLOSED",
+    "overlay_state": "EVAL_EVALUATED_CLOSED",
+    "r2_11_proposed": false,
+    "r2_11_started": false,
+    "selected_predictor_config_id": "decayed_transition/decay=0.99",
+    "eval_mean_recall_at_k_h1": 0.4498165836714136,
+    "dev_classification": "B (MEASURABLE_IMPROVEMENT_INSUFFICIENT_FOR_RETENTION)",
+    "eval_relationship_to_dev_classification": "SUPPORTED (not weakened or contradicted), not promoted to Category C"
+  },
+  "r2_09a_b_selected_independently_reverified": {
+    "source_file": "experiments/R2-09-prediction-benchmark/r2_09a/R2-09A-FREEZE.json",
+    "freeze_status": "FROZEN",
+    "outcome": "PASS",
+    "selected_baselines_by_budget": {
+      "1610612736": {"family_id": "aged_frequency", "config_id": "aged_frequency/decay=0.999,interval=1"},
+      "4294967296": {"family_id": "aged_frequency", "config_id": "aged_frequency/decay=0.99,interval=64"},
+      "8589934592": {"family_id": "aged_frequency", "config_id": "aged_frequency/decay=0.999,interval=16"}
+    }
+  },
+  "r2_09b_contract_independently_reverified": {
+    "source_file": "experiments/R2-09-prediction-benchmark/metrics_contract.json",
+    "primary_physical_replay_quantity": "miss_bytes",
+    "contract_digest_recomputed_and_matched": true
+  },
+  "r2_10_phase0_contract_independently_reverified": {
+    "contract_digest_recomputed_and_matched": true
+  },
+  "eval_manifest_status_at_authoring_time": {
+    "file": "experiments/R2-09-prediction-benchmark/eval_manifest.json",
+    "eval_visibility_state": "EVAL_LOCKED",
+    "note": "R2-BRIDGE-01 never opens this file's contents; its own corpus is entirely new (corpus_acquisition_contract.json)."
+  },
+  "no_frozen_artifact_mutated": "Confirmed via git status --porcelain before and after Phase-0 authoring: no file under experiments/R2-09-prediction-benchmark/ or experiments/R2-10-working-set-predictor/ was modified."
+}

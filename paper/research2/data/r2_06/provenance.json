@@ -1,0 +1,18 @@
+{
+  "binding": {
+    "candidate_status": "CANDIDATE",
+    "message": "bound to R2-01 PASS run bb6d8ca34dbc4537a43d54be30c9f3e1 (candidate_status=CANDIDATE), R2-04 PASS run cd2b58b019314fafb90304234e6d1907, and R2-05 PASS run da82e15b61c94019840477642618565a; trace identity re-verified byte-identical on disk.",
+    "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+    "r2_04_run_id": "cd2b58b019314fafb90304234e6d1907",
+    "r2_05_run_id": "da82e15b61c94019840477642618565a",
+    "status": "OK",
+    "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+    "trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1"
+  },
+  "canonical_digest": "a727edf42735286420d326baad481687167d3d0aba0444a527183c084140926e",
+  "nondeterminism": [],
+  "r2_05_bridge_run_id": "da82e15b61c94019840477642618565a",
+  "support_threshold_rationale": "Predeclared before any real R2-06 execution, based on sample-count, not observed-result, considerations: MIN_SOURCE_SUPPORT=30 (a source expert's outgoing row must have at least this many total transition observations to be included in headline/strong-transition summaries), MIN_PAIR_SUPPORT=10 (an individual (source, target) cell must have at least this many observations to be reported as a 'strong transition'). Both are conservative, widely-documented minimum-sample-size conventions, not tuned to any R2-06 result -- no real R2-06 canonical run has occurred at the time these constants were fixed. Raw per-cell data is never filtered by this rule; only headline/strong-transition SUMMARIES are.",
+  "synthesis_errors": [],
+  "transition_unit_definition": "One counted transition observation = one (source_expert_id, target_expert_id) pair contributed by one pair of CONSECUTIVE entries yielded by Trace.token_selections(layer, phase) for one layer (token-to-token, SAME layer; 'consecutive' = consecutive in the iterator's own yielded order, not consecutive token_index). Multi-expert selections are expanded via pairwise set-to-set counting: every expert i in the source selection paired with every expert j in the target selection, each pair counted once with weight 1 (never deduplicated). Cross-layer transitions are excluded from this unit entirely; layer visitation order is architectural, not a routing-structure transition."
+}

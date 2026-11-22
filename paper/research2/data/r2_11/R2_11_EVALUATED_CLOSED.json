@@ -1,0 +1,83 @@
+{
+  "artifact": "R2_11_EVALUATED_CLOSED",
+  "schema_version": 1,
+  "state": "R2_11_EVALUATED_CLOSED",
+  "generated_utc": "2026-11-14T09:45:00Z",
+  "git_head_at_generation": "01448a3bbccae135d61da26711967bd0bf6e7bd1",
+  "eval_opened_commit": "01448a3",
+  "eval_opened_record_reference": "experiments/R2-11-predictive-retention/R2_11_EVAL_OPENED.json",
+  "sealed_record_reference": "experiments/R2-11-predictive-retention/R2_11_CAPTURED_SEALED.json",
+  "phase0_contract_digest": "5dd3a3987aa74230693135d4ec20c5b8fd0a0de58a30b3b1646ccb2ce7b94f2a",
+  "phase0_contract_digest_reverified_unchanged_at_closure": true,
+  "no_code_modified_for_eval_scoring": "argine.research2.r2_09a.fast_replay.run_fast, argine.research2.r2_09a.policies.AgedFrequency, and argine.research2.r2_bridge01.retention_policies.PredictedProtectPolicy were used unmodified, reused verbatim from R2-09A/R2-BRIDGE-01. Only new code written for this phase: tools/r2_11_eval_runner.py (cell orchestration/persistence), tools/r2_11_determinism_audit.py (independent repeat-plan verification), tools/r2_11_aggregate.py (read-only aggregation of persisted cells) -- none of which implement or alter any scientific policy, predictor, or metric logic.",
+  "evaluation_matrix": {
+    "workloads": 12,
+    "budgets": 3,
+    "policies": 2,
+    "total_cells": 72,
+    "cells_computed": 72,
+    "cells_failed": 0
+  },
+  "classification": "R2_11_PASS",
+  "r2_12_gate_outcome": "R2-12 MAY BE PROPOSED FOR PROSPECTIVE RUNTIME VALIDATION.",
+  "r2_12_started": false,
+  "primary_4gib_mean_delta": -87476.85322895646,
+  "bootstrap_ci_95": [
+    -154123.32211349523,
+    -27178.93385517557
+  ],
+  "mean_delta_1_5gib": -779296.0626223087,
+  "mean_delta_8gib": 0.0,
+  "n_workloads_delta_le_0_at_4gib": "9/12",
+  "dominant_workload_fraction": 0.27626076260763255,
+  "budget_violations_total": 0,
+  "causal_leakage_failures": 0,
+  "determinism_checks_passed": true,
+  "scientific_validity_failure": false,
+  "closure_artifacts_written": [
+    "RAW-72-CELL-RESULTS.json",
+    "PER-WORKLOAD-COMPARISON.json",
+    "PER-CATEGORY-COMPARISON.json",
+    "PER-BUDGET-COMPARISON.json",
+    "PRIMARY-AGGREGATE.json",
+    "BOOTSTRAP-RESULT.json",
+    "MEMORY-CORRECTNESS-AUDIT.json",
+    "DETERMINISM-AUDIT.json",
+    "LEAKAGE-CAUSALITY-AUDIT.json",
+    "INSTRUMENTATION-AUDIT.json",
+    "DECISION-RULE-APPLICATION.json",
+    "FINAL-INTERPRETATION.json",
+    "R2_11_EVALUATED_CLOSED.json (this file)"
+  ],
+  "raw_cells_directory": "eval_cells/ (72 files)",
+  "tests_run_this_phase": {
+    "fast_suite": {
+      "files": 22,
+      "passed": 219,
+      "failed": 0
+    },
+    "test_r2_bridge01_memory_correctness": {
+      "passed": 3,
+      "failed": 0,
+      "elapsed_seconds": 92.06
+    },
+    "test_r2_bridge01_dev_runner_equivalence": {
+      "passed": 3,
+      "failed": 0,
+      "elapsed_seconds": 145.36
+    },
+    "total_passed": 225,
+    "total_failed": 0
+  },
+  "frozen_digests_reverified_unchanged": {
+    "r2_11_phase0_contract_digest": true,
+    "acquisition_plan_json_sha256_unchanged": true,
+    "eval_manifest_json_sha256_unchanged": true,
+    "eval_manifest_json_results_field_still_null": true,
+    "eval_manifest_json_modified": false
+  },
+  "r2_10_status_unchanged": true,
+  "r2_bridge01_status_unchanged": true,
+  "r2_12_requires_its_own_phase_0_protocol": true,
+  "final_r2_11_status": "R2_11_PASS -- R2-12 MAY BE PROPOSED FOR PROSPECTIVE RUNTIME VALIDATION."
+}

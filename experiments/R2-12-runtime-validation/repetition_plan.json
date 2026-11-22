@@ -1,0 +1,12 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "repetitions_per_cell": 5,
+  "justification": "Section 12 recommends at least 5 paired repetitions per workload/policy/budget absent a stronger power/variance rationale. 5 is adopted directly: it is the minimum the protocol itself recommends, keeps the total matrix (4x3x2x5=120 executions) manageable under the quality-over-size preference in section 24, and is sufficient to compute a paired mean and a bootstrap CI per workload/budget cell (and, pooled per section 14's workload-level aggregation, across the 4-workload primary aggregate).",
+  "warmup_runs_per_cell": 1,
+  "warmup_policy": "Exactly 1 warmup run per (workload, budget, policy) cell, executed and then DISCARDED before any of the 5 counted repetitions. The warmup brings the model fully resident, primes the runtime process, and lets any first-request JIT/initialization effects settle, so the 5 counted repetitions measure steady-state behavior only. Warmup runs are never included in any statistic and are recorded separately (tagged warmup=true) for provenance, never silently omitted from the record.",
+  "repetition_count_is_frozen": "This count (5) must not be changed after inspecting any performance result, per section 12's explicit instruction. Any change requires a new, separately frozen adaptive rule authored BEFORE the change, not a post-hoc adjustment.",
+  "total_counted_executions": "4 workloads x 3 budgets x 2 policies x 5 repetitions = 120",
+  "total_warmup_executions": "4 workloads x 3 budgets x 2 policies x 1 warmup = 24 (discarded, not part of the 120)",
+  "grand_total_process_launches": 144
+}

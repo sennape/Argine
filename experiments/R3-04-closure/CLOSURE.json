@@ -1,0 +1,251 @@
+{
+ "answers": {
+  "P_beats_A": "NO (P slower by 15.83 ms/token, 3.0%)",
+  "retention_improves_P_vs_S": "NO (P-S +1.24 ms/token, CI contains 0)",
+  "retention_recovers_cost": "NO"
+ },
+ "artifact": "R3-04-CLOSURE",
+ "claim_boundaries": "experiments/R3-04-final-evidence/CLAIM_BOUNDARIES.md",
+ "control_8GiB_descriptive": {
+  "P_minus_A_ms_per_token": {
+   "half_width": 2.256653924084149,
+   "hi": 22.37943891757373,
+   "lo": 17.866131069405434,
+   "mean": 20.12278499348958,
+   "n_blocks": 6,
+   "sd": 2.1503499960300765,
+   "se": 0.8778767097782534,
+   "t": 2.570581835636313
+  },
+  "P_minus_S": {
+   "half_width": 1.703807915552084,
+   "hi": 2.1559755587812486,
+   "lo": -1.2516402723229194,
+   "mean": 0.45216764322916464,
+   "n_blocks": 6,
+   "sd": 1.6235468386807974,
+   "se": 0.6628102213794448,
+   "t": 2.570581835636313
+  },
+  "S_minus_A": {
+   "half_width": 1.9930041486326422,
+   "hi": 21.66362149889306,
+   "lo": 17.677613201627775,
+   "mean": 19.670617350260418,
+   "n_blocks": 6,
+   "sd": 1.8991199391991123,
+   "se": 0.7753124685638731,
+   "t": 2.570581835636313
+  },
+  "arm_stats": {
+   "A": {
+    "ms_per_token": {
+     "mean": 116.47434749348959,
+     "median": 116.9464697265625,
+     "sd": 1.695243265066609
+    },
+    "n_launches": 12,
+    "tokens_per_second": {
+     "mean": 8.587282408637877,
+     "median": 8.550920918804369,
+     "of_mean_ms": 8.585581473687979,
+     "sd": 0.12749700414724333
+    }
+   },
+   "P": {
+    "ms_per_token": {
+     "mean": 136.59713248697918,
+     "median": 137.201990234375,
+     "sd": 1.830103871668886
+    },
+    "n_launches": 12,
+    "tokens_per_second": {
+     "mean": 7.322021269313077,
+     "median": 7.288524558940258,
+     "of_mean_ms": 7.32079789519244,
+     "sd": 0.09962080204990353
+    }
+   },
+   "S": {
+    "ms_per_token": {
+     "mean": 136.14496484375,
+     "median": 136.465541015625,
+     "sd": 2.1846243486336596
+    },
+    "n_launches": 12,
+    "tokens_per_second": {
+     "mean": 7.346870991810331,
+     "median": 7.327858236951371,
+     "of_mean_ms": 7.345111889724852,
+     "sd": 0.1196156665225631
+    }
+   }
+  },
+  "cost_ratio_fieller": {
+   "bounded": true,
+   "classification": "EXPLAINED",
+   "cov_means_OP": 0.031749164802644565,
+   "df": 5,
+   "g": 4.9603400712328844e-05,
+   "hi": 0.9657534962344555,
+   "lo": 0.7952991879153162,
+   "mean_O": 19.670617350260418,
+   "mean_P": 22.330050260416666,
+   "n_blocks": 6,
+   "rho": 0.8809034068825861,
+   "t": 2.570581835636313,
+   "var_mean_O": 0.6011094239106066,
+   "var_mean_P": 0.003743070303867741
+  },
+  "n_blocks": 6
+ },
+ "freezes": {
+  "amendment": {
+   "commit": "ec54b83",
+   "sha256": "ea0d6719f6d4f92dd77b597662ea3903bc22db70647e37dd8b4cf9ec06c9b3f6"
+  },
+  "final_evidence": {
+   "commit": "0f72427",
+   "sha256": "71fca58e65853c325ba7622d7565e51be85a54f46394de8d4f4ee2e0753adfa2"
+  },
+  "gate1": {
+   "commit": "d7e8f38",
+   "sha256": "6379572091345e38f130a62a18d9fd5acdaef673f92439c44ff2bea8de8d6f42"
+  },
+  "gate2": {
+   "commit": "7657934",
+   "sha256": "59fd7ac62242e8d126f6a8d7b6b31586b82119f9f8afccd5af20ded9237b2958"
+  },
+  "opening": {
+   "commit": "cf8b4f7",
+   "sha256": "3f6ea9b05c4c6d4784a6d6570f7f5a0fc81b3d94025fa5b10ba0bcfa7d97968d"
+  },
+  "protocol": {
+   "commit": "4a0aa2d",
+   "sha256": "a88359b52891f93ec49e67978d92c2eb3b73db588611bce46b3103b2978c1202"
+  }
+ },
+ "other_commits": {
+  "driver_tooling": "a3482a7",
+  "gate2_helper_tooling": "2345808",
+  "gate3_tooling": "5704a8c",
+  "test_fix": "45fdbd6"
+ },
+ "primary_1.5GiB": {
+  "P_minus_A_ms_per_token": {
+   "half_width": 5.366620042165749,
+   "hi": 21.193374056922686,
+   "lo": 10.460133972591187,
+   "mean": 15.826754014756936,
+   "n_blocks": 18,
+   "sd": 10.791768144296567,
+   "se": 2.5436441452750223,
+   "t": 2.1098155778333147
+  },
+  "P_minus_S": {
+   "half_width": 4.076626407217133,
+   "hi": 5.315331919369921,
+   "lo": -2.8379208950643453,
+   "mean": 1.2387055121527877,
+   "n_blocks": 18,
+   "sd": 8.197712275499539,
+   "se": 1.9322193134073091,
+   "t": 2.1098155778333147
+  },
+  "S_minus_A": {
+   "half_width": 4.719173468593284,
+   "hi": 19.307221971197432,
+   "lo": 9.868875034010866,
+   "mean": 14.588048502604149,
+   "n_blocks": 18,
+   "sd": 9.48981398079786,
+   "se": 2.2367706060070245,
+   "t": 2.1098155778333147
+  },
+  "arm_stats": {
+   "A": {
+    "ms_per_token": {
+     "mean": 526.9731852213541,
+     "median": 524.8057392578125,
+     "sd": 15.19220823259189
+    },
+    "n_launches": 36,
+    "tokens_per_second": {
+     "mean": 1.8991620948631482,
+     "median": 1.9054686842062054,
+     "of_mean_ms": 1.897629761901361,
+     "sd": 0.0547009896076959
+    }
+   },
+   "P": {
+    "ms_per_token": {
+     "mean": 542.7999392361112,
+     "median": 544.107755859375,
+     "sd": 13.757264180711402
+    },
+    "n_launches": 36,
+    "tokens_per_second": {
+     "mean": 1.8434568209494755,
+     "median": 1.8378712474352792,
+     "of_mean_ms": 1.8422993956250473,
+     "sd": 0.04699582768973656
+    }
+   },
+   "S": {
+    "ms_per_token": {
+     "mean": 541.5612337239584,
+     "median": 540.325390625,
+     "sd": 13.254635036343705
+    },
+    "n_launches": 36,
+    "tokens_per_second": {
+     "mean": 1.8475951946000453,
+     "median": 1.8507366477529223,
+     "of_mean_ms": 1.846513261526608,
+     "sd": 0.045491298459261816
+    }
+   }
+  },
+  "n_blocks": 18,
+  "pairwise": {
+   "P-A": {
+    "ms_per_token_abs": 15.826754014757057,
+    "ms_per_token_rel_pct": 3.003331945269484,
+    "tps_abs": -0.05570527391367275,
+    "tps_rel_pct": -2.9331500488738893
+   },
+   "P-S": {
+    "ms_per_token_abs": 1.2387055121528192,
+    "ms_per_token_rel_pct": 0.22872861553162896,
+    "tps_abs": -0.004138373650569793,
+    "tps_rel_pct": -0.22398703258511565
+   },
+   "S-A": {
+    "ms_per_token_abs": 14.588048502604238,
+    "ms_per_token_rel_pct": 2.7682715006602385,
+    "tps_abs": -0.051566900263102955,
+    "tps_rel_pct": -2.715244812571871
+   }
+  }
+ },
+ "primary_classification": "NET_LOSS",
+ "r3_05_input": {
+  "measured_predictor_cost_ms_per_token_1.5GiB": 14.588048502604149,
+  "net_gap_ci": [
+   10.460133972591187,
+   21.193374056922686
+  ],
+  "net_gap_to_break_even_ms_per_token": 15.826754014756936,
+  "policy_counter_cost_ms_per_token_1.5GiB": 23.604276025390625,
+  "quantitative_target": "Reduce the S/P incremental wall cost over A at 1.5 GiB from ~14.6 ms/token (policy counters ~23.6) to below the maximum recoverable retention benefit (<=0.57 ms/token by Gate 2 replay), i.e. >=96% reduction (>=~14 ms/token, >=~15.3 ms/token to beat A by margin only if retention benefit is real); otherwise retention cannot yield a net win in this runtime.",
+  "replay_max_wall_benefit_ms_per_token_1.5GiB": 0.57,
+  "retention_recovery_ms_per_token_1.5GiB": -1.2387055121527877
+ },
+ "runtime_identity": {
+  "driver_sha256": "3abf28d6b267aec50dff936fd5a9f840cc9039f4e1c549d292b3f09b64f4c26d",
+  "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+  "runtime_sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5",
+  "store_sha256": "fef943ae0bc017864a47d41c1fc90d422016045f7e8705b1d138b7defd8c5146"
+ },
+ "status": "R3_04_CLOSED_NET_LOSS"
+}

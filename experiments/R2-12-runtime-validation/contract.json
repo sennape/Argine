@@ -1,0 +1,122 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "phase": "R2-12 Phase 0 -- design/audit/freeze (no execution)",
+  "primary_scientific_question": "Does PredictedProtectPolicy, using the frozen decayed_transition predictor (decay=0.99), produce a measurable real-runtime benefit relative to B_selected(M) on the target consumer hardware, while preserving output equivalence and memory correctness? No speedup is assumed; R2-12 is the first phase where a runtime-performance claim may potentially be supported, and only if the frozen decision rule's conditions are met.",
+  "justification_for_existence": "R2-12 is justified prospectively ONLY by the new R2-11 PASS evidence (classification R2_11_PASS, commit 0ccd36d, r2_12_gate: 'R2-12 MAY BE PROPOSED FOR PROSPECTIVE RUNTIME VALIDATION'). It does not revisit, reinterpret, or re-run any retention-selection question: the predictor and policy are frozen inputs here, not outputs.",
+  "upstream": {
+    "r2_10_status": "CLOSED / Category B (unchanged, not reinterpreted)",
+    "r2_10_original_r2_11_decision": "NOT PROPOSED under the original R2-10 frozen rules (unchanged, not reinterpreted)",
+    "r2_bridge01_status": "CLOSED / BRIDGE_POSITIVE (unchanged, not reinterpreted)",
+    "r2_11_phase0_contract_digest": "5dd3a3987aa74230693135d4ec20c5b8fd0a0de58a30b3b1646ccb2ce7b94f2a",
+    "r2_11_eval_opened_commit": "01448a3",
+    "r2_11_closure_commit": "0ccd36d",
+    "r2_11_classification": "R2_11_PASS (unchanged, not reinterpreted)",
+    "r2_11_r2_12_gate_text": "R2-12 MAY BE PROPOSED FOR PROSPECTIVE RUNTIME VALIDATION."
+  },
+  "frozen_predictor": {
+    "family": "decayed_transition",
+    "decay_factor": 0.99,
+    "no_retuning": true,
+    "no_predictor_tournament": true
+  },
+  "frozen_retention_policy": {
+    "name": "PredictedProtectPolicy",
+    "no_policy_tournament": true,
+    "no_reselection": true
+  },
+  "frozen_baseline": {
+    "name": "B_selected(M)",
+    "never_reselect": true,
+    "mapping_by_budget_bytes": {
+      "1610612736": {
+        "budget_gib": 1.5,
+        "config_id": "aged_frequency/decay=0.999,interval=1",
+        "family_id": "aged_frequency",
+        "params": {
+          "aging_interval_steps": 1,
+          "decay_factor": 0.999,
+          "decay_form": "exponential_step_decay"
+        }
+      },
+      "4294967296": {
+        "budget_gib": 4.0,
+        "config_id": "aged_frequency/decay=0.99,interval=64",
+        "family_id": "aged_frequency",
+        "params": {
+          "aging_interval_steps": 64,
+          "decay_factor": 0.99,
+          "decay_form": "exponential_step_decay"
+        }
+      },
+      "8589934592": {
+        "budget_gib": 8.0,
+        "config_id": "aged_frequency/decay=0.999,interval=16",
+        "family_id": "aged_frequency",
+        "params": {
+          "aging_interval_steps": 16,
+          "decay_factor": 0.999,
+          "decay_form": "exponential_step_decay"
+        }
+      }
+    },
+    "source": "experiments/R2-11-predictive-retention/baseline_mapping.json, reused verbatim, unmodified."
+  },
+  "model_identity": {
+    "model_path_windows": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf",
+    "name": "Qwen3-30B-A3B-Q4_K_M",
+    "quantization": "Q4_K_M",
+    "sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+    "sha256_source": "Reused verbatim from experiments/R2-11-predictive-retention/acquisition_plan.json.model_identity -- same canonical model used continuously since R2-08/R2-09A/R2-BRIDGE-01/R2-11. A different model would require a new R2-12 protocol version (section 8)."
+  },
+  "runtime_identity": {
+    "name": "llama-research-v2",
+    "sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+    "sha256_source": "Reused verbatim from experiments/R2-11-predictive-retention/acquisition_plan.json.runtime_identity."
+  },
+  "deterministic_generation_conditions": {
+    "seed": 42,
+    "temperature": 0.0,
+    "top_k": 1,
+    "context": 4096,
+    "n_predict": 512,
+    "note": "Identical to the conditions used throughout R2-09A/R2-BRIDGE-01/R2-11; required unchanged by the output-equivalence requirement (section 7)."
+  },
+  "component_files": [
+    "contract.json",
+    "runtime_metrics.json",
+    "decision_rules.json",
+    "hardware_contract.json",
+    "machine_state_contract.json",
+    "run_order.json",
+    "runtime_corpus.json",
+    "repetition_plan.json",
+    "statistical_analysis.json",
+    "instrumentation_contract.json",
+    "output_equivalence.json",
+    "execution_plan.json",
+    "state_machine.json",
+    "provenance.json",
+    "audit.json",
+    "README.md"
+  ],
+  "hard_restrictions_this_phase": [
+    "Do NOT run runtime benchmarks.",
+    "Do NOT measure tokens/s experimentally.",
+    "Do NOT open R2-12 runtime (no R2_12_RUNTIME_OPENED record).",
+    "Do NOT change the frozen predictor.",
+    "Do NOT change PredictedProtectPolicy.",
+    "Do NOT change B_selected(M).",
+    "Do NOT change any historical R2-11 result.",
+    "Do NOT claim a runtime speedup.",
+    "Do NOT start Research 3.",
+    "Stop after Phase-0 freeze at R2_12_PROTOCOL_FROZEN."
+  ],
+  "scope_control": {
+    "no_new_policy_selection": true,
+    "no_new_predictor_selection": true,
+    "no_changing_policy_based_on_runtime_results": true,
+    "note": "R2-12 measures the already-frozen predictor/policy's real-runtime behavior; it must never become a second retention-selection study."
+  },
+  "contract_digest": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad"
+}

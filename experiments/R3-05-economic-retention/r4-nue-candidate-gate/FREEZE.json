@@ -1,0 +1,31 @@
+{
+ "artifact": "R3-05-R4-FREEZE",
+ "authorizes": "Nothing model-bearing. Cost measurement (a separate rung/prompt) only if the classification is R3_05_NUE_MECHANISM_PASS.",
+ "canonical_stream_sha256": "24fcc3e31e800826acb353c627326d4665af7b05c88a3138b18b79c5c435e776",
+ "events": 24672,
+ "files_sha256": {
+  "CANDIDATE_SELECTION.json": "68848951f66d764da9bf044cfa837700070493f7ae8e1049442b14a714192651",
+  "CLAIM_BOUNDARIES.md": "7a005b2e2a0f8f949eef19eccde009e80fde0a472e3f18e6fcd326dd61b7e976",
+  "DEV_RESULTS.json": "b5e5f26e88e5b0b733020698d9c57f54790669f40e00e36e22ec6cf71845b03e",
+  "EVAL_RESULTS.json": "72d3c50e53f95c6537448e5e05d768d8a4a5cd02932cd5890362e3e2e005f0ac",
+  "HEADROOM_CAPTURE.json": "78d681f5715ceae45934412b1103fbb1b5d46553f22da734f01b095fccc732ae",
+  "K4_DECISION.json": "8267dc1cc9f5f8b4537521b9ead688d8ed3ba6b540c4c7530ca15f90fe12e987",
+  "K5_DECISION.json": "e63ff54cc54c7473e439255c5be6d48cff9530afaeb085070221d838b718c83c",
+  "NUE_DEFINITION.md": "cbb9f9cc46a4351784bed79954b2d4339650d174c93fdc8cd753686b48bffb6d",
+  "README.md": "aa1b0c0a71824564c4ca4594e02c5f5a12ed8e93d53047db364a38934a4208c8",
+  "SOURCE_IDENTITY.json": "fad463e8d9dc29fe7d6687a1e3a41a3d1be8ce08133b39059a4fb1f24b089c54",
+  "SYNTHETIC_CASES.json": "51f2b7af1769564557925f5a3f177c2b7696b6ca1fa7438a20dcc157b7e90cea",
+  "r4.py": "4c11e34a86181947cb6c9a9219d88b08f1b7ea9ed9c7bd9fb531fa49fd75b0ee",
+  "tests/test_r4.py": "1b972d8a139eb9154662861fd5eef4df39cb356882b55c641101d2e680ab7428"
+ },
+ "freeze_sha256": "3f52a06eeec6f581be8d0659071b0de0dc9412849de3d10b6bd175cf8231b478",
+ "k5": "R3_05_K5_NUE_LO_NOT_SUFFICIENT",
+ "overall": "R3_05_PREDICTIVE_RETENTION_KILLED",
+ "passes": 514,
+ "phase0_freeze_sha256": "415f78a850a2917a2457797106589433f944c07a863f80b14cef88fde6232ae3",
+ "r1_freeze_sha256": "8d025fdfb3d2a48c54e4d905f3a0e3aad2dd70ed9fdabf602b21ec2b600c3382",
+ "r2_freeze_sha256": "8b22e41505e3c14b78b6c924b703f1da4b26643123a9240f7bd9ad7d232afa44",
+ "r3_freeze_sha256": "1993adfa510bc792878fadf26ff3044fb5d7cc1c88d8ab37211271c19266e7b6",
+ "selected_variant": "LEX",
+ "token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa"
+}

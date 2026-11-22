@@ -1,0 +1,99 @@
+{
+ "artifact": "R3-03A-IMPLEMENTATION",
+ "build_only_ui_asset_workaround": {
+  "action": "copied dist/, dist.tar.gz, dist.tar.gz.sha256 and .ui-stamp from the frozen build's tools/ui into build-r3-03a/tools/ui",
+  "reason": "first attempt stopped at ninja 143/211 (tools/ui asset provisioning): the current upstream 'latest' UI archive lacks bundle[hash].js/.css and workbox[hash].js",
+  "result": "UI stamp matched; gzip applied; 70 assets embedded; build exit 0",
+  "scientific_status": "build-only; UI assets are not scientific runtime source and cannot affect policy/prediction/IO paths"
+ },
+ "design": {
+  "fail_closed": "a second policy event for the same (pass, layer) is refused before any policy state changes",
+  "identity": "psx_semantic_event_tracker (structural, layer/kind-mask based; pass advances when layer <= previous)",
+  "legacy_path": "PSX_NO_SEMANTIC_EVENT sentinel keeps the old entry point byte-compatible",
+  "physical_vs_semantic": "gate/up/down physical ensure/pins unchanged; policy/prediction state advanced only at the first node of a semantic event; follow-up nodes are physical-only (no policy access, no eviction)",
+  "trace": "additive semantic_event block {schema r3-03a-v1, pass, layer, node_kind, first_node}; legacy rows unchanged"
+ },
+ "event_semantics": {
+  "new": "one policy access per (forward pass, MoE layer) over the union expert set = 48 per decode token (R2 definition)",
+  "old": "one policy->access() per MUL_MAT_ID node (gate/up/down) = 3 per (pass,layer), 144 per decode token"
+ },
+ "files_sha256": {
+  "experiments/R3-03A-runtime-semantic-correction/FROZEN_TRIPLET_REPLAY_B-4GiB.json": "6e889607e10ae3c9d30ed82782e8cf12c6669bcbb09c4cb5eb27ae285be9ec90",
+  "experiments/R3-03A-runtime-semantic-correction/replay_frozen_triplets.py": "94fd3619c10db5c634960e314bd0e59ecbb6aa30d0d59f4f464b7b2f2c9699bb",
+  "experiments/R3-03A-runtime-semantic-correction/tests/test_semantic_correction.py": "2c7608ebb7b1a8de145278acd233f3c4ac022ce26bc02a97ef26e22f70875a46",
+  "patches/argine-experts.cpp": "af954d3cc2e14d6338a38c7b7330269f114db8963304935615b38211c69e8185",
+  "patches/argine-semantic-event-test.cpp": "925d2b79e338b8ee5bdc556e3cb66b0c1f470481dda7d308bfbc4c6fd8cda905",
+  "patches/argine-store.cpp": "2a01d3b6dc53fe04ec1edd440446b897523342428ff3e35df5cb3ae4243045b5",
+  "patches/argine-store.h": "ce8e792270a457b2c30ee37cdabf7c2461b6f7028b2f3c01f0234faa0527cdde",
+  "tools/r3_03a_conformance.py": "ca4b9b6fb45b95be62233ba5dcdb8acf571887e7a67285a1b6298fff41cec019"
+ },
+ "frozen_runtime_source_sha256_for_modified_files": {
+  "argine-experts.cpp": "938187bc428225ce5b90ad27fe10e6c48156cdcf979fe13e67aee11cde49c468",
+  "argine-store.cpp": "8a88d34e523a708c4f473ead9e93ce05a60aa38f66953a31196a0ae59625a6b1",
+  "argine-store.h": "b5c16ec628844617b119ee6a460b4fc9038f1c0847907c94e2a588779344d571"
+ },
+ "line_ending_note": "frozen build-tree copies are CRLF; repo blobs are LF and content-identical after CR normalization (verified: 0 differing lines for the 3 modified files at HEAD)",
+ "no_claims": [
+  "no timing evidence",
+  "no R3-03 success",
+  "no runtime conformance claim"
+ ],
+ "offline_evidence": {
+  "conformance_analyser": "tools/r3_03a_conformance.py analyse_trace tested offline incl. negative cases (duplicate, missing event, legacy 3x, tampered eviction)",
+  "cpp_selftest": "RISULTATO OK: 0 fallimenti",
+  "frozen_triplet_replay": {
+   "frozen_R2_vs_cpp_mirror_identical_events": "24672/24672",
+   "frozen_R2_vs_logged_original_protected_before_identical": "1845/24672 (7.48%), first divergence event 48",
+   "layers": 48,
+   "passes": 514,
+   "physical_rows": 74016,
+   "ratio": 3.0,
+   "semantic_events": 24672
+  },
+  "r3_03a_tests": "14 passed, 27 subtests"
+ },
+ "parent_freezes": {
+  "event_semantics_audit_freeze_sha256": "ad6f8a4292fa59929ce80da48cea8755fac53f26167e93c41ccc2d7d0d768834",
+  "r3_02g_closure_freeze_sha256": "66a32a91f26664e01bc3167073f16e49685fff5d15b0b7d58fb82342e489d4dc"
+ },
+ "parent_head": "2c00becc749615c874aec9fb9be6eabfd243f4cf",
+ "regression_summary": "NO GENUINE R3-03A RUNTIME REGRESSION WAS IDENTIFIED (see REGRESSION_CLASSIFICATION.json)",
+ "runtime_identity": {
+  "evidence_source": "complete host output pasted by the user (not independently re-hashed by the agent; the new tree is not mounted in the agent workspace)",
+  "new_runtime": {
+   "build_exit_code": 0,
+   "build_status": "SUCCESS",
+   "bytes": 12435456,
+   "committed_to_git": false,
+   "compiler": "MSVC 19.44.35229.0 for Windows AMD64",
+   "final_step": "[62/62] Linking CXX executable bin\\llama-server.exe",
+   "llama_cpp_commit": "254b177307b14d055bbe4c050c9c441a1e06d8a4",
+   "path": "C:\\Users\\alpel\\Desktop\\Argine4-r3build-r3-03a\\llama.cpp\\build-r3-03a\\bin\\llama-server.exe",
+   "sha256": "e935005e5131b29d12b113b000fa52e798b4b4419a23724ec70af3f6875fcd76",
+   "version": "version: 0.5.0-dev (build 1, commit 254b177)"
+  },
+  "old_frozen_runtime": {
+   "path": "C:\\Users\\alpel\\Desktop\\Argine4-r3build\\llama.cpp\\build\\bin\\llama-server.exe",
+   "preserved": true,
+   "recheck": "SHA-256 re-hashed on the host after the new build: unchanged (user-reported)",
+   "sha256": "3f094f5b5f4963f488b63722f365068f09e2aa3b12e2096969da99f471bbd644"
+  },
+  "old_sha_differs_from_new_sha": true
+ },
+ "runtime_relevant_regressions": {
+  "R3-00A/01/02/02A/02G/02G-precision/02H": "158 passed, 1 skipped together with R3-03A and R3-03 audit (2 historical-source failures by design)",
+  "tests/test_argine.py": "287 passed",
+  "tests/test_r2_12_*": "165 passed"
+ },
+ "status": "R3_03A_SEMANTIC_CORRECTION_IMPLEMENTED_OFFLINE",
+ "unchanged_argine_sources_keep_frozen_hash": [
+  "argine-experts.h",
+  "argine-research.cpp",
+  "argine-research.h",
+  "argine-retention-policy.cpp",
+  "argine-retention-policy.h"
+ ],
+ "unresolved": [
+  "real-model semantic conformance not executed (tools/r3_03a_conformance.py prepared)"
+ ]
+}

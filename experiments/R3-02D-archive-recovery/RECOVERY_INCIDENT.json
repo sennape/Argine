@@ -1,0 +1,65 @@
+{
+  "admission_file_present": false,
+  "archive": {
+    "bytes": 1566236582,
+    "mtime_utc": "2026-11-18T00:30:19Z",
+    "path": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-02-p4\\traces\\A-8GiB.zst",
+    "sha256": "dc6b6056eed0bb64eb2dc13f17ef0cf9f364c30fe10a0f7bf668ac0423a9edb7"
+  },
+  "artifact": "R3-02D-RECOVERY-INCIDENT",
+  "attempts": 2,
+  "created_utc": "2026-11-18T05:46:00Z",
+  "error": "[Errno 28] No space left on device",
+  "free_bytes": 24198582272,
+  "launch_32_state": {
+    "attempts": 2,
+    "error": "[Errno 28] No space left on device",
+    "status": "FAILED"
+  },
+  "note": "ENOSPC incident preserved; no state was modified before this artifact was written",
+  "phase": "R3-02D",
+  "progress": {
+    "admissions": 51,
+    "cells": 20,
+    "records": 32,
+    "trace_zstd": 5
+  },
+  "raw": {
+    "bytes": 30941123714,
+    "mtime_utc": "2026-11-18T00:10:44Z",
+    "path": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-02-p4\\traces\\A-8GiB.jsonl",
+    "sha256": "a598543f1e6df6f8767361c6d34fae23879e28d661077edbde612f33e8495901"
+  },
+  "record": {
+    "archive_path_in_record": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-02-p4\\traces\\A-8GiB.jsonl",
+    "archive_storage_present": false,
+    "budget_bytes": 8589934592,
+    "counters": {
+      "budget_violations": 0,
+      "completion_rows": 74016,
+      "decision_rows": 74016,
+      "expert_bytes_read": 42229997568,
+      "expert_evictions": 11725,
+      "expert_hits": 589938,
+      "expert_miss_bytes": 42229997568,
+      "expert_miss_count": 14718,
+      "expert_read_count": 44154,
+      "hit_expert_events": 589938,
+      "max_step": 74015,
+      "miss_expert_events": 14718,
+      "requested_expert_events": 604656,
+      "resident_bytes_peak": 8589901824,
+      "slices_per_expert": 3,
+      "trace_budget_bytes": 8589934592
+    },
+    "mode": "TRACE_COUNT",
+    "output_token_count": 512,
+    "output_token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa",
+    "path": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-02-p4\\records\\trace_count-A-8GiB.json",
+    "policy_id": "b_selected",
+    "scientific_status": "CELL_READY",
+    "telemetry_status": "COMPLETE",
+    "trace_sha256": "a598543f1e6df6f8767361c6d34fae23879e28d661077edbde612f33e8495901"
+  },
+  "run_dir": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-02-p4"
+}

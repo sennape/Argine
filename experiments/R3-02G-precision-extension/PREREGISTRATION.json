@@ -1,0 +1,59 @@
+{
+  "artifact": "R3-02G-PREREGISTRATION",
+  "contamination_boundaries": [
+    "no reuse of the five pilot pairs",
+    "no endpoint or estimator change",
+    "no trimming or pooling",
+    "no optional stopping"
+  ],
+  "cooldowns_seconds": {
+    "adjacent": 15,
+    "block": 60
+  },
+  "cost_model_gate": "if PRECISION_EXTENSION_PASS then successor classification may allow COST_MODEL_DESIGN_ALLOWED",
+  "created_utc": "2026-11-18T22:19:28Z",
+  "endpoint": "step_time = decode_duration_seconds / tokens_generated",
+  "failure_rule": "CI half-width > threshold => PRECISION_EXTENSION_FAIL; no re-run, no N increase",
+  "identity": "R3-02G-PRECISION-EXTENSION",
+  "inherited_frozen_evidence": {
+    "condition_failed": 6,
+    "conditions_passed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      7
+    ],
+    "no_new_trace": true,
+    "r3_02_classification": "MECHANISM_INSUFFICIENT",
+    "r3_02_protocol_digest": "f8d4b3199c4c74555353e5f796eaf7d7c3687da97883ee07f7d1c81233c9469c",
+    "trajectory_equality": "established at 4 GiB"
+  },
+  "new_evidence": {
+    "budget_bytes": 4294967296,
+    "pairs": 600,
+    "policy_a": "b_selected",
+    "policy_b": "predicted_protect_sham",
+    "type": "TIMING"
+  },
+  "objective": "independently test the same 4-GiB precision condition with N=600 fresh counted pairs",
+  "pairing": "paired B - A within each block, both pairs of the block",
+  "phase": "R3-02G",
+  "precision_threshold": "1% of the extension's median b_selected step time",
+  "run_order": {
+    "blocks": "A,B,B,A then B,A,A,B alternating",
+    "fixed": true,
+    "no_optional_stopping": true,
+    "pairs_per_block": 2,
+    "total_blocks": 300
+  },
+  "seeds": {
+    "bootstrap": 20261116,
+    "draws": 10000
+  },
+  "statistic": "median paired difference; 95% percentile bootstrap CI",
+  "status": "FROZEN",
+  "success_rule": "CI half-width <= threshold AND inherited conditions 1-5,7 still hold",
+  "warmups": 2
+}

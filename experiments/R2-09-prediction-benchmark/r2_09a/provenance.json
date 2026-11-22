@@ -1,0 +1,184 @@
+{
+  "experiment_id": "R2-09A",
+  "name": "Causal Baseline Tournament",
+  "phase": "II-C",
+  "starting_head": "69997513d2617ddebe0675159b8bf6ac0762978b",
+  "current_head_pre_commit": "69997513d2617ddebe0675159b8bf6ac0762978b",
+  "r2_09b_contract_version": "r2-09b-contract-v1.1",
+  "r2_09b_contract_digest": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28",
+  "eval_result_visibility_state": "EVAL_LOCKED",
+  "eval_results": "unpopulated/locked",
+  "eval_spec_visibility": "EVAL_PROMPTS_VISIBLE_BUT_RESULTS_HELD_OUT",
+  "no_prompt_specific_baseline_engineering_performed": true,
+  "no_eval_results_inspected_or_opened": true,
+  "no_r2_10_11_12": true,
+  "no_model_run": true,
+  "engineering_materiality": "PENDING_POLICY_STREAM_CALIBRATION",
+  "stochastic_profile": "STOCHASTIC_PROFILE_UNRESOLVED",
+  "primary_budgets_bytes": [
+    1610612736,
+    4294967296,
+    8589934592
+  ],
+  "dev_corpus_digest": "f758b77492eebc38bc81ba22d6b06ab8f19138d1099b635821369a4d022d9398",
+  "tournament_digest": "5b600d1451983dabafdfbd6ea6bfdc4c4c3bdcf9327c9ec4d57c25025759f847",
+  "execution_hardening": {
+    "note": "Checkpoint/resume hardened after incomplete/non-durable runs (8532,11208) and audited stop (48916, Windows atomic manifest rename PermissionError). Valid per-cell records treated as durable truth; rescan/reconciliation performed; Phase-0 provenance correction recorded (NO_SCIENTIFIC_CHANGE_REPORTING_ERROR). Frozen scientific semantics, DEV corpus membership, parameter space, metrics, and selection rules unchanged.",
+    "checkpoint_runner_version": "r2-09a-checkpoint-runner-v1",
+    "checkpoint_schema_version": 1,
+    "execution_generation_id": "bd19d2f6242d4612be4bcc495f0b80cf",
+    "execution_history": [
+      {
+        "completed": 0,
+        "event": "resume_or_start",
+        "pending": 624,
+        "pid": 48916,
+        "utc": "2026-11-10T12:58:08Z"
+      },
+      {
+        "event": "audit_rescan_reconcile",
+        "invalid_cells": 240,
+        "note": "post-audit rescan/reconcile; stale manifest count and tmp from 48916 PermissionError on atomic rename",
+        "utc": "2026-11-10T17:51:42Z",
+        "valid_cells": 0
+      },
+      {
+        "event": "audit_rescan_reconcile_corrected",
+        "invalid_cells": 0,
+        "note": "correct rescan: valid cell files are durable truth; reconciled stale manifest after 48916 PermissionError",
+        "utc": "2026-11-10T17:53:22Z",
+        "valid_cells": 240
+      },
+      {
+        "completed": 240,
+        "event": "resume_or_start",
+        "pending": 384,
+        "pid": 20804,
+        "utc": "2026-11-10T17:54:27Z"
+      },
+      {
+        "completed": 624,
+        "event": "complete",
+        "utc": "2026-11-10T21:54:00Z"
+      }
+    ],
+    "previous_terminated_pid": 8532,
+    "restarted_pid": 11208,
+    "reason_previous_partial_evidence_discarded": "terminated/incomplete executions with no durable per-cell checkpoints; in-memory partial cells discarded; restarted cleanly from frozen Phase 0 corpus (and/or resumed via validated checkpoints in hardened runner)",
+    "old_runner_lacked_durable_checkpoints": true,
+    "previous_terminated_pids": [
+      8532,
+      11208
+    ],
+    "audited_stopped_pid": 48916,
+    "checkpoint_manifest_reconciled": true,
+    "recovered_valid_checkpoint_cells": 240,
+    "invalid_rejected_checkpoint_cells": 0,
+    "authoritative_dev_corpus_digest_preserved": "f758b77492eebc38bc81ba22d6b06ab8f19138d1099b635821369a4d022d9398"
+  },
+  "decode_steps_reconciliation": {
+    "r2_08_horizon_H": 388,
+    "r2_08_meaning": "matched characterization horizon (minimum valid decode positions across captures) used for comparable R2-08 analysis; longer traces had positions discarded for matching.",
+    "r2_09a_decode_steps_meaning": "replay-counted decode routing steps/events under frozen replay/trace semantics (v2, phase=decode), excluding warmup and flush-sentinel segments; deterministic per-trace count.",
+    "consistency": "legitimate; B_selected normalizes miss_bytes by decode_steps(i) with equal weight per DEV instance using the same deterministic replay-counting rule across all selected traces.",
+    "examples": {
+      "coding-v1/seed-42": {
+        "total_decode_events": 389,
+        "excluded_warmup_flush_decode": 8,
+        "counted_decode_steps": 381
+      },
+      "instruction/reasoning/summarization typical": {
+        "total_decode_events": 519,
+        "excluded": 8,
+        "counted_decode_steps": 511
+      }
+    }
+  },
+  "determinism_failures": [],
+  "r2_03_reused_evidence": {
+    "run_id": "d957077073374f1e9fd1e101a002946f",
+    "classification": "LFU_SWEEP_CANONICAL_AUXILIARY",
+    "scope": "Global-LRU and LFU on coding-v1/seed-42 (canonical R2-01 trace) at 1.5/4/8 GiB where exact replay match verified; recorded as REUSED_CANONICAL_DEV_EVIDENCE"
+  },
+  "phase0_provenance_correction": {
+    "label": "PHASE_0_PROVENANCE_CORRECTION",
+    "scope": "R2-09A DEV corpus identity/provenance correction only; not a new scientific corpus",
+    "scientific_change": "NO_SCIENTIFIC_CHANGE_REPORTING_ERROR",
+    "audit_final_state": "R2_09A_CORPUS_IDENTITY_VERIFIED_RESUME_ALLOWED",
+    "authoritative_dev_corpus_digest": "f758b77492eebc38bc81ba22d6b06ab8f19138d1099b635821369a4d022d9398",
+    "earlier_reported_dev_corpus_digest": "18158e165caff70c9b83f3eeed4d3949f5a3ee652d593fd32264281afa95f11a",
+    "historical_status": "earlier reported digest superseded for reporting/provenance purposes; historical old manifest bytes not recoverable from persisted artifacts",
+    "coding_v1_seed_43_decode_steps": {
+      "earlier_reported": 380,
+      "independently_verified": 381,
+      "reconstruction": {
+        "total_decode_events": 388,
+        "excluded_warmup": 7,
+        "excluded_flush_sentinel": 0,
+        "other_exclusions": 0,
+        "final_decode_steps": 381
+      }
+    },
+    "evidence_check": "no persisted scientific evidence found using denominator 380; all current durable tournament/checkpoint cells use verified denominator semantics (coding-v1__seed-43 decode_steps=381)",
+    "scientific_identity_unchanged": {
+      "dev_corpus_membership_unchanged": true,
+      "trace_shas_unchanged": true,
+      "model_runtime_identities_unchanged": true,
+      "other_scientific_identity_fields_unchanged": true,
+      "r2_09b_contract_unchanged": true,
+      "r2_09b_contract_digest": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28"
+    },
+    "auxiliary_provenance": {
+      "scientific_content_hash_excluding_frozen_utc": "36e5db2993a5ca4a0960fc725b3277e60983d0c572a695b1ae07963f77d9363f",
+      "note": "auxiliary provenance only; does not replace authoritative Phase-0 digest bound by current checkpoint cells"
+    },
+    "checkpoint_identity_at_correction": {
+      "checkpoint_dev_corpus_digest": "f758b77492eebc38bc81ba22d6b06ab8f19138d1099b635821369a4d022d9398",
+      "validated_cell_files_rescanned": 240,
+      "invalid_rejected_cells": 0,
+      "expected_total_cells": 624
+    },
+    "recorded_utc": "2026-11-10T17:55:00Z"
+  },
+  "closure_test_completion_correction": {
+    "type": "closure_test_completion_correction",
+    "initial_closure_attempt": {
+      "status": "two required heavy test suites timed out during execution (environment timeout); completion gate not fully satisfied at that point",
+      "timed_out_suites": [
+        "tests/test_r2_09a_baseline_semantics.py",
+        "tests/test_r2_09a_tournament.py"
+      ]
+    },
+    "subsequent_explicit_rerun": {
+      "tests/test_r2_09a_baseline_semantics.py": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "execution_status": "PASS",
+        "timed_out": false,
+        "recomputed_heavy_canonical_replay": false,
+        "notes": "artifact/logic validation (completed in ~0.06s)"
+      },
+      "tests/test_r2_09a_tournament.py": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "execution_status": "PASS",
+        "timed_out": false,
+        "recomputed_heavy_canonical_replay": true,
+        "notes": "heavy canonical replay/verification (completed in ~1230.12s)"
+      }
+    },
+    "scientific_impact": "none",
+    "unchanged": [
+      "tournament cells (624/624)",
+      "B_selected values/configs",
+      "DEV corpus identity/digest",
+      "frozen Phase-0 manifest",
+      "tournament digest",
+      "policy families/configurations/semantics",
+      "selection rule",
+      "R2-09B contract"
+    ]
+  }
+}

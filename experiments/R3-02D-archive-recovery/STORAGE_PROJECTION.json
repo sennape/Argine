@@ -1,0 +1,68 @@
+{
+  "artifact": "R3-02D-STORAGE-PROJECTION",
+  "completed_traces": [
+    {
+      "archive_bytes": 360684248,
+      "archive_gib": 0.336,
+      "config": "A-1.5GiB",
+      "logical_bytes": 5864942177,
+      "logical_gib": 5.462,
+      "ratio": 0.061498
+    },
+    {
+      "archive_bytes": 361492211,
+      "archive_gib": 0.337,
+      "config": "B-1.5GiB",
+      "logical_bytes": 5869103488,
+      "logical_gib": 5.466,
+      "ratio": 0.061592
+    },
+    {
+      "archive_bytes": 175382390,
+      "archive_gib": 0.163,
+      "config": "A-4GiB",
+      "logical_bytes": 15447057337,
+      "logical_gib": 14.386,
+      "ratio": 0.011354
+    },
+    {
+      "archive_bytes": 176353079,
+      "archive_gib": 0.164,
+      "config": "B-4GiB",
+      "logical_bytes": 15451218648,
+      "logical_gib": 14.39,
+      "ratio": 0.011414
+    },
+    {
+      "archive_bytes": 1566236582,
+      "archive_gib": 1.459,
+      "config": "A-8GiB",
+      "logical_bytes": 30941123714,
+      "logical_gib": 28.816,
+      "ratio": 0.05062
+    }
+  ],
+  "created_utc": "2026-11-18T06:08:43Z",
+  "current_free_gib": 64.48,
+  "double_count_correction": "prior archives are already on disk and excluded from the requirement to avoid double counting",
+  "interrupted_run_handling": "verified recovery deletes the raw before the next gate; storage failures are non-retryable",
+  "margin_gib": 16.17,
+  "observed_8gib_ratio": 0.05062,
+  "operational_ratio_constant": 0.05062,
+  "phase": "R3-02D",
+  "remaining_8gib": [
+    {
+      "config": "B-8GiB",
+      "projected_archive_gib": 1.459,
+      "projected_logical_gib": 28.82
+    },
+    {
+      "config": "C-8GiB",
+      "projected_archive_gib": 1.459,
+      "projected_logical_gib": 28.82
+    }
+  ],
+  "requirement_next_trace_bytes": 51868983482,
+  "requirement_next_trace_gib": 48.31,
+  "system_reserve_gib": 15.0
+}

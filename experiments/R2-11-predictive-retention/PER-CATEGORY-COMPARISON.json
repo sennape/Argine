@@ -1,0 +1,12 @@
+{
+  "artifact": "R2_11_PER_CATEGORY_COMPARISON",
+  "generated_utc": "2026-11-14T09:40:00Z",
+  "primary_budget_gib": 4.0,
+  "per_category_mean_delta_4gib": {
+    "coding": -95851.2093933324,
+    "instruction": -28663.984344412882,
+    "reasoning": -105494.04305284221,
+    "summarization": -119898.17612523834
+  },
+  "note": "3 instances per category (coding/instruction/reasoning/summarization), equal-weight mean of the 3 per-workload deltas within the category, at the primary 4 GiB budget."
+}

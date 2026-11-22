@@ -1,0 +1,46 @@
+{
+  "component_files": [
+    "contract.json",
+    "decision_rules.json",
+    "metrics_contract.json",
+    "causal_boundary.json",
+    "retention_policy.json",
+    "baseline_mapping.json",
+    "eval_manifest.json",
+    "acquisition_plan.json",
+    "freshness_audit.json",
+    "instrumentation_dependency.json",
+    "execution_plan.json",
+    "provenance.json",
+    "audit.json"
+  ],
+  "contract_digest": "5dd3a3987aa74230693135d4ec20c5b8fd0a0de58a30b3b1646ccb2ce7b94f2a",
+  "contract_version": "r2-11-phase0-contract-v1.0",
+  "depends_on": [
+    "R2-10",
+    "R2-BRIDGE-01"
+  ],
+  "hard_restrictions_this_phase": [
+    "Do NOT capture the 12 R2-11 traces.",
+    "Do NOT open R2-11 EVAL.",
+    "Do NOT run PredictedProtectPolicy on the new R2-11 corpus.",
+    "Do NOT compute B_selected R2-11 results.",
+    "Do NOT inspect any R2-11 retention result.",
+    "Do NOT retune predictor.",
+    "Do NOT retune retention policy.",
+    "Do NOT change historical R2-10 evidence.",
+    "Do NOT change historical R2-11 NOT PROPOSED decision.",
+    "Do NOT claim runtime speedup.",
+    "Do NOT start R2-12."
+  ],
+  "name": "R2-11 Phase-0 Contract -- Prediction-Driven Retention, Prospective Confirmatory Protocol",
+  "phase": "R2_11_PROTOCOL_FROZEN / R2_11_ACQUISITION_PLANNED",
+  "primary_scientific_question": "Does the already-selected causal prediction-driven retention mechanism (PredictedProtectPolicy, decayed_transition decay=0.99) produce a robust reduction in expert-memory miss traffic relative to the frozen strong causal retention baseline (B_selected(M)) across a larger, entirely fresh workload corpus and across relevant memory budgets? This is a retention experiment, NOT a runtime-speed experiment; tokens/s, latency, and TTFT improvements belong to R2-12, not R2-11.",
+  "schema_version": 1,
+  "stop_condition": "Stop at R2_11_PROTOCOL_FROZEN / R2_11_ACQUISITION_PLANNED.",
+  "upstream": {
+    "r2_10_closure_commit": "e13d89f97ea50452d8e0605c2bbed1f4e4ce589f",
+    "r2_bridge01_closure_commit": "58b36a1ce5d90827a4f7b639f511833257569cf9",
+    "r2_bridge01_contract_digest": "e4ef4268e6bc207f20d5f4a56c165b75b977536600ff9d6f7e59604f77a889fc"
+  }
+}

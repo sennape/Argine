@@ -1,0 +1,229 @@
+{
+  "workload_id": "r2-11-coding-v2",
+  "input_trace_sha256": "dfe19f93e42a809d44a45a22af238e049e4aaf8eb99219132cdf9b6e2313588b",
+  "budget_bytes": 4294967296,
+  "budget_gib": 4.0,
+  "policy_id": "b_selected",
+  "policy_config": {
+    "decay_factor": 0.99,
+    "aging_interval_steps": 64
+  },
+  "elapsed_seconds": 18.92749285697937,
+  "validity_failure": null,
+  "budget_violation": false,
+  "result": {
+    "policy": "AgedFreq(decay=0.99,interval=64)",
+    "budget": 4294967296,
+    "phase": "decode",
+    "steps": 511,
+    "tokens": 511,
+    "events": 24528,
+    "accesses": 196224,
+    "hits": 146084,
+    "misses": 50140,
+    "bytes_missed": 144540315648,
+    "evictions": 56336,
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident": 4294950912,
+    "per_layer": {
+      "0": {
+        "accesses": 4088,
+        "misses": 2485
+      },
+      "1": {
+        "accesses": 4088,
+        "misses": 1740
+      },
+      "2": {
+        "accesses": 4088,
+        "misses": 1335
+      },
+      "3": {
+        "accesses": 4088,
+        "misses": 1369
+      },
+      "4": {
+        "accesses": 4088,
+        "misses": 1279
+      },
+      "5": {
+        "accesses": 4088,
+        "misses": 1208
+      },
+      "6": {
+        "accesses": 4088,
+        "misses": 635
+      },
+      "7": {
+        "accesses": 4088,
+        "misses": 601
+      },
+      "8": {
+        "accesses": 4088,
+        "misses": 971
+      },
+      "9": {
+        "accesses": 4088,
+        "misses": 883
+      },
+      "10": {
+        "accesses": 4088,
+        "misses": 1166
+      },
+      "11": {
+        "accesses": 4088,
+        "misses": 1245
+      },
+      "12": {
+        "accesses": 4088,
+        "misses": 1082
+      },
+      "13": {
+        "accesses": 4088,
+        "misses": 1253
+      },
+      "14": {
+        "accesses": 4088,
+        "misses": 1079
+      },
+      "15": {
+        "accesses": 4088,
+        "misses": 939
+      },
+      "16": {
+        "accesses": 4088,
+        "misses": 1002
+      },
+      "17": {
+        "accesses": 4088,
+        "misses": 1151
+      },
+      "18": {
+        "accesses": 4088,
+        "misses": 600
+      },
+      "19": {
+        "accesses": 4088,
+        "misses": 438
+      },
+      "20": {
+        "accesses": 4088,
+        "misses": 757
+      },
+      "21": {
+        "accesses": 4088,
+        "misses": 710
+      },
+      "22": {
+        "accesses": 4088,
+        "misses": 970
+      },
+      "23": {
+        "accesses": 4088,
+        "misses": 1077
+      },
+      "24": {
+        "accesses": 4088,
+        "misses": 1058
+      },
+      "25": {
+        "accesses": 4088,
+        "misses": 1251
+      },
+      "26": {
+        "accesses": 4088,
+        "misses": 1092
+      },
+      "27": {
+        "accesses": 4088,
+        "misses": 982
+      },
+      "28": {
+        "accesses": 4088,
+        "misses": 1111
+      },
+      "29": {
+        "accesses": 4088,
+        "misses": 1196
+      },
+      "30": {
+        "accesses": 4088,
+        "misses": 507
+      },
+      "31": {
+        "accesses": 4088,
+        "misses": 484
+      },
+      "32": {
+        "accesses": 4088,
+        "misses": 783
+      },
+      "33": {
+        "accesses": 4088,
+        "misses": 802
+      },
+      "34": {
+        "accesses": 4088,
+        "misses": 1138
+      },
+      "35": {
+        "accesses": 4088,
+        "misses": 1269
+      },
+      "36": {
+        "accesses": 4088,
+        "misses": 1061
+      },
+      "37": {
+        "accesses": 4088,
+        "misses": 1231
+      },
+      "38": {
+        "accesses": 4088,
+        "misses": 1179
+      },
+      "39": {
+        "accesses": 4088,
+        "misses": 972
+      },
+      "40": {
+        "accesses": 4088,
+        "misses": 1007
+      },
+      "41": {
+        "accesses": 4088,
+        "misses": 1081
+      },
+      "42": {
+        "accesses": 4088,
+        "misses": 1050
+      },
+      "43": {
+        "accesses": 4088,
+        "misses": 882
+      },
+      "44": {
+        "accesses": 4088,
+        "misses": 836
+      },
+      "45": {
+        "accesses": 4088,
+        "misses": 795
+      },
+      "46": {
+        "accesses": 4088,
+        "misses": 1095
+      },
+      "47": {
+        "accesses": 4088,
+        "misses": 1303
+      }
+    },
+    "per_step_misses": null,
+    "per_step_bytes": null,
+    "per_step_accesses": null
+  },
+  "miss_bytes_per_decode_step": 282857760.5636008,
+  "misses_per_decode_step": 98.12133072407045
+}

@@ -1,0 +1,18 @@
+{
+  "cell_key": "reasoning-v1_seed-42__recency_window__recency_window_window_W-256__acd1c9bac178724d",
+  "cell_record_digest": "634d256e0391c9cfc8fd343ea9a18008af142175b6615b8cd627d3b1fe508fcb",
+  "config_id": "recency_window/window_W=256",
+  "deterministic": true,
+  "dev_cell_id": "reasoning-v1/seed-42",
+  "family_id": "recency_window",
+  "recall_at_k_h1": 0.3269575101597393,
+  "recall_at_k_h16": 0.30613682509426926,
+  "recall_at_k_h4": 0.31887672507993037,
+  "result_digest": "4de4d048642ceb2c1d957aa24425ab4ab7b43a4e173abd350cee0ee280366cdb",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 24853,
+    "h16": 24133,
+    "h4": 24709
+  }
+}

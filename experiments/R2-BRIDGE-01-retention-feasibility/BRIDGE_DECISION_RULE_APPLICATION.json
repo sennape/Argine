@@ -1,0 +1,20 @@
+{
+  "artifact": "BRIDGE_DECISION_RULE_APPLICATION",
+  "classification": "BRIDGE_POSITIVE",
+  "decision_rules_reference": "experiments/R2-BRIDGE-01-retention-feasibility/decision_rules.json (read in full, frozen before any BRIDGE result existed)",
+  "inputs": {
+    "all_workloads_delta_le_0_at_primary": true,
+    "dominant_workload_over_three_quarters": null,
+    "primary_budget_delta_mean_rate": -57784.86105671525,
+    "primary_budget_relative_delta_pct": -0.023083869519349688,
+    "secondary_budgets_both_nonpositive": true
+  },
+  "mechanism_config_evaluated": "predicted_protect (PredictedProtectPolicy, decayed_transition decay=0.99) -- the single already-selected mechanism; no tournament, no other bonus values, no R2-10 EVAL set used.",
+  "never_promotes_r2_10_category": true,
+  "never_reopens_r2_11_not_proposed": true,
+  "no_post_hoc_thresholds": "decision_rules.json's 3 outcome definitions were read and applied literally and verbatim; no threshold was added, removed, or adjusted after seeing results.",
+  "no_rounding_to_zero": "Full-precision relative difference at primary budget: -0.023083869519349688 percent. This is not rounded to zero and is not oversold as a large effect; it is smaller in magnitude than the DEV-level effect (~0.032486%) but shares its sign and consistency pattern.",
+  "no_runtime_speedup_claimed": true,
+  "rationale": "Aggregate reduction at 4 GiB (delta<0); sign consistent (delta<=0) across all 4 BRIDGE-holdout workloads individually at 4 GiB; no single workload accounts for more than 3/4 of the aggregate byte reduction; secondary budgets (1.5 GiB, 8 GiB) both show non-positive aggregate delta.",
+  "schema_version": 1
+}

@@ -1,0 +1,586 @@
+{
+  "binding": {
+    "candidate_status": "CANDIDATE",
+    "message": "R2-01/04/05/06/07 PASS verified; R2-07 canonical PASS run af28e8c6dc5044a18e4a86137d59156a (digest ad36e615970b196b64ba3a3fdc2559e252cc8627e5d17d0d830d16742f59281a) bound; coding-v1/seed-42 reuses canonical R2-01 run bb6d8ca34dbc4537a43d54be30c9f3e1 trace e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1 (capture source 286a41477ce54d5fb9ccc24f4e508f22), byte-identical on disk.",
+    "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+    "r2_04_run_id": "cd2b58b019314fafb90304234e6d1907",
+    "r2_05_run_id": "da82e15b61c94019840477642618565a",
+    "r2_06_run_id": "2e075161f02443ff822279add6938ca4",
+    "r2_07_run_id": "af28e8c6dc5044a18e4a86137d59156a",
+    "reused_capture_source": "286a41477ce54d5fb9ccc24f4e508f22",
+    "reused_trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+    "reused_trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+    "status": "OK"
+  },
+  "canonical_digest": "f5db4e0bf43ce4243edb303441e82ceefa5a0aeb5754143292f1230f220527c3",
+  "capture_matrix": {
+    "cells": {
+      "coding-v1/seed-42": {
+        "canonical_status": true,
+        "capture_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+        "capture_source": "286a41477ce54d5fb9ccc24f4e508f22",
+        "cell_id": "coding-v1/seed-42",
+        "configuration": {
+          "batch_threads": 12,
+          "ctx": 4096,
+          "expert_budget": "4G",
+          "generation_threads": 4,
+          "instrumentation": {
+            "pretouch": false,
+            "read_mode": "asincrono",
+            "source": "argine research trace / R2-01 compatible"
+          },
+          "model_name": "Qwen3-30B-A3B-Q4_K_M",
+          "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+          "prompt_sha256": "460949e7abf004374bb0b06dcda89eeaba0e916b5f6053784afe037e6f2162d8",
+          "runtime_args": {
+            "threads_batch_via_llama_arg": 12
+          },
+          "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+          "sampling": {
+            "seed": 42,
+            "seed_is_replicate": true,
+            "temperature": 0.0,
+            "top_k": 1
+          },
+          "seed": 42,
+          "trace_schema": "argine-router-trace v1 (jsonl.gz)",
+          "workload_id": "coding-v1",
+          "workload_sha256": "460949e7abf004374bb0b06dcda89eeaba0e916b5f6053784afe037e6f2162d8",
+          "workload_version": "v1"
+        },
+        "configuration_fingerprint": "e0f50951d46664c03260abe1c4eaedfd803a026c8f1fb7cdb48378de61d71596",
+        "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+        "note": "reused from R2-01 canonical trace",
+        "prompt_sha256": "460949e7abf004374bb0b06dcda89eeaba0e916b5f6053784afe037e6f2162d8",
+        "reused": true,
+        "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+        "seed": 42,
+        "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+        "trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+        "validation_state": "VALID",
+        "workload_id": "coding-v1",
+        "workload_version": "v1"
+      },
+      "coding-v1/seed-43": {
+        "canonical_status": true,
+        "capture_run_id": null,
+        "capture_source": null,
+        "cell_id": "coding-v1/seed-43",
+        "configuration": {
+          "batch_threads": 12,
+          "ctx": 4096,
+          "expert_budget": "4G",
+          "generation_threads": 4,
+          "instrumentation": {
+            "pretouch": false,
+            "read_mode": "asincrono",
+            "source": "argine research trace / R2-01 compatible"
+          },
+          "model_name": "Qwen3-30B-A3B-Q4_K_M",
+          "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+          "prompt_sha256": "460949e7abf004374bb0b06dcda89eeaba0e916b5f6053784afe037e6f2162d8",
+          "runtime_args": {
+            "threads_batch_via_llama_arg": 12
+          },
+          "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+          "sampling": {
+            "seed": 43,
+            "seed_is_replicate": true,
+            "temperature": 0.0,
+            "top_k": 1
+          },
+          "seed": 43,
+          "trace_schema": "argine-router-trace v1 (jsonl.gz)",
+          "workload_id": "coding-v1",
+          "workload_sha256": "460949e7abf004374bb0b06dcda89eeaba0e916b5f6053784afe037e6f2162d8",
+          "workload_version": "v1"
+        },
+        "configuration_fingerprint": "d0ba29bd231c34402c8b68d4f884d18259ddd9651ff6af6d88796b0c8c86c0ff",
+        "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+        "note": "captured",
+        "prompt_sha256": "460949e7abf004374bb0b06dcda89eeaba0e916b5f6053784afe037e6f2162d8",
+        "reused": false,
+        "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+        "seed": 43,
+        "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\coding-v1-seed43\\run-00-4G\\trace.jsonl.gz",
+        "trace_sha256": "0ce54e852eb057893ae13e9aa2775bcc282744d59d9b74cac78fa8eafac7665c",
+        "validation_state": "VALID",
+        "workload_id": "coding-v1",
+        "workload_version": "v1"
+      },
+      "instruction-v1/seed-42": {
+        "canonical_status": true,
+        "capture_run_id": null,
+        "capture_source": null,
+        "cell_id": "instruction-v1/seed-42",
+        "configuration": {
+          "batch_threads": 12,
+          "ctx": 4096,
+          "expert_budget": "4G",
+          "generation_threads": 4,
+          "instrumentation": {
+            "pretouch": false,
+            "read_mode": "asincrono",
+            "source": "argine research trace / R2-01 compatible"
+          },
+          "model_name": "Qwen3-30B-A3B-Q4_K_M",
+          "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+          "prompt_sha256": "59636f262206fd6d621f91c3d31a5cc03072284f368c930292dea88dc40fcc40",
+          "runtime_args": {
+            "threads_batch_via_llama_arg": 12
+          },
+          "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+          "sampling": {
+            "seed": 42,
+            "seed_is_replicate": true,
+            "temperature": 0.0,
+            "top_k": 1
+          },
+          "seed": 42,
+          "trace_schema": "argine-router-trace v1 (jsonl.gz)",
+          "workload_id": "instruction-v1",
+          "workload_sha256": "59636f262206fd6d621f91c3d31a5cc03072284f368c930292dea88dc40fcc40",
+          "workload_version": "r2-08-v1"
+        },
+        "configuration_fingerprint": "9c516be53ac670a60488a45ed1cadedc8132231c9c270362d5627e72a766ddae",
+        "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+        "note": "captured",
+        "prompt_sha256": "59636f262206fd6d621f91c3d31a5cc03072284f368c930292dea88dc40fcc40",
+        "reused": false,
+        "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+        "seed": 42,
+        "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\instruction-v1-seed42\\run-00-4G\\trace.jsonl.gz",
+        "trace_sha256": "9934371d18a1ad3f0e2cb2a5e89cad87ed4e7a002732190646cfff9a0b489f54",
+        "validation_state": "VALID",
+        "workload_id": "instruction-v1",
+        "workload_version": "r2-08-v1"
+      },
+      "instruction-v1/seed-43": {
+        "canonical_status": true,
+        "capture_run_id": null,
+        "capture_source": null,
+        "cell_id": "instruction-v1/seed-43",
+        "configuration": {
+          "batch_threads": 12,
+          "ctx": 4096,
+          "expert_budget": "4G",
+          "generation_threads": 4,
+          "instrumentation": {
+            "pretouch": false,
+            "read_mode": "asincrono",
+            "source": "argine research trace / R2-01 compatible"
+          },
+          "model_name": "Qwen3-30B-A3B-Q4_K_M",
+          "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+          "prompt_sha256": "59636f262206fd6d621f91c3d31a5cc03072284f368c930292dea88dc40fcc40",
+          "runtime_args": {
+            "threads_batch_via_llama_arg": 12
+          },
+          "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+          "sampling": {
+            "seed": 43,
+            "seed_is_replicate": true,
+            "temperature": 0.0,
+            "top_k": 1
+          },
+          "seed": 43,
+          "trace_schema": "argine-router-trace v1 (jsonl.gz)",
+          "workload_id": "instruction-v1",
+          "workload_sha256": "59636f262206fd6d621f91c3d31a5cc03072284f368c930292dea88dc40fcc40",
+          "workload_version": "r2-08-v1"
+        },
+        "configuration_fingerprint": "444d65b6387e7a6bf9ede1ed5ef900c66c495d6419a59e0108b9c41ce6b7438e",
+        "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+        "note": "captured",
+        "prompt_sha256": "59636f262206fd6d621f91c3d31a5cc03072284f368c930292dea88dc40fcc40",
+        "reused": false,
+        "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+        "seed": 43,
+        "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\instruction-v1-seed43\\run-00-4G\\trace.jsonl.gz",
+        "trace_sha256": "f7c9a2bbaea8c95e46d25dfc70662d67301fc4bd8508c2db63c018c870a6376d",
+        "validation_state": "VALID",
+        "workload_id": "instruction-v1",
+        "workload_version": "r2-08-v1"
+      },
+      "reasoning-v1/seed-42": {
+        "canonical_status": true,
+        "capture_run_id": null,
+        "capture_source": null,
+        "cell_id": "reasoning-v1/seed-42",
+        "configuration": {
+          "batch_threads": 12,
+          "ctx": 4096,
+          "expert_budget": "4G",
+          "generation_threads": 4,
+          "instrumentation": {
+            "pretouch": false,
+            "read_mode": "asincrono",
+            "source": "argine research trace / R2-01 compatible"
+          },
+          "model_name": "Qwen3-30B-A3B-Q4_K_M",
+          "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+          "prompt_sha256": "df938ba8b233877743a80fac33a9fe7c6e363461969c399d2300aa0f0290c183",
+          "runtime_args": {
+            "threads_batch_via_llama_arg": 12
+          },
+          "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+          "sampling": {
+            "seed": 42,
+            "seed_is_replicate": true,
+            "temperature": 0.0,
+            "top_k": 1
+          },
+          "seed": 42,
+          "trace_schema": "argine-router-trace v1 (jsonl.gz)",
+          "workload_id": "reasoning-v1",
+          "workload_sha256": "df938ba8b233877743a80fac33a9fe7c6e363461969c399d2300aa0f0290c183",
+          "workload_version": "r2-08-v1"
+        },
+        "configuration_fingerprint": "4109dc928a51da83ff5f96da7e1f40e640eb2ffbcb2dd38e80ef9f0921185f23",
+        "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+        "note": "captured",
+        "prompt_sha256": "df938ba8b233877743a80fac33a9fe7c6e363461969c399d2300aa0f0290c183",
+        "reused": false,
+        "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+        "seed": 42,
+        "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\reasoning-v1-seed42\\run-00-4G\\trace.jsonl.gz",
+        "trace_sha256": "8dff85b9e99f6e10a2a6a608585c77102c65597561c2cf55dd4471e37eb48b3b",
+        "validation_state": "VALID",
+        "workload_id": "reasoning-v1",
+        "workload_version": "r2-08-v1"
+      },
+      "reasoning-v1/seed-43": {
+        "canonical_status": true,
+        "capture_run_id": null,
+        "capture_source": null,
+        "cell_id": "reasoning-v1/seed-43",
+        "configuration": {
+          "batch_threads": 12,
+          "ctx": 4096,
+          "expert_budget": "4G",
+          "generation_threads": 4,
+          "instrumentation": {
+            "pretouch": false,
+            "read_mode": "asincrono",
+            "source": "argine research trace / R2-01 compatible"
+          },
+          "model_name": "Qwen3-30B-A3B-Q4_K_M",
+          "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+          "prompt_sha256": "df938ba8b233877743a80fac33a9fe7c6e363461969c399d2300aa0f0290c183",
+          "runtime_args": {
+            "threads_batch_via_llama_arg": 12
+          },
+          "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+          "sampling": {
+            "seed": 43,
+            "seed_is_replicate": true,
+            "temperature": 0.0,
+            "top_k": 1
+          },
+          "seed": 43,
+          "trace_schema": "argine-router-trace v1 (jsonl.gz)",
+          "workload_id": "reasoning-v1",
+          "workload_sha256": "df938ba8b233877743a80fac33a9fe7c6e363461969c399d2300aa0f0290c183",
+          "workload_version": "r2-08-v1"
+        },
+        "configuration_fingerprint": "9a76c49b937c9bc90df1f0d1aaee97575244e5cb7922dd90eaaf35f91d972531",
+        "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+        "note": "captured",
+        "prompt_sha256": "df938ba8b233877743a80fac33a9fe7c6e363461969c399d2300aa0f0290c183",
+        "reused": false,
+        "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+        "seed": 43,
+        "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\reasoning-v1-seed43\\run-00-4G\\trace.jsonl.gz",
+        "trace_sha256": "fb38497d5f6c9d13465a9ed185f3c04204cb50835943bbfcca315df06f4bb65b",
+        "validation_state": "VALID",
+        "workload_id": "reasoning-v1",
+        "workload_version": "r2-08-v1"
+      },
+      "summarization-v1/seed-42": {
+        "canonical_status": true,
+        "capture_run_id": null,
+        "capture_source": null,
+        "cell_id": "summarization-v1/seed-42",
+        "configuration": {
+          "batch_threads": 12,
+          "ctx": 4096,
+          "expert_budget": "4G",
+          "generation_threads": 4,
+          "instrumentation": {
+            "pretouch": false,
+            "read_mode": "asincrono",
+            "source": "argine research trace / R2-01 compatible"
+          },
+          "model_name": "Qwen3-30B-A3B-Q4_K_M",
+          "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+          "prompt_sha256": "1411d3f44661822206a3c5c300cefbab7be1a4ff8dd8d6880d554b62d8943266",
+          "runtime_args": {
+            "threads_batch_via_llama_arg": 12
+          },
+          "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+          "sampling": {
+            "seed": 42,
+            "seed_is_replicate": true,
+            "temperature": 0.0,
+            "top_k": 1
+          },
+          "seed": 42,
+          "trace_schema": "argine-router-trace v1 (jsonl.gz)",
+          "workload_id": "summarization-v1",
+          "workload_sha256": "1411d3f44661822206a3c5c300cefbab7be1a4ff8dd8d6880d554b62d8943266",
+          "workload_version": "r2-08-v1"
+        },
+        "configuration_fingerprint": "febf896d45da540ee25e6155cf2c727783716b41d7c4c0e355d3c56b61822ac2",
+        "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+        "note": "captured",
+        "prompt_sha256": "1411d3f44661822206a3c5c300cefbab7be1a4ff8dd8d6880d554b62d8943266",
+        "reused": false,
+        "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+        "seed": 42,
+        "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\summarization-v1-seed42\\run-00-4G\\trace.jsonl.gz",
+        "trace_sha256": "dc24bde642278f4a8d75c6eae077121faed8562d04e4d9fed2d7cb87aa39a9bf",
+        "validation_state": "VALID",
+        "workload_id": "summarization-v1",
+        "workload_version": "r2-08-v1"
+      },
+      "summarization-v1/seed-43": {
+        "canonical_status": true,
+        "capture_run_id": null,
+        "capture_source": null,
+        "cell_id": "summarization-v1/seed-43",
+        "configuration": {
+          "batch_threads": 12,
+          "ctx": 4096,
+          "expert_budget": "4G",
+          "generation_threads": 4,
+          "instrumentation": {
+            "pretouch": false,
+            "read_mode": "asincrono",
+            "source": "argine research trace / R2-01 compatible"
+          },
+          "model_name": "Qwen3-30B-A3B-Q4_K_M",
+          "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+          "prompt_sha256": "1411d3f44661822206a3c5c300cefbab7be1a4ff8dd8d6880d554b62d8943266",
+          "runtime_args": {
+            "threads_batch_via_llama_arg": 12
+          },
+          "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+          "sampling": {
+            "seed": 43,
+            "seed_is_replicate": true,
+            "temperature": 0.0,
+            "top_k": 1
+          },
+          "seed": 43,
+          "trace_schema": "argine-router-trace v1 (jsonl.gz)",
+          "workload_id": "summarization-v1",
+          "workload_sha256": "1411d3f44661822206a3c5c300cefbab7be1a4ff8dd8d6880d554b62d8943266",
+          "workload_version": "r2-08-v1"
+        },
+        "configuration_fingerprint": "13e9d12b4d2c7ab059e6e7b63fd61b67526ccb64da3d3918bd1ad86a83d4c2eb",
+        "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+        "note": "captured",
+        "prompt_sha256": "1411d3f44661822206a3c5c300cefbab7be1a4ff8dd8d6880d554b62d8943266",
+        "reused": false,
+        "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+        "seed": 43,
+        "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\summarization-v1-seed43\\run-00-4G\\trace.jsonl.gz",
+        "trace_sha256": "94b4522adb0faeb521ab12b7b67cf111d0a6623392e215f1ba499e2c1cf9042c",
+        "validation_state": "VALID",
+        "workload_id": "summarization-v1",
+        "workload_version": "r2-08-v1"
+      }
+    },
+    "expected_cells": [
+      {
+        "seed": 42,
+        "workload_id": "coding-v1"
+      },
+      {
+        "seed": 43,
+        "workload_id": "coding-v1"
+      },
+      {
+        "seed": 42,
+        "workload_id": "reasoning-v1"
+      },
+      {
+        "seed": 43,
+        "workload_id": "reasoning-v1"
+      },
+      {
+        "seed": 42,
+        "workload_id": "summarization-v1"
+      },
+      {
+        "seed": 43,
+        "workload_id": "summarization-v1"
+      },
+      {
+        "seed": 42,
+        "workload_id": "instruction-v1"
+      },
+      {
+        "seed": 43,
+        "workload_id": "instruction-v1"
+      }
+    ],
+    "missing_or_invalid": []
+  },
+  "comparison": {
+    "cross_workload_to_replicate_ratio": null,
+    "cross_workload_to_temporal_ratio": 2.2093895811387476,
+    "median_cross_workload_jsd": 0.2994961896155197,
+    "median_replicate_jsd": 0.0,
+    "median_temporal_jsd": 0.13555607945845186,
+    "reason": "median_cross_workload_jsd >= 1.5 * replicate and temporal",
+    "regime": "WORKLOAD_DEPENDENCE_DOMINANT",
+    "temporal_to_replicate_ratio": null,
+    "thresholds": {
+      "dominance_ratio": 1.5,
+      "labels": [
+        "STABLE_ACROSS_WORKLOADS",
+        "TEMPORAL_DRIFT_DOMINANT",
+        "WORKLOAD_DEPENDENCE_DOMINANT",
+        "RUN_VARIABILITY_DOMINANT",
+        "MIXED"
+      ],
+      "predeclared_before_real_execution": true,
+      "stable_low_drift_jsd": 0.05
+    }
+  },
+  "experiment_id": "R2-08",
+  "headline": {
+    "all_configuration_fingerprints_compatible": true,
+    "canonical_capture_count": 8,
+    "cross_workload_to_replicate_ratio": null,
+    "cross_workload_to_temporal_ratio": 2.2093895811387476,
+    "least_stable_layer": 12,
+    "least_stable_workload": "coding-v1",
+    "matched_decode_horizon": 388,
+    "median_cross_workload_jsd": 0.2994961896155197,
+    "median_same_workload_replicate_jsd": 0.0,
+    "median_temporal_jsd": 0.13555607945845186,
+    "median_top8_temporal_jaccard_distance": 0.6060606060606061,
+    "most_stable_layer": 47,
+    "most_stable_workload": "instruction-v1",
+    "newly_performed_capture_count": 7,
+    "regime_classification": "WORKLOAD_DEPENDENCE_DOMINANT",
+    "reused_capture_count": 1,
+    "strongest_workload_pair": {
+      "median_layer_frequency_jsd": 0.4213417846694305,
+      "seed_a": 42,
+      "seed_b": 42,
+      "workload_a": "reasoning-v1",
+      "workload_b": "instruction-v1"
+    },
+    "temporal_to_replicate_ratio": null,
+    "temporal_window_length": 48,
+    "workload_count": 4
+  },
+  "horizon": {
+    "h": 388,
+    "hard_cap": 512,
+    "min_required": 256,
+    "minimum_valid_decode_positions_across_captures": 388,
+    "ok": true,
+    "per_capture": [
+      {
+        "decode_positions": 389,
+        "matched_positions_used": 388,
+        "positions_discarded_because_of_horizon_matching": 0,
+        "prefill_positions": 148,
+        "seed": 42,
+        "total_positions": 537,
+        "trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+        "valid_decode_positions": 388,
+        "workload_id": "coding-v1"
+      },
+      {
+        "decode_positions": 388,
+        "matched_positions_used": 388,
+        "positions_discarded_because_of_horizon_matching": 0,
+        "prefill_positions": 148,
+        "seed": 43,
+        "total_positions": 536,
+        "trace_sha256": "0ce54e852eb057893ae13e9aa2775bcc282744d59d9b74cac78fa8eafac7665c",
+        "valid_decode_positions": 388,
+        "workload_id": "coding-v1"
+      },
+      {
+        "decode_positions": 519,
+        "matched_positions_used": 388,
+        "positions_discarded_because_of_horizon_matching": 130,
+        "prefill_positions": 134,
+        "seed": 42,
+        "total_positions": 653,
+        "trace_sha256": "9934371d18a1ad3f0e2cb2a5e89cad87ed4e7a002732190646cfff9a0b489f54",
+        "valid_decode_positions": 518,
+        "workload_id": "instruction-v1"
+      },
+      {
+        "decode_positions": 519,
+        "matched_positions_used": 388,
+        "positions_discarded_because_of_horizon_matching": 130,
+        "prefill_positions": 134,
+        "seed": 43,
+        "total_positions": 653,
+        "trace_sha256": "f7c9a2bbaea8c95e46d25dfc70662d67301fc4bd8508c2db63c018c870a6376d",
+        "valid_decode_positions": 518,
+        "workload_id": "instruction-v1"
+      },
+      {
+        "decode_positions": 519,
+        "matched_positions_used": 388,
+        "positions_discarded_because_of_horizon_matching": 130,
+        "prefill_positions": 170,
+        "seed": 42,
+        "total_positions": 689,
+        "trace_sha256": "8dff85b9e99f6e10a2a6a608585c77102c65597561c2cf55dd4471e37eb48b3b",
+        "valid_decode_positions": 518,
+        "workload_id": "reasoning-v1"
+      },
+      {
+        "decode_positions": 519,
+        "matched_positions_used": 388,
+        "positions_discarded_because_of_horizon_matching": 130,
+        "prefill_positions": 170,
+        "seed": 43,
+        "total_positions": 689,
+        "trace_sha256": "fb38497d5f6c9d13465a9ed185f3c04204cb50835943bbfcca315df06f4bb65b",
+        "valid_decode_positions": 518,
+        "workload_id": "reasoning-v1"
+      },
+      {
+        "decode_positions": 519,
+        "matched_positions_used": 388,
+        "positions_discarded_because_of_horizon_matching": 130,
+        "prefill_positions": 483,
+        "seed": 42,
+        "total_positions": 1002,
+        "trace_sha256": "dc24bde642278f4a8d75c6eae077121faed8562d04e4d9fed2d7cb87aa39a9bf",
+        "valid_decode_positions": 518,
+        "workload_id": "summarization-v1"
+      },
+      {
+        "decode_positions": 519,
+        "matched_positions_used": 388,
+        "positions_discarded_because_of_horizon_matching": 130,
+        "prefill_positions": 483,
+        "seed": 43,
+        "total_positions": 1002,
+        "trace_sha256": "94b4522adb0faeb521ab12b7b67cf111d0a6623392e215f1ba499e2c1cf9042c",
+        "valid_decode_positions": 518,
+        "workload_id": "summarization-v1"
+      }
+    ],
+    "reason": null
+  },
+  "outcome": "PASS",
+  "reasons": [
+    "all prerequisites verified; 8 canonical cells valid; decode phase available; matched horizon H=388>=256; deterministic double synthesis identical; no forbidden claims."
+  ],
+  "run_id": "6165471a12574e05b48932aac2f1626c",
+  "scope": "offline descriptive characterization (temporal drift, same-workload replicate variability, cross-workload variability) on Qwen3-30B-A3B-Q4_K_M under tested protocol; no predictor, no retention-policy change, no performance claim, no cross-model claim."
+}

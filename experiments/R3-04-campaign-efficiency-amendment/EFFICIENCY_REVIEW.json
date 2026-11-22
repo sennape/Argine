@@ -1,0 +1,46 @@
+{
+ "anti_bias": "The 4 GiB / 8 GiB decisions rest on protocol roles, planning precision, cost and structural facts (exactly-zero retention at 8 GiB), not on whether the 1.5 GiB retention effect looks strong or weak.",
+ "artifact": "R3-04-EFFICIENCY-REVIEW",
+ "assumptions": [
+  "1.5/4 GiB untraced decode is bounded, not observed (see UPDATED_TIME_MODEL)",
+  "per-launch tooling overhead 1 s is an assumption",
+  "legacy-shutdown savings are a model (floor 300.8 s), not a measurement"
+ ],
+ "classification": "FULL_DESIGN_OVERBUILT",
+ "kept_8gib": {
+  "option_B_rejected": "Gate 2 counters + R3-03B cost do not test the untraced P-arm timing path, so 36 launches are not redundant",
+  "why": [
+   "only zero-retention falsification control for the REAL P arm: Gate 2 shows P == A == S at the counter level at 8 GiB, so P-S and P-A timing should reflect bookkeeping only",
+   "exercises the new three-arm untraced driver + helper lifecycle end-to-end at the budget where launches are cheapest",
+   "R3-03B measured S-A at 8 GiB only, never the real P arm",
+   "cheap (about 1 h central) and precise (planning half-width 2.4 ms)"
+  ]
+ },
+ "primary_n": {
+  "changed": false,
+  "reason": "N is fixed by the frozen precision rule, which does not use any retention effect; Gate 2 effect magnitude/sign was NOT used for any N decision",
+  "value": 18
+ },
+ "r3_02g_comparison": {
+  "full_design_wall_h_central_helper": 9.79683983298121,
+  "recommended_wall_h_central_helper": 8.04087478970412,
+  "verdict": "not an R3-02G-scale oversizing (~10 h, not ~64 h); the excess is confined to the 4 GiB budget, about 22% of the full wall time"
+ },
+ "scope": "only the 4 GiB timing budget is unnecessary; the rest of the full design is justified",
+ "unnecessary_launches": {
+  "budget": "4",
+  "count": 37,
+  "counted": 36,
+  "frozen_seq_range": [
+   110,
+   146
+  ],
+  "warmups": 1,
+  "why": [
+   "cannot classify R3-04 (protocol: descriptive only); protocol's own budget selection marks it droppable without changing the primary answer",
+   "planning CI half-width 14.3 ms (N=6) is ~82% of the 17.5 ms cost scale, power 0.70: the least informative contrast per machine hour (precision per hour about 1/60 of the 8 GiB control)",
+   "Gate 2 already supplies all three budgets' mechanism evidence incl. 4 GiB counters (P-A miss bytes -0.026%) and decision identity",
+   "R2-12 bridge value is historical: R2-12 is closed and 'not reinterpreted'; the future HoPi gate is its own protocol"
+  ]
+ }
+}

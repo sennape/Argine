@@ -1,0 +1,41 @@
+{
+  "artifact": "R2-10-PHASE3J-FINAL-INTERPRETATION-AND-SCIENTIFIC-DECISION",
+  "generated_utc": "2026-11-13T21:21:16.924279Z",
+  "scientific_decision": {
+    "A_did_selected_predictor_generalize_to_eval": {
+      "answer": true,
+      "basis": "EVAL h=1 mean recall (0.449817) >= DEV h=1 mean recall (0.439397); EVAL h=4 and h=16 means are also >= their DEV counterparts. No sign of DEV-overfitting."
+    },
+    "B_did_it_beat_last_observation_on_eval": {
+      "answer": true,
+      "basis": "At h=1 (primary): 0.449817 vs 0.401473, absolute +0.048344, relative +12.04%. Positive in all 4 workloads at h=1, and the margin widens (not narrows) at h=4 and h=16."
+    },
+    "C_did_it_beat_global_frequency_on_eval": {
+      "answer": true,
+      "basis": "At h=1 (primary): 0.449817 vs 0.349480, absolute +0.100337, relative +28.71%. Positive in all 4 workloads at h=1 and h=4, but NOT uniformly at h=16 (instruction-eval-v1 cell is -0.00392, i.e. selected predictor is marginally behind global_frequency for that one cell at the longest horizon)."
+    },
+    "D_was_the_gain_consistent_across_workloads": {
+      "vs_last_observation": "Yes, at every horizon tested (h=1,4,16), for all 4 workloads.",
+      "vs_global_frequency": "Yes at h=1 and h=4 for all 4 workloads; NO at h=16 (1 of 4 workloads, instruction-eval-v1, is a negative cell).",
+      "overall": "Mostly consistent; the one exception is reported below as a negative finding rather than omitted."
+    },
+    "E_is_evidence_sufficient_under_frozen_rules_to_propose_R2_11": {
+      "answer": false,
+      "basis": "decision_rules.json's Category A/B/C definitions are textually and numerically anchored to DEV-specific evidence (explicitly '8 DEV cells' for the Category C bar). EVAL results, by the frozen rules' own wording, cannot mechanically or textually promote a DEV-based Category B classification to Category C -- that category is defined over the DEV corpus, not EVAL. EVAL can only support, weaken, or contradict confidence in the existing DEV-based Category B finding ('MEASURABLE_IMPROVEMENT_INSUFFICIENT_FOR_RETENTION'); it cannot itself satisfy a category whose criteria never reference EVAL data. On its own substance, the EVAL evidence SUPPORTS (does not weaken or contradict) the DEV Category B finding: the predictor shows a measurable, mostly-consistent improvement over both trivial baselines on 4 held-out instances, which is a positive but still narrow evidentiary base -- the frozen rules do not provide a path from this evidence to a Category C / retention-improvement claim, and no new threshold is being introduced post-hoc to force one up or down."
+    }
+  },
+  "dev_category_b_status": "SUPPORTED (not weakened or contradicted) by held-out EVAL evidence, under the frozen rules' own DEV-anchored definitions. Remains Category B.",
+  "negative_findings": [
+    "At h=16, the selected predictor does not beat the global_frequency baseline on the instruction-eval-v1 workload (selected 0.350302 vs global_frequency 0.354224, selected is behind by 0.00392).",
+    "The margin over global_frequency (unlike the margin over last_observation) shrinks as horizon grows, reaching near-parity by h=16 across most workloads and a slight deficit in one."
+  ],
+  "forbidden_claims_not_made": [
+    "No claim of generalization beyond these 4 held-out workload instances.",
+    "No cross-model or cross-vendor generalization claim.",
+    "No runtime speedup claim.",
+    "No retention/miss_bytes improvement claim.",
+    "No promotion of Category B to Category C.",
+    "No new thresholds introduced after seeing results."
+  ],
+  "r2_11_recommendation": "NOT PROPOSED. Per decision_rules.json, the evidence gathered (DEV Category B, supported but not strengthened into Category C by narrow 4-instance EVAL evidence) is insufficient under the frozen rules to justify starting R2-11. R2-10 is closed with its DEV classification (Category B) intact and now cross-checked against held-out data."
+}

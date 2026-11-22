@@ -1,0 +1,29 @@
+{
+  "artifact": "PHASE3A-SEED-PLAN",
+  "phase": "R2-10 Phase 3A (schema-compatibility follow-up)",
+  "purpose": "Prospectively define the explicit per-cell acquisition seed required by eval_manifest.json's deterministic_capture_conditions.seed_policy, before any EVAL trace exists.",
+  "written_before_any_capture": true,
+  "written_before_any_eval_inspection": true,
+  "frozen_wording_considered": {
+    "source": "experiments/R2-09-prediction-benchmark/eval_manifest.json:deterministic_capture_conditions.seed_policy",
+    "text": "Record explicit acquisition seed per cell; deterministic decoding protocol follows II-B/R2-08 convention. Seed field is metadata/replicate identifier; any seed effect under deterministic greedy decoding must be reported, not assumed zero.",
+    "interpretation": "The frozen contract requires an explicit, recorded, per-cell seed. It does NOT pin a single numeric value as frozen fact. Under temperature=0.0/top_k=1 (deterministic greedy decoding, both confirmed in this same manifest), the seed is documented as a replicate/metadata identifier rather than a tunable scientific parameter -- this is the explicit R2-08 convention (argine/research2/r2_08/capture.py: sampling={'temperature':0.0,'top_k':1,'seed_is_replicate':True})."
+  },
+  "repository_precedent_reviewed": [
+    {"module": "argine/research2/r2_01/capture.py", "field": "PROTOCOL['seed']", "value": 42},
+    {"module": "argine/research2/r2_08/capture.py", "note": "primary/non-replicate-variability captures use seed 42; seed 43 is reserved specifically for the replicate-variability ablation documented in experiments/R2-08-routing-drift/README.md, not for a primary single-capture cell."}
+  ],
+  "decision_rule": "Each of the four R2-09B EVAL cells is a single, primary (non-replicate) deterministic capture per eval_manifest.json's design_decision (DESIGN_DECISION_NOT_STATISTICALLY_POWERED, 'A_MINIMAL_FOUR_INSTANCES', 1 deterministic capture each). Applying the repository's own established primary-capture seed convention uniformly (seed=42 for every primary, non-replicate-variability capture in R2-01 and R2-08) avoids introducing a new, scientifically unmotivated per-cell value, and keeps the four EVAL cells mutually comparable under the same replicate identifier. This rule is fixed now, before any capture, and will not be revisited after observing any EVAL output.",
+  "seeds": [
+    {"workload_id": "coding-eval-v1", "seed": 42},
+    {"workload_id": "reasoning-eval-v1", "seed": 42},
+    {"workload_id": "summarization-eval-v1", "seed": 42},
+    {"workload_id": "instruction-eval-v1", "seed": 42}
+  ],
+  "explicitly_not_claimed": [
+    "This seed value is not claimed to be part of the frozen R2-09B contract text itself -- it is a new, additive, prospective planning decision, made under the latitude the frozen seed_policy text explicitly leaves open ('record explicit acquisition seed per cell').",
+    "No claim that seed effects are zero under deterministic decoding; per the frozen text, any seed effect must still be reported, not assumed away, once/if EVAL is ever opened."
+  ],
+  "commitment": "No seed listed here will be changed after any EVAL trace has been captured, inspected, or any EVAL output observed. A change would require a new, dated, additive amendment to this file with an explicit reason, never a silent edit.",
+  "written_utc": "2026-11-12T21:40:00Z"
+}

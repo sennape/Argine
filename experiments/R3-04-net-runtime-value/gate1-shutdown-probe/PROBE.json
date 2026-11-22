@@ -1,0 +1,304 @@
+{
+ "artifact": "R3-04-SHUTDOWN-PROBE",
+ "model_free": true,
+ "tests": "H1 (console Ctrl-event delivery) only",
+ "trials": 20,
+ "summary": {
+  "legacy": {
+   "n": 20,
+   "failed": 0,
+   "median_s": 5.40426504611969,
+   "max_s": 98.87742400169373,
+   "over_5s": 10
+  },
+  "own_console_helper": {
+   "n": 20,
+   "failed": 0,
+   "median_s": 0.10763883590698242,
+   "max_s": 0.14968585968017578,
+   "over_5s": 0
+  }
+ },
+ "rows": [
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 1.3111426830291748,
+   "stop_latency_s": 1.3198615999426693,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.14968585968017578,
+   "stop_latency_s": 0.1592285999795422,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 1.2372090816497803,
+   "stop_latency_s": 1.2447867000009865,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.10225105285644531,
+   "stop_latency_s": 0.11197460000403225,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 0.8908233642578125,
+   "stop_latency_s": 0.9110673998948187,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.11979842185974121,
+   "stop_latency_s": 0.12936349993105978,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 24.988018035888672,
+   "stop_latency_s": 25.002336099976674,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.1041405200958252,
+   "stop_latency_s": 0.11521530000027269,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 8.200420141220093,
+   "stop_latency_s": 8.209743599989451,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.09542679786682129,
+   "stop_latency_s": 0.10421479993965477,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 0.7392375469207764,
+   "stop_latency_s": 0.7566975000081584,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.11472487449645996,
+   "stop_latency_s": 0.12400079995859414,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 98.87742400169373,
+   "stop_latency_s": 98.8933710999554,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.09587454795837402,
+   "stop_latency_s": 0.10530230007134378,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 1.814201831817627,
+   "stop_latency_s": 1.831690999912098,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.09779977798461914,
+   "stop_latency_s": 0.10594799998216331,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 1.0193431377410889,
+   "stop_latency_s": 1.0271567999152467,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.08555984497070312,
+   "stop_latency_s": 0.09399389999452978,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 2.608109951019287,
+   "stop_latency_s": 2.6234093999955803,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.1147458553314209,
+   "stop_latency_s": 0.12782699998933822,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 57.699410915374756,
+   "stop_latency_s": 57.70855650003068,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.10212922096252441,
+   "stop_latency_s": 0.11142829991877079,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 0.7984452247619629,
+   "stop_latency_s": 0.8157213000813499,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.12192964553833008,
+   "stop_latency_s": 0.131269000004977,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 50.74164080619812,
+   "stop_latency_s": 50.75303900009021,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.10131478309631348,
+   "stop_latency_s": 0.11032420000992715,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 9.752679586410522,
+   "stop_latency_s": 9.763438199996017,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.11657547950744629,
+   "stop_latency_s": 0.1281959000043571,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 32.61650371551514,
+   "stop_latency_s": 32.62577419995796,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.12154412269592285,
+   "stop_latency_s": 0.13212550000753254,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 31.3867609500885,
+   "stop_latency_s": 31.395963400020264,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.11113715171813965,
+   "stop_latency_s": 0.12073500000406057,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 0.606792688369751,
+   "stop_latency_s": 0.6263905999949202,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.12727975845336914,
+   "stop_latency_s": 0.13650510006118566,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 83.9535505771637,
+   "stop_latency_s": 83.96556480007712,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.0995950698852539,
+   "stop_latency_s": 0.10830570000689477,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 0.6532430648803711,
+   "stop_latency_s": 0.6711394999874756,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.11822271347045898,
+   "stop_latency_s": 0.12650599994231015,
+   "helper_returncode": 0
+  },
+  {
+   "method": "legacy",
+   "mode": "graceful",
+   "delivery_latency_s": 64.14807057380676,
+   "stop_latency_s": 64.158301700023,
+   "helper_returncode": null
+  },
+  {
+   "method": "own_console_helper",
+   "mode": "graceful",
+   "delivery_latency_s": 0.1023550033569336,
+   "stop_latency_s": 0.11400260007940233,
+   "helper_returncode": 0
+  }
+ ]
+}

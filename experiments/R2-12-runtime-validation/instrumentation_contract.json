@@ -1,0 +1,21 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "fields_recorded_per_run": [
+    "tokens_generated",
+    "decode_duration_seconds",
+    "ttft_seconds",
+    "total_wall_clock_seconds",
+    "expert_store_reads",
+    "expert_store_bytes_read",
+    "policy_cpu_time_seconds",
+    "predictor_cpu_time_seconds_if_applicable"
+  ],
+  "overhead_must_be_measured_or_bounded": "Instrumentation overhead is NEVER assumed free. Before any publication-quality run, a calibration step must compare steady-state decode tokens/s under: (a) the SAME heavy structured trace logging used for R2-11 captures (--expert-store tracing, as in tools/r2_11_capture_driver.py's frozen command), and (b) a minimal-runtime instrumentation mode if the runtime binary (llama-research-v2) exposes one that disables heavy structured trace logging while still emitting the timing/counter fields listed above.",
+  "minimal_instrumentation_mode_requirement": {
+    "if_available": "Must be proven, before use for timing, to preserve the exact timing metrics needed (TTFT, decode duration, expert-store read/byte counters) -- i.e. the lighter mode's own reported values must be cross-checked once against a trace-enabled run of the SAME (workload,budget,policy) for consistency (not identical wall-clock time, since tracing itself adds overhead, but consistent counts: tokens generated, expert reads, bytes read must match).",
+    "if_not_available_or_not_provably_consistent": "Fallback: use the SAME instrumentation level (the existing R2-11-style tracing) symmetrically for BOTH policies in every cell. The policy-vs-policy comparison remains fair even with nonzero, unremoved tracing overhead, because both policies pay an identical overhead; this fallback is reported as an explicit caveat on the absolute tokens/s figures (which may then understate real-world throughput for BOTH policies equally) rather than silently assumed away."
+  },
+  "no_mixing_instrumentation_modes_within_a_comparison": "A (workload,budget) cell's PredictedProtectPolicy and B_selected(M) runs must use the SAME instrumentation mode as each other. Mixing trace-heavy and trace-light results across the two policies being compared, without accounting for the overhead difference, is forbidden -- the timing comparison would no longer isolate the policy's own effect.",
+  "separate_scientific_behavior_verification": "Whichever instrumentation mode is used for timing, policy/predictor SCIENTIFIC behavior (output-equivalence, memory correctness) is verified separately against a trace-enabled run for that same (workload,budget,policy), reusing the same validation machinery as R2-11 (trace_contract.normalize/reconcile, trace_completeness) -- timing and scientific-correctness verification are NOT required to come from the identical process invocation, only from consistent configuration."
+}

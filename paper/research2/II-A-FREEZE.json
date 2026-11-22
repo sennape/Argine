@@ -1,0 +1,94 @@
+{
+  "freeze_version": "1.0.0",
+  "freeze_name": "Research-II-A-Paper-Tranche-Freeze",
+  "freeze_timestamp_utc": "2026-11-08T00:00:00Z",
+  "status": "PAPER-FROZEN",
+  "scope": "Research II-A only (R2-01, R2-02, R2-03, R2-04). II-B and II-C are NOT started and are represented in the manuscript as placeholders only.",
+  "research_phase_classification": {
+    "II-A": "CLOSED / PASS / PAPER-FROZEN",
+    "II-B": "READY, NOT STARTED",
+    "II-C": "FUTURE"
+  },
+  "canonical_runs": {
+    "R2-01": {
+      "run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+      "status": "PASS",
+      "name": "Replay Validation (Level-D fidelity)",
+      "git_commit": "76baf4595665898abf0384b31b56f45259d1e0d3"
+    },
+    "R2-02": {
+      "run_id": "238c8ee7f0914df7b28942ec99627c24",
+      "status": "PASS",
+      "name": "Oracle Headroom at Fixed 4 GiB Memory",
+      "git_commit": "7a36083b7671c2638835620b7483172fcd46ac2e"
+    },
+    "R2-03": {
+      "run_id": "d957077073374f1e9fd1e101a002946f",
+      "status": "PASS",
+      "name": "Sensitivity to Expert-Memory Capacity (budget sweep)",
+      "git_commit": "0cdc657ae3ad6153dcca99a34577ce44c4c1f45c"
+    },
+    "R2-04": {
+      "run_id": "cd2b58b019314fafb90304234e6d1907",
+      "status": "PASS",
+      "name": "Oracle-Bounded Recoverable-Margin Analysis",
+      "git_commit": "b6f0fd7970998807416f3222bdcc28de3f99bbe6"
+    }
+  },
+  "source_trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+  "canonical_headline_metrics": {
+    "r2_01_replay_fidelity": {
+      "event_disagreement_rate": 0.0,
+      "wl_misses_runtime_vs_replay": [138944, 138944],
+      "wl_evictions_runtime_vs_replay": [136602, 136602],
+      "wl_miss_bytes_runtime_vs_replay": [132974714880, 132974714880],
+      "tail_disagreements_unexplained": 0,
+      "exp021_closure": "PASS"
+    },
+    "r2_02_at_4gib": {
+      "relative_miss_byte_reduction_oracle_vs_global_lru": 0.5859449007718049,
+      "structural_sharding_gap_bytes": 1200218112,
+      "structural_sharding_gap_relative": 0.011612946948471516
+    },
+    "r2_03_r2_04_budget_sweep_relative_headroom": {
+      "1.5GiB": 0.4411,
+      "2GiB": 0.4755,
+      "4GiB": 0.5859,
+      "8GiB": 0.7066,
+      "16GiB": 0.0000
+    },
+    "r2_04_budget_sweep_absolute_headroom_bytes": {
+      "1.5GiB": 103574900736,
+      "2GiB": 93423513600,
+      "4GiB": 59855155200,
+      "8GiB": 16179056640,
+      "16GiB": 0
+    },
+    "max_relative_headroom_budget": "8GiB",
+    "max_absolute_headroom_budget": "1.5GiB",
+    "effective_residency_budget_tested": "16GiB",
+    "causal_recovery_status": "NOT_YET_MEASURED -- II-C"
+  },
+  "figure_input_digests": {
+    "paper/research2/data/r2_03/comparison.json": "5dc93268e6fda692685e583914e9c23c23be976b18fb11c92a40e752b50628ce"
+  },
+  "data_snapshot_digest": {
+    "description": "sha256 of the sorted concatenation of per-file sha256sums over paper/research2/data/**",
+    "value": "c3d914ea4db032eb3574d7b0f9620c5494416b4446b4d28a3429eefe6e040682"
+  },
+  "claim_ledger": {
+    "path": "paper/research2/claims/claim_ledger.md",
+    "digest": "509cc71fb279c2aae25a7b5f0a37e5a26d627f4f021ff91f02c7e4b7587242b9"
+  },
+  "paper_source_digest": {
+    "description": "sha256 of the sorted concatenation of per-file sha256sums over sections/, tables/, figures/, manuscript.tex, references.bib, data/, claims/ under paper/research2/",
+    "value": "0421895d46247f85a36fd12f8009cee883a50eb5d806265d302e1b13df535396"
+  },
+  "prohibited_phrases": [
+    "performance improvement",
+    "memory saving",
+    "faster inference",
+    "demonstrated recoverability"
+  ],
+  "notes": "This manifest makes the II-A paper tranche auditable later: every headline number, run ID, and trace hash recorded here is reproducible from the canonical evidence directories under the Argine3 research evidence root, independent of this paper's own frozen data/ snapshot. Do NOT implement R2-05 or tag the whole Research 2 programme based on this manifest alone."
+}

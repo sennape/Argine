@@ -1,0 +1,77 @@
+{
+ "acquisition_opened": false,
+ "amended_schedule_sha256": "e87dc48518dd0281d5eeadd0c8db7a9cfc2234d0bce9d253f464566e43f511a0",
+ "artifact": "R3-04-CAMPAIGN-EFFICIENCY-AMENDMENT",
+ "changed": {
+  "4GiB_timing": "dropped (no timing launches)",
+  "shutdown": "validated own_console_helper REQUIRED; helper failure/fallback fails the launch closed",
+  "time_estimates": "updated (UPDATED_TIME_MODEL.json)"
+ },
+ "design": {
+  "blocks": {
+   "1.5": 18,
+   "8": 6
+  },
+  "counted_launches": 144,
+  "dropped": {
+   "4": "timing (descriptive budget); 37 launches"
+  },
+  "name": "PRIMARY_PLUS_8G",
+  "physical_launches": 146,
+  "warmups": 2
+ },
+ "driver_requirements": [
+  "fixed-N",
+  "resume-safe",
+  "no optional stopping",
+  "no policy selection",
+  "no silent replacement",
+  "orphan-safe",
+  "protocol/amendment SHA-gated",
+  "runtime SHA-gated",
+  "clean-environment gated",
+  "opening freeze must name this amendment"
+ ],
+ "estimates_h_helper": {
+  "model": [
+   5.829644997171599,
+   7.066985900815231,
+   8.37464747534776
+  ],
+  "wall": [
+   6.762978330504931,
+   8.04087478970412,
+   9.429647475347762
+  ]
+ },
+ "frozen_schedule_sha256": "9c37d12a53dded51a6a5fed9351db8a430248425ddd703b29b0f636013d43a06",
+ "opening_freeze_exists": false,
+ "opening_freeze_must_record": "amendment_freeze_sha256 (driver refuses a mismatch in either direction)",
+ "parents": {
+  "gate1_freeze_sha256": "6379572091345e38f130a62a18d9fd5acdaef673f92439c44ff2bea8de8d6f42",
+  "gate2_evidence_commit": "7657934",
+  "gate2_freeze_sha256": "59fd7ac62242e8d126f6a8d7b6b31586b82119f9f8afccd5af20ded9237b2958",
+  "gate2_tooling_commit": "2345808",
+  "protocol_commit": "4a0aa2d",
+  "protocol_freeze_sha256": "a88359b52891f93ec49e67978d92c2eb3b73db588611bce46b3103b2978c1202"
+ },
+ "schedule_rule": "frozen schedule restricted to budgets 1.5 and 8; slots, order, arms, cooldowns unchanged; seq renumbered 1..146 with frozen_seq retained",
+ "shutdown_method_required": "own_console_helper",
+ "status": "AMENDMENT_PROPOSED_PROSPECTIVE_NOT_OPENED",
+ "unchanged": {
+  "8GiB_role": "descriptive negative control, N=6, cannot override the primary classification",
+  "arms": {
+   "A": "b_selected",
+   "P": "predicted_protect",
+   "S": "predicted_protect_sham"
+  },
+  "classification_rule": "NET_WIN: CI upper < 0; NET_LOSS: CI lower > 0; else INCONCLUSIVE (frozen V.classify_primary)",
+  "estimator": "frozen paired block t-interval, alpha 0.05",
+  "primary_budget": "1.5",
+  "primary_endpoint": "decode wall ms/token",
+  "primary_n_blocks": 18,
+  "question": "R3-04 primary question",
+  "runtime_sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5",
+  "token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa"
+ }
+}

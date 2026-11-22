@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-bridge01-phase0-contract-v1.0",
+  "primary_metric": {
+    "metric_id": "miss_bytes_per_decode_step",
+    "definition": "bytes_missed / steps, aggregated exactly as argine.research2.r2_09a.fast_replay.run_fast already reports it per (trace, policy, budget) cell -- the same primary_physical_replay_quantity (miss_bytes) already frozen in experiments/R2-09-prediction-benchmark/metrics_contract.json.retention_metrics.",
+    "aggregation_rule": "mean over the N BRIDGE-holdout instances of the per-instance miss_bytes_per_decode_step, equal weight per instance -- identical discipline to R2-09A's baseline-selection aggregation (never weighted by step/token count across instances, to prevent a longer trace dominating the average)."
+  },
+  "secondary_metrics": [
+    "misses_per_decode_step",
+    "total_miss_bytes",
+    "total_misses",
+    "peak_resident_bytes",
+    "budget_violations (must be zero for every cell; a non-zero value is a correctness failure, not a scientific result)",
+    "per_workload_breakdown",
+    "comparator_relative_recovery_using_O_B_only_as_comparator (O_B is a comparator, never described as O*/optimal)"
+  ],
+  "comparator_baseline": {
+    "name": "B_selected(M)",
+    "source": "experiments/R2-09-prediction-benchmark/r2_09a/R2-09A-FREEZE.json.selected_baselines, exact per-budget config, never reselected",
+    "delta_definition": "delta_miss_bytes_vs_b_selected = MissBytes(mechanism) - MissBytes(B_selected); negative is better for the mechanism (identical sign convention to metrics_contract.json)."
+  },
+  "budgets_bytes": [1610612736, 4294967296, 8589934592],
+  "primary_budget_bytes": 4294967296,
+  "decision_gate": {
+    "frozen_before_any_result": true,
+    "outcomes": [
+      {
+        "label": "BRIDGE_NEGATIVE",
+        "definition": "At the primary budget (4 GiB), the aggregate (equal-weight-per-instance) miss_bytes_per_decode_step of every evaluated mechanism config is >= B_selected(M)'s -- i.e. no aggregate reduction versus B_selected at 4 GiB."
+      },
+      {
+        "label": "BRIDGE_POSITIVE_BUT_WEAK",
+        "definition": "At least one mechanism config shows an aggregate reduction versus B_selected at 4 GiB (delta_miss_bytes_vs_b_selected < 0), but the improvement is NOT consistent: either it is negative (worse) for >=1 of the 4 BRIDGE-holdout workload instances, or it does not also show a non-positive aggregate delta at both secondary budgets (1.5 GiB and 8 GiB)."
+      },
+      {
+        "label": "BRIDGE_POSITIVE",
+        "definition": "At least one mechanism config shows an aggregate reduction versus B_selected at the primary 4 GiB budget (delta_miss_bytes_vs_b_selected < 0), the sign of that reduction is consistent (delta <= 0) across all 4 BRIDGE-holdout workload instances individually at 4 GiB, AND the improvement is not driven by a single workload (no single instance accounts for more than 3/4 of the total aggregate byte reduction)."
+      }
+    ],
+    "tie_breaking_across_mechanism_configs": "If multiple mechanism configs qualify for BRIDGE_POSITIVE, the config with the largest 4 GiB aggregate miss_bytes_per_decode_step reduction is reported as primary; all qualifying configs are reported, none are hidden.",
+    "no_post_hoc_thresholds": "These three outcome definitions and their numeric/consistency criteria are frozen now, in Phase 0, before the BRIDGE holdout is captured or opened. No threshold may be added, removed, or adjusted after BRIDGE results exist."
+  },
+  "never_promotes_r2_10_category": true,
+  "never_reopens_r2_11_not_proposed": true,
+  "relationship_to_r2_11": "A BRIDGE_POSITIVE outcome may justify PROPOSING a new, separate R2-11 protocol prospectively. It never rewrites, and is not permitted to be interpreted as retroactively satisfying, the historical statement that R2-11 was NOT PROPOSED under the original frozen R2-10 decision rules (experiments/R2-10-working-set-predictor/decision_rules.json), which remains true and unchanged regardless of this bridge's outcome.",
+  "leakage_audit": {
+    "status": "FIRST_CLASS_SCIENTIFIC_TEST, not merely code quality",
+    "method": "Synthetic-trace future-alteration invariance: alter trace events strictly after a given decision boundary while holding the visible prefix identical; retention decisions (admission, eviction victim, resident set) up to and including that boundary must be bit-identical regardless of the alteration."
+  },
+  "determinism_audit": {
+    "status": "FIRST_CLASS_TEST",
+    "method": "Repeated replay with identical trace, predictor, policy, budget, and config must produce bit-identical scientific results (miss_bytes, misses, evictions, peak_resident_bytes, per-layer breakdown)."
+  },
+  "forbidden_claims_from_r2_bridge_01": [
+    "runtime speedup or latency improvement (this is a replay-level feasibility question, not a runtime-speed question)",
+    "retention improvement beyond the 4 new BRIDGE-holdout instances actually evaluated",
+    "cross-model or cross-vendor generalization",
+    "treating O_B (the comparator) as O* (the true offline optimum)",
+    "retroactive promotion of R2-10 Category B to Category C",
+    "retroactive reversal of the historical R2-11 NOT PROPOSED decision",
+    "use of the R2-10 EVAL set, in any form, as BRIDGE holdout or for BRIDGE policy tuning"
+  ]
+}

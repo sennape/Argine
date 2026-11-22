@@ -1,0 +1,116 @@
+{
+  "artifact": "R3-02B-STORAGE-MODEL",
+  "basis": {
+    "compression_ratio_measured": 0.4757,
+    "compression_test": "NTFS_COMPRESSION_TEST.json",
+    "free_bytes_measured": 69860298752,
+    "free_gib_measured": 65.06,
+    "logical_projection_source": "R3-02 Phase 0 storage audit (conformance-derived row model)",
+    "note": "compression reduces PHYSICAL allocation only; logical trace content and schema are unchanged",
+    "windows_headroom_gib": 15.0
+  },
+  "classification": {
+    "after_max_cleanup": "STORAGE_MARGIN_INSUFFICIENT",
+    "current_free": "STORAGE_REDESIGN_REQUIRED",
+    "reason": "expected physical peak exceeds current free space; after maximal safe cleanup only the expected case fits and the conservative case still does not, below the unattended standard"
+  },
+  "cleanup": {
+    "build_intermediates_gib": 0.34,
+    "conda_pkgs_gib": 14.69,
+    "free_after_cleanup_gib": 80.09,
+    "pip_cache_gib": 0.0,
+    "temp_gib": 0.0,
+    "total_reclaimable_gib": 15.03
+  },
+  "minimum_scientific_change": {
+    "change": "stop emitting resident_before per decision row (derive it from the previous row's resident_after plus the previous event's admissions minus evictions), or delta-encode resident sets",
+    "effect": "approximately halves logical and physical trace payload",
+    "projected_peak_physical_gib_after_change": {
+      "CONSERVATIVE_HIGH": 41.23,
+      "EXPECTED": 36.45
+    },
+    "requires": "explicit R3-00A trace-schema revision; NOT performed in this hotfix"
+  },
+  "per_trace": {
+    "1.5GiB": {
+      "CONSERVATIVE_HIGH": {
+        "logical_gib": 6.1,
+        "physical_gib": 2.9
+      },
+      "EXPECTED": {
+        "logical_gib": 5.4,
+        "physical_gib": 2.57
+      },
+      "LOW": {
+        "logical_gib": 1.8,
+        "physical_gib": 0.86
+      }
+    },
+    "4GiB": {
+      "CONSERVATIVE_HIGH": {
+        "logical_gib": 16.2,
+        "physical_gib": 7.71
+      },
+      "EXPECTED": {
+        "logical_gib": 14.3,
+        "physical_gib": 6.8
+      },
+      "LOW": {
+        "logical_gib": 4.8,
+        "physical_gib": 2.28
+      }
+    },
+    "8GiB": {
+      "CONSERVATIVE_HIGH": {
+        "logical_gib": 32.2,
+        "physical_gib": 15.32
+      },
+      "EXPECTED": {
+        "logical_gib": 28.5,
+        "physical_gib": 13.56
+      },
+      "LOW": {
+        "logical_gib": 9.5,
+        "physical_gib": 4.52
+      }
+    }
+  },
+  "phase": "R3-02B",
+  "required_free_gib": {
+    "conservative": 97.5,
+    "expected": 87.98
+  },
+  "shortfall_gib": {
+    "conservative": 32.44,
+    "expected": 22.92
+  },
+  "totals": {
+    "CONSERVATIVE_HIGH": {
+      "logical_traces_gib": 141.2,
+      "non_trace_gib": 0.01,
+      "peak_logical_gib": 173.4,
+      "peak_physical_gib": 82.5,
+      "physical_traces_gib": 67.17,
+      "rerun_buffer_logical_gib": 32.2,
+      "rerun_buffer_physical_gib": 15.32
+    },
+    "EXPECTED": {
+      "logical_traces_gib": 124.9,
+      "non_trace_gib": 0.01,
+      "peak_logical_gib": 153.4,
+      "peak_physical_gib": 72.98,
+      "physical_traces_gib": 59.41,
+      "rerun_buffer_logical_gib": 28.5,
+      "rerun_buffer_physical_gib": 13.56
+    },
+    "LOW": {
+      "logical_traces_gib": 41.7,
+      "non_trace_gib": 0.01,
+      "peak_logical_gib": 51.2,
+      "peak_physical_gib": 24.37,
+      "physical_traces_gib": 19.84,
+      "rerun_buffer_logical_gib": 9.5,
+      "rerun_buffer_physical_gib": 4.52
+    }
+  }
+}

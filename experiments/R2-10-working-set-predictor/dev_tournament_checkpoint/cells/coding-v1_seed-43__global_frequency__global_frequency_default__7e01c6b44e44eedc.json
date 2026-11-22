@@ -1,0 +1,18 @@
+{
+  "cell_key": "coding-v1_seed-43__global_frequency__global_frequency_default__7e01c6b44e44eedc",
+  "cell_record_digest": "1537cbf27ad1580c1e88490661a5da6d54eb25932cb9cdb09b1d78cf0511044b",
+  "config_id": "global_frequency/default",
+  "deterministic": true,
+  "dev_cell_id": "coding-v1/seed-43",
+  "family_id": "global_frequency",
+  "recall_at_k_h1": 0.3277750861326443,
+  "recall_at_k_h16": 0.3013622871863799,
+  "recall_at_k_h4": 0.3176540798611111,
+  "result_digest": "7bcfd0ad11eda489c1a10a159cd5671d9dc046746d3fb0d02865e47b5ec9e506",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 18576,
+    "h16": 17856,
+    "h4": 18432
+  }
+}

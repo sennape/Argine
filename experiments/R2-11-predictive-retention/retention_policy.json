@@ -1,0 +1,23 @@
+{
+  "contract_version": "r2-11-phase0-contract-v1.0",
+  "frozen_predictor": {
+    "decay_factor": 0.99,
+    "family": "decayed_transition",
+    "no_alternative_predictor_comparison_for_selection": true,
+    "no_retuning": true,
+    "no_use_of_holdout_evidence_to_alter_predictor": true,
+    "source": "argine.research2.r2_bridge01.retention_policies.PredictedProtectPolicy wraps one DecayedTransitionPredictor(n_experts, decay=0.99) per layer; identical to the predictor frozen in R2-BRIDGE-01's PHASE1-SELECTION-FREEZE.json (predictor_identity: 'decayed_transition/decay=0.99'), itself validated causally in R2-10."
+  },
+  "frozen_retention_mechanism": {
+    "module": "argine.research2.r2_bridge01.retention_policies.PredictedProtectPolicy",
+    "name": "PredictedProtectPolicy",
+    "no_bonus_policy_reselection": true,
+    "no_modification_based_on_r2_11_results": true,
+    "no_policy_tournament": true,
+    "no_retention_hyperparameter_tuning": true,
+    "note_on_bonus_configs": "build_bridge_configs() also defines predictor_retention_score at bonus=0.0/1.0/4.0; R2-11 explicitly does NOT evaluate those configs (per instruction #4/#23 -- only PredictedProtectPolicy and B_selected(M) are in scope).",
+    "source": "The exact mechanism selected prospectively in R2-BRIDGE-01 Phase 1 (PHASE1-SELECTION-FREEZE.json: classification DEV_RETENTION_SIGNAL_POSITIVE, selected_config_id='predicted_protect/budget=4294967296' pattern generalized across the 3 frozen budgets via build_bridge_configs()/make_policy()), then confirmed BRIDGE_POSITIVE on the R2-BRIDGE-01 holdout (BRIDGE_DECISION_RULE_APPLICATION.json, commit 58b36a1)."
+  },
+  "implementation_change_policy": "Any implementation change required for correctness (e.g. a bugfix analogous to the Phase-2A.1 instrumentation repair) must be recorded as a separately audited instrumentation/implementation repair (see instrumentation_dependency.json) and must not alter scientific policy semantics, the causal boundary, or the predictor's decay/aging parameters.",
+  "schema_version": 1
+}

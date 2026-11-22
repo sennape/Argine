@@ -1,0 +1,40 @@
+{
+  "label": "PHASE_0_PROVENANCE_CORRECTION",
+  "scope": "R2-09A DEV corpus identity/provenance correction only; not a new scientific corpus",
+  "scientific_change": "NO_SCIENTIFIC_CHANGE_REPORTING_ERROR",
+  "audit_final_state": "R2_09A_CORPUS_IDENTITY_VERIFIED_RESUME_ALLOWED",
+  "authoritative_dev_corpus_digest": "f758b77492eebc38bc81ba22d6b06ab8f19138d1099b635821369a4d022d9398",
+  "earlier_reported_dev_corpus_digest": "18158e165caff70c9b83f3eeed4d3949f5a3ee652d593fd32264281afa95f11a",
+  "historical_status": "earlier reported digest superseded for reporting/provenance purposes; historical old manifest bytes not recoverable from persisted artifacts",
+  "coding_v1_seed_43_decode_steps": {
+    "earlier_reported": 380,
+    "independently_verified": 381,
+    "reconstruction": {
+      "total_decode_events": 388,
+      "excluded_warmup": 7,
+      "excluded_flush_sentinel": 0,
+      "other_exclusions": 0,
+      "final_decode_steps": 381
+    }
+  },
+  "evidence_check": "no persisted scientific evidence found using denominator 380; all current durable tournament/checkpoint cells use verified denominator semantics (coding-v1__seed-43 decode_steps=381)",
+  "scientific_identity_unchanged": {
+    "dev_corpus_membership_unchanged": true,
+    "trace_shas_unchanged": true,
+    "model_runtime_identities_unchanged": true,
+    "other_scientific_identity_fields_unchanged": true,
+    "r2_09b_contract_unchanged": true,
+    "r2_09b_contract_digest": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28"
+  },
+  "auxiliary_provenance": {
+    "scientific_content_hash_excluding_frozen_utc": "36e5db2993a5ca4a0960fc725b3277e60983d0c572a695b1ae07963f77d9363f",
+    "note": "auxiliary provenance only; does not replace authoritative Phase-0 digest bound by current checkpoint cells"
+  },
+  "checkpoint_identity_at_correction": {
+    "checkpoint_dev_corpus_digest": "f758b77492eebc38bc81ba22d6b06ab8f19138d1099b635821369a4d022d9398",
+    "validated_cell_files_rescanned": 240,
+    "invalid_rejected_cells": 0,
+    "expected_total_cells": 624
+  },
+  "recorded_utc": "2026-11-10T17:55:00Z"
+}

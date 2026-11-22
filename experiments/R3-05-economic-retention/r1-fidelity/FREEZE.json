@@ -1,0 +1,19 @@
+{
+ "artifact": "R3-05-R1-FREEZE",
+ "authorizes": "Nothing candidate-related. Permits R2 (clairvoyant ceiling) and R3 (CES / PP_CURVE) to consume CANONICAL_STREAM.jsonl; each needs its own prompt.",
+ "canonical_stream_sha256": "24fcc3e31e800826acb353c627326d4665af7b05c88a3138b18b79c5c435e776",
+ "classification": "R3_05_R1_FIDELITY_PASS",
+ "files_sha256": {
+  "CANONICAL_STREAM.jsonl": "24fcc3e31e800826acb353c627326d4665af7b05c88a3138b18b79c5c435e776",
+  "CLAIM_BOUNDARIES.md": "687a0861813a0e963ae98742d272dca565c473a4b9e6af27a050d6ba09f78a72",
+  "FIDELITY_RESULTS.json": "d76ad68c229b0377b80ec6fdb902e9885de2963fa092e8904c70a1e6b0f4fde2",
+  "README.md": "92b8659d723c4463f8bf96341acc1eb33d7447cbd8ba2d84fd20abdc8aa65b53",
+  "SOURCE_MANIFEST.json": "f9f2ad13af098dcfb4808430f6c462ee5ab60e9691e7c974fe9976c1a971e649",
+  "STREAM_MANIFEST.json": "71aafb8c7a8681d061d0bf3ee18496b80a5d4567a193f24983efa12d11a12650",
+  "r1.py": "86a2ec54e0069ca85b5b0c568d97b238c7a082cf75612ee6a1b0aa02b60ded29",
+  "tests/test_r1_core.py": "1844dfa24d1f50b5c07c902d2a237ae42e495708e69b43ceb037936d06c5ab8f",
+  "tests/test_r1_evidence.py": "e97bbfc9240a2876435ce461a67c0e5b4794211458668800d84a94f7be072316"
+ },
+ "freeze_sha256": "8d025fdfb3d2a48c54e4d905f3a0e3aad2dd70ed9fdabf602b21ec2b600c3382",
+ "phase0_freeze_sha256": "415f78a850a2917a2457797106589433f944c07a863f80b14cef88fde6232ae3"
+}

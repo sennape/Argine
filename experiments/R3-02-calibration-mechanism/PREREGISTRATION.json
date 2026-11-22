@@ -1,0 +1,142 @@
+{
+  "artifact": "R3-02-PREREGISTRATION",
+  "budgets_bytes": {
+    "1.5": 1610612736,
+    "4": 4294967296,
+    "8": 8589934592
+  },
+  "claim_boundaries": {
+    "allowed": [
+      "predictive bookkeeping has measurable/bounded wall-time overhead",
+      "expert-memory traffic is present at budget X",
+      "A/B real-runtime retention trajectories are equivalent",
+      "traffic and timing vary across budgets"
+    ],
+    "not_allowed": [
+      "I/O caused the timing difference",
+      "policy overhead caused the R2 result",
+      "cost-aware retention will improve throughput",
+      "R3 achieved runtime speedup"
+    ]
+  },
+  "classification": {
+    "MECHANISM_OBSERVABLE": [
+      "all 7 TRACE_COUNT records admissible",
+      "all 35 counted CELL records admissible",
+      "sham vs B_selected retention trajectories identical at all three budgets",
+      "sham predictive activity > 0",
+      "expert traffic measured and > 0 at at least one tested budget",
+      "sham overhead satisfies the frozen precision criterion at 4 GiB",
+      "all frozen identities and acquisition invariants hold"
+    ],
+    "must_not_report": "policy success/failure",
+    "otherwise": "MECHANISM_INSUFFICIENT, reporting the exact failing condition(s)"
+  },
+  "endpoints": {
+    "delta_overhead_cpu": {
+      "formula": "median over paired repetitions of cpu_per_token(B) - cpu_per_token(A)",
+      "source": "process_cpu_seconds / tokens_generated",
+      "unit": "seconds/token"
+    },
+    "delta_overhead_relative": {
+      "aggregation": "per budget",
+      "formula": "(step_time(B) - step_time(A)) / step_time(A)",
+      "unit": "dimensionless"
+    },
+    "delta_overhead_time": {
+      "aggregation": "per budget",
+      "formula": "median over paired repetitions of step_time(B) - step_time(A)",
+      "unit": "seconds/token"
+    },
+    "precision": {
+      "applies_to": "4 GiB (primary mechanism budget)",
+      "criterion": "95% CI half-width of delta_overhead_time <= 0.01 * median step_time(A) at the 4 GiB budget",
+      "name": "OVERHEAD_BOUNDED"
+    },
+    "step_time": {
+      "formula": "decode_duration_seconds / tokens_generated",
+      "source": "TIMING",
+      "unit": "seconds/token"
+    },
+    "traffic": {
+      "bytes_read_per_token": "expert_bytes_read / tokens_generated",
+      "evictions_per_decision_step": "evictions / decision_rows",
+      "miss_bytes_per_token": "expert_miss_bytes / tokens_generated (TRACE_COUNT)",
+      "reads_per_token": "expert_read_count / tokens_generated",
+      "resident_bytes_peak": "max cache_resident_bytes_after"
+    }
+  },
+  "measurements_included": false,
+  "next_phase_gate": {
+    "authorizes": "cost-model protocol design",
+    "otherwise": "do not authorize cost-model synthesis",
+    "requires": [
+      "MECHANISM_OBSERVABLE",
+      "at least one prospective runtime-cost quantity that is available before a retention decision or derivable from historical data",
+      "not derived from reserved holdout data, not based on TRACE_COUNT timing, not an unidentified causal claim",
+      "measurable or calibratable under the real runtime"
+    ]
+  },
+  "parameters": {
+    "base_by_budget": {
+      "1.5": {
+        "aging_interval_steps": 1,
+        "decay_factor": 0.999
+      },
+      "4": {
+        "aging_interval_steps": 64,
+        "decay_factor": 0.99
+      },
+      "8": {
+        "aging_interval_steps": 16,
+        "decay_factor": 0.999
+      }
+    },
+    "predictor": {
+      "n_experts": 128,
+      "predictor_decay": 0.99,
+      "top_k": 8
+    }
+  },
+  "phase": "R3-02",
+  "primary_contrast": "A (b_selected) vs B (predicted_protect_sham), paired within budget",
+  "questions": {
+    "Q1": "isolated runtime cost of predictive bookkeeping when retention is held equivalent to B_selected",
+    "Q2": "expert-memory traffic at 1.5 / 4 / 8 GiB under the real runtime",
+    "Q3": "budgets with enough measured traffic and runtime signal to justify a later cost-aware hypothesis",
+    "Q4": "can real TRACE_COUNT+TIMING CELL records be generated under the frozen R3-00A/R3-01 contracts",
+    "Q5": "does the sham remain behaviourally equivalent to B_selected through the real model/store path"
+  },
+  "scope": "mechanism attribution only; not a cost-aware policy evaluation and not a policy success/failure",
+  "secondary_control": "C (predicted_protect) at 8 GiB only, as a predictive-policy mechanism reference; not an overhead control",
+  "sham_equivalence_rule": {
+    "compared": [
+      "requested expert sequence where semantically required",
+      "victim sequence",
+      "evicted expert sequence",
+      "resident-set trajectory",
+      "resident bytes after every event",
+      "eviction total",
+      "final resident set",
+      "output_token_digest"
+    ],
+    "on_failure": "MECHANISM_INSUFFICIENT and A-vs-B timing is not interpreted as isolated overhead",
+    "requires_positive": "predictor_decisions > 0 for B"
+  },
+  "stage": "PHASE_0",
+  "statistics": {
+    "aggregation": "median of per-repetition paired differences",
+    "bootstrap": {
+      "ci": "95% percentile",
+      "resamples": 10000,
+      "seed": 20261116
+    },
+    "individual_values": "all five per-repetition values reported",
+    "outlier_removal": null,
+    "p_value": null,
+    "paired_unit": "(workload, budget, control pair, repetition)",
+    "per_token_pooling": null,
+    "repetitions": 5
+  },
+  "status": "FROZEN"
+}

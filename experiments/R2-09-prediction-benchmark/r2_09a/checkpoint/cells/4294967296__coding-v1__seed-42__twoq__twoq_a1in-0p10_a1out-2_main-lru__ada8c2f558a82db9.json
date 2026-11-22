@@ -1,0 +1,31 @@
+{
+  "accesses": 146304,
+  "budget_bytes": 4294967296,
+  "budget_gib": 4.0,
+  "budget_violations": 0,
+  "causal": true,
+  "cell_key": "4294967296__coding-v1__seed-42__twoq__twoq_a1in-0p10_a1out-2_main-lru__ada8c2f558a82db9",
+  "cell_record_digest": "2b8c8b33e108c41ebae44550ba5b60dce4af2e68e5d777c21dee2ded2587df02",
+  "decode_steps": 381,
+  "deterministic": true,
+  "dev_instance_id": "coding-v1__seed-42",
+  "evictions": 48420,
+  "evidence_mode": "NEW_R2_09A_REPLAY",
+  "miss_bytes": 102795337728,
+  "miss_bytes_per_decode_step": 269804036.03149605,
+  "miss_rate": 0.24445674759405076,
+  "misses": 35765,
+  "misses_per_decode_step": 93.87139107611549,
+  "nominal_category": "coding",
+  "params": {
+    "a1in_fraction": 0.1,
+    "a1out_slots_factor": 2,
+    "main_policy": "LRU"
+  },
+  "peak_resident_bytes": 4294803456,
+  "policy_config_id": "twoq/a1in=0.10,a1out=2,main=lru",
+  "policy_family": "twoq",
+  "result_digest": "3f24bde82ab365bece737601b59156a48cb08f3988b38346371bb6977bc034ee",
+  "source_run_id": "R2-09A",
+  "status": "OK"
+}

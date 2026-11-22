@@ -1,0 +1,44 @@
+{
+  "artifact": "R2_11_DETERMINISM_AUDIT",
+  "generated_utc": "2026-11-14T09:40:00Z",
+  "repeat_plan": [
+    {
+      "workload_id": "r2-11-coding-v1",
+      "budget_gib": 4.0,
+      "reason": "one per category at primary budget"
+    },
+    {
+      "workload_id": "r2-11-instruction-v1",
+      "budget_gib": 4.0,
+      "reason": "one per category at primary budget"
+    },
+    {
+      "workload_id": "r2-11-reasoning-v1",
+      "budget_gib": 4.0,
+      "reason": "one per category at primary budget"
+    },
+    {
+      "workload_id": "r2-11-summarization-v1",
+      "budget_gib": 4.0,
+      "reason": "one per category at primary budget"
+    },
+    {
+      "workload_id": "r2-11-coding-v2",
+      "budget_gib": 1.5,
+      "reason": "representative secondary-budget repeat"
+    },
+    {
+      "workload_id": "r2-11-reasoning-v2",
+      "budget_gib": 8.0,
+      "reason": "representative secondary-budget repeat"
+    }
+  ],
+  "policies_repeated_per_entry": [
+    "predicted_protect",
+    "b_selected"
+  ],
+  "n_repeat_cells_checked": 12,
+  "method": "Each listed (workload, budget) pair was independently recomputed from scratch via tools/r2_11_eval_runner.run_one_cell(), completely separately from the persisted eval_cells/ value, and compared field-by-field after normalizing per_layer dict key types (int vs JSON-round-tripped str -- a serialization detail, not a scientific difference).",
+  "all_12_bit_identical": true,
+  "result": "PASS -- all 12 repeated cells bit-identical to their originally persisted computation."
+}

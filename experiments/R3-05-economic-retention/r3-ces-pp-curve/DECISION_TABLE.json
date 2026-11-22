@@ -1,0 +1,336 @@
+{
+ "artifact": "R3-05-R3-DECISION-TABLE",
+ "belady_context": {
+  "conservative_value_ms": 92.21555273959194,
+  "miss_bytes_headroom_decode": 124509708288,
+  "misses_headroom_decode": 43313,
+  "misses_headroom_per_token": 84.595703125
+ },
+ "canonical_stream_sha256": "24fcc3e31e800826acb353c627326d4665af7b05c88a3138b18b79c5c435e776",
+ "pp_beyond_ces": {
+  "pp_minus_ces_decode_miss_bytes_avoided": -409374720,
+  "pp_minus_ces_decode_misses_avoided": -144
+ },
+ "rows": {
+  "A": {
+   "benefit_retained_vs_full_PP": {
+    "miss_bytes": 0.0,
+    "misses": 0.0
+   },
+   "budget_violations": 0,
+   "decode_evictions": 106490,
+   "decode_hits": 93967,
+   "decode_miss_bytes": 306277576704,
+   "decode_misses": 106491,
+   "decode_protected_entries": 0,
+   "decode_protected_events": 0,
+   "fraction_of_belady_headroom": {
+    "miss_bytes": 0.0,
+    "misses": 0.0
+   },
+   "miss_bytes_avoided_vs_A": 0,
+   "miss_bytes_per_token": 598198392.0,
+   "misses_avoided_vs_A": 0,
+   "misses_per_token": 207.990234375,
+   "overflow_events": 0,
+   "resident_peak_bytes": 1610588160,
+   "retained_exact": {
+    "miss_bytes": "0/286322688",
+    "misses": "0/101"
+   }
+  },
+  "CES": {
+   "benefit_retained_vs_full_PP": {
+    "miss_bytes": 2.4297669627912963,
+    "misses": 2.4257425742574257
+   },
+   "budget_violations": 0,
+   "decode_evictions": 106245,
+   "decode_hits": 94212,
+   "decode_miss_bytes": 305581879296,
+   "decode_misses": 106246,
+   "decode_protected_entries": 0,
+   "decode_protected_events": 0,
+   "fraction_of_belady_headroom": {
+    "miss_bytes": 0.005587495285032725,
+    "misses": 0.005656500357860227
+   },
+   "miss_bytes_avoided_vs_A": 695697408,
+   "miss_bytes_per_token": 596839608.0,
+   "misses_avoided_vs_A": 245,
+   "misses_per_token": 207.51171875,
+   "overflow_events": 0,
+   "resident_peak_bytes": 1610588160,
+   "retained_exact": {
+    "miss_bytes": "695697408/286322688",
+    "misses": "245/101"
+   }
+  },
+  "PP N=1": {
+   "N": 1,
+   "PROPORTIONAL_COST_MODEL_ONLY": {
+    "benefit_ms_at_kappa_low": 0.21205900566992525,
+    "estimated_cost_ms_per_token": 14.588048502604149,
+    "label": "PROPORTIONAL_COST_MODEL_ONLY (not measured)",
+    "net_ms_best_case": -14.375989496934224
+   },
+   "benefit_retained_vs_full_PP": {
+    "miss_bytes": 1.0,
+    "misses": 1.0
+   },
+   "budget_violations": 0,
+   "decode_evictions": 106389,
+   "decode_hits": 94068,
+   "decode_miss_bytes": 305991254016,
+   "decode_misses": 106390,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "expected_refresh_count": 24672,
+   "fraction_of_belady_headroom": {
+    "miss_bytes": 0.0022996013076965437,
+    "misses": 0.002331863412832175
+   },
+   "invocation_fraction": 1.0,
+   "invocation_fraction_exact": "24672/24672",
+   "miss_bytes_avoided_vs_A": 286322688,
+   "miss_bytes_per_token": 597639168.0,
+   "misses_avoided_vs_A": 101,
+   "misses_per_token": 207.79296875,
+   "overflow_events": 0,
+   "predictor_refresh_count": 24672,
+   "resident_peak_bytes": 1610588160,
+   "retained_exact": {
+    "miss_bytes": "286322688/286322688",
+    "misses": "101/101"
+   }
+  },
+  "PP N=10": {
+   "N": 10,
+   "PROPORTIONAL_COST_MODEL_ONLY": {
+    "benefit_ms_at_kappa_low": 0.13195328626274605,
+    "estimated_cost_ms_per_token": 1.47583370065256,
+    "label": "PROPORTIONAL_COST_MODEL_ONLY (not measured)",
+    "net_ms_best_case": -1.343880414389814
+   },
+   "benefit_retained_vs_full_PP": {
+    "miss_bytes": 0.6222479721900348,
+    "misses": 0.6237623762376238
+   },
+   "budget_violations": 0,
+   "decode_evictions": 106427,
+   "decode_hits": 94030,
+   "decode_miss_bytes": 306099412992,
+   "decode_misses": 106428,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "expected_refresh_count": 2496,
+   "fraction_of_belady_headroom": {
+    "miss_bytes": 0.0014309222505597267,
+    "misses": 0.0014545286634497726
+   },
+   "invocation_fraction": 0.10116731517509728,
+   "invocation_fraction_exact": "2496/24672",
+   "miss_bytes_avoided_vs_A": 178163712,
+   "miss_bytes_per_token": 597850416.0,
+   "misses_avoided_vs_A": 63,
+   "misses_per_token": 207.8671875,
+   "overflow_events": 0,
+   "predictor_refresh_count": 2496,
+   "resident_peak_bytes": 1610588160,
+   "retained_exact": {
+    "miss_bytes": "178163712/286322688",
+    "misses": "63/101"
+   }
+  },
+  "PP N=100": {
+   "N": 100,
+   "PROPORTIONAL_COST_MODEL_ONLY": {
+    "benefit_ms_at_kappa_low": 0.09113595479930608,
+    "estimated_cost_ms_per_token": 0.1702885039214492,
+    "label": "PROPORTIONAL_COST_MODEL_ONLY (not measured)",
+    "net_ms_best_case": -0.07915254912214312
+   },
+   "benefit_retained_vs_full_PP": {
+    "miss_bytes": 0.4297669627912965,
+    "misses": 0.42574257425742573
+   },
+   "budget_violations": 0,
+   "decode_evictions": 106447,
+   "decode_hits": 94010,
+   "decode_miss_bytes": 306154524672,
+   "decode_misses": 106448,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "expected_refresh_count": 288,
+   "fraction_of_belady_headroom": {
+    "miss_bytes": 0.0009882926696396374,
+    "misses": 0.0009927735321958765
+   },
+   "invocation_fraction": 0.011673151750972763,
+   "invocation_fraction_exact": "288/24672",
+   "miss_bytes_avoided_vs_A": 123052032,
+   "miss_bytes_per_token": 597958056.0,
+   "misses_avoided_vs_A": 43,
+   "misses_per_token": 207.90625,
+   "overflow_events": 0,
+   "predictor_refresh_count": 288,
+   "resident_peak_bytes": 1610588160,
+   "retained_exact": {
+    "miss_bytes": "123052032/286322688",
+    "misses": "43/101"
+   }
+  },
+  "PP N=2": {
+   "N": 2,
+   "PROPORTIONAL_COST_MODEL_ONLY": {
+    "benefit_ms_at_kappa_low": 0.16474366424775702,
+    "estimated_cost_ms_per_token": 7.2940242513020745,
+    "label": "PROPORTIONAL_COST_MODEL_ONLY (not measured)",
+    "net_ms_best_case": -7.129280587054318
+   },
+   "benefit_retained_vs_full_PP": {
+    "miss_bytes": 0.7768765289043389,
+    "misses": 0.7722772277227723
+   },
+   "budget_violations": 0,
+   "decode_evictions": 106412,
+   "decode_hits": 94045,
+   "decode_miss_bytes": 306055139328,
+   "decode_misses": 106413,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "expected_refresh_count": 12336,
+   "fraction_of_belady_headroom": {
+    "miss_bytes": 0.0017865062817871695,
+    "misses": 0.0018008450118901947
+   },
+   "invocation_fraction": 0.5,
+   "invocation_fraction_exact": "12336/24672",
+   "miss_bytes_avoided_vs_A": 222437376,
+   "miss_bytes_per_token": 597763944.0,
+   "misses_avoided_vs_A": 78,
+   "misses_per_token": 207.837890625,
+   "overflow_events": 0,
+   "predictor_refresh_count": 12336,
+   "resident_peak_bytes": 1610588160,
+   "retained_exact": {
+    "miss_bytes": "222437376/286322688",
+    "misses": "78/101"
+   }
+  },
+  "PP N=20": {
+   "N": 20,
+   "PROPORTIONAL_COST_MODEL_ONLY": {
+    "benefit_ms_at_kappa_low": 0.142983521654873,
+    "estimated_cost_ms_per_token": 0.73791685032628,
+    "label": "PROPORTIONAL_COST_MODEL_ONLY (not measured)",
+    "net_ms_best_case": -0.5949333286714069
+   },
+   "benefit_retained_vs_full_PP": {
+    "miss_bytes": 0.674262907171366,
+    "misses": 0.6732673267326733
+   },
+   "budget_violations": 0,
+   "decode_evictions": 106422,
+   "decode_hits": 94035,
+   "decode_miss_bytes": 306084519936,
+   "decode_misses": 106423,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "expected_refresh_count": 1248,
+   "fraction_of_belady_headroom": {
+    "miss_bytes": 0.0015505358630625466,
+    "misses": 0.0015699674462632466
+   },
+   "invocation_fraction": 0.05058365758754864,
+   "invocation_fraction_exact": "1248/24672",
+   "miss_bytes_avoided_vs_A": 193056768,
+   "miss_bytes_per_token": 597821328.0,
+   "misses_avoided_vs_A": 68,
+   "misses_per_token": 207.857421875,
+   "overflow_events": 0,
+   "predictor_refresh_count": 1248,
+   "resident_peak_bytes": 1610588160,
+   "retained_exact": {
+    "miss_bytes": "193056768/286322688",
+    "misses": "68/101"
+   }
+  },
+  "PP N=4": {
+   "N": 4,
+   "PROPORTIONAL_COST_MODEL_ONLY": {
+    "benefit_ms_at_kappa_low": 0.1540137570469999,
+    "estimated_cost_ms_per_token": 3.661202834311158,
+    "label": "PROPORTIONAL_COST_MODEL_ONLY (not measured)",
+    "net_ms_best_case": -3.507189077264158
+   },
+   "benefit_retained_vs_full_PP": {
+    "miss_bytes": 0.7262778421526973,
+    "misses": 0.7227722772277227
+   },
+   "budget_violations": 0,
+   "decode_evictions": 106417,
+   "decode_hits": 94040,
+   "decode_miss_bytes": 306069626880,
+   "decode_misses": 106418,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "expected_refresh_count": 6192,
+   "fraction_of_belady_headroom": {
+    "miss_bytes": 0.0016701494755653667,
+    "misses": 0.0016854062290767207
+   },
+   "invocation_fraction": 0.2509727626459144,
+   "invocation_fraction_exact": "6192/24672",
+   "miss_bytes_avoided_vs_A": 207949824,
+   "miss_bytes_per_token": 597792240.0,
+   "misses_avoided_vs_A": 73,
+   "misses_per_token": 207.84765625,
+   "overflow_events": 0,
+   "predictor_refresh_count": 6192,
+   "resident_peak_bytes": 1610588160,
+   "retained_exact": {
+    "miss_bytes": "207949824/286322688",
+    "misses": "73/101"
+   }
+  },
+  "PP N=50": {
+   "N": 50,
+   "PROPORTIONAL_COST_MODEL_ONLY": {
+    "benefit_ms_at_kappa_low": 0.09113595479930608,
+    "estimated_cost_ms_per_token": 0.3121955905226569,
+    "label": "PROPORTIONAL_COST_MODEL_ONLY (not measured)",
+    "net_ms_best_case": -0.2210596357233508
+   },
+   "benefit_retained_vs_full_PP": {
+    "miss_bytes": 0.4297669627912965,
+    "misses": 0.42574257425742573
+   },
+   "budget_violations": 0,
+   "decode_evictions": 106447,
+   "decode_hits": 94010,
+   "decode_miss_bytes": 306154524672,
+   "decode_misses": 106448,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "expected_refresh_count": 528,
+   "fraction_of_belady_headroom": {
+    "miss_bytes": 0.0009882926696396374,
+    "misses": 0.0009927735321958765
+   },
+   "invocation_fraction": 0.021400778210116732,
+   "invocation_fraction_exact": "528/24672",
+   "miss_bytes_avoided_vs_A": 123052032,
+   "miss_bytes_per_token": 597958056.0,
+   "misses_avoided_vs_A": 43,
+   "misses_per_token": 207.90625,
+   "overflow_events": 0,
+   "predictor_refresh_count": 528,
+   "resident_peak_bytes": 1610588160,
+   "retained_exact": {
+    "miss_bytes": "123052032/286322688",
+    "misses": "43/101"
+   }
+  }
+ }
+}

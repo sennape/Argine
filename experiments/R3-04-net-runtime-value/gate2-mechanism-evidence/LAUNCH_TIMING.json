@@ -1,0 +1,369 @@
+{
+ "launches": [
+  {
+   "arm": "A",
+   "budget": "1.5",
+   "cooldown_before_s": null,
+   "decode_ms_per_token_traced": 560.49455078125,
+   "decode_s": 286.97321,
+   "launch_wall_s_mtime": 304.4,
+   "mseq": 1,
+   "mtime_utc": {
+    "record": 1795249752.966586,
+    "server_end": 1795249659.0962214,
+    "start": 1795249354.683663
+   },
+   "post_launch_analysis_and_record_s_mtime": 93.9,
+   "pre_launch_gap_s_mtime": null,
+   "prefill_s": 9.9002,
+   "server_uptime_to_cleanup_s": 303.676993,
+   "shutdown_s": 0.864540999988094,
+   "startup_load_s": 5.687322,
+   "traced": true,
+   "unclassified_other_s": null
+  },
+  {
+   "arm": "S",
+   "budget": "1.5",
+   "cooldown_before_s": 60,
+   "decode_ms_per_token_traced": 605.66923828125,
+   "decode_s": 310.10265000000004,
+   "launch_wall_s_mtime": 328.4,
+   "mseq": 2,
+   "mtime_utc": {
+    "record": 1795250235.2698026,
+    "server_end": 1795250141.3666782,
+    "start": 1795249812.9808114
+   },
+   "post_launch_analysis_and_record_s_mtime": 93.9,
+   "pre_launch_gap_s_mtime": 60.0,
+   "prefill_s": 10.78861,
+   "server_uptime_to_cleanup_s": 327.613737,
+   "shutdown_s": 0.9644004999427125,
+   "startup_load_s": 6.133103,
+   "traced": true,
+   "unclassified_other_s": 0.0
+  },
+  {
+   "arm": "P",
+   "budget": "1.5",
+   "cooldown_before_s": 60,
+   "decode_ms_per_token_traced": 599.0451171875,
+   "decode_s": 306.7111,
+   "launch_wall_s_mtime": 325.4,
+   "mseq": 3,
+   "mtime_utc": {
+    "record": 1795250789.0017922,
+    "server_end": 1795250674.1780014,
+    "start": 1795250348.8095956
+   },
+   "post_launch_analysis_and_record_s_mtime": 114.8,
+   "pre_launch_gap_s_mtime": 113.5,
+   "prefill_s": 10.953100000000001,
+   "server_uptime_to_cleanup_s": 324.39655500000003,
+   "shutdown_s": 1.1090968999778852,
+   "startup_load_s": 5.987031,
+   "traced": true,
+   "unclassified_other_s": 53.5
+  },
+  {
+   "arm": "P",
+   "budget": "1.5",
+   "cooldown_before_s": 60,
+   "decode_ms_per_token_traced": 587.22689453125,
+   "decode_s": 300.66017,
+   "launch_wall_s_mtime": 319.1,
+   "mseq": 4,
+   "mtime_utc": {
+    "record": 1795251283.8048022,
+    "server_end": 1795251168.1018414,
+    "start": 1795250849.016691
+   },
+   "post_launch_analysis_and_record_s_mtime": 115.7,
+   "pre_launch_gap_s_mtime": 60.0,
+   "prefill_s": 10.7114,
+   "server_uptime_to_cleanup_s": 318.036196,
+   "shutdown_s": 1.1949716000817716,
+   "startup_load_s": 6.407986,
+   "traced": true,
+   "unclassified_other_s": 0.0
+  },
+  {
+   "arm": "A",
+   "budget": "4",
+   "cooldown_before_s": 60,
+   "decode_ms_per_token_traced": 416.74875,
+   "decode_s": 213.37535999999997,
+   "launch_wall_s_mtime": 232.3,
+   "mseq": 5,
+   "mtime_utc": {
+    "record": 1795251779.5846698,
+    "server_end": 1795251580.2375226,
+    "start": 1795251347.9018042
+   },
+   "post_launch_analysis_and_record_s_mtime": 199.3,
+   "pre_launch_gap_s_mtime": 64.1,
+   "prefill_s": 10.813559999999999,
+   "server_uptime_to_cleanup_s": 230.88405699999998,
+   "shutdown_s": 1.6004656000295654,
+   "startup_load_s": 6.361827,
+   "traced": true,
+   "unclassified_other_s": 4.1
+  },
+  {
+   "arm": "S",
+   "budget": "4",
+   "cooldown_before_s": 60,
+   "decode_ms_per_token_traced": 443.99267578125,
+   "decode_s": 227.32425,
+   "launch_wall_s_mtime": 246.6,
+   "mseq": 6,
+   "mtime_utc": {
+    "record": 1795252285.7502632,
+    "server_end": 1795252086.1973617,
+    "start": 1795251839.5866528
+   },
+   "post_launch_analysis_and_record_s_mtime": 199.6,
+   "pre_launch_gap_s_mtime": 60.0,
+   "prefill_s": 11.228620000000001,
+   "server_uptime_to_cleanup_s": 245.280626,
+   "shutdown_s": 1.495041299960576,
+   "startup_load_s": 5.6854130000000005,
+   "traced": true,
+   "unclassified_other_s": 0.0
+  },
+  {
+   "arm": "P",
+   "budget": "4",
+   "cooldown_before_s": 60,
+   "decode_ms_per_token_traced": 430.49369140625,
+   "decode_s": 220.41277,
+   "launch_wall_s_mtime": 237.8,
+   "mseq": 7,
+   "mtime_utc": {
+    "record": 1795252943.022064,
+    "server_end": 1795252725.7841172,
+    "start": 1795252487.9367545
+   },
+   "post_launch_analysis_and_record_s_mtime": 217.2,
+   "pre_launch_gap_s_mtime": 202.2,
+   "prefill_s": 9.35412,
+   "server_uptime_to_cleanup_s": 236.433663,
+   "shutdown_s": 1.6091030000243336,
+   "startup_load_s": 5.890269,
+   "traced": true,
+   "unclassified_other_s": 142.2
+  },
+  {
+   "arm": "A",
+   "budget": "8",
+   "cooldown_before_s": 60,
+   "decode_ms_per_token_traced": 483.7064453125,
+   "decode_s": 247.6577,
+   "launch_wall_s_mtime": 265.6,
+   "mseq": 8,
+   "mtime_utc": {
+    "record": 1795253648.4402208,
+    "server_end": 1795253269.7838964,
+    "start": 1795253004.1955237
+   },
+   "post_launch_analysis_and_record_s_mtime": 378.7,
+   "pre_launch_gap_s_mtime": 61.2,
+   "prefill_s": 9.6739,
+   "server_uptime_to_cleanup_s": 264.058782,
+   "shutdown_s": 1.7382241999730468,
+   "startup_load_s": 6.166283,
+   "traced": true,
+   "unclassified_other_s": 1.2
+  },
+  {
+   "arm": "S",
+   "budget": "8",
+   "cooldown_before_s": 60,
+   "decode_ms_per_token_traced": 520.51099609375,
+   "decode_s": 266.50163,
+   "launch_wall_s_mtime": 285.0,
+   "mseq": 9,
+   "mtime_utc": {
+    "record": 1795254371.512533,
+    "server_end": 1795253993.447116,
+    "start": 1795253708.4515767
+   },
+   "post_launch_analysis_and_record_s_mtime": 378.1,
+   "pre_launch_gap_s_mtime": 60.0,
+   "prefill_s": 9.941799999999999,
+   "server_uptime_to_cleanup_s": 283.105432,
+   "shutdown_s": 2.073136599967256,
+   "startup_load_s": 5.850688,
+   "traced": true,
+   "unclassified_other_s": 0.0
+  },
+  {
+   "arm": "P",
+   "budget": "8",
+   "cooldown_before_s": 60,
+   "decode_ms_per_token_traced": 509.3084375,
+   "decode_s": 260.76592,
+   "launch_wall_s_mtime": 277.8,
+   "mseq": 10,
+   "mtime_utc": {
+    "record": 1795255438.9803052,
+    "server_end": 1795255018.2737439,
+    "start": 1795254740.4324832
+   },
+   "post_launch_analysis_and_record_s_mtime": 420.7,
+   "pre_launch_gap_s_mtime": 368.9,
+   "prefill_s": 8.930969999999999,
+   "server_uptime_to_cleanup_s": 276.395987,
+   "shutdown_s": 1.6819892999483272,
+   "startup_load_s": 5.481627,
+   "traced": true,
+   "unclassified_other_s": 308.9
+  }
+ ],
+ "summary": {
+  "by_arm_decode_ms_per_token_traced": {
+   "A": {
+    "max": 560.49455078125,
+    "mean": 486.9832486979167,
+    "median": 483.7064453125,
+    "min": 416.74875,
+    "n": 3
+   },
+   "P": {
+    "max": 599.0451171875,
+    "mean": 531.51853515625,
+    "median": 548.267666015625,
+    "min": 430.49369140625,
+    "n": 4
+   },
+   "S": {
+    "max": 605.66923828125,
+    "mean": 523.3909700520834,
+    "median": 520.51099609375,
+    "min": 443.99267578125,
+    "n": 3
+   }
+  },
+  "by_arm_launch_wall_s": {
+   "A": {
+    "max": 304.4,
+    "mean": 267.43333333333334,
+    "median": 265.6,
+    "min": 232.3,
+    "n": 3
+   },
+   "P": {
+    "max": 325.4,
+    "mean": 290.025,
+    "median": 298.45000000000005,
+    "min": 237.8,
+    "n": 4
+   },
+   "S": {
+    "max": 328.4,
+    "mean": 286.6666666666667,
+    "median": 285.0,
+    "min": 246.6,
+    "n": 3
+   }
+  },
+  "by_budget_decode_ms_per_token_traced": {
+   "1.5": {
+    "max": 605.66923828125,
+    "mean": 588.1089501953124,
+    "median": 593.136005859375,
+    "min": 560.49455078125,
+    "n": 4
+   },
+   "4": {
+    "max": 443.99267578125,
+    "mean": 430.41170572916667,
+    "median": 430.49369140625,
+    "min": 416.74875,
+    "n": 3
+   },
+   "8": {
+    "max": 520.51099609375,
+    "mean": 504.5086263020833,
+    "median": 509.3084375,
+    "min": 483.7064453125,
+    "n": 3
+   }
+  },
+  "by_budget_launch_wall_s": {
+   "1.5": {
+    "max": 328.4,
+    "mean": 319.325,
+    "median": 322.25,
+    "min": 304.4,
+    "n": 4
+   },
+   "4": {
+    "max": 246.6,
+    "mean": 238.9,
+    "median": 237.8,
+    "min": 232.3,
+    "n": 3
+   },
+   "8": {
+    "max": 285.0,
+    "mean": 276.1333333333334,
+    "median": 277.8,
+    "min": 265.6,
+    "n": 3
+   }
+  },
+  "first_launch_start_to_last_record_s": 6084.296642303467,
+  "note_user_reported_span": "the 1 h 33 m 48 s span reported by the user starts at the M01 record write time, i.e. it omits the first launch",
+  "post_launch_analysis_s_by_budget": {
+   "1.5": {
+    "max": 115.7,
+    "mean": 104.575,
+    "median": 104.35,
+    "min": 93.9,
+    "n": 4
+   },
+   "4": {
+    "max": 217.2,
+    "mean": 205.36666666666667,
+    "median": 199.6,
+    "min": 199.3,
+    "n": 3
+   },
+   "8": {
+    "max": 420.7,
+    "mean": 392.5,
+    "median": 378.7,
+    "min": 378.1,
+    "n": 3
+   }
+  },
+  "prefill_s": {
+   "max": 11.228620000000001,
+   "mean": 10.229628,
+   "median": 10.3266,
+   "min": 8.930969999999999,
+   "n": 10
+  },
+  "shutdown_s": {
+   "max": 2.073136599967256,
+   "mean": 1.4330969999893568,
+   "median": 1.5477534499950707,
+   "min": 0.864540999988094,
+   "n": 10
+  },
+  "startup_load_s": {
+   "max": 6.407986,
+   "mean": 5.9651549,
+   "median": 5.93865,
+   "min": 5.481627,
+   "n": 10
+  },
+  "sum_launch_wall_s": 2822.4,
+  "sum_post_launch_analysis_s": 2211.9,
+  "sum_pre_launch_gaps_s": 1049.9,
+  "sum_server_uptime_s": 2809.8820279999995,
+  "sum_shutdown_s": 14.330969999893568
+ }
+}

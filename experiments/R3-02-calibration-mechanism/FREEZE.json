@@ -1,0 +1,52 @@
+{
+  "anchor_commit": "425bd7452e8796a43c9cdc4bc2b9fe4e1fc59be3",
+  "artifact": "R3-02-FREEZE",
+  "artifacts": {
+    "ACQUISITION_PLAN.json": "8de9dfb0108e090d495f0a88d4b8c7802bcb6cb61c6280cb30e5541b8bfbd598",
+    "PREREGISTRATION.json": "16f13891c41ae0b7f5ef9b0e4012e058cce2c26591ab8524882d4bdd9cac95f4",
+    "PROTOCOL.md": "3c91813e8f5b0fddfeda28ab2cc7c7e90bdc8c46b5cdf1b5735be58d317b6b44",
+    "README.md": "d97308d58d4cd1cb3182507fbde41b09dcf6ed0d302955bcd934e1d5f0cfd235",
+    "tests/test_protocol.py": "f71deb3ee15c1f87bca448d781f53d134ba5cdb9c8d6531f20bf3f53ef13c952"
+  },
+  "contract_digest": "99a68c73c5a3caba4fd53937f27907375734f3866c84e18d4ecb944013efa073",
+  "counts": {
+    "preflight_launches": 3,
+    "scientific_cells": 35,
+    "scientific_configurations": 7,
+    "scientific_matrix_launches": 49,
+    "timing_counted_launches": 35,
+    "timing_warmups": 7,
+    "total_host_process_launches": 52,
+    "trace_count_launches": 7
+  },
+  "created_utc": "2026-11-16T22:44:34Z",
+  "frozen_scope": [
+    "calibration questions",
+    "controls A/B/C",
+    "27-budget/control matrix",
+    "acquisition modes and counts",
+    "trace reuse rule",
+    "ordering",
+    "cooldowns",
+    "environment",
+    "endpoints",
+    "statistics",
+    "sham equivalence rule",
+    "mechanism classification",
+    "next-phase gate"
+  ],
+  "measurements_included": false,
+  "not_frozen": [
+    "cost-aware policy",
+    "cost-model coefficients",
+    "primary scientific endpoint",
+    "DEV policy selection",
+    "EVAL rules",
+    "runtime benchmark endpoint"
+  ],
+  "phase": "R3-02",
+  "protocol_digest": "f8d4b3199c4c74555353e5f796eaf7d7c3687da97883ee07f7d1c81233c9469c",
+  "runtime_sha256": "3f094f5b5f4963f488b63722f365068f09e2aa3b12e2096969da99f471bbd644",
+  "stage": "PHASE_0",
+  "status": "PASS_R3_02_PROTOCOL_FROZEN"
+}

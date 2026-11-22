@@ -1,0 +1,54 @@
+diff --git a/ggml/src/ggml-cpu/ggml-cpu.c b/ggml/src/ggml-cpu/ggml-cpu.c
+index ac09bb1..794c790 100644
+--- a/ggml/src/ggml-cpu/ggml-cpu.c
++++ b/ggml/src/ggml-cpu/ggml-cpu.c
+@@ -23,6 +23,27 @@
+ #endif
+ 
+ #include <assert.h>
++
++/* R3-02A portability shim: the Argine route-log worker (patch 0001) uses GCC
++ * __atomic builtins, which MSVC does not provide. The MSVC branch below maps
++ * the same three operations onto the equivalent interlocked intrinsics with
++ * the same acquire/release semantics; the GCC/Clang path is unchanged. This
++ * is a build-portability shim only: no algorithm, decision or timing logic
++ * is altered. */
++#if defined(_MSC_VER)
++#include <intrin.h>
++#define ARGINE_ATOMIC_LOAD_ACQUIRE(ptr) \
++    ((int) _InterlockedCompareExchange((volatile long *) (ptr), 0, 0))
++#define ARGINE_ATOMIC_STORE_RELEASE(ptr, val) \
++    ((void) _InterlockedExchange((volatile long *) (ptr), (long) (val)))
++#define ARGINE_ATOMIC_TEST_AND_SET(ptr, expected) \
++    ((_InterlockedCompareExchange((volatile long *) (ptr), 1, (long) (*(expected))) == (long) (*(expected))) ? 1 : 0)
++#else
++#define ARGINE_ATOMIC_LOAD_ACQUIRE(ptr) __atomic_load_n((ptr), __ATOMIC_ACQUIRE)
++#define ARGINE_ATOMIC_STORE_RELEASE(ptr, val) __atomic_store_n((ptr), (val), __ATOMIC_RELEASE)
++#define ARGINE_ATOMIC_TEST_AND_SET(ptr, expected) \
++    __atomic_compare_exchange_n((ptr), (expected), 1, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)
++#endif
+ #include <errno.h>
+ #include <time.h>
+ #include <math.h>
+@@ -1762,9 +1783,9 @@ static void * argine_worker_main(void * arg) {
+ #else
+         while (sem_wait(&w->sem) != 0) { }
+ #endif
+-        if (__atomic_load_n(&w->stop, __ATOMIC_ACQUIRE)) break;
++        if (ARGINE_ATOMIC_LOAD_ACQUIRE(&w->stop)) break;
+         argine_serve(&w->req);
+-        __atomic_store_n(&w->busy, 0, __ATOMIC_RELEASE);
++        ARGINE_ATOMIC_STORE_RELEASE(&w->busy, 0);
+     }
+     return 0;
+ }
+@@ -1802,8 +1823,7 @@ static void argine_issue_prefetch(void ** addrs, size_t * sizes, int n) {
+     for (int tentativo = 0; tentativo < nw; ++tentativo) {
+         struct argine_worker * w = &argine_workers[(argine_rr + tentativo) % nw];
+         int atteso = 0;
+-        if (!__atomic_compare_exchange_n(&w->busy, &atteso, 1, 0,
+-                                        __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) {
++        if (!ARGINE_ATOMIC_TEST_AND_SET(&w->busy, &atteso)) {
+             continue;   // occupato: proviamo il prossimo
+         }
+         for (int i = 0; i < n; ++i) { w->req.addrs[i] = addrs[i]; w->req.sizes[i] = sizes[i]; }

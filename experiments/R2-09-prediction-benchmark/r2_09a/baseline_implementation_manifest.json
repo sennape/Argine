@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "phase": "PHASE_1_BASELINE_IMPLEMENTATION_MANIFEST",
+  "configs": [
+    {
+      "family_id": "global_lru",
+      "config_id": "global_lru/default",
+      "params": {},
+      "causal": true
+    },
+    {
+      "family_id": "lfu",
+      "config_id": "lfu/default",
+      "params": {
+        "halflife": 0,
+        "in_cache_only": false,
+        "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "twoq",
+      "config_id": "twoq/a1in=0.10,a1out=1,main=lru",
+      "params": {
+        "a1in_fraction": 0.1,
+        "a1out_slots_factor": 1,
+        "main_policy": "LRU"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "twoq",
+      "config_id": "twoq/a1in=0.10,a1out=2,main=lru",
+      "params": {
+        "a1in_fraction": 0.1,
+        "a1out_slots_factor": 2,
+        "main_policy": "LRU"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "twoq",
+      "config_id": "twoq/a1in=0.10,a1out=4,main=lru",
+      "params": {
+        "a1in_fraction": 0.1,
+        "a1out_slots_factor": 4,
+        "main_policy": "LRU"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "twoq",
+      "config_id": "twoq/a1in=0.25,a1out=1,main=lru",
+      "params": {
+        "a1in_fraction": 0.25,
+        "a1out_slots_factor": 1,
+        "main_policy": "LRU"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "twoq",
+      "config_id": "twoq/a1in=0.25,a1out=2,main=lru",
+      "params": {
+        "a1in_fraction": 0.25,
+        "a1out_slots_factor": 2,
+        "main_policy": "LRU"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "twoq",
+      "config_id": "twoq/a1in=0.25,a1out=4,main=lru",
+      "params": {
+        "a1in_fraction": 0.25,
+        "a1out_slots_factor": 4,
+        "main_policy": "LRU"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "twoq",
+      "config_id": "twoq/a1in=0.50,a1out=1,main=lru",
+      "params": {
+        "a1in_fraction": 0.5,
+        "a1out_slots_factor": 1,
+        "main_policy": "LRU"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "twoq",
+      "config_id": "twoq/a1in=0.50,a1out=2,main=lru",
+      "params": {
+        "a1in_fraction": 0.5,
+        "a1out_slots_factor": 2,
+        "main_policy": "LRU"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "twoq",
+      "config_id": "twoq/a1in=0.50,a1out=4,main=lru",
+      "params": {
+        "a1in_fraction": 0.5,
+        "a1out_slots_factor": 4,
+        "main_policy": "LRU"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "lru_k",
+      "config_id": "lru_k/K=2,crp=0",
+      "params": {
+        "K": 2,
+        "correlated_reference_period_objects": 0
+      },
+      "causal": true
+    },
+    {
+      "family_id": "lru_k",
+      "config_id": "lru_k/K=2,crp=1",
+      "params": {
+        "K": 2,
+        "correlated_reference_period_objects": 1
+      },
+      "causal": true
+    },
+    {
+      "family_id": "lru_k",
+      "config_id": "lru_k/K=2,crp=2",
+      "params": {
+        "K": 2,
+        "correlated_reference_period_objects": 2
+      },
+      "causal": true
+    },
+    {
+      "family_id": "lru_k",
+      "config_id": "lru_k/K=3,crp=0",
+      "params": {
+        "K": 3,
+        "correlated_reference_period_objects": 0
+      },
+      "causal": true
+    },
+    {
+      "family_id": "lru_k",
+      "config_id": "lru_k/K=3,crp=1",
+      "params": {
+        "K": 3,
+        "correlated_reference_period_objects": 1
+      },
+      "causal": true
+    },
+    {
+      "family_id": "lru_k",
+      "config_id": "lru_k/K=3,crp=2",
+      "params": {
+        "K": 3,
+        "correlated_reference_period_objects": 2
+      },
+      "causal": true
+    },
+    {
+      "family_id": "aged_frequency",
+      "config_id": "aged_frequency/decay=0.9,interval=1",
+      "params": {
+        "decay_factor": 0.9,
+        "aging_interval_steps": 1,
+        "decay_form": "exponential_step_decay"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "aged_frequency",
+      "config_id": "aged_frequency/decay=0.9,interval=16",
+      "params": {
+        "decay_factor": 0.9,
+        "aging_interval_steps": 16,
+        "decay_form": "exponential_step_decay"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "aged_frequency",
+      "config_id": "aged_frequency/decay=0.9,interval=64",
+      "params": {
+        "decay_factor": 0.9,
+        "aging_interval_steps": 64,
+        "decay_form": "exponential_step_decay"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "aged_frequency",
+      "config_id": "aged_frequency/decay=0.99,interval=1",
+      "params": {
+        "decay_factor": 0.99,
+        "aging_interval_steps": 1,
+        "decay_form": "exponential_step_decay"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "aged_frequency",
+      "config_id": "aged_frequency/decay=0.99,interval=16",
+      "params": {
+        "decay_factor": 0.99,
+        "aging_interval_steps": 16,
+        "decay_form": "exponential_step_decay"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "aged_frequency",
+      "config_id": "aged_frequency/decay=0.99,interval=64",
+      "params": {
+        "decay_factor": 0.99,
+        "aging_interval_steps": 64,
+        "decay_form": "exponential_step_decay"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "aged_frequency",
+      "config_id": "aged_frequency/decay=0.999,interval=1",
+      "params": {
+        "decay_factor": 0.999,
+        "aging_interval_steps": 1,
+        "decay_form": "exponential_step_decay"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "aged_frequency",
+      "config_id": "aged_frequency/decay=0.999,interval=16",
+      "params": {
+        "decay_factor": 0.999,
+        "aging_interval_steps": 16,
+        "decay_form": "exponential_step_decay"
+      },
+      "causal": true
+    },
+    {
+      "family_id": "aged_frequency",
+      "config_id": "aged_frequency/decay=0.999,interval=64",
+      "params": {
+        "decay_factor": 0.999,
+        "aging_interval_steps": 64,
+        "decay_form": "exponential_step_decay"
+      },
+      "causal": true
+    }
+  ],
+  "families": [
+    "aged_frequency",
+    "global_lru",
+    "lfu",
+    "lru_k",
+    "twoq"
+  ],
+  "primary_budgets_bytes": [
+    1610612736,
+    4294967296,
+    8589934592
+  ],
+  "baseline_configs_digest": "f6f7a924d681d4a9f872c39865570fb3aada8778c86d6270f2da89be10247cf3",
+  "digest": "8712b6b173e4e4427d1549527216c3db68c8d98f2578e5663bc08f57ca8849ca"
+}

@@ -1,0 +1,18 @@
+{
+  "cell_key": "reasoning-v1_seed-42__markov_transition__markov_transition_default__13eed61e114bda60",
+  "cell_record_digest": "d93b77f15b03baac03b0acf2d24d7ed2df5c48564ddcd1a4737ecdff6ced5876",
+  "config_id": "markov_transition/default",
+  "deterministic": true,
+  "dev_cell_id": "reasoning-v1/seed-42",
+  "family_id": "markov_transition",
+  "recall_at_k_h1": 0.4229066913451092,
+  "recall_at_k_h16": 0.3055359880661335,
+  "recall_at_k_h4": 0.3239710227042778,
+  "result_digest": "067163bd9a2869152e5e5069660d3d94e9d8be6a011e8f19422789c2aab84709",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 24853,
+    "h16": 24133,
+    "h4": 24709
+  }
+}

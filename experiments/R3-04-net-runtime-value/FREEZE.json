@@ -1,0 +1,27 @@
+{
+ "acquisition_opened": false,
+ "artifact": "R3-04-PROTOCOL-FREEZE",
+ "files_sha256_lf": {
+  "BUDGET_SELECTION.json": "3ea4f3dfb7920d48284e5aace2d35c9b1323293e7d6f81c4ae4116f5b3ab945f",
+  "CLAIM_BOUNDARIES.md": "f1952f1786ed0da4302530b7ba2bc12dd748244ca1ddfbd41a9a4100dd1decd9",
+  "ESTIMANDS.md": "9af629fc5f160b1e7bfb4860c343b0f2fea4dbc3bcd0a7e0405a2cb5f95d8608",
+  "INSTRUMENTATION_PLAN.md": "370cec1dd0faa4c65c78da78082d8ec213cbbeb76526c87e28b2f7c0b444aa17",
+  "PROTOCOL.json": "b472eaed35627384fd1f0a020c0db40cb71960478e64f240d2a7faf8cbe0cdcd",
+  "README.md": "ec8dbf144304ae560277d923e45645e648915c2e194442eff4031d607017cad6",
+  "SAMPLE_SIZE.json": "7c7eabb585e7778741b7eedb59a23c0516497643270d33cd48abedaa434e4ca4",
+  "SCHEDULE.json": "d901e6ef03067513a8c1c7230e052d795656c3ee1f1ec955d3d57a71ac933366",
+  "SHUTDOWN_PLAN.md": "3543c857327bc5ce2efa7ae3938ed9c670dd50471fdaf1b2689537e510f2a59b",
+  "build_artifacts.py": "1620d5e88608a4d15ea01e37c9340d899435ce74393682c80f82eee66a6fc14b",
+  "validate_protocol.py": "348ecb3d3e0e7fd9b9e25750dec2c2bf3a63e9f847c619f8e780aba522bcf974"
+ },
+ "freeze_sha256": "a88359b52891f93ec49e67978d92c2eb3b73db588611bce46b3103b2978c1202",
+ "mechanism_schedule_sha256": "71a8d474a2c28ea38ef61946d5ae5473b7d565cb438e6dd44d894bd0e1b0b63f",
+ "parent_freeze_sha256": {
+  "r3_03b_final": "1846b00954e033bc9a4cb136cd05373a411d7a8de699923235f31dbfd2f53448"
+ },
+ "primary_budget": "1.5 GiB",
+ "primary_endpoint": "decode_wall_ms_per_token",
+ "runtime_sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5",
+ "status": "R3_04_PROTOCOL_FROZEN",
+ "timing_schedule_sha256": "9c37d12a53dded51a6a5fed9351db8a430248425ddd703b29b0f636013d43a06"
+}

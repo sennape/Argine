@@ -1,0 +1,109 @@
+{
+ "schema": "r3-03b-block-count-addendum-v1",
+ "protocol_rule": "equivalence_interval.precision_gate",
+ "p_token_ms": 5.936613728923476,
+ "endpoints": {
+  "8GiB": {
+   "historical_b_selected_step_ms": 126.15759335937499,
+   "cv_protocol_pct": [
+    3.8,
+    1.7
+   ],
+   "cv_recomputed_pct": [
+    3.7641193739051646,
+    1.6834286733933144
+   ],
+   "P_pct_of_step": 4.705712570160023,
+   "sigma_c_pct": 2.943637205907005,
+   "half_target_pct": 2.3528562850800117,
+   "N_req": 9,
+   "cap": 20,
+   "N_req_with_recomputed_cv": 9,
+   "N_req_with_step_adjusted_for_48_calls": 9,
+   "step_ms_adjusted": 125.31254039937498,
+   "exceeds_cap": false,
+   "fixed_blocks": 9,
+   "physical_launches": 36,
+   "rho_ci_halfwidth_at_N": 0.4808368175315868,
+   "approx_power_explained_at_true_rho": {
+    "0.75": 0.1340233670442229,
+    "1.0": 0.530221907202608,
+    "1.25": 0.8032466163277574,
+    "1.5": 0.530221907202608
+   },
+   "approx_power_explained_at_cap_blocks": {
+    "0.75": 0.37990528530607337,
+    "1.0": 0.9307717406341858,
+    "1.25": 0.9989201807564163,
+    "1.5": 0.9307717406341858
+   },
+   "classification": "FIXED_N_BY_RULE"
+  },
+  "4GiB": {
+   "historical_b_selected_step_ms": 273.258173046875,
+   "cv_protocol_pct": [
+    6.9,
+    9.1
+   ],
+   "cv_recomputed_pct": [
+    6.892339288894123,
+    9.053541546133118
+   ],
+   "P_pct_of_step": 2.172529246876397,
+   "sigma_c_pct": 8.075270893288968,
+   "half_target_pct": 1.0862646234381985,
+   "N_req": 215,
+   "cap": 10,
+   "N_req_with_recomputed_cv": 214,
+   "N_req_with_step_adjusted_for_48_calls": 214,
+   "step_ms_adjusted": 272.41312008687504,
+   "exceeds_cap": true,
+   "classification": "UNDERPOWERED_FOR_EXPLAINED_VERDICT_DO_NOT_RUN_CAPPED_EXPERIMENT",
+   "rho_ci_halfwidth_at_cap": 2.658974929522232,
+   "interval_width_available": 1.5,
+   "capped_ci_width_vs_interval_width": 5.317949859044464,
+   "blocks_required_for_rule": 215
+  }
+ },
+ "status": "PRE_ACQUISITION_ADDENDUM_NO_END_TO_END_DATA_ACQUIRED",
+ "inputs": {
+  "authoritative_microbench_result": "experiments/R3-03B-microbench-evidence/MICROBENCH_RESULT.json",
+  "protocol_freeze_sha256": "d0dd74510918d711c0ae6a8dd35f97c40d8cb3a573ff32f82955ebbe30686882",
+  "variance_source": "R3-02-p4 ANALYSIS.json timing.a/b (5 launches per arm); step time basis = b_selected arm"
+ },
+ "decision": {
+  "8GiB": "FIXED N = 9 ABBA blocks (36 launches) by the frozen precision gate",
+  "4GiB": "N_req = 215 > cap 10: UNDERPOWERED for an EXPLAINED verdict; capped experiment NOT to be run; no 4 GiB end-to-end acquisition under this protocol"
+ },
+ "power_note": "The gate is a precision gate at rho=1 (CI half-width <= 0.5), not a power guarantee: at N=9 the approximate probability of an EXPLAINED verdict is ~53% if true rho=1 and ~80% if true rho=1.25; at the cap N=20 it would be ~93% at rho=1. N=9 is the rule's minimum; raising N toward the cap would require an explicit, separately justified addendum decision by the researcher.",
+ "machine_time_estimate": {
+  "launch_model": "launch = ttft ~14.5 s + 512 steps x step time + 60 s cooldown (frozen R3-02 driver convention) + ~20 s startup/shutdown (assumption)",
+  "8GiB_primary": {
+   "blocks": 9,
+   "launches": 36,
+   "core_seconds_per_launch_range": [
+    80,
+    94
+   ],
+   "hours": [
+    1.5,
+    2.0
+   ],
+   "point_hours": 1.7
+  },
+  "4GiB_secondary": {
+   "blocks": 0,
+   "launches": 0,
+   "hours": 0.0
+  },
+  "instrumented_conformance": {
+   "required": true,
+   "design": "8 GiB b_selected and predicted_protect_sham, timing OFF and ON, traced: 4 launches (~7 min each from R3-03A traced runs) + cooldown",
+   "hours": 0.5,
+   "plus": "new instrumented runtime build (offline compile, ~0.4 h, not model-bearing)"
+  },
+  "total_model_bearing_hours": 2.2,
+  "total_including_build": 2.6,
+  "old_8_10_5_hour_estimate_applies": false
+ }
+}

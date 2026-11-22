@@ -1,0 +1,33 @@
+{
+  "binding": {
+    "message": "bound to R2-01 run bb6d8ca34dbc4537a43d54be30c9f3e1 and R2-02 PASS run 238c8ee7f0914df7b28942ec99627c24, trace identity consistent across both.",
+    "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+    "r2_02_run_id": "238c8ee7f0914df7b28942ec99627c24",
+    "status": "OK",
+    "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+    "trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1"
+  },
+  "candidate_status": "CANDIDATE",
+  "experiment_id": "R2-03",
+  "fixed_budgets_bytes": [
+    1610612736,
+    2147483648,
+    4294967296,
+    8589934592,
+    17179869184
+  ],
+  "interface_errors": [],
+  "nondeterminism": [],
+  "outcome": "PASS",
+  "reasons": [
+    "the fixed, predeclared budget sweep was evaluated end-to-end: every budget/policy pair replayed deterministically (two independent replays each), zero capacity violations, the 4 GiB point exactly reproduces R2-02's registered evidence, and the Oracle is no worse than every causal baseline it theoretically dominates at every budget"
+  ],
+  "replay_errors": [],
+  "reproduction_check": {
+    "message": "4 GiB point exactly reproduces R2-02's registered PASS evidence for ['Global-LRU', 'Oracle-Global-Belady'].",
+    "mismatches": {},
+    "ok": true
+  },
+  "run_id": "d957077073374f1e9fd1e101a002946f",
+  "scope": "offline budget-sensitivity sweep of the R2-02 Oracle-vs-causal-retention comparison on the validated R2-01 trace -- no latency/throughput/wall-clock/energy/hardware-performance claim, no final recoverable-margin claim (R2-04)"
+}

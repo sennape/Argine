@@ -1,0 +1,62 @@
+{
+  "schema": "r3-03b-conformance-plan-v1",
+  "status": "PLANNED_NOT_EXECUTED",
+  "no_timing_claim": true,
+  "parent_microbench_freeze_sha256": "abb451010b04782a56c51420485908871e1a77e87dd18b22f75b5e0580dd7009",
+  "runtime_source_identity": {
+    "repo_head_at_plan": "1dd8f716e44d09873fb1e55ac1d3c52565845305",
+    "overlay_sha256_lf_normalised": {
+      "argine-experts.cpp": "20ea2a2f69cb3a421c69b1f67f89e4dd6f7d3491df34dec86036a457b405bf89",
+      "argine-store.cpp": "dc11824f9f3effaa80e7ea0bfa40bee0698c5888d06a0964f1d67de7780d8403",
+      "argine-store.h": "a1bcc17b8afc282f26c84f07cfc7bfac911b982e68f15ca89f7b2e24ac17240c",
+      "argine-retention-policy.cpp": "dc6bd01631b4af5969a083f99ff636b7bfa2605aebad4ee030c8ea924c25d856",
+      "argine-retention-policy.h": "8fd28954799df74f14b8b88da7fd3f91f20dfd9fd826d5a2999d0897e6be376b"
+    },
+    "pinned_llama_cpp": "254b177307b14d055bbe4c050c9c441a1e06d8a4",
+    "msvc": "19.44"
+  },
+  "old_runtime": {
+    "r3_03a_sha256": "e935005e5131b29d12b113b000fa52e798b4b4419a23724ec70af3f6875fcd76",
+    "frozen_r3_sha256": "3f094f5b5f4963f488b63722f365068f09e2aa3b12e2096969da99f471bbd644"
+  },
+  "new_build": {
+    "tree": "C:\\Users\\alpel\\Desktop\\Argine4-r3build-r3-03b\\llama.cpp",
+    "binary": "C:\\Users\\alpel\\Desktop\\Argine4-r3build-r3-03b\\llama.cpp\\build-r3-03b\\bin\\llama-server.exe",
+    "expected_sha256": "UNKNOWN_UNTIL_BUILT (must differ from both old runtimes)",
+    "command": "C:\\Users\\alpel\\Desktop\\Argine4\\tools\\r3_03b_build.bat"
+  },
+  "launches": [
+    "A-8GiB-OFF",
+    "A-8GiB-ON",
+    "B-8GiB-OFF",
+    "B-8GiB-ON"
+  ],
+  "policies": {
+    "A-8GiB": "b_selected",
+    "B-8GiB": "predicted_protect_sham"
+  },
+  "timing_design": "OFF: ARGINE_POLICY_TIMING unset. ON: =1. Env otherwise identical. Graceful Ctrl-C stop so policy_timing line is emitted at exit.",
+  "canonicalization": "Parse each JSONL row; recursively drop keys == 'policy_timing' or starting with 'ns_'; compare sort_keys JSON row by row; equal sha256 is a fast path. Row counts must match.",
+  "pass": [
+    "identical token digest ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa in all 4",
+    "514 passes, 48 events/pass, 24672 events in all 4",
+    "OFF vs ON canonical traces identical per policy (requested, protected_before, evictions, residents, resident bytes, history, score decay)",
+    "zero duplicate refusals, zero budget violations",
+    "sham==b_selected on compared fields",
+    "timing absent/zero OFF; exactly one valid policy_timing record ON (calls==24672, hist sum==calls)",
+    "graceful shutdown on ON launches"
+  ],
+  "fail": [
+    "any pass condition violated",
+    "terminate fallback on ON launch (tooling issue, reported separately)",
+    "runtime sha equals R3-03A or frozen"
+  ],
+  "output_dir": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03B-conformance",
+  "command": "C:\\Users\\alpel\\anaconda3\\python.exe C:\\Users\\alpel\\Desktop\\Argine4\\tools\\r3_03b_conformance.py --runtime C:\\Users\\alpel\\Desktop\\Argine4-r3build-r3-03b\\llama.cpp\\build-r3-03b\\bin\\llama-server.exe --runtime-sha256 <NEW_SHA> --out-dir C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03B-conformance --trace-dir <DIR_WITH_45GB_FREE>",
+  "expected_model_hours": "about 4-6 (4 launches of 514 passes plus trace analysis ~1 h)",
+  "end_to_end": {
+    "may_start": false,
+    "four_gib": "not planned (needs ~215 blocks > cap)",
+    "n9_vs_n20": "to be chosen by prospective addendum after conformance PASS and before any timing"
+  }
+}

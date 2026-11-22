@@ -1,0 +1,81 @@
+{
+  "run_id": "3178707effa0f567afcca52b",
+  "workload_id": "r2-11-reasoning-v1",
+  "budget_gib": 1.5,
+  "policy_id": "predicted_protect",
+  "repetition_index": 4,
+  "ordering_block": "counted",
+  "cell_index": 7,
+  "position_in_abba_sequence": 7,
+  "warmup": false,
+  "counted": true,
+  "timestamps": {
+    "t0_process_start": 240106.6060365,
+    "t1_model_ready_check_started": 240108.3129785,
+    "t1_model_ready": 240112.3500411,
+    "t2_request_sent": 240112.350102,
+    "t3_first_token": 240122.572045,
+    "t4_last_token": 240339.9619552
+  },
+  "environment": {
+    "ARGINE_EXPERT_STORE": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs",
+    "ARGINE_EXPERT_BUDGET": "1610612736",
+    "ARGINE_EXPERT_SHARDS": "1",
+    "ARGINE_EXPERT_READ": "blocco",
+    "ARGINE_RETENTION_POLICY": "predicted_protect",
+    "ARGINE_PREFETCH": null,
+    "ARGINE_RETENTION_DECAY": "0.999",
+    "ARGINE_RETENTION_INTERVAL": "1",
+    "ARGINE_RETENTION_PREDICTOR_DECAY": "0.99",
+    "ARGINE_RETENTION_TOPK": "8",
+    "ARGINE_RETENTION_NEXPERTS": "128",
+    "process_identity_pid": 13272
+  },
+  "runtime_metrics": {
+    "decode_tokens_per_second": 2.3506221160632412,
+    "ttft_seconds": 10.221943000011379,
+    "end_to_end_time_to_final_token_seconds": 227.61185320001096,
+    "total_decode_time_seconds": 217.38925899999998,
+    "tokens_generated": 512,
+    "expert_bytes_read": null,
+    "expert_read_count": null,
+    "expert_miss_bytes": null,
+    "expert_io_best_effort": {
+      "expert_tensors_served_from_store": null,
+      "expert_tensors_expected": null,
+      "approx_mib_read": null,
+      "note": "best-effort stderr parse"
+    },
+    "cpu_time_seconds": 1774.8125,
+    "peak_resident_memory_bytes": 3299041280,
+    "metrics_source_note": "psutil",
+    "wall_clock_seconds": 233.355918700021,
+    "budget_violations": 0,
+    "prediction_overhead_seconds": null,
+    "retention_policy_overhead_seconds": null,
+    "overhead_note": "prediction/retention-policy overhead isolation requires the calibration step instrumentation_contract.json itself requires BEFORE any publication-quality run; not performed by this driver, so left None rather than approximated"
+  },
+  "workload_identity": {
+    "path": "C:\\Users\\alpel\\Desktop\\Argine3\\research2\\workloads\\r2_11\\r2-11-reasoning-v1.json",
+    "sha256": "bb82afa21e35b94c1e93910be4d4d50378a0ca5d040d40f387e6890243aa5791"
+  },
+  "canonical": true,
+  "diagnostic_only": false,
+  "trace_enabled": false,
+  "pre_popen_env_check": {
+    "retention_trace_env_present": false,
+    "trace_output_variables_present": []
+  },
+  "output_text": " \n\nOkay, let's try to figure out this scheduling problem. So, there are five people: Ana, Ben, Cara, Dev, and Ewa. They each need to present in one of the five slots, 1 through 5. Each slot is exactly one hour, and we need to assign each person to a slot following all the constraints. Let me go through each constraint one by one and see how they can help narrow down the possibilities.\n\nFirst, let me list out the constraints again to make sure I don't miss any:\n\n1. Ana must present before Cara. So Ana's slot number is less than Cara's.\n2. Ben cannot present in slot 1 or slot 5. So Ben can only be in slots 2, 3, or 4.\n3. Dev must present immediately after Ewa. That means if Ewa is in slot x, Dev is in slot x+1. So their slots are consecutive, with Ewa first.\n4. Cara cannot be adjacent to Ben. So if Ben is in slot n, Cara can't be in n-1 or n+1. Similarly, if Cara is in slot m, Ben can't be in m-1 or m+1.\n5. Exactly one person presents in slot 3, and it is not Ana. So slot 3 is occupied by someone else, and Ana is not there.\n\nAlright, let's start by considering constraint 5 first because it's very specific. Slot 3 is occupied by someone who isn't Ana. So Ana can't be in slot 3. Also, since each person has exactly one slot, only one person is in slot 3. So that's a fixed point.\n\nNow, let's think about constraint 2: Ben can't be in 1 or 5. So Ben is in 2, 3, or 4. But slot 3 is already occupied by someone else (not Ana). So Ben could be in 2, 3, or 4. However, if Ben is in 3, then slot 3 is Ben. But if Ben is in 3, then we have to check other constraints. But let's hold that thought.\n\nConstraint 3: Dev must be immediately after Ewa. So possible pairs for Ewa and Dev are (1,2), (2,3), (3,4), (4,5). So Ewa can't be in slot 5 because there's no slot 6 for Dev",
+  "output_token_digest": "6faab96f99b92bacd21156dd6e2b5840e6766ff7ae02d02bcdc667cfd470a271",
+  "process_cleanup": {
+    "ok": true,
+    "method": "terminate",
+    "exit_code": 1
+  },
+  "driver_managed_artifact_bytes_written": 8251,
+  "external_trace_output_detected": null,
+  "external_trace_output_note": "Not scanned (avoids expensive full-disk scanning per-launch). The pre-Popen fail-closed assertion above is the actual defense against an external/inherited trace path being used by the child process; this field documents the limit rather than silently implying full coverage.",
+  "status": "completed_ok",
+  "ok": true
+}

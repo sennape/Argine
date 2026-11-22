@@ -1,0 +1,59 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "frozen_before_any_result": true,
+  "forbidden_claims": [
+    "Do not call a <2% relative throughput effect 'large' regardless of statistical significance.",
+    "Do not claim a runtime speedup beyond what the frozen decision rule's PASS classification actually supports.",
+    "Do not infer that R2-11's byte-level retention effect size translates proportionally into a runtime effect size of the same magnitude."
+  ],
+  "ttft_latency_tolerance": {
+    "metric": "mean TTFT and mean end-to-end-time-to-final-token, PredictedProtectPolicy vs B_selected(M), at the primary 4 GiB budget",
+    "tolerance": "A regression (PredictedProtectPolicy slower) is 'meaningful' and fails the PASS latency criterion if it exceeds the LARGER of: +5% relative to B_selected(M)'s mean, or +5 milliseconds absolute. This exact numeric tolerance is frozen now, before any result exists, specifically so it cannot be tuned after seeing how large an observed regression turns out to be."
+  },
+  "primary_decision_rule": {
+    "R2_12_BLOCKED_INVALID": {
+      "applies_when": [
+        "an output-equivalence failure (per output_equivalence.json) that is not resolved by a documented architectural reason",
+        "an uncontrolled-hardware-state failure (pre-run gate / hardware_contract.json mismatch)",
+        "a thermal-throttling invalidation",
+        "an instrumentation failure (overhead not measured/bounded as required)",
+        "any other scientific-validity failure (e.g. a budget violation)"
+      ],
+      "note": "NOT automatically R2_12_FAIL, same pattern as R2-11's BLOCKED_INVALID vs FAIL distinction."
+    },
+    "R2_12_FAIL": {
+      "applies_when": "primary 4 GiB mean delta_tps <= 0 (directionally worse or no improvement), OR confirmed prediction/retention-policy CPU overhead (measured separately per instrumentation_contract.json) exceeds the measured throughput benefit such that the net real-world effect is non-positive."
+    },
+    "R2_12_INCONCLUSIVE": {
+      "applies_when": "primary 4 GiB mean delta_tps > 0 (central estimate favorable) but EITHER the 95% paired-bootstrap CI includes 0, OR one or more secondary PASS criteria (consistency across workloads, dominance test, TTFT/latency tolerance) fail, with no scientific-validity failure."
+    },
+    "R2_12_PASS": {
+      "requires_all": [
+        "primary 4 GiB mean delta_tps > 0",
+        "95% paired-bootstrap CI excludes 0 in favor of PredictedProtectPolicy (CI lower bound > 0)",
+        "zero output-equivalence failures across all evaluated cells",
+        "zero memory-correctness failures (zero budget violations, peak_resident <= budget for every run)",
+        "no meaningful TTFT/end-to-end-latency regression beyond the frozen tolerance above",
+        "consistency across multiple workloads: at least 3 of the 4 corpus workloads individually show delta_tps >= 0 at the primary 4 GiB budget",
+        "result not dominated by one workload: no single improving workload contributes more than 50% of the total positive tps gain among improving workloads",
+        "deterministic scientific configuration preserved throughout (model/runtime/predictor/policy/seed/temperature/top_k/context/n_predict hashes and values unchanged for every run)"
+      ]
+    }
+  },
+  "practical_effect_interpretation": {
+    "must_distinguish": [
+      "statistically supported speedup",
+      "practically meaningful speedup"
+    ],
+    "no_post_hoc_minimum_effect_size_threshold_for_pass_fail": true,
+    "note": "A statistically robust but tiny throughput improvement may still justify reporting R2_12_PASS; the magnitude is reported honestly (absolute tokens/s, relative %, latency deltas, expert-I/O reduction, overhead) rather than used to override the frozen PASS/FAIL arithmetic in either direction."
+  },
+  "research_3_gate": {
+    "note": "This protocol does not define a 'Research 3' gate; R2-12's own classification is the terminal scientific output of this phase of work. Starting Research 3 is explicitly out of scope and not addressed here."
+  },
+  "budget_specific_interpretive_stance_frozen_before_execution": {
+    "8gib_null_control": "R2-11 showed an EXACT retention tie (delta=0.0) at 8 GiB. R2-12 does NOT assume runtime equality follows from that tie, but explicitly treats 8 GiB as a useful null/control condition: if 8 GiB shows a MATERIAL runtime difference despite identical retention traffic, that difference must be attributed to non-retention overhead (e.g. prediction-policy bookkeeping cost that runs regardless of whether it changes any eviction decision) or measurement noise, and investigated as such -- not reported as a retention-driven runtime effect.",
+    "1_5gib_stress": "R2-11 showed a LARGER retention improvement at 1.5 GiB. 1.5 GiB is treated as a stress/secondary condition in R2-12 and must NOT replace the 4 GiB primary budget as the basis for the R2_12_PASS/FAIL/INCONCLUSIVE classification, even if its own effect size is larger."
+  }
+}

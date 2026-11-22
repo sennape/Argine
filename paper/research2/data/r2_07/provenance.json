@@ -1,0 +1,21 @@
+{
+  "binding": {
+    "candidate_status": "CANDIDATE",
+    "message": "bound to R2-01 PASS run bb6d8ca34dbc4537a43d54be30c9f3e1 (candidate_status=CANDIDATE), R2-04 PASS run cd2b58b019314fafb90304234e6d1907, R2-05 PASS run da82e15b61c94019840477642618565a, and R2-06 PASS run 2e075161f02443ff822279add6938ca4; trace identity re-verified byte-identical on disk.",
+    "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+    "r2_04_run_id": "cd2b58b019314fafb90304234e6d1907",
+    "r2_05_run_id": "da82e15b61c94019840477642618565a",
+    "r2_06_run_id": "2e075161f02443ff822279add6938ca4",
+    "status": "OK",
+    "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+    "trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1"
+  },
+  "canonical_digest": "ad36e615970b196b64ba3a3fdc2559e252cc8627e5d17d0d830d16742f59281a",
+  "distinct_intervening_definition": "For the same reuse event (e at t_prev, then t_now): the count of DISTINCT layer-local experts observed in any selection at a position strictly between t_prev and t_now, excluding e itself. Conceptually different from token_reuse_gap (a position-interval count, not a distinct-expert count) and never conflated with it under the same name.",
+  "nondeterminism": [],
+  "r2_05_bridge_run_id": "da82e15b61c94019840477642618565a",
+  "r2_06_bridge_run_id": "2e075161f02443ff822279add6938ca4",
+  "reuse_event_definition": "For layer-local expert e selected at position t_prev and next selected at position t_now (t_now > t_prev, t_prev being e's immediately preceding occurrence in this layer): one reuse event, with token_reuse_gap = t_now - t_prev (always >= 1). e's first-ever occurrence in a layer has no t_prev and is a COLD / FIRST OBSERVATION, tracked separately, never assigned an infinite or fabricated gap.",
+  "synthesis_errors": [],
+  "temporal_unit_definition": "One POSITION = one (token_index, selection) entry yielded, in order, by Trace.token_selections(layer, phase) for one layer; positions are numbered 0, 1, 2, ... in that yielded order (never by raw token_index). A selection is an unordered SET of concurrently selected experts: no artificial within-token ordering is ever constructed."
+}

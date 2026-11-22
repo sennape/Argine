@@ -1,0 +1,40 @@
+{
+  "anchor_commit": "a3d731c21f21b3f88f8c779b52106b3ce84780f8",
+  "archive_format": "zstd-v1 (level 3, zstandard 0.24.0)",
+  "artifact": "R3-02C-FREEZE",
+  "artifacts": {
+    "CLASSIFICATION.json": "44b486421b692e55215d97273811d7ee6d5a4035555ae729a6883b964f819075",
+    "COMPRESSION_TEST.json": "2891eaf84decc70c78540b6463c975f881b963d741ba5a6d3a5ffe2c413d0b52",
+    "PEAK_STORAGE.json": "011cff9edceb74107dfeb0237b3e2c15b54062048ee8bedf148547dc5d231042",
+    "README.md": "fe02a248872b65236e59e71ed2c0d36365e8d36457c7f6a01ab3470e5a5bd94d",
+    "experiments/R3-02B-acquisition-driver/tests/test_driver.py": "f6077f62a49b625396998f817e6dee2faf7373404096f224fc9186752e20114b",
+    "tools/r3_02_acquire.py": "9b6237937dc00386758a1f0a4d49f5921c6f1d8e857babcbe2a153c9dc82025f"
+  },
+  "classification": "STORAGE_REPRESENTATION_ONLY",
+  "created_utc": "2026-11-17T19:01:56Z",
+  "frozen_artifacts_modified": false,
+  "frozen_scope": [
+    "lossless archive storage lifecycle",
+    "logical/archive identity separation",
+    "per-TRACE_COUNT storage gate with 15 GiB reserve"
+  ],
+  "measured_ratio": 0.0111,
+  "no_acquisition": true,
+  "no_model_loaded": true,
+  "not_frozen": [
+    "scientific matrix",
+    "endpoints",
+    "statistics",
+    "policy parameters"
+  ],
+  "peak_storage": {
+    "conservative_gib": 32.93,
+    "current_free_gib": 64.94,
+    "expected_gib": 29.89,
+    "required_free_gib": 47.93,
+    "system_reserve_gib": 15.0
+  },
+  "phase": "R3-02C",
+  "protocol_digest": "f8d4b3199c4c74555353e5f796eaf7d7c3687da97883ee07f7d1c81233c9469c",
+  "status": "LOSSLESS_ARCHIVE_STORAGE_SAFE"
+}

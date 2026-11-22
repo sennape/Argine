@@ -1,0 +1,73 @@
+{
+  "admission_sha256": "5d584544fdf1499ddc49be3dca181ae9d34f6d38b2daa26e29d99ebfd550bd3b",
+  "artifact": "R3-02D-RECOVERY-RESULT",
+  "created_utc": "2026-11-18T06:08:43Z",
+  "free_bytes_after": 69233516544,
+  "free_bytes_before": 24198582272,
+  "freed_bytes": 45034934272,
+  "no_model_rerun": true,
+  "phase": "R3-02D",
+  "raw_removed_bytes": 30941123714,
+  "record_archive_storage": {
+    "archive_bytes": 1566236582,
+    "archive_sha256": "dc6b6056eed0bb64eb2dc13f17ef0cf9f364c30fe10a0f7bf668ac0423a9edb7",
+    "format": "zstd-v1",
+    "logical_bytes": 30941123714,
+    "logical_sha256": "a598543f1e6df6f8767361c6d34fae23879e28d661077edbde612f33e8495901"
+  },
+  "recovered": [
+    {
+      "admission": "ADMISSIBLE",
+      "archive_bytes": 1566236582,
+      "archive_sha256": "dc6b6056eed0bb64eb2dc13f17ef0cf9f364c30fe10a0f7bf668ac0423a9edb7",
+      "config": "A-8GiB",
+      "logical_bytes": 30941123714,
+      "logical_sha256": "a598543f1e6df6f8767361c6d34fae23879e28d661077edbde612f33e8495901",
+      "ratio": 0.05062,
+      "raw_removed": true,
+      "seq": 32
+    }
+  ],
+  "run_dir": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-02-p4",
+  "state_launch_32": {
+    "attempts": 2,
+    "error": "[Errno 28] No space left on device",
+    "evidence": {
+      "admission": "ADMISSIBLE",
+      "archive": {
+        "archive_bytes": 1566236582,
+        "archive_sha256": "dc6b6056eed0bb64eb2dc13f17ef0cf9f364c30fe10a0f7bf668ac0423a9edb7",
+        "format": "zstd-v1",
+        "logical_bytes": 30941123714,
+        "logical_sha256": "a598543f1e6df6f8767361c6d34fae23879e28d661077edbde612f33e8495901"
+      },
+      "budget_invariant_ok": true,
+      "intentional_shutdown": true,
+      "kill_used": false,
+      "kind": "TRACE_COUNT",
+      "output_token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa",
+      "process_alive_before_shutdown": true,
+      "record_sha256": "9502e628c9f7ca5e005e1473fa4abd94770ebeffdd4a1dbe7bd00594ed664f5d",
+      "recovered": true,
+      "recovery": {
+        "original_attempts": 2,
+        "original_error": "[Errno 28] No space left on device",
+        "recovered_from_status": "FAILED",
+        "verified_streaming": true
+      },
+      "request_completed_successfully": true,
+      "schema": 3,
+      "server_return_code": null,
+      "shutdown_mode": "terminate",
+      "shutdown_verified": false,
+      "stderr_error_markers": []
+    },
+    "recovery": {
+      "original_attempts": 2,
+      "original_error": "[Errno 28] No space left on device",
+      "recovered_from_status": "FAILED",
+      "verified_streaming": true
+    },
+    "status": "SUCCEEDED"
+  }
+}

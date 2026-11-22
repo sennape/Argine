@@ -1,0 +1,51 @@
+{
+ "acquisition_opened": false,
+ "artifact": "R3-04-GATE1-SHUTDOWN-PROBE-FREEZE",
+ "classification": "SHUTDOWN_PROBE_SUPPORTS_HELPER",
+ "exclusions": 0,
+ "freeze_sha256": "6379572091345e38f130a62a18d9fd5acdaef673f92439c44ff2bea8de8d6f42",
+ "limitations": [
+  "Stand-in Python child, not llama-server: H2 (llama-server-specific shutdown stall) is untested.",
+  "Does not show the real-model ~300 s shutdown plateau is solved.",
+  "Event delivery latency only; policy_timing and trace flush on real exit are untested here.",
+  "Within each trial legacy ran before helper (fixed order, no randomisation); no frozen statistical test; ratios are descriptive.",
+  "Single host, single session."
+ ],
+ "model_used": false,
+ "probe_file": "PROBE.json",
+ "probe_sha256": "4ed1abb9aaf91cfba4c0dff782c917aa13489166d970717ce4d0712949a880d2",
+ "protocol_freeze_sha256": "a88359b52891f93ec49e67978d92c2eb3b73db588611bce46b3103b2978c1202",
+ "protocol_parent_commit": "4a0aa2d",
+ "retries": 0,
+ "rows_total": 40,
+ "statistics": {
+  "legacy": {
+   "failed": 0,
+   "helper_returncodes": [],
+   "max_s": 98.87742400169373,
+   "median_s": 5.40426504611969,
+   "min_s": 0.606792688369751,
+   "n": 20,
+   "over_5s": 10
+  },
+  "own_console_helper": {
+   "failed": 0,
+   "helper_returncodes": [
+    0
+   ],
+   "max_s": 0.14968585968017578,
+   "median_s": 0.10763883590698242,
+   "min_s": 0.08555984497070312,
+   "n": 20,
+   "over_5s": 0
+  },
+  "ratios_descriptive": {
+   "max_legacy_over_helper": 660.5662299228451,
+   "median_legacy_over_helper": 50.20739030278867
+  }
+ },
+ "status": "GATE1_FROZEN_MODEL_FREE_H1_ONLY",
+ "tests": "H1 only: console Ctrl-event delivery to a stand-in Python child; not llama-server",
+ "tooling_parent_commit": "6b22fdd",
+ "trials_per_method": 20
+}

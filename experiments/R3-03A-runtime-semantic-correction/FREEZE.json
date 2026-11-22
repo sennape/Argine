@@ -1,0 +1,29 @@
+{
+ "artifact": "R3-03A-FREEZE",
+ "artifacts_sha256": {
+  "CONFORMANCE_PLAN.json": "bc105432a815f7e096e2a0ee6cd84f06069e3784a564c132d7fe98bf70eaca14",
+  "FROZEN_TRIPLET_REPLAY_B-4GiB.json": "6e889607e10ae3c9d30ed82782e8cf12c6669bcbb09c4cb5eb27ae285be9ec90",
+  "IMPLEMENTATION.json": "e7ed43ccdc4ac7bb318f64452a52211d0be630d0b8332d5961575ed99583ec2e",
+  "README.md": "dd4b9cf2c5b8f5d880a27557ed1c93cefd2e5bb7261053c4aaa29c93475bbc1c",
+  "REGRESSION_CLASSIFICATION.json": "742693b5e250e9cba31a0a70e8586e84a65facb7ca1a7d199dd5add4aa156fcb",
+  "replay_frozen_triplets.py": "94fd3619c10db5c634960e314bd0e59ecbb6aa30d0d59f4f464b7b2f2c9699bb",
+  "tests/test_semantic_correction.py": "7044d7ece915a079eac8202b72ac9a5f28786012305ad01174880ef5f814656d"
+ },
+ "closure_freeze_sha256": "66a32a91f26664e01bc3167073f16e49685fff5d15b0b7d58fb82342e489d4dc",
+ "new_runtime_sha256": "e935005e5131b29d12b113b000fa52e798b4b4419a23724ec70af3f6875fcd76",
+ "no_claims": [
+  "runtime semantic conformance",
+  "timing",
+  "R3-03 success"
+ ],
+ "old_runtime_sha256": "3f094f5b5f4963f488b63722f365068f09e2aa3b12e2096969da99f471bbd644",
+ "parent_audit_freeze_sha256": "ad6f8a4292fa59929ce80da48cea8755fac53f26167e93c41ccc2d7d0d768834",
+ "source_sha256": {
+  "patches/argine-experts.cpp": "af954d3cc2e14d6338a38c7b7330269f114db8963304935615b38211c69e8185",
+  "patches/argine-semantic-event-test.cpp": "925d2b79e338b8ee5bdc556e3cb66b0c1f470481dda7d308bfbc4c6fd8cda905",
+  "patches/argine-store.cpp": "2a01d3b6dc53fe04ec1edd440446b897523342428ff3e35df5cb3ae4243045b5",
+  "patches/argine-store.h": "ce8e792270a457b2c30ee37cdabf7c2461b6f7028b2f3c01f0234faa0527cdde",
+  "tools/r3_03a_conformance.py": "b481374b28025c8b67227235e5e20ef8f8880dd88cda010063d57efac68f6a2a"
+ },
+ "status": "R3_03A_SEMANTIC_CORRECTION_IMPLEMENTED_OFFLINE"
+}

@@ -1,0 +1,78 @@
+{
+  "run_id": "abeb11c38a2dc33ea7c3f9df",
+  "workload_id": "r2-11-instruction-v1",
+  "budget_gib": 4.0,
+  "policy_id": "b_selected",
+  "repetition_index": 2,
+  "ordering_block": "counted",
+  "cell_index": 3,
+  "position_in_abba_sequence": 2,
+  "warmup": false,
+  "counted": true,
+  "timestamps": {
+    "t0_process_start": 213913.1617109,
+    "t1_model_ready_check_started": 213914.2216067,
+    "t1_model_ready": 213918.768376,
+    "t2_request_sent": 213918.768443,
+    "t3_first_token": 213929.2127148,
+    "t4_last_token": 214071.5355522
+  },
+  "environment": {
+    "ARGINE_EXPERT_STORE": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs",
+    "ARGINE_EXPERT_BUDGET": "4294967296",
+    "ARGINE_EXPERT_SHARDS": "1",
+    "ARGINE_EXPERT_READ": "blocco",
+    "ARGINE_RETENTION_POLICY": "b_selected",
+    "ARGINE_PREFETCH": null,
+    "ARGINE_RETENTION_DECAY": "0.99",
+    "ARGINE_RETENTION_INTERVAL": "64",
+    "process_identity_pid": 22176
+  },
+  "runtime_metrics": {
+    "decode_tokens_per_second": 3.590450632329649,
+    "ttft_seconds": 10.444271799991839,
+    "end_to_end_time_to_final_token_seconds": 152.76710919998004,
+    "total_decode_time_seconds": 142.321968,
+    "tokens_generated": 512,
+    "expert_bytes_read": null,
+    "expert_read_count": null,
+    "expert_miss_bytes": null,
+    "expert_io_best_effort": {
+      "expert_tensors_served_from_store": null,
+      "expert_tensors_expected": null,
+      "approx_mib_read": null,
+      "note": "best-effort stderr parse"
+    },
+    "cpu_time_seconds": 1178.65625,
+    "peak_resident_memory_bytes": 5942091776,
+    "metrics_source_note": "psutil",
+    "wall_clock_seconds": 158.37384129999555,
+    "budget_violations": 0,
+    "prediction_overhead_seconds": null,
+    "retention_policy_overhead_seconds": null,
+    "overhead_note": "prediction/retention-policy overhead isolation requires the calibration step instrumentation_contract.json itself requires BEFORE any publication-quality run; not performed by this driver, so left None rather than approximated"
+  },
+  "workload_identity": {
+    "path": "C:\\Users\\alpel\\Desktop\\Argine3\\research2\\workloads\\r2_11\\r2-11-instruction-v1.json",
+    "sha256": "5a9c042b5d8ecac9ca92d189fe074f42c9f24747606ae8edc75567901d29266d"
+  },
+  "canonical": true,
+  "diagnostic_only": false,
+  "trace_enabled": false,
+  "pre_popen_env_check": {
+    "retention_trace_env_present": false,
+    "trace_output_variables_present": []
+  },
+  "output_text": " \n\nDo not use markdown. Just plain text.\n\nOkay, let's tackle this query. The user wants a product description for a reusable water bottle with specific constraints. First, I need to make sure I follow each rule exactly. \n\nThe first paragraph must be exactly two sentences. I'll start by introducing the product and its main benefits. Maybe something like \"Stay hydrated with this sleek, durable water bottle designed for everyday use. Its minimalist style complements any lifestyle while reducing single-use plastic waste.\" That's two sentences, check.\n\nNext, the second paragraph needs 'insulated' and 'capacity' each once. Let me think. \"The insulated design maintains beverage temperature for hours, ensuring drinks stay refreshingly cold or hot. With a 20-ounce capacity, it\u2019s ideal for workouts, work, or on-the-go hydration.\" That works. 'Insulated' and 'capacity' are both there.\n\nThird paragraph must end with a question. Maybe something like \"Whether you\u2019re hiking, commuting, or at your desk, this bottle adapts to your routine. How will you make hydration a daily habit?\" Ends with a question, good.\n\nNow check for forbidden words: 'amazing', 'perfect', exclamation marks. None present. Word count: Let me count. First paragraph: 14 words. Second: 14. Third: 14. Total 42. Plus the WORD COUNT line. Wait, the user said total response under 150 words. 42 is way under. But maybe I need to check again. Wait, the example might have more. Let me recount.\n\nOriginal response:\n\nStay hydrated with this sleek, durable water bottle designed for everyday use. Its minimalist style complements any lifestyle while reducing single-use plastic waste. The insulated design maintains beverage temperature for hours, ensuring drinks stay refreshingly cold or hot. With a 20-ounce capacity, it\u2019s ideal for workouts, work, or on-the-go hydration. Whether you\u2019re hiking, commuting, or at your desk, this bottle adapts to your routine. How will you make hydration a daily habit? WORD COUNT: 42\n\nYes, that's 42 words. But the user said under 150, so that's fine. But maybe the user expects more? Wait, maybe I miscounted. Let me check each sentence.\n\nFirst paragraph: \"Stay hydrated with this sleek, durable water bottle designed for everyday use.\" That's 12 words. \"Its",
+  "output_token_digest": "a6c5d80691af1aadd9dc77e64f03b57b9655249a97cdd181ea70a0b5e8fb2dd7",
+  "process_cleanup": {
+    "ok": true,
+    "method": "terminate",
+    "exit_code": 1
+  },
+  "driver_managed_artifact_bytes_written": 6349,
+  "external_trace_output_detected": null,
+  "external_trace_output_note": "Not scanned (avoids expensive full-disk scanning per-launch). The pre-Popen fail-closed assertion above is the actual defense against an external/inherited trace path being used by the child process; this field documents the limit rather than silently implying full coverage.",
+  "status": "completed_ok",
+  "ok": true
+}

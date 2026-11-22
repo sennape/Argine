@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-10-phase0-contract-v1.0",
+  "name": "R2-10 DEV-only predictor selection rule (frozen before any DEV result exists)",
+  "selected_from": "DEV_ONLY",
+  "eval_influence": "FORBIDDEN -- no EVAL result may influence family/config selection; mirrors R2-09B/R2-09A b_selected_rule.eval_hindsight_diagnostic_only discipline.",
+  "pool": "families.causal_runtime_candidates from predictor_space.json only (global_frequency, last_observation, and -- once implemented in the DEV tournament phase -- recency_window, markov_transition, decayed_transition, recency_frequency_transition_blend). shuffled_null is never in the pool.",
+  "aggregation": {
+    "primary_selection_statistic": "mean future_requested_expert_recall_at_k over the primary horizon h=1, equal weight per DEV instance (macro by instance, NOT token-weighted and NOT layer-weighted), matching the equal-per-instance weighting style already frozen for R2-09A's B_selected rule.",
+    "formula": "Score(family, config) = mean over the 8 DEV cells of [ mean over all (t, l, h=1) targets in that cell of recall_at_k(t,l) ]",
+    "weights": "equal weight per DEV instance (8 cells); within a cell, equal weight per (t,l) target (token/layer weighted equally within-instance, never instance-count-of-targets-weighted across instances) -- this prevents a longer trace (e.g. 511 vs 381 decode steps) from dominating the cross-instance average.",
+    "secondary_horizons_reporting": "h=4 and h=16 are reported descriptively per family/config using the same aggregation, but are NEVER used in the primary selection statistic (matches predictor_space.json / prediction_contract.json horizon primacy of h=1)."
+  },
+  "tie_breaking": [
+    "1. higher primary_selection_statistic",
+    "2. lower hyperparameter-count (prefer simpler/fewer tunable hyperparameters)",
+    "3. lexical config_id ascending (deterministic fallback, same convention as R2-09A's B_selected tie-break)"
+  ],
+  "freeze_requirement": "This selection rule is frozen in this Phase-0 contract BEFORE any DEV result exists for recency_window, markov_transition, decayed_transition, or the blend (only global_frequency/last_observation have been exercised at all in Phase 0, and only for contract/leakage/determinism testing on a synthetic trace, never for a selection decision)."
+}

@@ -1,0 +1,40 @@
+{
+  "level_d": {
+    "metrics": {
+      "event_disagreement_rate": 0.0,
+      "exp021_closure": "PASS",
+      "format": 2,
+      "full_trace_fidelity": "PASS",
+      "incomplete_nodes_in_workload": 0,
+      "pre_workload_disagreements": 0,
+      "pre_workload_rp_failures": 0,
+      "pre_workload_skip_count_disagreements": 0,
+      "reconstruct_inconsistencies": 0,
+      "rp_budget_violations": 0,
+      "run": "run-00-4G",
+      "shard_map": "recorded (format v2)",
+      "shards": 16,
+      "shards_with_replay_relevant_seq_gaps": 0,
+      "tail_disagreements_unexplained": 0,
+      "termination_tail_completeness": "INCOMPLETE: 2 lost records, 1 incomplete node(s) (0 in workload), 0 tail disagreement(s): 0 explained by record loss, 0 unexplained",
+      "wl_disagreements": 0,
+      "wl_rp_evictions": 136602,
+      "wl_rp_failures": 0,
+      "wl_rp_miss_bytes": 132974714880,
+      "wl_rp_misses": 138944,
+      "wl_rt_evictions": 136602,
+      "wl_rt_miss_bytes": 132974714880,
+      "wl_rt_misses": 138944,
+      "wl_skip_count_disagreements": 0,
+      "wl_victim_disagreements": 0,
+      "workload_fidelity": "PASS"
+    },
+    "reason": "real runtime cache events (raw.tsv, format v2, exact recorded shard map) agree with independent StoreReplay prediction with zero disagreements over the measured workload and zero unexplained tail disagreement",
+    "status": "OBSERVED_PASS"
+  },
+  "reasons": [
+    "behavioral replay validation (Level D) is OBSERVED and PASSES: the real runtime's own recorded cache events (raw.tsv, format v2, exact recorded shard map) agree with independent StoreReplay prediction with zero disagreements over the measured workload (see level_d for metrics)"
+  ],
+  "reconcile_problems": [],
+  "replay_error": null
+}

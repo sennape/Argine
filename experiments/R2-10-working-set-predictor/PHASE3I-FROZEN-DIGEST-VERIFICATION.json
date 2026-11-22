@@ -1,0 +1,12 @@
+{
+  "artifact": "R2-10-PHASE3I-FROZEN-DIGEST-VERIFICATION",
+  "generated_utc": "2026-11-13T21:21:50.806964Z",
+  "eval_manifest_json_sha256": "08ae0d065362e62a83e6ac445df6c5a5d66fc45fdadf2f5bd38aee12a97e57a8",
+  "eval_manifest_json_unchanged_since_eval_opened": true,
+  "r2_09b_contract_digest_matches_preregistration": true,
+  "r2_10_phase0_contract_digest_matches_preregistration": true,
+  "r2_09b_contract_digest_computed": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28",
+  "r2_09b_contract_digest_expected": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28",
+  "r2_10_phase0_contract_digest_computed": "4d2288b7b4a812fd85d96aa7c2227d639b52f5131bff305d687e03970f53d725",
+  "r2_10_phase0_contract_digest_expected": "4d2288b7b4a812fd85d96aa7c2227d639b52f5131bff305d687e03970f53d725"
+}

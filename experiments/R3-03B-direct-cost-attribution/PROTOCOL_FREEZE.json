@@ -1,0 +1,23 @@
+{
+ "artifact": "R3-03B-PROTOCOL-FREEZE",
+ "parent_conformance_commit": "3c37870c2b1ed08609f61cee05674b38960be3a7",
+ "parent_conformance_freeze_sha256": "0ebcd1354e3bd1d1454bce056fc0cd7430ea8997d33e8e9ed6134d1e3a632cc5",
+ "protocol_json_sha256": "295e8e3f3e376248998baf3ea5fa845c8f3b793706ed3e1c7aae0d8b463b1ae5",
+ "files_sha256": {
+  "PROTOCOL.json": "295e8e3f3e376248998baf3ea5fa845c8f3b793706ed3e1c7aae0d8b463b1ae5",
+  "README.md": "3d6149fcb7945de49addfb8deb7dc0e8bfb8ffe8e81936e1f6ff5b0bd549d799",
+  "routing_stream_A-4GiB.txt": "0224419aa9928ef6c3bcc1698eddfffcf1ec97a88893755f030b2cd5ff5690b6"
+ },
+ "summary": {
+  "microbench": "3 processes x 30 reps, 4 modes, warmup 2 replays/combo, MSVC 19.44 /O2",
+  "end_to_end": "ABBA, 8 GiB <=20 blocks, 4 GiB <=10, N fixed in later addendum",
+  "estimator": "mean block contrast; rho by Fieller 95%",
+  "equivalence_interval": [
+   0.5,
+   2.0
+  ]
+ },
+ "forbidden_post_hoc_changes": "see PROTOCOL.json forbidden_post_hoc_changes",
+ "freeze_method": "freeze_sha256 = sha256 of json.dumps(object without freeze_sha256, sort_keys=True, separators=(',',':'))",
+ "freeze_sha256": "d0dd74510918d711c0ae6a8dd35f97c40d8cb3a573ff32f82955ebbe30686882"
+}

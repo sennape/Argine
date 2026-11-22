@@ -1,0 +1,57 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "selection_rule": "Select exactly the 'v1' instance of each of the 4 R2-11 semantic categories (coding, instruction, reasoning, summarization) from the already-frozen, outcome-independent R2-11 workload corpus. 'v1' is a POSITION-based rule (the first-indexed instance within each category in the frozen eval_manifest.json ordering), fixed before any reference to this selection's R2-11 retention outcome.",
+  "explicit_non_cherry_picking_disclosure": {
+    "note": "The R2-11 per-workload delta_bytes at 4 GiB for ALL 12 candidates is disclosed here specifically to demonstrate that 'v1' was not chosen because it showed the largest retention improvement. In 2 of 4 categories (reasoning, summarization), v1 happens to show the LARGEST improvement in its category; in the other 2 (coding, instruction), it does not -- instruction-v1 in particular shows an UNFAVORABLE (positive, i.e. predicted-protect worse) R2-11 delta, the single most unfavorable result among all 12 R2-11 workloads at the primary budget. A rule that excluded or avoided that case to produce a cleaner runtime story would be outcome-dependent selection; this rule does not do that -- it keeps the one workload most likely to show a null or unfavorable runtime result too.",
+    "r2_11_delta_bytes_at_4gib_all_12_candidates": {
+      "r2-11-coding-v1": -11181.839530318975,
+      "r2-11-coding-v2": -74377.2681017518,
+      "r2-11-coding-v3": -201994.52054792643,
+      "r2-11-instruction-v1": 27052.83757340908,
+      "r2-11-instruction-v2": -53528.5479452014,
+      "r2-11-instruction-v3": -59516.24266144633,
+      "r2-11-reasoning-v1": -240734.1839530468,
+      "r2-11-reasoning-v2": -135264.1878669262,
+      "r2-11-reasoning-v3": 59516.24266144633,
+      "r2-11-summarization-v1": -324056.9236790538,
+      "r2-11-summarization-v2": -72357.32289627194,
+      "r2-11-summarization-v3": 36719.71819961071
+    }
+  },
+  "workloads": [
+    {
+      "workload_id": "r2-11-coding-v1",
+      "category": "coding",
+      "path": "research2/workloads/r2_11/r2-11-coding-v1.json",
+      "sha256": "3cc6a2f89fcc6600f894c967861e6ff5f53cb0b2d460fe7fc459481d8cca2019"
+    },
+    {
+      "workload_id": "r2-11-instruction-v1",
+      "category": "instruction",
+      "path": "research2/workloads/r2_11/r2-11-instruction-v1.json",
+      "sha256": "5a9c042b5d8ecac9ca92d189fe074f42c9f24747606ae8edc75567901d29266d"
+    },
+    {
+      "workload_id": "r2-11-reasoning-v1",
+      "category": "reasoning",
+      "path": "research2/workloads/r2_11/r2-11-reasoning-v1.json",
+      "sha256": "bb82afa21e35b94c1e93910be4d4d50378a0ca5d040d40f387e6890243aa5791"
+    },
+    {
+      "workload_id": "r2-11-summarization-v1",
+      "category": "summarization",
+      "path": "research2/workloads/r2_11/r2-11-summarization-v1.json",
+      "sha256": "ecc9425a9aeaec7e92a982d51cb742a804442e6765a192818bdac9b588820601"
+    }
+  ],
+  "n_workloads": 4,
+  "categories_covered": [
+    "coding",
+    "instruction",
+    "reasoning",
+    "summarization"
+  ],
+  "rationale_for_subset_vs_full_12": "Section 11 explicitly warns against reusing all 12 R2-11 workloads without justification, and section 24 flags the full 12x3x2x5=360-execution matrix as potentially too expensive. 4 workloads (one per category) preserves full category coverage while keeping the campaign a manageable 4x3x2x5=120 executions (plus discarded warmups), prioritizing measurement quality/control (more careful machine-state control, ABBA ordering, cooldowns) over brute-force corpus size, per section 24's explicit guidance to prefer quality over size.",
+  "generation_conditions_reused_from_r2_11": "research2/workloads/r2_11/*.json prompts and n_predict=512 reused verbatim; no dedicated R2-12 corpus authored, since timing semantics (fixed prompt, fixed n_predict, greedy decoding) do not require different prompt content than R2-11 already provides."
+}

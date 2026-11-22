@@ -1,0 +1,120 @@
+{
+  "completed_cell_count": 128,
+  "configs_digest": "0cd032e9bf8c77a49ce94d55726bff930eb3e65dbf280177b989d1fd9368fe2c",
+  "creation_time_utc": "2026-11-11T22:21:54Z",
+  "dev_corpus_digest": "f758b77492eebc38bc81ba22d6b06ab8f19138d1099b635821369a4d022d9398",
+  "execution_generation_id": "c2c19103a53b433682a10174125b057f",
+  "execution_history": [
+    {
+      "completed": 0,
+      "event": "resume_or_start",
+      "pending": 128,
+      "pid": 8,
+      "utc": "2026-11-11T22:21:55Z"
+    },
+    {
+      "completed": 7,
+      "event": "resume_or_start",
+      "pending": 121,
+      "pid": 8,
+      "utc": "2026-11-11T22:24:43Z"
+    },
+    {
+      "completed": 7,
+      "event": "resume_or_start",
+      "pending": 121,
+      "pid": 9,
+      "utc": "2026-11-11T22:39:30Z"
+    },
+    {
+      "completed": 30,
+      "event": "paused_for_deadline",
+      "pending": 98,
+      "utc": "2026-11-11T22:42:12Z"
+    },
+    {
+      "completed": 30,
+      "event": "resume_or_start",
+      "pending": 98,
+      "pid": 8,
+      "utc": "2026-11-11T22:42:18Z"
+    },
+    {
+      "completed": 49,
+      "event": "paused_for_deadline",
+      "pending": 79,
+      "utc": "2026-11-11T22:44:58Z"
+    },
+    {
+      "completed": 49,
+      "event": "resume_or_start",
+      "pending": 79,
+      "pid": 8,
+      "utc": "2026-11-11T22:45:03Z"
+    },
+    {
+      "completed": 71,
+      "event": "paused_for_deadline",
+      "pending": 57,
+      "utc": "2026-11-11T22:47:48Z"
+    },
+    {
+      "completed": 71,
+      "event": "resume_or_start",
+      "pending": 57,
+      "pid": 8,
+      "utc": "2026-11-11T22:47:53Z"
+    },
+    {
+      "completed": 89,
+      "event": "paused_for_deadline",
+      "pending": 39,
+      "utc": "2026-11-11T22:50:40Z"
+    },
+    {
+      "completed": 89,
+      "event": "resume_or_start",
+      "pending": 39,
+      "pid": 8,
+      "utc": "2026-11-11T22:50:47Z"
+    },
+    {
+      "completed": 107,
+      "event": "paused_for_deadline",
+      "pending": 21,
+      "utc": "2026-11-11T22:53:36Z"
+    },
+    {
+      "completed": 107,
+      "event": "resume_or_start",
+      "pending": 21,
+      "pid": 8,
+      "utc": "2026-11-11T22:53:41Z"
+    },
+    {
+      "completed": 125,
+      "event": "paused_for_deadline",
+      "pending": 3,
+      "utc": "2026-11-11T22:56:33Z"
+    },
+    {
+      "completed": 125,
+      "event": "resume_or_start",
+      "pending": 3,
+      "pid": 8,
+      "utc": "2026-11-11T22:56:42Z"
+    },
+    {
+      "completed": 128,
+      "event": "complete",
+      "pending": 0,
+      "utc": "2026-11-11T22:57:21Z"
+    }
+  ],
+  "expected_cell_count": 128,
+  "last_update_utc": "2026-11-11T22:57:21Z",
+  "pending_cell_count": 0,
+  "phase0_contract_digest": "4d2288b7b4a812fd85d96aa7c2227d639b52f5131bff305d687e03970f53d725",
+  "runner_version": "r2-10-phase1-checkpoint-runner-v1",
+  "schema_version": 1
+}

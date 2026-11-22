@@ -1,0 +1,78 @@
+{
+  "run_id": "be58378e5c2858a65e707719",
+  "workload_id": "r2-11-summarization-v1",
+  "budget_gib": 1.5,
+  "policy_id": "b_selected",
+  "repetition_index": 4,
+  "ordering_block": "counted",
+  "cell_index": 10,
+  "position_in_abba_sequence": 7,
+  "warmup": false,
+  "counted": true,
+  "timestamps": {
+    "t0_process_start": 243397.3129122,
+    "t1_model_ready_check_started": 243398.134719,
+    "t1_model_ready": 243403.1869832,
+    "t2_request_sent": 243403.1870536,
+    "t3_first_token": 243428.3316024,
+    "t4_last_token": 243656.9958068
+  },
+  "environment": {
+    "ARGINE_EXPERT_STORE": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs",
+    "ARGINE_EXPERT_BUDGET": "1610612736",
+    "ARGINE_EXPERT_SHARDS": "1",
+    "ARGINE_EXPERT_READ": "blocco",
+    "ARGINE_RETENTION_POLICY": "b_selected",
+    "ARGINE_PREFETCH": null,
+    "ARGINE_RETENTION_DECAY": "0.999",
+    "ARGINE_RETENTION_INTERVAL": "1",
+    "process_identity_pid": 10764
+  },
+  "runtime_metrics": {
+    "decode_tokens_per_second": 2.2347244339871586,
+    "ttft_seconds": 25.144548799988115,
+    "end_to_end_time_to_final_token_seconds": 253.80875319999177,
+    "total_decode_time_seconds": 228.66354,
+    "tokens_generated": 512,
+    "expert_bytes_read": null,
+    "expert_read_count": null,
+    "expert_miss_bytes": null,
+    "expert_io_best_effort": {
+      "expert_tensors_served_from_store": null,
+      "expert_tensors_expected": null,
+      "approx_mib_read": null,
+      "note": "best-effort stderr parse"
+    },
+    "cpu_time_seconds": 1975.625,
+    "peak_resident_memory_bytes": 3329531904,
+    "metrics_source_note": "psutil",
+    "wall_clock_seconds": 259.6828946000023,
+    "budget_violations": 0,
+    "prediction_overhead_seconds": null,
+    "retention_policy_overhead_seconds": null,
+    "overhead_note": "prediction/retention-policy overhead isolation requires the calibration step instrumentation_contract.json itself requires BEFORE any publication-quality run; not performed by this driver, so left None rather than approximated"
+  },
+  "workload_identity": {
+    "path": "C:\\Users\\alpel\\Desktop\\Argine3\\research2\\workloads\\r2_11\\r2-11-summarization-v1.json",
+    "sha256": "ecc9425a9aeaec7e92a982d51cb742a804442e6765a192818bdac9b588820601"
+  },
+  "canonical": true,
+  "diagnostic_only": false,
+  "trace_enabled": false,
+  "pre_popen_env_check": {
+    "retention_trace_env_present": false,
+    "trace_output_variables_present": []
+  },
+  "output_text": "Answer:\n\nOkay, let's tackle this query. The user wants a summary, takeaways, and a limitation from the source text about raised-bed gardens. First, I need to read the source carefully.\n\nThe main points are about soil mix, bed depth, watering, and crop rotation. For the summary, I should list 5-7 bullet points. Let me check each paragraph. The first part talks about soil composition: 40% compost, 40% topsoil, 20% coarse material. Then bed depth for different crops: shallow for leafy greens, deeper for root veggies and tomatoes. Watering consistency is key, not volume. Mulching helps. Crop rotation to prevent pests and diseases.\n\nFor the takeaways, practical steps: use the soil mix ratio, adjust bed depth based on crops, water consistently, mulch, rotate crops. Need to make sure these are actionable.\n\nLimitation: The text doesn't mention specific examples of crop rotation plans or how often to rotate. Maybe that's an open question. Also, maybe the source doesn't address climate-specific adjustments? Wait, the text does mention that sandy soils dry quickly, but maybe not how to adjust in different climates. But the user said not to add facts not in the source. The limitation should be something the source doesn't resolve. The text says to rotate to an unrelated family, but doesn't specify how to plan that rotation over multiple seasons. So that's a possible open question.\n\nLet me structure the summary first. Check for 5-7 points. Then takeaways as three practical steps. Limitation as one point. Make sure not to add anything extra. Alright, that should cover it.\nAnswer:\n\n**Summary (5-7 bullet points):**  \n- A raised-bed garden allows better soil control, especially in the first two growing seasons.  \n- Optimal soil mix is 40% compost, 40% topsoil, and 20% coarse material (e.g., perlite) for drainage and moisture retention.  \n- Bed depth varies by crop: 20\u201325 cm for leafy greens, 30 cm+ for root vegetables, and 30\u201340 cm for tomatoes/peppers.  \n- Consistent watering (not volume) is critical; use the \"finger test\" to avoid over/under-watering.  \n- Mulching with straw or leaves reduces evaporation and watering frequency.  \n- Crop rotation (e.g., avoiding repeating",
+  "output_token_digest": "1dbe98c75ab7d40eb9f11f3a4e180007564df907ca81d47bec69f258c2a7139d",
+  "process_cleanup": {
+    "ok": true,
+    "method": "terminate",
+    "exit_code": 1
+  },
+  "driver_managed_artifact_bytes_written": 8496,
+  "external_trace_output_detected": null,
+  "external_trace_output_note": "Not scanned (avoids expensive full-disk scanning per-launch). The pre-Popen fail-closed assertion above is the actual defense against an external/inherited trace path being used by the child process; this field documents the limit rather than silently implying full coverage.",
+  "status": "completed_ok",
+  "ok": true
+}

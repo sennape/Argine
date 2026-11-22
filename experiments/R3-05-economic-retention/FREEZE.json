@@ -1,0 +1,39 @@
+{
+ "artifact": "R3-05-PHASE0-PROTOCOL-FREEZE",
+ "authorizes": "NOTHING model-bearing. Phase 1 offline rungs R1-R6 only; any runtime step needs a separate gate.",
+ "files_sha256": {
+  "CLAIM_BOUNDARIES.md": "dfa836b6fd61a96bc10a1d62c29b1d0493a21b2ba22e32b3929c068223c54b22",
+  "COST_MAP.json": "b067a1e2ed5b16346034a8efb9f6ab5550bc8028414886bdbe036c045fd4326a",
+  "DECISION_REPORT.md": "21524d473cbb5eda5d748ca98457f93204bb1d6e51098572fb54d1b57d5d7d71",
+  "ECONOMIC_ENVELOPE.json": "be4c3860b2626fd214ebd1267012e7961e57bc7ec8cbb524b0bfbe9d4a451a54",
+  "PROTOCOL.json": "566fc379a033aca0e53dc7c22eefcabe916c879d2a7f0b479ce5e1ebda6c5831",
+  "phase0.py": "5754b5fd9a9f8663f224ec8700fe6e9857a63891257254352e8e7d62b94ee7d9",
+  "tests/test_phase0.py": "db65481337b3213a46a9956d88147a21112f05f0f4e78897cb7ab9092a2f449a"
+ },
+ "freeze_sha256": "415f78a850a2917a2457797106589433f944c07a863f80b14cef88fde6232ae3",
+ "r3_04_final_evidence_freeze": "71fca58e65853c325ba7622d7565e51be85a54f46394de8d4f4ee2e0753adfa2",
+ "sources": {
+  "gate2_mechanism_metrics": "experiments/R3-04-net-runtime-value/gate2-mechanism-evidence/MECHANISM_METRICS.json",
+  "r2_03_sweep_table": "paper/research2/tables/table3_r2_03_sweep.tex",
+  "r2_09a_tournament": "experiments/R2-09-prediction-benchmark/r2_09a/tournament_results.csv",
+  "r3_03b_microbench": "experiments/R3-03B-microbench-evidence/MICROBENCH_RESULT.json",
+  "r3_04_arm_statistics": "experiments/R3-04-final-evidence/ARM_STATISTICS.json",
+  "r3_04_claim_boundaries": "experiments/R3-04-net-runtime-value/CLAIM_BOUNDARIES.md",
+  "r3_04_final_freeze": "experiments/R3-04-final-evidence/FREEZE.json",
+  "r3_04_official_analysis": "experiments/R3-04-final-evidence/OFFICIAL_ANALYSIS.json",
+  "retention_policy_cpp": "patches/argine-retention-policy.cpp",
+  "retention_policy_h": "patches/argine-retention-policy.h"
+ },
+ "sources_sha256": {
+  "gate2_mechanism_metrics": "269e2b5b403cb469e7a84d1b65f4172364fc174f75ec87788bc159a52ca0fd90",
+  "r2_03_sweep_table": "f92210e7c90665cf8fa22883fb802e793126cd474f696128585ae15c04be423a",
+  "r2_09a_tournament": "73f8f67f3ad1753479ae44079091754ad7ccaa0ff930ffd918e2261758c11862",
+  "r3_03b_microbench": "bff51715ae74f380127ec04a19403d816d15935472fea77d6f516737fc53484e",
+  "r3_04_arm_statistics": "fbd93c2ca3ce27a8f6fd0f21b5390ef04d6b0c767b111b31ccd101155501cac1",
+  "r3_04_claim_boundaries": "f1952f1786ed0da4302530b7ba2bc12dd748244ca1ddfbd41a9a4100dd1decd9",
+  "r3_04_final_freeze": "3204e8e7ee853e0e3eed3f3ce42b5019c579b2257ce536aef906dff53cc216db",
+  "r3_04_official_analysis": "c9e84e2bb874635f74860b1b15343dc5457993cded8545fef8df25a2992dd3ae",
+  "retention_policy_cpp": "dc6bd01631b4af5969a083f99ff636b7bfa2605aebad4ee030c8ea924c25d856",
+  "retention_policy_h": "8fd28954799df74f14b8b88da7fd3f91f20dfd9fd826d5a2999d0897e6be376b"
+ }
+}

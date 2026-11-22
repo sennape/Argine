@@ -1,0 +1,114 @@
+{
+  "argine_sources": [
+    {
+      "name": "argine-store.cpp",
+      "sha256": "8a88d34e523a708c4f473ead9e93ce05a60aa38f66953a31196a0ae59625a6b1"
+    },
+    {
+      "name": "argine-store.h",
+      "sha256": "b5c16ec628844617b119ee6a460b4fc9038f1c0847907c94e2a588779344d571"
+    },
+    {
+      "name": "argine-experts.cpp",
+      "sha256": "938187bc428225ce5b90ad27fe10e6c48156cdcf979fe13e67aee11cde49c468"
+    },
+    {
+      "name": "argine-experts.h",
+      "sha256": "d3aa8a4968b0319720ee17a0e0db3757c69f5934d4047494197c380414d03ff2"
+    },
+    {
+      "name": "argine-research.cpp",
+      "sha256": "19aa2ace738d855a686978b4a3af8941dd5c121ed4f1ac87bedfa454b8567ae8"
+    },
+    {
+      "name": "argine-research.h",
+      "sha256": "2e893e676c54d2e91f3306cb3335feade0ca949207eeba4353391416b1af7577"
+    },
+    {
+      "name": "argine-retention-policy.cpp",
+      "sha256": "fb38f2afe082f9c505d09098d7e5a1b5f5c4ae9e924f09e3ab769def118b6e24"
+    },
+    {
+      "name": "argine-retention-policy.h",
+      "sha256": "39a627bf791ab8452415794d8a88efa74e4a81ef69809cf7529ec421e7b8f4a8"
+    }
+  ],
+  "artifact": "R3-02A-BUILD-IDENTITY",
+  "binary": {
+    "bytes": 12421632,
+    "committed_to_git": false,
+    "note": "runtime binaries are kept outside git by repository convention",
+    "path": "C:\\Users\\alpel\\Desktop\\Argine4-r3build\\llama.cpp\\build\\bin\\llama-server.exe",
+    "sha256": "3f094f5b5f4963f488b63722f365068f09e2aa3b12e2096969da99f471bbd644",
+    "version_line": "version: 0.5.0-dev (build 1, commit 254b177); built with MSVC 19.44.35229.0 for Windows AMD64"
+  },
+  "build_command": "cmake -S . -B build -G Ninja <flags> && cmake --build build --target llama-server -j 8",
+  "build_notes": [
+    "0004 does not apply after 0002+0003 (documented in R2 v8 BUILD-INFO); the CMakeLists wiring was applied as the same direct 8-line edit used for v8.",
+    "0006 (R3-02A) is a build-portability shim: patch 0001 uses GCC __atomic builtins in the route-log worker; the MSVC branch maps the same operations to _Interlocked* intrinsics. No algorithm, decision or timing logic changed.",
+    "/DNOMINMAX is required because windows.h min/max macros collide with std::min/std::max in argine-store.cpp."
+  ],
+  "configure_flags": [
+    "-DCMAKE_BUILD_TYPE=Release",
+    "-DBUILD_SHARED_LIBS=OFF",
+    "-DLLAMA_CURL=OFF",
+    "-DLLAMA_OPENSSL=OFF",
+    "-DGGML_NATIVE=OFF",
+    "-DGGML_AVX=ON",
+    "-DGGML_AVX2=ON",
+    "-DGGML_FMA=ON",
+    "-DGGML_F16C=ON",
+    "-DGGML_BMI2=ON",
+    "-DGGML_OPENMP=OFF",
+    "-DLLAMA_BUILD_TESTS=OFF",
+    "-DLLAMA_BUILD_EXAMPLES=OFF",
+    "-DCMAKE_CXX_FLAGS=/DNOMINMAX",
+    "-DCMAKE_C_FLAGS=/DNOMINMAX"
+  ],
+  "created_utc": "2026-11-16T22:36:15Z",
+  "patches": [
+    {
+      "name": "0001-argine-route-log.patch",
+      "sha256": "e3cee85c8618cfb5274bedd153a5776cce4ee85fa61407382c1a758dde63e191"
+    },
+    {
+      "name": "0002-argine-expert-store.patch",
+      "sha256": "854edc0c8f5fc30cce4cac3091eb5531b4acca087367c1541b1c01913fadf551"
+    },
+    {
+      "name": "0003-argine-research-trace.patch",
+      "sha256": "dbf7f8d5a7aefc7992b635c225c6b96345170323ca27bfd262287cb8d3fdfc97"
+    },
+    {
+      "name": "0004-argine-retention-policy-cmake.patch",
+      "sha256": "a6520ea39735d328aea5c7d76b32ca55e387cb269da7939aed321eb97aa727fe"
+    },
+    {
+      "name": "0005-argine-prefetch-race-fix.patch",
+      "sha256": "a1474b7c42626bbb5977665b72d77e7c17182334c3eef5cce229b797bd7e7f5f"
+    },
+    {
+      "name": "0006-argine-msvc-atomic-shim.patch",
+      "sha256": "109f13fab5b855e3ce87bf5ac02e040583a77a578ccccfbe5e5585315181d357"
+    }
+  ],
+  "phase": "R3-02A",
+  "r2_frozen_runtime": {
+    "expected": "f4d93061b0d4ce41bc4c5f0abce3420e16768ff5dba5ce53212b49ca25dcf087",
+    "matches_expected": true,
+    "overwritten": false,
+    "path": "C:\\Users\\alpel\\Desktop\\Argine2\\llama-research-v8\\llama-server.exe",
+    "sha256": "f4d93061b0d4ce41bc4c5f0abce3420e16768ff5dba5ce53212b49ca25dcf087"
+  },
+  "source": {
+    "checkout": "shallow fetch by commit id; no newer revision used",
+    "commit": "254b177307b14d055bbe4c050c9c441a1e06d8a4",
+    "commit_date": "2026-10-02T09:10:45+02:00",
+    "repo": "https://github.com/ggml-org/llama.cpp"
+  },
+  "toolchain": {
+    "cmake": "3.31.6-msvc6",
+    "compiler": "MSVC 19.44.35229.0 (VS 2022 BuildTools 14.44.35207)",
+    "ninja": "1.12.1"
+  }
+}

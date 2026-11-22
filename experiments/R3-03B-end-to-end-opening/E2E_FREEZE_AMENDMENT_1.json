@@ -1,0 +1,67 @@
+{
+ "artifact": "R3-03B-END-TO-END-FREEZE-AMENDMENT-1",
+ "schema": "r3-03b-e2e-amendment-v1",
+ "kind": "ADMINISTRATIVE_TOOLING_ONLY",
+ "status": "APPLIES_BEFORE_RESUME_NOTHING_NEW_ACQUIRED",
+ "parent_freeze_sha256": "eb3e87b6d2b7c1457f7a4bbb9d37308eb0a4b4b7adf2ab415f039826bc505173",
+ "parent_opening_commit": "fa209ae",
+ "supersedes_driver_sha256_lf": "b6a6f5ac932b0cc3fe99560f918629c5046edc085a18f7667a0fdcba765f1a2b",
+ "superseded_driver_commit": "bee595c",
+ "driver": "tools/r3_03b_e2e.py",
+ "driver_sha256_lf": "9d2fef3b92fd4692e1f1854bb4d60d42c87f57fc58ec31b9c77b4bd27c0e86d2",
+ "incident": "experiments/R3-03B-e2e-shutdown-incident/INCIDENT.json",
+ "incident_sha256": "398369054565dcd13a0ff47630d98d83263cf99b7d405dbeb13de1e537e22b07",
+ "campaign_state_at_amendment": {
+  "campaign_dir": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03B-e2e",
+  "accepted_counted_launches": 4,
+  "complete_abba_blocks": 1,
+  "accepted_slots": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "launch_005": "INCOMPLETE_NONCOUNTED_LAUNCH (try1 retained as incident evidence)",
+  "next_slot": {
+   "seq": 5,
+   "block": 2,
+   "position": 1,
+   "arm": "B",
+   "policy_id": "predicted_protect_sham",
+   "retry_identity": "005-b02p1-B-try2"
+  },
+  "remaining_accepted_launches": 76,
+  "target_accepted_launches": 80
+ },
+ "tooling_changes": [
+  "GRACEFUL_STOP_TIMEOUT_S 600 (conformance driver used 180); evidence: observed Ctrl-C to exit latency 4.8-151.6 s and >=180 s in launch 005; timeout still falls back to terminate and the launch is FAILED (no policy_timing)",
+  "--resume: requires the campaign's CAMPAIGN_OPENED.json (same freeze and runtime), re-validates every persisted accepted record against the frozen admission rule and frozen schedule, fails closed on gaps or mismatches, and logs CAMPAIGN_RESUMED_NN.json",
+  "attempt numbering derives from existing artifacts: a retry is the same scientific slot under the next try index; logs of earlier tries are never overwritten",
+  "orphan attempts (logs without a record) receive an explicit ORPHAN_NONCOUNTED marker",
+  "KeyboardInterrupt (during launch or during the shutdown wait) writes recs NNN.tryK.INTERRUPTED.json and CAMPAIGN_INTERRUPTED.json, hard-stops the child, exits 130; never counted",
+  "shutdown timeout (terminate_fallback) is recorded as shutdown_timeout and is distinct from operator interrupt; neither can be accepted (validate_launch requires graceful shutdown and exactly one valid policy_timing record)",
+  "launch records additionally carry interrupted, request_completed, shutdown_wait_s, shutdown_timeout, graceful_timeout_s, started_unix, finished_unix",
+  "--amendment-sha256 is mandatory; the driver refuses unless its own hash equals driver_sha256_lf"
+ ],
+ "scientific_content_unchanged": {
+  "design": "69a9f4c50177a7d09d1f102e03388e077b4e0cc6dbb1045eac95abbd2f67c61c",
+  "estimands": "e8562038890baeb457416e1f13e9fa1ebaeeb8c1343ccd15d82237ad4d623076",
+  "classification": "9dcec374a9bacd6c1f1a6b06770fdec08544ec37d886e9d520987081bf06e2ad",
+  "admission_rule": "6ed0fba1514910cc96c284af9e853909100724fed0f595d288587070daf8b4dd",
+  "failure_rule": "58ee15458a8e9179bb0614828ef86abdeef325b5907e8452ccb88cf40db56ada",
+  "abort_conditions": "a71c29be441c2c0f8b4570c9f0d23c2f7c83c35b9317724589a6b8034ba34210",
+  "retention": "ff8afdd9e092dc55ebc3231a24f7bce58a625f4fad07fce4b7b4d209f9e1f224",
+  "environment": "e76eb071cd3cec13497bf0a3f4c80ddabe31602cee84bdff62ec3e56cf5f18c2",
+  "runtime_sha256": "51eb4ae6269e28c4430cd58988741f94a6a7e68e9e3e2c6c6256d7757eeabc60",
+  "output_dir": "d19a604b7265cbf283ae87e65cf2ae272f822d76113418e246af73116a16d26d"
+ },
+ "scientific_unchanged_statement": "N=20, 80 accepted counted launches, the alternating ABBA schedule (schedule_sha256 unchanged), policies, workload, 8 GiB budget, estimands, Fieller method, interval [0.5, 2.0], classification, admission rule, failure rule (one rerun of the same slot, then abort) and instrumentation are exactly those of E2E_FREEZE.json.",
+ "failure_budget_reading": "The interrupted try1 of slot 005 is treated as the slot's single permitted failed attempt (literal frozen failure rule); a failure of try2 therefore aborts the campaign. No accepted record is ever discarded by an abort.",
+ "disclosed_limitations": [
+  "shutdown reaction time varies (about 5-150+ s) and its cause is not established, so the idle time between launches is longer and more variable than the frozen fixed pauses alone; shutdown_wait_s and timestamps are recorded from now on (records 001-004 lack them; their file modification times exist)",
+  "the first four accepted launches were produced by the superseded driver; their acceptance semantics are identical and were re-validated by the amended driver"
+ ],
+ "no_timing_claim": true,
+ "freeze_method": "freeze_sha256 = sha256 of json.dumps(object without freeze_sha256, sort_keys=True, separators=(',',':'))",
+ "freeze_sha256": "8d9bf840ddd734fde55ac5ece8dda150f967ff9915b87299dc348c76cbaa72eb"
+}

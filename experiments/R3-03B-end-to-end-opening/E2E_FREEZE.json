@@ -1,0 +1,102 @@
+{
+ "artifact": "R3-03B-END-TO-END-OPENING-FREEZE",
+ "schema": "r3-03b-e2e-opening-v1",
+ "status": "OPEN_FOR_ACQUISITION_NOTHING_ACQUIRED",
+ "parents": {
+  "conformance_freeze_sha256": "29cd74284c92a29537e4d0d77987d172032639ecc99f7b5cd9aed6b48bcdc0a4",
+  "conformance_evidence_commit": "91b5894",
+  "n20_addendum_commit": "8792939",
+  "driver_commit": "bee595c",
+  "microbench_freeze_sha256": "abb451010b04782a56c51420485908871e1a77e87dd18b22f75b5e0580dd7009",
+  "block_count_addendum_commit": "1dd8f716",
+  "protocol_json": "experiments/R3-03B-direct-cost-attribution/PROTOCOL.json"
+ },
+ "runtime_sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5",
+ "runtime_path": "C:\\Users\\alpel\\Desktop\\Argine4-r3build-r3-03b\\llama.cpp\\build-r3-03b\\bin\\llama-server.exe",
+ "driver": "tools/r3_03b_e2e.py",
+ "driver_sha256_lf": "b6a6f5ac932b0cc3fe99560f918629c5046edc085a18f7667a0fdcba765f1a2b",
+ "design": {
+  "primary_budget": "8 GiB",
+  "policies": {
+   "A": "b_selected",
+   "B": "predicted_protect_sham"
+  },
+  "N_blocks": 20,
+  "counted_physical_launches": 80,
+  "warmup_launches": 0,
+  "total_physical_launches": 80,
+  "abba_rule": "odd blocks A B B A; even blocks B A A B (A=b_selected, B=predicted_protect_sham)",
+  "schedule_sha256": "c50afc61b5a6936cefdd54e29e723747817f2025e2e68b69d2629724a0e831a3",
+  "workload": "r2-11-coding-v1 (sha c02f9657...), seed 42, temperature 0, top_k 1, n_predict 512, ctx 4096",
+  "warmup_rule": "NONE. The frozen R3-03B protocol defines a warmup only for the microbenchmark; none is defined for the end-to-end experiment, and the block-count addendum and N=20 addendum count 4 launches per block with no warmups. No warmup is added. Limitation: block 1 launch 1 may be cooler/colder than later launches; the ABBA contrast and the fixed N absorb this only to first order and it is not corrected post hoc.",
+  "cooldown_rule": "60 s before the first launch of each block (including block 1); 15 s between adjacent launches within a block (R2-12 frozen cooldown semantics as carried by the R3-02 plan); fixed pauses only, no temperature threshold",
+  "instrumentation": "ARGINE_POLICY_TIMING=1 in every launch (P is measured in the same launches as O); ARGINE_RETENTION_TRACE unset (no event trace); graceful Ctrl-C shutdown via the conformance-validated graceful_stop so the policy_timing line is emitted"
+ },
+ "estimands": {
+  "wall_per_token": "server timings predicted_ms / predicted_n (decode), ms/token",
+  "O_b": "mean over the block's 2 sham launches minus mean over its 2 b_selected launches of wall ms/token",
+  "P_b": "same contrast of ns_total/512/1e6 from the policy_timing record (aggregate includes the 2 prefill passes; 512 decoded tokens is the divisor)",
+  "rho": "mean_b(O_b)/mean_b(P_b)",
+  "interval": {
+   "lower": 0.5,
+   "upper": 2.0
+  },
+  "ci": "two-sided 95% Fieller interval, t quantile df = N-1 = 19, block-paired means, covariance of means included"
+ },
+ "classification": {
+  "EXPLAINED": "Fieller CI inside [0.5, 2.0]",
+  "REJECTED_UNEXPLAINED": "Fieller CI entirely below 0.5 or above 2.0",
+  "INCONCLUSIVE": "CI bounded but straddles a bound",
+  "UNTESTABLE": "Fieller set unbounded (g >= 1 or mean P == 0); the protocol's second UNTESTABLE clause (O/P below timer or launch-noise resolution) is not operationalised in code and, if invoked, requires a written analysis note and can never yield EXPLAINED"
+ },
+ "admission_rule": "a launch is admitted only if token digest == ac28efbe..., 512 tokens, graceful shutdown, exactly one valid policy_timing record (calls == 24,672), server timings present, no duplicate-event refusal, no error",
+ "failure_rule": "a failed launch is retained as FAILED; the same slot may be rerun once (same configuration, same slot); a second failure of the slot aborts the campaign (CAMPAIGN_ABORTED.json) with no imputation, no replacement blocks and no reordering. No optional stopping, no outlier removal, no change of N.",
+ "abort_conditions": [
+  "runtime sha256 mismatch",
+  "freeze or driver hash mismatch",
+  "free RAM feasibility gate (argine.planner.plan, 8 GiB) fails",
+  "less than 2 GiB free in the output volume",
+  "second failure of any slot",
+  "operator attestation of clean environment absent"
+ ],
+ "retention": {
+  "retained": [
+   "per-launch record (tokens, digest, server timings, policy_timing record, wall seconds, shutdown mode, errors)",
+   "per-launch stdout and stderr logs",
+   "FAILED records",
+   "CAMPAIGN_OPENED/COMPLETE/ABORTED markers"
+  ],
+  "not_retained": "event-level retention traces: not required by the frozen protocol (semantics were proven by the conformance freeze; digest and policy_timing calls==24,672 validate each launch) and writing ~10 GB per launch would slow decode ~4x and contaminate the timing endpoint",
+  "expected_disk_bytes_total": "<= 10 MB (about 20 KB per launch x 80 plus failed attempts)",
+  "free_space_gate_bytes": 2147483648
+ },
+ "environment": {
+  "browsers_and_streaming_video": "closed",
+  "heavy_background_workloads": "forbidden",
+  "power_mode": "fixed, never Power Saver",
+  "operator_attestation": "--attest-clean-environment"
+ },
+ "output_dir": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03B-e2e",
+ "output_dir_rule": "fresh; the driver refuses an existing directory except with --resume of this same campaign",
+ "duration_estimate": {
+  "basis": "conformance logs: model ready ~6 s, prefill 10.3-11.2 s per 187 tokens; decode 512 x 126.16 ms = 64.6 s (R3-02-p4 untraced b_selected step; not observed with this runtime); shutdown planning 20 s (21-39 s observed in traced launches)",
+  "per_launch_s": 102,
+  "per_launch_range_s": [
+   82,
+   128
+  ],
+  "per_block_s": 513,
+  "model_s": 8160,
+  "cooldown_s": 2100.0,
+  "total_s": 10260.0,
+  "total_h": 2.85,
+  "total_h_range": [
+   2.41,
+   3.43
+  ],
+  "replaces": "earlier 3.8 h and N=9 1.7 h point estimates"
+ },
+ "no_timing_claim": true,
+ "freeze_method": "freeze_sha256 = sha256 of json.dumps(object without freeze_sha256, sort_keys=True, separators=(',',':'))",
+ "freeze_sha256": "eb3e87b6d2b7c1457f7a4bbb9d37308eb0a4b4b7adf2ab415f039826bc505173"
+}

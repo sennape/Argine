@@ -1,0 +1,61 @@
+{
+  "artifact": "R2-12-PHASE0-FREEZE",
+  "schema_version": 1,
+  "state": "R2_12_PROTOCOL_FROZEN",
+  "contract_digest": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad",
+  "component_files": [
+    "contract.json",
+    "runtime_metrics.json",
+    "decision_rules.json",
+    "hardware_contract.json",
+    "machine_state_contract.json",
+    "run_order.json",
+    "runtime_corpus.json",
+    "repetition_plan.json",
+    "statistical_analysis.json",
+    "instrumentation_contract.json",
+    "output_equivalence.json",
+    "execution_plan.json",
+    "state_machine.json",
+    "provenance.json",
+    "audit.json",
+    "README.md"
+  ],
+  "historical_statements_unchanged": {
+    "r2_10_category_b": true,
+    "r2_11_not_proposed_under_original_r2_10_rules": true,
+    "r2_bridge01_bridge_positive": true,
+    "r2_11_pass_classification": true,
+    "r2_11_r2_12_gate_text": "R2-12 MAY BE PROPOSED FOR PROSPECTIVE RUNTIME VALIDATION."
+  },
+  "upstream_digests_reverified_unchanged": {
+    "r2_11_phase0_contract_digest": "5dd3a3987aa74230693135d4ec20c5b8fd0a0de58a30b3b1646ccb2ce7b94f2a",
+    "r2_11_phase0_contract_digest_recomputed_match": true,
+    "r2_12_phase0_contract_digest_this_freeze": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad"
+  },
+  "r2_12_started_by": "R2-11's own terminal classification (R2_11_PASS) and its explicit gate text (R2-12 MAY BE PROPOSED FOR PROSPECTIVE RUNTIME VALIDATION), not by any new upstream evidence beyond R2-11's closure.",
+  "no_runtime_benchmark_run": true,
+  "no_tokens_per_second_measured_experimentally": true,
+  "no_r2_12_runtime_opened": true,
+  "no_predictor_changed": true,
+  "no_predicted_protect_policy_changed": true,
+  "no_b_selected_changed": true,
+  "no_historical_r2_11_result_changed": true,
+  "no_runtime_speedup_claimed": true,
+  "no_research_3_started": true,
+  "runtime_corpus_workload_count": 4,
+  "runtime_corpus_selection_disclosed_full_candidate_set": true,
+  "repetitions_per_cell_frozen": 5,
+  "evaluation_matrix_frozen": "4 workloads x 3 budgets x 2 policies = 24 cells; 5 counted repetitions + 1 discarded warmup per cell = 144 total process launches",
+  "tests_run_this_phase": {
+    "r2_12_new_tests": 58,
+    "r2_10_bridge_r2_11_regression_tests_rerun": 225,
+    "total": 283,
+    "all_passed": true,
+    "two_slow_bridge_files_run_separately": [
+      "test_r2_bridge01_memory_correctness.py",
+      "test_r2_bridge01_dev_runner_equivalence.py"
+    ]
+  },
+  "stop_condition": "Stop at R2_12_PROTOCOL_FROZEN / R2_12_RUNTIME_READY. Do not execute R2-12."
+}

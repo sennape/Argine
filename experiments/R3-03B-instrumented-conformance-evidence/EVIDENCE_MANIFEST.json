@@ -1,0 +1,41 @@
+{
+ "artifact": "R3-03B-INSTRUMENTED-CONFORMANCE-EVIDENCE-MANIFEST",
+ "host_run_dir": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03B-conformance",
+ "host_trace_dir": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03B-conformance-traces",
+ "host_records_sha256": {
+  "A-8GiB-OFF.analysis.json": "3db3c0e05bc8c4c3c0062eb1128b72f9018239d77096508d67d9ccfae0d49a96",
+  "A-8GiB-OFF.launch.json": "18818ef25807546f242857eacefc76078327bbeb3c144c68cd58caa388a5d812",
+  "A-8GiB-OFF.stderr.log": "3c805bc0749777f95982b8d1684297e16fba2c922bb8cc6f445c71547f0a7726",
+  "A-8GiB-ON.analysis.json": "3db3c0e05bc8c4c3c0062eb1128b72f9018239d77096508d67d9ccfae0d49a96",
+  "A-8GiB-ON.launch.json": "cec5f74258cf51044e43d8c57e8a931aabb3a4c75b36211df6e1bdaad7103de3",
+  "A-8GiB-ON.stderr.log": "22c416de3327d4030a316fec5f0550712052e9cfb72a46eac358706db0771343",
+  "B-8GiB-OFF.analysis.json": "dc189bbfb33e7f886bf913ec06d45b958c3dc3ad03983e9d916f67e1838ef9c7",
+  "B-8GiB-OFF.launch.json": "81def86781304375781dbe40f46655ac2145e1969c37fafc502296f37f440298",
+  "B-8GiB-OFF.stderr.log": "02a29e2552f02295be6eaa774db174b198a99bde244fc9a6e769f37c24d27512",
+  "B-8GiB-ON.analysis.json": "dc189bbfb33e7f886bf913ec06d45b958c3dc3ad03983e9d916f67e1838ef9c7",
+  "B-8GiB-ON.launch.json": "16ada8dd6389f2fa1c3e3cfbdff6d4322804ab4ab86a34d7a7a5a9694de4f76e",
+  "B-8GiB-ON.stderr.log": "04a80182510c99d10df422fd61c34008acb5d6cd9eebe0b81d6c2257692cc4a0",
+  "CONFORMANCE_RESULT.json": "37a23bcb5e4f38c38abda1b99a7ccf40a5b3930b5e1c5499c335f0b66c135623"
+ },
+ "traces_not_committed": {
+  "reason": "10.2 GB each; identified by sha256 and byte size",
+  "files": {
+   "A-8GiB-OFF.trace.jsonl": {
+    "bytes": 10240964088,
+    "sha256": "f6bfed9780c354243bd1b66b334d34aecce6f1ee205a12ebe50e812773c88e4e"
+   },
+   "A-8GiB-ON.trace.jsonl": {
+    "bytes": 10240964088,
+    "sha256": "f6bfed9780c354243bd1b66b334d34aecce6f1ee205a12ebe50e812773c88e4e"
+   },
+   "B-8GiB-OFF.trace.jsonl": {
+    "bytes": 10242349397,
+    "sha256": "0a352d5808100902f17c1e059218f52ee53c0faefedb1d285b4c4f14dc4e8844"
+   },
+   "B-8GiB-ON.trace.jsonl": {
+    "bytes": 10242349397,
+    "sha256": "0a352d5808100902f17c1e059218f52ee53c0faefedb1d285b4c4f14dc4e8844"
+   }
+  }
+ }
+}

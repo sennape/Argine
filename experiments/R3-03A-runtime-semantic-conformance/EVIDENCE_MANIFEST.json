@@ -1,0 +1,59 @@
+{
+ "artifact": "R3-03A-CONFORMANCE-EVIDENCE-MANIFEST",
+ "files": {
+  "A-4GiB.analysis.json": {
+   "bytes": 822,
+   "sha256": "316b0b5a0cc40b9532608dadaa0bdbc1fcaa7a4192886f424718fd43a4360276"
+  },
+  "A-4GiB.launch.json": {
+   "bytes": 3472,
+   "sha256": "83e7343a2da083caf461aa72fc947657c0b6a2fef097016d9b3e85c9e4bfa0c6"
+  },
+  "A-4GiB.stderr.log": {
+   "bytes": 7839,
+   "sha256": "fc74daefd058413ba81d7f5f09734bf81f9f43455004e48ec1d91d8cdd389307"
+  },
+  "A-4GiB.trace.jsonl": {
+   "bytes": 5134162249,
+   "sha256": "154502dafdefede307f76169d830a268dc67c86ff1945e9f8fd0e6d38755b990"
+  },
+  "B-4GiB.analysis.json": {
+   "bytes": 830,
+   "sha256": "253339aa51e265f574ab9f932a5bdd88273d6fb7e4520ec984534de538fa6bf2"
+  },
+  "B-4GiB.launch.json": {
+   "bytes": 3484,
+   "sha256": "43fb511b9e5ba0f7f3ac2173c3c6cc335fc253b1c5f0bc12669f636168ce54ee"
+  },
+  "B-4GiB.stderr.log": {
+   "bytes": 8185,
+   "sha256": "7ea29b3b5ce7e17a0d5bc92ad3f28564a2ae1da8a6eddbb0bb62ef8804d56d48"
+  },
+  "B-4GiB.trace.jsonl": {
+   "bytes": 5135547558,
+   "sha256": "677217ec4e131b58f8d9498d9eabaeb6b87dbdc2343c90789f87d8949f0a9e5c"
+  },
+  "C-8GiB.analysis.json": {
+   "bytes": 829,
+   "sha256": "1d7bc95c59e4bf05ff4b5f3a8315f7a5073f0e7b56ee288fe1debdef82d813c5"
+  },
+  "C-8GiB.launch.json": {
+   "bytes": 3480,
+   "sha256": "536da6a8c24480f32238b05c136abc793f1d2c2f80d90dbd598dade49afa8d2b"
+  },
+  "C-8GiB.stderr.log": {
+   "bytes": 9429,
+   "sha256": "e34cf48049203c2112b83710e924e25dd743d6206124294bedf881efe6e073f8"
+  },
+  "C-8GiB.trace.jsonl": {
+   "bytes": 10242218132,
+   "sha256": "ab0dbf29f0ebbecb22c7f181a8eef617090b90281926989ec8de8b6d0e5bfb08"
+  },
+  "CONFORMANCE_RESULT.json": {
+   "bytes": 1845,
+   "sha256": "7f296da396d387f2e4bb08edd155a4e189e844b1cdd8fe5794228f1bcb6a75ab"
+  }
+ },
+ "host_directory": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03A-conformance-run2",
+ "note": "raw traces (20.5 GB total) stay on the host and are NOT in git; they are bound here by size and SHA-256. stdout logs are empty (0 bytes). stderr logs contain server timing lines that are not used as evidence."
+}

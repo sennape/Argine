@@ -1,0 +1,25 @@
+{
+ "artifact": "R3-03B-INSTRUMENTED-CONFORMANCE-FREEZE",
+ "classification": "R3_03B_INSTRUMENTED_CONFORMANCE_PASS",
+ "runtime_sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5",
+ "parents": {
+  "microbench_freeze_sha256": "abb451010b04782a56c51420485908871e1a77e87dd18b22f75b5e0580dd7009",
+  "tooling_commit": "0ceec69"
+ },
+ "token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa",
+ "trace_sha256": {
+  "b_selected": "f6bfed9780c354243bd1b66b334d34aecce6f1ee205a12ebe50e812773c88e4e",
+  "predicted_protect_sham": "0a352d5808100902f17c1e059218f52ee53c0faefedb1d285b4c4f14dc4e8844"
+ },
+ "files_sha256": {
+  "README.md": "2ebae1611a2dd3e2a9e2bb58540b5a468bb6e63535f46fb7db224cc4e0f138f0",
+  "CONFORMANCE_EVIDENCE.json": "7f9c2aff0cb92c5e902c190e715911df96961bd711dab38affffcd8b71247f4b",
+  "EVIDENCE_MANIFEST.json": "82606502d1c7bb733a363703a6c0beb17fa01b666747ff3e2b42b9a10f5d30f1",
+  "INDEPENDENT_VERIFICATION.json": "7e3b98a712d5639884ff229f094294f66185ed11690bb893155fb2241ab55b0f",
+  "validate_evidence.py": "60f2676a31e5db4b8935628e93e845b53ad02a580920f4a4fc014ad7d0ff4e65",
+  "tests/test_evidence.py": "34134241883ec05b896077618d0f42ab62eca335b000e54a47b831960f09a0c9"
+ },
+ "host_records_manifest_sha256": "82606502d1c7bb733a363703a6c0beb17fa01b666747ff3e2b42b9a10f5d30f1",
+ "freeze_method": "freeze_sha256 = sha256 of json.dumps(object without freeze_sha256, sort_keys=True, separators=(',',':'))",
+ "freeze_sha256": "29cd74284c92a29537e4d0d77987d172032639ecc99f7b5cd9aed6b48bcdc0a4"
+}

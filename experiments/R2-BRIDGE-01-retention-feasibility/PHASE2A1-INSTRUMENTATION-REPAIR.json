@@ -1,0 +1,103 @@
+{
+  "artifact": "PHASE2A1-INSTRUMENTATION-REPAIR",
+  "schema_version": 1,
+  "phase_name": "R2-BRIDGE-01 Phase 2A.1 -- Trace Instrumentation Repair",
+  "pre_repair_git_head": "48d885d9afa810caba7aa6980e8a162cec166f47",
+  "authorization": "prospectively authorized by the user for this exact phase, scoped to trace instrumentation only; scientific protocol (prompt, workload SHA, model, weights, runtime model semantics, seed, ctx, threads, threads-batch, decoding settings, expert budget, predictor, retention policy, B_selected baseline, holdout identities, Phase-0/0.1/1 frozen evidence) unchanged.",
+  "original_summarization_failure_identities": {
+    "attempt_1": {
+      "preserved_path": "captures/bridge-summarization-v1-attempt1-incomplete-trace-completeness/run-00-4G",
+      "trace_sha256": "07b669f1ecb68056310a31ac927f206d65a6d206386ea91c2b06aa8d44550dba",
+      "classification": "scientific trace incompleteness (not provenance-only)"
+    },
+    "attempt_2": {
+      "preserved_path": "captures/bridge-summarization-v1-attempt2-incomplete-trace-completeness/run-00-4G",
+      "trace_sha256": "76dacb652699b68b820665894feeedf070e11e02d2b6e5b8219b9299bf32b833",
+      "classification": "scientific trace incompleteness (not provenance-only); identical defect signature to attempt 1, independently reproduced"
+    }
+  },
+  "defect_signature": {
+    "observed_warning": "not publication-quality: argine2 commit; trace completeness (forward passes missing from the trace)",
+    "trace_completeness_detail": {
+      "decode_steps": 511,
+      "expected_decode_steps": 511,
+      "partial_steps": 1
+    },
+    "affected_step": {
+      "graph": 10,
+      "phase": "prefill",
+      "n_tokens": 512,
+      "missing_layer": 47,
+      "total_layers": 48,
+      "reproduced_identically_in_both_attempts": true
+    },
+    "ubatch_size": 512,
+    "note": "summarization prefill token count (512) exactly equals the frozen capture command ubatch-size (512); coding/reasoning/instruction prefills (127/201/112 tokens) never reach this boundary"
+  },
+  "root_cause": {
+    "classification": "C: graph-boundary accounting bug",
+    "confined_to": "trace instrumentation (research-log parsing / step construction), not model execution",
+    "evidence_not_assumption": [
+      "raw.tsv for graph=10 contains exactly 47 R records (layers 0..46); layer 47 has zero R, zero N, and zero I records anywhere in graph 10's time window -- a true per-graph gap, not a parser artifact",
+      "graph=11 (the very next graph id) contains a full R record for layer 47 (n_tok=1, n_used=8, 8 valid expert ids in [0,127]) -- the record exists, is valid, was never lost",
+      "graph=11's other layers (0..46) carry n_tok=21, uniformly smaller than graph 10's n_tok=512 -- the signature of a small trailing recompute of the same logical forward pass, not a new request",
+      "argine-experts.cpp (patches/argine-experts.cpp:836-842): the C++ side increments its internal \"graph\" counter purely from \"layer index went backwards\" (if (layer < arx_last_layer) arx_graph++); it has no direct signal that a trailing sub-batch belongs to the SAME logical request as the one before it",
+      "confirmed on both independently-run attempts: identical graph/layer/token-count signature both times, consistent with a deterministic llama.cpp scheduling behavior at this exact ubatch boundary, not random instrumentation flakiness"
+    ],
+    "explicitly_ruled_out": "D (runtime routing execution bug) -- layer 47's routing record is present, valid, and well-formed (8 experts in range, consistent with top_k=8); the model computed and routed layer 47 correctly, it was only filed under a different graph id than its sibling layers for the same forward pass. Execution was NOT stopped on this basis because the evidence demonstrates instrumentation/accounting, not model computation, is where the defect lives."
+  },
+  "files_changed": [
+    {
+      "path": "argine/research/rawlog.py",
+      "change": "added _absorb_split_tail_graphs(), called once at the top of to_trace() immediately after by_graph is built from the raw R records, before any Step is constructed; appends a human-readable note to Trace.meta.notes for every merge it performs.",
+      "why_scientific_semantics_are_unaffected": [
+        "operates purely on already-parsed R-record data in Python memory; reads and writes no A/I/E/U/N/S record (access, I/O, eviction, undo, node-timing, snapshot) -- eviction behavior, memory budget, and expert-store behavior are untouched",
+        "never invents, drops, or alters an expert id, a token count, or a timestamp that was actually recorded; it only re-attributes one already-recorded, unmodified record to the graph id its sibling layers belong to",
+        "only fires on an exact, narrow signature (missing layer is the single globally-highest/output layer; the next graph holds that exact layer; every other layer the next graph holds shares one uniform token count strictly smaller than the predecessor's) -- a genuine new step (prefill or decode) never matches this, as proven by test_decode_step_not_merged_even_if_top_layer_absent and by the fact that none of coding/reasoning/instruction (no boundary hit) trigger it",
+        "a missing MIDDLE layer is explicitly never merged (test_missing_middle_layer_not_merged) -- the repair cannot mask a different, more serious defect class",
+        "does not touch model.gguf, llama-server.exe, or any frozen runtime/model identity; runtime_sha256 and model sha256 are completely unaffected by this change"
+      ]
+    },
+    {
+      "path": "tests/test_r2_bridge01_phase2a1_instrumentation_repair.py",
+      "change": "new regression test file, 11 tests"
+    }
+  ],
+  "tests_added": [
+    "test_boundary_511/512/513/1023/1024/1025: synthetic split-tail signature at six token-count boundaries, all absorbed correctly",
+    "test_trace_completeness_becomes_true_after_repair: decode/prefill accounting reaches complete=true post-repair",
+    "test_decode_step_not_merged_even_if_top_layer_absent: a genuine subsequent step is never silently absorbed",
+    "test_missing_middle_layer_not_merged: a missing non-output layer is never silently absorbed",
+    "test_non_boundary_trace_round_trips_unchanged: an ordinary trace with no split-tail signature is byte-for-byte unaffected",
+    "test_eviction_io_access_records_untouched: A/I/E record counts and content are unaffected by the repair"
+  ],
+  "pre_repair_behavior": {
+    "bridge-coding-v1": "complete=true (unaffected before and after)",
+    "bridge-reasoning-v1": "complete=true (unaffected before and after)",
+    "bridge-instruction-v1": "complete=true (unaffected before and after)",
+    "bridge-summarization-v1 (both attempts)": "complete=false, partial_steps=1 (graph 10 missing layer 47)"
+  },
+  "post_repair_behavior_on_existing_raw_logs": {
+    "bridge-coding-v1": "to_trace() produces zero merges, meta.notes=[], step count unchanged, routing digest unchanged -- verified directly",
+    "bridge-reasoning-v1": "same as coding -- zero merges, unaffected",
+    "bridge-instruction-v1": "same as coding -- zero merges, unaffected; additionally independently rebuilt from its raw.tsv under the repaired code and written to captures/instrumentation-validation/bridge-instruction-v1-repaired-rebuild.jsonl.gz (NOT replacing the canonical sealed-eligible trace): normalized routing digest IDENTICAL to the existing canonical trace (03d3dcd4e4a42c12440fe8ed1ffb27d5b60a77c2ab042fbc1ef5c0fa8e3acde3 both before and after)",
+    "bridge-summarization-v1 attempt 1 (preserved, re-derived only, not resealed)": "trace_completeness becomes complete=true (partial_steps: 1 -> 0); graph 11 absorbed into graph 10; graph 10 now carries all 48 layers",
+    "bridge-summarization-v1 attempt 2 (preserved, re-derived only, not resealed)": "identical outcome to attempt 1"
+  },
+  "proof_scientific_execution_semantics_unchanged": [
+    "non-boundary equivalence check (instruction workload): normalized routing-sequence digest identical before and after the repair",
+    "decode-step accounting for summarization unaffected: 511/511 decode steps were already complete in both attempts and remain so -- the repair only affects the single prefill step's layer-47 attribution",
+    "expert ids for the absorbed layer-47 record are copied verbatim from the raw R record graph=11 already wrote (8 ids, all in [0,127], top_k=8) -- nothing invented or altered",
+    "no change to argine/research/trace.py, argine/research2/r2_01/trace_contract.py, the C++ patches, or the frozen llama-server.exe / model.gguf -- canonical_runtime_sha256 and model identity are untouched"
+  ],
+  "original_phase0_contract_digest": "e4ef4268e6bc207f20d5f4a56c165b75b977536600ff9d6f7e59604f77a889fc",
+  "phase01_dev_selection_rule_addendum_digest": "5954a0f6d13fcf427124f8b7f7d7f009d2d76fbe82e4b4e28c6aa2167fc8eb92",
+  "phase1_selection_freeze_identity": {
+    "classification": "DEV_RETENTION_SIGNAL_POSITIVE",
+    "selected_config_id": "predicted_protect/budget=4294967296"
+  },
+  "phase2a0_acquisition_plan_identity": "33cab68f3ff05e5d3cb442aac6bb6e2eb0f4b026ebdc5157101c4e2905150fdd",
+  "phase2a0_freeze_digest": "31f3f50f4fd26b564947d449b1e3b8d458ebd47a17535fcbc8d3616ae221d29a",
+  "repair_commit": null,
+  "next_step": "recapture bridge-summarization-v1 only, using the exact original frozen scientific acquisition parameters, on the canonical output path (free: both failed attempts preserved under provenance-labelled paths)"
+}

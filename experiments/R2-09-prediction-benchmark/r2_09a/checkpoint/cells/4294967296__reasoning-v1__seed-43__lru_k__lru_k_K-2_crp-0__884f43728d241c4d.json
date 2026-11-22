@@ -1,0 +1,30 @@
+{
+  "accesses": 196224,
+  "budget_bytes": 4294967296,
+  "budget_gib": 4.0,
+  "budget_violations": 0,
+  "causal": true,
+  "cell_key": "4294967296__reasoning-v1__seed-43__lru_k__lru_k_K-2_crp-0__884f43728d241c4d",
+  "cell_record_digest": "4014a5b156a0f49702efb5d5aae6572146264d1e418ff7070fa4965f4d450517",
+  "decode_steps": 511,
+  "deterministic": true,
+  "dev_instance_id": "reasoning-v1__seed-43",
+  "evictions": 55593,
+  "evidence_mode": "NEW_R2_09A_REPLAY",
+  "miss_bytes": 142828388352,
+  "miss_bytes_per_decode_step": 279507609.2994129,
+  "miss_rate": 0.2535928326810176,
+  "misses": 49761,
+  "misses_per_decode_step": 97.37964774951077,
+  "nominal_category": "reasoning",
+  "params": {
+    "K": 2,
+    "correlated_reference_period_objects": 0
+  },
+  "peak_resident_bytes": 4294950912,
+  "policy_config_id": "lru_k/K=2,crp=0",
+  "policy_family": "lru_k",
+  "result_digest": "3e13aa44cacefabd85af1ce57084ecce8c390a75aaece30025b8d5b06405afa6",
+  "source_run_id": "R2-09A",
+  "status": "OK"
+}

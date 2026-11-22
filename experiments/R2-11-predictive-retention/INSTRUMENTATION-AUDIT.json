@@ -1,0 +1,10 @@
+{
+  "artifact": "R2_11_INSTRUMENTATION_AUDIT",
+  "generated_utc": "2026-11-14T09:40:00Z",
+  "phase_2a1_repair_commit": "dbe8306",
+  "phase_2a1_repair_applicability_reconfirmed": "tests/test_r2_bridge01_phase2a1_instrumentation_repair.py passed (part of this step's regression run); repair remains attribution-only (reassigns which graph id a layer-47-equivalent R-record belongs to) and strictly upstream of any retention-policy decision logic, so it applies identically to R2-11 trace construction as it did to R2-BRIDGE-01.",
+  "all_12_r2_11_traces_complete": true,
+  "trace_completeness_source": "Re-confirmed in this Phase (R2_11_EVAL_OPENED.json checklist) directly from each capture's own summary.json trace_completeness.complete field, independently of the capture driver's self-report.",
+  "no_scientific_replay_depends_on_preserved_incomplete_bridge_attempts": "Confirmed: this evaluation replays only the 12 canonical sealed R2-11 traces (all complete=true), reading trace.jsonl.gz directly via Trace.load(); no BRIDGE holdout trace, DEV trace, or any preserved incomplete/failed attempt directory is read anywhere in tools/r2_11_eval_runner.py or tools/r2_11_aggregate.py.",
+  "result": "PASS."
+}

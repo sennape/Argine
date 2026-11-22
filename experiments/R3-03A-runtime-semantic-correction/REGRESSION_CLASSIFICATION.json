@@ -1,0 +1,38 @@
+{
+ "artifact": "R3-03A-REGRESSION-CLASSIFICATION",
+ "caveat": "tests/test_r2_0x..r2_10 files (~45 files, slow) were not swept to completion in this session",
+ "genuine_regressions": 0,
+ "groups": [
+  {
+   "class": "B historical-source tests",
+   "count": 2,
+   "id": "G1",
+   "note": "pin the PRE-FIX source; fail by design on the successor tree; intentionally preserved unmodified",
+   "tests": "experiments/R3-03-event-semantics-audit/tests: test_each_ensure_many_call_is_one_policy_event, test_router_trace_dedups_per_graph_layer_but_policy_hook_does_not"
+  },
+  {
+   "class": "C environmental",
+   "count": 12,
+   "id": "G2",
+   "note": "compact.exe (Windows only), 22.9 GB storage gate vs ~9.9 GB free, Windows absolute runtime/model/store paths; no reference to patches/argine-*; 24 further failures (zstandard missing) disappear once zstandard is installed",
+   "tests": "R3-02B test_driver.py (after installing zstandard)"
+  },
+  {
+   "class": "C environmental",
+   "count": 2,
+   "id": "G3",
+   "note": "RUN path is a Windows absolute path",
+   "tests": "R3-02-phase2-mechanism test_phase2.py (cell/trace completeness)"
+  },
+  {
+   "class": "C pre-existing",
+   "count": "exp022 x2, exp026 x2, fidelity x4 errors, multiturn x1, provenance x1",
+   "id": "G4",
+   "note": "exp022 verified at HEAD: same 3 findings on HEAD blobs; fidelity links argine-store.cpp without retention-policy.cpp (HEAD already references RetentionPolicy symbols); exp026/provenance/multiturn do not reference patches and trip on CRLF checkout of BUILD-INFO.json / missing raw/",
+   "tests": "tests/ (R1/R2 era)"
+  }
+ ],
+ "historical_tests_not_edited": true,
+ "runtime_relevant_green": "tests/test_r2_12_* (retention conformance 33, real trace conformance 28, protected_for 1, output equivalence 6, ...) and tests/test_argine.py 287 passed",
+ "verdict": "NO GENUINE R3-03A RUNTIME REGRESSION WAS IDENTIFIED"
+}

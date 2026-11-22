@@ -1,0 +1,17 @@
+{
+  "name": "r2-11-instruction-v1",
+  "version": "r2-11-v1",
+  "split": "eval",
+  "semantic_category": "instruction",
+  "description": "R2-11 fresh confirmatory instruction-following specification #1: structured formatting + length constraints. New task, authored for R2-11 only.",
+  "n_predict": 512,
+  "items": [
+    {
+      "id": "r2-11-instruction-v1",
+      "segment": "r2-11-instruction-v1",
+      "prompt": "Write a short product description for a reusable water bottle. Follow these constraints exactly: (1) exactly 3 paragraphs; (2) the first paragraph must be exactly 2 sentences; (3) the second paragraph must contain the word 'insulated' exactly once and the word 'capacity' exactly once; (4) the third paragraph must end with a question (not a statement); (5) do not use the words 'amazing', 'perfect', or any exclamation marks anywhere in the response; (6) the total response must be under 150 words. After writing the description, append a line starting with 'WORD COUNT:' followed by your own accurate count of the total words used."
+    }
+  ],
+  "provenance_split_identity": "r2_11_eval",
+  "cli_split_field_note": "argine.research.cli's 'research trace --split' flag only accepts {dev, eval} (argine/research/cli.py 'trace' subparser, choices=['dev','eval']); there is no third CLI-level split value. Per the loader (argine/research/workloads.py:load, the 'items'-schema fallback branch), the CLI-facing 'split' field here is literal plumbing selecting which dict key the prompts load under -- it is set to the already-supported value 'eval' so this file can be captured with the existing CLI and loader, with NO code change. The true provenance-level identity of this corpus (a fresh, entirely new R2-11 confirmatory EVAL corpus -- distinct from R2-10 DEV, R2-10 EVAL, and R2-BRIDGE-01's holdout) is tracked entirely by workload_id, file path, output directory, and the 'provenance_split_identity' field below, plus experiments/R2-11-predictive-retention/eval_manifest.json -- exactly mirroring how R2-BRIDGE-01's own fresh holdout was externally distinguished from R2-09/R2-10 by workload_id/path/manifest, not by a unique CLI split string."
+}

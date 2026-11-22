@@ -1,0 +1,26 @@
+{
+  "artifact": "R3-02C-STORAGE-CLASSIFICATION",
+  "classification": "STORAGE_REPRESENTATION_ONLY",
+  "conditions": [
+    "trace_sha256 is never recomputed over archive bytes",
+    "the archive must pass logical SHA, size and parser-counter verification before raw deletion",
+    "if the contract owner later requires the on-disk artifact to be plain JSONL, re-express as an additive v2 (CONTRACT_VERSION_REQUIRED)"
+  ],
+  "created_utc": "2026-11-17T19:01:56Z",
+  "frozen_files_modified": [],
+  "phase": "R3-02C",
+  "rationale": [
+    "logical trace identity remains sha256 of the uncompressed JSONL bytes",
+    "the archive is a lossless storage envelope: decompression is byte-identical",
+    "archive sha256, bytes and format are recorded separately",
+    "no contract row, counter, rule, endpoint, matrix, policy or statistic changes",
+    "V4 requires a 64-hex digest of the archived decision trace; the digest is over the logical trace content"
+  ],
+  "representation": {
+    "archive_sha256": "sha256 of the archive file",
+    "format": "zstd-v1",
+    "level": 3,
+    "logical": "uncompressed JSONL decision trace",
+    "logical_sha256": "sha256 of the uncompressed JSONL bytes (scientific identity)"
+  }
+}

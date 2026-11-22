@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "artifact": "PHASE2A-ACQUISITION-PLAN-v1",
+  "overlay_state": "BRIDGE_ACQUISITION_PLANNED",
+  "note": "Additive, out-of-band provenance record, exactly mirroring R2-10's own PHASE3A-EVAL-ACQUISITION-PLAN.json pattern. Does NOT edit corpus_acquisition_contract.json or any other frozen Phase-0 component -- those remain byte-identical to their Phase-0 freeze (acquisition_status stays 'ACQUISITION_CONTRACT_FROZEN_NOT_EXECUTED', corpus_visibility_state stays 'BRIDGE_LOCKED' on disk). This file records, metadata-only, the concrete acquisition choices for the four fresh BRIDGE cells, chosen prospectively, before any capture.",
+  "model_identity": {
+    "name": "Qwen3-30B-A3B-Q4_K_M",
+    "quantization": "Q4_K_M",
+    "sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+    "sha256_source": "paper/research2/II-B-FREEZE.json.canonical_headline_metrics.r2_08.canonical_model_sha256 (existing Research2-wide canonical reference, reused unchanged through R2-08/R2-09/R2-10; not invented here)",
+    "model_path_windows": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf"
+  },
+  "runtime_identity": {
+    "name": "llama-research-v2",
+    "sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+    "sha256_source": "paper/research2/II-B-FREEZE.json.canonical_headline_metrics.r2_08.canonical_runtime_sha256 (same canonical reference as model identity above)"
+  },
+  "deterministic_capture_conditions": {
+    "seed": 42,
+    "context": 4096,
+    "threads": 4,
+    "threads_batch": 12,
+    "temperature": 0.0,
+    "top_k": 1,
+    "n_predict": 512,
+    "expert_store_capture_budget": "4G"
+  },
+  "trace_schema": "Research2 R2Trace/routing trace schema used by R2-10 (argine.research2.r2_01.trace_contract.normalize/reconcile); identical schema and validation pipeline, no versioning deviation.",
+  "cli_invocation_basis": "argine.research2.r2_09b.eval_capture.plan_capture_command (the exact, already-committed command-generator this repository uses for R2-09B EVAL captures) -- reused verbatim as the pattern, substituting only the BRIDGE workload paths/output directories below. HELD_CONSTANT in that module already pins expert_budget=4G, ctx=4096, threads=4, threads_batch=12, temperature=0.0, top_k=1, n_predict=512, confirming these values independently.",
+  "cli_split_flag_gap_and_resolution": "argine.research.cli's 'research trace' subparser restricts --split to choices=['dev','eval'] (argine/research/cli.py); there is no third CLI-level split value, and argine.research.runner.cmd_trace selects prompts via wl.split(args.split). Per this phase's own instruction to 'prefer an already-supported schema if possible', the four new workload files' CLI-facing 'split' field is set to the already-supported value 'eval' (NOT a new value requiring a code change). The true BRIDGE-holdout identity -- distinct from, and never to be confused with, the R2-09 EVAL corpus -- is tracked at the provenance layer only: via each file's own 'provenance_split_identity': 'bridge_holdout' field, via workload_id/path/output directory (bridge-*-v1, research2/workloads/r2_bridge01/, ...\\R2-BRIDGE-01\\captures\\...), and via dev_holdout_separation.json/corpus_acquisition_contract.json. No file under argine/research/ or argine/research2/ was modified to make this work; verified by loading all four files through the unmodified argine.research.workloads.load() in this same session.",
+  "canonical_output_paths": {
+    "bridge-coding-v1": "%LOCALAPPDATA%\\Argine3\\research\\R2-BRIDGE-01\\captures\\bridge-coding-v1",
+    "bridge-reasoning-v1": "%LOCALAPPDATA%\\Argine3\\research\\R2-BRIDGE-01\\captures\\bridge-reasoning-v1",
+    "bridge-summarization-v1": "%LOCALAPPDATA%\\Argine3\\research\\R2-BRIDGE-01\\captures\\bridge-summarization-v1",
+    "bridge-instruction-v1": "%LOCALAPPDATA%\\Argine3\\research\\R2-BRIDGE-01\\captures\\bridge-instruction-v1"
+  },
+  "planned_capture_commands_windows_powershell": {
+    "bridge-coding-v1": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_bridge01\\bridge-coding-v1.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-BRIDGE-01\\captures\\bridge-coding-v1\"",
+    "bridge-reasoning-v1": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_bridge01\\bridge-reasoning-v1.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-BRIDGE-01\\captures\\bridge-reasoning-v1\"",
+    "bridge-summarization-v1": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_bridge01\\bridge-summarization-v1.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-BRIDGE-01\\captures\\bridge-summarization-v1\"",
+    "bridge-instruction-v1": "python -m argine research trace \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\" --expert-store --expert-budget 4G --workload \"research2\\workloads\\r2_bridge01\\bridge-instruction-v1.json\" --split eval --seed 42 --threads 4 --llama-arg=--threads-batch --llama-arg 12 --ctx 4096 --out \"%LOCALAPPDATA%\\Argine3\\research\\R2-BRIDGE-01\\captures\\bridge-instruction-v1\""
+  },
+  "retry_and_failure_rules": [
+    "Never overwrite an existing valid capture; a valid capture is immutable once sealed.",
+    "Preserve failed/partial attempts under a separate, provenance-labelled sibling path (e.g. '<workload-id>-failed-<reason>'), never inside the canonical output directory.",
+    "A pre-launch failure (e.g. stale ARGINE_LLAMA_DIR, model/runtime not found) does not count as a scientific capture and is excluded from sealing.",
+    "A capture is canonical only after: trace file existence is confirmed, normalize() succeeds, and reconcile() returns [].",
+    "A malformed or incomplete trace is rejected, its provenance is preserved for the record, and it is never reused or silently discarded.",
+    "A retry must use the identical frozen acquisition parameters (model, runtime, seed, threads, threads_batch, ctx, expert budget, workload path) -- no parameter may be changed in response to a prior failure or in response to any observed model output.",
+    "No prompt or configuration change is permitted in response to model output at any point in this protocol.",
+    "No parallel capture writers: captures are executed strictly sequentially, one workload at a time, exactly as Phase 2A's handoff (and this one) requires.",
+    "A timeout during capture is not a PASS and must not be recorded as a successful cell."
+  ],
+  "preflight_commands_windows_powershell": {
+    "model_hash_preflight": "Get-FileHash -Algorithm SHA256 \"C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf\"  # expect a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+    "runtime_hash_preflight": "(runtime binary hash check -- exact command deferred to the real preflight step, which has not run in this phase; this phase freezes the plan only, per the governing handoff's 'stop before capture' instruction)",
+    "memory_preflight": "Get-CimInstance Win32_OperatingSystem | Select-Object FreePhysicalMemory",
+    "output_existence_guard_per_workload": {
+      "bridge-coding-v1": "Test-Path \"%LOCALAPPDATA%\\Argine3\\research\\R2-BRIDGE-01\\captures\\bridge-coding-v1\"  # must be False (or empty) before that workload's capture runs",
+      "bridge-reasoning-v1": "Test-Path \"%LOCALAPPDATA%\\Argine3\\research\\R2-BRIDGE-01\\captures\\bridge-reasoning-v1\"  # must be False (or empty) before that workload's capture runs",
+      "bridge-summarization-v1": "Test-Path \"%LOCALAPPDATA%\\Argine3\\research\\R2-BRIDGE-01\\captures\\bridge-summarization-v1\"  # must be False (or empty) before that workload's capture runs",
+      "bridge-instruction-v1": "Test-Path \"%LOCALAPPDATA%\\Argine3\\research\\R2-BRIDGE-01\\captures\\bridge-instruction-v1\"  # must be False (or empty) before that workload's capture runs"
+    },
+    "post_capture_validation": "python -c \"from argine.research2.r2_01 import trace_contract; from argine.research.trace import Trace; t = Trace.load('<trace_path>'); print(trace_contract.normalize(t)); print(trace_contract.reconcile(t))\""
+  },
+  "explicitly_not_performed": [
+    "No preflight executed on a real host in this phase.",
+    "No BRIDGE trace capture executed in this phase.",
+    "No BRIDGE_CAPTURED_SEALED transition (no real trace exists).",
+    "No BRIDGE_OPENED transition.",
+    "No BRIDGE performance/result computed, inspected, or claimed."
+  ],
+  "pre_freeze_git_head": "650c9091ccbddd2037ff8343dee9e880309b67b4",
+  "acquisition_plan_digest_sha256": "33cab68f3ff05e5d3cb442aac6bb6e2eb0f4b026ebdc5157101c4e2905150fdd"
+}

@@ -1,0 +1,78 @@
+{
+ "arm": "P",
+ "artifact": "R3-04-MECHANISM-RECORD",
+ "budget": "1.5",
+ "config_id": "P-1.5GiB",
+ "counts": {
+  "all_passes": {
+   "events": 24672,
+   "evictions": 106739,
+   "hits": 94250,
+   "miss_bytes": 308598829056,
+   "misses": 107302,
+   "protected_entries": 196992,
+   "protected_events": 24624
+  },
+  "decode_evictions_per_token": 207.791015625,
+  "decode_hits_per_token": 183.7265625,
+  "decode_miss_bytes_per_token": 597639168.0,
+  "decode_passes": {
+   "events": 24576,
+   "evictions": 106389,
+   "hits": 94068,
+   "miss_bytes": 305991254016,
+   "misses": 106390,
+   "protected_entries": 196608,
+   "protected_events": 24576
+  },
+  "decode_tokens_divisor": 512,
+  "prefill_passes_assumed": 2,
+  "resident_peak_bytes": 1610588160
+ },
+ "duplicate_event_refusals": 0,
+ "mseq": 4,
+ "n_tokens": 512,
+ "output_token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa",
+ "policy_id": "predicted_protect",
+ "policy_timing": "OFF",
+ "policy_timing_records": [],
+ "replay": {
+  "budget_bytes": 1610612736,
+  "budget_violations": 0,
+  "completion_rows": 24672,
+  "decay_score_max_abs_diff": 0.0,
+  "duplicate_events": 0,
+  "events_per_pass": 48,
+  "history_last_ref": "MATCH",
+  "max_policy_resident_bytes": 1610588160,
+  "missing_events": 0,
+  "ok": true,
+  "passes": 514,
+  "physical": {
+   "max_post_service_bytes": 1610588160,
+   "next_before_equal_prev_post_service": 24569,
+   "next_before_greater_than_prev_post_service": 0,
+   "note": "post-service bytes may exceed policy bytes only by physical margin/transient slices; informational",
+   "post_service_over_budget": 0
+  },
+  "policy_event_rows": 24672,
+  "policy_id": "predicted_protect",
+  "protected_before_compared_events": 24672,
+  "r2_replay": "MATCH",
+  "semantic_events": 24672,
+  "total_evictions": 106739,
+  "trace_bytes": 1960441202
+ },
+ "runtime_sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5",
+ "shutdown": {
+  "helper_returncode": 0,
+  "latency_s": 1.1949716000817716,
+  "method_used": "own_console_helper",
+  "mode": "graceful"
+ },
+ "shutdown_method_requested": "own_console_helper",
+ "shutdown_mode": "graceful",
+ "tag": "M04-P-1.5GiB-OFF",
+ "trace_bytes": 1960441202,
+ "trace_sha256": "563bd470082d5e6018e4c03173754df1ae845a231b24c2758665edf445bd011f"
+}

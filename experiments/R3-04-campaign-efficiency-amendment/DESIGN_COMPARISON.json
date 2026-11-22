@@ -1,0 +1,113 @@
+{
+ "designs": {
+  "FULL": {
+   "answers": "primary Q (1.5), descriptive P-A/P-S/S-A at 4 and 8 GiB",
+   "blocks": {
+    "1.5": 18,
+    "4": 6,
+    "8": 6
+   },
+   "bridge": "4 GiB corrected-runtime timing at R2's primary budget",
+   "claim": "unchanged (three tested budgets)",
+   "counted_launches": 180,
+   "lost": "nothing vs the frozen design",
+   "mechanistic_evidence_already_from_gate2": "all three budgets: A/S/P counters, protected-set effect, policy ns/call, decision equivalence S==A, P timing OFF==ON",
+   "model_h_low_central_high_helper": [
+    7.05065451270915,
+    8.571006499647877,
+    10.179227380753293
+   ],
+   "physical_launches": 183,
+   "primary_classification_capability": "YES (1.5 GiB, 18 blocks, frozen estimator and rule: unchanged)",
+   "primary_classification_changed": false,
+   "shutdown_savings_h_central": 6.719660167018834,
+   "wall_h_central_legacy_shutdown_counterfactual": 16.516500000000043,
+   "wall_h_low_central_high_helper": [
+    8.225654512709148,
+    9.79683983298121,
+    11.506727380753293
+   ],
+   "warmups": 3
+  },
+  "PRIMARY_ONLY": {
+   "answers": "primary Q (1.5) only",
+   "blocks": {
+    "1.5": 18
+   },
+   "bridge": "no budget gradient; R3-03B covers S-A at 8 GiB only (not the real P arm)",
+   "claim": "narrowed: one tested budget; no control in the same campaign",
+   "counted_launches": 108,
+   "lost": "the only zero-retention instrument-falsification control for the real P arm; 4 and 8 GiB descriptive timing",
+   "mechanistic_evidence_already_from_gate2": "all three budgets: A/S/P counters, protected-set effect, policy ns/call, decision equivalence S==A, P timing OFF==ON",
+   "model_h_low_central_high_helper": [
+    5.082204915157697,
+    6.290048596579119,
+    7.550664725611657
+   ],
+   "physical_launches": 109,
+   "primary_classification_capability": "YES (1.5 GiB, 18 blocks, frozen estimator and rule: unchanged)",
+   "primary_classification_changed": false,
+   "shutdown_savings_h_central": 2.8175069589764226,
+   "wall_h_central_legacy_shutdown_counterfactual": 9.829499999999985,
+   "wall_h_low_central_high_helper": [
+    5.773871581824364,
+    7.011993041023563,
+    8.333164725611658
+   ],
+   "warmups": 1
+  },
+  "PRIMARY_PLUS_8G": {
+   "answers": "primary Q (1.5) + zero-retention falsification control at 8 GiB for the three-arm untraced driver and the real P arm",
+   "blocks": {
+    "1.5": 18,
+    "8": 6
+   },
+   "bridge": "4 GiB bridge to R2-12 lost; recoverable later as its own additive 37-launch protocol (about 1.8 h)",
+   "claim": "narrowed: two tested budgets (1.5, 8); 4 GiB untested for timing (mechanism-only from Gate 2)",
+   "counted_launches": 144,
+   "lost": "4 GiB descriptive timing (cannot classify; planning half-width 14.3 ms ~ 82% of the 17.5 ms cost scale)",
+   "mechanistic_evidence_already_from_gate2": "all three budgets: A/S/P counters, protected-set effect, policy ns/call, decision equivalence S==A, P timing OFF==ON",
+   "model_h_low_central_high_helper": [
+    5.829644997171599,
+    7.066985900815231,
+    8.37464747534776
+   ],
+   "physical_launches": 146,
+   "primary_classification_capability": "YES (1.5 GiB, 18 blocks, frozen estimator and rule: unchanged)",
+   "primary_classification_changed": false,
+   "shutdown_savings_h_central": 5.132125210295895,
+   "wall_h_central_legacy_shutdown_counterfactual": 13.173000000000014,
+   "wall_h_low_central_high_helper": [
+    6.762978330504931,
+    8.04087478970412,
+    9.429647475347762
+   ],
+   "warmups": 2
+  }
+ },
+ "marginal": {
+  "4": {
+   "extra_wall_h_central_helper": 1.7559650432770901,
+   "gate2_P_vs_A_miss_byte_reduction_pct": 0.026172995973755924,
+   "planning_half_width_ms": 14.349024829422838,
+   "planning_power_exclude_zero": 0.7023624633788432,
+   "precision_per_hour_1_over_hw2": 0.0027659183771665363,
+   "replay_implied_max_wall_benefit_ms": 0.10470225918282712
+  },
+  "8": {
+   "extra_wall_h_central_helper": 1.0288817486805568,
+   "planning_half_width_ms": 2.363385821357462,
+   "planning_power_exclude_zero": 0.999999999999996,
+   "precision_per_hour_1_over_hw2": 0.1740064252948901,
+   "retention_effect": "exactly zero in Gate 2 counters (P == A == S: hits, misses, miss bytes, evictions identical)"
+  }
+ },
+ "other_designs_considered": {
+  "4 GiB only / 4+1.5": "rejected: 4 GiB has the noisiest planning SD and no best-case test (frozen budget selection)",
+  "8 GiB with fewer than 6 blocks": "rejected: the 6 permutations need a whole cycle to stay order-balanced; 3 blocks would break balance",
+  "lower primary N": "rejected: N=12 misses the frozen precision target (planning half-width 7.0 > 5.82 ms)",
+  "raise primary N": "rejected: would use Gate 2 effect information (Part D); N=18 stays",
+  "unbalanced extras": "rejected: no clear scientific advantage"
+ },
+ "recommended": "PRIMARY_PLUS_8G"
+}

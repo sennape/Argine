@@ -1,0 +1,141 @@
+{
+ "schema": "r3-03b-protocol-v2",
+ "artifact": "R3-03B-DIRECT-COST-ATTRIBUTION-PROTOCOL",
+ "status": "FROZEN_BEFORE_AUTHORITATIVE_ACQUISITION",
+ "prospective": true,
+ "parents": {
+  "r3_03a_conformance_commit": "3c37870c2b1ed08609f61cee05674b38960be3a7",
+  "r3_03a_conformance_freeze_sha256": "0ebcd1354e3bd1d1454bce056fc0cd7430ea8997d33e8e9ed6134d1e3a632cc5",
+  "r3_03a_runtime_sha256": "e935005e5131b29d12b113b000fa52e798b4b4419a23724ec70af3f6875fcd76",
+  "classification": "R3_03A_RUNTIME_SEMANTIC_CONFORMANCE_PASS"
+ },
+ "scientific_state": "R2-10/R2-11/R2-12 remain valid; R3 showed the original runtime event stream was not semantically equivalent to R2; R3-03A corrected it (one policy access per (pass,layer)); real-model conformance passes.",
+ "research_question": "After semantic correction, what is the direct critical-path cost of retention-policy bookkeeping, and does that cost explain the end-to-end predicted_protect_sham vs b_selected difference?",
+ "out_of_scope": [
+  "predicted_protect throughput benefit",
+  "any generalisation beyond the A-4GiB semantic routing stream for microbenchmark values",
+  "use of the old +/-1% baseline precision criterion",
+  "use of the Linux VM exploratory values for any decision beyond feasibility"
+ ],
+ "policies": {
+  "b_selected": "decay .99, interval 64 (A-4GiB)",
+  "predicted_protect_sham": "b_selected parameters + predictor decay .99, top_k 8, n_experts 128, sham=true",
+  "predicted_protect": "same predictor parameters, sham=false (microbenchmark only; no end-to-end throughput inference)"
+ },
+ "semantic_event_frequency": {
+  "decode_calls_per_token": 48,
+  "stream_events": 24672,
+  "note": "c_token = c_call x 48"
+ },
+ "estimands": {
+  "c_call": "ns per semantic policy access, per policy: mean over repetitions of (bulk_total_ns - null_total_ns)/events",
+  "c_predictor": "c_call(predicted_protect_sham) - c_call(b_selected); paired by repetition",
+  "c_predictor_token": "c_predictor x 48",
+  "c_token": "c_call x 48",
+  "fraction_of_step": "c_token / decode step wall time (step wall time only available from end-to-end runs; not defined for the microbenchmark)",
+  "O": "end-to-end per-token wall difference sham - b_selected, per ABBA block",
+  "P": "in-situ instrumented bookkeeping difference per token (ns_policy_total/token, sham - b_selected), per ABBA block, from the same launches",
+  "rho": "mean_b(O_b) / mean_b(P_b); confidence interval by Fieller's method on block-paired means (t quantile, df = blocks-1); unbounded Fieller set => untestable"
+ },
+ "primary_decision_criterion": "Mechanism EXPLAINED iff the two-sided 95% Fieller confidence interval for rho lies entirely inside the equivalence interval [0.5, 2.0].",
+ "equivalence_interval": {
+  "lower": 0.5,
+  "upper": 2.0,
+  "scale": "log-symmetric (factor of two)",
+  "justification": [
+   "rho=O/P is dimensionless; a ratio is symmetric on the log scale, so +/-ln2 is the natural symmetric tolerance.",
+   "rho<0.5 would leave more than half of the observed overhead unexplained by the instrumented bookkeeping; rho>2 would mean the timers count more than twice the observed cost, contradicting a critical-path model (overlap, mis-measurement).",
+   "rho=1 is not required exactly: unmeasured secondary effects (cache pollution, lock interaction, part of the work off the critical path, timer overhead ~1 us/call on the VM exploratory run) can legitimately move rho within a factor of two.",
+   "No empirical basis exists for a tighter interval; the old +/-1% baseline-precision criterion belongs to a different estimand and is NOT reused.",
+   "Passing therefore supports only: 'instrumented bookkeeping accounts for between half and double of the observed overhead'; it does not support 'fully explains'."
+  ],
+  "precision_gate": "Before acquisition (after the host microbenchmark) the required ABBA block count is N_req = ceil((t_{N-1,0.975} * sigma_c / (0.5 * P_hat))^2), with P_hat from the authoritative host microbenchmark (c_predictor_token as fraction of the measured step time) and sigma_c the ABBA-contrast SD derived from the R3-02-p4 between-launch CV (8 GiB A 3.8%, B 1.7%; contrast SD = sqrt((CVA^2+CVB^2)/2)). If N_req exceeds the block cap, the end-to-end test is declared a-priori UNDERPOWERED for the 'explained' verdict and only the 'inconclusive' / 'rejected' branches are attainable; this is decided and recorded in a separate pre-acquisition addendum, never after seeing end-to-end data."
+ },
+ "decision_branches": {
+  "EXPLAINED": "Fieller 95% CI for rho inside [0.5, 2.0]",
+  "REJECTED_UNEXPLAINED": "Fieller 95% CI for rho entirely below 0.5 or entirely above 2.0",
+  "INCONCLUSIVE": "CI bounded but straddles an interval bound",
+  "UNTESTABLE": "P not distinguishable from 0 (Fieller set unbounded) or O/P below timer or launch-noise resolution"
+ },
+ "authoritative_microbenchmark": {
+  "platform": "Windows host (same machine as the runtime builds)",
+  "toolchain": "MSVC cl 19.44.x from VS 2022 BuildTools (runtime build family 19.44.35229.0); run aborts if cl major.minor is not 19.44",
+  "compiler_flags": "/nologo /O2 /Ob2 /DNDEBUG /MT /EHsc /std:c++17 /arch:AVX2 /DNOMINMAX /W4",
+  "sources": [
+   "patches/argine-policy-microbench.cpp",
+   "patches/argine-retention-policy.cpp"
+  ],
+  "policy_implementation": "patches/argine-retention-policy.cpp exactly as in the instrumented runtime source (same file, no copy)",
+  "input": {
+   "file": "experiments/R3-03B-direct-cost-attribution/routing_stream_A-4GiB.txt",
+   "sha256": "0224419aa9928ef6c3bcc1698eddfffcf1ec97a88893755f030b2cd5ff5690b6",
+   "events": 24672,
+   "logged_evictions": 41786,
+   "config": "budget 4294967296 bytes, decay .99, interval 64, predictor decay .99, top_k 8, n_experts 128"
+  },
+  "processes": 3,
+  "repetitions_per_process": 30,
+  "total_repetitions_per_policy": 90,
+  "repetition_rule": "exactly 30 per process, exactly 3 processes; no optional stopping; an interrupted or failed process invalidates the whole run directory, which is kept and a new fresh directory is used for a full rerun",
+  "interleaving": "within each repetition the 3 policies run in rotating order (rep mod 3, reversed on odd reps); the 4 timing modes (null, bulk, outer, inner) run for each policy; mode order alternates by repetition",
+  "modes": {
+   "null": "copy of the expert vector per event only, one timer pair around the whole replay (baseline)",
+   "bulk": "one timer pair around the whole replay, policy timing OFF (PRIMARY for c_call; immune to timer quantization)",
+   "outer": "timer pair around every access(), policy timing OFF (per-call distribution, per-token-equivalent sums)",
+   "inner": "as outer with internal PolicyTiming ON (prediction-update and victim-selection shares, instrumentation overhead)"
+  },
+  "warmup_rule": "2 unrecorded complete replays for every (policy, mode) combination at process start (in fixed order), discarded from all statistics but logged; no further warmup",
+  "timer": "std::chrono::steady_clock; calibration of 1,000,000 back-to-back read pairs and 1,000,000 minimum-nonzero-tick probes at process start; raw pair deltas retained",
+  "validity_checks": [
+   "every replay of b_selected and predicted_protect_sham must produce exactly 41786 evictions and identical hits/misses (else run invalid)",
+   "every replay of a given policy must reproduce identical hits/misses/evictions across repetitions and modes (else run invalid)",
+   "predicted_protect eviction count is recorded without a reference (informational)",
+   "no per-call duration may exceed 2^32-1 ns (else run invalid)"
+  ],
+  "raw_data": "all per-call outer and inner durations (uint32 ns) retained in binary files; all per-replay totals retained in JSON lines; calibration raw deltas retained",
+  "statistics": "mean, median, SD, p90, p99, p99.9, max of per-call outer durations; per-repetition means with between-repetition SD; per-process and pooled; no outlier removal or trimming",
+  "estimators": {
+   "c_call": "mean over all repetitions of (bulk_total - null_total)/events (same-repetition null)",
+   "c_predictor": "paired difference over repetitions, 95% t interval, df=89; process-wise values also reported",
+   "timer_overhead": "outer-mode mean per call minus bulk-derived c_call per policy; calibration pair median; instrumentation overhead = inner minus outer mean",
+   "shares": "prediction_update_share and victim_selection_share = inner decomposition / inner ns_policy_total"
+  },
+  "binary_identity": "SHA-256 of the built executable and SHA-256 of both source files recorded in the run directory; compiler version and flags recorded",
+  "output_dir_rule": "fresh additive directory C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03B-microbench-run1; the command refuses to run if it already exists",
+  "model_execution": false
+ },
+ "end_to_end_design": {
+  "status": "design frozen; exact block counts fixed only in a later pre-acquisition addendum (after authoritative microbenchmark analysis)",
+  "primary": {
+   "budget": "8 GiB",
+   "comparison": "b_selected vs predicted_protect_sham",
+   "max_blocks": 20
+  },
+  "secondary": {
+   "budget": "4 GiB",
+   "max_blocks": 10
+  },
+  "block": "ABBA (b_selected, sham, sham, b_selected) with alternating sequence per block",
+  "estimator": "mean of per-block ABBA contrasts of per-token wall time; 95% t interval; rho by Fieller",
+  "runtime": "new instrumented runtime identity (not the R3-03A runtime); must first pass instrumented semantic conformance (digest ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa, 514 passes, 48 events/token, trace identical with timing off vs on)",
+  "historical_8_10_hour_estimate": "NOT binding"
+ },
+ "fixed_acquisition_rules": [
+  "protocol and instrumentation are committed before any authoritative acquisition",
+  "no optional stopping",
+  "no outlier removal",
+  "raw data retained",
+  "fresh output directory per run, never overwritten",
+  "failed runs are kept and reported"
+ ],
+ "forbidden_post_hoc_changes": [
+  "changing the equivalence interval [0.5, 2.0]",
+  "changing the estimator, repetition counts, warmup rule or validity checks after seeing authoritative data",
+  "dropping or trimming repetitions or outliers",
+  "switching the primary estimator among bulk/outer/inner after data is seen",
+  "using VM exploratory values as results",
+  "claiming a predicted_protect benefit",
+  "reinterpreting UNTESTABLE or INCONCLUSIVE as EXPLAINED"
+ ],
+ "next_gate": "MICROBENCH_COST_ATTRIBUTION_READY (after analysis of the authoritative host microbenchmark)"
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "artifact": "PHASE2A0-FREEZE",
+  "freeze_name": "R2-BRIDGE-01 Phase 2A.0 -- Fresh Holdout Specification & Acquisition Plan Freeze",
+  "original_phase0_contract_digest": "e4ef4268e6bc207f20d5f4a56c165b75b977536600ff9d6f7e59604f77a889fc",
+  "phase01_dev_selection_rule_addendum_digest": "5954a0f6d13fcf427124f8b7f7d7f009d2d76fbe82e4b4e28c6aa2167fc8eb92",
+  "phase1_selection_freeze_identity": {
+    "classification": "DEV_RETENTION_SIGNAL_POSITIVE",
+    "selected_config_id": "predicted_protect/budget=4294967296",
+    "primary_aggregate_dev_value": 238322868.58893323,
+    "baseline_aggregate_value": 238400316.389602
+  },
+  "new_holdout_manifest_digest_sha256": "ebe8735f3ac9105a1d001b40cdd8189e780772b350328aeba131be3af015147e",
+  "new_acquisition_plan_digest_sha256": "33cab68f3ff05e5d3cb442aac6bb6e2eb0f4b026ebdc5157101c4e2905150fdd",
+  "state_transition_record_digest_sha256": "d7f72387b73c1350e50415b686966c8517a975c7398e02b09806028099dc7b12",
+  "freshness_audit_overall_pass": true,
+  "selected_retention_mechanism_identity": {
+    "family": "predicted_protect",
+    "budget_bytes": 4294967296,
+    "budget_gib": 4,
+    "predictor": "decayed_transition/decay=0.99"
+  },
+  "statement_no_holdout_trace_or_result_existed_at_freeze_time": "As of this freeze, no fresh BRIDGE holdout trace exists on any host, no BRIDGE_CAPTURED_SEALED or BRIDGE_OPENED transition has occurred, and no BRIDGE holdout performance result has been computed, inspected, or implied anywhere in this repository or in this session.",
+  "pre_freeze_git_head": "650c9091ccbddd2037ff8343dee9e880309b67b4",
+  "hard_restrictions_honored": [
+    "original Phase-0 frozen artifacts not altered (digest reverified unchanged)",
+    "no BRIDGE trace captured",
+    "no retention replay run on any fresh holdout",
+    "holdout not opened",
+    "no model output inspected for selection/tuning (only prompt-spec text itself was authored and hashed)",
+    "PredictedProtectPolicy not changed",
+    "frozen predictor (decayed_transition/decay=0.99) not changed",
+    "R2-10 not reopened",
+    "R2-10 Category B not promoted",
+    "R2-11 not started",
+    "R2-12 not started"
+  ],
+  "phase2a0_freeze_digest_sha256": "31f3f50f4fd26b564947d449b1e3b8d458ebd47a17535fcbc8d3616ae221d29a"
+}

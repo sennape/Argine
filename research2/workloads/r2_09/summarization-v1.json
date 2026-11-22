@@ -1,0 +1,20 @@
+{
+  "name": "summarization-eval-v1",
+  "version": "r2-09-eval-v1",
+  "split": "eval",
+  "semantic_category": "summarization",
+  "description": "R2-09B held-out EVAL summarization specification with a new committed local source input. No web/network dependency.",
+  "n_predict": 512,
+  "source_input": {
+    "path": "research2/workloads/r2_09/sources/summarization_eval_source.txt",
+    "committed_locally": true,
+    "web_network_dependency": false
+  },
+  "items": [
+    {
+      "id": "r2-09-eval-summarization-001",
+      "segment": "summarization-eval-v1",
+      "prompt": "Read the source text below and produce: (1) a concise summary in 5-7 bullet points, (2) three practical recommendations for a household preparing for short power outages, and (3) one limitation or uncertainty that the source does not fully resolve. Do not add facts that are not supported by the source.\n\nSOURCE TEXT:\nTitle: Practical notes on home battery backup for small electronics\n\nA home battery backup system stores electrical energy and supplies it when grid power is unavailable or unstable. For small electronics such as routers, laptops, LED lights, and phone chargers, the key factors are capacity, output power, efficiency, and recharge time. Capacity is usually measured in watt-hours (Wh) and indicates how much energy the battery can deliver before it is empty. Output power, measured in watts (W), limits which devices can run at the same time; a battery may have enough stored energy but still be unable to power a device that needs a high surge or continuous wattage.\n\nUsers should estimate runtime by matching device wattage to battery capacity and allowing for conversion losses. For example, an efficient 300 Wh unit may run a 30 W router for several hours, but actual runtime can be shorter because inverters and electronics waste some energy as heat. Recharge options matter as well: wall charging is usually fastest, while solar or car charging may be useful during longer outages but can take much more time. Safety features such as over-temperature protection, short-circuit protection, and clear battery management indicators reduce risk.\n\nMaintenance practices improve reliability. Batteries should be stored in a dry, ventilated place, kept partly charged if unused for long periods, and tested occasionally under a small load. Users should avoid covering vents, mixing incompatible chargers, or exceeding the rated output. For emergency planning, it is helpful to prioritize essential devices, label cables, and keep a simple checklist of what to charge first when an outage begins."
+    }
+  ]
+}

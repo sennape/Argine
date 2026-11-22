@@ -1,0 +1,22 @@
+{
+  "cross_workload_to_replicate_ratio": null,
+  "cross_workload_to_temporal_ratio": 2.2093895811387476,
+  "median_cross_workload_jsd": 0.2994961896155197,
+  "median_replicate_jsd": 0.0,
+  "median_temporal_jsd": 0.13555607945845186,
+  "reason": "median_cross_workload_jsd >= 1.5 * replicate and temporal",
+  "regime": "WORKLOAD_DEPENDENCE_DOMINANT",
+  "temporal_to_replicate_ratio": null,
+  "thresholds": {
+    "dominance_ratio": 1.5,
+    "labels": [
+      "STABLE_ACROSS_WORKLOADS",
+      "TEMPORAL_DRIFT_DOMINANT",
+      "WORKLOAD_DEPENDENCE_DOMINANT",
+      "RUN_VARIABILITY_DOMINANT",
+      "MIXED"
+    ],
+    "predeclared_before_real_execution": true,
+    "stable_low_drift_jsd": 0.05
+  }
+}

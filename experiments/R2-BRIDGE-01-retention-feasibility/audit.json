@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "artifact": "R2-BRIDGE-01-PHASE0-AUDIT",
+  "generated_utc": "2026-11-13T22:30:00Z",
+  "scope_compliance": {
+    "full_retention_experiment_executed": false,
+    "bridge_holdout_traces_captured": false,
+    "bridge_results_inspected": false,
+    "r2_11_started": false,
+    "r2_12_started": false,
+    "r2_10_modified": false,
+    "r2_10_category_changed": false,
+    "eval_set_used_for_policy_tuning": false,
+    "runtime_speedup_claimed": false
+  },
+  "frozen_artifact_mutation_check": {
+    "method": "git status --porcelain scoped to experiments/R2-09-prediction-benchmark/ and experiments/R2-10-working-set-predictor/ before and after Phase-0 authoring",
+    "result": "no changes detected outside experiments/R2-BRIDGE-01-retention-feasibility/, argine/research2/r2_bridge01/, and tests/test_r2_bridge01_*.py"
+  },
+  "upstream_digest_reverification": {
+    "r2_09b_contract_digest_recomputed": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28",
+    "r2_09b_contract_digest_matches_pinned": true,
+    "r2_10_phase0_contract_digest_recomputed": "4d2288b7b4a812fd85d96aa7c2227d639b52f5131bff305d687e03970f53d725",
+    "r2_10_phase0_contract_digest_matches_pinned": true,
+    "r2_10_closure_record_r2_11_proposed": false,
+    "r2_10_closure_record_final_status": "R2-10 CLOSED",
+    "eval_manifest_still_eval_locked": true
+  },
+  "r2_bridge01_contract_self_check": {
+    "validate_contract_errors": [],
+    "contract_digest": "e4ef4268e6bc207f20d5f4a56c165b75b977536600ff9d6f7e59604f77a889fc"
+  },
+  "tests_run": {
+    "tests/test_r2_bridge01_leakage.py": "8 passed (synthetic trace: future-alteration invariance, predicted-set-precedes-use, budget-never-exceeded across all 12 configs, byte accounting, deterministic ties, fail-closed on invalid bonus/budget, bonus=0.0 control equivalence)",
+    "tests/test_r2_bridge01_memory_correctness.py": "3 passed (real R2-10 DEV trace, implementation-debugging use only: budget never exceeded, bonus=0.0 control equivalence, determinism)",
+    "tests/test_r2_bridge01_contract.py": "5 passed (contract validates with zero errors, digest recomputes identically, upstream digests unmodified, R2-10 closure untouched, EVAL manifest still EVAL_LOCKED)",
+    "regression_tests_r2_10": "tests/test_r2_10_leakage.py (9 passed) + tests/test_r2_10_phase3_closure.py (11 passed) re-run unmodified -- no regression"
+  },
+  "implementation_sanity_check_disclaimer": "During implementation debugging (DEV trace only, per dev_holdout_separation.json), PredictedProtectPolicy and PredictorRetentionScorePolicy(bonus=1.0) both showed a small miss_bytes reduction relative to B_selected(M) at the 4 GiB budget on this single DEV instance. This is explicitly NOT a BRIDGE result: it is DEV data, a single instance, pre-registration-forbidden to use as a scientific finding, and is recorded here ONLY to confirm the mechanisms are mechanically functioning (nonzero, plausible, budget-respecting) before any BRIDGE holdout exists. No threshold, claim, or decision is based on this number.",
+  "control_equivalence_confirmed": true,
+  "zero_budget_violations_confirmed": true,
+  "determinism_confirmed": true,
+  "leakage_tests_confirmed": true
+}

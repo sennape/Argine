@@ -1,0 +1,171 @@
+{
+ "all_ok": true,
+ "checks": [
+  {
+   "check": "exactly 10 records in frozen mseq order",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "schedule identity (arm,budget,policy,timing) per launch",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "runtime sha256 frozen (all 10)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "token digest frozen, 512 tokens (all 10)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "model path == frozen plan model path (log, all 10)",
+   "detail": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf",
+   "ok": true
+  },
+  {
+   "check": "expert store path == frozen plan store path (log, all 10)",
+   "detail": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs",
+   "ok": true
+  },
+  {
+   "check": "store budget MiB matches launch budget (log)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "policy id / decay / interval / predictor_decay match frozen per-budget config (log)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "514 passes and 24,672 semantic events (all 10)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "trace diagnostics: attempted == written == completed == 24672 (log)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "no budget violation (replay)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "no duplicate-event refusal (record and raw log)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "no missing events (replay)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "resident peak <= budget (counts)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "policy_timing valid for 9 ON launches (1 record, schema/calls/hist/victim_calls), absent for the OFF launch (record and raw log)",
+   "detail": [],
+   "ok": true
+  },
+  {
+   "check": "victim_calls == total evictions (ON launches)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "reduction self-consistency: all-pass evictions == replay evictions; events 24672/decode 24576",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "reduction: decode miss_bytes/token == decode miss_bytes/512",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "hits+misses (requested experts) identical across A/S/P at each budget",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "S counters identical to A at every budget (decomposition valid)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "S decisions equal A (frozen trace comparison, 49,344 rows, 0 diff) at 1.5/4/8",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "P timing OFF vs ON canonical traces byte-identical, 0 diff rows",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "trace lifecycle: all 10 traces deleted after reduction; compact records persisted with trace size+sha256",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "shutdown requested = own_console_helper (all 10)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "shutdown helper actually used, return code 0, mode graceful, zero fallback to legacy",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "server logged 'cleaning up before exit' in all 10 (graceful destructor path)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "ten shutdown latencies all <= 60 s frozen limit",
+   "detail": {
+    "latencies_s": [
+     0.864540999988094,
+     0.9644004999427125,
+     1.1090968999778852,
+     1.1949716000817716,
+     1.6004656000295654,
+     1.495041299960576,
+     1.6091030000243336,
+     1.7382241999730468,
+     2.073136599967256,
+     1.6819892999483272
+    ],
+    "max": 2.073136599967256,
+    "median": 1.5477534499950707
+   },
+   "ok": true
+  },
+  {
+   "check": "MECHANISM_GATES.json latencies equal record latencies",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "independent re-evaluation of the committed gate function equals MECHANISM_GATES.json (status, failures, shutdown_validation)",
+   "detail": null,
+   "ok": true
+  },
+  {
+   "check": "no scientific classification in records or gates",
+   "detail": null,
+   "ok": true
+  }
+ ],
+ "n_checks": 30
+}

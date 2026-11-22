@@ -1,0 +1,20 @@
+{
+  "anchor_commit": "0ee128b0f9172aa55ccc204bd3eb18e6a311f53c",
+  "artifact": "R3-02E-FREEZE",
+  "artifacts": {
+    "DIAGNOSIS.json": "7384dddfd11497cb8a5523c6e26c6aafe0fc8f186f1bc9bccc515d6cba6a2463",
+    "README.md": "c7807bd53d1537cdad5f8454511707e39e9f0c16042fb8edf2eb3bcdd4c18ba3",
+    "tests/test_feasibility.py": "635dea39d6bb58356452aa071a92c7ce64a97b2f9a65a7b6f636c13228019d64"
+  },
+  "budget_at_10_19_gib": 9.69,
+  "code_change": false,
+  "created_utc": "2026-11-18T18:56:08Z",
+  "estimate_total_gib": 10.042,
+  "gate_change": false,
+  "no_model_loaded": true,
+  "phase": "R3-02E",
+  "protocol_digest": "f8d4b3199c4c74555353e5f796eaf7d7c3687da97883ee07f7d1c81233c9469c",
+  "required_available_gib": 10.541,
+  "shortfall_gib": 0.352,
+  "status": "HOST_RAM_GENUINELY_INSUFFICIENT"
+}

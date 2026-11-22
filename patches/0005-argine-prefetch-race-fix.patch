@@ -1,0 +1,37 @@
+diff --git a/ggml/src/ggml-cpu/ggml-cpu.c b/ggml/src/ggml-cpu/ggml-cpu.c
+index ce8461b..ac09bb1 100644
+--- a/ggml/src/ggml-cpu/ggml-cpu.c
++++ b/ggml/src/ggml-cpu/ggml-cpu.c
+@@ -1723,12 +1723,26 @@ static void argine_serve(struct argine_req * r) {
+         fn(GetCurrentProcess(), (ULONG_PTR) r->n, ranges, 0);
+         return;
+     }
+-    // senza PrefetchVirtualMemory: tocchiamo una byte per pagina, che genera
+-    // fault veri da questo thread e quindi concorrenza reale sull'SSD
+-    for (int i = 0; i < r->n; ++i) {
+-        volatile const char * p = (const char *) r->addrs[i];
+-        for (size_t off = 0; off < r->sizes[i]; off += 4096) (void) p[off];
+-    }
++    // R2-12 Phase F: qui sotto c'era un tocco manuale, un byte per pagina,
++    // quando PrefetchVirtualMemory non e' risolvibile, da un thread worker
++    // (CreateThread, fuori dal threadpool ggml, senza barriera). Quel tocco
++    // grezzo non ha NESSUNA coordinazione con psx_region o la politica di
++    // retention: una pagina di un expert "futuro" che la politica ha gia'
++    // sfrattato (psx_region_decommit -> VirtualFree(MEM_DECOMMIT),
++    // PAGE_NOACCESS) e' indistinguibile qui da una pagina residente, e un
++    // dereferenziamento diretto su memoria decommittata e' una violazione di
++    // accesso Win32 non gestita -- silenziosa (nessun nostro assert/abort la
++    // vede), fuori dalla barriera dei thread di calcolo: esattamente la
++    // forma del crash osservato sull'host (stderr vuoto, nessuna riga
++    // GGML_ABORT, processo sparito). Il target minimo di questo progetto e'
++    // Windows 10 (_WIN32_WINNT/WINVER 0x0A00, vedi BUILD-INFO.json), dove
++    // PrefetchVirtualMemory e' sempre presente: `fn` nullo qui segnala
++    // un'anomalia (kernel32 agganciato da AV/EDR, o altro), non un sistema
++    // operativo piu' vecchio da assistere a mano. In quel caso raro nessun
++    // prefetch e' l'unica scelta sicura: un suggerimento perso costa
++    // qualche ms di I/O in piu' nel caso peggiore; un tocco grezzo su
++    // memoria potenzialmente decommittata costa il processo.
++    return;
+ #else
+     for (int i = 0; i < r->n; ++i) {
+         madvise(r->addrs[i], r->sizes[i], MADV_WILLNEED);

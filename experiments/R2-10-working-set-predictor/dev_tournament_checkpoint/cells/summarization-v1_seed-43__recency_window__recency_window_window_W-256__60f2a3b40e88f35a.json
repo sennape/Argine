@@ -1,0 +1,18 @@
+{
+  "cell_key": "summarization-v1_seed-43__recency_window__recency_window_window_W-256__60f2a3b40e88f35a",
+  "cell_record_digest": "bcf0a20c027ac1983153d6b8f760f95c2a003dc23f4a372e1b65f3ead07bb0fa",
+  "config_id": "recency_window/window_W=256",
+  "deterministic": true,
+  "dev_cell_id": "summarization-v1/seed-43",
+  "family_id": "recency_window",
+  "recall_at_k_h1": 0.3341248440455588,
+  "recall_at_k_h16": 0.3131346624114063,
+  "recall_at_k_h4": 0.3272072217949237,
+  "result_digest": "7905801a65bf01bf3f347b8e67bbfe391cfcfbbb0e1cab1a91a36c8696e9f2fa",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 24847,
+    "h16": 24127,
+    "h4": 24703
+  }
+}

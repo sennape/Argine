@@ -1,0 +1,17 @@
+{
+  "name": "bridge-reasoning-v1",
+  "version": "r2-bridge01-v1",
+  "split": "eval",
+  "semantic_category": "reasoning",
+  "description": "R2-BRIDGE-01 fresh held-out reasoning specification. New multi-step analytical problem (warehouse camera/false-alarm expectation and conditional probability), authored for this bridge holdout only; not a reuse or paraphrase of any Research2 DEV or EVAL reasoning prompt.",
+  "n_predict": 512,
+  "items": [
+    {
+      "id": "r2-bridge01-reasoning-001",
+      "segment": "bridge-reasoning-v1",
+      "prompt": "Solve step by step and justify each step. A warehouse has three security cameras monitoring overlapping zones: Camera X covers 40% of all foot-traffic events, Camera Y covers 35%, and Camera Z covers the remaining 25%. Each camera independently triggers a false alarm on 5% of the events it covers, regardless of whether anything unusual occurred. (1) Out of 2,000 total foot-traffic events in a week, what is the expected number of false alarms triggered in total across all three cameras? (2) If a single false alarm is selected uniformly at random from all false alarms triggered that week, what is the probability it came from Camera Y? (3) Camera Z's false-alarm rate is then reduced by one-fifth (i.e. to 4%) after a firmware update; recompute the total expected number of false alarms for the week under the updated rate. Show all calculations."
+    }
+  ],
+  "provenance_split_identity": "bridge_holdout",
+  "cli_split_field_note": "argine.research.cli's 'research trace --split' flag only accepts {dev, eval} (argine/research/cli.py 'trace' subparser, choices=['dev','eval']); there is no third CLI-level split value. Per the loader (argine/research/workloads.py:load, the 'items'-schema fallback branch), the CLI-facing 'split' field here is literal plumbing selecting which dict key the prompts load under -- it is set to the already-supported value 'eval' so this file can be captured with the existing CLI and loader, with NO code change. The true provenance-level identity of this corpus (a fresh BRIDGE holdout, distinct from and never to be confused with the R2-09 EVAL corpus) is tracked entirely by workload_id, file path, output directory, and the 'provenance_split_identity' field above plus experiments/R2-BRIDGE-01-retention-feasibility/dev_holdout_separation.json -- exactly mirroring how R2-09's own EVAL corpus is externally distinguished from R2-08's DEV corpus by workload_id/path/manifest, not by a unique CLI split string."
+}

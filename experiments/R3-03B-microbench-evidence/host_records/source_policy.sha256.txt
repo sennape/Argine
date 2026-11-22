@@ -1,0 +1,3 @@
+SHA256 hash di C:\Users\alpel\Desktop\Argine4\patches\argine-retention-policy.cpp:
+dc6bd01631b4af5969a083f99ff636b7bfa2605aebad4ee030c8ea924c25d856
+CertUtil: - Esecuzione comando hashfile riuscita.

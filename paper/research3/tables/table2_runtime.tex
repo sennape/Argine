@@ -1,0 +1,25 @@
+\begin{table}[t]
+\centering
+\caption{Real-runtime retention evaluation results (decode wall ms/token, 512 tokens; lower is better). Arm rows: per-launch mean, standard deviation and mean tokens/s. Contrast rows: mean over blocks of paired 2-launch arm means, two-sided 95\% $t$ interval. The 8~GiB budget is a descriptive negative control.}
+\label{tab:runtime}
+\small
+\begin{tabular}{llrrrr}
+\toprule
+Budget & Arm / contrast & $n$ & ms/token & sd or 95\% CI & tok/s \\
+\midrule
+1.5 GiB (primary) & A (b\_selected) & 36 & 526.97 & 15.19 & 1.8992 \\
+ & S (predicted\_protect\_sham) & 36 & 541.56 & 13.25 & 1.8476 \\
+ & P (predicted\_protect) & 36 & 542.80 & 13.76 & 1.8435 \\
+ & $S-A$ (cost) & 18 blocks & 14.59 & [9.87, 19.31] & \\
+ & $P-S$ (retention) & 18 blocks & 1.24 & [$-$2.84, 5.32] & \\
+ & $P-A$ (net) & 18 blocks & 15.83 & [10.46, 21.19] & \\
+\midrule
+8 GiB (control) & A (b\_selected) & 12 & 116.47 & 1.70 & 8.5873 \\
+ & S (predicted\_protect\_sham) & 12 & 136.14 & 2.18 & 7.3469 \\
+ & P (predicted\_protect) & 12 & 136.60 & 1.83 & 7.3220 \\
+ & $S-A$ (cost) & 6 blocks & 19.67 & [17.68, 21.66] & \\
+ & $P-S$ (retention) & 6 blocks & 0.45 & [$-$1.25, 2.16] & \\
+ & $P-A$ (net) & 6 blocks & 20.12 & [17.87, 22.38] & \\
+\bottomrule
+\end{tabular}
+\end{table}

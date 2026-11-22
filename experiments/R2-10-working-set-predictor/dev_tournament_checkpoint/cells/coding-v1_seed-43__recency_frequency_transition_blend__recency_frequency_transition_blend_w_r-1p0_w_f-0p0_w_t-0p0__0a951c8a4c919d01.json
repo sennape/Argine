@@ -1,0 +1,18 @@
+{
+  "cell_key": "coding-v1_seed-43__recency_frequency_transition_blend__recency_frequency_transition_blend_w_r-1p0_w_f-0p0_w_t-0p0__0a951c8a4c919d01",
+  "cell_record_digest": "8fc5a19088732122c56a6d474ceaa0eafa71fe737a4c186f47cf1a8db755f998",
+  "config_id": "recency_frequency_transition_blend/w_r=1.0,w_f=0.0,w_t=0.0",
+  "deterministic": true,
+  "dev_cell_id": "coding-v1/seed-43",
+  "family_id": "recency_frequency_transition_blend",
+  "recall_at_k_h1": 0.3644420219638243,
+  "recall_at_k_h16": 0.2928707437275986,
+  "recall_at_k_h4": 0.3308512369791667,
+  "result_digest": "417cd3708187d7644e7c6a68ec9fe9cea83c68b8b62c16ad0f31ac85ca4481e2",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 18576,
+    "h16": 17856,
+    "h4": 18432
+  }
+}

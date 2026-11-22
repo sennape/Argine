@@ -1,0 +1,40 @@
+{
+  "run_id": "selftest-99ab977ad00e9dab",
+  "workload_id": "r2-11-coding-v1",
+  "policy_id": "b_selected",
+  "budget_gib": 4.0,
+  "repetition_index": 1,
+  "ordering_block": "counted",
+  "cell_index": 0,
+  "position_in_abba_sequence": 0,
+  "warmup": false,
+  "counted": true,
+  "status": "completed_ok",
+  "ok": true,
+  "timestamps": {
+    "t0": 0.0,
+    "t1": 0.0,
+    "t2": 0.0,
+    "t3": 0.0,
+    "t4": 0.0
+  },
+  "environment": {
+    "operator_attested_clean_environment": true
+  },
+  "runtime_metrics": {
+    "ttft_seconds": null,
+    "end_to_end_time_to_final_token_seconds": null,
+    "total_decode_time_seconds": null,
+    "expert_bytes_read": null,
+    "expert_read_count": null,
+    "expert_miss_bytes": null,
+    "page_cache_behavior": null,
+    "cpu_time_seconds": null,
+    "wall_clock_seconds": null,
+    "peak_resident_memory_bytes": null,
+    "budget_violations": null,
+    "prediction_overhead_seconds": null,
+    "retention_policy_overhead_seconds": null
+  },
+  "output_token_digest": "d354caf95d3e6516b85e558edc25f44a260802e9a2daa18a01fc1cf8459673da"
+}

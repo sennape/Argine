@@ -1,0 +1,433 @@
+{
+ "designs": {
+  "FULL": {
+   "blocks": {
+    "1.5": 18,
+    "4": 6,
+    "8": 6
+   },
+   "helper_central": {
+    "components_h": {
+     "cooldown": 1.175,
+     "decode": 7.647873166314549,
+     "other_tooling": 0.050833333333333335,
+     "prefill": 0.5200250000000007,
+     "shutdown": 0.07269166666666692,
+     "startup_load": 0.3304166666666667
+    },
+    "counted": 180,
+    "model_h": 8.571006499647877,
+    "physical_launches": 183,
+    "wall_h": 9.79683983298121,
+    "wall_h_by_budget": {
+     "1.5": 7.01199304102356,
+     "4": 1.7559650432770928,
+     "8": 1.0288817486805564
+    },
+    "warmups": 3
+   },
+   "helper_high": {
+    "components_h": {
+     "cooldown": 1.175,
+     "decode": 9.121894047419971,
+     "other_tooling": 0.1525,
+     "prefill": 0.570858333333334,
+     "shutdown": 0.10522499999999972,
+     "startup_load": 0.38125
+    },
+    "counted": 180,
+    "model_h": 10.179227380753293,
+    "physical_launches": 183,
+    "wall_h": 11.506727380753293,
+    "wall_h_by_budget": {
+     "1.5": 8.333164725611658,
+     "4": 2.0770799054055242,
+     "8": 1.0964827497361112
+    },
+    "warmups": 3
+   },
+   "helper_low": {
+    "components_h": {
+     "cooldown": 1.175,
+     "decode": 6.273412846042474,
+     "other_tooling": 0.0,
+     "prefill": 0.4539416666666672,
+     "shutdown": 0.04371666666666678,
+     "startup_load": 0.27958333333333335
+    },
+    "counted": 180,
+    "model_h": 7.05065451270915,
+    "physical_launches": 183,
+    "wall_h": 8.225654512709148,
+    "wall_h_by_budget": {
+     "1.5": 5.77387158182437,
+     "4": 1.4626761822042196,
+     "8": 0.9891067486805557
+    },
+    "warmups": 3
+   },
+   "legacy_central": {
+    "components_h": {
+     "cooldown": 1.175,
+     "decode": 7.647873166314549,
+     "other_tooling": 0.050833333333333335,
+     "prefill": 0.5200250000000007,
+     "shutdown": 6.792351833685447,
+     "startup_load": 0.3304166666666667
+    },
+    "counted": 180,
+    "model_h": 15.290666666666711,
+    "physical_launches": 183,
+    "wall_h": 16.516500000000043,
+    "wall_h_by_budget": {
+     "1.5": 9.829499999999992,
+     "4": 3.343499999999999,
+     "8": 3.343499999999999
+    },
+    "warmups": 3
+   },
+   "legacy_high": {
+    "components_h": {
+     "cooldown": 1.175,
+     "decode": 9.121894047419971,
+     "other_tooling": 0.1525,
+     "prefill": 0.570858333333334,
+     "shutdown": 5.216664285913375,
+     "startup_load": 0.38125
+    },
+    "counted": 180,
+    "model_h": 15.290666666666711,
+    "physical_launches": 183,
+    "wall_h": 16.61816666666671,
+    "wall_h_by_budget": {
+     "1.5": 9.890055555555548,
+     "4": 3.364055555555554,
+     "8": 3.364055555555554
+    },
+    "warmups": 3
+   },
+   "legacy_low": {
+    "components_h": {
+     "cooldown": 1.175,
+     "decode": 6.273412846042474,
+     "other_tooling": 0.0,
+     "prefill": 0.4539416666666672,
+     "shutdown": 8.283728820624184,
+     "startup_load": 0.27958333333333335
+    },
+    "counted": 180,
+    "model_h": 15.290666666666711,
+    "physical_launches": 183,
+    "wall_h": 16.46566666666671,
+    "wall_h_by_budget": {
+     "1.5": 9.799222222222213,
+     "4": 3.3332222222222208,
+     "8": 3.3332222222222208
+    },
+    "warmups": 3
+   }
+  },
+  "PRIMARY_ONLY": {
+   "blocks": {
+    "1.5": 18
+   },
+   "helper_central": {
+    "components_h": {
+     "cooldown": 0.6916666666666667,
+     "decode": 5.740204152134677,
+     "other_tooling": 0.03027777777777778,
+     "prefill": 0.309741666666667,
+     "shutdown": 0.04329722222222234,
+     "startup_load": 0.19680555555555557
+    },
+    "counted": 108,
+    "model_h": 6.290048596579119,
+    "physical_launches": 109,
+    "wall_h": 7.011993041023563,
+    "wall_h_by_budget": {
+     "1.5": 7.01199304102356
+    },
+    "warmups": 1
+   },
+   "helper_high": {
+    "components_h": {
+     "cooldown": 0.6916666666666667,
+     "decode": 6.920886947833887,
+     "other_tooling": 0.09083333333333334,
+     "prefill": 0.3400194444444448,
+     "shutdown": 0.06267499999999986,
+     "startup_load": 0.22708333333333333
+    },
+    "counted": 108,
+    "model_h": 7.550664725611657,
+    "physical_launches": 109,
+    "wall_h": 8.333164725611658,
+    "wall_h_by_budget": {
+     "1.5": 8.333164725611658
+    },
+    "warmups": 1
+   },
+   "helper_low": {
+    "components_h": {
+     "cooldown": 0.6916666666666667,
+     "decode": 4.619257692935484,
+     "other_tooling": 0.0,
+     "prefill": 0.2703805555555549,
+     "shutdown": 0.026038888888888875,
+     "startup_load": 0.16652777777777777
+    },
+    "counted": 108,
+    "model_h": 5.082204915157697,
+    "physical_launches": 109,
+    "wall_h": 5.773871581824364,
+    "wall_h_by_budget": {
+     "1.5": 5.77387158182437
+    },
+    "warmups": 1
+   },
+   "legacy_central": {
+    "components_h": {
+     "cooldown": 0.6916666666666667,
+     "decode": 5.740204152134677,
+     "other_tooling": 0.03027777777777778,
+     "prefill": 0.309741666666667,
+     "shutdown": 2.8608041811986586,
+     "startup_load": 0.19680555555555557
+    },
+    "counted": 108,
+    "model_h": 9.10755555555554,
+    "physical_launches": 109,
+    "wall_h": 9.829499999999985,
+    "wall_h_by_budget": {
+     "1.5": 9.829499999999992
+    },
+    "warmups": 1
+   },
+   "legacy_high": {
+    "components_h": {
+     "cooldown": 0.6916666666666667,
+     "decode": 6.920886947833887,
+     "other_tooling": 0.09083333333333334,
+     "prefill": 0.3400194444444448,
+     "shutdown": 1.6195658299439004,
+     "startup_load": 0.22708333333333333
+    },
+    "counted": 108,
+    "model_h": 9.10755555555554,
+    "physical_launches": 109,
+    "wall_h": 9.890055555555541,
+    "wall_h_by_budget": {
+     "1.5": 9.890055555555548
+    },
+    "warmups": 1
+   },
+   "legacy_low": {
+    "components_h": {
+     "cooldown": 0.6916666666666667,
+     "decode": 4.619257692935484,
+     "other_tooling": 0.0,
+     "prefill": 0.2703805555555549,
+     "shutdown": 4.05138952928675,
+     "startup_load": 0.16652777777777777
+    },
+    "counted": 108,
+    "model_h": 9.10755555555554,
+    "physical_launches": 109,
+    "wall_h": 9.799222222222207,
+    "wall_h_by_budget": {
+     "1.5": 9.799222222222213
+    },
+    "warmups": 1
+   }
+  },
+  "PRIMARY_PLUS_8G": {
+   "blocks": {
+    "1.5": 18,
+    "8": 6
+   },
+   "helper_central": {
+    "components_h": {
+     "cooldown": 0.9333333333333333,
+     "decode": 6.330497011926346,
+     "other_tooling": 0.04055555555555555,
+     "prefill": 0.4148833333333339,
+     "shutdown": 0.05799444444444463,
+     "startup_load": 0.26361111111111113
+    },
+    "counted": 144,
+    "model_h": 7.066985900815231,
+    "physical_launches": 146,
+    "wall_h": 8.04087478970412,
+    "wall_h_by_budget": {
+     "1.5": 7.01199304102356,
+     "8": 1.0288817486805564
+    },
+    "warmups": 2
+   },
+   "helper_high": {
+    "components_h": {
+     "cooldown": 0.9333333333333333,
+     "decode": 7.531091919792221,
+     "other_tooling": 0.12166666666666667,
+     "prefill": 0.45543888888888945,
+     "shutdown": 0.08394999999999979,
+     "startup_load": 0.30416666666666664
+    },
+    "counted": 144,
+    "model_h": 8.37464747534776,
+    "physical_launches": 146,
+    "wall_h": 9.429647475347762,
+    "wall_h_by_budget": {
+     "1.5": 8.333164725611658,
+     "8": 1.0964827497361112
+    },
+    "warmups": 2
+   },
+   "helper_low": {
+    "components_h": {
+     "cooldown": 0.9333333333333333,
+     "decode": 5.209550552727154,
+     "other_tooling": 0.0,
+     "prefill": 0.362161111111111,
+     "shutdown": 0.03487777777777776,
+     "startup_load": 0.22305555555555556
+    },
+    "counted": 144,
+    "model_h": 5.829644997171599,
+    "physical_launches": 146,
+    "wall_h": 6.762978330504931,
+    "wall_h_by_budget": {
+     "1.5": 5.77387158182437,
+     "8": 0.9891067486805557
+    },
+    "warmups": 2
+   },
+   "legacy_central": {
+    "components_h": {
+     "cooldown": 0.9333333333333333,
+     "decode": 6.330497011926346,
+     "other_tooling": 0.04055555555555555,
+     "prefill": 0.4148833333333339,
+     "shutdown": 5.19011965474032,
+     "startup_load": 0.26361111111111113
+    },
+    "counted": 144,
+    "model_h": 12.199111111111126,
+    "physical_launches": 146,
+    "wall_h": 13.173000000000014,
+    "wall_h_by_budget": {
+     "1.5": 9.829499999999992,
+     "8": 3.343499999999999
+    },
+    "warmups": 2
+   },
+   "legacy_high": {
+    "components_h": {
+     "cooldown": 0.9333333333333333,
+     "decode": 7.531091919792221,
+     "other_tooling": 0.12166666666666667,
+     "prefill": 0.45543888888888945,
+     "shutdown": 3.908413635763343,
+     "startup_load": 0.30416666666666664
+    },
+    "counted": 144,
+    "model_h": 12.199111111111126,
+    "physical_launches": 146,
+    "wall_h": 13.254111111111126,
+    "wall_h_by_budget": {
+     "1.5": 9.890055555555548,
+     "8": 3.364055555555554
+    },
+    "warmups": 2
+   },
+   "legacy_low": {
+    "components_h": {
+     "cooldown": 0.9333333333333333,
+     "decode": 5.209550552727154,
+     "other_tooling": 0.0,
+     "prefill": 0.362161111111111,
+     "shutdown": 6.4043438917172955,
+     "startup_load": 0.22305555555555556
+    },
+    "counted": 144,
+    "model_h": 12.199111111111126,
+    "physical_launches": 146,
+    "wall_h": 13.13244444444446,
+    "wall_h_by_budget": {
+     "1.5": 9.799222222222213,
+     "8": 3.3332222222222208
+    },
+    "warmups": 2
+   }
+  }
+ },
+ "gate2_actual_vs_plan": {
+  "actual_first_launch_start_to_last_record_h": 1.6900824006398518,
+  "actual_incl_initial_60s_cooldown_h": 1.7067490673065187,
+  "actual_post_launch_replay_analysis_h": 0.6144166666666667,
+  "actual_pre_launch_gaps_h": 0.2916388888888889,
+  "actual_server_uptime_h": 0.7805227855555554,
+  "evidence_supported_discrepancies": [
+   "Plan assumed traced decode = 5.05 x untraced planning value (2.2 s/token at 1.5 GiB); observed traced decode 0.56-0.61 s/token at 1.5 GiB.",
+   "Plan scaled prefill with decode wall (231 s at 1.5 GiB); observed prefill 8.9-11.2 s at every budget.",
+   "Plan omitted post-launch replay analysis (94-421 s per launch, 0.61 h total) and trace comparisons (pre-launch gaps up to 369 s): traced-phase overhead that does not exist in the untraced campaign.",
+   "Cause of the non-monotone traced decode (4 GiB < 1.5 GiB < 8 GiB per token) is undetermined."
+  ],
+  "plan_mechanism_hours_current_model": 2.814393171221936,
+  "plan_mechanism_hours_fixed_model": 2.814393171221936,
+  "user_reported_span_h": 1.5633333333333332
+ },
+ "inputs": {
+  "corrected_over_old_ratio_8GiB": 0.6645025495133031,
+  "cost_ms_per_token_scenarios": {
+   "central": 17.466373388671876,
+   "high": 23.3,
+   "low": 17.466373388671876
+  },
+  "decode_A_ms_per_token_scenarios": {
+   "central": {
+    "1.5": 358.74524367626213,
+    "4": 239.01643578956595,
+    "8": 100.84604619140626
+   },
+   "high": {
+    "1.5": 431.05400322896287,
+    "4": 287.19263405088066,
+    "8": 100.84604619140626
+   },
+   "low": {
+    "1.5": 286.4364841235614,
+    "4": 190.84023752825127,
+    "8": 100.84604619140626
+   }
+  },
+  "legacy_floor_s": 300.8,
+  "prefill_s": {
+   "central": 10.23,
+   "high": 11.23,
+   "low": 8.93
+  },
+  "provenance": {
+   "cooldown": "frozen schedule: 60 s before a block/warmup, 15 s within a block",
+   "decode 1.5/4 GiB": "NO untraced corrected-runtime observation exists. high = R2-12 old-runtime untraced means (431.1/287.2, frozen planning values); low = those x 0.6645 (corrected/old ratio measured at 8 GiB); central = midpoint. Gate 2 traced decode is NOT used: it is non-monotone in budget (8 GiB traced slower than 4 GiB) and its trace overhead is not a usable factor.",
+   "decode 8 GiB": "R3-03B corrected runtime, 80 untraced counted launches (100.846 ms/token A; S adds 17.466)",
+   "legacy shutdown": "R3-03B: 71/80 exits at 300.0 s of uptime, median launch 300.8 s, mean shutdown wait 218 s",
+   "startup/prefill/shutdown": "Gate 2 real-host launch logs (10 launches): load 5.48-6.41 s (+<=1 s health polling), prefill 8.93-11.23 s, helper shutdown 0.86-2.07 s"
+  },
+  "shutdown_helper_s": {
+   "central": 1.43,
+   "high": 2.07,
+   "low": 0.86
+  },
+  "startup_s": {
+   "central": 6.5,
+   "high": 7.5,
+   "low": 5.5
+  },
+  "tooling_s_ASSUMPTION": {
+   "central": 1.0,
+   "high": 3.0,
+   "low": 0.0
+  }
+ }
+}

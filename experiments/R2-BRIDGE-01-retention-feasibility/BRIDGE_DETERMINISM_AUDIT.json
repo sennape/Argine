@@ -1,0 +1,33 @@
+{
+  "all_passed": false,
+  "artifact": "BRIDGE_DETERMINISM_AUDIT",
+  "cells_checked": {
+    "bridge-coding-v1": {
+      "4294967296": {
+        "b_selected_identical": true,
+        "predicted_protect_identical": true
+      }
+    },
+    "bridge-instruction-v1": {
+      "8589934592": {
+        "b_selected_identical": true,
+        "predicted_protect_identical": true
+      }
+    },
+    "bridge-reasoning-v1": {
+      "1610612736": {
+        "b_selected_identical": true,
+        "predicted_protect_identical": true
+      }
+    },
+    "bridge-summarization-v1": {
+      "4294967296": {
+        "b_selected_identical": true,
+        "predicted_protect_identical": true
+      }
+    }
+  },
+  "coverage_note": "4 representative cells, one per workload, collectively spanning all 3 budgets at least once (bridge-coding-v1@4GiB, bridge-summarization-v1@4GiB, bridge-reasoning-v1@1.5GiB, bridge-instruction-v1@8GiB).",
+  "method": "Representative cells re-run fresh (independent process invocation) and compared bit-for-bit against the stored first-pass result.",
+  "schema_version": 1
+}

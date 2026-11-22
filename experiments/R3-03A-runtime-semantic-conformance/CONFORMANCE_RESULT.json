@@ -1,0 +1,125 @@
+{
+ "artifact": "R3-03A-RUNTIME-SEMANTIC-CONFORMANCE",
+ "budget": {
+  "A_B_budget": 4294967296,
+  "A_B_max_policy_resident_bytes": 4294950912,
+  "C_budget": 8589934592,
+  "C_max_policy_resident_bytes": 8589901824,
+  "post_service_over_budget": 0,
+  "violations": 0
+ },
+ "classification": "R3_03A_RUNTIME_SEMANTIC_CONFORMANCE_PASS",
+ "classification_reproduced_from_raw_evidence": true,
+ "commits": {
+  "implementation": "75f22d237e77d979573b0a4430136b745ae87a73",
+  "implementation_freeze_sha256": "fd2e62507f01da026f1cab6f6100e76444d7e4b5869318ed94b949139c144faf",
+  "parser_recovery": "935578721febf296b1feeb1a8147560ea141667c"
+ },
+ "console_string_trusted": false,
+ "determinism_observation": "the run-2 A-4GiB trace is byte-identical (SHA-256 154502da...b990) to the earlier run-1 A-4GiB trace",
+ "does_not_prove": [
+  "speedup or throughput recovery",
+  "reversal of the R2-12 regression",
+  "reduced predictor overhead",
+  "that predicted_protect is fast enough or beneficial",
+  "behaviour on other workloads, budgets, hardware or parameter settings",
+  "sham conformance of the predictor protected set",
+  "model/store hash re-verification during this campaign (existence-checked only)"
+ ],
+ "event_counts": {
+  "completion_rows_per_launch": 24672,
+  "duplicate_events": 0,
+  "events_per_pass": 48,
+  "missing_events": 0,
+  "old_runtime_policy_calls_per_decode_token": 144,
+  "passes": 514,
+  "policy_calls_per_decode_token": 48,
+  "policy_event_rows_per_launch": 24672
+ },
+ "identities": {
+  "decoding": {
+   "context": 4096,
+   "n_predict": 512,
+   "seed": 42,
+   "temperature": 0.0,
+   "top_k": 1
+  },
+  "model": {
+   "bytes": 18632184480,
+   "sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32"
+  },
+  "source": "frozen R3-02 ACQUISITION_PLAN.json (contract digest 99a68c73...3013); this driver checked existence only, not model/store hashes (limitation)",
+  "store": {
+   "bytes": 17553387520,
+   "sha256": "fef943ae0bc017864a47d41c1fc90d422016045f7e8705b1d138b7defd8c5146"
+  },
+  "workload": {
+   "id": "r2-11-coding-v1",
+   "sha256": "c02f9657d12d874cc43523e2b609bb604a68a6a8b267b2ffac6d3420c509b730"
+  }
+ },
+ "launches": {
+  "A-4GiB": {
+   "analysis_sha256": "316b0b5a0cc40b9532608dadaa0bdbc1fcaa7a4192886f424718fd43a4360276",
+   "budget_bytes": 4294967296,
+   "launch_record_sha256": "83e7343a2da083caf461aa72fc947657c0b6a2fef097016d9b3e85c9e4bfa0c6",
+   "policy": "b_selected",
+   "stderr_sha256": "fc74daefd058413ba81d7f5f09734bf81f9f43455004e48ec1d91d8cdd389307",
+   "trace_bytes": 5134162249,
+   "trace_sha256": "154502dafdefede307f76169d830a268dc67c86ff1945e9f8fd0e6d38755b990"
+  },
+  "B-4GiB": {
+   "analysis_sha256": "253339aa51e265f574ab9f932a5bdd88273d6fb7e4520ec984534de538fa6bf2",
+   "budget_bytes": 4294967296,
+   "launch_record_sha256": "43fb511b9e5ba0f7f3ac2173c3c6cc335fc253b1c5f0bc12669f636168ce54ee",
+   "policy": "predicted_protect_sham",
+   "stderr_sha256": "7ea29b3b5ce7e17a0d5bc92ad3f28564a2ae1da8a6eddbb0bb62ef8804d56d48",
+   "trace_bytes": 5135547558,
+   "trace_sha256": "677217ec4e131b58f8d9498d9eabaeb6b87dbdc2343c90789f87d8949f0a9e5c"
+  },
+  "C-8GiB": {
+   "analysis_sha256": "1d7bc95c59e4bf05ff4b5f3a8315f7a5073f0e7b56ee288fe1debdef82d813c5",
+   "budget_bytes": 8589934592,
+   "launch_record_sha256": "536da6a8c24480f32238b05c136abc793f1d2c2f80d90dbd598dade49afa8d2b",
+   "policy": "predicted_protect",
+   "stderr_sha256": "e34cf48049203c2112b83710e924e25dd743d6206124294bedf881efe6e073f8",
+   "trace_bytes": 10242218132,
+   "trace_sha256": "ab0dbf29f0ebbecb22c7f181a8eef617090b90281926989ec8de8b6d0e5bfb08"
+  }
+ },
+ "proves": "The corrected real runtime (e935005e...) implements exactly one semantic policy event per (forward pass, MoE layer) (48 per decode token) and its policy/prediction state evolution conforms decision-by-decision to the frozen R2 reference, with unchanged output tokens, zero budget violations and sham==b_selected trajectories, for the tested workload (r2-11-coding-v1, 512 decode tokens, seed 42, greedy) and configurations (b_selected 4 GiB, predicted_protect_sham 4 GiB, predicted_protect 8 GiB), one run each.",
+ "r2_reference_replay": {
+  "A-4GiB": "MATCH on 24,672/24,672 events (protected_before, hits, misses, evictions, resident set, resident bytes, history last_ref, decay score max |diff| 0.0)",
+  "B-4GiB": "MATCH as corrected b_selected (sham trajectory) on 24,672/24,672 events; sham's own predictor set not compared",
+  "C-8GiB": "MATCH on 24,672/24,672 events including protected_before (predictor/transition state), history, decay"
+ },
+ "runtime": {
+  "path": "C:\\Users\\alpel\\Desktop\\Argine4-r3build-r3-03a\\llama.cpp\\build-r3-03a\\bin\\llama-server.exe",
+  "sha256": "e935005e5131b29d12b113b000fa52e798b4b4419a23724ec70af3f6875fcd76",
+  "verification": "the conformance driver refuses to launch unless the file's SHA-256 equals this value (check C8, executed before every launch); the agent did not re-hash the binary (not mounted)"
+ },
+ "sham_vs_b_selected": {
+  "events_compared": 24672,
+  "fields": [
+   "requested_experts",
+   "hit_experts",
+   "miss_experts",
+   "evicted",
+   "resident_after (scores, last_ref)",
+   "policy_resident_bytes_after",
+   "semantic_event",
+   "post-service bytes"
+  ],
+  "mismatches": 0
+ },
+ "timing_evidence": "NONE; stderr timing lines were not read or used",
+ "token_digest": {
+  "A": "equal",
+  "B": "equal",
+  "C": "equal",
+  "frozen_R3_02": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa",
+  "n_tokens": 512,
+  "recomputed_from_stored_token_ids": true,
+  "token_sequences_identical_across_launches": true
+ }
+}

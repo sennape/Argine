@@ -1,0 +1,60 @@
+{
+  "artifact": "R3-02A-IMPLEMENTATION",
+  "created_utc": "2026-11-16T22:36:15Z",
+  "equivalence": {
+    "artifact": "EQUIVALENCE.json",
+    "fail_closed": {
+      "all_rejected": true,
+      "sham_missing_params_rejected": true,
+      "sham_top_k_zero_rejected": true,
+      "unknown_policy_rejected": true
+    },
+    "summary": {
+      "all_pass": true,
+      "cases": 6,
+      "passed": 6
+    }
+  },
+  "phase": "R3-02A",
+  "predictive_activity_proof": {
+    "all_positive": true,
+    "counter": "predictor_decisions",
+    "observed": {
+      "budget_boundary": 80,
+      "eviction_heavy": 200,
+      "multi_layer": 600,
+      "no_pressure": 80,
+      "repeated_reuse": 120,
+      "ties": 60
+    }
+  },
+  "r3_00a_contract_digest": "99a68c73c5a3caba4fd53937f27907375734f3866c84e18d4ecb944013efa073",
+  "r3_01_integration": {
+    "note": "sham identity represented as policy_id + policy_params; frozen R3-00A/R3-01 untouched",
+    "status": "ADMISSIBLE",
+    "tests": 4
+  },
+  "regressions": {
+    "b_selected": "baseline build vs sham build: byte-identical stdout and FINAL stats on all 6 streams",
+    "predicted_protect": "baseline build vs sham build: byte-identical stdout and FINAL stats on all 6 streams"
+  },
+  "sham": {
+    "files": [
+      "patches/argine-retention-policy.h",
+      "patches/argine-retention-policy.cpp",
+      "patches/argine-store.cpp",
+      "patches/argine-retention-conformance-main.cpp",
+      "patches/0006-argine-msvc-atomic-shim.patch"
+    ],
+    "identity_is_explicit": true,
+    "kind": "PolicyKind::PREDICTED_PROTECT_SHAM (additive enum value)",
+    "params_validation": "same frozen predictor validation as predicted_protect (decay grid + 0.99 + top_k/n_experts); fail-closed otherwise",
+    "policy_id": "predicted_protect_sham",
+    "semantics": {
+      "after_event": "unchanged: history append, transition-state update, predict_for_layer score computation",
+      "choose_victim": "delegates to RetentionPolicy::choose_victim (B_selected AgedFrequency key) when sham_ is set",
+      "predictor_state_skipped": false,
+      "protection_consulted": false
+    }
+  }
+}

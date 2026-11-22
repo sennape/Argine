@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-10-phase0-contract-v1.0",
+  "name": "Research2 R2-10 Causal Working-Set Predictor -- Phase-0 Benchmark Contract",
+  "status": "PHASE0_FROZEN",
+  "freeze_utc": "2026-11-11T21:40:00Z",
+  "upstream": {
+    "r2_09b_contract_version": "r2-09b-contract-v1.1",
+    "r2_09b_contract_digest": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28",
+    "r2_09a_freeze_digest": "5b600d1451983dabafdfbd6ea6bfdc4c4c3bdcf9327c9ec4d57c25025759f847",
+    "r2_09a_commit": "c3469b67bdd6c4e37cce196188caf34e0ac59524",
+    "r2_09a_status": "CLOSED / R2_09A_PASS_CONFIRMED",
+    "audit_id": "AUDIT-ORACLE-001",
+    "audit_verdict": "CASE C / RESOLVED BY PAPER AMENDMENT",
+    "note": "This contract does not redefine the primary_target, causal boundary (intrastep_cross_layer_causal_context), horizons, or primary_metric_cutoff already frozen in experiments/R2-09-prediction-benchmark/prediction_contract.json and metrics_contract.json under r2-09b-contract-v1.1 -- it binds to them by digest and adds only what R2-09B explicitly left open for R2-10: the predictor candidate grid, null/trivial baselines, the deterministic output-contract implementation, aggregation rule, DEV-only selection rule, and acceptance/interpretation categories."
+  },
+  "purpose": "Freeze, before any predictor is run or DEV results exist, the exact experimental contract for the R2-10 causal working-set predictor tournament: causal boundary (adopted), target definition (adopted), output contract, metrics/aggregation, DEV/EVAL protocol, candidate predictor families with finite grids, null/trivial baselines, selection rule, and interpretation categories. Prevents R2-10 from winning by construction and prevents EVAL-influenced predictor/configuration selection.",
+  "scientific_question": "Can strictly causal information available before a routing decision predict future expert demand well enough to support a retention policy that can later be tested (R2-11) against the strong causal baseline established by R2-09A?",
+  "adopted_from_r2_09b": {
+    "primary_target": "next_step_same_layer_routing (prediction_contract.json)",
+    "causal_boundary_name": "intrastep_cross_layer_causal_context (prediction_contract.json.input_time_semantics)",
+    "horizons": [
+      1,
+      4,
+      16
+    ],
+    "allowed_feature_families": "prediction_contract.json.allowed_feature_families",
+    "forbidden_features": "prediction_contract.json.forbidden_features",
+    "primary_metric_id": "future_requested_expert_recall_at_k (metrics_contract.json.prediction_metrics)",
+    "secondary_prediction_metrics": [
+      "precision_at_k",
+      "f1",
+      "jaccard",
+      "ranking_metric_ndcg_or_map",
+      "byte_weighted_recall_optional"
+    ]
+  },
+  "non_goals_this_phase": [
+    "No predictor is implemented for the full DEV tournament in Phase 0 beyond the reference null/trivial baselines needed to make the leakage/determinism/output-contract tests executable.",
+    "No EVAL data is opened, read, or referenced beyond the already-frozen R2-09B eval_manifest.json acquisition contract.",
+    "No retention policy (R2-11) is implemented or evaluated.",
+    "No runtime/throughput/latency claim is made (reserved for R2-12).",
+    "R2-09A and R2-09B frozen evidence are not modified; this contract only reads them."
+  ],
+  "scope_boundary": {
+    "r2_10_full_tournament": "NOT STARTED -- gated on this Phase-0 contract passing its own tests, per the handoff instruction not to begin the full tournament merely because contract tests pass.",
+    "r2_11": "FUTURE -- explicitly forbidden to start in this phase",
+    "r2_12": "FUTURE"
+  },
+  "case_c_binding": {
+    "o_b_proven_byte_optimal": false,
+    "r2_10_does_not_claim": [
+      "O_B = O*",
+      "the R2-09A comparator gap is a proven maximum causal opportunity",
+      "runtime speedup",
+      "retention improvement"
+    ]
+  },
+  "contract_digest": "4d2288b7b4a812fd85d96aa7c2227d639b52f5131bff305d687e03970f53d725"
+}

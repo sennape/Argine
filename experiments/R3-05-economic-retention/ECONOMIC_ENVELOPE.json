@@ -1,0 +1,399 @@
+{
+ "artifact": "R3-05-ECONOMIC-ENVELOPE",
+ "benefit_required_by_cost_reduction": {
+  "1": {
+   "policy_cost_ms": 14.588048502604149,
+   "required_benefit_ms": 14.588048502604149,
+   "required_benefit_multiple_of_ceiling": 25.593067548428333
+  },
+  "10": {
+   "policy_cost_ms": 1.458804850260415,
+   "required_benefit_ms": 1.458804850260415,
+   "required_benefit_multiple_of_ceiling": 2.5593067548428334
+  },
+  "2": {
+   "policy_cost_ms": 7.2940242513020745,
+   "required_benefit_ms": 7.2940242513020745,
+   "required_benefit_multiple_of_ceiling": 12.796533774214167
+  },
+  "25": {
+   "policy_cost_ms": 0.5835219401041659,
+   "required_benefit_ms": 0.5835219401041659,
+   "required_benefit_multiple_of_ceiling": 1.0237227019371333
+  },
+  "4": {
+   "policy_cost_ms": 3.6470121256510373,
+   "required_benefit_ms": 3.6470121256510373,
+   "required_benefit_multiple_of_ceiling": 6.398266887107083
+  }
+ },
+ "break_even_matrix": {
+  "cost/100|benefit x1": {
+   "label": "WIN",
+   "net_ms": 0.4241195149739585,
+   "ratio": 3.9073080946930485
+  },
+  "cost/100|benefit x10": {
+   "label": "WIN",
+   "net_ms": 5.554119514973958,
+   "ratio": 39.07308094693049
+  },
+  "cost/100|benefit x100": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 56.85411951497395,
+   "ratio": 390.73080946930486
+  },
+  "cost/100|benefit x2": {
+   "label": "WIN",
+   "net_ms": 0.9941195149739585,
+   "ratio": 7.814616189386097
+  },
+  "cost/100|benefit x25": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 14.104119514973958,
+   "ratio": 97.68270236732621
+  },
+  "cost/100|benefit x300": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 170.85411951497392,
+   "ratio": 1172.1924284079146
+  },
+  "cost/100|benefit x5": {
+   "label": "WIN",
+   "net_ms": 2.704119514973958,
+   "ratio": 19.536540473465244
+  },
+  "cost/100|benefit x50": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 28.354119514973956,
+   "ratio": 195.36540473465243
+  },
+  "cost/10|benefit x1": {
+   "label": "LOSS",
+   "net_ms": -0.888804850260415,
+   "ratio": 0.39073080946930483
+  },
+  "cost/10|benefit x10": {
+   "label": "WIN",
+   "net_ms": 4.241195149739585,
+   "ratio": 3.907308094693048
+  },
+  "cost/10|benefit x100": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 55.54119514973958,
+   "ratio": 39.07308094693048
+  },
+  "cost/10|benefit x2": {
+   "label": "LOSS",
+   "net_ms": -0.31880485026041505,
+   "ratio": 0.7814616189386097
+  },
+  "cost/10|benefit x25": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 12.791195149739583,
+   "ratio": 9.76827023673262
+  },
+  "cost/10|benefit x300": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 169.54119514973956,
+   "ratio": 117.21924284079144
+  },
+  "cost/10|benefit x5": {
+   "label": "WIN",
+   "net_ms": 1.3911951497395847,
+   "ratio": 1.953654047346524
+  },
+  "cost/10|benefit x50": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 27.041195149739583,
+   "ratio": 19.53654047346524
+  },
+  "cost/1|benefit x1": {
+   "label": "LOSS",
+   "net_ms": -14.018048502604149,
+   "ratio": 0.03907308094693048
+  },
+  "cost/1|benefit x10": {
+   "label": "LOSS",
+   "net_ms": -8.88804850260415,
+   "ratio": 0.39073080946930483
+  },
+  "cost/1|benefit x100": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 42.41195149739585,
+   "ratio": 3.907308094693048
+  },
+  "cost/1|benefit x2": {
+   "label": "LOSS",
+   "net_ms": -13.448048502604149,
+   "ratio": 0.07814616189386096
+  },
+  "cost/1|benefit x25": {
+   "label": "LOSS",
+   "net_ms": -0.33804850260415087,
+   "ratio": 0.976827023673262
+  },
+  "cost/1|benefit x300": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 156.41195149739582,
+   "ratio": 11.721924284079144
+  },
+  "cost/1|benefit x5": {
+   "label": "LOSS",
+   "net_ms": -11.73804850260415,
+   "ratio": 0.19536540473465241
+  },
+  "cost/1|benefit x50": {
+   "label": "WIN",
+   "net_ms": 13.911951497395847,
+   "ratio": 1.953654047346524
+  },
+  "cost/25|benefit x1": {
+   "label": "LOSS",
+   "net_ms": -0.013521940104165964,
+   "ratio": 0.9768270236732621
+  },
+  "cost/25|benefit x10": {
+   "label": "WIN",
+   "net_ms": 5.116478059895833,
+   "ratio": 9.768270236732622
+  },
+  "cost/25|benefit x100": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 56.41647805989583,
+   "ratio": 97.68270236732621
+  },
+  "cost/25|benefit x2": {
+   "label": "WIN",
+   "net_ms": 0.556478059895834,
+   "ratio": 1.9536540473465243
+  },
+  "cost/25|benefit x25": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 13.666478059895832,
+   "ratio": 24.420675591831554
+  },
+  "cost/25|benefit x300": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 170.4164780598958,
+   "ratio": 293.04810710197864
+  },
+  "cost/25|benefit x5": {
+   "label": "WIN",
+   "net_ms": 2.266478059895834,
+   "ratio": 4.884135118366311
+  },
+  "cost/25|benefit x50": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 27.91647805989583,
+   "ratio": 48.84135118366311
+  },
+  "cost/2|benefit x1": {
+   "label": "LOSS",
+   "net_ms": -6.724024251302074,
+   "ratio": 0.07814616189386096
+  },
+  "cost/2|benefit x10": {
+   "label": "LOSS",
+   "net_ms": -1.5940242513020753,
+   "ratio": 0.7814616189386097
+  },
+  "cost/2|benefit x100": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 49.70597574869792,
+   "ratio": 7.814616189386096
+  },
+  "cost/2|benefit x2": {
+   "label": "LOSS",
+   "net_ms": -6.154024251302075,
+   "ratio": 0.15629232378772193
+  },
+  "cost/2|benefit x25": {
+   "label": "WIN",
+   "net_ms": 6.955975748697924,
+   "ratio": 1.953654047346524
+  },
+  "cost/2|benefit x300": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 163.7059757486979,
+   "ratio": 23.443848568158288
+  },
+  "cost/2|benefit x5": {
+   "label": "LOSS",
+   "net_ms": -4.444024251302075,
+   "ratio": 0.39073080946930483
+  },
+  "cost/2|benefit x50": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 21.205975748697924,
+   "ratio": 3.907308094693048
+  },
+  "cost/4|benefit x1": {
+   "label": "LOSS",
+   "net_ms": -3.0770121256510374,
+   "ratio": 0.15629232378772193
+  },
+  "cost/4|benefit x10": {
+   "label": "WIN",
+   "net_ms": 2.052987874348962,
+   "ratio": 1.5629232378772193
+  },
+  "cost/4|benefit x100": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 53.352987874348955,
+   "ratio": 15.629232378772192
+  },
+  "cost/4|benefit x2": {
+   "label": "LOSS",
+   "net_ms": -2.5070121256510376,
+   "ratio": 0.31258464757544385
+  },
+  "cost/4|benefit x25": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 10.602987874348962,
+   "ratio": 3.907308094693048
+  },
+  "cost/4|benefit x300": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 167.35298787434894,
+   "ratio": 46.887697136316575
+  },
+  "cost/4|benefit x5": {
+   "label": "LOSS",
+   "net_ms": -0.7970121256510376,
+   "ratio": 0.7814616189386097
+  },
+  "cost/4|benefit x50": {
+   "label": "WIN_WITH_MARGIN",
+   "net_ms": 24.85298787434896,
+   "ratio": 7.814616189386096
+  }
+ },
+ "derived": {
+  "P_benefit_ms_from_mechanism_x_kappa": 0.4241180113398505,
+  "belady_fraction_of_b_selected_misses_removed_r2_coding_v1": 0.4030005105580793,
+  "clairvoyant_ceiling_ms_prior_low": 91.41590367179478,
+  "clairvoyant_ceiling_ms_prior_point": 182.83180734358956,
+  "current_P_capture_of_clairvoyant_ceiling": 0.002319716779601812,
+  "detectability_ci_halfwidth_ms_by_blocks": {
+   "12": 6.856762351586467,
+   "18": 5.366620042165749,
+   "36": 3.6514090115959976,
+   "6": 11.32526610811896
+  },
+  "incremental_runtime_ns_per_event_predictor": 464263.2255188068,
+  "kappa_ms_per_MB_low": 0.37920226183054595,
+  "kappa_ms_per_MB_point": 0.7584045236610919,
+  "max_allowable_incremental_policy_cost_ms_breakeven": 0.57,
+  "max_invocation_fraction_per_call_cost_unchanged_benefit_fully_retained": 0.03907308094693048,
+  "max_invocation_fraction_with_2x_margin": 0.01953654047346524,
+  "ms_per_average_miss_point": 2.181238787017407,
+  "required_cost_reduction_if_benefit_unchanged": 0.9609269190530695,
+  "runtime_over_microbench_transfer_factor_b_selected": 2.181272285675596,
+  "runtime_over_microbench_transfer_factor_predictor_path": 3.6492795162731584
+ },
+ "inputs": {
+  "A_1.5_decode_miss_bytes_per_token": 598198392.0,
+  "A_1.5_decode_misses_per_token": 207.990234375,
+  "A_1.5_ms": 526.9731852213541,
+  "A_8_decode_miss_bytes_per_token": 56932056.0,
+  "A_8_ms": 116.47434749348959,
+  "B_ceiling_ms_frozen_R3_04": 0.57,
+  "C0_ci": [
+   9.868875034010866,
+   19.307221971197432
+  ],
+  "C0_wall_cost_ms": 14.588048502604149,
+  "P_1.5_decode_miss_bytes_per_token": 597639168.0,
+  "R3_04_DELTA_NET_block_sd_ms": 10.791768144296567,
+  "events_per_token": 48,
+  "microbench_ns_per_call": {
+   "b_selected": 8802.635286064275,
+   "predictor_component": 123679.45268590575,
+   "sham": 132482.08797197003
+  },
+  "policy_ms_per_token": {
+   "A": 0.9252455078125,
+   "S": 23.2969296875
+  },
+  "r2_coding_v1_1.5GiB_misses": {
+   "b_selected": 76387,
+   "belady": 45603,
+   "global_lru": 81752
+  },
+  "runtime_ns_per_event": {
+   "A": 19200.944390402074,
+   "S": 483464.16990920884
+  }
+ },
+ "invocation_fraction_table": {
+  "0.01": {
+   "if_benefit_fully_retained": {
+    "max_per_call_cost_fraction": 1.0,
+    "required_per_call_cost_reduction": 0.0
+   },
+   "if_benefit_proportional_to_f": {
+    "required_per_call_cost_reduction": 0.9609269190530695
+   }
+  },
+  "0.02": {
+   "if_benefit_fully_retained": {
+    "max_per_call_cost_fraction": 1.0,
+    "required_per_call_cost_reduction": 0.0
+   },
+   "if_benefit_proportional_to_f": {
+    "required_per_call_cost_reduction": 0.9609269190530695
+   }
+  },
+  "0.05": {
+   "if_benefit_fully_retained": {
+    "max_per_call_cost_fraction": 0.7814616189386097,
+    "required_per_call_cost_reduction": 0.21853838106139034
+   },
+   "if_benefit_proportional_to_f": {
+    "required_per_call_cost_reduction": 0.9609269190530695
+   }
+  },
+  "0.1": {
+   "if_benefit_fully_retained": {
+    "max_per_call_cost_fraction": 0.39073080946930483,
+    "required_per_call_cost_reduction": 0.6092691905306952
+   },
+   "if_benefit_proportional_to_f": {
+    "required_per_call_cost_reduction": 0.9609269190530695
+   }
+  },
+  "0.25": {
+   "if_benefit_fully_retained": {
+    "max_per_call_cost_fraction": 0.15629232378772193,
+    "required_per_call_cost_reduction": 0.843707676212278
+   },
+   "if_benefit_proportional_to_f": {
+    "required_per_call_cost_reduction": 0.9609269190530695
+   }
+  },
+  "0.5": {
+   "if_benefit_fully_retained": {
+    "max_per_call_cost_fraction": 0.07814616189386096,
+    "required_per_call_cost_reduction": 0.9218538381061391
+   },
+   "if_benefit_proportional_to_f": {
+    "required_per_call_cost_reduction": 0.9609269190530695
+   }
+  },
+  "1.0": {
+   "if_benefit_fully_retained": {
+    "max_per_call_cost_fraction": 0.03907308094693048,
+    "required_per_call_cost_reduction": 0.9609269190530695
+   },
+   "if_benefit_proportional_to_f": {
+    "required_per_call_cost_reduction": 0.9609269190530695
+   }
+  }
+ },
+ "notes": [
+  "kappa is the 1.5 vs 8 GiB association between A wall time and A decode miss bytes; it is NOT a causal per-miss cost. kappa_low halves it by pre-registration.",
+  "the clairvoyant ceiling is a PRIOR from the R2 coding-v1 trace (non-causal Belady); Phase 1 rung R2 re-measures it on the R3-04 stream.",
+  "B_ceiling is R3-04's frozen replay upper bound for the CURRENT mechanism, not for retention in general."
+ ]
+}

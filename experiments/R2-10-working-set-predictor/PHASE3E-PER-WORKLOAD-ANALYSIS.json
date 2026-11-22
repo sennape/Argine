@@ -1,0 +1,117 @@
+{
+  "artifact": "R2-10-PHASE3E-PER-WORKLOAD-ANALYSIS",
+  "note": "Required-analysis point 7 (per-workload results) and point 9 (is the advantage positive in all four workloads)",
+  "h1_primary": {
+    "per_workload_recall": {
+      "decayed_transition/decay=0.99": {
+        "coding-eval-v1": 0.46247380722114767,
+        "reasoning-eval-v1": 0.44259624280944526,
+        "summarization-eval-v1": 0.42954646196002577,
+        "instruction-eval-v1": 0.46464982269503546
+      },
+      "global_frequency/default": {
+        "coding-eval-v1": 0.3734082849774339,
+        "reasoning-eval-v1": 0.33060461000040225,
+        "summarization-eval-v1": 0.3252790538362347,
+        "instruction-eval-v1": 0.3686281028368794
+      },
+      "last_observation/default": {
+        "coding-eval-v1": 0.41527643455834945,
+        "reasoning-eval-v1": 0.39377589605374314,
+        "summarization-eval-v1": 0.37343850741457124,
+        "instruction-eval-v1": 0.4234012330754352
+      }
+    },
+    "selected_minus_global_frequency": {
+      "coding-eval-v1": 0.08906552224371378,
+      "reasoning-eval-v1": 0.111991632809043,
+      "summarization-eval-v1": 0.1042674081237911,
+      "instruction-eval-v1": 0.09602171985815605
+    },
+    "selected_minus_last_observation": {
+      "coding-eval-v1": 0.04719737266279822,
+      "reasoning-eval-v1": 0.048820346755702126,
+      "summarization-eval-v1": 0.05610795454545453,
+      "instruction-eval-v1": 0.04124858961960026
+    },
+    "positive_in_all_four_workloads_vs_global_frequency": true,
+    "positive_in_all_four_workloads_vs_last_observation": true,
+    "workloads_where_selected_does_not_beat_global_frequency": {}
+  },
+  "h4": {
+    "per_workload_recall": {
+      "decayed_transition/decay=0.99": {
+        "coding-eval-v1": 0.3760639591439689,
+        "reasoning-eval-v1": 0.34392069593364355,
+        "summarization-eval-v1": 0.34901406452658884,
+        "instruction-eval-v1": 0.3754813148508431
+      },
+      "global_frequency/default": {
+        "coding-eval-v1": 0.3663717979896239,
+        "reasoning-eval-v1": 0.32321464697552094,
+        "summarization-eval-v1": 0.3191725437743191,
+        "instruction-eval-v1": 0.3628354004539559
+      },
+      "last_observation/default": {
+        "coding-eval-v1": 0.31089899481193256,
+        "reasoning-eval-v1": 0.2676967428687032,
+        "summarization-eval-v1": 0.29840507457846954,
+        "instruction-eval-v1": 0.32111806906614787
+      }
+    },
+    "selected_minus_global_frequency": {
+      "coding-eval-v1": 0.009692161154345014,
+      "reasoning-eval-v1": 0.020706048958122614,
+      "summarization-eval-v1": 0.029841520752269757,
+      "instruction-eval-v1": 0.01264591439688717
+    },
+    "selected_minus_last_observation": {
+      "coding-eval-v1": 0.06516496433203633,
+      "reasoning-eval-v1": 0.07622395306494034,
+      "summarization-eval-v1": 0.0506089899481193,
+      "instruction-eval-v1": 0.0543632457846952
+    },
+    "positive_in_all_four_workloads_vs_global_frequency": true,
+    "positive_in_all_four_workloads_vs_last_observation": true,
+    "workloads_where_selected_does_not_beat_global_frequency": {}
+  },
+  "h16": {
+    "per_workload_recall": {
+      "decayed_transition/decay=0.99": {
+        "coding-eval-v1": 0.3609468376494024,
+        "reasoning-eval-v1": 0.33745184141845147,
+        "summarization-eval-v1": 0.31244812416998674,
+        "instruction-eval-v1": 0.3503019173306773
+      },
+      "global_frequency/default": {
+        "coding-eval-v1": 0.3582856075697211,
+        "reasoning-eval-v1": 0.31190190148721986,
+        "summarization-eval-v1": 0.3044125581009296,
+        "instruction-eval-v1": 0.3542237300796813
+      },
+      "last_observation/default": {
+        "coding-eval-v1": 0.2758601012616202,
+        "reasoning-eval-v1": 0.26852810804092964,
+        "summarization-eval-v1": 0.24135748671978752,
+        "instruction-eval-v1": 0.27353606407702524
+      }
+    },
+    "selected_minus_global_frequency": {
+      "coding-eval-v1": 0.002661230079681276,
+      "reasoning-eval-v1": 0.025549939931231613,
+      "summarization-eval-v1": 0.008035566069057143,
+      "instruction-eval-v1": -0.0039218127490039945
+    },
+    "selected_minus_last_observation": {
+      "coding-eval-v1": 0.08508673638778219,
+      "reasoning-eval-v1": 0.06892373337752183,
+      "summarization-eval-v1": 0.07109063745019922,
+      "instruction-eval-v1": 0.07676585325365204
+    },
+    "positive_in_all_four_workloads_vs_global_frequency": false,
+    "positive_in_all_four_workloads_vs_last_observation": true,
+    "workloads_where_selected_does_not_beat_global_frequency": {
+      "instruction-eval-v1": -0.0039218127490039945
+    }
+  }
+}

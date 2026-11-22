@@ -1,0 +1,16 @@
+{
+  "all_mandatory_checks_passed": true,
+  "classification": "R2_10_PHASE2_DEV_TOURNAMENT_CLOSED",
+  "dev_corpus_digest": "f758b77492eebc38bc81ba22d6b06ab8f19138d1099b635821369a4d022d9398",
+  "eval_executed": false,
+  "experiment_id": "R2-10",
+  "frozen_utc": "2026-11-11T23:00:45Z",
+  "note": "Separate freeze artifact for Phase 2 DEV-tournament closure. Does NOT overwrite or modify R2-10-PHASE0-FREEZE.json, which remains the Phase-0 contract-freeze record.",
+  "phase": "PHASE_2_FREEZE",
+  "phase0_contract_digest": "4d2288b7b4a812fd85d96aa7c2227d639b52f5131bff305d687e03970f53d725",
+  "r2_11_started": false,
+  "r2_12_started": false,
+  "schema_version": 1,
+  "supersedes": null,
+  "tournament_result_digest": "3aa190cc8362268bff46b063b035d4c9f420e21886a14a57786be878edba5bd5"
+}

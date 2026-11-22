@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "artifact": "R2-BRIDGE-01-PHASE1-DEV-SELECTION-ANALYSIS",
+  "generated_utc": "2026-11-14T00:12:00Z",
+  "primary_budget_bytes": 4294967296,
+  "baseline_b_selected_4gib_mean_miss_bytes_per_decode_step": 238400316.389602,
+  "baseline_per_instance": {
+    "coding-v1__seed-42": 258534585.4488189,
+    "coding-v1__seed-43": 258534585.4488189,
+    "instruction-v1__seed-42": 186360649.6438356,
+    "instruction-v1__seed-43": 186360649.6438356,
+    "reasoning-v1__seed-42": 286787924.66536206,
+    "reasoning-v1__seed-43": 286787924.66536206,
+    "summarization-v1__seed-42": 221918105.80039138,
+    "summarization-v1__seed-43": 221918105.80039138
+  },
+  "eligible_candidate_means": {
+    "predicted_protect/budget=4294967296": 238322868.58893323,
+    "predictor_retention_score/budget=4294967296,bonus=1.0": 238358687.87130377,
+    "predictor_retention_score/budget=4294967296,bonus=4.0": 238358687.87130377
+  },
+  "ranking_lowest_first": [
+    [
+      "predicted_protect/budget=4294967296",
+      238322868.58893323
+    ],
+    [
+      "predictor_retention_score/budget=4294967296,bonus=1.0",
+      238358687.87130377
+    ],
+    [
+      "predictor_retention_score/budget=4294967296,bonus=4.0",
+      238358687.87130377
+    ]
+  ],
+  "best_candidate_config_id": "predicted_protect/budget=4294967296",
+  "best_candidate_mean_miss_bytes_per_decode_step": 238322868.58893323,
+  "absolute_improvement_vs_baseline": 77447.80066877604,
+  "relative_improvement_vs_baseline_pct": 0.032486450455127824,
+  "dev_progression_gate_evaluation": "best_candidate.mean < B_selected_4GiB.mean -> DEV_RETENTION_SIGNAL_POSITIVE",
+  "classification": "DEV_RETENTION_SIGNAL_POSITIVE"
+}

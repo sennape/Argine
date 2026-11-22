@@ -1,0 +1,81 @@
+{
+  "artifact": "R3-02C-COMPRESSION-TEST",
+  "chosen": "zstd-3",
+  "chosen_reason": "measured 0.0111 ratio at 1.6 s compress / 1.5 s decompress with a trusted available implementation",
+  "methods": {
+    "gzip-6": {
+      "compress_seconds": 46.1,
+      "compressed_bytes": 419938680,
+      "counters_equal": true,
+      "decompress_seconds": 5.1,
+      "parse_seconds": 27.1,
+      "ratio": 0.2186,
+      "sha_equal": true
+    },
+    "gzip-9": {
+      "compress_seconds": 291.0,
+      "compressed_bytes": 410136252,
+      "counters_equal": true,
+      "decompress_seconds": 7.3,
+      "parse_seconds": 34.7,
+      "ratio": 0.2135,
+      "sha_equal": true
+    },
+    "zlib-9": {
+      "compress_seconds": 313.6,
+      "compressed_bytes": 410136224,
+      "counters_equal": true,
+      "decompress_seconds": 7.3,
+      "parse_seconds": 40.7,
+      "ratio": 0.2135,
+      "sha_equal": true
+    },
+    "zstd-19": {
+      "compress_seconds": 106.9,
+      "compressed_bytes": 11922396,
+      "counters_equal": true,
+      "decompress_seconds": 1.5,
+      "parse_seconds": 41.7,
+      "ratio": 0.0062,
+      "sha_equal": true
+    },
+    "zstd-3": {
+      "compress_seconds": 1.6,
+      "compressed_bytes": 21262440,
+      "counters_equal": true,
+      "decompress_seconds": 1.5,
+      "parse_seconds": 40.1,
+      "ratio": 0.0111,
+      "sha_equal": true
+    }
+  },
+  "phase": "R3-02C",
+  "source": "C:\\Users\\alpel\\Desktop\\Argine4\\experiments\\R2-12-runtime-validation\\conformance_traces\\conformance-b_selected-20261115.jsonl",
+  "source_bytes": 1921137735,
+  "source_counters": {
+    "budget_bytes": 4294967296,
+    "budget_violations": 0,
+    "complete": true,
+    "completion_gaps": 0,
+    "completion_rows": 9504,
+    "decision_rows": 9504,
+    "evicted_expert_events": 8988,
+    "hit_expert_events": 71102,
+    "last_line_is_completion": true,
+    "max_step": 9503,
+    "miss_bytes": 30100414464,
+    "miss_expert_events": 10486,
+    "peak_resident_bytes": 4294950912,
+    "policy_ids": [
+      "b_selected"
+    ],
+    "requested_expert_events": 81588,
+    "steps_completed": 9504
+  },
+  "source_sha256": "3ae926280e0fb092aabf196cacb98fe59742901fd4ba8fc1217b00bdd2fd384f",
+  "streaming": {
+    "buffers": "4 MiB copy_stream/copyfileobj",
+    "peak_rss_estimate_mib": 64
+  },
+  "zstd_available": "zstandard 0.24.0 (anaconda 3.13.9)"
+}

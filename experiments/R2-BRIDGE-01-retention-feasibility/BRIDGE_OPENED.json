@@ -1,0 +1,94 @@
+{
+  "artifact": "BRIDGE_OPENED",
+  "schema_version": 1,
+  "phase_name": "R2-BRIDGE-01 Substep 1 -- BRIDGE_OPENED",
+  "state": "BRIDGE_OPENED",
+  "timestamp_utc": "2026-11-14T01:35:00Z",
+  "opening_commit_parent": "000d27fa6171a6dc6be1e3f0417902ed09f77dee",
+  "independent_verification_performed_before_opening": {
+    "branch": "r2-main",
+    "head_before_opening": "000d27fa6171a6dc6be1e3f0417902ed09f77dee",
+    "working_tree": "clean (git status --porcelain empty after removing the harmless untracked scratch file write_sealed_tmp.py, which referenced nothing and was referenced by nothing)",
+    "phase0_contract_digest_recomputed": "e4ef4268e6bc207f20d5f4a56c165b75b977536600ff9d6f7e59604f77a889fc (independently recomputed via argine.research2.r2_bridge01.contract.compute_contract_digest(); matches)",
+    "phase01_dev_selection_rule_digest_recomputed": "5954a0f6d13fcf427124f8b7f7d7f009d2d76fbe82e4b4e28c6aa2167fc8eb92 (independently recomputed as sha256 of canonical JSON of DEV-SELECTION-RULE-v1.json; matches PHASE0A-DEV-SELECTION-RULE-FREEZE.json.addendum_digest_sha256)",
+    "phase1_selection_freeze": {
+      "classification": "DEV_RETENTION_SIGNAL_POSITIVE",
+      "selected_config_id": "predicted_protect/budget=4294967296",
+      "predictor_identity": "decayed_transition/decay=0.99",
+      "original_phase0_contract_digest_in_file_matches_recomputed": true,
+      "selection_rule_amendment_digest_in_file_matches_recomputed": true
+    },
+    "phase2a0_acquisition_plan_digest_recomputed": "33cab68f3ff05e5d3cb442aac6bb6e2eb0f4b026ebdc5157101c4e2905150fdd (matches PHASE2A0-FREEZE.json)",
+    "phase2a0_holdout_manifest_digest_recomputed": "ebe8735f3ac9105a1d001b40cdd8189e780772b350328aeba131be3af015147e (matches PHASE2A0-FREEZE.json)",
+    "phase2a1_instrumentation_repair_commit_present_in_log": "dbe8306",
+    "bridge_captured_sealed_artifact_present": true,
+    "four_canonical_trace_sha256_recomputed_from_disk_now": {
+      "bridge-coding-v1": "493535d0266617f7adfd2285be53c32b0ad419571a31d98b8e89f58a77a5dec3",
+      "bridge-reasoning-v1": "218c66be51a40acf9fb39ac49da8cf73a69d901cecffe636d3d14993a5667d4e",
+      "bridge-summarization-v1": "6a1841b6a704efa3b72921e14b7e83d1f8bbe0242dc59d5979d2fb5fb75ff68b",
+      "bridge-instruction-v1": "0ccce92f92f669ac3308ac39f27fa17b8ad6d23e8aa858767f5f528957d1802c"
+    },
+    "trace_sha256_match_sealed_record": true,
+    "no_bridge_performance_result_exists_yet": {
+      "phase0_contract_bridge_results_field": null,
+      "no_RESULT_EVAL_OPENED_CLOSURE_INTERPRETATION_artifact_found_before_this_one": true
+    },
+    "b_selected_baseline_reference_confirmed": {
+      "source": "experiments/R2-09-prediction-benchmark/r2_09a/R2-09A-FREEZE.json.selected_baselines (read fresh, not reselected)",
+      "budget_1610612736_1p5gib": "aged_frequency/decay=0.999,interval=1",
+      "budget_4294967296_4gib_primary": "aged_frequency/decay=0.99,interval=64",
+      "budget_8589934592_8gib": "aged_frequency/decay=0.999,interval=16"
+    },
+    "frozen_decision_rules_reference": "experiments/R2-BRIDGE-01-retention-feasibility/decision_rules.json (read in full; primary_metric=miss_bytes_per_decode_step, equal-weight-per-instance mean aggregation; primary_budget_bytes=4294967296; secondary budgets 1610612736 and 8589934592 required to distinguish BRIDGE_POSITIVE from BRIDGE_POSITIVE_BUT_WEAK per decision_gate)"
+  },
+  "exact_four_sealed_trace_identities": {
+    "bridge-coding-v1": {
+      "trace_sha256": "493535d0266617f7adfd2285be53c32b0ad419571a31d98b8e89f58a77a5dec3",
+      "workload_sha256": "a179a10e269549c3ce4af34bdf0f0c84a414097852eb6284f51444f3516c1ba5"
+    },
+    "bridge-reasoning-v1": {
+      "trace_sha256": "218c66be51a40acf9fb39ac49da8cf73a69d901cecffe636d3d14993a5667d4e",
+      "workload_sha256": "f152008e9935c4fa536deb29e8b3124c71b2ae32314b2082c524bc764828cc1b"
+    },
+    "bridge-summarization-v1": {
+      "trace_sha256": "6a1841b6a704efa3b72921e14b7e83d1f8bbe0242dc59d5979d2fb5fb75ff68b",
+      "workload_sha256": "6fb0210e02be9b8df454cc557e7cfff70aa6d2cc2781e852339f04487521f073"
+    },
+    "bridge-instruction-v1": {
+      "trace_sha256": "0ccce92f92f669ac3308ac39f27fa17b8ad6d23e8aa858767f5f528957d1802c",
+      "workload_sha256": "bbc9f6f92950f6f006465cdb8b2008c78aa5f29aa3980df7e3dac2c6a3944dcb"
+    }
+  },
+  "selected_retention_mechanism": {
+    "family": "predicted_protect",
+    "config_id": "predicted_protect/budget=4294967296",
+    "description": "PredictedProtectPolicy (hard shield, total deterministic fallback), AgedFrequency base decay_factor=0.99, aging_interval_steps=64",
+    "predictor_identity": "decayed_transition/decay=0.99 (frozen, no retuning)"
+  },
+  "baseline_identity": {
+    "name": "B_selected(M)",
+    "source": "experiments/R2-09-prediction-benchmark/r2_09a/R2-09A-FREEZE.json.selected_baselines, exact per-budget config, never reselected",
+    "configs_by_budget": {
+      "1610612736": "aged_frequency/decay=0.999,interval=1",
+      "4294967296": "aged_frequency/decay=0.99,interval=64",
+      "8589934592": "aged_frequency/decay=0.999,interval=16"
+    }
+  },
+  "primary_budget_bytes": 4294967296,
+  "primary_budget_gib": 4.0,
+  "frozen_decision_rule_reference": {
+    "path": "experiments/R2-BRIDGE-01-retention-feasibility/decision_rules.json",
+    "primary_metric_id": "miss_bytes_per_decode_step",
+    "decision_gate_labels": [
+      "BRIDGE_NEGATIVE",
+      "BRIDGE_POSITIVE_BUT_WEAK",
+      "BRIDGE_POSITIVE"
+    ],
+    "frozen_before_any_result": true
+  },
+  "statement_no_holdout_metric_inspected_before_opening": true,
+  "bridge_opened": true,
+  "predicted_protect_policy_run_against_holdout_before_this_record": false,
+  "b_selected_run_against_holdout_before_this_record": false,
+  "next_step": "Substep 2 -- held-out retention evaluation, in a separate commit, following this BRIDGE_OPENED commit"
+}

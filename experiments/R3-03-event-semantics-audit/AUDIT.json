@@ -1,0 +1,823 @@
+{
+ "artifact": "R3-EVENT-SEMANTICS-AUDIT",
+ "base_policy_effect": {
+  "by_budget": {
+   "1.5GiB": {
+    "aging_interval_touches": 1,
+    "aging_ticks_per_decode_token_R2": 384.0,
+    "aging_ticks_per_decode_token_R3": 1152.0,
+    "score_decay_factor": 0.999,
+    "score_decay_per_decode_token_R2": 0.6810005752658318,
+    "score_decay_per_decode_token_R3": 0.3158220413582484,
+    "score_increment_per_expert_use_R2": 1,
+    "score_increment_per_expert_use_R3": 3,
+    "touches_per_decode_token_R2": 384,
+    "touches_per_decode_token_R3": 1152
+   },
+   "4GiB": {
+    "aging_interval_touches": 64,
+    "aging_ticks_per_decode_token_R2": 6.0,
+    "aging_ticks_per_decode_token_R3": 18.0,
+    "score_decay_factor": 0.99,
+    "score_decay_per_decode_token_R2": 0.941480149401,
+    "score_decay_per_decode_token_R3": 0.8345137614500875,
+    "score_increment_per_expert_use_R2": 1,
+    "score_increment_per_expert_use_R3": 3,
+    "touches_per_decode_token_R2": 384,
+    "touches_per_decode_token_R3": 1152
+   },
+   "8GiB": {
+    "aging_interval_touches": 16,
+    "aging_ticks_per_decode_token_R2": 24.0,
+    "aging_ticks_per_decode_token_R3": 72.0,
+    "score_decay_factor": 0.999,
+    "score_decay_per_decode_token_R2": 0.9762739865836302,
+    "score_decay_per_decode_token_R3": 0.9304973749532336,
+    "score_increment_per_expert_use_R2": 1,
+    "score_increment_per_expert_use_R3": 3,
+    "touches_per_decode_token_R2": 384,
+    "touches_per_decode_token_R3": 1152
+   }
+  },
+  "note": "t_/aging/score clock of b_selected is ALSO advanced per call, so A (b_selected) in R3 is not R2's B_selected either; A/B remain mutually consistent"
+ },
+ "caveats": [
+  "single workload (r2-11-coding-v1, DEV), single model, single host; routing is identical across budgets so the three budget analyses are replications of the event structure, not independent workloads",
+  "decode-token recall figures come from one trace and are NOT a re-evaluation of R2-10",
+  "misses at calls 2-3 are consistent with same-event self-eviction churn (R2-12 Phase F) but that mechanism was inferred from miss/eviction co-occurrence, not replayed",
+  "R2-12 binary not inspected; its event multiplicity is inferred from unchanged source",
+  "why calls 2-3 never miss at 1.5 GiB is not explained here"
+ ],
+ "classification": "R2_R3_EVENT_SEMANTICS_NOT_EQUIVALENT",
+ "consequences": {
+  "R2-10": "UNAFFECTED. Predictor quality was evaluated offline on the one-observation-per-token same-layer stream (Trace.token_selections); the result stands for the predictor it evaluated.",
+  "R2-11": "UNAFFECTED as a replay result: PredictedProtect was driven by one access() per (step, layer). It is not evidence about the runtime-realised policy.",
+  "R2-12": "Frozen R2_12_FAIL stands as a statement about the runtime realisation. Its event stream per token was not measured (canonical runs had tracing off); the SAME node-dispatch source (argine-experts.cpp unchanged since R2-12 Phase F) makes a 3x event stream the strong default, so R2-12 is NOT a clean test of the R2-11 policy at runtime. INCONCLUSIVE for causal attribution; not retro-invalidated.",
+  "R3-02": "Classification MECHANISM_INSUFFICIENT unchanged. Measurements are valid for the REALISED runtime: A/B trajectories identical, sham overhead real (both arms share the 3x base semantics). But the overhead is the cost of a 3x event stream, and traffic at 4/8 GiB includes misses at calls 2-3 that R2 replay semantics cannot produce."
+ },
+ "event_counts": {
+  "1.5GiB": {
+   "actual_over_semantic": 3.0,
+   "calls_per_generated_token": 144.5625,
+   "calls_per_layer_group_histogram": {
+    "3": 24672
+   },
+   "calls_per_layer_per_decode_pass": 3.0,
+   "decode_calls": 73728,
+   "decode_calls_per_decode_pass": 144.0,
+   "decode_passes": 512,
+   "forward_passes": 514,
+   "layer_groups": 24672,
+   "layers": 48,
+   "layers_per_pass_histogram": {
+    "48": 514
+   },
+   "multi_token_passes": [
+    0,
+    2
+   ],
+   "policy_rows": 74016,
+   "policy_step_contiguous": true,
+   "semantic_events_if_one_per_layer_per_pass": 24672,
+   "tokens_generated": 512
+  },
+  "4GiB": {
+   "actual_over_semantic": 3.0,
+   "calls_per_generated_token": 144.5625,
+   "calls_per_layer_group_histogram": {
+    "3": 24672
+   },
+   "calls_per_layer_per_decode_pass": 3.0,
+   "decode_calls": 73728,
+   "decode_calls_per_decode_pass": 144.0,
+   "decode_passes": 512,
+   "forward_passes": 514,
+   "layer_groups": 24672,
+   "layers": 48,
+   "layers_per_pass_histogram": {
+    "48": 514
+   },
+   "multi_token_passes": [
+    0,
+    2
+   ],
+   "policy_rows": 74016,
+   "policy_step_contiguous": true,
+   "semantic_events_if_one_per_layer_per_pass": 24672,
+   "tokens_generated": 512
+  },
+  "8GiB": {
+   "actual_over_semantic": 3.0,
+   "calls_per_generated_token": 144.5625,
+   "calls_per_layer_group_histogram": {
+    "3": 24672
+   },
+   "calls_per_layer_per_decode_pass": 3.0,
+   "decode_calls": 73728,
+   "decode_calls_per_decode_pass": 144.0,
+   "decode_passes": 512,
+   "forward_passes": 514,
+   "layer_groups": 24672,
+   "layers": 48,
+   "layers_per_pass_histogram": {
+    "48": 514
+   },
+   "multi_token_passes": [
+    0,
+    2
+   ],
+   "policy_rows": 74016,
+   "policy_step_contiguous": true,
+   "semantic_events_if_one_per_layer_per_pass": 24672,
+   "tokens_generated": 512
+  }
+ },
+ "exploratory_cost_estimates": {
+  "by_budget": {
+   "1.5GiB": {
+    "approx_bookkeeping_per_token_ms": 66.46899414062501,
+    "approx_bookkeeping_per_token_ms_at_1_call_if_linear": 22.15633138020834,
+    "approx_cost_per_call_us": 461.5902370876737,
+    "decode_policy_calls_per_token": 144.0,
+    "if_one_call_per_layer_per_token_calls": 48.0,
+    "max_reduction_fraction_if_linear": 0.6666666666666666,
+    "max_reduction_if_linear_ms_per_token": 44.31266276041668,
+    "median_A_step_time_s_per_token": 0.5582820312500001,
+    "median_sham_overhead_s_per_token": 0.06646899414062502
+   },
+   "4GiB": {
+    "approx_bookkeeping_per_token_ms": 66.74900781249998,
+    "approx_bookkeeping_per_token_ms_at_1_call_if_linear": 22.249669270833326,
+    "approx_cost_per_call_us": 463.53477647569434,
+    "decode_policy_calls_per_token": 144.0,
+    "if_one_call_per_layer_per_token_calls": 48.0,
+    "max_reduction_fraction_if_linear": 0.6666666666666666,
+    "max_reduction_if_linear_ms_per_token": 44.49933854166665,
+    "median_A_step_time_s_per_token": 0.266463701171875,
+    "median_sham_overhead_s_per_token": 0.06674900781249998
+   },
+   "8GiB": {
+    "approx_bookkeeping_per_token_ms": 57.94622851562503,
+    "approx_bookkeeping_per_token_ms_at_1_call_if_linear": 19.315409505208343,
+    "approx_cost_per_call_us": 402.4043646918405,
+    "decode_policy_calls_per_token": 144.0,
+    "if_one_call_per_layer_per_token_calls": 48.0,
+    "max_reduction_fraction_if_linear": 0.6666666666666666,
+    "max_reduction_if_linear_ms_per_token": 38.63081901041669,
+    "median_A_step_time_s_per_token": 0.12926877343749998,
+    "median_sham_overhead_s_per_token": 0.05794622851562503
+   }
+  },
+  "caveats": [
+   "assumes cost is uniform per call; calls 2-3 touch already-present transition keys (no new hash inserts) and are probably cheaper than call 1, so the 2/3 saving is an UPPER bound",
+   "overhead is the sham minus b_selected wall step time; includes lock hold time on the single shard mutex",
+   "total miss I/O also falls if calls 2-3 stop re-missing (see miss_position), which this estimate does not include"
+  ],
+  "status": "EXPLORATORY derived estimates from frozen R3-02 TIMING medians; not confirmatory; R3-02G Session 1 not used"
+ },
+ "first_semantic_divergence": {
+  "first_comparable_protected_set_difference": {
+   "R2_protected_set": [
+    5,
+    10,
+    15,
+    18,
+    70,
+    82,
+    94,
+    119
+   ],
+   "R3_protected_set": [
+    5,
+    10,
+    18,
+    37,
+    70,
+    82,
+    94,
+    119
+   ],
+   "layer": 1,
+   "pass": 4,
+   "step": 579
+  },
+  "structural": {
+   "call_in_triplet": 2,
+   "forward_pass": 0,
+   "layer": 0,
+   "policy_step": 1,
+   "what": "second policy->access() for the same (pass, layer) event: R2 defines exactly one event there, so the runtime stream gains an extra event with an identical expert set"
+  }
+ },
+ "head_before_task": "fd42d77546e44be342436846f7688744cb5ffa40",
+ "inputs": {
+  "frozen_r3_02_traces": {
+   "1.5GiB": {
+    "archive_sha256": "73f9c367253fb70919eca413bf0d3bf74bc633eec433743dcb8a6a4a6b450983",
+    "logical_bytes": 5869103488,
+    "logical_sha256": "12bb3ec83f92de7b17f1954b0313cc0965b0b8ba216dc1cafe9779d00614c4ae"
+   },
+   "4GiB": {
+    "archive_sha256": "0481c15511537b934a8ec238b1a2e9f1dd2fecc9739f80828605d60ddd1879b7",
+    "logical_bytes": 15451218648,
+    "logical_sha256": "d2cb82066024f98472d0e2a3eeed05b70ec0c4010f6850f20d78217896deb7fe"
+   },
+   "8GiB": {
+    "archive_sha256": "64d320220b7e9f1b8287b6866c75b280e28d6ba08678129bdf54a1123ebb4d29",
+    "logical_bytes": 30945285025,
+    "logical_sha256": "f90b50765e2ceb6f1a5d7496407b8391817b3668105abc0a64cd9d38d1504359"
+   }
+  },
+  "runtime_sha256": "3f094f5b5f4963f488b63722f365068f09e2aa3b12e2096969da99f471bbd644",
+  "tool": "tools/r3_event_semantics_audit.py",
+  "trace_files_used": "B (predicted_protect_sham) traces; only they log protected_before",
+  "workload": "r2-11-coding-v1 (DEV), seed 42, n_predict 512"
+ },
+ "minimal_correction_architecture": {
+  "design": [
+   "derive a (forward_pass_id, layer) event key inside the policy path without relying on ARGINE_ROUTE tracing (detect pass boundary as layer index decreasing, as arx does)",
+   "call policy->access()/after_event only on the first MoE node of each (pass, layer); the up/down nodes still run the physical ensure (pins, reads) but do not advance t_, scores, history, transitions or policy_step",
+   "carry policy event identity (pass, layer, step) into the trace rows so that rows == events and triplet grouping becomes an assertion, not an inference",
+   "keep sham and predicted_protect behind the same single-event hook so A/B/C stay comparable"
+  ],
+  "not_implemented": true,
+  "principle": "separate PHYSICAL expert-access accounting (3 nodes per layer; pins, reads, hits) from POLICY events (1 per forward pass per layer)"
+ },
+ "miss_position": {
+  "1.5GiB": {
+   "by_pass_kind": {
+    "decode": {
+     "evicted": [
+      109592,
+      0,
+      0
+     ],
+     "hit": [
+      86987,
+      196608,
+      196608
+     ],
+     "miss": [
+      109621,
+      0,
+      0
+     ]
+    },
+    "multi_token": {
+     "evicted": [
+      4396,
+      0,
+      0
+     ],
+     "hit": [
+      14,
+      4944,
+      4944
+     ],
+     "miss": [
+      4930,
+      0,
+      0
+     ]
+    }
+   },
+   "evictions_by_call_position": [
+    113988,
+    0,
+    0
+   ],
+   "extra_misses_over_first_call_only": 0.0,
+   "fraction_of_misses_at_calls_2_and_3": 0.0,
+   "hits_by_call_position": [
+    87001,
+    201552,
+    201552
+   ],
+   "logical_hit_rate_as_logged_all_calls": 0.8105517848164907,
+   "logical_hit_rate_first_call_only": 0.4316553544494721,
+   "misses_at_calls_2_and_3": 0,
+   "misses_by_call_position": [
+    114551,
+    0,
+    0
+   ],
+   "total_misses": 114551
+  },
+  "4GiB": {
+   "by_pass_kind": {
+    "decode": {
+     "evicted": [
+      39962,
+      3670,
+      3186
+     ],
+     "hit": [
+      156592,
+      192954,
+      193422
+     ],
+     "miss": [
+      40016,
+      3654,
+      3186
+     ]
+    },
+    "multi_token": {
+     "evicted": [
+      3097,
+      1987,
+      1737
+     ],
+     "hit": [
+      397,
+      2957,
+      3200
+     ],
+     "miss": [
+      4547,
+      1987,
+      1744
+     ]
+    }
+   },
+   "evictions_by_call_position": [
+    43059,
+    5657,
+    4923
+   ],
+   "extra_misses_over_first_call_only": 0.23721472970850258,
+   "fraction_of_misses_at_calls_2_and_3": 0.19173286901004824,
+   "hits_by_call_position": [
+    156989,
+    195911,
+    196622
+   ],
+   "logical_hit_rate_as_logged_all_calls": 0.9088175756132413,
+   "logical_hit_rate_first_call_only": 0.7789007303326189,
+   "misses_at_calls_2_and_3": 10571,
+   "misses_by_call_position": [
+    44563,
+    5641,
+    4930
+   ],
+   "total_misses": 55134
+  },
+  "8GiB": {
+   "by_pass_kind": {
+    "decode": {
+     "evicted": [
+      6905,
+      354,
+      344
+     ],
+     "hit": [
+      189660,
+      196253,
+      196264
+     ],
+     "miss": [
+      6948,
+      355,
+      344
+     ]
+    },
+    "multi_token": {
+     "evicted": [
+      1372,
+      1375,
+      1375
+     ],
+     "hit": [
+      623,
+      3569,
+      3569
+     ],
+     "miss": [
+      4321,
+      1375,
+      1375
+     ]
+    }
+   },
+   "evictions_by_call_position": [
+    8277,
+    1729,
+    1719
+   ],
+   "extra_misses_over_first_call_only": 0.30606087496672285,
+   "fraction_of_misses_at_calls_2_and_3": 0.2343389047424922,
+   "hits_by_call_position": [
+    190283,
+    199822,
+    199833
+   ],
+   "logical_hit_rate_as_logged_all_calls": 0.975658887036596,
+   "logical_hit_rate_first_call_only": 0.9440888703659601,
+   "misses_at_calls_2_and_3": 3449,
+   "misses_by_call_position": [
+    11269,
+    1730,
+    1719
+   ],
+   "total_misses": 14718
+  }
+ },
+ "no_model_loaded": true,
+ "no_r3_02g_session1_timing_read": true,
+ "predictor_state_effect": {
+  "decay": {
+   "effective_decay_per_token_R2": 0.99,
+   "effective_decay_per_token_R3": 0.970299,
+   "time_constant_tokens_R2": 100.0,
+   "time_constant_tokens_R3": 33.66890003703582
+  },
+  "distinction": {
+   "computational_overhead": "bookkeeping runs 3x per layer-token (~2/3 of it re-processing an identical set)",
+   "semantic_predictor_drift": "the predictor is a different predictor: self-transitions dominate its state, its time constant is ~3x shorter, and calls 2-3 consult a set that already contains the event being served"
+  },
+  "history": "3 entries per layer per pass instead of 1 (measured ratio 3.0)",
+  "prediction_quality_recall_at_8": {
+   "R2_semantics": 0.4684129901960784,
+   "R3_runtime_semantics": 0.43827103758169933,
+   "persistence_baseline_previous_set": 0.4231107026143791
+  },
+  "protected_set": {
+   "consulted_first_call_identical_to_R2_fraction": 0.07005718954248366,
+   "mean_jaccard_with_R2": 0.5648058423058894
+  },
+  "transition_counts": {
+   "measured_cell_update_ratio_4GiB": 3.4017500902359794,
+   "per_decode_token_R2": "1 transition update: S(t-1)->S(t)",
+   "per_decode_token_R3": "3 transition updates: S(t-1)->S(t), S(t)->S(t), S(t)->S(t)",
+   "self_transition_mass_fraction_decode": 0.6666666666666666
+  }
+ },
+ "r2_consecutive_event_identity": {
+  "decode_adjacent_pairs": 24480,
+  "fraction_identical_sets": 0.0031454248366013073,
+  "mean_jaccard": 0.29436285301478027
+ },
+ "r2_event_definition": {
+  "base_policy_clock": "_t increments once per expert touched per event; aging when _t % interval == 0",
+  "entering_predictor": "(step_index, layer, expert_set) from Trace.events()",
+  "gate_up_down": "NOT separate events; the router decides once per layer and the legacy converter keeps only gate rows (up/down repeat the ids)",
+  "history_updated": "after the event has been served (_refresh_prediction_after_observing, retention_policies.py:104, called at :167)",
+  "identical_consecutive_sets": {
+   "decode_adjacent_pairs": 24480,
+   "measured_fraction_decode_adjacent": 0.0031454248366013073,
+   "measured_mean_jaccard": 0.29436285301478027,
+   "possible": true
+  },
+  "one_event_is": "the sorted UNION of experts routed in ONE forward-pass step for ONE layer (one token when decoding)",
+  "per_layer_per_token": 1,
+  "per_token": "48 events (one per MoE layer) per decode step",
+  "prediction_computed": "in the same call, after history/transition update; consulted only at the NEXT same-layer access",
+  "previous_event": "the same layer's previous served step",
+  "sources": [
+   "argine/research/trace.py:188 Trace.events",
+   "argine/research2/r2_bridge01/dev_runner.py:189,216 run_fast_bridge -> policy.access(i, l, ex)",
+   "argine/research2/r2_bridge01/retention_policies.py:141-168",
+   "argine/research2/r2_10/predictors.py:142 DecayedTransitionPredictor",
+   "argine/research/replay.py:95 served_steps (v2: every step incl. prompt)"
+  ],
+  "transition_counts_updated": "in the same call, from the previous same-layer event to this one (DecayedTransitionPredictor._decayed_state)"
+ },
+ "r3_runtime_call_definition": {
+  "calls_per_decode_token": 144.0,
+  "calls_per_layer_per_forward_pass": 3,
+  "contrast": "the R2 router-trace logger in the same function is guarded by (arx_graph, layer) and fires once per layer per pass (argine-experts.cpp:953); the policy call is not",
+  "each_call_does": [
+   "policy->access() (argine-store.cpp:1633) with step = policy_step++ (:1607)",
+   "RetentionPolicy::access advances t_ per expert, scores, hits/misses, evictions",
+   "after_event() (argine-retention-policy.cpp:318) -> history.push_back, transition update, predict_for_layer, predictor_decisions_++"
+  ],
+  "hook_level": "EXPERT-TENSOR ACCESS (one per MUL_MAT_ID node), not expert-selection (one per layer per forward pass)",
+  "one_call_is": "one psx_cache_ensure_many() call = one MoE GGML_OP_MUL_MAT_ID NODE (gate OR up OR down tensor of a layer), carrying the union of experts of that node for all three kinds"
+ },
+ "recommended_r3_03_direction": "R3_03_RUNTIME_SEMANTIC_CORRECTION_FIRST",
+ "required_conformance_before_new_timing": [
+  "semantic equivalence: policy rows per run == forward_passes x 48 (ratio exactly 1.0)",
+  "predictor-state equivalence: logged protected_before equals the frozen R2 DecayedTransitionPredictor on the routed stream (100%)",
+  "trajectory equivalence: runtime A (b_selected) eviction/resident trajectory equals frozen Python B_selected replay of the same routing trace",
+  "output-token identity: output_token_digest unchanged vs R3-02 (ac28efbe...)",
+  "conformance vs frozen R2 reference on real runtime traces, not only synthetic conformance_traces",
+  "sham/b_selected trajectory identity re-established under the corrected hook"
+ ],
+ "root_cause": {
+  "design_assumption_that_failed": "RETENTION-POLICY-INTEGRATION-IMPLEMENTATION.md states 'one access() call per MoE node ... matching the Python reference's event boundary exactly': node was equated with (step, layer) event",
+  "file": "patches/argine-experts.cpp",
+  "function": "ExpertTraits::compute_forward (l.868) -> psx_cache_ensure_many (l.1189, thread 0)",
+  "hook_placed_at": "expert-tensor access level (physical accounting), not expert-selection semantic level",
+  "intent_vs_effect": "the source comment (l.985-991) intends gate/up/down to load together so the next two nodes hit cache; that holds physically but the policy hook was not made once-per-layer",
+  "node_structure": "ggml executes ffn_gate_exps, ffn_up_exps and ffn_down_exps as three separate MUL_MAT_ID nodes per layer; identifica() (l.135) accepts all three kinds with no filter",
+  "r3_build_identical_to_repo_patches": true,
+  "why_each_node_triggers_policy": "each node builds the FULL three-kind request (dove[] over all kinds, l.1003) and calls psx_cache_ensure_many; patches/argine-store.cpp:2278 routes every such call to servi_evento_con_politica, which calls policy->access() once (l.1633)"
+ },
+ "set_identity": {
+  "1.5GiB": {
+   "all": {
+    "counts": {
+     "identical": 24672
+    },
+    "fully_different": 0.0,
+    "identical": 1.0,
+    "n_triplets": 24672,
+    "partially_different": 0.0
+   },
+   "bytes_of_layer_identical_within_triplets": true,
+   "decode": {
+    "counts": {
+     "identical": 24576
+    },
+    "fully_different": 0.0,
+    "identical": 1.0,
+    "n_triplets": 24576,
+    "partially_different": 0.0
+   },
+   "first_mismatch": null,
+   "multi_token": {
+    "counts": {
+     "identical": 96
+    },
+    "fully_different": 0.0,
+    "identical": 1.0,
+    "n_triplets": 96,
+    "partially_different": 0.0
+   }
+  },
+  "4GiB": {
+   "all": {
+    "counts": {
+     "identical": 24672
+    },
+    "fully_different": 0.0,
+    "identical": 1.0,
+    "n_triplets": 24672,
+    "partially_different": 0.0
+   },
+   "bytes_of_layer_identical_within_triplets": true,
+   "decode": {
+    "counts": {
+     "identical": 24576
+    },
+    "fully_different": 0.0,
+    "identical": 1.0,
+    "n_triplets": 24576,
+    "partially_different": 0.0
+   },
+   "first_mismatch": null,
+   "multi_token": {
+    "counts": {
+     "identical": 96
+    },
+    "fully_different": 0.0,
+    "identical": 1.0,
+    "n_triplets": 96,
+    "partially_different": 0.0
+   }
+  },
+  "8GiB": {
+   "all": {
+    "counts": {
+     "identical": 24672
+    },
+    "fully_different": 0.0,
+    "identical": 1.0,
+    "n_triplets": 24672,
+    "partially_different": 0.0
+   },
+   "bytes_of_layer_identical_within_triplets": true,
+   "decode": {
+    "counts": {
+     "identical": 24576
+    },
+    "fully_different": 0.0,
+    "identical": 1.0,
+    "n_triplets": 24576,
+    "partially_different": 0.0
+   },
+   "first_mismatch": null,
+   "multi_token": {
+    "counts": {
+     "identical": 96
+    },
+    "fully_different": 0.0,
+    "identical": 1.0,
+    "n_triplets": 96,
+    "partially_different": 0.0
+   }
+  }
+ },
+ "simulation": {
+  "1.5GiB": {
+   "collapse_onto_current_set": {
+    "R2_fraction_equal_to_current_set": 0.003553921568627451,
+    "R2_mean_overlap_with_current_set": 0.46962316176470587,
+    "R3_fraction_equal_to_current_set": 0.051470588235294115,
+    "R3_mean_overlap_with_current_set": 0.727328431372549
+   },
+   "decode_token_boundaries_compared": 24480,
+   "first_protected_set_divergence_at_comparable_event": {
+    "R2_protected_set": [
+     5,
+     10,
+     15,
+     18,
+     70,
+     82,
+     94,
+     119
+    ],
+    "R3_protected_set": [
+     5,
+     10,
+     18,
+     37,
+     70,
+     82,
+     94,
+     119
+    ],
+    "layer": 1,
+    "pass": 4,
+    "step": 579
+   },
+   "next_token_recall_at_k": {
+    "R2_semantics": 0.4684129901960784,
+    "R3_runtime_semantics": 0.43827103758169933,
+    "persistence_baseline_previous_set": 0.4231107026143791
+   },
+   "protected_set_consulted_at_first_call_of_next_token": {
+    "fraction_identical_R2_vs_R3": 0.07005718954248366,
+    "mean_jaccard_R2_vs_R3": 0.5648058423058894
+   },
+   "runtime_stream_conformance_vs_logged_protected_before": {
+    "comparable_rows": 74016,
+    "first_mismatch": null,
+    "fraction": 1.0,
+    "matching_rows": 74016,
+    "note": "simulated predictor fed the LOGGED 3x stream vs logged protected_before"
+   },
+   "state_effect": {
+    "effective_decay_per_token_R2": 0.99,
+    "effective_decay_per_token_R3": 0.970299,
+    "effective_time_constant_tokens_R2": 99.99999999999991,
+    "effective_time_constant_tokens_R3": 33.66890003703582,
+    "history_entries_R2": 24672,
+    "history_entries_R3": 74016,
+    "history_ratio": 3.0,
+    "transition_cell_updates_R2": 1640144,
+    "transition_cell_updates_R3": 5579360,
+    "transition_update_ratio": 3.4017500902359794
+   },
+   "within_token_sets_consulted": {
+    "call2_fraction_equal_to_current_set": 0.007965686274509803,
+    "call2_mean_overlap_with_current_set": 0.6116676879084967,
+    "call2_recall_of_next_token": 0.430218545751634,
+    "call3_fraction_equal_to_current_set": 0.018872549019607842,
+    "call3_mean_overlap_with_current_set": 0.6728451797385621,
+    "call3_recall_of_next_token": 0.43465073529411763
+   }
+  },
+  "4GiB": {
+   "collapse_onto_current_set": {
+    "R2_fraction_equal_to_current_set": 0.003553921568627451,
+    "R2_mean_overlap_with_current_set": 0.46962316176470587,
+    "R3_fraction_equal_to_current_set": 0.051470588235294115,
+    "R3_mean_overlap_with_current_set": 0.727328431372549
+   },
+   "decode_token_boundaries_compared": 24480,
+   "first_protected_set_divergence_at_comparable_event": {
+    "R2_protected_set": [
+     5,
+     10,
+     15,
+     18,
+     70,
+     82,
+     94,
+     119
+    ],
+    "R3_protected_set": [
+     5,
+     10,
+     18,
+     37,
+     70,
+     82,
+     94,
+     119
+    ],
+    "layer": 1,
+    "pass": 4,
+    "step": 579
+   },
+   "next_token_recall_at_k": {
+    "R2_semantics": 0.4684129901960784,
+    "R3_runtime_semantics": 0.43827103758169933,
+    "persistence_baseline_previous_set": 0.4231107026143791
+   },
+   "protected_set_consulted_at_first_call_of_next_token": {
+    "fraction_identical_R2_vs_R3": 0.07005718954248366,
+    "mean_jaccard_R2_vs_R3": 0.5648058423058894
+   },
+   "runtime_stream_conformance_vs_logged_protected_before": {
+    "comparable_rows": 74016,
+    "first_mismatch": null,
+    "fraction": 1.0,
+    "matching_rows": 74016,
+    "note": "simulated predictor fed the LOGGED 3x stream vs logged protected_before"
+   },
+   "state_effect": {
+    "effective_decay_per_token_R2": 0.99,
+    "effective_decay_per_token_R3": 0.970299,
+    "effective_time_constant_tokens_R2": 99.99999999999991,
+    "effective_time_constant_tokens_R3": 33.66890003703582,
+    "history_entries_R2": 24672,
+    "history_entries_R3": 74016,
+    "history_ratio": 3.0,
+    "transition_cell_updates_R2": 1640144,
+    "transition_cell_updates_R3": 5579360,
+    "transition_update_ratio": 3.4017500902359794
+   },
+   "within_token_sets_consulted": {
+    "call2_fraction_equal_to_current_set": 0.007965686274509803,
+    "call2_mean_overlap_with_current_set": 0.6116676879084967,
+    "call2_recall_of_next_token": 0.430218545751634,
+    "call3_fraction_equal_to_current_set": 0.018872549019607842,
+    "call3_mean_overlap_with_current_set": 0.6728451797385621,
+    "call3_recall_of_next_token": 0.43465073529411763
+   }
+  },
+  "8GiB": {
+   "collapse_onto_current_set": {
+    "R2_fraction_equal_to_current_set": 0.003553921568627451,
+    "R2_mean_overlap_with_current_set": 0.46962316176470587,
+    "R3_fraction_equal_to_current_set": 0.051470588235294115,
+    "R3_mean_overlap_with_current_set": 0.727328431372549
+   },
+   "decode_token_boundaries_compared": 24480,
+   "first_protected_set_divergence_at_comparable_event": {
+    "R2_protected_set": [
+     5,
+     10,
+     15,
+     18,
+     70,
+     82,
+     94,
+     119
+    ],
+    "R3_protected_set": [
+     5,
+     10,
+     18,
+     37,
+     70,
+     82,
+     94,
+     119
+    ],
+    "layer": 1,
+    "pass": 4,
+    "step": 579
+   },
+   "next_token_recall_at_k": {
+    "R2_semantics": 0.4684129901960784,
+    "R3_runtime_semantics": 0.43827103758169933,
+    "persistence_baseline_previous_set": 0.4231107026143791
+   },
+   "protected_set_consulted_at_first_call_of_next_token": {
+    "fraction_identical_R2_vs_R3": 0.07005718954248366,
+    "mean_jaccard_R2_vs_R3": 0.5648058423058894
+   },
+   "runtime_stream_conformance_vs_logged_protected_before": {
+    "comparable_rows": 74016,
+    "first_mismatch": null,
+    "fraction": 1.0,
+    "matching_rows": 74016,
+    "note": "simulated predictor fed the LOGGED 3x stream vs logged protected_before"
+   },
+   "state_effect": {
+    "effective_decay_per_token_R2": 0.99,
+    "effective_decay_per_token_R3": 0.970299,
+    "effective_time_constant_tokens_R2": 99.99999999999991,
+    "effective_time_constant_tokens_R3": 33.66890003703582,
+    "history_entries_R2": 24672,
+    "history_entries_R3": 74016,
+    "history_ratio": 3.0,
+    "transition_cell_updates_R2": 1640144,
+    "transition_cell_updates_R3": 5579360,
+    "transition_update_ratio": 3.4017500902359794
+   },
+   "within_token_sets_consulted": {
+    "call2_fraction_equal_to_current_set": 0.007965686274509803,
+    "call2_mean_overlap_with_current_set": 0.6116676879084967,
+    "call2_recall_of_next_token": 0.430218545751634,
+    "call3_fraction_equal_to_current_set": 0.018872549019607842,
+    "call3_mean_overlap_with_current_set": 0.6728451797385621,
+    "call3_recall_of_next_token": 0.43465073529411763
+   }
+  }
+ }
+}

@@ -1,0 +1,28 @@
+{
+  "candidate_status": "CANDIDATE",
+  "experiment_id": "R2-02",
+  "fixed_budget_bytes": 4294967296,
+  "interface_errors": [],
+  "nondeterminism": [],
+  "outcome": "PASS",
+  "policies_evaluated": [
+    "Runtime-Sharded-LRU",
+    "Global-LRU",
+    "LFU",
+    "Oracle-Global-Belady"
+  ],
+  "r2_01_binding": {
+    "message": "bound to the trace R2-01's PASS run bb6d8ca34dbc4537a43d54be30c9f3e1 validated, re-verified byte-identical on disk.",
+    "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+    "status": "OK",
+    "trace_byte_size": 268956,
+    "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+    "trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1"
+  },
+  "reasons": [
+    "all declared policies replayed deterministically (verified by two independent replays per policy) with zero budget violations; the Oracle is non-causal by construction and every causal baseline is structurally causal (policy_interface assertions held); the Oracle is no worse than every causal baseline it theoretically dominates"
+  ],
+  "replay_errors": [],
+  "run_id": "238c8ee7f0914df7b28942ec99627c24",
+  "scope": "offline retention/replay comparison only (Oracle vs causal retention baselines) at a fixed 4 GiB budget on the validated R2-01 trace -- no latency/throughput/wall-clock/energy/hardware-performance claim, no budget sweep (R2-03), no recoverable-margin claim (R2-04)"
+}

@@ -1,0 +1,416 @@
+{
+ "P_OFF_vs_ON_identical_counts": true,
+ "P_vs_A_decode_miss_byte_reduction_pct": {
+  "1.5": 0.09348470465296738,
+  "4": 0.026172995973755924,
+  "8": -0.0
+ },
+ "R2_pattern_reproduced": true,
+ "contrasts": {
+  "1.5": {
+   "P_minus_A": {
+    "all_pass_miss_bytes": {
+     "abs": -286322688,
+     "rel_pct_of_second": -0.09269551688819945
+    },
+    "decode_evictions_per_token": {
+     "abs": -0.197265625,
+     "rel_pct_of_second": -0.09484458634613578
+    },
+    "decode_hits_per_token": {
+     "abs": 0.197265625,
+     "rel_pct_of_second": 0.10748454244575223
+    },
+    "decode_miss_bytes_per_token": {
+     "abs": -559224.0,
+     "rel_pct_of_second": -0.09348470465296738
+    },
+    "decode_misses_per_token": {
+     "abs": -0.197265625,
+     "rel_pct_of_second": -0.09484369571137467
+    }
+   },
+   "P_minus_S": {
+    "decode_evictions_per_token": {
+     "abs": -0.197265625,
+     "rel_pct_of_second": -0.09484458634613578
+    },
+    "decode_hits_per_token": {
+     "abs": 0.197265625,
+     "rel_pct_of_second": 0.10748454244575223
+    },
+    "decode_miss_bytes_per_token": {
+     "abs": -559224.0,
+     "rel_pct_of_second": -0.09348470465296738
+    }
+   },
+   "S_minus_A": {
+    "decode_evictions_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    },
+    "decode_hits_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    },
+    "decode_miss_bytes_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    }
+   },
+   "decode_protected_entries": {
+    "A": 0,
+    "P": 196608,
+    "S": 196608
+   },
+   "policy_ms_per_token": {
+    "A": 0.9252455078125,
+    "P": 23.2942408203125,
+    "S": 23.2969296875
+   }
+  },
+  "4": {
+   "P_minus_A": {
+    "all_pass_miss_bytes": {
+     "abs": -32034816,
+     "rel_pct_of_second": -0.02570744279280452
+    },
+    "decode_evictions_per_token": {
+     "abs": -0.021484375,
+     "rel_pct_of_second": -0.026324606327478104
+    },
+    "decode_hits_per_token": {
+     "abs": 0.021484375,
+     "rel_pct_of_second": 0.0069643614630224065
+    },
+    "decode_miss_bytes_per_token": {
+     "abs": -62568.0,
+     "rel_pct_of_second": -0.026172995973755924
+    },
+    "decode_misses_per_token": {
+     "abs": -0.021484375,
+     "rel_pct_of_second": -0.02587565571263908
+    }
+   },
+   "P_minus_S": {
+    "decode_evictions_per_token": {
+     "abs": -0.021484375,
+     "rel_pct_of_second": -0.026324606327478104
+    },
+    "decode_hits_per_token": {
+     "abs": 0.021484375,
+     "rel_pct_of_second": 0.0069643614630224065
+    },
+    "decode_miss_bytes_per_token": {
+     "abs": -62568.0,
+     "rel_pct_of_second": -0.026172995973755924
+    }
+   },
+   "S_minus_A": {
+    "decode_evictions_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    },
+    "decode_hits_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    },
+    "decode_miss_bytes_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    }
+   },
+   "decode_protected_entries": {
+    "A": 0,
+    "P": 196608,
+    "S": 196608
+   },
+   "policy_ms_per_token": {
+    "A": 1.002666796875,
+    "P": 22.73622890625,
+    "S": 22.5057369140625
+   }
+  },
+  "8": {
+   "P_minus_A": {
+    "all_pass_miss_bytes": {
+     "abs": 0,
+     "rel_pct_of_second": 0.0
+    },
+    "decode_evictions_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    },
+    "decode_hits_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    },
+    "decode_miss_bytes_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    },
+    "decode_misses_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    }
+   },
+   "P_minus_S": {
+    "decode_evictions_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    },
+    "decode_hits_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    },
+    "decode_miss_bytes_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    }
+   },
+   "S_minus_A": {
+    "decode_evictions_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    },
+    "decode_hits_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    },
+    "decode_miss_bytes_per_token": {
+     "abs": 0.0,
+     "rel_pct_of_second": 0.0
+    }
+   },
+   "decode_protected_entries": {
+    "A": 0,
+    "P": 196608,
+    "S": 196608
+   },
+   "policy_ms_per_token": {
+    "A": 0.8919142578125,
+    "P": 21.5440091796875,
+    "S": 21.361791796875
+   }
+  }
+ },
+ "decode_definition": "passes >= 2 (first 2 passes are prefill), divisor 512 tokens",
+ "mechanism_only": "no wall-time or throughput claim; no NET_WIN/NET_LOSS",
+ "per_launch": [
+  {
+   "all_pass_evictions": 106840,
+   "all_pass_hits": 94149,
+   "all_pass_miss_bytes": 308885151744,
+   "all_pass_misses": 107403,
+   "arm": "A",
+   "budget": "1.5",
+   "decode_evictions_per_token": 207.98828125,
+   "decode_hits_per_token": 183.529296875,
+   "decode_miss_bytes_per_token": 598198392.0,
+   "decode_misses_per_token": 207.990234375,
+   "decode_protected_entries": 0,
+   "decode_protected_events": 0,
+   "mseq": 1,
+   "policy_ms_per_token_ns_total_over_512": 0.9252455078125,
+   "policy_ns_per_call": 19200.944390402074,
+   "policy_timing": "ON",
+   "policy_victim_selection_ms_total": 99.018,
+   "resident_peak_bytes": 1610588160,
+   "resident_peak_fraction_of_budget": 0.9999847412109375
+  },
+  {
+   "all_pass_evictions": 106840,
+   "all_pass_hits": 94149,
+   "all_pass_miss_bytes": 308885151744,
+   "all_pass_misses": 107403,
+   "arm": "S",
+   "budget": "1.5",
+   "decode_evictions_per_token": 207.98828125,
+   "decode_hits_per_token": 183.529296875,
+   "decode_miss_bytes_per_token": 598198392.0,
+   "decode_misses_per_token": 207.990234375,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "mseq": 2,
+   "policy_ms_per_token_ns_total_over_512": 23.2969296875,
+   "policy_ns_per_call": 483464.16990920884,
+   "policy_timing": "ON",
+   "policy_victim_selection_ms_total": 101.1706,
+   "resident_peak_bytes": 1610588160,
+   "resident_peak_fraction_of_budget": 0.9999847412109375
+  },
+  {
+   "all_pass_evictions": 106739,
+   "all_pass_hits": 94250,
+   "all_pass_miss_bytes": 308598829056,
+   "all_pass_misses": 107302,
+   "arm": "P",
+   "budget": "1.5",
+   "decode_evictions_per_token": 207.791015625,
+   "decode_hits_per_token": 183.7265625,
+   "decode_miss_bytes_per_token": 597639168.0,
+   "decode_misses_per_token": 207.79296875,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "mseq": 3,
+   "policy_ms_per_token_ns_total_over_512": 23.2942408203125,
+   "policy_ns_per_call": 483408.36981193256,
+   "policy_timing": "ON",
+   "policy_victim_selection_ms_total": 175.3842,
+   "resident_peak_bytes": 1610588160,
+   "resident_peak_fraction_of_budget": 0.9999847412109375
+  },
+  {
+   "all_pass_evictions": 106739,
+   "all_pass_hits": 94250,
+   "all_pass_miss_bytes": 308598829056,
+   "all_pass_misses": 107302,
+   "arm": "P",
+   "budget": "1.5",
+   "decode_evictions_per_token": 207.791015625,
+   "decode_hits_per_token": 183.7265625,
+   "decode_miss_bytes_per_token": 597639168.0,
+   "decode_misses_per_token": 207.79296875,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "mseq": 4,
+   "policy_ms_per_token_ns_total_over_512": null,
+   "policy_ns_per_call": null,
+   "policy_timing": "OFF",
+   "policy_victim_selection_ms_total": null,
+   "resident_peak_bytes": 1610588160,
+   "resident_peak_fraction_of_budget": 0.9999847412109375
+  },
+  {
+   "all_pass_evictions": 41786,
+   "all_pass_hits": 158267,
+   "all_pass_miss_bytes": 124613001216,
+   "all_pass_misses": 43285,
+   "arm": "A",
+   "budget": "4",
+   "decode_evictions_per_token": 81.61328125,
+   "decode_hits_per_token": 308.490234375,
+   "decode_miss_bytes_per_token": 239055552.0,
+   "decode_misses_per_token": 83.029296875,
+   "decode_protected_entries": 0,
+   "decode_protected_events": 0,
+   "mseq": 5,
+   "policy_ms_per_token_ns_total_over_512": 1.002666796875,
+   "policy_ns_per_call": 20807.61186770428,
+   "policy_timing": "ON",
+   "policy_victim_selection_ms_total": 101.4172,
+   "resident_peak_bytes": 4294950912,
+   "resident_peak_fraction_of_budget": 0.9999961853027344
+  },
+  {
+   "all_pass_evictions": 41786,
+   "all_pass_hits": 158267,
+   "all_pass_miss_bytes": 124613001216,
+   "all_pass_misses": 43285,
+   "arm": "S",
+   "budget": "4",
+   "decode_evictions_per_token": 81.61328125,
+   "decode_hits_per_token": 308.490234375,
+   "decode_miss_bytes_per_token": 239055552.0,
+   "decode_misses_per_token": 83.029296875,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "mseq": 6,
+   "policy_ms_per_token_ns_total_over_512": 22.5057369140625,
+   "policy_ns_per_call": 467045.12402723735,
+   "policy_timing": "ON",
+   "policy_victim_selection_ms_total": 100.3564,
+   "resident_peak_bytes": 4294950912,
+   "resident_peak_fraction_of_budget": 0.9999961853027344
+  },
+  {
+   "all_pass_evictions": 41775,
+   "all_pass_hits": 158278,
+   "all_pass_miss_bytes": 124580966400,
+   "all_pass_misses": 43274,
+   "arm": "P",
+   "budget": "4",
+   "decode_evictions_per_token": 81.591796875,
+   "decode_hits_per_token": 308.51171875,
+   "decode_miss_bytes_per_token": 238992984.0,
+   "decode_misses_per_token": 83.0078125,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "mseq": 7,
+   "policy_ms_per_token_ns_total_over_512": 22.73622890625,
+   "policy_ns_per_call": 471828.3560311284,
+   "policy_timing": "ON",
+   "policy_victim_selection_ms_total": 183.2289,
+   "resident_peak_bytes": 4294950912,
+   "resident_peak_fraction_of_budget": 0.9999961853027344
+  },
+  {
+   "all_pass_evictions": 7966,
+   "all_pass_hits": 190594,
+   "all_pass_miss_bytes": 31365771264,
+   "all_pass_misses": 10958,
+   "arm": "A",
+   "budget": "8",
+   "decode_evictions_per_token": 15.55859375,
+   "decode_hits_per_token": 371.62890625,
+   "decode_miss_bytes_per_token": 56932056.0,
+   "decode_misses_per_token": 19.890625,
+   "decode_protected_entries": 0,
+   "decode_protected_events": 0,
+   "mseq": 8,
+   "policy_ms_per_token_ns_total_over_512": 0.8919142578125,
+   "policy_ns_per_call": 18509.24529831388,
+   "policy_timing": "ON",
+   "policy_victim_selection_ms_total": 36.5212,
+   "resident_peak_bytes": 8589901824,
+   "resident_peak_fraction_of_budget": 0.9999961853027344
+  },
+  {
+   "all_pass_evictions": 7966,
+   "all_pass_hits": 190594,
+   "all_pass_miss_bytes": 31365771264,
+   "all_pass_misses": 10958,
+   "arm": "S",
+   "budget": "8",
+   "decode_evictions_per_token": 15.55859375,
+   "decode_hits_per_token": 371.62890625,
+   "decode_miss_bytes_per_token": 56932056.0,
+   "decode_misses_per_token": 19.890625,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "mseq": 9,
+   "policy_ms_per_token_ns_total_over_512": 21.361791796875,
+   "policy_ns_per_call": 443305.66634241247,
+   "policy_timing": "ON",
+   "policy_victim_selection_ms_total": 35.1756,
+   "resident_peak_bytes": 8589901824,
+   "resident_peak_fraction_of_budget": 0.9999961853027344
+  },
+  {
+   "all_pass_evictions": 7966,
+   "all_pass_hits": 190594,
+   "all_pass_miss_bytes": 31365771264,
+   "all_pass_misses": 10958,
+   "arm": "P",
+   "budget": "8",
+   "decode_evictions_per_token": 15.55859375,
+   "decode_hits_per_token": 371.62890625,
+   "decode_miss_bytes_per_token": 56932056.0,
+   "decode_misses_per_token": 19.890625,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "mseq": 10,
+   "policy_ms_per_token_ns_total_over_512": 21.5440091796875,
+   "policy_ns_per_call": 447087.0906290532,
+   "policy_timing": "ON",
+   "policy_victim_selection_ms_total": 66.1624,
+   "resident_peak_bytes": 8589901824,
+   "resident_peak_fraction_of_budget": 0.9999961853027344
+  }
+ ],
+ "replay_R2_11_reference_miss_byte_reduction_pct": {
+  "1.5": 0.131,
+  "4": 0.037,
+  "8": 0.0
+ }
+}

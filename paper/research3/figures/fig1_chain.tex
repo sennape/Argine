@@ -1,0 +1,18 @@
+% Figure 1: evidence chain of the present study (reader-facing stage names; each box lists its frozen gate).
+\begin{tikzpicture}[
+  node distance=3.2mm and 2.0mm,
+  box/.style={draw, rounded corners=1.5pt, align=center, font=\scriptsize, text width=25mm, minimum height=18mm, inner sep=2pt},
+  neg/.style={box, fill=black!8},
+  arr/.style={-{Stealth[length=1.6mm]}, thin}]
+\node[box] (n1) {Validated predictive\\structure\\[-1pt]\gate{(preceding study)}};
+\node[box, right=of n1] (n2) {Runtime Semantic\\Equivalence\\[-1pt]\gate{gate: event-stream\\conformance}};
+\node[box, right=of n2] (n3) {Predictor Cost\\Attribution\\[-1pt]\gate{gate: $\rho\in[0.5,2]$,\\Fieller 95\% CI}};
+\node[neg, right=of n3] (n4) {Real-Runtime\\Net Loss\\[-1pt]\gate{gate: paired 95\% CI\\vs.\ 0}};
+\node[box, right=of n4] (n5) {Exact Offline\\Replay\\[-1pt]\gate{gate: integer-exact\\counter match}};
+\node[box, below=of n5] (n6) {Clairvoyant\\Headroom\\[-1pt]\gate{gate: $\ge 10$ ms/token\\ceiling}};
+\node[neg, left=of n6] (n7) {Current-Event\\Shielding\\[-1pt]\gate{gate: retire PP if\\shield $\ge 80\%$ of it}};
+\node[box, left=of n7] (n8) {Causal Next-Use\\Eviction\\[-1pt]\gate{gate: DEV-locked\\candidate, EVAL once}};
+\node[neg, left=of n8] (n9) {Prospective\\Viability Failure\\[-1pt]\gate{gate: $<10$ ms/token\\at zero cost}};
+\draw[arr] (n1) -- (n2); \draw[arr] (n2) -- (n3); \draw[arr] (n3) -- (n4); \draw[arr] (n4) -- (n5);
+\draw[arr] (n5) -- (n6); \draw[arr] (n6) -- (n7); \draw[arr] (n7) -- (n8); \draw[arr] (n8) -- (n9);
+\end{tikzpicture}

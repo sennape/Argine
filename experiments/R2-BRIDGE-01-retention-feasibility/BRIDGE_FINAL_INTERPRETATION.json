@@ -1,0 +1,26 @@
+{
+  "artifact": "BRIDGE_FINAL_INTERPRETATION",
+  "classification": "BRIDGE_POSITIVE",
+  "forbidden_claims_honored": {
+    "no_cross_model_cross_vendor_generalization_claimed": true,
+    "no_generalization_beyond_4_bridge_instances_claimed": true,
+    "no_retroactive_promotion_of_r2_10_category_b": true,
+    "no_retroactive_reversal_of_r2_11_not_proposed": true,
+    "no_runtime_speedup_claimed": true,
+    "o_b_not_treated_as_o_star": true,
+    "r2_10_eval_set_not_used": true
+  },
+  "historical_statements_unchanged": {
+    "r2_10_category": "CLOSED / Category B (unchanged)",
+    "r2_11_historical_status": "R2-11 NOT PROPOSED under the original frozen R2-10 decision rules (unchanged, not rewritten)."
+  },
+  "magnitude_statement": "The effect is small: relative difference at the primary budget reported to full precision in BRIDGE_AGGREGATE_COMPARISON.json. It is not rounded to zero and is not oversold as practically large; it is comparable in order of magnitude to, and consistent in sign with, the DEV-level selection effect of approximately 0.032486% relative improvement at 4 GiB observed earlier in R2-BRIDGE-01 Phase 1.",
+  "r2_11_prospective_decision": {
+    "r2_11_started_this_turn": false,
+    "rule_applied_verbatim": "A BRIDGE_POSITIVE outcome may justify PROPOSING a new, separate R2-11 protocol prospectively. It never rewrites, and is not permitted to be interpreted as retroactively satisfying, the historical statement that R2-11 was NOT PROPOSED under the original frozen R2-10 decision rules (experiments/R2-10-working-set-predictor/decision_rules.json), which remains true and unchanged regardless of this bridge's outcome.",
+    "statement": "R2-11 MAY NOW BE PROPOSED UNDER NEW PROSPECTIVE BRIDGE EVIDENCE."
+  },
+  "schema_version": 1,
+  "statistical_vs_practical": "The direction of the effect is consistent across workloads and budgets (a statistical/experimental signal), but the magnitude is small enough that no practical runtime or latency benefit is claimed or implied.",
+  "summary": "At the primary 4 GiB budget, PredictedProtectPolicy (frozen decayed_transition predictor, decay=0.99) shows a small, sign-consistent aggregate reduction in miss_bytes_per_decode_step relative to B_selected(4 GiB) across all 4 fresh BRIDGE-holdout workloads (bridge-coding-v1, bridge-reasoning-v1, bridge-summarization-v1, bridge-instruction-v1), with no single workload accounting for more than 3/4 of the aggregate byte reduction, and both secondary budgets (1.5 GiB, 8 GiB) also showing non-positive aggregate delta."
+}

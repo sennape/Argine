@@ -1,0 +1,134 @@
+{
+  "artifact": "R2-12-RUNTIME-POLICY-CONFORMANCE-PASS",
+  "schema_version": 1,
+  "state": "R2_12_RUNTIME_POLICY_CONFORMANCE_PASS",
+  "prior_state": "R2_12_RUNTIME_BLOCKED_CAPABILITY",
+  "state_machine_position": "additive side-branch opened after R2_12_RUNTIME_OPENED (R2_12_RUNTIME_BLOCKED_CAPABILITY) is now closed by this PASS; this does NOT by itself equal R2_12_RUNTIME_COMPLETE, and Session 1 / 4 GiB counted execution has not resumed and has not been started by this artifact",
+  "parent_blocked_capability_commit": "see R2_12_RUNTIME_BLOCKED_CAPABILITY.json (R2_12_RUNTIME_BLOCKED_CAPABILITY state, parent_runtime_opened_commit 2d85a36)",
+  "realization_commit_building_v8": "02dd25f",
+  "host_execution_summary": {
+    "executed_by": "user, on their own Windows host machine, independently of this sandbox",
+    "runtime_used": "llama-research-v8\\llama-server.exe",
+    "runtime_sha256_expected": "f4d93061b0d4ce41bc4c5f0abce3420e16768ff5dba5ce53212b49ca25dcf087",
+    "runtime_sha256_observed_on_host": "f4d93061b0d4ce41bc4c5f0abce3420e16768ff5dba5ce53212b49ca25dcf087",
+    "runtime_sha256_match": true,
+    "model_path_windows": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf",
+    "store_path_windows": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs",
+    "budget_bytes": 4294967296,
+    "budget_mib": 4096,
+    "policies_executed": [
+      "b_selected",
+      "predicted_protect"
+    ],
+    "per_policy_result": {
+      "b_selected": {
+        "status": "STORE READY / POLICY READY / TRACE OPEN / health READY / REQUEST OK",
+        "completion_tokens": 64,
+        "trace_rows": 19008,
+        "decision_rows": 9504,
+        "completion_rows": 9504,
+        "comparator_result": "MATCH",
+        "comparator_result_source": "real host run of tools/r2_12_real_trace_conformance.py (authoritative)"
+      },
+      "predicted_protect": {
+        "status": "STORE READY / POLICY READY / TRACE OPEN / health READY / REQUEST OK",
+        "completion_tokens": 64,
+        "trace_rows": 19008,
+        "decision_rows": 9504,
+        "completion_rows": 9504,
+        "comparator_result": "MATCH",
+        "comparator_result_source": "real host run of tools/r2_12_real_trace_conformance.py (authoritative)"
+      }
+    },
+    "host_harness_final_result": "R2-12 HOST CONFORMANCE: BOTH MATCH",
+    "host_harness_exit_code": 0,
+    "authoritative_comparator_note": "The comparator_result values in per_policy_result below (and in host_harness_final_result) come from the unmodified frozen tool, tools/r2_12_real_trace_conformance.py, run directly on the Windows host by tools/r2-12-host-conformance.ps1 itself as part of this same execution. This host-side run is the authoritative conformance result; see independent_reverification_performed_by_this_agent below for the separate, supplemental, post-hoc check performed by this agent."
+  },
+  "independent_reverification_performed_by_this_agent": {
+    "method": "Re-ran comparison of the preserved raw trace files against the frozen Python reference policies, independently of and without re-running llama-server or any host process. Because the frozen comparator tool (tools/r2_12_real_trace_conformance.py) fully materializes each trace in memory and could not complete in this sandbox's constrained (~3.9 GiB, no swap) memory, a streaming-equivalent driver (streaming_conformance.py, preserved alongside this evidence) was used instead. It imports the identical frozen policy classes from the identical frozen tool and reproduces its comparison logic verbatim across two bounded streaming passes rather than one in-memory pass; it does not modify, replace, or alter tools/r2_12_real_trace_conformance.py in any way.",
+    "comparator_tool_modified": false,
+    "mechanical_structural_audit_performed": true,
+    "mechanical_audit_findings": {
+      "malformed_lines": 0,
+      "decision_rows_equal_completion_rows": true,
+      "last_decision_has_matching_completion": true,
+      "decisions_file_steps_match_trace_decision_steps": true,
+      "budget_violations_post_service": 0,
+      "budget_violations_policy_resident": 0
+    },
+    "b_selected_comparator_result": "MATCH",
+    "predicted_protect_comparator_result": "MATCH",
+    "status": "supplemental post-hoc corroboration performed in this agent's sandbox; NOT a replacement for, and not the source of, the authoritative host comparator result recorded in host_execution_summary above"
+  },
+  "frozen_evidence_digest_verification": {
+    "method": "argine.research2.r2_12.contract.assert_valid() executed against the unmodified repository tree",
+    "result": "valid",
+    "r2_12_phase0_contract_digest_recomputed": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad",
+    "r2_12_phase0_contract_digest_matches_pinned_constant": true,
+    "r2_11_phase0_contract_digest_recursively_verified": true,
+    "r2_10_status_unchanged": "CLOSED / Category B",
+    "r2_bridge01_status_unchanged": "CLOSED / BRIDGE_POSITIVE",
+    "r2_11_classification_unchanged": "R2_11_PASS",
+    "frozen_retention_policy_python_references_unchanged": [
+      "argine.research2.r2_09a.policies.AgedFrequency",
+      "argine.research2.r2_bridge01.retention_policies.PredictedProtectPolicy"
+    ],
+    "b_selected_mapping_unchanged": true,
+    "predicted_protect_policy_semantics_unchanged": true,
+    "predictor_semantics_unchanged": true,
+    "r2_12_phase0_protocol_unchanged": true,
+    "git_diff_against_committed_tree_for_frozen_files": "empty (no uncommitted modification detected in any frozen contract/policy/evidence file at time of this verification)"
+  },
+  "preserved_evidence": {
+    "canonical_evidence_directory": "experiments/R2-12-runtime-validation/HOST-CONFORMANCE-PASS-V8-20261115/",
+    "conformance_traces_added": [
+      "experiments/R2-12-runtime-validation/conformance_traces/conformance-b_selected-20261115.jsonl",
+      "experiments/R2-12-runtime-validation/conformance_traces/conformance-predicted_protect-20261115.jsonl"
+    ],
+    "full_manifest": "experiments/R2-12-runtime-validation/HOST-CONFORMANCE-PASS-V8-20261115/CONFORMANCE-MANIFEST.json"
+  },
+  "harness_fixes_in_this_commit": {
+    "file": "tools/r2-12-host-conformance.ps1",
+    "process_kill_compatibility_fix_landed": true,
+    "python_resolution_fix": "replaced a hardcoded personal interpreter path with a Resolve-ArginePython function that resolves py/python/python3 from PATH and explicitly rejects the Microsoft Store alias stub, erroring with guidance to pass -Python explicitly if none is found",
+    "self_test_false_positives_fixed": true,
+    "self_test_fix_method": "replaced self-referential raw-text regex hazard checks with PowerShell AST/tokenizer-based validation (System.Management.Automation.Language.Parser) scoped to double-quoted string tokens only, with scope-qualifier and subexpression exclusions",
+    "self_test_result_after_fix": "SELF-TEST OK: 0 failures (0 parse errors, 0 hazards)"
+  },
+  "scientifically_supported_statements": [
+    "A real execution on the user's Windows host, using the llama-research-v8 runtime built to fix the previously identified same-event self-eviction defect, completed successfully for both frozen retention policies (B_selected(M) and PredictedProtectPolicy) at the 4 GiB budget, with every generated decision event across both policies independently found to match the frozen Python reference implementation.",
+    "This result establishes host-level conformance between the compiled runtime's retention-policy behavior and its frozen Python reference under real execution; it does not measure, establish, or imply anything about inference speed, throughput, latency, or the outcome of any future benchmark comparison."
+  ],
+  "statements_explicitly_not_made": [
+    "no speedup claim",
+    "no throughput claim",
+    "no latency claim",
+    "no benchmark-success claim",
+    "no claim that this generalizes beyond the two traced runs reported here"
+  ],
+  "benchmark_status_after_this_artifact": {
+    "unlock_state": "R2_12_RUNTIME_POLICY_CONFORMANCE_PASS",
+    "campaign_status": "UNLOCKED BUT NOT STARTED",
+    "counted_benchmark": "0 / 120",
+    "physical_launches": "0 / 144",
+    "warmup_runs_executed": 0,
+    "counted_runs_executed": 0
+  },
+  "frozen_phase0_benchmark_design_restated_not_executed": {
+    "workloads": 4,
+    "budgets_gib": [
+      1.5,
+      4,
+      8
+    ],
+    "policies": 2,
+    "counted_repetitions_per_cell": 5,
+    "discarded_warmups_per_cell_per_policy": 1,
+    "ordering": "paired ABBA, balanced 6/6 policy opener across the 12 cells",
+    "total_counted_runs": 120,
+    "total_discarded_warmups": 24,
+    "total_physical_launches": 144
+  },
+  "scope": "This artifact records formalization of already-completed, user-executed host conformance evidence. It performs no model run, no benchmark run, and no rebuild of v8.",
+  "stop_condition": "Do not rerun the 30B model. Do not start any benchmark. Do not modify frozen scientific evidence. Do not rebuild v8."
+}

@@ -1,0 +1,258 @@
+{
+ "artifact": "R3-04-SAMPLE-SIZE",
+ "design": "6-launch palindromic blocks; unit of analysis = block-level contrast of 2-launch arm means; t interval, df = N_blocks - 1",
+ "disk": {
+  "free_space_gate_bytes_mechanism": 26843545600,
+  "free_space_gate_bytes_timing": 2147483648,
+  "mechanism_trace_bytes_per_launch_peak": "<= ~12 GB (R3-03A: 6.8 GB/launch observed at 4-8 GiB; R3-03B noted ~10 GB), each trace is analysed to a compact record and its sha256 + size are kept; raw trace is then deleted by the driver (regenerable: greedy decoding + deterministic policy)",
+  "retained_total_bytes_estimate": "< 50 MB",
+  "timing_records_bytes_estimate": "<= 20 KB x 183 launches + stderr ~4 KB: < 6 MB"
+ },
+ "hours": {
+  "current": {
+   "mechanism_hours": 2.814393171221936,
+   "model_bearing_hours_total": 19.239393171221938,
+   "timing_hours_per_budget": {
+    "1.5": 9.775,
+    "4": 3.325,
+    "8": 3.325
+   },
+   "timing_hours_total": 16.425
+  },
+  "fixed": {
+   "mechanism_hours": 2.814393171221936,
+   "model_bearing_hours_total": 15.836327360404074,
+   "timing_hours_per_budget": {
+    "1.5": 9.543152193758463,
+    "4": 2.331294691187564,
+    "8": 1.1474873042361118
+   },
+   "timing_hours_total": 13.021934189182138
+  }
+ },
+ "hours_inputs_ms_per_token": {
+  "b_selected_wall_planning": {
+   "1.5": 431.05400322896287,
+   "4": 287.19263405088066,
+   "8": 100.84604619140626
+  },
+  "note": "1.5 and 4 GiB use the (slower, old-runtime) R2-12 values: deliberately conservative; 8 GiB uses the R3-03B measured value. S/P add DELTA_COST_REF. Prefill scaled from 10.7 s at 8 GiB; startup 10 s; traced decode x5.05 (R3-00A)"
+ },
+ "per_budget": {
+  "1.5": {
+   "candidates": {
+    "12": {
+     "half_width_ms": 7.000436214549236,
+     "launches_counted": 72,
+     "meets_primary_precision_target": false,
+     "power_to_exclude_zero_at_expected_net": 0.9978075319897047
+    },
+    "18": {
+     "half_width_ms": 5.479070057635947,
+     "launches_counted": 108,
+     "meets_primary_precision_target": true,
+     "power_to_exclude_zero_at_expected_net": 0.9999833721789672
+    },
+    "24": {
+     "half_width_ms": 4.652448836832115,
+     "launches_counted": 144,
+     "meets_primary_precision_target": true,
+     "power_to_exclude_zero_at_expected_net": 0.9999999090594497
+    },
+    "30": {
+     "half_width_ms": 4.11414943869682,
+     "launches_counted": 180,
+     "meets_primary_precision_target": true,
+     "power_to_exclude_zero_at_expected_net": 0.9999999995968373
+    },
+    "6": {
+     "half_width_ms": 11.562571216186223,
+     "launches_counted": 36,
+     "meets_primary_precision_target": false,
+     "power_to_exclude_zero_at_expected_net": 0.8479326479276462
+    }
+   },
+   "expected_net_basis": "DELTA_COST_REF minus the replay-implied maximum wall benefit (generous: wall proportional to miss bytes); planning only",
+   "expected_net_for_planning_ms": 16.900737080291407,
+   "frozen_counted_launches": 108,
+   "frozen_half_width_ms_planning": 5.479070057635947,
+   "frozen_n_blocks": 18,
+   "frozen_power_planning": 0.9999833721789672,
+   "planning_sd_ms": 11.017894548857006,
+   "role": "PRIMARY",
+   "selection_rule": "smallest multiple of 6 with planning half-width <= DELTA_COST_REF/3",
+   "smallest_multiple_of_6_meeting_primary_precision": 18
+  },
+  "4": {
+   "candidates": {
+    "12": {
+     "half_width_ms": 8.68746502670103,
+     "launches_counted": 72,
+     "meets_primary_precision_target": false,
+     "power_to_exclude_zero_at_expected_net": 0.9788140678518538
+    },
+    "18": {
+     "half_width_ms": 6.799466211209817,
+     "launches_counted": 108,
+     "meets_primary_precision_target": false,
+     "power_to_exclude_zero_at_expected_net": 0.9990443279184197
+    },
+    "24": {
+     "half_width_ms": 5.773638287638828,
+     "launches_counted": 144,
+     "meets_primary_precision_target": true,
+     "power_to_exclude_zero_at_expected_net": 0.9999663212955849
+    },
+    "30": {
+     "half_width_ms": 5.105614602846821,
+     "launches_counted": 180,
+     "meets_primary_precision_target": true,
+     "power_to_exclude_zero_at_expected_net": 0.9999989912303078
+    },
+    "6": {
+     "half_width_ms": 14.349024829422838,
+     "launches_counted": 36,
+     "meets_primary_precision_target": false,
+     "power_to_exclude_zero_at_expected_net": 0.7023624633788432
+    }
+   },
+   "expected_net_basis": "DELTA_COST_REF minus the replay-implied maximum wall benefit (generous: wall proportional to miss bytes); planning only",
+   "expected_net_for_planning_ms": 17.36167112948905,
+   "frozen_counted_launches": 36,
+   "frozen_half_width_ms_planning": 14.349024829422838,
+   "frozen_n_blocks": 6,
+   "frozen_power_planning": 0.7023624633788432,
+   "planning_sd_ms": 13.673087023083248,
+   "role": "CONFIRMATORY_DESCRIPTIVE",
+   "selection_rule": "one full cycle of the 6 permutations (minimum fully order-balanced N); descriptive role, no classification label, no inferential decision depends on it",
+   "smallest_multiple_of_6_meeting_primary_precision": 24
+  },
+  "8": {
+   "candidates": {
+    "12": {
+     "half_width_ms": 1.4308869007978355,
+     "launches_counted": 72,
+     "meets_primary_precision_target": true,
+     "power_to_exclude_zero_at_expected_net": 1.0000000000000002
+    },
+    "18": {
+     "half_width_ms": 1.1199201497945137,
+     "launches_counted": 108,
+     "meets_primary_precision_target": true,
+     "power_to_exclude_zero_at_expected_net": 0.9999999999999999
+    },
+    "24": {
+     "half_width_ms": 0.9509590392980761,
+     "launches_counted": 144,
+     "meets_primary_precision_target": true,
+     "power_to_exclude_zero_at_expected_net": 0.9999999999999941
+    },
+    "30": {
+     "half_width_ms": 0.8409308162141593,
+     "launches_counted": 180,
+     "meets_primary_precision_target": true,
+     "power_to_exclude_zero_at_expected_net": 0.9999999999999925
+    },
+    "6": {
+     "half_width_ms": 2.363385821357462,
+     "launches_counted": 36,
+     "meets_primary_precision_target": true,
+     "power_to_exclude_zero_at_expected_net": 0.999999999999996
+    }
+   },
+   "expected_net_basis": "DELTA_COST_REF minus the replay-implied maximum wall benefit (generous: wall proportional to miss bytes); planning only",
+   "expected_net_for_planning_ms": 17.466373388671876,
+   "frozen_counted_launches": 36,
+   "frozen_half_width_ms_planning": 2.363385821357462,
+   "frozen_n_blocks": 6,
+   "frozen_power_planning": 0.999999999999996,
+   "planning_sd_ms": 2.252054086510453,
+   "role": "NEGATIVE_CONTROL_DESCRIPTIVE",
+   "selection_rule": "one full cycle of the 6 permutations (minimum fully order-balanced N); descriptive role, no classification label, no inferential decision depends on it",
+   "smallest_multiple_of_6_meeting_primary_precision": 6
+  }
+ },
+ "planning_scale": {
+  "delta_cost_ref_ms_per_token": 17.466373388671876,
+  "meaning": "primary CI half-width <= one third of the measured bookkeeping cost, i.e. the design can tell 'recovers >= ~1/3 of its cost' from 'recovers nothing' and can bound near-break-even",
+  "precision_fraction": 0.3333333333333333,
+  "precision_target_half_width_ms": 5.822124462890625,
+  "source": "R3-03B corrected sham overhead (planning scale only; never an R3-04 observation)"
+ },
+ "proxy_conservativeness_check_8GiB": {
+  "r2_12_proxy_sd": 2.252054086510453,
+  "r3_03b_block_sd": 1.2671874995039745,
+  "ratio": 1.7772066780898585
+ },
+ "r2_12_proxy": {
+  "1.5": {
+   "mean_b_selected_ms_per_token": 431.05400322896287,
+   "mean_delta_ms_per_token_OLD_RUNTIME_NOT_REUSED_AS_OUTCOME": 13.076312622309194,
+   "mean_predicted_protect_ms_per_token": 444.13031585127203,
+   "n_pairs": 20,
+   "sd_paired_delta_ms_per_token": 11.017894548857006
+  },
+  "4": {
+   "mean_b_selected_ms_per_token": 287.19263405088066,
+   "mean_delta_ms_per_token_OLD_RUNTIME_NOT_REUSED_AS_OUTCOME": 14.623623776908016,
+   "mean_predicted_protect_ms_per_token": 301.81625782778866,
+   "n_pairs": 20,
+   "sd_paired_delta_ms_per_token": 13.673087023083248
+  },
+  "8": {
+   "mean_b_selected_ms_per_token": 151.761714481409,
+   "mean_delta_ms_per_token_OLD_RUNTIME_NOT_REUSED_AS_OUTCOME": 10.495822994129158,
+   "mean_predicted_protect_ms_per_token": 162.25753747553816,
+   "n_pairs": 20,
+   "sd_paired_delta_ms_per_token": 2.252054086510453
+  }
+ },
+ "r3_03b": {
+  "block_contrast_sd_O_ms_per_token_8GiB": 1.2671874995039745,
+  "corrected_overhead_ms_per_token": 17.466373388671876,
+  "mean_policy_ms_per_token": {
+   "b_selected": 1.2007139208984374,
+   "predicted_protect_sham": 20.555198940429687
+  },
+  "mean_wall_b_selected_8GiB_ms_per_token": 100.84604619140626,
+  "mean_wall_sham_8GiB_ms_per_token": 118.31241958007813
+ },
+ "r3_03b_observed_for_calibration": {
+  "campaign_span_h": 7.36,
+  "model_prediction_current_8GiB_s_per_launch_incl_cooldown": 330.0,
+  "per_launch_incl_cooldown_s": 331.1875
+ },
+ "replay_implied_retention_benefit_bounds": {
+  "1.5": {
+   "as_fraction_of_delta_cost_ref": 0.03238430186928907,
+   "max_wall_benefit_ms_per_token_if_wall_proportional_to_miss_bytes": 0.5656363083804675,
+   "prior_delta_artifact_value": -779296.0626223087,
+   "relative_reduction": 0.001312216808435528,
+   "replay_B_miss_bytes_per_step_mean": 593877519.0293542,
+   "replay_P_miss_bytes_per_step_mean": 593098222.9667319,
+   "replay_mean_delta_bytes_per_step": -779296.0626223087
+  },
+  "4": {
+   "as_fraction_of_delta_cost_ref": 0.005994504803769603,
+   "max_wall_benefit_ms_per_token_if_wall_proportional_to_miss_bytes": 0.10470225918282712,
+   "prior_delta_artifact_value": -87476.85322895646,
+   "relative_reduction": 0.00036457153411628755,
+   "replay_B_miss_bytes_per_step_mean": 239944277.1663405,
+   "replay_P_miss_bytes_per_step_mean": 239856800.31311154,
+   "replay_mean_delta_bytes_per_step": -87476.85322895646
+  },
+  "8": {
+   "as_fraction_of_delta_cost_ref": 0.0,
+   "max_wall_benefit_ms_per_token_if_wall_proportional_to_miss_bytes": 0.0,
+   "prior_delta_artifact_value": 0.0,
+   "relative_reduction": 0.0,
+   "replay_B_miss_bytes_per_step_mean": 41533295.71819961,
+   "replay_P_miss_bytes_per_step_mean": 41533295.71819961,
+   "replay_mean_delta_bytes_per_step": 0.0
+  }
+ },
+ "variance_sources_used": {
+  "allowed": "R2-12 paired-delta SD per budget (old runtime, non-contemporaneous, used ONLY as a conservative planning SD for a block contrast; conservative because a block contrast averages 2 launches per arm); R3-03B 8 GiB block-contrast SD (corrected runtime) as a conservativeness check",
+  "not_allowed": "R2-12 / R3-03B outcome means as R3-04 observations"
+ }
+}

@@ -1,0 +1,31 @@
+{
+  "anchor_commit": "e6592a5e144ca54525b4bc36a0b42412cb663e1f",
+  "artifact": "R3-02-PHASE2-FREEZE",
+  "artifacts": {
+    "ANALYSIS.json": "7c682f8f504974157458bab85e013c7926d7e61742db31a5016442b526b0cdba",
+    "ANALYSIS_RAW.json": "d4a36ff5a17e74b3a90317f3326b2ecd0736d93aa415a5989a3285b2626e42af",
+    "CLASSIFICATION.json": "7b667ee5a49a0d10355e82a625410c1e18787766661341243db953437bf5daeb",
+    "README.md": "2be39d22dc620737b79aa1b6ed98996a68ba8e45c575a10a7086c6a78dd7cf0b",
+    "tests/test_phase2.py": "502140ceaf66bfdfa708e64fd3c17b521ece166234a9a589829558d7d6a58282"
+  },
+  "cost_model": "COST_MODEL_DESIGN_NOT_YET_ALLOWED",
+  "created_utc": "2026-11-18T22:12:55Z",
+  "failed_conditions": [
+    6
+  ],
+  "key_numbers": {
+    "cells": 35,
+    "launches": 52,
+    "precision_4gib_half_width": 0.030396048828124966,
+    "precision_4gib_threshold": 0.00266463701171875,
+    "sham_delta_4gib_s_per_token": 0.06674900781249998,
+    "sham_relative_4gib": 0.2525303640022605,
+    "traces": 7
+  },
+  "no_model_loaded": true,
+  "phase": "R3-02 Phase 2",
+  "protocol_digest": "f8d4b3199c4c74555353e5f796eaf7d7c3687da97883ee07f7d1c81233c9469c",
+  "raw_traces_in_git": false,
+  "source_run": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-02-p4",
+  "status": "MECHANISM_INSUFFICIENT"
+}

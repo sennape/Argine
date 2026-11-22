@@ -1,0 +1,64 @@
+{
+  "artifacts": {
+    "expert_store": null,
+    "model": null,
+    "runtime_binary": null
+  },
+  "execution": {
+    "command": null,
+    "exit_code": null,
+    "raw_evidence_paths": [],
+    "stderr_path": null,
+    "stdout_path": null
+  },
+  "experiment": {
+    "baseline_policy": null,
+    "parameters": {
+      "candidate_status": "CANDIDATE",
+      "min_pair_support": 10,
+      "min_source_support": 30,
+      "null_baseline_seed": 1234,
+      "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+      "r2_04_run_id": "cd2b58b019314fafb90304234e6d1907",
+      "r2_05_run_id": "da82e15b61c94019840477642618565a",
+      "transition_unit": "One counted transition observation = one (source_expert_id, target_expert_id) pair contributed by one pair of CONSECUTIVE entries yielded by Trace.token_selections(layer, phase) for one layer (token-to-token, SAME layer; 'consecutive' = consecutive in the iterator's own yielded order, not consecutive token_index). Multi-expert selections are expanded via pairwise set-to-set counting: every expert i in the source selection paired with every expert j in the target selection, each pair counted once with weight 1 (never deduplicated). Cross-layer transitions are excluded from this unit entirely; layer visitation order is architectural, not a routing-structure transition."
+    },
+    "seed": null,
+    "workload": null
+  },
+  "git": {
+    "branch": "r2-main",
+    "candidate_status": "CANDIDATE",
+    "clean": true,
+    "commit": "2e00b46ec67c5402fdeec7054adb1614271b802b",
+    "dirty_definition": "tracked files modified (untracked files ignored)",
+    "note": null,
+    "repo_root": "C:\\Users\\alpel\\Desktop\\Argine3"
+  },
+  "hardware": {
+    "cores_logical": 16,
+    "cores_physical": 12,
+    "cpu": "13th Gen Intel(R) Core(TM) i5-1340P",
+    "cpu_source": "windows-registry:ProcessorNameString",
+    "machine": "AMD64",
+    "os": "Windows-11-10.0.26200-SP0",
+    "os_release": "11",
+    "os_version": "10.0.26200",
+    "ram_total": 16876888064
+  },
+  "identity": {
+    "end_utc": "2026-11-08T10:01:05Z",
+    "experiment_id": "R2-06",
+    "outcome": "PASS",
+    "run_id": "2e075161f02443ff822279add6938ca4",
+    "runner_schema_version": 1,
+    "start_utc": "2026-11-08T10:00:52Z"
+  },
+  "schema_version": 1,
+  "software": {
+    "argine_version": "0.1.0",
+    "os": "Windows-11-10.0.26200-SP0",
+    "python_version": "3.13.9",
+    "runtime_identity": null
+  }
+}

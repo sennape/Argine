@@ -1,0 +1,2748 @@
+{
+  "global_summary": {
+    "concentration_axis": "normalized_entropy (lower = more concentrated)",
+    "experts_for_pct": {
+      "0.5": {
+        "max": 35,
+        "median": 19.0,
+        "min": 11
+      },
+      "0.8": {
+        "max": 68,
+        "median": 43.0,
+        "min": 31
+      },
+      "0.9": {
+        "max": 85,
+        "median": 59.0,
+        "min": 43
+      },
+      "0.95": {
+        "max": 97,
+        "median": 72.5,
+        "min": 54
+      }
+    },
+    "layer_count_total": 48,
+    "layer_count_with_data": 48,
+    "layer_median": {
+      "effective_expert_count": 62.469120639146624,
+      "effective_expert_count_max": 99.3562827270146,
+      "effective_expert_count_min": 45.90536669900023,
+      "gini": 0.6203081354748604,
+      "hhi": 0.02285624061532273,
+      "normalized_entropy": 0.8521530182050354,
+      "normalized_entropy_max": 0.9477913275838906,
+      "normalized_entropy_min": 0.7886558458288192,
+      "top_16_share": 0.4606610800744879,
+      "top_8_share": 0.3000919373106534
+    },
+    "least_concentrated_layer": 0,
+    "most_concentrated_layer": 31,
+    "request_weighted_aggregate": {
+      "effective_expert_fraction": 0.513554224151178,
+      "gini": 0.6055210243455191,
+      "hhi": 0.022172542668354805,
+      "normalized_entropy": 0.8591873268636677,
+      "top_16_share": 0.4607018844368148,
+      "top_8_share": 0.29871054582341694
+    }
+  },
+  "heterogeneity": {
+    "classification": "HETEROGENEOUS",
+    "normalized_entropy_spread": 0.15913548175507142,
+    "note": "descriptive spread of normalized entropy across layers only; no causal explanation and no temporal/workload-drift claim is made here (see R2-08)."
+  },
+  "layer_metrics": {
+    "0": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.7762209588048016,
+        "top16_ratio_to_uniform": 2.2197392923649906,
+        "top1_ratio_to_uniform": 3.7243947858473,
+        "top32_ratio_to_uniform": 1.905027932960894,
+        "top4_ratio_to_uniform": 2.837988826815643,
+        "top8_ratio_to_uniform": 2.5512104283054002
+      },
+      "effective_expert_count": 99.3562827270146,
+      "effective_expert_fraction": 0.7762209588048016,
+      "experts_for_pct": {
+        "0.5": 35,
+        "0.8": 68,
+        "0.9": 85,
+        "0.95": 97
+      },
+      "gini": 0.38035381750465547,
+      "hhi": 0.011460684921056008,
+      "layer_id": 0,
+      "max_expert_share": 0.02909683426443203,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.9477913275838906,
+      "observed_expert_count": 122,
+      "shannon_entropy": 4.598712205317589,
+      "top_k_share": {
+        "1": 0.02909683426443203,
+        "4": 0.08868715083798884,
+        "8": 0.15945065176908751,
+        "16": 0.2774674115456238,
+        "32": 0.4762569832402235
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "1": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.7146013020709874,
+        "top16_ratio_to_uniform": 2.6052141527001864,
+        "top1_ratio_to_uniform": 3.6052141527001864,
+        "top32_ratio_to_uniform": 2.1815642458100557,
+        "top4_ratio_to_uniform": 3.277467411545624,
+        "top8_ratio_to_uniform": 3.0242085661080074
+      },
+      "effective_expert_count": 91.46896666508638,
+      "effective_expert_fraction": 0.7146013020709874,
+      "experts_for_pct": {
+        "0.5": 29,
+        "0.8": 61,
+        "0.9": 79,
+        "0.95": 93
+      },
+      "gini": 0.44846223230912474,
+      "hhi": 0.013074177529484792,
+      "layer_id": 1,
+      "max_expert_share": 0.028165735567970206,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.9307443496806691,
+      "observed_expert_count": 123,
+      "shannon_entropy": 4.515999752622789,
+      "top_k_share": {
+        "1": 0.028165735567970206,
+        "4": 0.10242085661080075,
+        "8": 0.18901303538175046,
+        "16": 0.3256517690875233,
+        "32": 0.5453910614525139
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "10": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.5844554531960348,
+        "top16_ratio_to_uniform": 3.478584729981378,
+        "top1_ratio_to_uniform": 8.163873370577281,
+        "top32_ratio_to_uniform": 2.5577281191806334,
+        "top4_ratio_to_uniform": 5.772811918063315,
+        "top8_ratio_to_uniform": 4.495344506517691
+      },
+      "effective_expert_count": 74.81029800909245,
+      "effective_expert_fraction": 0.5844554531960348,
+      "experts_for_pct": {
+        "0.5": 21,
+        "0.8": 52,
+        "0.9": 71,
+        "0.95": 86
+      },
+      "gini": 0.5493482309124766,
+      "hhi": 0.019127727841758303,
+      "layer_id": 10,
+      "max_expert_share": 0.06378026070763501,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.889309281829756,
+      "observed_expert_count": 119,
+      "shannon_entropy": 4.314955549422596,
+      "top_k_share": {
+        "1": 0.06378026070763501,
+        "4": 0.1804003724394786,
+        "8": 0.2809590316573557,
+        "16": 0.43482309124767227,
+        "32": 0.6394320297951583
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "11": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.6534901875883524,
+        "top16_ratio_to_uniform": 2.8957169459962757,
+        "top1_ratio_to_uniform": 4.618249534450651,
+        "top32_ratio_to_uniform": 2.3333333333333335,
+        "top4_ratio_to_uniform": 3.962756052141527,
+        "top8_ratio_to_uniform": 3.3929236499068898
+      },
+      "effective_expert_count": 83.64674401130911,
+      "effective_expert_fraction": 0.6534901875883524,
+      "experts_for_pct": {
+        "0.5": 26,
+        "0.8": 56,
+        "0.9": 73,
+        "0.95": 87
+      },
+      "gini": 0.4976613419459963,
+      "hhi": 0.014708585180792665,
+      "layer_id": 11,
+      "max_expert_share": 0.036080074487895714,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.9123196398091022,
+      "observed_expert_count": 119,
+      "shannon_entropy": 4.426602502722008,
+      "top_k_share": {
+        "1": 0.036080074487895714,
+        "4": 0.12383612662942271,
+        "8": 0.2120577281191806,
+        "16": 0.36196461824953446,
+        "32": 0.5833333333333334
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "12": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.6105097416793107,
+        "top16_ratio_to_uniform": 3.2141527001862196,
+        "top1_ratio_to_uniform": 5.482309124767226,
+        "top32_ratio_to_uniform": 2.468342644320298,
+        "top4_ratio_to_uniform": 4.662942271880819,
+        "top8_ratio_to_uniform": 3.988826815642458
+      },
+      "effective_expert_count": 78.14524693495177,
+      "effective_expert_fraction": 0.6105097416793107,
+      "experts_for_pct": {
+        "0.5": 23,
+        "0.8": 52,
+        "0.9": 70,
+        "0.95": 83
+      },
+      "gini": 0.5352471776070764,
+      "hhi": 0.01652147508920862,
+      "layer_id": 12,
+      "max_expert_share": 0.04283054003724395,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8982980315804159,
+      "observed_expert_count": 120,
+      "shannon_entropy": 4.3585692352475975,
+      "top_k_share": {
+        "1": 0.04283054003724395,
+        "4": 0.1457169459962756,
+        "8": 0.24930167597765363,
+        "16": 0.40176908752327745,
+        "32": 0.6170856610800745
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "13": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.6135245466918096,
+        "top16_ratio_to_uniform": 2.97951582867784,
+        "top1_ratio_to_uniform": 4.975791433891993,
+        "top32_ratio_to_uniform": 2.436685288640596,
+        "top4_ratio_to_uniform": 3.9702048417132216,
+        "top8_ratio_to_uniform": 3.478584729981378
+      },
+      "effective_expert_count": 78.53114197655162,
+      "effective_expert_fraction": 0.6135245466918096,
+      "experts_for_pct": {
+        "0.5": 25,
+        "0.8": 50,
+        "0.9": 67,
+        "0.95": 81
+      },
+      "gini": 0.5327703095903167,
+      "hhi": 0.015630797693233323,
+      "layer_id": 13,
+      "max_expert_share": 0.03887337057728119,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8993132816262903,
+      "observed_expert_count": 118,
+      "shannon_entropy": 4.363495259195626,
+      "top_k_share": {
+        "1": 0.03887337057728119,
+        "4": 0.12406890130353818,
+        "8": 0.21741154562383613,
+        "16": 0.37243947858473,
+        "32": 0.609171322160149
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "14": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.5743326181355393,
+        "top16_ratio_to_uniform": 3.398510242085661,
+        "top1_ratio_to_uniform": 6.018621973929236,
+        "top32_ratio_to_uniform": 2.591247672253259,
+        "top4_ratio_to_uniform": 4.543761638733706,
+        "top8_ratio_to_uniform": 3.936685288640596
+      },
+      "effective_expert_count": 73.51457512134903,
+      "effective_expert_fraction": 0.5743326181355393,
+      "experts_for_pct": {
+        "0.5": 21,
+        "0.8": 50,
+        "0.9": 66,
+        "0.95": 78
+      },
+      "gini": 0.5633583566108007,
+      "hhi": 0.01743686041148667,
+      "layer_id": 14,
+      "max_expert_share": 0.04702048417132216,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8857083434716357,
+      "observed_expert_count": 115,
+      "shannon_entropy": 4.297483687530487,
+      "top_k_share": {
+        "1": 0.04702048417132216,
+        "4": 0.1419925512104283,
+        "8": 0.24604283054003726,
+        "16": 0.42481378026070765,
+        "32": 0.6478119180633147
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "15": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.5193821064254528,
+        "top16_ratio_to_uniform": 3.6461824953445063,
+        "top1_ratio_to_uniform": 7.657355679702048,
+        "top32_ratio_to_uniform": 2.707635009310987,
+        "top4_ratio_to_uniform": 6.495344506517691,
+        "top8_ratio_to_uniform": 4.927374301675978
+      },
+      "effective_expert_count": 66.48090962245796,
+      "effective_expert_fraction": 0.5193821064254528,
+      "experts_for_pct": {
+        "0.5": 19,
+        "0.8": 46,
+        "0.9": 61,
+        "0.95": 74
+      },
+      "gini": 0.6010242085661079,
+      "hhi": 0.021359026975853856,
+      "layer_id": 15,
+      "max_expert_share": 0.05982309124767225,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.864981173821343,
+      "observed_expert_count": 115,
+      "shannon_entropy": 4.196914833101871,
+      "top_k_share": {
+        "1": 0.05982309124767225,
+        "4": 0.20297951582867785,
+        "8": 0.3079608938547486,
+        "16": 0.4557728119180633,
+        "32": 0.6769087523277467
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "16": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.4882898650056686,
+        "top16_ratio_to_uniform": 3.702048417132216,
+        "top1_ratio_to_uniform": 11.1731843575419,
+        "top32_ratio_to_uniform": 2.7858472998137804,
+        "top4_ratio_to_uniform": 6.614525139664805,
+        "top8_ratio_to_uniform": 4.856610800744879
+      },
+      "effective_expert_count": 62.501102720725584,
+      "effective_expert_fraction": 0.4882898650056686,
+      "experts_for_pct": {
+        "0.5": 19,
+        "0.8": 43,
+        "0.9": 59,
+        "0.95": 72
+      },
+      "gini": 0.6187041724860336,
+      "hhi": 0.02420975815708346,
+      "layer_id": 16,
+      "max_expert_share": 0.08729050279329609,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8522585340961565,
+      "observed_expert_count": 108,
+      "shannon_entropy": 4.13518420011832,
+      "top_k_share": {
+        "1": 0.08729050279329609,
+        "4": 0.20670391061452514,
+        "8": 0.30353817504655495,
+        "16": 0.462756052141527,
+        "32": 0.6964618249534451
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "17": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.506528309992899,
+        "top16_ratio_to_uniform": 3.6685288640595903,
+        "top1_ratio_to_uniform": 10.636871508379889,
+        "top32_ratio_to_uniform": 2.723463687150838,
+        "top4_ratio_to_uniform": 6.450651769087523,
+        "top8_ratio_to_uniform": 4.823091247672253
+      },
+      "effective_expert_count": 64.83562367909107,
+      "effective_expert_fraction": 0.506528309992899,
+      "experts_for_pct": {
+        "0.5": 19,
+        "0.8": 44,
+        "0.9": 59,
+        "0.95": 74
+      },
+      "gini": 0.6085566515363128,
+      "hhi": 0.02275350765859021,
+      "layer_id": 17,
+      "max_expert_share": 0.08310055865921788,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8598164012823064,
+      "observed_expert_count": 113,
+      "shannon_entropy": 4.171855200436204,
+      "top_k_share": {
+        "1": 0.08310055865921788,
+        "4": 0.2015828677839851,
+        "8": 0.3014432029795158,
+        "16": 0.4585661080074488,
+        "32": 0.6808659217877095
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "18": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.38065817451218725,
+        "top16_ratio_to_uniform": 4.571694599627561,
+        "top1_ratio_to_uniform": 10.666666666666666,
+        "top32_ratio_to_uniform": 3.171322160148976,
+        "top4_ratio_to_uniform": 7.8584729981378025,
+        "top8_ratio_to_uniform": 6.171322160148976
+      },
+      "effective_expert_count": 48.72424633755997,
+      "effective_expert_fraction": 0.38065817451218725,
+      "experts_for_pct": {
+        "0.5": 13,
+        "0.8": 33,
+        "0.9": 46,
+        "0.95": 56
+      },
+      "gini": 0.7109375,
+      "hhi": 0.02984869212710104,
+      "layer_id": 18,
+      "max_expert_share": 0.08333333333333333,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8009382807229498,
+      "observed_expert_count": 92,
+      "shannon_entropy": 3.8861767775994984,
+      "top_k_share": {
+        "1": 0.08333333333333333,
+        "4": 0.24557728119180633,
+        "8": 0.385707635009311,
+        "16": 0.5714618249534451,
+        "32": 0.792830540037244
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "19": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.3696688542825057,
+        "top16_ratio_to_uniform": 4.733705772811918,
+        "top1_ratio_to_uniform": 9.11731843575419,
+        "top32_ratio_to_uniform": 3.266294227188082,
+        "top4_ratio_to_uniform": 7.106145251396648,
+        "top8_ratio_to_uniform": 6.003724394785847
+      },
+      "effective_expert_count": 47.31761334816073,
+      "effective_expert_fraction": 0.3696688542825057,
+      "experts_for_pct": {
+        "0.5": 13,
+        "0.8": 31,
+        "0.9": 44,
+        "0.95": 54
+      },
+      "gini": 0.7235618889664803,
+      "hhi": 0.029042325111229016,
+      "layer_id": 19,
+      "max_expert_share": 0.0712290502793296,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.7949007717633482,
+      "observed_expert_count": 91,
+      "shannon_entropy": 3.856882601408825,
+      "top_k_share": {
+        "1": 0.0712290502793296,
+        "4": 0.22206703910614525,
+        "8": 0.3752327746741154,
+        "16": 0.5917132216014898,
+        "32": 0.8165735567970205
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "2": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.6019753299123195,
+        "top16_ratio_to_uniform": 3.122905027932961,
+        "top1_ratio_to_uniform": 8.402234636871508,
+        "top32_ratio_to_uniform": 2.4655493482309123,
+        "top4_ratio_to_uniform": 5.29608938547486,
+        "top8_ratio_to_uniform": 3.992551210428305
+      },
+      "effective_expert_count": 77.0528422287769,
+      "effective_expert_fraction": 0.6019753299123195,
+      "experts_for_pct": {
+        "0.5": 23,
+        "0.8": 53,
+        "0.9": 70,
+        "0.95": 83
+      },
+      "gini": 0.5325629946461825,
+      "hhi": 0.01788940558797929,
+      "layer_id": 2,
+      "max_expert_share": 0.06564245810055866,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8953966098482007,
+      "observed_expert_count": 119,
+      "shannon_entropy": 4.3444914491944955,
+      "top_k_share": {
+        "1": 0.06564245810055866,
+        "4": 0.16550279329608938,
+        "8": 0.24953445065176907,
+        "16": 0.39036312849162014,
+        "32": 0.6163873370577281
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "20": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.45175050387626703,
+        "top16_ratio_to_uniform": 4.093109869646183,
+        "top1_ratio_to_uniform": 7.329608938547486,
+        "top32_ratio_to_uniform": 2.9599627560521418,
+        "top4_ratio_to_uniform": 6.689013035381751,
+        "top8_ratio_to_uniform": 5.407821229050279
+      },
+      "effective_expert_count": 57.82406449616218,
+      "effective_expert_fraction": 0.45175050387626703,
+      "experts_for_pct": {
+        "0.5": 16,
+        "0.8": 39,
+        "0.9": 53,
+        "0.95": 65
+      },
+      "gini": 0.6590542074022347,
+      "hhi": 0.024162292930238687,
+      "layer_id": 20,
+      "max_expert_share": 0.05726256983240224,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8362283021950736,
+      "observed_expert_count": 105,
+      "shannon_entropy": 4.057405029796616,
+      "top_k_share": {
+        "1": 0.05726256983240224,
+        "4": 0.20903165735567972,
+        "8": 0.33798882681564246,
+        "16": 0.5116387337057728,
+        "32": 0.7399906890130354
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "21": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.4430455053429279,
+        "top16_ratio_to_uniform": 4.256983240223464,
+        "top1_ratio_to_uniform": 8.432029795158288,
+        "top32_ratio_to_uniform": 3.0027932960893855,
+        "top4_ratio_to_uniform": 6.845437616387337,
+        "top8_ratio_to_uniform": 5.64245810055866
+      },
+      "effective_expert_count": 56.70982468389477,
+      "effective_expert_fraction": 0.4430455053429279,
+      "experts_for_pct": {
+        "0.5": 15,
+        "0.8": 37,
+        "0.9": 52,
+        "0.95": 67
+      },
+      "gini": 0.6665393680167597,
+      "hhi": 0.025226250914626748,
+      "layer_id": 21,
+      "max_expert_share": 0.06587523277467412,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8322181130233944,
+      "observed_expert_count": 111,
+      "shannon_entropy": 4.037947470571586,
+      "top_k_share": {
+        "1": 0.06587523277467412,
+        "4": 0.2139199255121043,
+        "8": 0.3526536312849162,
+        "16": 0.532122905027933,
+        "32": 0.7506983240223464
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "22": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.5703659238802253,
+        "top16_ratio_to_uniform": 3.435754189944134,
+        "top1_ratio_to_uniform": 8.432029795158288,
+        "top32_ratio_to_uniform": 2.5847299813780262,
+        "top4_ratio_to_uniform": 5.4972067039106145,
+        "top8_ratio_to_uniform": 4.5027932960893855
+      },
+      "effective_expert_count": 73.00683825666884,
+      "effective_expert_fraction": 0.5703659238802253,
+      "experts_for_pct": {
+        "0.5": 21,
+        "0.8": 50,
+        "0.9": 68,
+        "0.95": 82
+      },
+      "gini": 0.561965345670391,
+      "hhi": 0.019081129559696083,
+      "layer_id": 22,
+      "max_expert_share": 0.06587523277467412,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8842799566637566,
+      "observed_expert_count": 115,
+      "shannon_entropy": 4.290553111510074,
+      "top_k_share": {
+        "1": 0.06587523277467412,
+        "4": 0.1717877094972067,
+        "8": 0.2814245810055866,
+        "16": 0.42946927374301674,
+        "32": 0.6461824953445066
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "23": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.6479876887664598,
+        "top16_ratio_to_uniform": 2.9459962756052143,
+        "top1_ratio_to_uniform": 4.558659217877095,
+        "top32_ratio_to_uniform": 2.371508379888268,
+        "top4_ratio_to_uniform": 3.8137802607076345,
+        "top8_ratio_to_uniform": 3.381750465549348
+      },
+      "effective_expert_count": 82.94242416210686,
+      "effective_expert_fraction": 0.6479876887664598,
+      "experts_for_pct": {
+        "0.5": 25,
+        "0.8": 55,
+        "0.9": 72,
+        "0.95": 86
+      },
+      "gini": 0.5064413116852886,
+      "hhi": 0.014953930554255137,
+      "layer_id": 23,
+      "max_expert_share": 0.0356145251396648,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.9105769012089736,
+      "observed_expert_count": 121,
+      "shannon_entropy": 4.418146682292083,
+      "top_k_share": {
+        "1": 0.0356145251396648,
+        "4": 0.11918063314711358,
+        "8": 0.21135940409683426,
+        "16": 0.3682495344506518,
+        "32": 0.592877094972067
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "24": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.6127608207791108,
+        "top16_ratio_to_uniform": 3.271880819366853,
+        "top1_ratio_to_uniform": 4.350093109869646,
+        "top32_ratio_to_uniform": 2.468342644320298,
+        "top4_ratio_to_uniform": 4.201117318435754,
+        "top8_ratio_to_uniform": 3.828677839851024
+      },
+      "effective_expert_count": 78.43338505972618,
+      "effective_expert_fraction": 0.6127608207791108,
+      "experts_for_pct": {
+        "0.5": 22,
+        "0.8": 52,
+        "0.9": 69,
+        "0.95": 83
+      },
+      "gini": 0.5346288698789572,
+      "hhi": 0.016220861985858398,
+      "layer_id": 24,
+      "max_expert_share": 0.03398510242085661,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8990565658665232,
+      "observed_expert_count": 118,
+      "shannon_entropy": 4.362249666560011,
+      "top_k_share": {
+        "1": 0.03398510242085661,
+        "4": 0.13128491620111732,
+        "8": 0.239292364990689,
+        "16": 0.4089851024208566,
+        "32": 0.6170856610800745
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "25": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.6111417915651444,
+        "top16_ratio_to_uniform": 2.9441340782122905,
+        "top1_ratio_to_uniform": 4.826815642458101,
+        "top32_ratio_to_uniform": 2.4264432029795158,
+        "top4_ratio_to_uniform": 4.01489757914339,
+        "top8_ratio_to_uniform": 3.5046554934823093
+      },
+      "effective_expert_count": 78.22614932033848,
+      "effective_expert_fraction": 0.6111417915651444,
+      "experts_for_pct": {
+        "0.5": 25,
+        "0.8": 49,
+        "0.9": 66,
+        "0.95": 81
+      },
+      "gini": 0.5335013675512104,
+      "hhi": 0.01568844952127309,
+      "layer_id": 25,
+      "max_expert_share": 0.03770949720670391,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8985112921408558,
+      "observed_expert_count": 118,
+      "shannon_entropy": 4.359603981940952,
+      "top_k_share": {
+        "1": 0.03770949720670391,
+        "4": 0.12546554934823093,
+        "8": 0.21904096834264433,
+        "16": 0.3680167597765363,
+        "32": 0.6066108007448789
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "26": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.5476727340769181,
+        "top16_ratio_to_uniform": 3.4432029795158288,
+        "top1_ratio_to_uniform": 5.243947858472998,
+        "top32_ratio_to_uniform": 2.664804469273743,
+        "top4_ratio_to_uniform": 4.759776536312849,
+        "top8_ratio_to_uniform": 4.260707635009311
+      },
+      "effective_expert_count": 70.10210996184551,
+      "effective_expert_fraction": 0.5476727340769181,
+      "experts_for_pct": {
+        "0.5": 21,
+        "0.8": 45,
+        "0.9": 61,
+        "0.95": 76
+      },
+      "gini": 0.5864539688081936,
+      "hhi": 0.018281589733986664,
+      "layer_id": 26,
+      "max_expert_share": 0.040968342644320296,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8759122803713488,
+      "observed_expert_count": 112,
+      "shannon_entropy": 4.249952892900629,
+      "top_k_share": {
+        "1": 0.040968342644320296,
+        "4": 0.14874301675977653,
+        "8": 0.26629422718808193,
+        "16": 0.4304003724394786,
+        "32": 0.6662011173184358
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "27": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.48666637072703506,
+        "top16_ratio_to_uniform": 3.927374301675978,
+        "top1_ratio_to_uniform": 8.640595903165735,
+        "top32_ratio_to_uniform": 2.819366852886406,
+        "top4_ratio_to_uniform": 6.942271880819367,
+        "top8_ratio_to_uniform": 5.385474860335195
+      },
+      "effective_expert_count": 62.29329545306049,
+      "effective_expert_fraction": 0.48666637072703506,
+      "experts_for_pct": {
+        "0.5": 17,
+        "0.8": 43,
+        "0.9": 60,
+        "0.95": 72
+      },
+      "gini": 0.6265275837988826,
+      "hhi": 0.023407942601319835,
+      "layer_id": 27,
+      "max_expert_share": 0.06750465549348231,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8515721415840052,
+      "observed_expert_count": 113,
+      "shannon_entropy": 4.131853802876434,
+      "top_k_share": {
+        "1": 0.06750465549348231,
+        "4": 0.2169459962756052,
+        "8": 0.3365921787709497,
+        "16": 0.49092178770949724,
+        "32": 0.7048417132216015
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "28": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.46817035048379424,
+        "top16_ratio_to_uniform": 3.899441340782123,
+        "top1_ratio_to_uniform": 12.335195530726256,
+        "top32_ratio_to_uniform": 2.868715083798883,
+        "top4_ratio_to_uniform": 7.210428305400372,
+        "top8_ratio_to_uniform": 5.180633147113594
+      },
+      "effective_expert_count": 59.92580486192566,
+      "effective_expert_fraction": 0.46817035048379424,
+      "experts_for_pct": {
+        "0.5": 17,
+        "0.8": 42,
+        "0.9": 58,
+        "0.95": 70
+      },
+      "gini": 0.635100238594041,
+      "hhi": 0.02611606136581949,
+      "layer_id": 28,
+      "max_expert_share": 0.09636871508379888,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8435864965273497,
+      "observed_expert_count": 111,
+      "shannon_entropy": 4.093107211384622,
+      "top_k_share": {
+        "1": 0.09636871508379888,
+        "4": 0.22532588454376162,
+        "8": 0.3237895716945996,
+        "16": 0.48743016759776536,
+        "32": 0.7171787709497207
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "29": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.4725623168286255,
+        "top16_ratio_to_uniform": 3.7653631284916202,
+        "top1_ratio_to_uniform": 11.411545623836126,
+        "top32_ratio_to_uniform": 2.783054003724395,
+        "top4_ratio_to_uniform": 7.4636871508379885,
+        "top8_ratio_to_uniform": 5.221601489757914
+      },
+      "effective_expert_count": 60.48797655406406,
+      "effective_expert_fraction": 0.4725623168286255,
+      "experts_for_pct": {
+        "0.5": 18,
+        "0.8": 43,
+        "0.9": 57,
+        "0.95": 71
+      },
+      "gini": 0.6265494064245809,
+      "hhi": 0.02626506750032077,
+      "layer_id": 29,
+      "max_expert_share": 0.08915270018621974,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8455109278994484,
+      "observed_expert_count": 111,
+      "shannon_entropy": 4.1024446106428805,
+      "top_k_share": {
+        "1": 0.08915270018621974,
+        "4": 0.23324022346368714,
+        "8": 0.3263500931098696,
+        "16": 0.47067039106145253,
+        "32": 0.6957635009310987
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "3": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.5711702217077835,
+        "top16_ratio_to_uniform": 3.2383612662942274,
+        "top1_ratio_to_uniform": 8.819366852886406,
+        "top32_ratio_to_uniform": 2.4702048417132216,
+        "top4_ratio_to_uniform": 5.623836126629422,
+        "top8_ratio_to_uniform": 4.189944134078212
+      },
+      "effective_expert_count": 73.10978837859629,
+      "effective_expert_fraction": 0.5711702217077835,
+      "experts_for_pct": {
+        "0.5": 23,
+        "0.8": 51,
+        "0.9": 67,
+        "0.95": 79
+      },
+      "gini": 0.5515777758379887,
+      "hhi": 0.019408617951305447,
+      "layer_id": 3,
+      "max_expert_share": 0.06890130353817504,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8845703815277088,
+      "observed_expert_count": 115,
+      "shannon_entropy": 4.291962261739365,
+      "top_k_share": {
+        "1": 0.06890130353817504,
+        "4": 0.17574487895716945,
+        "8": 0.26187150837988826,
+        "16": 0.4047951582867784,
+        "32": 0.6175512104283054
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "30": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.3644986661333156,
+        "top16_ratio_to_uniform": 4.683426443202979,
+        "top1_ratio_to_uniform": 10.845437616387336,
+        "top32_ratio_to_uniform": 3.1983240223463687,
+        "top4_ratio_to_uniform": 8.20856610800745,
+        "top8_ratio_to_uniform": 6.45437616387337
+      },
+      "effective_expert_count": 46.6558292650644,
+      "effective_expert_fraction": 0.3644986661333156,
+      "experts_for_pct": {
+        "0.5": 12,
+        "0.8": 33,
+        "0.9": 44,
+        "0.95": 55
+      },
+      "gini": 0.7214014490223464,
+      "hhi": 0.03166418286986465,
+      "layer_id": 30,
+      "max_expert_share": 0.08472998137802606,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.7919979200280095,
+      "observed_expert_count": 90,
+      "shannon_entropy": 3.8427978769372904,
+      "top_k_share": {
+        "1": 0.08472998137802606,
+        "4": 0.2565176908752328,
+        "8": 0.4033985102420856,
+        "16": 0.5854283054003724,
+        "32": 0.7995810055865922
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "31": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.3586356773359393,
+        "top16_ratio_to_uniform": 4.8584729981378025,
+        "top1_ratio_to_uniform": 10.487895716945996,
+        "top32_ratio_to_uniform": 3.2253258845437616,
+        "top4_ratio_to_uniform": 8.067039106145252,
+        "top8_ratio_to_uniform": 6.4804469273743015
+      },
+      "effective_expert_count": 45.90536669900023,
+      "effective_expert_fraction": 0.3586356773359393,
+      "experts_for_pct": {
+        "0.5": 11,
+        "0.8": 32,
+        "0.9": 44,
+        "0.95": 54
+      },
+      "gini": 0.7272535498137802,
+      "hhi": 0.03191017845191404,
+      "layer_id": 31,
+      "max_expert_share": 0.08193668528864059,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.7886558458288192,
+      "observed_expert_count": 87,
+      "shannon_entropy": 3.826582031778554,
+      "top_k_share": {
+        "1": 0.08193668528864059,
+        "4": 0.2520949720670391,
+        "8": 0.40502793296089384,
+        "16": 0.6073091247672253,
+        "32": 0.8063314711359404
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "32": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.44561198092273724,
+        "top16_ratio_to_uniform": 4.21415270018622,
+        "top1_ratio_to_uniform": 8.521415270018622,
+        "top32_ratio_to_uniform": 2.961824953445065,
+        "top4_ratio_to_uniform": 7.307262569832402,
+        "top8_ratio_to_uniform": 5.631284916201118
+      },
+      "effective_expert_count": 57.03833355811037,
+      "effective_expert_fraction": 0.44561198092273724,
+      "experts_for_pct": {
+        "0.5": 15,
+        "0.8": 39,
+        "0.9": 54,
+        "0.95": 67
+      },
+      "gini": 0.6600580481843576,
+      "hhi": 0.025621252631177416,
+      "layer_id": 32,
+      "max_expert_share": 0.06657355679702048,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8334085610364632,
+      "observed_expert_count": 103,
+      "shannon_entropy": 4.043723560358619,
+      "top_k_share": {
+        "1": 0.06657355679702048,
+        "4": 0.22835195530726257,
+        "8": 0.35195530726256985,
+        "16": 0.5267690875232774,
+        "32": 0.7404562383612663
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "33": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.4403798627363661,
+        "top16_ratio_to_uniform": 4.208566108007449,
+        "top1_ratio_to_uniform": 9.594040968342645,
+        "top32_ratio_to_uniform": 2.972998137802607,
+        "top4_ratio_to_uniform": 7.202979515828678,
+        "top8_ratio_to_uniform": 5.798882681564246
+      },
+      "effective_expert_count": 56.36862243025486,
+      "effective_expert_fraction": 0.4403798627363661,
+      "experts_for_pct": {
+        "0.5": 15,
+        "0.8": 38,
+        "0.9": 53,
+        "0.95": 66
+      },
+      "gini": 0.6644043878026071,
+      "hhi": 0.026169811942337768,
+      "layer_id": 33,
+      "max_expert_share": 0.07495344506517691,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8309743436231899,
+      "observed_expert_count": 110,
+      "shannon_entropy": 4.0319126638004565,
+      "top_k_share": {
+        "1": 0.07495344506517691,
+        "4": 0.22509310986964617,
+        "8": 0.36243016759776536,
+        "16": 0.5260707635009311,
+        "32": 0.7432495344506518
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "34": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.5588279622806975,
+        "top16_ratio_to_uniform": 3.3743016759776534,
+        "top1_ratio_to_uniform": 10.309124767225326,
+        "top32_ratio_to_uniform": 2.5549348230912474,
+        "top4_ratio_to_uniform": 5.8472998137802605,
+        "top8_ratio_to_uniform": 4.439478584729981
+      },
+      "effective_expert_count": 71.52997917192928,
+      "effective_expert_fraction": 0.5588279622806975,
+      "experts_for_pct": {
+        "0.5": 22,
+        "0.8": 49,
+        "0.9": 66,
+        "0.95": 79
+      },
+      "gini": 0.564514955772812,
+      "hhi": 0.020385881457438214,
+      "layer_id": 34,
+      "max_expert_share": 0.08054003724394786,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8800680166185125,
+      "observed_expert_count": 114,
+      "shannon_entropy": 4.270116650940735,
+      "top_k_share": {
+        "1": 0.08054003724394786,
+        "4": 0.18272811918063314,
+        "8": 0.2774674115456238,
+        "16": 0.4217877094972067,
+        "32": 0.6387337057728119
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "35": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.6436364549780061,
+        "top16_ratio_to_uniform": 2.9757914338919926,
+        "top1_ratio_to_uniform": 4.916201117318436,
+        "top32_ratio_to_uniform": 2.3314711359404097,
+        "top4_ratio_to_uniform": 4.37243947858473,
+        "top8_ratio_to_uniform": 3.716945996275605
+      },
+      "effective_expert_count": 82.38546623718479,
+      "effective_expert_fraction": 0.6436364549780061,
+      "experts_for_pct": {
+        "0.5": 26,
+        "0.8": 56,
+        "0.9": 73,
+        "0.95": 86
+      },
+      "gini": 0.5045100093109869,
+      "hhi": 0.015279685056299393,
+      "layer_id": 35,
+      "max_expert_share": 0.03840782122905028,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.9091882780587145,
+      "observed_expert_count": 118,
+      "shannon_entropy": 4.411409040741846,
+      "top_k_share": {
+        "1": 0.03840782122905028,
+        "4": 0.1366387337057728,
+        "8": 0.23230912476722532,
+        "16": 0.3719739292364991,
+        "32": 0.5828677839851024
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "36": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.5618936248043133,
+        "top16_ratio_to_uniform": 3.3910614525139664,
+        "top1_ratio_to_uniform": 6.5251396648044695,
+        "top32_ratio_to_uniform": 2.585661080074488,
+        "top4_ratio_to_uniform": 5.1918063314711365,
+        "top8_ratio_to_uniform": 4.204841713221602
+      },
+      "effective_expert_count": 71.9223839749521,
+      "effective_expert_fraction": 0.5618936248043133,
+      "experts_for_pct": {
+        "0.5": 21,
+        "0.8": 48,
+        "0.9": 64,
+        "0.95": 77
+      },
+      "gini": 0.5726511580540037,
+      "hhi": 0.01830402193023522,
+      "layer_id": 36,
+      "max_expert_share": 0.05097765363128492,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.881195562402352,
+      "observed_expert_count": 114,
+      "shannon_entropy": 4.275587537207879,
+      "top_k_share": {
+        "1": 0.05097765363128492,
+        "4": 0.16224394785847301,
+        "8": 0.2628026070763501,
+        "16": 0.4238826815642458,
+        "32": 0.646415270018622
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "37": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.5919199918277118,
+        "top16_ratio_to_uniform": 2.9869646182495346,
+        "top1_ratio_to_uniform": 7.687150837988827,
+        "top32_ratio_to_uniform": 2.4664804469273744,
+        "top4_ratio_to_uniform": 4.797020484171322,
+        "top8_ratio_to_uniform": 3.739292364990689
+      },
+      "effective_expert_count": 75.76575895394711,
+      "effective_expert_fraction": 0.5919199918277118,
+      "experts_for_pct": {
+        "0.5": 24,
+        "0.8": 49,
+        "0.9": 66,
+        "0.95": 81
+      },
+      "gini": 0.5423831762104283,
+      "hhi": 0.017267697810791037,
+      "layer_id": 37,
+      "max_expert_share": 0.06005586592178771,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8919248698692916,
+      "observed_expert_count": 116,
+      "shannon_entropy": 4.327646461748369,
+      "top_k_share": {
+        "1": 0.06005586592178771,
+        "4": 0.14990689013035383,
+        "8": 0.23370577281191807,
+        "16": 0.37337057728119183,
+        "32": 0.6166201117318436
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "38": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.5083076896894466,
+        "top16_ratio_to_uniform": 3.554934823091248,
+        "top1_ratio_to_uniform": 9.772811918063315,
+        "top32_ratio_to_uniform": 2.7085661080074486,
+        "top4_ratio_to_uniform": 6.167597765363128,
+        "top8_ratio_to_uniform": 4.651769087523277
+      },
+      "effective_expert_count": 65.06338428024917,
+      "effective_expert_fraction": 0.5083076896894466,
+      "experts_for_pct": {
+        "0.5": 20,
+        "0.8": 43,
+        "0.9": 59,
+        "0.95": 73
+      },
+      "gini": 0.6076073673184357,
+      "hhi": 0.021686948839854493,
+      "layer_id": 38,
+      "max_expert_share": 0.07635009310986965,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.860539137312154,
+      "observed_expert_count": 110,
+      "shannon_entropy": 4.17536193752585,
+      "top_k_share": {
+        "1": 0.07635009310986965,
+        "4": 0.19273743016759776,
+        "8": 0.29073556797020483,
+        "16": 0.444366852886406,
+        "32": 0.6771415270018621
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "39": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.48779014498099743,
+        "top16_ratio_to_uniform": 3.834264432029795,
+        "top1_ratio_to_uniform": 9.504655493482309,
+        "top32_ratio_to_uniform": 2.819366852886406,
+        "top4_ratio_to_uniform": 7.083798882681564,
+        "top8_ratio_to_uniform": 5.1471135940409685
+      },
+      "effective_expert_count": 62.43713855756767,
+      "effective_expert_fraction": 0.48779014498099743,
+      "experts_for_pct": {
+        "0.5": 18,
+        "0.8": 43,
+        "0.9": 60,
+        "0.95": 73
+      },
+      "gini": 0.6219120984636872,
+      "hhi": 0.023871324587594365,
+      "layer_id": 39,
+      "max_expert_share": 0.07425512104283054,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8520475023139142,
+      "observed_expert_count": 106,
+      "shannon_entropy": 4.134160267524232,
+      "top_k_share": {
+        "1": 0.07425512104283054,
+        "4": 0.22136871508379888,
+        "8": 0.32169459962756053,
+        "16": 0.4792830540037244,
+        "32": 0.7048417132216015
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "4": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.5463229433947904,
+        "top16_ratio_to_uniform": 3.541899441340782,
+        "top1_ratio_to_uniform": 6.88268156424581,
+        "top32_ratio_to_uniform": 2.635009310986965,
+        "top4_ratio_to_uniform": 5.973929236499069,
+        "top8_ratio_to_uniform": 4.677839851024208
+      },
+      "effective_expert_count": 69.92933675453317,
+      "effective_expert_fraction": 0.5463229433947904,
+      "experts_for_pct": {
+        "0.5": 20,
+        "0.8": 47,
+        "0.9": 64,
+        "0.95": 78
+      },
+      "gini": 0.5825331703910615,
+      "hhi": 0.019776310907205698,
+      "layer_id": 4,
+      "max_expert_share": 0.05377094972067039,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8754037024121715,
+      "observed_expert_count": 115,
+      "shannon_entropy": 4.247485257251138,
+      "top_k_share": {
+        "1": 0.05377094972067039,
+        "4": 0.18668528864059591,
+        "8": 0.292364990689013,
+        "16": 0.44273743016759776,
+        "32": 0.6587523277467412
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "40": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.42988237699372506,
+        "top16_ratio_to_uniform": 4.050279329608939,
+        "top1_ratio_to_uniform": 11.858472998137803,
+        "top32_ratio_to_uniform": 2.9720670391061454,
+        "top4_ratio_to_uniform": 7.396648044692737,
+        "top8_ratio_to_uniform": 5.579143389199255
+      },
+      "effective_expert_count": 55.02494425519681,
+      "effective_expert_fraction": 0.42988237699372506,
+      "experts_for_pct": {
+        "0.5": 16,
+        "0.8": 38,
+        "0.9": 52,
+        "0.95": 64
+      },
+      "gini": 0.6666630295623837,
+      "hhi": 0.027672660722893237,
+      "layer_id": 40,
+      "max_expert_share": 0.09264432029795158,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8260019819194236,
+      "observed_expert_count": 102,
+      "shannon_entropy": 4.0077866143306276,
+      "top_k_share": {
+        "1": 0.09264432029795158,
+        "4": 0.23114525139664804,
+        "8": 0.34869646182495345,
+        "16": 0.5062849162011174,
+        "32": 0.7430167597765364
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "41": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.4667114402386006,
+        "top16_ratio_to_uniform": 3.718808193668529,
+        "top1_ratio_to_uniform": 10.726256983240223,
+        "top32_ratio_to_uniform": 2.815642458100559,
+        "top4_ratio_to_uniform": 7.232774674115456,
+        "top8_ratio_to_uniform": 5.094972067039106
+      },
+      "effective_expert_count": 59.73906435054088,
+      "effective_expert_fraction": 0.4667114402386006,
+      "experts_for_pct": {
+        "0.5": 19,
+        "0.8": 42,
+        "0.9": 55,
+        "0.95": 67
+      },
+      "gini": 0.6321941922718808,
+      "hhi": 0.025908428090398068,
+      "layer_id": 41,
+      "max_expert_share": 0.08379888268156424,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8429432481187504,
+      "observed_expert_count": 111,
+      "shannon_entropy": 4.08998615063888,
+      "top_k_share": {
+        "1": 0.08379888268156424,
+        "4": 0.226024208566108,
+        "8": 0.31843575418994413,
+        "16": 0.4648510242085661,
+        "32": 0.7039106145251397
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "42": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.47378450699914465,
+        "top16_ratio_to_uniform": 3.6685288640595903,
+        "top1_ratio_to_uniform": 8.402234636871508,
+        "top32_ratio_to_uniform": 2.8696461824953445,
+        "top4_ratio_to_uniform": 6.621973929236499,
+        "top8_ratio_to_uniform": 4.8305400372439475
+      },
+      "effective_expert_count": 60.644416895890515,
+      "effective_expert_fraction": 0.47378450699914465,
+      "experts_for_pct": {
+        "0.5": 19,
+        "0.8": 40,
+        "0.9": 55,
+        "0.95": 67
+      },
+      "gini": 0.6351584322625698,
+      "hhi": 0.022958973572055247,
+      "layer_id": 42,
+      "max_expert_share": 0.06564245810055866,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8460432753686723,
+      "observed_expert_count": 103,
+      "shannon_entropy": 4.105027576674476,
+      "top_k_share": {
+        "1": 0.06564245810055866,
+        "4": 0.2069366852886406,
+        "8": 0.3019087523277467,
+        "16": 0.4585661080074488,
+        "32": 0.7174115456238361
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "43": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.42258050400552843,
+        "top16_ratio_to_uniform": 4.1359404096834265,
+        "top1_ratio_to_uniform": 12.067039106145252,
+        "top32_ratio_to_uniform": 2.9972067039106145,
+        "top4_ratio_to_uniform": 7.657355679702048,
+        "top8_ratio_to_uniform": 5.739292364990689
+      },
+      "effective_expert_count": 54.09030451270764,
+      "effective_expert_fraction": 0.42258050400552843,
+      "experts_for_pct": {
+        "0.5": 16,
+        "0.8": 38,
+        "0.9": 51,
+        "0.95": 62
+      },
+      "gini": 0.6725878724394785,
+      "hhi": 0.028018354954936212,
+      "layer_id": 43,
+      "max_expert_share": 0.09427374301675978,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8224711591936836,
+      "observed_expert_count": 99,
+      "shannon_entropy": 3.990654955608802,
+      "top_k_share": {
+        "1": 0.09427374301675978,
+        "4": 0.239292364990689,
+        "8": 0.35870577281191807,
+        "16": 0.5169925512104283,
+        "32": 0.7493016759776536
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "44": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.4637115175374638,
+        "top16_ratio_to_uniform": 3.75,
+        "top1_ratio_to_uniform": 10.626865671641792,
+        "top32_ratio_to_uniform": 2.896455223880597,
+        "top4_ratio_to_uniform": 6.455223880597015,
+        "top8_ratio_to_uniform": 4.779850746268657
+      },
+      "effective_expert_count": 59.35507424479537,
+      "effective_expert_fraction": 0.4637115175374638,
+      "experts_for_pct": {
+        "0.5": 18,
+        "0.8": 40,
+        "0.9": 53,
+        "0.95": 65
+      },
+      "gini": 0.6421845848880596,
+      "hhi": 0.02412516185397639,
+      "layer_id": 44,
+      "max_expert_share": 0.0830223880597015,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8416142093610749,
+      "observed_expert_count": 102,
+      "shannon_entropy": 4.083537614364716,
+      "top_k_share": {
+        "1": 0.0830223880597015,
+        "4": 0.20172574626865672,
+        "8": 0.2987406716417911,
+        "16": 0.46875,
+        "32": 0.7241138059701493
+      },
+      "total_requests": 4288,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "45": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.43650586625536486,
+        "top16_ratio_to_uniform": 4.003731343283582,
+        "top1_ratio_to_uniform": 10.238805970149254,
+        "top32_ratio_to_uniform": 2.925373134328358,
+        "top4_ratio_to_uniform": 7.507462686567164,
+        "top8_ratio_to_uniform": 5.492537313432836
+      },
+      "effective_expert_count": 55.8727508806867,
+      "effective_expert_fraction": 0.43650586625536486,
+      "experts_for_pct": {
+        "0.5": 16,
+        "0.8": 39,
+        "0.9": 52,
+        "0.95": 63
+      },
+      "gini": 0.6609360424440298,
+      "hhi": 0.0267832435884941,
+      "layer_id": 45,
+      "max_expert_share": 0.07999067164179105,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8291532782359364,
+      "observed_expert_count": 100,
+      "shannon_entropy": 4.023076799428926,
+      "top_k_share": {
+        "1": 0.07999067164179105,
+        "4": 0.23460820895522388,
+        "8": 0.34328358208955223,
+        "16": 0.5004664179104478,
+        "32": 0.7313432835820896
+      },
+      "total_requests": 4288,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "46": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.48076195576361175,
+        "top16_ratio_to_uniform": 3.7611940298507465,
+        "top1_ratio_to_uniform": 9.223880597014926,
+        "top32_ratio_to_uniform": 2.890858208955224,
+        "top4_ratio_to_uniform": 5.791044776119403,
+        "top8_ratio_to_uniform": 4.6716417910447765
+      },
+      "effective_expert_count": 61.537530337742304,
+      "effective_expert_fraction": 0.48076195576361175,
+      "experts_for_pct": {
+        "0.5": 18,
+        "0.8": 40,
+        "0.9": 55,
+        "0.95": 69
+      },
+      "gini": 0.6351045067630596,
+      "hhi": 0.022188135233348186,
+      "layer_id": 46,
+      "max_expert_share": 0.07206156716417911,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8490563772271769,
+      "observed_expert_count": 104,
+      "shannon_entropy": 4.119647238080213,
+      "top_k_share": {
+        "1": 0.07206156716417911,
+        "4": 0.18097014925373134,
+        "8": 0.29197761194029853,
+        "16": 0.4701492537313433,
+        "32": 0.722714552238806
+      },
+      "total_requests": 4288,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "47": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.45083112618293336,
+        "top16_ratio_to_uniform": 3.881012658227848,
+        "top1_ratio_to_uniform": 8.99240506329114,
+        "top32_ratio_to_uniform": 3.0329113924050635,
+        "top4_ratio_to_uniform": 5.954430379746835,
+        "top8_ratio_to_uniform": 4.739240506329114
+      },
+      "effective_expert_count": 57.70638415141547,
+      "effective_expert_fraction": 0.45083112618293336,
+      "experts_for_pct": {
+        "0.5": 17,
+        "0.8": 36,
+        "0.9": 50,
+        "0.95": 63
+      },
+      "gini": 0.6593947784810126,
+      "hhi": 0.023653260695401378,
+      "layer_id": 47,
+      "max_expert_share": 0.07025316455696203,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8358084328990648,
+      "observed_expert_count": 107,
+      "shannon_entropy": 4.055367811265491,
+      "top_k_share": {
+        "1": 0.07025316455696203,
+        "4": 0.1860759493670886,
+        "8": 0.29620253164556964,
+        "16": 0.485126582278481,
+        "32": 0.7582278481012659
+      },
+      "total_requests": 3160,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "5": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.5594454533107069,
+        "top16_ratio_to_uniform": 3.292364990689013,
+        "top1_ratio_to_uniform": 6.465549348230913,
+        "top32_ratio_to_uniform": 2.594972067039106,
+        "top4_ratio_to_uniform": 4.819366852886406,
+        "top8_ratio_to_uniform": 4.044692737430168
+      },
+      "effective_expert_count": 71.60901802377049,
+      "effective_expert_fraction": 0.5594454533107069,
+      "experts_for_pct": {
+        "0.5": 22,
+        "0.8": 47,
+        "0.9": 63,
+        "0.95": 75
+      },
+      "gini": 0.574291492085661,
+      "hhi": 0.0178418319930367,
+      "layer_id": 5,
+      "max_expert_share": 0.050512104283054006,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8802956254930275,
+      "observed_expert_count": 112,
+      "shannon_entropy": 4.2712210160882185,
+      "top_k_share": {
+        "1": 0.050512104283054006,
+        "4": 0.1506052141527002,
+        "8": 0.2527932960893855,
+        "16": 0.41154562383612664,
+        "32": 0.6487430167597765
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "6": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.3709568687884169,
+        "top16_ratio_to_uniform": 4.849162011173184,
+        "top1_ratio_to_uniform": 11.1731843575419,
+        "top32_ratio_to_uniform": 3.2374301675977653,
+        "top4_ratio_to_uniform": 8.588454376163874,
+        "top8_ratio_to_uniform": 6.517690875232774
+      },
+      "effective_expert_count": 47.48247920491736,
+      "effective_expert_fraction": 0.3709568687884169,
+      "experts_for_pct": {
+        "0.5": 12,
+        "0.8": 31,
+        "0.9": 47,
+        "0.95": 60
+      },
+      "gini": 0.7183317330074488,
+      "hhi": 0.032453319358183436,
+      "layer_id": 6,
+      "max_expert_share": 0.08729050279329609,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.7956176227625336,
+      "observed_expert_count": 103,
+      "shannon_entropy": 3.860360784151594,
+      "top_k_share": {
+        "1": 0.08729050279329609,
+        "4": 0.26838919925512106,
+        "8": 0.4073556797020484,
+        "16": 0.606145251396648,
+        "32": 0.8093575418994413
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "7": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.36996672113743123,
+        "top16_ratio_to_uniform": 4.657355679702048,
+        "top1_ratio_to_uniform": 11.322160148975792,
+        "top32_ratio_to_uniform": 3.2690875232774674,
+        "top4_ratio_to_uniform": 8.20856610800745,
+        "top8_ratio_to_uniform": 6.160148975791434
+      },
+      "effective_expert_count": 47.3557403055912,
+      "effective_expert_fraction": 0.36996672113743123,
+      "experts_for_pct": {
+        "0.5": 13,
+        "0.8": 31,
+        "0.9": 43,
+        "0.95": 56
+      },
+      "gini": 0.7204521648044693,
+      "hhi": 0.031176851533972098,
+      "layer_id": 7,
+      "max_expert_share": 0.08845437616387337,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.7950667728404651,
+      "observed_expert_count": 99,
+      "shannon_entropy": 3.85768804365884,
+      "top_k_share": {
+        "1": 0.08845437616387337,
+        "4": 0.2565176908752328,
+        "8": 0.3850093109869646,
+        "16": 0.582169459962756,
+        "32": 0.8172718808193669
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "8": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.47625958532118506,
+        "top16_ratio_to_uniform": 3.994413407821229,
+        "top1_ratio_to_uniform": 7.06145251396648,
+        "top32_ratio_to_uniform": 2.910614525139665,
+        "top4_ratio_to_uniform": 6.465549348230912,
+        "top8_ratio_to_uniform": 5.299813780260708
+      },
+      "effective_expert_count": 60.96122692111169,
+      "effective_expert_fraction": 0.47625958532118506,
+      "experts_for_pct": {
+        "0.5": 17,
+        "0.8": 40,
+        "0.9": 57,
+        "0.95": 71
+      },
+      "gini": 0.6405959031657356,
+      "hhi": 0.022992025841890078,
+      "layer_id": 8,
+      "max_expert_share": 0.055167597765363126,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8471171477224329,
+      "observed_expert_count": 108,
+      "shannon_entropy": 4.110238037834509,
+      "top_k_share": {
+        "1": 0.055167597765363126,
+        "4": 0.202048417132216,
+        "8": 0.33123836126629425,
+        "16": 0.4993016759776536,
+        "32": 0.7276536312849162
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    },
+    "9": {
+      "concentration_ratios": {
+        "effective_expert_fraction": 0.447564803308951,
+        "top16_ratio_to_uniform": 4.11731843575419,
+        "top1_ratio_to_uniform": 9.296089385474861,
+        "top32_ratio_to_uniform": 3.0065176908752327,
+        "top4_ratio_to_uniform": 6.808193668528864,
+        "top8_ratio_to_uniform": 5.359404096834265
+      },
+      "effective_expert_count": 57.288294823545726,
+      "effective_expert_fraction": 0.447564803308951,
+      "experts_for_pct": {
+        "0.5": 16,
+        "0.8": 37,
+        "0.9": 52,
+        "0.95": 67
+      },
+      "gini": 0.6614692446461825,
+      "hhi": 0.02510108576164567,
+      "layer_id": 9,
+      "max_expert_share": 0.07262569832402235,
+      "n_basis": "nominal_expert_count",
+      "n_used": 128,
+      "nominal_expert_count": 128,
+      "normalized_entropy": 0.8343097845316338,
+      "observed_expert_count": 107,
+      "shannon_entropy": 4.048096324031742,
+      "top_k_share": {
+        "1": 0.07262569832402235,
+        "4": 0.212756052141527,
+        "8": 0.33496275605214154,
+        "16": 0.5146648044692738,
+        "32": 0.7516294227188082
+      },
+      "total_requests": 4296,
+      "uniform_baseline": {
+        "effective_expert_count": 128.0,
+        "gini": 0.0,
+        "hhi": 0.0078125,
+        "n": 128,
+        "normalized_entropy": 1.0,
+        "top_k_share": {
+          "1": 0.0078125,
+          "4": 0.03125,
+          "8": 0.0625,
+          "16": 0.125,
+          "32": 0.25
+        }
+      }
+    }
+  },
+  "population_rows": [
+    {
+      "layer_id": 0,
+      "never_observed_expert_count": 6,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 122
+    },
+    {
+      "layer_id": 1,
+      "never_observed_expert_count": 5,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 123
+    },
+    {
+      "layer_id": 2,
+      "never_observed_expert_count": 9,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 119
+    },
+    {
+      "layer_id": 3,
+      "never_observed_expert_count": 13,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 115
+    },
+    {
+      "layer_id": 4,
+      "never_observed_expert_count": 13,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 115
+    },
+    {
+      "layer_id": 5,
+      "never_observed_expert_count": 16,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 112
+    },
+    {
+      "layer_id": 6,
+      "never_observed_expert_count": 25,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 103
+    },
+    {
+      "layer_id": 7,
+      "never_observed_expert_count": 29,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 99
+    },
+    {
+      "layer_id": 8,
+      "never_observed_expert_count": 20,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 108
+    },
+    {
+      "layer_id": 9,
+      "never_observed_expert_count": 21,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 107
+    },
+    {
+      "layer_id": 10,
+      "never_observed_expert_count": 9,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 119
+    },
+    {
+      "layer_id": 11,
+      "never_observed_expert_count": 9,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 119
+    },
+    {
+      "layer_id": 12,
+      "never_observed_expert_count": 8,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 120
+    },
+    {
+      "layer_id": 13,
+      "never_observed_expert_count": 10,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 118
+    },
+    {
+      "layer_id": 14,
+      "never_observed_expert_count": 13,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 115
+    },
+    {
+      "layer_id": 15,
+      "never_observed_expert_count": 13,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 115
+    },
+    {
+      "layer_id": 16,
+      "never_observed_expert_count": 20,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 108
+    },
+    {
+      "layer_id": 17,
+      "never_observed_expert_count": 15,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 113
+    },
+    {
+      "layer_id": 18,
+      "never_observed_expert_count": 36,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 92
+    },
+    {
+      "layer_id": 19,
+      "never_observed_expert_count": 37,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 91
+    },
+    {
+      "layer_id": 20,
+      "never_observed_expert_count": 23,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 105
+    },
+    {
+      "layer_id": 21,
+      "never_observed_expert_count": 17,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 111
+    },
+    {
+      "layer_id": 22,
+      "never_observed_expert_count": 13,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 115
+    },
+    {
+      "layer_id": 23,
+      "never_observed_expert_count": 7,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 121
+    },
+    {
+      "layer_id": 24,
+      "never_observed_expert_count": 10,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 118
+    },
+    {
+      "layer_id": 25,
+      "never_observed_expert_count": 10,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 118
+    },
+    {
+      "layer_id": 26,
+      "never_observed_expert_count": 16,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 112
+    },
+    {
+      "layer_id": 27,
+      "never_observed_expert_count": 15,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 113
+    },
+    {
+      "layer_id": 28,
+      "never_observed_expert_count": 17,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 111
+    },
+    {
+      "layer_id": 29,
+      "never_observed_expert_count": 17,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 111
+    },
+    {
+      "layer_id": 30,
+      "never_observed_expert_count": 38,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 90
+    },
+    {
+      "layer_id": 31,
+      "never_observed_expert_count": 41,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 87
+    },
+    {
+      "layer_id": 32,
+      "never_observed_expert_count": 25,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 103
+    },
+    {
+      "layer_id": 33,
+      "never_observed_expert_count": 18,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 110
+    },
+    {
+      "layer_id": 34,
+      "never_observed_expert_count": 14,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 114
+    },
+    {
+      "layer_id": 35,
+      "never_observed_expert_count": 10,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 118
+    },
+    {
+      "layer_id": 36,
+      "never_observed_expert_count": 14,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 114
+    },
+    {
+      "layer_id": 37,
+      "never_observed_expert_count": 12,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 116
+    },
+    {
+      "layer_id": 38,
+      "never_observed_expert_count": 18,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 110
+    },
+    {
+      "layer_id": 39,
+      "never_observed_expert_count": 22,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 106
+    },
+    {
+      "layer_id": 40,
+      "never_observed_expert_count": 26,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 102
+    },
+    {
+      "layer_id": 41,
+      "never_observed_expert_count": 17,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 111
+    },
+    {
+      "layer_id": 42,
+      "never_observed_expert_count": 25,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 103
+    },
+    {
+      "layer_id": 43,
+      "never_observed_expert_count": 29,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 99
+    },
+    {
+      "layer_id": 44,
+      "never_observed_expert_count": 26,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 102
+    },
+    {
+      "layer_id": 45,
+      "never_observed_expert_count": 28,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 100
+    },
+    {
+      "layer_id": 46,
+      "never_observed_expert_count": 24,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 104
+    },
+    {
+      "layer_id": 47,
+      "never_observed_expert_count": 21,
+      "nominal_expert_count": 128,
+      "observed_expert_count": 107
+    }
+  ]
+}

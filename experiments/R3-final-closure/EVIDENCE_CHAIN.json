@@ -1,0 +1,147 @@
+{
+ "artifact": "R3-CLOSURE-EVIDENCE-CHAIN",
+ "key_numbers": {
+  "R3_03A": {
+   "corrected_policy_calls_per_decode_token": 48,
+   "old_over_corrected": 3.0,
+   "old_runtime_policy_calls_per_decode_token": 144,
+   "passes": 514,
+   "policy_event_rows_per_launch": 24672
+  },
+  "R3_03B": {
+   "classification": "R3_03B_EXPLAINED",
+   "equivalence_interval": [
+    0.5,
+    2.0
+   ],
+   "fieller_95": [
+    0.8759943227325426,
+    0.9286851073705427
+   ],
+   "n_blocks": 20,
+   "rho": 0.9024457830340606
+  },
+  "R3_04": {
+   "A_ms_per_token": 526.9731852213541,
+   "A_tokens_per_second": 1.8991620948631482,
+   "P_minus_A_ci95": [
+    10.460133972591187,
+    21.193374056922686
+   ],
+   "P_minus_A_ms_per_token": 15.826754014756936,
+   "P_minus_S_ci95": [
+    -2.8379208950643453,
+    5.315331919369921
+   ],
+   "P_minus_S_ms_per_token": 1.2387055121527877,
+   "P_ms_per_token": 542.7999392361112,
+   "S_minus_A_ms_per_token": 14.588048502604149,
+   "S_ms_per_token": 541.5612337239584,
+   "n_blocks": 18,
+   "status": "R3_04_CLOSED_NET_LOSS",
+   "throughput_change_P_vs_A_pct": -2.9331500488738893
+  },
+  "R3_05": {
+   "A_misses_per_token": 207.990234375,
+   "CES_fraction_of_belady_byte_headroom": 0.005587495285032725,
+   "CES_over_PP_byte_ratio": 2.4297669627912963,
+   "K2": "R3_05_K2_RETIRE_CURRENT_PP",
+   "K3": "R3_05_K3_FREQUENCY_FAMILY_SURVIVES",
+   "K4_NUE_LO": "K4_FAIL_INFEASIBLE",
+   "K4_NUE_X": "K4_FAIL_INFEASIBLE",
+   "K4_threshold_ms_per_token": 10.0,
+   "K5": "R3_05_K5_NUE_LO_NOT_SUFFICIENT",
+   "NUE_LO_fraction_of_belady_byte_headroom": 0.04780488295926446,
+   "NUE_LO_gross_ms_per_token": 4.408353705740072,
+   "NUE_X_fraction_of_belady_byte_headroom": 0.08794590859269848,
+   "NUE_X_gross_ms_per_token": 8.10998057206132,
+   "PP_fraction_of_belady_byte_headroom": 0.0022996013076965437,
+   "belady_byte_reduction_pct": 40.65257066087199,
+   "belady_conservative_ceiling_ms_per_token": 92.21555273959194,
+   "belady_miss_reduction_pct": 40.67292071630467,
+   "belady_misses_per_token": 123.39453125,
+   "final": "R3_05_PREDICTIVE_RETENTION_KILLED"
+  }
+ },
+ "r3_04_closure": {
+  "commit": "91aa9b48a317934fcd985d63ca6e4bcab7ee9741",
+  "file_sha256": "24a09785677bb1fba029cd5303aef630f1dc57d46571f0b858acb162b947555a",
+  "path": "experiments/R3-04-closure/CLOSURE.json",
+  "status": "R3_04_CLOSED_NET_LOSS"
+ },
+ "stages": [
+  {
+   "bound_files": 14,
+   "classification": "R3_03A_RUNTIME_SEMANTIC_CONFORMANCE_PASS",
+   "commit": "3c37870c2b1ed08609f61cee05674b38960be3a7",
+   "dir": "experiments/R3-03A-runtime-semantic-conformance",
+   "freeze_file_sha256": "0ebcd1354e3bd1d1454bce056fc0cd7430ea8997d33e8e9ed6134d1e3a632cc5",
+   "freeze_sha256": null,
+   "stage": "R3-03A"
+  },
+  {
+   "bound_files": 0,
+   "classification": "R3_03B_EXPLAINED",
+   "commit": "46cab36cf4777856b658ad776a537df0bede2be3",
+   "dir": "experiments/R3-03B-final-evidence",
+   "freeze_file_sha256": "0e987eeb48a63085f381b9f712c0fe3bdaaec3ae739385d612818f3d87373f43",
+   "freeze_sha256": "1846b00954e033bc9a4cb136cd05373a411d7a8de699923235f31dbfd2f53448",
+   "stage": "R3-03B"
+  },
+  {
+   "bound_files": 7,
+   "classification": "NET_LOSS",
+   "commit": "0f7242798cea2e45d0cd9c5d89653327583d19b2",
+   "dir": "experiments/R3-04-final-evidence",
+   "freeze_file_sha256": "3204e8e7ee853e0e3eed3f3ce42b5019c579b2257ce536aef906dff53cc216db",
+   "freeze_sha256": "71fca58e65853c325ba7622d7565e51be85a54f46394de8d4f4ee2e0753adfa2",
+   "stage": "R3-04-final-evidence"
+  },
+  {
+   "bound_files": 7,
+   "classification": null,
+   "commit": "402cf6a515a12377a55dfae6aecf44607cd41410",
+   "dir": "experiments/R3-05-economic-retention",
+   "freeze_file_sha256": "10ef89f79720d9b03e38c869bb3eafdce833920335a4b4dbb0e4be3eeac5ca5b",
+   "freeze_sha256": "415f78a850a2917a2457797106589433f944c07a863f80b14cef88fde6232ae3",
+   "stage": "R3-05-Phase0"
+  },
+  {
+   "bound_files": 9,
+   "classification": "R3_05_R1_FIDELITY_PASS",
+   "commit": "12e3347321ba806049825b131eed6523ac82bd5b",
+   "dir": "experiments/R3-05-economic-retention/r1-fidelity",
+   "freeze_file_sha256": "f8f7e9018f60333964743e13c556e012f35bb7fb6597c56a166c6a5e68f79f0b",
+   "freeze_sha256": "8d025fdfb3d2a48c54e4d905f3a0e3aad2dd70ed9fdabf602b21ec2b600c3382",
+   "stage": "R3-05-R1"
+  },
+  {
+   "bound_files": 9,
+   "classification": "R3_05_K1_HEADROOM_PASS",
+   "commit": "fc8e6313c3b7d6a9231b29b51c06fa4b29dc2728",
+   "dir": "experiments/R3-05-economic-retention/r2-belady-ceiling",
+   "freeze_file_sha256": "bd2860cb573f6a2acaf61e41e73037ab2138a3b117b6a02643b0a4ed20c2c130",
+   "freeze_sha256": "8b22e41505e3c14b78b6c924b703f1da4b26643123a9240f7bd9ad7d232afa44",
+   "stage": "R3-05-R2"
+  },
+  {
+   "bound_files": 11,
+   "classification": "R3_05_K2_RETIRE_CURRENT_PP",
+   "commit": "f6e77806e51565075eb6d095b707c7772d9077ce",
+   "dir": "experiments/R3-05-economic-retention/r3-ces-pp-curve",
+   "freeze_file_sha256": "b1f7d40c63bf075b29fbd11ea9341b88d205cebb75b1ab308b65b617b66bbbd3",
+   "freeze_sha256": "1993adfa510bc792878fadf26ff3044fb5d7cc1c88d8ab37211271c19266e7b6",
+   "stage": "R3-05-R3"
+  },
+  {
+   "bound_files": 13,
+   "classification": "R3_05_PREDICTIVE_RETENTION_KILLED",
+   "commit": "612900731b4dcce79fd9ee18dc3d30b866deb286",
+   "dir": "experiments/R3-05-economic-retention/r4-nue-candidate-gate",
+   "freeze_file_sha256": "ebfad501be9f286aa605465a871100d53bf6a3e4b2bf5a6e8a8e53b4ed341228",
+   "freeze_sha256": "3f52a06eeec6f581be8d0659071b0de0dc9412849de3d10b6bd175cf8231b478",
+   "stage": "R3-05-R4"
+  }
+ ],
+ "verification": "each FREEZE.json is byte-identical to its committed copy; freeze_sha256 recomputes; every bound file hash matches; R3-05 numbers recompute via the R4 validator (which recomputes Phase 0/R1/R2/R3)"
+}

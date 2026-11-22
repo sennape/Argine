@@ -1,0 +1,23 @@
+{
+  "amendment_required": false,
+  "anchor_commit": "3a47a93a3f1f60fc8756345f1d4df5d7b89c2451",
+  "artifact": "R3-02H-FREEZE",
+  "artifacts": {
+    "EXECUTION_CONTRACT.json": "e629549963b97b3bff5ab07aa8a0b3033aa5d83dcaed01122d91bc711229920a",
+    "GLOBAL_SCHEDULE.json": "532454c12fc08b549714a0fdeb8f720aa2fd2e7bb77b8591f73b07d1ead75703",
+    "README.md": "d85982372b429ee58d49fa7e5c6d5f7605bcf5e359b6896c565976e361ca24a6",
+    "SESSION_PLAN.json": "b6748621e46dc5b88c89631c5eb6d757452f9c649ab369cc7529bc47c11c7778",
+    "tests/test_multisession.py": "99e668c71eae3c9b7477eaf869b5672e7c852699fc58bb7b55a65f93948643bd",
+    "tools/r3_02g_session.py": "ed2c959ac081c50c90f272348e33091454ca8e03b68fa830c191d3c14a94891f"
+  },
+  "created_utc": "2026-11-18T22:28:03Z",
+  "hotfix": "execution adapter (R3-02H -> R3-02B schema); schedule unchanged",
+  "launches_total": 1200,
+  "no_model_loaded": true,
+  "pairs_total": 600,
+  "r3_02g_freeze": "f8619c92ebcea1a0480be04073089eef427644119cbd68d2da6968e6559d3e6f",
+  "schedule_digest": "ba7eb1b7e94f89ed1d5d02c4a9742f8307bc050860cc08fdd23aeae0832b5e40",
+  "sessions": 10,
+  "status": "MULTI_SESSION_PLAN_FROZEN",
+  "warmups": 2
+}

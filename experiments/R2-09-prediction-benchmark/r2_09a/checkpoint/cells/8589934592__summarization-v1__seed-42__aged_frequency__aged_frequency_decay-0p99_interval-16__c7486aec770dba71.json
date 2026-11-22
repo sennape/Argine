@@ -1,0 +1,31 @@
+{
+  "accesses": 196224,
+  "budget_bytes": 8589934592,
+  "budget_gib": 8.0,
+  "budget_violations": 0,
+  "causal": true,
+  "cell_key": "8589934592__summarization-v1__seed-42__aged_frequency__aged_frequency_decay-0p99_interval-16__c7486aec770dba71",
+  "cell_record_digest": "00417cc38e6477452913ba569f81fed2a07324216a6940988b78678eecaed86c",
+  "decode_steps": 511,
+  "deterministic": true,
+  "dev_instance_id": "summarization-v1__seed-42",
+  "evictions": 9985,
+  "evidence_mode": "NEW_R2_09A_REPLAY",
+  "miss_bytes": 17344217088,
+  "miss_bytes_per_decode_step": 33941716.414872795,
+  "miss_rate": 0.030888168623613828,
+  "misses": 6061,
+  "misses_per_decode_step": 11.86105675146771,
+  "nominal_category": "summarization",
+  "params": {
+    "aging_interval_steps": 16,
+    "decay_factor": 0.99,
+    "decay_form": "exponential_step_decay"
+  },
+  "peak_resident_bytes": 8589901824,
+  "policy_config_id": "aged_frequency/decay=0.99,interval=16",
+  "policy_family": "aged_frequency",
+  "result_digest": "becf3548fe512a1460f0f86e9f703cec1da53da0990b85140b48c5b063c71b07",
+  "source_run_id": "R2-09A",
+  "status": "OK"
+}

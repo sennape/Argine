@@ -1,0 +1,39 @@
+{
+  "lfu_bridge": "R2-02's own evidence showed LFU performing WORSE than Global-LRU at the 4 GiB budget (see paper/research2 Table 2). This is direct evidence that simple global request-frequency information is not, by itself, sufficient to drive a good retention policy. Therefore, even if R2-05 finds strong frequency concentration, the correct interpretation is NOT 'frequency solves retention' but rather: aggregate frequency structure may exist in the routing stream, while frequency alone does not capture the TIMING information the Oracle exploits. This motivates R2-06 (transition structure) and R2-07 (reuse distance), not a frequency-only retention policy.",
+  "not_yet_supported": [
+    {
+      "claim": "These hot experts remain hot over time.",
+      "reason": "requires an explicitly predeclared temporal analysis; assigned to R2-08."
+    },
+    {
+      "claim": "Frequency concentration explains the R2-04 Oracle gap.",
+      "reason": "frequency alone may be insufficient; R2-02's own evidence showed LFU performing WORSE than Global-LRU at the 4 GiB budget (see paper/research2 Table 2). This is direct evidence that simple global request-frequency information is not, by itself, sufficient to drive a good retention policy. Therefore, even if R2-05 finds strong frequency concentration, the correct interpretation is NOT 'frequency solves retention' but rather: aggregate frequency structure may exist in the routing stream, while frequency alone does not capture the TIMING information the Oracle exploits. This motivates R2-06 (transition structure) and R2-07 (reuse distance), not a frequency-only retention policy."
+    },
+    {
+      "claim": "The observed distribution is Zipfian / power-law / heavy-tailed.",
+      "reason": "R2-05 computes descriptive concentration metrics only, never a distributional fit test; no such claim is made without it."
+    },
+    {
+      "claim": "Routing can be predicted from this frequency structure.",
+      "reason": "predictability is II-C's question (R2-09..R2-12), not R2-05's."
+    }
+  ],
+  "supported_now": [
+    {
+      "basis": "global_summary.layer_median.normalized_entropy",
+      "claim": "On the tested trace, the median per-layer normalized routing entropy is 0.8521530182050354."
+    },
+    {
+      "basis": "global_summary.most_concentrated_layer / least_concentrated_layer",
+      "claim": "The most concentrated layer (lowest normalized entropy) is layer 31; the least concentrated is layer 0."
+    },
+    {
+      "basis": "layer_heterogeneity.classification",
+      "claim": "Layer-to-layer concentration heterogeneity is classified as HETEROGENEOUS (descriptive spread only; no causal explanation, no temporal/workload-drift claim)."
+    },
+    {
+      "basis": "frequency.layer_frequency_rows top-ranked experts",
+      "claim": "These experts carry the largest aggregate request share on THIS trace (a full-trace frequency statement, not a temporal-stability claim)."
+    }
+  ]
+}

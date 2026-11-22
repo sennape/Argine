@@ -1,0 +1,76 @@
+{
+  "binding": {
+    "fixed_budgets_bytes": [
+      1610612736,
+      2147483648,
+      4294967296,
+      8589934592,
+      17179869184
+    ],
+    "message": "bound to R2-01 run bb6d8ca34dbc4537a43d54be30c9f3e1, R2-02 PASS run 238c8ee7f0914df7b28942ec99627c24, and R2-03 PASS run d957077073374f1e9fd1e101a002946f; trace identity and binding consistent across all three, R2-03's own R2-02-reproduction check reads OK.",
+    "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+    "r2_02_run_id": "238c8ee7f0914df7b28942ec99627c24",
+    "r2_03_run_dir": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-03\\d957077073374f1e9fd1e101a002946f",
+    "r2_03_run_id": "d957077073374f1e9fd1e101a002946f",
+    "reproduction_budget_bytes": 4294967296,
+    "status": "OK",
+    "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+    "trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1"
+  },
+  "candidate_status": "CANDIDATE",
+  "canonical_digest": "a019475d67df002abad50bd508842fe87f2e6146a8a1c915ae610fef8d5c9b4d",
+  "experiment_id": "R2-04",
+  "ii_a_scientific_state": {
+    "ii_a_closed": true,
+    "ii_b": "FUTURE/READY (not auto-started by this run; paper-freeze is the next project action)",
+    "ii_c": "FUTURE",
+    "r2_01": "CLOSED/PASS",
+    "r2_02": "CLOSED/PASS",
+    "r2_03": "CLOSED/PASS",
+    "r2_04": "PASS"
+  },
+  "nondeterminism": [],
+  "outcome": "PASS",
+  "reasons": [
+    "R2-01 PASS, R2-02 PASS, and R2-03 PASS canonical evidence verified; trace identity and binding consistent across all three; R2-03's own R2-02-reproduction check reads OK; structural/information/total decompositions computed deterministically (verified by two independent syntheses producing an identical canonical digest) for every declared budget; no internally impossible decomposition; regime classification, peak-opportunity maxima, and curve-shape classification produced; causal recovery explicitly left NOT_YET_MEASURED."
+  ],
+  "run_id": "cd2b58b019314fafb90304234e6d1907",
+  "scope": "offline SYNTHESIS of already-completed R2-01/R2-02/R2-03 evidence into a structural/information/total miss-cost decomposition and an upper-bound (never demonstrated-causal) recoverable-margin analysis -- no new replay, no model/runtime invocation, no new trace capture",
+  "summary_metrics": {
+    "causal_recovery": "NOT_YET_MEASURED -- II-C",
+    "first_tested_policy_indifference_budget_bytes": 17179869184,
+    "information_gap_at_reproduction_budget": {
+      "baseline": "Global-LRU",
+      "interpretation": "Global-LRU vs Oracle-Global-Belady: both global cache scope -- the scientifically clean primary upper bound for future causal prediction/retention work. This is THEORETICAL/INFORMATIONAL HEADROOM, not demonstrated causally recoverable performance (that is II-C's job, not R2-04's).",
+      "miss_byte_reduction": 59855155200,
+      "miss_reduction": 20775,
+      "oracle": "Oracle-Global-Belady",
+      "oracle_dominates": true,
+      "relative_miss_byte_reduction": 0.5859449007718049,
+      "relative_miss_reduction": 0.584733597905936
+    },
+    "information_headroom_fraction_at_reproduction_budget": 0.5859449007718049,
+    "max_absolute_miss_byte_headroom": {
+      "budget_bytes": 1610612736,
+      "value": 103574900736
+    },
+    "max_tested_information_headroom_fraction": {
+      "budget_bytes": 8589934592,
+      "value": 0.7065525368501716
+    },
+    "oracle_advantage_persists_at_every_capacity_constrained_point": true,
+    "r2_01_replay_fidelity_status": "PASS",
+    "reproduction_budget_bytes": 4294967296,
+    "structural_gap_at_reproduction_budget": {
+      "baseline": "Runtime-Sharded-LRU",
+      "interpretation": "Runtime-Sharded-LRU vs Global-LRU: both causal; approximates the runtime's sharded-retention-structure effect under the existing offline model. LIMITATION (preserved from R2-02): the offline ShardedLRU's shard-to-key mapping is statistical, not the runtime's exact address-derived shard mapping. This gap may be negative (sharding itself reducing misses relative to Global-LRU) -- that is a valid observed result, not an error.",
+      "miss_byte_reduction": 1200218112,
+      "miss_reduction": 414,
+      "oracle": "Global-LRU",
+      "oracle_dominates": true,
+      "relative_miss_byte_reduction": 0.011612946948471516,
+      "relative_miss_reduction": 0.011518237208914114
+    }
+  },
+  "synthesis_errors": []
+}

@@ -1,0 +1,17 @@
+{
+  "name": "bridge-instruction-v1",
+  "version": "r2-bridge01-v1",
+  "split": "eval",
+  "semantic_category": "instruction",
+  "description": "R2-BRIDGE-01 fresh held-out instruction-following specification. New task (weekly grocery budget planning for a household of 4), authored for this bridge holdout only; not a reuse or paraphrase of any Research2 DEV or EVAL instruction prompt.",
+  "n_predict": 512,
+  "items": [
+    {
+      "id": "r2-bridge01-instruction-001",
+      "segment": "bridge-instruction-v1",
+      "prompt": "Explain how to plan an efficient weekly grocery shopping trip for a household of 4 on a fixed budget of $120. Organize your answer with clear headings and cover: (1) setting category-level spending targets before shopping, (2) building a list that reduces impulse purchases, (3) a simple strategy for substituting cheaper ingredients without reducing nutritional variety, (4) basic rules for reducing food waste between trips, and (5) two common mistakes to avoid. Keep the guidance practical and concrete."
+    }
+  ],
+  "provenance_split_identity": "bridge_holdout",
+  "cli_split_field_note": "argine.research.cli's 'research trace --split' flag only accepts {dev, eval} (argine/research/cli.py 'trace' subparser, choices=['dev','eval']); there is no third CLI-level split value. Per the loader (argine/research/workloads.py:load, the 'items'-schema fallback branch), the CLI-facing 'split' field here is literal plumbing selecting which dict key the prompts load under -- it is set to the already-supported value 'eval' so this file can be captured with the existing CLI and loader, with NO code change. The true provenance-level identity of this corpus (a fresh BRIDGE holdout, distinct from and never to be confused with the R2-09 EVAL corpus) is tracked entirely by workload_id, file path, output directory, and the 'provenance_split_identity' field above plus experiments/R2-BRIDGE-01-retention-feasibility/dev_holdout_separation.json -- exactly mirroring how R2-09's own EVAL corpus is externally distinguished from R2-08's DEV corpus by workload_id/path/manifest, not by a unique CLI split string."
+}

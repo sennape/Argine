@@ -1,0 +1,29 @@
+{
+ "artifact": "R3-05-R3-FREEZE",
+ "authorizes": "Nothing model-bearing. The next gate (NUE_X / NUE_LO DEV selection and EVAL replay) needs its own prompt.",
+ "canonical_stream_sha256": "24fcc3e31e800826acb353c627326d4665af7b05c88a3138b18b79c5c435e776",
+ "events": 24672,
+ "files_sha256": {
+  "CES_DEFINITION.md": "a2403a733cf2f54a7497a5af4e38d9970fbff026d50fad543dda0545b9d3ba9d",
+  "CES_RESULTS.json": "f7ef4de9a327c0fd3a8ff6724c55c351658d74617de2cbc8146196d84a248e6c",
+  "CLAIM_BOUNDARIES.md": "57c9707caf33b495001e72167f84a4ff18dabf657a558f526825dc6addfede46",
+  "DECISION_TABLE.json": "5ba858cbd1ecaf197fac4fd090116d96d0776d6ac90dea64abd76524fbd0b77d",
+  "K2_DECISION.json": "b97cdd735f40679eb168c36fe418194fbb2346abde641eda06a02c64b0b14742",
+  "K3_DECISION.json": "cf3c2cb06d1e081e05ab06c6c3d860cf2c971c6407a3b4d32fba1dc2a9ddf844",
+  "PP_CURVE.json": "d8bb80ed4df770b5a57c1a8feae6b6be3993235d1add82ee7a8e89c84b9146d9",
+  "README.md": "485a07ca2c9d767875427794fa5e7954cfc66914c9df17227f4017e76f33d1dc",
+  "SOURCE_IDENTITY.json": "acba8cab29a83477b8d22d0f0814914e2d985f38e6f09c81037e814b906cea33",
+  "r3.py": "7a502cc0bd6525e7b5966df58fcd3d8445a63057d1198d140c8e9f860f9aae5e",
+  "tests/test_r3.py": "d4f67cefdcabc6f2c13fbb718e45a0187a3f861b482ca15ee9407afffc230072"
+ },
+ "freeze_sha256": "1993adfa510bc792878fadf26ff3044fb5d7cc1c88d8ab37211271c19266e7b6",
+ "k2": "R3_05_K2_RETIRE_CURRENT_PP",
+ "k3": "R3_05_K3_FREQUENCY_FAMILY_SURVIVES",
+ "passes": 514,
+ "phase0_freeze_sha256": "415f78a850a2917a2457797106589433f944c07a863f80b14cef88fde6232ae3",
+ "r1_classification": "R3_05_R1_FIDELITY_PASS",
+ "r1_freeze_sha256": "8d025fdfb3d2a48c54e4d905f3a0e3aad2dd70ed9fdabf602b21ec2b600c3382",
+ "r2_classification": "R3_05_K1_HEADROOM_PASS",
+ "r2_freeze_sha256": "8b22e41505e3c14b78b6c924b703f1da4b26643123a9240f7bd9ad7d232afa44",
+ "token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa"
+}

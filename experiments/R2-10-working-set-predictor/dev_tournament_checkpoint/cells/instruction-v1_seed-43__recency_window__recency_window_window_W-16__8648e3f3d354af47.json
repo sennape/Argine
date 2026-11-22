@@ -1,0 +1,18 @@
+{
+  "cell_key": "instruction-v1_seed-43__recency_window__recency_window_window_W-16__8648e3f3d354af47",
+  "cell_record_digest": "893ceb8234e804574fbd681f1035b44c44b1a91fb60d2c92c39bdbc09d1c6020",
+  "config_id": "recency_window/window_W=16",
+  "deterministic": true,
+  "dev_cell_id": "instruction-v1/seed-43",
+  "family_id": "recency_window",
+  "recall_at_k_h1": 0.38460184291002736,
+  "recall_at_k_h16": 0.331810459141389,
+  "recall_at_k_h4": 0.36152258377853325,
+  "result_digest": "b5a45ea3b541381a2e2dca54e8997a72879d7eb6f80b757a0b1ac09af4c16a13",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 24852,
+    "h16": 24132,
+    "h4": 24708
+  }
+}

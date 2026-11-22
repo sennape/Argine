@@ -1,0 +1,15 @@
+{
+  "name": "coding-eval-v1",
+  "version": "r2-09-eval-v1",
+  "split": "eval",
+  "semantic_category": "coding",
+  "description": "R2-09B held-out EVAL coding specification. New task, not a reuse of Research2 DEV coding prompts.",
+  "n_predict": 512,
+  "items": [
+    {
+      "id": "r2-09-eval-coding-001",
+      "segment": "coding-eval-v1",
+      "prompt": "Write a Python function `group_anagrams(words)` that takes a list of lowercase strings and returns a list of groups, where each group is a list of words that are anagrams of each other. Each group must be sorted lexicographically, and the outer list must be sorted by the lexicographically smallest word in each group. Include a short docstring and 4 example assertions covering: normal input, an empty list, a single word, and words with repeated letters. Then briefly explain the time complexity."
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "addendum_version": "r2-bridge01-phase0.1-dev-selection-rule-v1.0",
+  "name": "R2-BRIDGE-01 Phase 0.1 -- DEV Selection Rule",
+  "status": "FROZEN_BEFORE_ANY_DEV_RESULT",
+  "amends": "experiments/R2-BRIDGE-01-retention-feasibility/contract.json",
+  "original_phase0_contract_digest_unchanged": "e4ef4268e6bc207f20d5f4a56c165b75b977536600ff9d6f7e59604f77a889fc",
+  "purpose": "Fills the protocol gap identified by the Phase-1 pre-execution gate: the original Phase-0 contract (decision_rules.json.decision_gate) defines the BRIDGE-HOLDOUT-stage outcome labels only. It never defined a rule for selecting ONE of the 12 frozen retention configurations from DEV evidence. This addendum freezes that missing rule, additively, before any DEV retention cell is executed or inspected.",
+  "selection_budget": {
+    "value_bytes": 4294967296,
+    "value_gib": 4.0,
+    "rule": "Selection happens ONLY at the primary 4 GiB budget. The 1.5 GiB and 8 GiB secondary budgets are robustness/descriptive analyses and MUST NOT influence which configuration is selected.",
+    "secondary_budget_non_influence": "Any 1.5 GiB or 8 GiB result, however it compares to B_selected at those budgets, carries zero weight in the selection decision. The selection decision is a pure function of the 4 GiB cells alone."
+  },
+  "dev_corpus": {
+    "instances": 8,
+    "source": "experiments/R2-09-prediction-benchmark/r2_09a/dev_corpus_manifest.json.selected_instances (the same 8 DEV cells R2-09A/R2-10 already froze)",
+    "aggregation": "equal weight per DEV instance -- arithmetic mean of the 8 per-instance miss_bytes_per_decode_step values. No token-count or step-count weighting across instances (identical discipline to R2-09A baseline-selection and R2-10 predictor-selection aggregation)."
+  },
+  "primary_selection_metric": {
+    "metric_id": "mean_dev_miss_bytes_per_decode_step_at_4gib",
+    "definition": "mean over the 8 DEV instances (equal weight) of bytes_missed/steps at the 4 GiB budget, computed via the exact existing replay semantics (argine.research2.r2_09a.fast_replay.run_fast, the same primary_physical_replay_quantity already frozen in experiments/R2-09-prediction-benchmark/metrics_contract.json).",
+    "direction": "lower is better"
+  },
+  "primary_baseline": {
+    "name": "B_selected(4 GiB)",
+    "family_id": "aged_frequency",
+    "decay_factor": 0.99,
+    "aging_interval_steps": 64,
+    "source": "experiments/R2-09-prediction-benchmark/r2_09a/R2-09A-FREEZE.json.selected_baselines.4294967296",
+    "reselection_forbidden": true
+  },
+  "eligible_candidates_at_4gib": [
+    {"family_id": "predicted_protect", "config_id": "predicted_protect/budget=4294967296"},
+    {"family_id": "predictor_retention_score", "config_id": "predictor_retention_score/budget=4294967296,bonus=1.0"},
+    {"family_id": "predictor_retention_score", "config_id": "predictor_retention_score/budget=4294967296,bonus=4.0"}
+  ],
+  "eligible_candidate_count": 3,
+  "mandatory_control": {
+    "config_id": "predictor_retention_score/budget=4294967296,bonus=0.0",
+    "eligible_for_selection": false,
+    "role": "Mandatory implementation/control-equivalence cell only. Must reproduce B_selected(4 GiB)'s retention semantics exactly (bit-for-bit, per leakage_contract.json.control_equivalence). If control equivalence fails, Phase 1 DEV execution is blocked -- this is an implementation/protocol discrepancy, not a scientific result, and must be investigated before any selection proceeds."
+  },
+  "candidate_validity_requirements": [
+    "budget_violations == 0",
+    "peak_resident_bytes <= 4294967296",
+    "replay completes without exception (no InvariantViolation, no RuntimeError)",
+    "causal/leakage audit passes (tests/test_r2_bridge01_leakage.py, unmodified)",
+    "deterministic replay check passes (repeated replay of the same cell is bit-identical)",
+    "configuration identity matches retention_policy_space.json exactly (family_id, config_id, params)"
+  ],
+  "tie_break": {
+    "rule": [
+      "1. lower equal-weight DEV mean misses_per_decode_step wins",
+      "2. if still tied, lexically ascending config_id wins"
+    ],
+    "no_additional_criteria_after_results": "This two-step tie-break is exhaustive and frozen now. No additional tie-break criterion may be introduced after DEV results exist."
+  },
+  "dev_progression_gate": {
+    "frozen_before_any_result": true,
+    "rule": "Let best = the eligible candidate (of the 3) with the lowest mean_dev_miss_bytes_per_decode_step_at_4gib (ties broken per tie_break above). Compare best.value against B_selected(4 GiB)'s own mean_dev_miss_bytes_per_decode_step_at_4gib.",
+    "outcomes": [
+      {
+        "label": "DEV_RETENTION_SIGNAL_POSITIVE",
+        "condition": "best_candidate.mean_miss_bytes_per_decode_step < B_selected_4GiB.mean_miss_bytes_per_decode_step",
+        "action": "Freeze exactly that one retention family/configuration for the fresh BRIDGE holdout. The holdout may then be captured/sealed under the existing Phase-0 acquisition contract (corpus_acquisition_contract.json) -- but still may not be OPENED until this freeze record exists."
+      },
+      {
+        "label": "DEV_NO_RETENTION_IMPROVEMENT",
+        "condition": "best_candidate.mean_miss_bytes_per_decode_step >= B_selected_4GiB.mean_miss_bytes_per_decode_step",
+        "action": "Do not open the fresh BRIDGE holdout. Do not propose R2-11. This is explicitly NOT the same as the frozen decision_rules.json BRIDGE_NEGATIVE label -- that label is reserved exclusively for a decision made from BRIDGE-HOLDOUT evidence, never from DEV evidence. A DEV_NO_RETENTION_IMPROVEMENT outcome produces a closure record, not a BRIDGE_NEGATIVE classification."
+      }
+    ],
+    "distinctness_from_holdout_decision_gate": "This DEV-stage gate and decision_rules.json's BRIDGE-holdout-stage decision_gate are two separate, non-interchangeable mechanisms. DEV_RETENTION_SIGNAL_POSITIVE/DEV_NO_RETENTION_IMPROVEMENT are DEV-only labels that gate whether the holdout may be opened at all; BRIDGE_NEGATIVE/BRIDGE_POSITIVE_BUT_WEAK/BRIDGE_POSITIVE remain exclusively holdout-stage labels, applied later, only if DEV_RETENTION_SIGNAL_POSITIVE is reached and the holdout is subsequently opened and evaluated."
+  },
+  "secondary_budget_reporting": {
+    "budgets_bytes": [1610612736, 8589934592],
+    "role": "descriptive/robustness only",
+    "may_report": [
+      "selected mechanism behavior at 1.5 GiB and 8 GiB",
+      "all frozen configurations at those budgets, if already required by the Phase-0 grid",
+      "corresponding B_selected(M) comparisons at those budgets"
+    ],
+    "explicit_prohibition": "Secondary-budget results, however favorable or unfavorable, MUST NOT change the 4 GiB selection decision made above. The selection decision is finalized from 4 GiB evidence alone before any secondary-budget result is even computed, let alone inspected for selection purposes."
+  },
+  "no_dev_result_before_this_freeze": "This addendum is authored and frozen with zero DEV retention cells computed. No file under experiments/R2-BRIDGE-01-retention-feasibility/ or any other path contains a DEV miss_bytes/retention result as of this addendum's commit."
+}

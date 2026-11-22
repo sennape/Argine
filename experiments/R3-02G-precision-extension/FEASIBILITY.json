@@ -1,0 +1,79 @@
+{
+  "artifact": "R3-02G-FEASIBILITY",
+  "chosen_N": 600,
+  "cost": {
+    "conservative_hours": 80.4,
+    "counted_launches": 1200,
+    "disk_mb": 10,
+    "expected_hours": 64.3,
+    "per_launch_minutes": 3.215,
+    "ram_required_gib": 6.55,
+    "total_model_launches": 1202,
+    "warmup_launches": 2
+  },
+  "design": {
+    "blocks": "each block = A,B,B,A (two pairs: AB and BA); alternate BAAB blocks across the campaign",
+    "cooldowns": "15 s between adjacent launches, 60 s between blocks",
+    "endpoint": "step_time = decode_duration_seconds / tokens_generated",
+    "type": "TIMING-only, extension-only, balanced ABBA blocks",
+    "warmups": "one A and one B warmup at 4 GiB before counted blocks"
+  },
+  "generated_utc": "2026-11-18T22:19:28Z",
+  "model_based_half_at_600": 0.0022063268190666008,
+  "naive_sqrt_half_at_600": 0.002774766933698752,
+  "note": "pilot SD fixed in the primary model; sensitivity uses SD x1.3",
+  "phase": "R3-02G",
+  "pilot": {
+    "ci": [
+      0.025268759765625037,
+      0.08606085742187497
+    ],
+    "diffs": [
+      0.08606085742187497,
+      0.025268759765625037,
+      0.06674900781249998,
+      0.05438830078125001,
+      0.06891077343749996
+    ],
+    "half_width": 0.030396048828124966,
+    "median": 0.06674900781249998,
+    "sd": 0.02259142472589463,
+    "threshold": 0.00266463701171875
+  },
+  "practicality": "PRACTICAL_BUT_MULTI_DAY",
+  "probability_pass_at_600": 0.907,
+  "reuse_decision": "EXTENSION_ONLY",
+  "sensitivity_probability_pass_at_600": 0.298,
+  "simulation_note": "nonparametric resampling of the five pilot values produces a discrete median distribution whose bootstrap CI degenerates at large N; the primary model is a normal-model Monte Carlo from the pilot mean/SD, with SD x1.3 sensitivity",
+  "trace_requirement": "TIMING_ONLY_EXTENSION_VALID",
+  "variance_diagnosis": {
+    "block_position": "counted block followed two warmups; first counted pair is the slowest",
+    "order_effect": {
+      "AB_pairs_mean_diff": 0.07391,
+      "BA_pairs_mean_diff": 0.03983,
+      "note": "3 AB and 2 BA pairs in the pilot; order is a nuisance component"
+    },
+    "temporal_trend": {
+      "A_first_to_last_change_pct": -16.1,
+      "A_step_times": [
+        0.2997364765625,
+        0.2842247265625,
+        0.264320720703125,
+        0.266463701171875,
+        0.251545240234375
+      ],
+      "B_first_to_last_change_pct": -16.9,
+      "B_step_times": [
+        0.385797333984375,
+        0.309493486328125,
+        0.331069728515625,
+        0.320852001953125,
+        0.320456013671875
+      ]
+    },
+    "unobserved": [
+      "thermal state not instrumented",
+      "per-run page cache state not instrumented"
+    ]
+  }
+}

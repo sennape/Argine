@@ -1,0 +1,46 @@
+{
+  "contract_version": "r2-11-phase0-contract-v1.0",
+  "implementation": "argine.research2.r2_09a.policies.AgedFrequency(decay_factor, aging_interval_steps), run via argine.research2.r2_09a.fast_replay.run_fast -- identical code path reused from R2-09A/R2-BRIDGE-01, no reimplementation.",
+  "mapping_by_budget_bytes": {
+    "1610612736": {
+      "budget_gib": 1.5,
+      "config_id": "aged_frequency/decay=0.999,interval=1",
+      "family_id": "aged_frequency",
+      "params": {
+        "aging_interval_steps": 1,
+        "decay_factor": 0.999,
+        "decay_form": "exponential_step_decay"
+      }
+    },
+    "4294967296": {
+      "budget_gib": 4.0,
+      "config_id": "aged_frequency/decay=0.99,interval=64",
+      "family_id": "aged_frequency",
+      "params": {
+        "aging_interval_steps": 64,
+        "decay_factor": 0.99,
+        "decay_form": "exponential_step_decay"
+      }
+    },
+    "8589934592": {
+      "budget_gib": 8.0,
+      "config_id": "aged_frequency/decay=0.999,interval=16",
+      "family_id": "aged_frequency",
+      "params": {
+        "aging_interval_steps": 16,
+        "decay_factor": 0.999,
+        "decay_form": "exponential_step_decay"
+      }
+    }
+  },
+  "name": "B_selected(M) -- exact R2-09A frozen mapping, never reselected",
+  "never_reselect": true,
+  "primary_decision_budget_bytes": 4294967296,
+  "schema_version": 1,
+  "secondary_robustness_budgets_bytes": [
+    1610612736,
+    8589934592
+  ],
+  "source": "experiments/R2-09-prediction-benchmark/r2_09a/R2-09A-FREEZE.json.selected_baselines, re-verified fresh from source during this Phase-0 freeze (independently re-read, not copied from any handoff prompt).",
+  "source_content_sha256": "b8a01f62cbc00c736b146b52fd61895d27edbdb5e828a85fd5eba68d27fd3f3d"
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-09b-contract-v1.1",
+  "prediction_metrics": {
+    "primary_metric_id": "future_requested_expert_recall_at_k",
+    "primary_metric_rationale": "For retention/admission decisions, failing to retain a future-requested expert causes a miss; recall over future requested experts directly measures coverage of needed items. It avoids misleading scalar accuracy on sparse top-k sets and is compatible with per-layer next-step targets. Precision/Jaccard/F1/ranking/byte-weighted variants remain diagnostic because over-prediction has cache-pressure costs evaluated in R2-11 retention metrics.",
+    "metrics": [
+      {
+        "metric_id": "future_requested_expert_recall_at_k",
+        "name": "Recall of future requested experts at k_tl",
+        "direction": "higher",
+        "primary": true,
+        "applies_to": [
+          "next_step_same_layer_routing",
+          "short_horizon_future_working_set"
+        ],
+        "k_tl": "router requested cardinality from trace metadata/event; expected 8 for canonical Qwen3-30B-A3B Research2 traces; exact target cardinality used if variable",
+        "fixed_output_cardinality": "exactly k_tl unique expert IDs / top-k_tl cutoff",
+        "tie_breaking": "score desc, then stable (layer,expert_id) asc"
+      },
+      {
+        "metric_id": "precision_at_k",
+        "name": "Precision",
+        "direction": "higher",
+        "primary": false
+      },
+      {
+        "metric_id": "f1",
+        "name": "F1",
+        "direction": "higher",
+        "primary": false
+      },
+      {
+        "metric_id": "jaccard",
+        "name": "Jaccard",
+        "direction": "higher",
+        "primary": false
+      },
+      {
+        "metric_id": "ranking_metric_ndcg_or_map",
+        "name": "Ranking metric (NDCG/MAP) if scores output",
+        "direction": "higher",
+        "primary": false,
+        "condition": "only when predictor outputs ranked scores/lists"
+      },
+      {
+        "metric_id": "byte_weighted_recall_optional",
+        "name": "Byte-weighted recall (optional)",
+        "direction": "higher",
+        "primary": false,
+        "rationale": "Expert objects have heterogeneous byte sizes; byte-weighted variant may be reported as diagnostic."
+      }
+    ],
+    "reporting": "Report per workload family and per (M,W_class) context where applicable; do not report only global aggregates for confirmatory claims."
+  },
+  "retention_metrics": {
+    "primary_physical_replay_quantity": "miss_bytes",
+    "metrics": [
+      {
+        "metric_id": "miss_bytes",
+        "direction": "lower",
+        "primary_physical": true
+      },
+      {
+        "metric_id": "misses",
+        "direction": "lower"
+      },
+      {
+        "metric_id": "miss_rate",
+        "direction": "lower"
+      },
+      {
+        "metric_id": "evictions",
+        "direction": "report"
+      },
+      {
+        "metric_id": "peak_resident_bytes",
+        "direction": "report"
+      },
+      {
+        "metric_id": "budget_violations",
+        "direction": "zero"
+      },
+      {
+        "metric_id": "delta_miss_bytes_vs_b_selected",
+        "direction": "lower",
+        "definition": "MissBytes(P)-MissBytes(B_selected); negative better for P."
+      },
+      {
+        "metric_id": "recovery_vs_lru",
+        "direction": "report",
+        "note": "Continuity view where useful; preserve comparator/context semantics."
+      },
+      {
+        "metric_id": "recovery_of_belady_gap",
+        "direction": "report",
+        "definition": "(B-P)/(B-O_B); signed, may be negative or >1 under CASE C; >1 means beats O_B not O*; not fraction of maximum causal opportunity."
+      }
+    ]
+  }
+}

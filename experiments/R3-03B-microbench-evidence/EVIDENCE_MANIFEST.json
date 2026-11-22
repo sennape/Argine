@@ -1,0 +1,160 @@
+{
+ "artifact": "R3-03B-MICROBENCH-EVIDENCE-MANIFEST",
+ "host_run_dir": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03B-microbench-run2",
+ "host_records_sha256": {
+  "MICROBENCH_REPORT.json": "7bf702de303023e3d629558dd3ac0fd64b856a6cc638bcb4a6a2c8ac8ba61f71",
+  "cl_version.txt": "7335730c1ec0b8487f634d232b4abd6170e1da432764379b087e5973f6f94f5f",
+  "compile.log": "f03fb5e2091be16a347b3cd1bf5f242a766af3b419a23bb4a6eb059e7628beef",
+  "compiler_flags.txt": "917b0f3216f7b3feb5caa3bd444a4b0597b7690e5ae07a58f09ab6a9683cde6e",
+  "git_head.txt": "e2e543a29dc079ba983a45a0942a1077ba56f2f761ade0a41d3c66e6bcbfbfc4",
+  "git_status.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "host_cpu.json": "6d38ddd5c99940f941e5a023c47a8ca2a0bb4fc896778be30d30ff0384a78872",
+  "host_os.txt": "59366916933117dbc16b5f6b7376701ec5e728c69c6ebd3d864bedf689f57139",
+  "host_power_scheme.txt": "23d762edead4e6f246d5f2993a3403aa873a09f13bc2b7d81998967dc83144e0",
+  "microbench_binary.sha256.txt": "21a9ba641ba849f96d3bc3c988f4c2c9a3c842eaf12b2a4811a3b9dc7d477028",
+  "proc1.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "proc1.stdout.txt": "243aa57c1d471081b9b05dc936d2dcd03cee84f721bb16c241d5912f0e85d583",
+  "proc2.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "proc2.stdout.txt": "f18bf63c218074cfa5e9b479bcc22bbe5da9a33d39e997bbedb43cb2c6cab33b",
+  "proc3.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "proc3.stdout.txt": "098316750b31849c4518483860a94990912e6a01f99bbe0bbb42fb35fcd7f22c",
+  "raw/p1_meta.json": "7dbf68601edf6c164efeafa820b7f3e908ed9c25ad800405b4c160de1f129c47",
+  "raw/p1_replays.jsonl": "b5143db783f8cf776ba5cd1d97f342fd1f1d8c74d74a194ae9b24c05f7f6c568",
+  "raw/p2_meta.json": "d1b2cf94c1227be99dfcde4fc84b9474fb6870ea801cac836b5e9737818aedf2",
+  "raw/p2_replays.jsonl": "05303b58d800067fe0692c73a3ad05c12d5f18fba378fdf0d01f8413b80dbee3",
+  "raw/p3_meta.json": "833f754b9359771cd5f95ae1ddb9b6d664baa4d99922b920ef922fd59360ace8",
+  "raw/p3_replays.jsonl": "7e16477ec732996cc9c4d6f46cfbe07028123d229f468ef5b31e82e2475d7513",
+  "source_microbench.sha256.txt": "6774483386702b8eae720fd478b1f7dc62ddaeab2ec657ace80be14015a99c9d",
+  "source_policy.sha256.txt": "d5b8b477dd738f8f5f700679df84988b7a1b50eeaf4789503de6b703b77dc7b0",
+  "source_policy_header.sha256.txt": "345c0ef1ac7d5fb8f6f7b4c186998fe07546d580089b721a401fe2355d63e847",
+  "stream.sha256.txt": "4e79ea96039fdf3c60b41dbe9abd465d4c171ca267f0bd51cc06eddef39a3e14",
+  "vcvars.log": "02a37ae29e815a0130765ffe4578eeda6edae1209ddaa5fb75d1536b95ef7937"
+ },
+ "host_large_files_not_committed": {
+  "argine-policy-microbench-r3-03b.exe": {
+   "bytes": 359424,
+   "sha256": "d9eb52d7e5de77629da9bad9fa60b174c80598a7ad98aa741f82fb5eda00cbb3"
+  },
+  "p1_calibration_pairs.u32": {
+   "bytes": 4000000,
+   "sha256": "ccdb46c0080840baad9ac5a7c1060d3d3447016a03bcd5d9f9a6661cd560cccb"
+  },
+  "p1_calibration_ticks.u32": {
+   "bytes": 4000000,
+   "sha256": "5543fe231e1bf4045e086e7634b3d6eda9b7b5d4220b3db0b04e88cdda064f72"
+  },
+  "p1_calls_b_selected_inner.u32": {
+   "bytes": 2960640,
+   "sha256": "dd77e26d4275845dd081ce01ee86d7e728d6995699688c8681638d68ae7c0446"
+  },
+  "p1_calls_b_selected_outer.u32": {
+   "bytes": 2960640,
+   "sha256": "d7d1f23241a709fd7688a3fd9868613b26e2005bd6fb5a80efde5850e68c7d3f"
+  },
+  "p1_calls_predicted_protect_inner.u32": {
+   "bytes": 2960640,
+   "sha256": "201051c299ef632c90f85a3cff2444581facef308a86050106926a1649b17eb4"
+  },
+  "p1_calls_predicted_protect_outer.u32": {
+   "bytes": 2960640,
+   "sha256": "fae599de7e6ed87fceb90ef8c8ed387baae45585a4e7f075838988e88d8bfdb1"
+  },
+  "p1_calls_predicted_protect_sham_inner.u32": {
+   "bytes": 2960640,
+   "sha256": "9d132fd3d22e374a27454ef39a5f4da319963f87b0d469e4343b66730f4764b0"
+  },
+  "p1_calls_predicted_protect_sham_outer.u32": {
+   "bytes": 2960640,
+   "sha256": "ac267084b599278e3eb0cbd4b87b8f186a7cf944a68aa4cd3d4c7a7d78f79e3d"
+  },
+  "p1_meta.json": {
+   "bytes": 432,
+   "sha256": "7dbf68601edf6c164efeafa820b7f3e908ed9c25ad800405b4c160de1f129c47"
+  },
+  "p1_replays.jsonl": {
+   "bytes": 83984,
+   "sha256": "b5143db783f8cf776ba5cd1d97f342fd1f1d8c74d74a194ae9b24c05f7f6c568"
+  },
+  "p2_calibration_pairs.u32": {
+   "bytes": 4000000,
+   "sha256": "2156a53e3302c78d6543336705ccb67b1a628f91617b5e25c32eec8a6fce0b96"
+  },
+  "p2_calibration_ticks.u32": {
+   "bytes": 4000000,
+   "sha256": "b90a3bc6dc4787d98258093eb0438d96df1d81b98a5ed809f3ec8e502c70f45c"
+  },
+  "p2_calls_b_selected_inner.u32": {
+   "bytes": 2960640,
+   "sha256": "1d649fab519ee111c201bbdec100557b9278928ee7ac30ce84fb9b5b24fcaae2"
+  },
+  "p2_calls_b_selected_outer.u32": {
+   "bytes": 2960640,
+   "sha256": "f4469358d07655427e20e909e6049f59da5ee21797ec19852e2d145aeb6162e2"
+  },
+  "p2_calls_predicted_protect_inner.u32": {
+   "bytes": 2960640,
+   "sha256": "b438a32262ac17f0fce763f22d80b9b9a83a5ff1e7568c8b13a734a44438face"
+  },
+  "p2_calls_predicted_protect_outer.u32": {
+   "bytes": 2960640,
+   "sha256": "52b071396e843f88af72b1cf7270d96ec63af71db014725ddfcebc610b684467"
+  },
+  "p2_calls_predicted_protect_sham_inner.u32": {
+   "bytes": 2960640,
+   "sha256": "11ccdd6bdacd980214b13b8342996e9f1d9870b1fb82601b1e02df20214a85bd"
+  },
+  "p2_calls_predicted_protect_sham_outer.u32": {
+   "bytes": 2960640,
+   "sha256": "0f2614cfe22ce07d91116009e9a36f8bb9c352a89eefc9927a6e2503d00c2c1e"
+  },
+  "p2_meta.json": {
+   "bytes": 432,
+   "sha256": "d1b2cf94c1227be99dfcde4fc84b9474fb6870ea801cac836b5e9737818aedf2"
+  },
+  "p2_replays.jsonl": {
+   "bytes": 83984,
+   "sha256": "05303b58d800067fe0692c73a3ad05c12d5f18fba378fdf0d01f8413b80dbee3"
+  },
+  "p3_calibration_pairs.u32": {
+   "bytes": 4000000,
+   "sha256": "8430a4b591c729d0e573c7fbfe9d7a32bc8643330c6fe02edd6f17c420f9bb1e"
+  },
+  "p3_calibration_ticks.u32": {
+   "bytes": 4000000,
+   "sha256": "9111a707587206d0d212469a85017cfae89e70073c93d565a9e5a4ef46d455b2"
+  },
+  "p3_calls_b_selected_inner.u32": {
+   "bytes": 2960640,
+   "sha256": "f6d5bce3792e546666848c3b69c0059a096583eb385dd08cb307d236ede471ec"
+  },
+  "p3_calls_b_selected_outer.u32": {
+   "bytes": 2960640,
+   "sha256": "eec285f57613f2331eed47d2249fbb527595d76a065b0c254ac02297fa28986c"
+  },
+  "p3_calls_predicted_protect_inner.u32": {
+   "bytes": 2960640,
+   "sha256": "8447f0be1e7e2a6db6fe38b163ea72c0ef1672df10f6d9781d3751fb1dfb33cb"
+  },
+  "p3_calls_predicted_protect_outer.u32": {
+   "bytes": 2960640,
+   "sha256": "59b379b10f34ac9406d29a36e8e8fd9f2a1a378caa8f2a62aa7238e533ba7c63"
+  },
+  "p3_calls_predicted_protect_sham_inner.u32": {
+   "bytes": 2960640,
+   "sha256": "c0364fe6d2026a64b18a14c4ea82fcca31322f2f1089f89001bcbe8f015ea36b"
+  },
+  "p3_calls_predicted_protect_sham_outer.u32": {
+   "bytes": 2960640,
+   "sha256": "a12b26761c4c9872f1dc8c58d1845752bda2f24b1676ae15a86abf94ee741898"
+  },
+  "p3_meta.json": {
+   "bytes": 432,
+   "sha256": "833f754b9359771cd5f95ae1ddb9b6d664baa4d99922b920ef922fd59360ace8"
+  },
+  "p3_replays.jsonl": {
+   "bytes": 83984,
+   "sha256": "7e16477ec732996cc9c4d6f46cfbe07028123d229f468ef5b31e82e2475d7513"
+  }
+ },
+ "note": "Large raw per-call and calibration files (~76 MB) stay on the host; bound here by size and sha256."
+}

@@ -1,0 +1,42 @@
+{
+ "artifact": "R3-05-R4-CANDIDATE-SELECTION",
+ "dev_only": true,
+ "dev_run_hashes": {
+  "coding-v1__seed-42__A": "11eb0e7d35b6ff136629b43e6610ad766d6a474ba503b13bcb8fbd61bdf27175",
+  "coding-v1__seed-42__CES": "1e86fc45a49dba8e4260bcd689f847af9a65edc5c715e2533476223012a614e8",
+  "coding-v1__seed-42__NUE_X:LEX": "744464f6e1bc25c5f80293eaf98ef8cc1a1978944172d804c9e3ec5652c8c423",
+  "coding-v1__seed-42__NUE_X:SOFT1": "3626e36d18530d62e7b6c7e06abc44e3f40f8a0d7253033a112b68fd91bf7a51",
+  "coding-v1__seed-42__NUE_X:SOFT4": "fee94390db07134a8195268b933a4ca29c99950349b22809dfd594304ab0b5e0",
+  "instruction-v1__seed-42__A": "05c773485d432098e947f509806b51f4fcbd127e429d804b89bb34d2d8c78f1f",
+  "instruction-v1__seed-42__CES": "cc7b0d8b3a312f89c48df788a9f9ce8de871d4a8982e6612febcccda7cd77b20",
+  "instruction-v1__seed-42__NUE_X:LEX": "09b5734f66ff3f8f2bfb2307fd96e4ca3c7d35d19765347e722b8913606cc064",
+  "instruction-v1__seed-42__NUE_X:SOFT1": "6638dfb601af9a613ea86737d1ba7ba7b420bd687f7f297f6a815a592c634ec1",
+  "instruction-v1__seed-42__NUE_X:SOFT4": "212468ad7be1869da95a0ba66ad58abc1d45760bd96668bf737ec6a6788db874",
+  "reasoning-v1__seed-42__A": "d6e068f31e6e58d1e02a8466d2b04c7abb190df67cd5e59d8f8d34aadaeecc74",
+  "reasoning-v1__seed-42__CES": "1394001390c9e545c14910b4862b0fd5e8ca266c5d4ea0eb7b44a5b15a4b9fde",
+  "reasoning-v1__seed-42__NUE_X:LEX": "108fbcecb659de9b108ca1cb726b124b3b9cf3939ed4709dbd9ae9ecc92e79be",
+  "reasoning-v1__seed-42__NUE_X:SOFT1": "20fd7814894795bcf70f213140fa2322e2cc1b16e154f55cd3e7bee7245e091c",
+  "reasoning-v1__seed-42__NUE_X:SOFT4": "215904ad82008d3da7de15deb1c704fa871cb5637b56a8c12c24bb0d79c03c4d",
+  "summarization-v1__seed-42__A": "c588b3901b32339aea7bfe1fe0fb708ff1922570d30ed0227945cf2c525e625a",
+  "summarization-v1__seed-42__CES": "8c4cbdc2a7b7b045f1d8ab1d75dfd40f3a39e1a57c5f26db2daec49c6abf2c82",
+  "summarization-v1__seed-42__NUE_X:LEX": "b05bb01e8bd4a5133bc92bec3b304c75b859211e40be87a82f6b053aaf0e2409",
+  "summarization-v1__seed-42__NUE_X:SOFT1": "d2c97740a797044039f968a852a8004efe3250b0e05ea39311ca2239ed1d8a0b",
+  "summarization-v1__seed-42__NUE_X:SOFT4": "5e33e0e2e449e643885f96c33473cd4d99c0133d23b566550b2a617a70cdf9a4"
+ },
+ "difference_bytes": 0,
+ "eval_data_used": false,
+ "locked_before_eval": true,
+ "metric": "sum over the 4 seed-42 DEV traces of decode miss bytes avoided vs A at 1.5 GiB (higher is better)",
+ "nue_lo_key_form": "LEX",
+ "runner_up": "SOFT1",
+ "scores": {
+  "LEX": 40489132032,
+  "SOFT1": 40489132032,
+  "SOFT4": 40489132032
+ },
+ "selected_variant": "LEX",
+ "selection_rule": "Phase 0 dev_eval_separation.rule: NUE_X variant chosen on DEV only (max bytes avoided); EVAL scored once; no re-selection",
+ "tie_break_rule": "frozen Phase 0 variant order LEX < SOFT1 < SOFT4",
+ "tie_break_used": true,
+ "winner": "LEX"
+}

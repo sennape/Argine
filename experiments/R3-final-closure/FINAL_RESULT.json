@@ -1,0 +1,82 @@
+{
+ "artifact": "R3-FINAL-RESULT",
+ "causally_recoverable_belady_headroom_known": false,
+ "central_answer": "No, within the tested regime: corrected predictive retention produced a real runtime net loss (R3-04), and the best causal predictive retention family (NUE_X) failed the prospectively frozen viability threshold even before its computation cost was charged (R3-05).",
+ "central_question": "Can the predictive expert information established in Research 2 be converted into useful real-runtime retention value?",
+ "classification": "R3_CLOSED_NEGATIVE_PREDICTIVE_RETENTION_NOT_VIABLE_IN_TESTED_REGIME",
+ "key_numbers": {
+  "R3_03A": {
+   "corrected_policy_calls_per_decode_token": 48,
+   "old_over_corrected": 3.0,
+   "old_runtime_policy_calls_per_decode_token": 144,
+   "passes": 514,
+   "policy_event_rows_per_launch": 24672
+  },
+  "R3_03B": {
+   "classification": "R3_03B_EXPLAINED",
+   "equivalence_interval": [
+    0.5,
+    2.0
+   ],
+   "fieller_95": [
+    0.8759943227325426,
+    0.9286851073705427
+   ],
+   "n_blocks": 20,
+   "rho": 0.9024457830340606
+  },
+  "R3_04": {
+   "A_ms_per_token": 526.9731852213541,
+   "A_tokens_per_second": 1.8991620948631482,
+   "P_minus_A_ci95": [
+    10.460133972591187,
+    21.193374056922686
+   ],
+   "P_minus_A_ms_per_token": 15.826754014756936,
+   "P_minus_S_ci95": [
+    -2.8379208950643453,
+    5.315331919369921
+   ],
+   "P_minus_S_ms_per_token": 1.2387055121527877,
+   "P_ms_per_token": 542.7999392361112,
+   "S_minus_A_ms_per_token": 14.588048502604149,
+   "S_ms_per_token": 541.5612337239584,
+   "n_blocks": 18,
+   "status": "R3_04_CLOSED_NET_LOSS",
+   "throughput_change_P_vs_A_pct": -2.9331500488738893
+  },
+  "R3_05": {
+   "A_misses_per_token": 207.990234375,
+   "CES_fraction_of_belady_byte_headroom": 0.005587495285032725,
+   "CES_over_PP_byte_ratio": 2.4297669627912963,
+   "K2": "R3_05_K2_RETIRE_CURRENT_PP",
+   "K3": "R3_05_K3_FREQUENCY_FAMILY_SURVIVES",
+   "K4_NUE_LO": "K4_FAIL_INFEASIBLE",
+   "K4_NUE_X": "K4_FAIL_INFEASIBLE",
+   "K4_threshold_ms_per_token": 10.0,
+   "K5": "R3_05_K5_NUE_LO_NOT_SUFFICIENT",
+   "NUE_LO_fraction_of_belady_byte_headroom": 0.04780488295926446,
+   "NUE_LO_gross_ms_per_token": 4.408353705740072,
+   "NUE_X_fraction_of_belady_byte_headroom": 0.08794590859269848,
+   "NUE_X_gross_ms_per_token": 8.10998057206132,
+   "PP_fraction_of_belady_byte_headroom": 0.0022996013076965437,
+   "belady_byte_reduction_pct": 40.65257066087199,
+   "belady_conservative_ceiling_ms_per_token": 92.21555273959194,
+   "belady_miss_reduction_pct": 40.67292071630467,
+   "belady_misses_per_token": 123.39453125,
+   "final": "R3_05_PREDICTIVE_RETENTION_KILLED"
+  }
+ },
+ "nue_family_status": "CLOSED (R3-05 K4: NUE_LO and NUE_X infeasible at zero cost)",
+ "pp_status": "RETIRED (R3-04 net loss; R3-05 K2: a zero-cost current-event shield beats it)",
+ "r2_prediction_results_still_valid": true,
+ "research_3_closed": true,
+ "stage_status": {
+  "R3-03A": "CLOSED / PASS",
+  "R3-03B": "CLOSED / R3_03B_EXPLAINED",
+  "R3-04": "CLOSED / R3_04_CLOSED_NET_LOSS",
+  "R3-05": "CLOSED / R3_05_PREDICTIVE_RETENTION_KILLED"
+ },
+ "strongest_defensible_claim": "Predictive structure in MoE expert routing does not necessarily translate into economically useful retention control. In the tested regime (Qwen3-30B-A3B Q4_K_M, the tested host, 1.5 GiB primary expert budget, the R3-04 workload stream), correcting semantic policy-event placement, isolating predictor cost, and replacing the original predicted_protect mechanism with a causal next-use predictive eviction policy still failed a prospectively defined viability threshold (10 ms/token at a conservative byte-to-time conversion) before candidate computation cost was charged.",
+ "universal_claim_allowed": false
+}

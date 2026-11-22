@@ -1,0 +1,15 @@
+{
+  "name": "instruction-v1",
+  "version": "r2-08-v1",
+  "description": "R2-08 fixed general expository/instruction-following workload (frozen for routing drift analysis).",
+  "n_predict": 512,
+  "splits": {
+    "dev": [
+      {
+        "id": "r2-08-instr-dev-1",
+        "segment": "instruction-v1",
+        "prompt": "Write a clear, structured guide for a junior engineer on how to investigate a sudden increase in latency in a web service. Cover: (1) how to confirm the symptom and define the time window, (2) which metrics and logs to check first and why, (3) how to distinguish client-side, network, application, and database causes, (4) how to form and test hypotheses safely in production, and (5) what information to record for a post-incident review. Use headings and practical steps."
+      }
+    ]
+  }
+}

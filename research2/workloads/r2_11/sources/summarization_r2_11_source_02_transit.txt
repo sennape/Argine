@@ -1,0 +1,36 @@
+Title: Why urban bus schedules drift and what cities do about it
+
+Published bus schedules assume a fixed travel time between stops, but
+actual travel time varies with traffic, passenger boarding volume, and
+driver behavior, so buses tend to drift away from the printed timetable
+as a route progresses. This drift is not random: it is dominated by a
+small number of structural causes, and transit agencies that understand
+those causes can design schedules and operational rules that keep
+service closer to on-time without adding more buses.
+
+The largest single cause is bunching: two buses on the same route that
+were originally spaced evenly start to clump together. A bus running
+slightly behind schedule picks up more waiting passengers at each stop
+(because more people have accumulated), which slows it down further and
+makes it later still. Meanwhile the bus behind it finds fewer passengers
+waiting, because they already boarded the delayed bus ahead, so the
+trailing bus speeds up and catches up. Left uncorrected, this produces
+two buses arriving together followed by a long gap, rather than evenly
+spaced service.
+
+Signal priority is a secondary but still significant factor. Routes that
+pass through many signalized intersections without any priority system
+accumulate variable delay at each light, and that variability compounds
+across a route with dozens of intersections. Cities that give buses even
+limited signal priority -- extending a green light slightly when a bus
+is detected approaching -- measurably reduce both average delay and the
+variance in arrival time, which matters more to riders than the average
+alone, since riders plan around the worst case they have experienced.
+
+Operational countermeasures used by well-run systems include: holding a
+leading bus briefly at designated control points if it is running early
+relative to the bus behind it, short-turning a badly delayed bus before
+the end of the route so it can start its next trip on time rather than
+arriving very late, and publishing real-time arrival predictions so
+riders can adjust their own arrival at the stop instead of experiencing
+the drift as an unexplained wait.

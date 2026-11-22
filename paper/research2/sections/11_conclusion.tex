@@ -1,0 +1,78 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+This report establishes, under a behaviorally validated offline replay
+model of a real 30B-A3B MoE coding-workload trace
+(Section~\ref{sec:replay-validation}), that a substantial miss-byte gap
+exists between causal LRU-family expert retention and the implemented
+non-causal clairvoyant Belady-style comparator $O_B$
+(\textsc{Oracle-Global-Belady}) at every tested capacity-constrained
+expert-memory budget (Sections~\ref{sec:oracle-headroom}--\ref{sec:sensitivity-capacity}). The
+relative Belady comparator gap is largest, among the tested points, near
+$8$~GiB ($70.66\%$) and the absolute comparator gap is largest at
+$1.5$~GiB ($\approx 103.57$~GB); the gap collapses once the working set
+becomes effectively resident at $16$~GiB, the first tested such point.
+After \textsc{AUDIT-ORACLE-001} (CASE~C), this gap is interpreted as a
+measured separation from $O_B$, not as a proven byte-optimal bound or a
+proven upper bound on causal recovery.
+
+The routing characterization that follows adds a descriptive characterization
+of routing structure on the validated trace and on controlled workload captures
+(Section~\ref{sec:iib}). Under the tested
+Qwen3-30B-A3B-Q4\_K\_M protocol, routing is non-uniform in aggregate;
+same-layer routing exhibits measurable transition dependence (positive NMI
+in every tested layer); reuse is concentrated at short horizons relative to
+a deterministic shuffled null; and cross-workload divergence exceeds
+temporal drift under the predeclared comparison
+($2.21\times$, \texttt{WORKLOAD\_DEPENDENCE\_DOMINANT}). The canonical
+auxiliary R-03 sweep provides an additional constraint on interpretation:
+despite aggregate routing concentration, static LFU incurs more miss bytes
+than Global-LRU at each tested capacity-constrained budget (1.5--8~GiB)
+and ties it at 16~GiB on the DEV trace. This result is correspondingly
+bounded: structure exists, but structure is not a measured causal recovery.
+
+The programme then moves from routing structure to causal prediction, to
+replay-level retention, and finally to real-runtime validation
+(Section~\ref{sec:iic}). A strictly causal predictor was built and
+confirmed on held-out EVAL data to beat
+trivial baselines at a measurable, if frozen-rule-insufficient-on-its-own,
+margin (R-09/R-10). A predictor-driven reactive retention policy was then
+shown, prospectively and confirmatorily, to improve a replay-level
+retention metric at the frozen primary budget (R-BRIDGE-01
+\textsc{bridge\_positive}; R-11 PASS, $72/72$ cells, CI
+entirely below zero). Finally, real-runtime validation on the actual
+30B-class runtime found that this same policy does \emph{not} improve
+measured decode throughput at the frozen primary 4~GiB budget (R-12 FAIL,
+$144/144$ physical canonical launches accounted for
+across all three tested budgets, $0$ unresolved protocol violations).
+
+The programme's central conclusion is accordingly conservative:
+\emph{predictive expert information is measurably useful for forecasting
+and can improve replay-level retention metrics, but the tested reactive
+predictive-retention realization does not convert that information into
+improved end-to-end decode throughput on the evaluated runtime
+configuration.} This negative real-runtime finding does not invalidate the
+positive prediction-quality (R-10) or replay-retention (R-BRIDGE-01/R-11)
+findings that precede it; the three levels measure different quantities
+under different experimental apparatus, and a negative result at the
+real-runtime level does not retroactively weaken, retract, or reclassify a
+positive result at an earlier, differently-scoped level. Causal attribution
+of the R-12 runtime deficit does not exceed the available evidence: the
+8~GiB null-control budget's real canonical records carry no
+retention-traffic telemetry, so any non-retention-overhead explanation of
+that budget's larger measured delta remains an explicitly unverified
+hypothesis. No runtime speedup is claimed anywhere in this report, and this
+report does not open, scope, or begin any follow-on research effort; the
+open question that future work would need to address -- how useful
+predictive expert information might be converted into end-to-end runtime
+value when reactive predictive retention alone does not -- is stated but
+not pursued here.
+
+The frozen records of every stage of this research programme remain
+preserved unchanged, including the stage-level freeze manifests that
+precede this publication and the repository-level closure record for the
+final stage. The manuscript-level freeze and the machine-readable
+claim-to-artifact provenance mapping are stored with this paper; the
+provenance appendix (Appendix~\ref{sec:provenance-appendix}) is their
+human-readable counterpart. This document is the complete, frozen
+publication of the research programme it reports.

@@ -1,0 +1,116 @@
+{
+  "a8_evidence": {
+    "admissible": true,
+    "budget_bytes": 8589934592,
+    "budget_violations": 0,
+    "completion_rows": 74016,
+    "config": "A-8GiB",
+    "decision_rows": 74016,
+    "note": "confirms the configuration runs on this host when more RAM is free; no RSS telemetry exists",
+    "output_token_count": 512,
+    "resident_bytes_peak": 8589901824,
+    "rss_measured": false
+  },
+  "artifact": "R3-02E-FREE-RAM-DIAGNOSIS",
+  "at_10_19_gib_available": {
+    "available_gib": 10.19,
+    "budget_gib": 9.69,
+    "estimate": {
+      "activations": 0.069,
+      "draft": 0.0,
+      "expert_cache": 8.0,
+      "kv_cache": 0.375,
+      "prompt_cache": 0.0,
+      "repack": 0.224,
+      "runtime": 0.375,
+      "total": 10.042,
+      "weights_resident": 0.999
+    },
+    "estimate_total_gib": 10.042,
+    "failure_reason": "stima 10.04 GiB oltre il budget 9.69 GiB di 360.83 MiB anche dopo tutte le riduzioni disponibili",
+    "feasible": false,
+    "plan": {
+      "ctx": 4096,
+      "expert_cache_budget_gib": 8.0,
+      "expert_store": true,
+      "kv_type_k": "f16",
+      "moe_streaming": true
+    }
+  },
+  "at_10_60_gib_available": {
+    "available_gib": 10.6,
+    "budget_gib": 10.1,
+    "estimate": {
+      "activations": 0.069,
+      "draft": 0.0,
+      "expert_cache": 8.0,
+      "kv_cache": 0.375,
+      "prompt_cache": 0.0,
+      "repack": 0.224,
+      "runtime": 0.375,
+      "total": 10.042,
+      "weights_resident": 0.999
+    },
+    "estimate_total_gib": 10.042,
+    "failure_reason": null,
+    "feasible": true,
+    "plan": {
+      "ctx": 4096,
+      "expert_cache_budget_gib": 8.0,
+      "expert_store": true,
+      "kv_type_k": "f16",
+      "moe_streaming": true
+    }
+  },
+  "at_current_available": {
+    "available_gib": 5.876,
+    "budget_gib": 5.376,
+    "estimate": {
+      "activations": 0.069,
+      "draft": 0.0,
+      "expert_cache": 8.0,
+      "kv_cache": 0.375,
+      "prompt_cache": 0.0,
+      "repack": 0.224,
+      "runtime": 0.375,
+      "total": 10.042,
+      "weights_resident": 0.999
+    },
+    "estimate_total_gib": 10.042,
+    "failure_reason": "stima 10.04 GiB oltre il budget 5.38 GiB di 4.67 GiB anche dopo tutte le riduzioni disponibili",
+    "feasible": false,
+    "plan": {
+      "ctx": 4096,
+      "expert_cache_budget_gib": 8.0,
+      "expert_store": true,
+      "kv_type_k": "f16",
+      "moe_streaming": true
+    }
+  },
+  "classification": "HOST_RAM_GENUINELY_INSUFFICIENT",
+  "estimate_breakdown_gib": {
+    "activations": 0.069,
+    "draft": 0.0,
+    "expert_cache": 8.0,
+    "kv_cache": 0.375,
+    "prompt_cache": 0.0,
+    "repack": 0.224,
+    "runtime": 0.375,
+    "total": 10.042,
+    "weights_resident": 0.999
+  },
+  "explanation": "planner budget = available - 512 MiB when available < total-reserve; estimate 10.042 GiB > 10.19 - 0.5 = 9.69 GiB, short by ~0.35 GiB",
+  "host": {
+    "ram_available_now_gib": 5.876,
+    "ram_total_gib": 15.718
+  },
+  "phase": "R3-02E",
+  "request": {
+    "backend": "cpu",
+    "ctx": 4096,
+    "expert_store": true,
+    "expert_store_budget_bytes": 8589934592,
+    "threads": 0
+  },
+  "required_available_gib": 10.541
+}

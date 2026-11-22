@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "note": "Research Part 2 does not define a new benchmark corpus in R2-M0.1. This file declares how later experiments are expected to reference workloads, without duplicating Research Part 1 data.",
+  "canonical_workload_source": "workloads/ (Research Part 1 canonical workload definitions, e.g. workloads/v2/*.json), referenced by name and version, never copied or mutated.",
+  "selection_policy": "Each future experiment config must name an explicit workload id + version from the canonical source above. Where the correct workload selection for a given R2-NN experiment requires a scientific decision not yet made, it must be recorded here as unresolved, not guessed.",
+  "unresolved_selections": [
+    {
+      "experiment": "R2-05",
+      "open_point": "Which workload family/families to use for expert-frequency characterization (single family vs. the full Research Part 1 workload set) is not yet decided."
+    },
+    {
+      "experiment": "R2-09",
+      "open_point": "The train/benchmark split convention for the prediction benchmark (reuse Research Part 1 dev/eval split vs. a new split) is not yet decided."
+    }
+  ]
+}

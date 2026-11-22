@@ -1,0 +1,18 @@
+{
+  "cell_key": "reasoning-v1_seed-42__last_observation__last_observation_default__ee96afbe352cb117",
+  "cell_record_digest": "4883094a10abe2e9e2c3be55c52e96a5ecf7bd29a1419e2c03ab4111a8c84711",
+  "config_id": "last_observation/default",
+  "deterministic": true,
+  "dev_cell_id": "reasoning-v1/seed-42",
+  "family_id": "last_observation",
+  "recall_at_k_h1": 0.3927292479781113,
+  "recall_at_k_h16": 0.2536153814279203,
+  "recall_at_k_h4": 0.28335323161601034,
+  "result_digest": "2e1adfdf55b56e0c1e43f832c784f63f070c3588285daa6ba53cb421095300c1",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 24853,
+    "h16": 24133,
+    "h4": 24709
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "independent_verification_performed_this_phase": [
+    "branch=r2-main, HEAD=0ccd36d, working tree clean -- confirmed via git directly, not assumed from the handoff text",
+    "experiments/R2-11-predictive-retention/R2_11_EVALUATED_CLOSED.json read directly: state=R2_11_EVALUATED_CLOSED, classification=R2_11_PASS, r2_12_gate_outcome matches the 'MAY BE PROPOSED' text, r2_12_started=False, scientific_validity_failure=False",
+    "experiments/R2-11-predictive-retention/DECISION-RULE-APPLICATION.json read directly: all_pass_conditions_satisfied=True, classification=R2_11_PASS",
+    "experiments/R2-12-runtime-validation/ directory inspected: contained only a pre-existing README.md stub committed in 77544a2 (R2-M0.1 infrastructure bootstrap), explicitly stating 'No result exists yet for R2-12' -- confirmed absence of any prior R2-12 result before writing anything new",
+    "R2-11 predictor identity (decayed_transition/decay=0.99) and PredictedProtectPolicy identity re-read from experiments/R2-11-predictive-retention/retention_policy.json and the live argine.research2.r2_bridge01.retention_policies source (not merely copied from this handoff's text)",
+    "B_selected(M) mapping re-read from experiments/R2-11-predictive-retention/baseline_mapping.json and reused verbatim (byte-for-byte dict reuse, not retyped)",
+    "Phase-2A.1 instrumentation repair (commit dbe8306) re-read from experiments/R2-11-predictive-retention/instrumentation_dependency.json"
+  ],
+  "fail_closed_discrepancies_found": "None. Every checked item matched the handoff's claimed canonical state exactly."
+}

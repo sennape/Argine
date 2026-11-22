@@ -1,0 +1,47 @@
+{
+  "not_yet_supported": [
+    {
+      "claim": "This transition structure lets us predict the next expert with X% accuracy.",
+      "reason": "R2-06 trains no predictor and reports no accuracy/precision/recall/F1; predictability is II-C's question, not this experiment's."
+    },
+    {
+      "claim": "This transition structure reduces reuse distance.",
+      "reason": "reuse-distance measurement is R2-07's job; not computed here."
+    },
+    {
+      "claim": "This transition structure is stable over time / across workload segments.",
+      "reason": "temporal/windowed drift analysis is R2-08's job; not computed here."
+    },
+    {
+      "claim": "Cross-layer transitions explain the observed same-layer structure.",
+      "reason": "R2-06's primary analysis is SAME-LAYER only; layer-to-layer order is architectural, not a measured routing transition, and no cross-layer claim is made from this experiment's primary evidence."
+    },
+    {
+      "claim": "Self-transitions dominate the routing process.",
+      "reason": "self-transition mass/lift is measured per layer, not assumed; dominance is reported only where the measured share/lift actually shows it."
+    }
+  ],
+  "r2_05_transition_bridge": "R2-05 found descriptive frequency concentration in layer-local expert routing but explicitly declined to claim that frequency alone explains retention behaviour (R2-02's own evidence: LFU lost to Global-LRU at 4 GiB). R2-06 asks a DIFFERENT, complementary question: whether the ORDER of routing decisions carries information beyond that static frequency structure. A positive R2-06 finding (NMI > 0 for some layers) does not retroactively validate a frequency-only policy, and does not by itself establish that this transition structure is exploitable by any real policy -- that is a predictive-modelling question assigned to II-C, not measured here.",
+  "supported_now": [
+    {
+      "basis": "global_summary.median_nmi",
+      "claim": "On the tested trace, the median per-layer same-layer normalized mutual information between consecutive token-to-token expert selections is 0.0989325510804687."
+    },
+    {
+      "basis": "global_summary.strongest_layer_by_nmi / weakest_layer_by_nmi",
+      "claim": "The strongest same-layer transition structure (highest NMI) is observed at layer 37; the weakest is at layer 45."
+    },
+    {
+      "basis": "global_summary.fraction_layers_with_nmi_positive",
+      "claim": "The fraction of layers with strictly positive NMI (i.e. the source expert carries SOME measurable information about the next same-layer target beyond marginal frequency) is 1.0."
+    },
+    {
+      "basis": "global_summary.median_self_transition_lift",
+      "claim": "The median per-layer self-transition lift (P(i->i) relative to expert i's own marginal probability) is 4.18503995784333, measured directly rather than assumed."
+    },
+    {
+      "basis": "layer_information_metrics.normalized_mutual_information",
+      "claim": "Previous same-layer expert selection state carries measurable information about subsequent same-layer routing state beyond marginal frequency, on this trace, for layers with NMI > 0."
+    }
+  ]
+}

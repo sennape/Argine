@@ -1,0 +1,52 @@
+{
+ "artifact": "R3-CLOSURE-FREEZE",
+ "authorizes": "Nothing. Research 3 is closed; Research 4 is not opened.",
+ "bound_freezes": {
+  "R3-03A": {
+   "commit": "3c37870c2b1ed08609f61cee05674b38960be3a7",
+   "freeze_sha256": null
+  },
+  "R3-03B": {
+   "commit": "46cab36cf4777856b658ad776a537df0bede2be3",
+   "freeze_sha256": "1846b00954e033bc9a4cb136cd05373a411d7a8de699923235f31dbfd2f53448"
+  },
+  "R3-04-final-evidence": {
+   "commit": "0f7242798cea2e45d0cd9c5d89653327583d19b2",
+   "freeze_sha256": "71fca58e65853c325ba7622d7565e51be85a54f46394de8d4f4ee2e0753adfa2"
+  },
+  "R3-05-Phase0": {
+   "commit": "402cf6a515a12377a55dfae6aecf44607cd41410",
+   "freeze_sha256": "415f78a850a2917a2457797106589433f944c07a863f80b14cef88fde6232ae3"
+  },
+  "R3-05-R1": {
+   "commit": "12e3347321ba806049825b131eed6523ac82bd5b",
+   "freeze_sha256": "8d025fdfb3d2a48c54e4d905f3a0e3aad2dd70ed9fdabf602b21ec2b600c3382"
+  },
+  "R3-05-R2": {
+   "commit": "fc8e6313c3b7d6a9231b29b51c06fa4b29dc2728",
+   "freeze_sha256": "8b22e41505e3c14b78b6c924b703f1da4b26643123a9240f7bd9ad7d232afa44"
+  },
+  "R3-05-R3": {
+   "commit": "f6e77806e51565075eb6d095b707c7772d9077ce",
+   "freeze_sha256": "1993adfa510bc792878fadf26ff3044fb5d7cc1c88d8ab37211271c19266e7b6"
+  },
+  "R3-05-R4": {
+   "commit": "612900731b4dcce79fd9ee18dc3d30b866deb286",
+   "freeze_sha256": "3f52a06eeec6f581be8d0659071b0de0dc9412849de3d10b6bd175cf8231b478"
+  }
+ },
+ "classification": "R3_CLOSED_NEGATIVE_PREDICTIVE_RETENTION_NOT_VIABLE_IN_TESTED_REGIME",
+ "files_sha256": {
+  "CLAIM_BOUNDARIES.md": "1afd0c47682221d17d10754fde2de78b6fa946eaa656eecfea9912476ed02124",
+  "EVIDENCE_CHAIN.json": "53aa11af0c3064492a9f45876e80ab9b4ac12163466631cd1cee413023263998",
+  "FINAL_RESULT.json": "6d5fa60746ef9b7ab81493d91b16b91ad48179db53eacf76260695885bd6af1f",
+  "README.md": "0c3ed871342b26353c34fe4a4a29dd070851712c734b18f68e87ebd7aeb00f00",
+  "RESEARCH_3_CLOSURE.json": "23cd68331e718db6b0fe85449ac9ee4f342120d01f8d0ca750ce8d8bbdbb2812",
+  "ROADMAP_IMPACT.md": "2a0fe4b8e3a4cae9c7649c260cc94c9dbf2fdfbc5b7862d898d2fb74f41c6aef",
+  "UNTESTED_DIRECTIONS.md": "8cd3633734aa65ed2fe6f8477eed9be2d3cac39812ed622a503f4abb34baf2ac",
+  "closure.py": "c0f3ce4e4371af3069e0ae3368f2abba9f0e09c78ef728468bc4539b20d47b4b",
+  "tests/test_closure.py": "b7ad90b36c3c9033ba78b4be160a31d0523e8694055419a38ecb08a16a8814d3"
+ },
+ "freeze_sha256": "760a22d69abdd207c7ecd4b4f1012b85711b20aa3cb623cddb55d0c8802a5717",
+ "r3_04_closure_commit": "91aa9b48a317934fcd985d63ca6e4bcab7ee9741"
+}

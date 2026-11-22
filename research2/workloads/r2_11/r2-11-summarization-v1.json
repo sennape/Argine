@@ -1,0 +1,22 @@
+{
+  "name": "r2-11-summarization-v1",
+  "version": "r2-11-v1",
+  "split": "eval",
+  "semantic_category": "summarization",
+  "description": "R2-11 fresh confirmatory summarization specification (a raised-bed vegetable garden soil mix and watering/rotation guide). New committed local source, not a reuse of the R2-08 DEV (MoE routing technical background), R2-09 EVAL (home battery backup), or R2-BRIDGE-01 (bicycle commuting) source texts.",
+  "n_predict": 512,
+  "items": [
+    {
+      "id": "r2-11-summarization-v1",
+      "segment": "r2-11-summarization-v1",
+      "prompt": "Read the source text below and produce: (1) a concise summary in 5-7 bullet points, (2) three practical takeaways a reader could act on, and (3) one limitation or open question the source does not fully resolve. Do not add facts that are not supported by the source.\n\nSOURCE TEXT:\nTitle: Building and maintaining a healthy raised-bed vegetable garden\n\nA raised-bed vegetable garden gives more control over soil quality than\nplanting directly in native ground, which matters most in the first two\ngrowing seasons while soil biology is still establishing. The single\nhighest-leverage decision is soil mix composition: a blend of roughly\n40% high-quality compost, 40% topsoil, and 20% coarse material such as\nperlite or coarse sand drains well while still holding enough moisture\nbetween waterings. Beds that are too compost-heavy stay soggy and starve\nroots of oxygen; beds that are too sandy dry out within a day in hot\nweather and require constant attention.\n\nBed depth affects which crops thrive. Shallow beds (20-25 cm) support\nlettuce, herbs, and most leafy greens comfortably. Root vegetables such\nas carrots and parsnips need at least 30 cm of loose, stone-free soil to\ngrow straight; in shallower beds they fork or stay stunted. Tomatoes and\npeppers benefit from 30-40 cm depth because their root systems spread\nwide as well as deep, and a deeper bed also buffers soil temperature\nswings that can stress fruiting plants.\n\nWatering consistency matters more than total water volume. Vegetables\nthat receive irregular watering -- long dry spells followed by heavy\nsoaking -- are far more prone to blossom-end rot in tomatoes and\nsplitting in root vegetables than plants watered on a steady schedule.\nA simple test is pushing a finger two knuckles deep into the soil: if it\nis dry at that depth, water; if still moist, wait. Mulching the surface\nwith straw or shredded leaves reduces how often this becomes necessary\nby slowing evaporation.\n\nCrop rotation across seasons within the same raised bed reduces pest and\ndisease buildup. Planting the same family of crop (for example, tomatoes\nand peppers, which are both nightshades) in the same bed year after year\nlets soil-borne pathogens specific to that family accumulate. Rotating\nto an unrelated family, such as legumes or leafy greens, for at least one\nseason breaks that cycle and, in the case of legumes, also adds nitrogen\nback into the soil through root nodules as the plants are cut down at\nthe end of the season rather than pulled out.\n"
+    }
+  ],
+  "provenance_split_identity": "r2_11_eval",
+  "cli_split_field_note": "argine.research.cli's 'research trace --split' flag only accepts {dev, eval} (argine/research/cli.py 'trace' subparser, choices=['dev','eval']); there is no third CLI-level split value. Per the loader (argine/research/workloads.py:load, the 'items'-schema fallback branch), the CLI-facing 'split' field here is literal plumbing selecting which dict key the prompts load under -- it is set to the already-supported value 'eval' so this file can be captured with the existing CLI and loader, with NO code change. The true provenance-level identity of this corpus (a fresh, entirely new R2-11 confirmatory EVAL corpus -- distinct from R2-10 DEV, R2-10 EVAL, and R2-BRIDGE-01's holdout) is tracked entirely by workload_id, file path, output directory, and the 'provenance_split_identity' field below, plus experiments/R2-11-predictive-retention/eval_manifest.json -- exactly mirroring how R2-BRIDGE-01's own fresh holdout was externally distinguished from R2-09/R2-10 by workload_id/path/manifest, not by a unique CLI split string.",
+  "source_input": {
+    "path": "research2/workloads/r2_11/sources/summarization_r2_11_source_01_gardening.txt",
+    "committed_locally": true,
+    "web_network_dependency": false
+  }
+}

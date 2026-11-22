@@ -1,0 +1,26 @@
+{
+ "artifact": "R3-03B-RUN1-PREFLIGHT-REJECTION",
+ "classification": "PREFLIGHT_REJECTED_NO_TIMING_ACQUIRED",
+ "scientific_timing_evidence": false,
+ "directory": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03B-microbench-run1",
+ "directory_contents_observed": [
+  "cl_version.txt",
+  "obj (empty)",
+  "raw (empty)",
+  "vcvars.log"
+ ],
+ "root_cause": "PREFLIGHT_LOCALIZATION_BUG: driver ran findstr /C:\"Version 19.44\" (case-sensitive literal) against the cl banner; the Italian host prints 'versione 19.44.35229 per x64', so a valid 19.44 compiler was rejected before compilation.",
+ "actual_compiler_banner": "Microsoft (R) C/C++ Optimizing Compiler versione 19.44.35229 per x64",
+ "fix": "tools/r3_03b_check_cl_version.py (numeric NN.NN.NNNNN triple, exactly one, major.minor must be 19.44; fail closed otherwise)",
+ "unchanged": [
+  "PROTOCOL.json",
+  "PROTOCOL_FREEZE.json",
+  "compiler flags",
+  "repetitions",
+  "estimator",
+  "equivalence interval",
+  "runtime instrumentation"
+ ],
+ "operational_change": "output directory run1 -> run2 (run1 preserved, never reused); PROTOCOL.json output_dir_rule requires a fresh directory per attempt, run2 satisfies it",
+ "corrected_output_directory": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03B-microbench-run2"
+}

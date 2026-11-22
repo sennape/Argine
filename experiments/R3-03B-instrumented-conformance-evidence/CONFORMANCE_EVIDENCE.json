@@ -1,0 +1,126 @@
+{
+ "artifact": "R3-03B-INSTRUMENTED-CONFORMANCE-EVIDENCE",
+ "classification": "R3_03B_INSTRUMENTED_CONFORMANCE_PASS",
+ "runtime": {
+  "path": "C:\\Users\\alpel\\Desktop\\Argine4-r3build-r3-03b\\llama.cpp\\build-r3-03b\\bin\\llama-server.exe",
+  "sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5",
+  "compiler": "MSVC 19.44.35229",
+  "pinned_llama_cpp": "254b177307b14d055bbe4c050c9c441a1e06d8a4",
+  "r3_03a_runtime_sha256_unchanged": "e935005e5131b29d12b113b000fa52e798b4b4419a23724ec70af3f6875fcd76",
+  "frozen_r3_runtime_sha256_unchanged": "3f094f5b5f4963f488b63722f365068f09e2aa3b12e2096969da99f471bbd644"
+ },
+ "source_identity": {
+  "tooling_commit": "0ceec69",
+  "plan": "experiments/R3-03B-instrumented-conformance/CONFORMANCE_PLAN.json"
+ },
+ "parents": {
+  "microbench_freeze_sha256": "abb451010b04782a56c51420485908871e1a77e87dd18b22f75b5e0580dd7009",
+  "microbench_evidence_commit": "757ddfe3654ed95f9a2aaf75dfc9b421a21523dc",
+  "block_count_addendum_commit": "1dd8f716"
+ },
+ "launches": {
+  "A-8GiB-OFF": {
+   "policy": "b_selected",
+   "timing": "OFF",
+   "shutdown": "graceful",
+   "token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa",
+   "trace_sha256": "f6bfed9780c354243bd1b66b334d34aecce6f1ee205a12ebe50e812773c88e4e",
+   "trace_bytes": 10240964088,
+   "passes": 514,
+   "semantic_events": 24672,
+   "budget_violations": 0,
+   "timing_record_calls": null
+  },
+  "A-8GiB-ON": {
+   "policy": "b_selected",
+   "timing": "ON",
+   "shutdown": "graceful",
+   "token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa",
+   "trace_sha256": "f6bfed9780c354243bd1b66b334d34aecce6f1ee205a12ebe50e812773c88e4e",
+   "trace_bytes": 10240964088,
+   "passes": 514,
+   "semantic_events": 24672,
+   "budget_violations": 0,
+   "timing_record_calls": 24672
+  },
+  "B-8GiB-OFF": {
+   "policy": "predicted_protect_sham",
+   "timing": "OFF",
+   "shutdown": "graceful",
+   "token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa",
+   "trace_sha256": "0a352d5808100902f17c1e059218f52ee53c0faefedb1d285b4c4f14dc4e8844",
+   "trace_bytes": 10242349397,
+   "passes": 514,
+   "semantic_events": 24672,
+   "budget_violations": 0,
+   "timing_record_calls": null
+  },
+  "B-8GiB-ON": {
+   "policy": "predicted_protect_sham",
+   "timing": "ON",
+   "shutdown": "graceful",
+   "token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa",
+   "trace_sha256": "0a352d5808100902f17c1e059218f52ee53c0faefedb1d285b4c4f14dc4e8844",
+   "trace_bytes": 10242349397,
+   "passes": 514,
+   "semantic_events": 24672,
+   "budget_violations": 0,
+   "timing_record_calls": 24672
+  }
+ },
+ "frozen_expectations": {
+  "token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa",
+  "passes": 514,
+  "events_per_pass": 48,
+  "semantic_events": 24672,
+  "duplicate_refusals": 0,
+  "budget_violations": 0
+ },
+ "canonicalization": "each trace row parsed as JSON; keys equal to 'policy_timing' or starting with 'ns_' removed recursively (none exist in current trace format); sort_keys JSON compared row by row; equal sha256 is a fast path. Outcome: OFF and ON traces are byte-identical (equal sha256) for both policies, so canonicalization removed nothing.",
+ "sham_vs_b_selected": {
+  "rows_compared": 49344,
+  "diff_rows": 0,
+  "fields": [
+   "requested_experts",
+   "hit_experts",
+   "miss_experts",
+   "evicted",
+   "resident_before",
+   "resident_after",
+   "policy_resident_bytes_after",
+   "cache_resident_bytes_before",
+   "cache_resident_bytes_after",
+   "bytes_of_layer",
+   "budget_bytes",
+   "step",
+   "layer",
+   "semantic_event"
+  ],
+  "note": "protected_before is excluded by design (the sham records protection but must not change eviction decisions)"
+ },
+ "timing_records": {
+  "ON_only": true,
+  "calls": 24672,
+  "valid": true,
+  "record_count_per_ON_launch": 1,
+  "absent_OFF": true
+ },
+ "pass_conditions": [
+  "runtime sha is new and differs from R3-03A and frozen R3",
+  "digest equals frozen in all 4 launches",
+  "514 passes, 48 events/pass, 24,672 events in all 4",
+  "zero duplicate/missing events, zero budget violations",
+  "OFF vs ON traces identical after canonicalization, per policy",
+  "sham equals b_selected on compared fields",
+  "no policy_timing line OFF; exactly one valid line ON with calls == 24,672",
+  "graceful shutdown in all 4 launches, no terminate fallback, no tooling issues"
+ ],
+ "limitations": [
+  "correctness only: no timing value from these launches is evidence (event tracing writes ~10 GB per launch inside the instrumented lock region; per-token decode was 477-524 ms vs ~126 ms untraced historically)",
+  "observational note, not analysed and not used for any decision: ON-launch ns_prediction_update for the sham (10.42 s over 24,672 calls = 422 us/call) is larger than the isolated microbenchmark c_predictor (123.7 us/call); cause (trace I/O pressure, cache effects, routing distribution) is undetermined",
+  "the new runtime tree was not re-hashed by the verifier (not mounted); the host driver enforced its sha256",
+  "OFF/ON identity covers the trace format as of runtime 8d2e1def...; later format changes need re-conformance",
+  "one run per launch; no repetition statistics"
+ ],
+ "no_timing_claim": true
+}

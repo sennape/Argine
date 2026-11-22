@@ -1,0 +1,77 @@
+{
+  "artifact": "R3-02C-PEAK-STORAGE",
+  "classification": "LOSSLESS_ARCHIVE_STORAGE_SAFE",
+  "conservative_peak_gib": 32.93,
+  "current_free_gib": 64.94,
+  "expected_final_archives_gib": 1.386,
+  "expected_peak_gib": 29.89,
+  "lifecycle": [
+    "raw JSONL written",
+    "validate completeness/admission",
+    "compress losslessly",
+    "verify logical SHA round-trip and archive SHA",
+    "persist archive + metadata atomically",
+    "delete raw only after verification",
+    "CELLs reference logical identity"
+  ],
+  "logical_per_trace_gib": {
+    "1.5GiB": 5.4,
+    "4GiB": 14.3,
+    "8GiB": 28.5
+  },
+  "phase": "R3-02C",
+  "ratio_used": 0.0111,
+  "required_free_gib": 47.93,
+  "sequence": [
+    {
+      "config": "A-1.5GiB",
+      "prior_archives_gib": 0.0,
+      "raw_logical_gib": 5.4,
+      "step_peak_gib": 5.46,
+      "temp_archive_gib": 0.06
+    },
+    {
+      "config": "B-1.5GiB",
+      "prior_archives_gib": 0.06,
+      "raw_logical_gib": 5.4,
+      "step_peak_gib": 5.52,
+      "temp_archive_gib": 0.06
+    },
+    {
+      "config": "A-4GiB",
+      "prior_archives_gib": 0.12,
+      "raw_logical_gib": 14.3,
+      "step_peak_gib": 14.579,
+      "temp_archive_gib": 0.159
+    },
+    {
+      "config": "B-4GiB",
+      "prior_archives_gib": 0.279,
+      "raw_logical_gib": 14.3,
+      "step_peak_gib": 14.737,
+      "temp_archive_gib": 0.159
+    },
+    {
+      "config": "A-8GiB",
+      "prior_archives_gib": 0.437,
+      "raw_logical_gib": 28.5,
+      "step_peak_gib": 29.254,
+      "temp_archive_gib": 0.316
+    },
+    {
+      "config": "B-8GiB",
+      "prior_archives_gib": 0.754,
+      "raw_logical_gib": 28.5,
+      "step_peak_gib": 29.57,
+      "temp_archive_gib": 0.316
+    },
+    {
+      "config": "C-8GiB",
+      "prior_archives_gib": 1.07,
+      "raw_logical_gib": 28.5,
+      "step_peak_gib": 29.886,
+      "temp_archive_gib": 0.316
+    }
+  ],
+  "system_reserve_gib": 15.0
+}

@@ -1,0 +1,75 @@
+{
+ "artifact": "R3-04-BUDGET-SELECTION",
+ "confirmatory": {
+  "budget": "4 GiB",
+  "droppable_without_changing_primary_answer": true,
+  "why": "the R2-BRIDGE/R2-11/R2-12 primary budget: links R3-04 to the original negative R2-12 result under the corrected runtime and gives a middle point of the budget gradient. Descriptive N=6 (one full permutation cycle); no classification label."
+ },
+ "evaluated": {
+  "1.5": {
+   "n_blocks": 18,
+   "old_runtime_wall_b_selected_ms_per_token": 431.05400322896287,
+   "replay_evidence": {
+    "as_fraction_of_delta_cost_ref": 0.03238430186928907,
+    "max_wall_benefit_ms_per_token_if_wall_proportional_to_miss_bytes": 0.5656363083804675,
+    "prior_delta_artifact_value": -779296.0626223087,
+    "relative_reduction": 0.001312216808435528,
+    "replay_B_miss_bytes_per_step_mean": 593877519.0293542,
+    "replay_P_miss_bytes_per_step_mean": 593098222.9667319,
+    "replay_mean_delta_bytes_per_step": -779296.0626223087
+   },
+   "role": "PRIMARY"
+  },
+  "4": {
+   "n_blocks": 6,
+   "old_runtime_wall_b_selected_ms_per_token": 287.19263405088066,
+   "replay_evidence": {
+    "as_fraction_of_delta_cost_ref": 0.005994504803769603,
+    "max_wall_benefit_ms_per_token_if_wall_proportional_to_miss_bytes": 0.10470225918282712,
+    "prior_delta_artifact_value": -87476.85322895646,
+    "relative_reduction": 0.00036457153411628755,
+    "replay_B_miss_bytes_per_step_mean": 239944277.1663405,
+    "replay_P_miss_bytes_per_step_mean": 239856800.31311154,
+    "replay_mean_delta_bytes_per_step": -87476.85322895646
+   },
+   "role": "CONFIRMATORY_DESCRIPTIVE"
+  },
+  "8": {
+   "n_blocks": 6,
+   "old_runtime_wall_b_selected_ms_per_token": 100.84604619140626,
+   "replay_evidence": {
+    "as_fraction_of_delta_cost_ref": 0.0,
+    "max_wall_benefit_ms_per_token_if_wall_proportional_to_miss_bytes": 0.0,
+    "prior_delta_artifact_value": 0.0,
+    "relative_reduction": 0.0,
+    "replay_B_miss_bytes_per_step_mean": 41533295.71819961,
+    "replay_P_miss_bytes_per_step_mean": 41533295.71819961,
+    "replay_mean_delta_bytes_per_step": 0.0
+   },
+   "role": "NEGATIVE_CONTROL_DESCRIPTIVE"
+  }
+ },
+ "negative_control": {
+  "budget": "8 GiB",
+  "caution": "the real runtime at 8 GiB still has eviction (victim_calls 7966 in R3-03B) so 'zero retention benefit' is a replay-level expectation that the mechanism phase checks directly",
+  "why": "replay retention benefit is exactly zero (tie): P-S should equal only the extra policy bookkeeping time and miss/eviction counters should tie. It validates that the instrument does not manufacture a retention effect, and its S-A contrast is the budget R3-03B already measured (replication check). Descriptive N=6."
+ },
+ "primary": {
+  "budget": "1.5 GiB",
+  "limit": "A NET_LOSS at 1.5 GiB is not a proof of loss at budgets that were not tested; it bounds the tested implementation at the most favourable tested budget.",
+  "why": "largest evidence-supported retention benefit (R2-11 replay: 0.131% miss-byte reduction vs 0.037% at 4 GiB and exactly 0 at 8 GiB); it is the best case for NET_WIN: if the real policy cannot recover its bookkeeping cost where retention helps most, no other tested budget can win. It also never had a real-model conformance for any policy in the corrected runtime, so the mechanism phase covers it first."
+ },
+ "prior_evidence_use": {
+  "budget_selection": "R2-11 per-budget replay retention deltas (replay evidence, used as a prior only)",
+  "instrumentation": "R3-03B conformance/final evidence (policy_timing schema r3-03b-v1)",
+  "negative_control": "R2-11 8 GiB exact tie",
+  "not_used_as_observations": "all R2-12 and R3-03B outcome values",
+  "positive_control": "none claimed: no direct runtime positive control exists for retention benefit",
+  "variance_planning": "R2-12 paired-delta SD (conservative proxy) and R3-03B block SD (check)"
+ },
+ "rejected": [
+  "1.5+4+8 all as primary (multiplicity, ~3x cost, no information gain for the single net question)",
+  "8 GiB only (would test the budget where retention benefit is zero; cannot answer 'does retention pay for itself')",
+  "4 GiB only (small effect, I/O-bound noise, no best-case test)"
+ ]
+}

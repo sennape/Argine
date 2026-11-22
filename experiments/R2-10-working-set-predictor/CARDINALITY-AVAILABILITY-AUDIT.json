@@ -1,0 +1,23 @@
+{
+  "audit_id": "R2-10-CARDINALITY-AVAILABILITY-AUDIT-001",
+  "audit_timestamp_utc": "2026-11-11T22:05:00Z",
+  "question": "output_contract.json's cardinality_rule reads 'k_{t,l} = len(selected experts tuple for that routing event ..., read per-event from the trace'. For THAT routing event to mean the TARGET event being predicted, a causal predictor computing k from len(target) at prediction time would be reading future information. Is this a leak?",
+  "method": "Measured, for every one of the 8 frozen R2-09A DEV cells (coding/reasoning/summarization/instruction x seed-42/seed-43) and for the canonical R2-01 trace, the set of distinct per-token selected-expert-set lengths across every (token, layer) entry yielded by Trace.token_selections(layer), for all layers.",
+  "result": {
+    "distinct_cardinalities_observed_per_cell": {
+      "coding-v1/seed-42": [8], "coding-v1/seed-43": [8],
+      "instruction-v1/seed-42": [8], "instruction-v1/seed-43": [8],
+      "reasoning-v1/seed-42": [8], "reasoning-v1/seed-43": [8],
+      "summarization-v1/seed-42": [8], "summarization-v1/seed-43": [8]
+    },
+    "trace_sha256_reverified": true,
+    "finding": "In every observed (token, layer) event across all 8 DEV cells (and the canonical R2-01 trace, 25631 token-layer events), the per-token selected-expert-set length is EXACTLY trace.meta.top_k (8), with zero exceptions."
+  },
+  "resolution": {
+    "classification": "NOT_A_LEAK -- RESOLVED, no stop required",
+    "reasoning": "trace.meta.top_k is global trace metadata, recorded in the trace HEADER and available before any routing event is observed (i.e. causally available at t=0, before the first prediction). Since every observed k_{t,l} equals trace.meta.top_k with no exceptions, a causal predictor that sources its OWN output cardinality from trace.meta.top_k (never from len(target)) produces the mechanically identical exactly-k_tl output the frozen contract requires, without ever reading the target event.",
+    "implementation_decision": "All R2-10 Phase-1 predictor families take k from trace.meta.top_k, supplied to the causal walker/runner once at trace-load time, not derived per-call from the target. output_contract.apply_output_contract's existing parameter `k` is unchanged; callers (predictors/runner) are responsible for passing a causally-available k, and Phase 1 adds an explicit runtime check (argine/research2/r2_10/causal_walk.py: CausalContext carries `k` resolved from meta.top_k at walk-construction time, before any prediction is made) so a predictor can never obtain k any other way through the Phase-1 API.",
+    "fail_safe_for_future_traces": "If a FUTURE trace (not yet seen in any frozen DEV/EVAL evidence) ever has a per-event cardinality differing from trace.meta.top_k, a Phase-1 predictor using meta.top_k would output the WRONG cardinality relative to that specific target -- this degrades the measured recall score for that cell (a visible, non-silent effect caught by the output-contract's own `len(predicted)==len(target)` assumption breaking downstream in scoring, not a leak), never a leak, since the predictor still never read the target. The DEV tournament runner (Step 5) asserts per-cell that every observed cardinality equals meta.top_k and raises rather than silently proceeding if that ever fails, so this edge case is caught loudly, not ignored.",
+    "no_contract_value_changed": "This resolves an ambiguity in output_contract.json's prose ('that routing event' was ambiguous between 'the event being scored' and 'the event being predicted'), not a change to the frozen contract_digest, any numeric value, the primary metric, the causal boundary, or the selection rule. The digest in contract.json (4d2288b7...) is unchanged by this audit."
+  }
+}

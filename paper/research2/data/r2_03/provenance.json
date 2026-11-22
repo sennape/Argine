@@ -1,0 +1,42 @@
+{
+  "binding": {
+    "message": "bound to R2-01 run bb6d8ca34dbc4537a43d54be30c9f3e1 and R2-02 PASS run 238c8ee7f0914df7b28942ec99627c24, trace identity consistent across both.",
+    "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+    "r2_02_run_id": "238c8ee7f0914df7b28942ec99627c24",
+    "status": "OK",
+    "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+    "trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1"
+  },
+  "fixed_budgets_bytes": [
+    1610612736,
+    2147483648,
+    4294967296,
+    8589934592,
+    17179869184
+  ],
+  "phase": "decode",
+  "trace": {
+    "capacity_semantics": "Capacity is byte-budgeted: the unit of residency is one expert of one layer, sized by trace.meta.expert_bytes[layer] (Research Part 1's existing convention; see policies.Context.size / bytes_of). Expert sizes are NOT assumed uniform across layers (Research Part 1's own fidelity tests exercise unequal per-layer sizes). When a trace source carries no expert_bytes for one or more layers (observed for at least one real local candidate, SMOKE-30B -- see trace_source.py discovery notes), R2Trace v1 does NOT silently assume equal sizing: normalization records which layers are missing byte metadata, and replay for those layers falls back to Research Part 1's own existing fallback (count-based, 1 unit per expert) with that fallback explicitly flagged in the normalization report, never hidden.",
+    "excluded_row_count": 0,
+    "exclusion_reasons": {},
+    "expert_order_semantics": "Within one token's selection tuple, expert order is recorded exactly as llama.cpp's router produced it, but is NOT claimed to be semantically meaningful (e.g. not a ranked preference order) by this contract. The quantity that IS semantically meaningful for residency/replay is the per-layer UNION of experts needed across every token of the step (Step.experts(layer) in Research Part 1's Trace, 'the event'), because that is what the real runtime must hold resident at once. R2Trace v1 records the full per-token tuples (so no information is discarded) and explicitly derives the per-step-per-layer union only at replay time, never earlier.",
+    "initial_residency": "cold_start_documented",
+    "initial_residency_semantics": "Canonical cold start: replay begins with EVERY layer's resident set empty (Research Part 1's Policy.start() convention; see argine.research.policies.Policy). This is not claimed to reproduce a warm real-runtime state. Research Part 1 amortises this by recording 'warmup' segment steps in the trace itself and serving (but not counting) them before any counted step -- the same convention R2Trace v1 replay reuses (argine.research.replay.served_steps / counted_step). A trace with no explicit warmup segment is recorded as 'initial_residency: unknown_cold_assumed' rather than silently treated as equivalent to one that does warm up first.",
+    "layers_missing_expert_bytes": [],
+    "normalized_routing_event_count": 19004,
+    "normalized_step_count": 396,
+    "normalized_trace_digest": "be13e138edb7faf56aa9eab30d1ce355527715fea6e11b555f040d2411a85bcf",
+    "routing_step_unit": "one Research Part 1 Trace `Step` == one forward pass (one llama.cpp graph / one ubatch). This is the routing-step unit for R2Trace v1. During generation a step carries exactly one token; during prompt processing a step may carry many tokens whose required experts must be resident SIMULTANEOUSLY (the runtime pins them together). Flattening a step into independent per-token accesses would misrepresent that simultaneity, so R2Trace v1 preserves the step boundary and, within it, the per-token tuple grouping exactly as recorded (Step.routes[layer]); it does not flatten them.",
+    "schema_version": 1,
+    "source": {
+      "byte_size": 268956,
+      "path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+      "sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+      "source_experiment": null,
+      "source_format": "argine-router-trace-jsonl-gz",
+      "source_split": "dev",
+      "source_workload": "coding@460949e7abf0"
+    },
+    "source_row_count": 396
+  }
+}

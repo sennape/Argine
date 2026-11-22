@@ -1,0 +1,176 @@
+{
+ "A": {
+  "all_pass": {
+   "evictions": 106840,
+   "hits": 94149,
+   "miss_bytes": 308885151744,
+   "misses": 107403
+  },
+  "budget_bytes": 1610612736,
+  "budget_violations": 0,
+  "decode": {
+   "evictions": 106490,
+   "hits": 93967,
+   "miss_bytes": 306277576704,
+   "misses": 106491
+  },
+  "decode_protected_entries": 0,
+  "decode_protected_events": 0,
+  "events": 24672,
+  "overflow_events": 0,
+  "overflow_misses": 0,
+  "resident_peak_bytes": 1610588160
+ },
+ "CES": {
+  "all_pass": {
+   "evictions": 106589,
+   "hits": 94400,
+   "miss_bytes": 308172312576,
+   "misses": 107152
+  },
+  "budget_bytes": 1610612736,
+  "budget_violations": 0,
+  "decode": {
+   "evictions": 106245,
+   "hits": 94212,
+   "miss_bytes": 305581879296,
+   "misses": 106246
+  },
+  "decode_protected_entries": 0,
+  "decode_protected_events": 0,
+  "decode_shield_entries": 200458,
+  "decode_shield_events": 24576,
+  "events": 24672,
+  "overflow_events": 0,
+  "overflow_misses": 0,
+  "resident_peak_bytes": 1610588160,
+  "shield_changed_victims_all_pass": 562,
+  "shield_total_fallbacks": 0
+ },
+ "PP_full": {
+  "all_pass": {
+   "evictions": 106739,
+   "hits": 94250,
+   "miss_bytes": 308598829056,
+   "misses": 107302
+  },
+  "budget_bytes": 1610612736,
+  "budget_violations": 0,
+  "decode": {
+   "evictions": 106389,
+   "hits": 94068,
+   "miss_bytes": 305991254016,
+   "misses": 106390
+  },
+  "decode_protected_entries": 196608,
+  "decode_protected_events": 24576,
+  "events": 24672,
+  "overflow_events": 0,
+  "overflow_misses": 0,
+  "predictor_refresh_count": 24672,
+  "refresh_n": 1,
+  "resident_peak_bytes": 1610588160
+ },
+ "artifact": "R3-05-R3-CES-RESULTS",
+ "budget": "1.5 GiB",
+ "canonical_stream_sha256": "24fcc3e31e800826acb353c627326d4665af7b05c88a3138b18b79c5c435e776",
+ "effect_metric": "decode miss bytes avoided vs A (the Phase 0 K2/K3 effect metric); misses reported alongside",
+ "pp_beyond_ces": {
+  "pp_minus_ces_decode_miss_bytes_avoided": -409374720,
+  "pp_minus_ces_decode_misses_avoided": -144
+ },
+ "table_rows": {
+  "A": {
+   "benefit_retained_vs_full_PP": {
+    "miss_bytes": 0.0,
+    "misses": 0.0
+   },
+   "budget_violations": 0,
+   "decode_evictions": 106490,
+   "decode_hits": 93967,
+   "decode_miss_bytes": 306277576704,
+   "decode_misses": 106491,
+   "decode_protected_entries": 0,
+   "decode_protected_events": 0,
+   "fraction_of_belady_headroom": {
+    "miss_bytes": 0.0,
+    "misses": 0.0
+   },
+   "miss_bytes_avoided_vs_A": 0,
+   "miss_bytes_per_token": 598198392.0,
+   "misses_avoided_vs_A": 0,
+   "misses_per_token": 207.990234375,
+   "overflow_events": 0,
+   "resident_peak_bytes": 1610588160,
+   "retained_exact": {
+    "miss_bytes": "0/286322688",
+    "misses": "0/101"
+   }
+  },
+  "CES": {
+   "benefit_retained_vs_full_PP": {
+    "miss_bytes": 2.4297669627912963,
+    "misses": 2.4257425742574257
+   },
+   "budget_violations": 0,
+   "decode_evictions": 106245,
+   "decode_hits": 94212,
+   "decode_miss_bytes": 305581879296,
+   "decode_misses": 106246,
+   "decode_protected_entries": 0,
+   "decode_protected_events": 0,
+   "fraction_of_belady_headroom": {
+    "miss_bytes": 0.005587495285032725,
+    "misses": 0.005656500357860227
+   },
+   "miss_bytes_avoided_vs_A": 695697408,
+   "miss_bytes_per_token": 596839608.0,
+   "misses_avoided_vs_A": 245,
+   "misses_per_token": 207.51171875,
+   "overflow_events": 0,
+   "resident_peak_bytes": 1610588160,
+   "retained_exact": {
+    "miss_bytes": "695697408/286322688",
+    "misses": "245/101"
+   }
+  },
+  "PP N=1": {
+   "N": 1,
+   "PROPORTIONAL_COST_MODEL_ONLY": {
+    "benefit_ms_at_kappa_low": 0.21205900566992525,
+    "estimated_cost_ms_per_token": 14.588048502604149,
+    "label": "PROPORTIONAL_COST_MODEL_ONLY (not measured)",
+    "net_ms_best_case": -14.375989496934224
+   },
+   "benefit_retained_vs_full_PP": {
+    "miss_bytes": 1.0,
+    "misses": 1.0
+   },
+   "budget_violations": 0,
+   "decode_evictions": 106389,
+   "decode_hits": 94068,
+   "decode_miss_bytes": 305991254016,
+   "decode_misses": 106390,
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "expected_refresh_count": 24672,
+   "fraction_of_belady_headroom": {
+    "miss_bytes": 0.0022996013076965437,
+    "misses": 0.002331863412832175
+   },
+   "invocation_fraction": 1.0,
+   "invocation_fraction_exact": "24672/24672",
+   "miss_bytes_avoided_vs_A": 286322688,
+   "miss_bytes_per_token": 597639168.0,
+   "misses_avoided_vs_A": 101,
+   "misses_per_token": 207.79296875,
+   "overflow_events": 0,
+   "predictor_refresh_count": 24672,
+   "resident_peak_bytes": 1610588160,
+   "retained_exact": {
+    "miss_bytes": "286322688/286322688",
+    "misses": "101/101"
+   }
+  }
+ }
+}

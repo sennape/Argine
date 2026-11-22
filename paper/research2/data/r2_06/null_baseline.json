@@ -1,0 +1,775 @@
+{
+  "analytic_independence_info": {
+    "0": {
+      "conditional_entropy": 4.598398062923383,
+      "layer_id": 0,
+      "marginal_entropy": 4.598398062923382,
+      "mutual_information": -1.7763568394002505e-15,
+      "normalized_mutual_information": -3.8629905786602363e-16
+    },
+    "1": {
+      "conditional_entropy": 4.515237951679564,
+      "layer_id": 1,
+      "marginal_entropy": 4.515237951679562,
+      "mutual_information": -2.6645352591003757e-15,
+      "normalized_mutual_information": -5.901206730664619e-16
+    },
+    "10": {
+      "conditional_entropy": 4.312836676344854,
+      "layer_id": 10,
+      "marginal_entropy": 4.312836676344854,
+      "mutual_information": 0.0,
+      "normalized_mutual_information": 0.0
+    },
+    "11": {
+      "conditional_entropy": 4.424480280407287,
+      "layer_id": 11,
+      "marginal_entropy": 4.424480280407286,
+      "mutual_information": -8.881784197001252e-16,
+      "normalized_mutual_information": -2.0074186422147778e-16
+    },
+    "12": {
+      "conditional_entropy": 4.35715530355918,
+      "layer_id": 12,
+      "marginal_entropy": 4.357155303559182,
+      "mutual_information": 1.7763568394002505e-15,
+      "normalized_mutual_information": 4.0768729036332884e-16
+    },
+    "13": {
+      "conditional_entropy": 4.3607812869936255,
+      "layer_id": 13,
+      "marginal_entropy": 4.360781286993624,
+      "mutual_information": -1.7763568394002505e-15,
+      "normalized_mutual_information": -4.0734829896155895e-16
+    },
+    "14": {
+      "conditional_entropy": 4.295183760126427,
+      "layer_id": 14,
+      "marginal_entropy": 4.2951837601264256,
+      "mutual_information": -1.7763568394002505e-15,
+      "normalized_mutual_information": -4.1356946258987643e-16
+    },
+    "15": {
+      "conditional_entropy": 4.194286157628928,
+      "layer_id": 15,
+      "marginal_entropy": 4.194286157628926,
+      "mutual_information": -1.7763568394002505e-15,
+      "normalized_mutual_information": -4.235182752538858e-16
+    },
+    "16": {
+      "conditional_entropy": 4.132650550200681,
+      "layer_id": 16,
+      "marginal_entropy": 4.132650550200685,
+      "mutual_information": 3.552713678800501e-15,
+      "normalized_mutual_information": 8.596695112844656e-16
+    },
+    "17": {
+      "conditional_entropy": 4.170739768719631,
+      "layer_id": 17,
+      "marginal_entropy": 4.170739768719633,
+      "mutual_information": 1.7763568394002505e-15,
+      "normalized_mutual_information": 4.259092961691951e-16
+    },
+    "18": {
+      "conditional_entropy": 3.883088683127784,
+      "layer_id": 18,
+      "marginal_entropy": 3.8830886831277835,
+      "mutual_information": -4.440892098500626e-16,
+      "normalized_mutual_information": -1.1436494143944038e-16
+    },
+    "19": {
+      "conditional_entropy": 3.8534035521272827,
+      "layer_id": 19,
+      "marginal_entropy": 3.853403552127283,
+      "mutual_information": 4.440892098500626e-16,
+      "normalized_mutual_information": 1.1524596472770204e-16
+    },
+    "2": {
+      "conditional_entropy": 4.3412277532808385,
+      "layer_id": 2,
+      "marginal_entropy": 4.3412277532808385,
+      "mutual_information": 0.0,
+      "normalized_mutual_information": 0.0
+    },
+    "20": {
+      "conditional_entropy": 4.055104851375766,
+      "layer_id": 20,
+      "marginal_entropy": 4.055104851375768,
+      "mutual_information": 1.7763568394002505e-15,
+      "normalized_mutual_information": 4.3805447812220913e-16
+    },
+    "21": {
+      "conditional_entropy": 4.035559076298426,
+      "layer_id": 21,
+      "marginal_entropy": 4.035559076298426,
+      "mutual_information": 0.0,
+      "normalized_mutual_information": 0.0
+    },
+    "22": {
+      "conditional_entropy": 4.289175062237397,
+      "layer_id": 22,
+      "marginal_entropy": 4.289175062237395,
+      "mutual_information": -1.7763568394002505e-15,
+      "normalized_mutual_information": -4.1414883133113153e-16
+    },
+    "23": {
+      "conditional_entropy": 4.415959023908537,
+      "layer_id": 23,
+      "marginal_entropy": 4.415959023908536,
+      "mutual_information": -1.7763568394002505e-15,
+      "normalized_mutual_information": -4.022584516257601e-16
+    },
+    "24": {
+      "conditional_entropy": 4.36210443719945,
+      "layer_id": 24,
+      "marginal_entropy": 4.36210443719945,
+      "mutual_information": 0.0,
+      "normalized_mutual_information": 0.0
+    },
+    "25": {
+      "conditional_entropy": 4.357399925216321,
+      "layer_id": 25,
+      "marginal_entropy": 4.357399925216321,
+      "mutual_information": 0.0,
+      "normalized_mutual_information": 0.0
+    },
+    "26": {
+      "conditional_entropy": 4.248435571831158,
+      "layer_id": 26,
+      "marginal_entropy": 4.248435571831159,
+      "mutual_information": 8.881784197001252e-16,
+      "normalized_mutual_information": 2.090601127598842e-16
+    },
+    "27": {
+      "conditional_entropy": 4.128412609209112,
+      "layer_id": 27,
+      "marginal_entropy": 4.128412609209114,
+      "mutual_information": 2.6645352591003757e-15,
+      "normalized_mutual_information": 6.454139911201425e-16
+    },
+    "28": {
+      "conditional_entropy": 4.090749804642898,
+      "layer_id": 28,
+      "marginal_entropy": 4.0907498046429,
+      "mutual_information": 1.7763568394002505e-15,
+      "normalized_mutual_information": 4.3423746849150477e-16
+    },
+    "29": {
+      "conditional_entropy": 4.101242315049578,
+      "layer_id": 29,
+      "marginal_entropy": 4.101242315049579,
+      "mutual_information": 1.7763568394002505e-15,
+      "normalized_mutual_information": 4.33126526779917e-16
+    },
+    "3": {
+      "conditional_entropy": 4.290626928378402,
+      "layer_id": 3,
+      "marginal_entropy": 4.290626928378401,
+      "mutual_information": -8.881784197001252e-16,
+      "normalized_mutual_information": -2.0700434564134973e-16
+    },
+    "30": {
+      "conditional_entropy": 3.8404982372196557,
+      "layer_id": 30,
+      "marginal_entropy": 3.840498237219654,
+      "mutual_information": -1.7763568394002505e-15,
+      "normalized_mutual_information": -4.625329136165031e-16
+    },
+    "31": {
+      "conditional_entropy": 3.82272102608709,
+      "layer_id": 31,
+      "marginal_entropy": 3.8227210260870903,
+      "mutual_information": 4.440892098500626e-16,
+      "normalized_mutual_information": 1.161709700549687e-16
+    },
+    "32": {
+      "conditional_entropy": 4.042250728963352,
+      "layer_id": 32,
+      "marginal_entropy": 4.042250728963351,
+      "mutual_information": -8.881784197001252e-16,
+      "normalized_mutual_information": -2.1972373295307725e-16
+    },
+    "33": {
+      "conditional_entropy": 4.030257460581237,
+      "layer_id": 33,
+      "marginal_entropy": 4.030257460581236,
+      "mutual_information": -8.881784197001252e-16,
+      "normalized_mutual_information": -2.2037758837670728e-16
+    },
+    "34": {
+      "conditional_entropy": 4.268935673994394,
+      "layer_id": 34,
+      "marginal_entropy": 4.2689356739943936,
+      "mutual_information": -8.881784197001252e-16,
+      "normalized_mutual_information": -2.0805617313719487e-16
+    },
+    "35": {
+      "conditional_entropy": 4.410403443859895,
+      "layer_id": 35,
+      "marginal_entropy": 4.410403443859897,
+      "mutual_information": 1.7763568394002505e-15,
+      "normalized_mutual_information": 4.027651578844267e-16
+    },
+    "36": {
+      "conditional_entropy": 4.275362913579759,
+      "layer_id": 36,
+      "marginal_entropy": 4.275362913579761,
+      "mutual_information": 1.7763568394002505e-15,
+      "normalized_mutual_information": 4.154867961636752e-16
+    },
+    "37": {
+      "conditional_entropy": 4.326290606462497,
+      "layer_id": 37,
+      "marginal_entropy": 4.326290606462497,
+      "mutual_information": 0.0,
+      "normalized_mutual_information": 0.0
+    },
+    "38": {
+      "conditional_entropy": 4.173985499212129,
+      "layer_id": 38,
+      "marginal_entropy": 4.17398549921213,
+      "mutual_information": 1.7763568394002505e-15,
+      "normalized_mutual_information": 4.2557810508339103e-16
+    },
+    "39": {
+      "conditional_entropy": 4.1311014040882865,
+      "layer_id": 39,
+      "marginal_entropy": 4.131101404088289,
+      "mutual_information": 2.6645352591003757e-15,
+      "normalized_mutual_information": 6.44993912873563e-16
+    },
+    "4": {
+      "conditional_entropy": 4.245444970964286,
+      "layer_id": 4,
+      "marginal_entropy": 4.245444970964288,
+      "mutual_information": 1.7763568394002505e-15,
+      "normalized_mutual_information": 4.1841476018396686e-16
+    },
+    "40": {
+      "conditional_entropy": 4.00558465981214,
+      "layer_id": 40,
+      "marginal_entropy": 4.005584659812138,
+      "mutual_information": -1.7763568394002505e-15,
+      "normalized_mutual_information": -4.4347005250503473e-16
+    },
+    "41": {
+      "conditional_entropy": 4.087054884710373,
+      "layer_id": 41,
+      "marginal_entropy": 4.087054884710372,
+      "mutual_information": -8.881784197001252e-16,
+      "normalized_mutual_information": -2.1731502139175844e-16
+    },
+    "42": {
+      "conditional_entropy": 4.102806597858031,
+      "layer_id": 42,
+      "marginal_entropy": 4.102806597858026,
+      "mutual_information": -4.440892098500626e-15,
+      "normalized_mutual_information": -1.0824034700585463e-15
+    },
+    "43": {
+      "conditional_entropy": 3.9885384711444622,
+      "layer_id": 43,
+      "marginal_entropy": 3.9885384711444605,
+      "mutual_information": -1.7763568394002505e-15,
+      "normalized_mutual_information": -4.453653518078133e-16
+    },
+    "44": {
+      "conditional_entropy": 4.081287473643554,
+      "layer_id": 44,
+      "marginal_entropy": 4.081287473643556,
+      "mutual_information": 1.7763568394002505e-15,
+      "normalized_mutual_information": 4.3524423380409754e-16
+    },
+    "45": {
+      "conditional_entropy": 4.02159892102956,
+      "layer_id": 45,
+      "marginal_entropy": 4.021598921029559,
+      "mutual_information": -8.881784197001252e-16,
+      "normalized_mutual_information": -2.208520633561203e-16
+    },
+    "46": {
+      "conditional_entropy": 4.118132709596602,
+      "layer_id": 46,
+      "marginal_entropy": 4.1181327095966,
+      "mutual_information": -1.7763568394002505e-15,
+      "normalized_mutual_information": -4.313500716625174e-16
+    },
+    "47": {
+      "conditional_entropy": 4.050246358049286,
+      "layer_id": 47,
+      "marginal_entropy": 4.050246358049285,
+      "mutual_information": -8.881784197001252e-16,
+      "normalized_mutual_information": -2.1928997428390936e-16
+    },
+    "5": {
+      "conditional_entropy": 4.268931990284871,
+      "layer_id": 5,
+      "marginal_entropy": 4.268931990284875,
+      "mutual_information": 3.552713678800501e-15,
+      "normalized_mutual_information": 8.322254106848446e-16
+    },
+    "6": {
+      "conditional_entropy": 3.8571771969417776,
+      "layer_id": 6,
+      "marginal_entropy": 3.8571771969417763,
+      "mutual_information": -1.3322676295501878e-15,
+      "normalized_mutual_information": -3.4539964371004194e-16
+    },
+    "7": {
+      "conditional_entropy": 3.8536370195818113,
+      "layer_id": 7,
+      "marginal_entropy": 3.85363701958181,
+      "mutual_information": -1.3322676295501878e-15,
+      "normalized_mutual_information": -3.4571694811432014e-16
+    },
+    "8": {
+      "conditional_entropy": 4.108169296824899,
+      "layer_id": 8,
+      "marginal_entropy": 4.108169296824896,
+      "mutual_information": -2.6645352591003757e-15,
+      "normalized_mutual_information": -6.485943169770851e-16
+    },
+    "9": {
+      "conditional_entropy": 4.045156098955838,
+      "layer_id": 9,
+      "marginal_entropy": 4.0451560989558395,
+      "mutual_information": 1.7763568394002505e-15,
+      "normalized_mutual_information": 4.3913183964860454e-16
+    }
+  },
+  "seed": 1234,
+  "shuffled_null": {
+    "0": {
+      "conditional_entropy": 4.396500293605292,
+      "layer_id": 0,
+      "marginal_entropy": 4.598974959952383,
+      "mutual_information": 0.20247466634709088,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.04402604234861659,
+      "seed": 1234
+    },
+    "1": {
+      "conditional_entropy": 4.32386710980793,
+      "layer_id": 1,
+      "marginal_entropy": 4.516713615776582,
+      "mutual_information": 0.19284650596865216,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.042696199576402645,
+      "seed": 1234
+    },
+    "10": {
+      "conditional_entropy": 4.144061541692748,
+      "layer_id": 10,
+      "marginal_entropy": 4.314626931623822,
+      "mutual_information": 0.17056538993107395,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03953189757402297,
+      "seed": 1234
+    },
+    "11": {
+      "conditional_entropy": 4.256354326228532,
+      "layer_id": 11,
+      "marginal_entropy": 4.4264048836601475,
+      "mutual_information": 0.17005055743161535,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03841730747662702,
+      "seed": 1234
+    },
+    "12": {
+      "conditional_entropy": 4.195654083436043,
+      "layer_id": 12,
+      "marginal_entropy": 4.358562689575933,
+      "mutual_information": 0.1629086061398901,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.0373766807414534,
+      "seed": 1234
+    },
+    "13": {
+      "conditional_entropy": 4.197126658501878,
+      "layer_id": 13,
+      "marginal_entropy": 4.363585926927603,
+      "mutual_information": 0.1664592684257249,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.038147356603775814,
+      "seed": 1234
+    },
+    "14": {
+      "conditional_entropy": 4.1532051402660475,
+      "layer_id": 14,
+      "marginal_entropy": 4.298160872184941,
+      "mutual_information": 0.14495573191889388,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03372505967772365,
+      "seed": 1234
+    },
+    "15": {
+      "conditional_entropy": 4.057310564398043,
+      "layer_id": 15,
+      "marginal_entropy": 4.197284474748445,
+      "mutual_information": 0.13997391035040163,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03334868322423885,
+      "seed": 1234
+    },
+    "16": {
+      "conditional_entropy": 4.003908721698721,
+      "layer_id": 16,
+      "marginal_entropy": 4.135825302178928,
+      "mutual_information": 0.1319165804802065,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.031896071724960735,
+      "seed": 1234
+    },
+    "17": {
+      "conditional_entropy": 4.035782068066945,
+      "layer_id": 17,
+      "marginal_entropy": 4.172009815151787,
+      "mutual_information": 0.13622774708484187,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03265278681514454,
+      "seed": 1234
+    },
+    "18": {
+      "conditional_entropy": 3.8017677101179834,
+      "layer_id": 18,
+      "marginal_entropy": 3.8868276996446816,
+      "mutual_information": 0.08505998952669813,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.021884167784045064,
+      "seed": 1234
+    },
+    "19": {
+      "conditional_entropy": 3.77434400098334,
+      "layer_id": 19,
+      "marginal_entropy": 3.8572510077539865,
+      "mutual_information": 0.08290700677064633,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.021493806496902496,
+      "seed": 1234
+    },
+    "2": {
+      "conditional_entropy": 4.177936782547109,
+      "layer_id": 2,
+      "marginal_entropy": 4.344732290727106,
+      "mutual_information": 0.16679550817999722,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.038390284376320784,
+      "seed": 1234
+    },
+    "20": {
+      "conditional_entropy": 3.941163680048369,
+      "layer_id": 20,
+      "marginal_entropy": 4.057683253246444,
+      "mutual_information": 0.11651957319807504,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.028715788277670722,
+      "seed": 1234
+    },
+    "21": {
+      "conditional_entropy": 3.9179609921681893,
+      "layer_id": 21,
+      "marginal_entropy": 4.0372457026247375,
+      "mutual_information": 0.1192847104565482,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.02954606165757946,
+      "seed": 1234
+    },
+    "22": {
+      "conditional_entropy": 4.134836157210483,
+      "layer_id": 22,
+      "marginal_entropy": 4.290335752771661,
+      "mutual_information": 0.15549959556117798,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03624415535793941,
+      "seed": 1234
+    },
+    "23": {
+      "conditional_entropy": 4.24192415382522,
+      "layer_id": 23,
+      "marginal_entropy": 4.418302428950037,
+      "mutual_information": 0.17637827512481685,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.039919919009874405,
+      "seed": 1234
+    },
+    "24": {
+      "conditional_entropy": 4.201126560948289,
+      "layer_id": 24,
+      "marginal_entropy": 4.362846273888589,
+      "mutual_information": 0.1617197129403003,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03706747906938286,
+      "seed": 1234
+    },
+    "25": {
+      "conditional_entropy": 4.19772446197326,
+      "layer_id": 25,
+      "marginal_entropy": 4.359859621556107,
+      "mutual_information": 0.16213515958284752,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03718816055021945,
+      "seed": 1234
+    },
+    "26": {
+      "conditional_entropy": 4.112932671411286,
+      "layer_id": 26,
+      "marginal_entropy": 4.250647246040183,
+      "mutual_information": 0.13771457462889636,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03239849525438472,
+      "seed": 1234
+    },
+    "27": {
+      "conditional_entropy": 3.9974788852113763,
+      "layer_id": 27,
+      "marginal_entropy": 4.132187475366769,
+      "mutual_information": 0.13470859015539283,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03259982538508523,
+      "seed": 1234
+    },
+    "28": {
+      "conditional_entropy": 3.963505809616855,
+      "layer_id": 28,
+      "marginal_entropy": 4.093567808915565,
+      "mutual_information": 0.13006199929870998,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03177228407342908,
+      "seed": 1234
+    },
+    "29": {
+      "conditional_entropy": 3.9749528553934397,
+      "layer_id": 29,
+      "marginal_entropy": 4.102314191750899,
+      "mutual_information": 0.12736133635745972,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.031046216941053195,
+      "seed": 1234
+    },
+    "3": {
+      "conditional_entropy": 4.132719288373983,
+      "layer_id": 3,
+      "marginal_entropy": 4.290420379895885,
+      "mutual_information": 0.15770109152190148,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03675655939470631,
+      "seed": 1234
+    },
+    "30": {
+      "conditional_entropy": 3.7587126159886157,
+      "layer_id": 30,
+      "marginal_entropy": 3.8434344946191197,
+      "mutual_information": 0.08472187863050396,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.022043273730595947,
+      "seed": 1234
+    },
+    "31": {
+      "conditional_entropy": 3.7449272277404186,
+      "layer_id": 31,
+      "marginal_entropy": 3.8266553449121927,
+      "mutual_information": 0.08172811717177408,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.021357585098547578,
+      "seed": 1234
+    },
+    "32": {
+      "conditional_entropy": 3.928917133362395,
+      "layer_id": 32,
+      "marginal_entropy": 4.043437961602645,
+      "mutual_information": 0.11452082824024945,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.02832263764839818,
+      "seed": 1234
+    },
+    "33": {
+      "conditional_entropy": 3.9124096987325196,
+      "layer_id": 33,
+      "marginal_entropy": 4.0322739283586175,
+      "mutual_information": 0.11986422962609788,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.02972621199742994,
+      "seed": 1234
+    },
+    "34": {
+      "conditional_entropy": 4.116398384311831,
+      "layer_id": 34,
+      "marginal_entropy": 4.269664579633906,
+      "mutual_information": 0.1532661953220753,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03589654233101768,
+      "seed": 1234
+    },
+    "35": {
+      "conditional_entropy": 4.237238474643467,
+      "layer_id": 35,
+      "marginal_entropy": 4.411322839174947,
+      "mutual_information": 0.17408436453147935,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03946307510878948,
+      "seed": 1234
+    },
+    "36": {
+      "conditional_entropy": 4.1298021927803665,
+      "layer_id": 36,
+      "marginal_entropy": 4.275747080990013,
+      "mutual_information": 0.14594488820964635,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.034133190164244716,
+      "seed": 1234
+    },
+    "37": {
+      "conditional_entropy": 4.171307848082968,
+      "layer_id": 37,
+      "marginal_entropy": 4.327053628227093,
+      "mutual_information": 0.15574578014412488,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.035993494309414883,
+      "seed": 1234
+    },
+    "38": {
+      "conditional_entropy": 4.041616437971146,
+      "layer_id": 38,
+      "marginal_entropy": 4.174955850035971,
+      "mutual_information": 0.13333941206482525,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.031937921466565065,
+      "seed": 1234
+    },
+    "39": {
+      "conditional_entropy": 4.0037074138399,
+      "layer_id": 39,
+      "marginal_entropy": 4.133954697800175,
+      "mutual_information": 0.13024728396027552,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03150670326154874,
+      "seed": 1234
+    },
+    "4": {
+      "conditional_entropy": 4.096251019484038,
+      "layer_id": 4,
+      "marginal_entropy": 4.2482128332233025,
+      "mutual_information": 0.15196181373926443,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03577076283721982,
+      "seed": 1234
+    },
+    "40": {
+      "conditional_entropy": 3.8978680635817087,
+      "layer_id": 40,
+      "marginal_entropy": 4.007880396536176,
+      "mutual_information": 0.11001233295446688,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.027449005975713602,
+      "seed": 1234
+    },
+    "41": {
+      "conditional_entropy": 3.9631706808190237,
+      "layer_id": 41,
+      "marginal_entropy": 4.090152287210093,
+      "mutual_information": 0.12698160639106915,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.031045691571959473,
+      "seed": 1234
+    },
+    "42": {
+      "conditional_entropy": 3.988017080985953,
+      "layer_id": 42,
+      "marginal_entropy": 4.105516888246261,
+      "mutual_information": 0.11749980726030795,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.028619979032774096,
+      "seed": 1234
+    },
+    "43": {
+      "conditional_entropy": 3.8850763523349614,
+      "layer_id": 43,
+      "marginal_entropy": 3.9913840626409827,
+      "mutual_information": 0.10630771030602126,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.026634297436082997,
+      "seed": 1234
+    },
+    "44": {
+      "conditional_entropy": 3.966581959017437,
+      "layer_id": 44,
+      "marginal_entropy": 4.084366836995239,
+      "mutual_information": 0.11778487797780146,
+      "n_selections": 536,
+      "normalized_mutual_information": 0.028837977262701677,
+      "seed": 1234
+    },
+    "45": {
+      "conditional_entropy": 3.9198838306714983,
+      "layer_id": 45,
+      "marginal_entropy": 4.023614891668896,
+      "mutual_information": 0.10373106099739804,
+      "n_selections": 536,
+      "normalized_mutual_information": 0.0257805639431792,
+      "seed": 1234
+    },
+    "46": {
+      "conditional_entropy": 3.9962779636677253,
+      "layer_id": 46,
+      "marginal_entropy": 4.119470174884697,
+      "mutual_information": 0.12319221121697144,
+      "n_selections": 536,
+      "normalized_mutual_information": 0.029904867856075587,
+      "seed": 1234
+    },
+    "47": {
+      "conditional_entropy": 3.8984430117434754,
+      "layer_id": 47,
+      "marginal_entropy": 4.054158524537824,
+      "mutual_information": 0.1557155127943486,
+      "n_selections": 395,
+      "normalized_mutual_information": 0.03840883671713361,
+      "seed": 1234
+    },
+    "5": {
+      "conditional_entropy": 4.126748583686763,
+      "layer_id": 5,
+      "marginal_entropy": 4.270675218493922,
+      "mutual_information": 0.14392663480715928,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.03370114266331773,
+      "seed": 1234
+    },
+    "6": {
+      "conditional_entropy": 3.7556345768366883,
+      "layer_id": 6,
+      "marginal_entropy": 3.860760255674443,
+      "mutual_information": 0.10512567883775459,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.0272292688164834,
+      "seed": 1234
+    },
+    "7": {
+      "conditional_entropy": 3.7662716584586184,
+      "layer_id": 7,
+      "marginal_entropy": 3.8582006577122177,
+      "mutual_information": 0.09192899925359921,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.023826909849761414,
+      "seed": 1234
+    },
+    "8": {
+      "conditional_entropy": 3.9828675499697477,
+      "layer_id": 8,
+      "marginal_entropy": 4.110686607283091,
+      "mutual_information": 0.1278190573133431,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.031094332778100923,
+      "seed": 1234
+    },
+    "9": {
+      "conditional_entropy": 3.9313284362035956,
+      "layer_id": 9,
+      "marginal_entropy": 4.0484585343724575,
+      "mutual_information": 0.11713009816886188,
+      "n_selections": 537,
+      "normalized_mutual_information": 0.02893202367627015,
+      "seed": 1234
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+ "artifact": "R3-05-R2-K1-DECISION",
+ "classification": "R3_05_K1_HEADROOM_PASS",
+ "inputs": {
+  "canonical_stream_sha256": "24fcc3e31e800826acb353c627326d4665af7b05c88a3138b18b79c5c435e776",
+  "events": 24672,
+  "passes": 514,
+  "phase0_freeze_sha256": "415f78a850a2917a2457797106589433f944c07a863f80b14cef88fde6232ae3",
+  "r1_classification": "R3_05_R1_FIDELITY_PASS",
+  "r1_freeze_sha256": "8d025fdfb3d2a48c54e4d905f3a0e3aad2dd70ed9fdabf602b21ec2b600c3382",
+  "token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa"
+ },
+ "interpretation": "HEADROOM_PASS means only that enough theoretical future-retention value exists to justify testing causal candidates; it does not predict that any candidate works.",
+ "primary_budget": "1.5",
+ "r3_may_proceed": true,
+ "rule": "K1 (frozen Phase 0): clairvoyant bytes avoided x kappa_low < 10 ms/token at 1.5 GiB -> kill predictive retention as the primary R3 path",
+ "threshold_ms_per_token": 10.0,
+ "value_ms_per_token": 92.21555273959194
+}

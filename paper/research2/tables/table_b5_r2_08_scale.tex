@@ -1,0 +1,28 @@
+\begin{table}[t]
+\centering
+\caption{R-08 routing drift and workload-dependence scale comparison.}
+\label{tab:r2-08-summary}
+\small
+\begin{tabular}{@{}lr@{}}
+\toprule
+Quantity & Value \\
+\midrule
+Matrix & 4 workloads $\times$ 2 replicates = 8 cells \\
+Reused / new captures & 1 / 7 \\
+Matched decode horizon $H$ & 388 \\
+Temporal windows / window length & 8 / 48 \\
+Median temporal JSD & 0.135556 \\
+Median same-workload replicate JSD & 0.0\,\footnotemark[1] \\
+Median cross-workload JSD & 0.299496 \\
+Cross-workload / temporal ratio & 2.2094$\times$ \\
+Median top-8 temporal Jaccard distance & 0.606061 \\
+Predeclared regime & WORKLOAD\_DEPENDENCE\_DOMINANT \\
+Most / least stable workload & instruction-v1 / coding-v1 \\
+Most / least stable layer & 47 / 12 \\
+Strongest workload pair (median layer JSD) & reasoning-v1 (s42) vs instruction-v1 (s42), 0.421342 \\
+Configuration compatibility & true \\
+\bottomrule
+\end{tabular}
+\vspace{2pt}
+\par\footnotesize\textsuperscript{1}Under the deterministic decoding protocol (temperature~$=0.0$, top-$k=1$); interpreted as a reproducibility check at the reported resolution, not as a general claim of zero stochastic run-to-run variability.
+\end{table}

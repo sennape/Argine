@@ -1,0 +1,60 @@
+{
+  "artifacts": {
+    "expert_store": null,
+    "model": null,
+    "runtime_binary": null
+  },
+  "execution": {
+    "command": null,
+    "exit_code": null,
+    "raw_evidence_paths": [],
+    "stderr_path": null,
+    "stdout_path": null
+  },
+  "experiment": {
+    "baseline_policy": null,
+    "parameters": {
+      "candidate_status": "CANDIDATE",
+      "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+      "r2_04_run_id": "cd2b58b019314fafb90304234e6d1907",
+      "request_unit": "One counted expert request = one occurrence of one expert id within one token's selected-expert tuple (Trace.token_selections(layer, phase)), for one (layer_id, expert_id) pair. This is the token-expert ASSIGNMENT unit -- the router's raw per-token top-k selection -- not the cache-access/residency-event unit R2-01..R2-04 use (the per-step-per-layer union across tokens). Duplicate expert ids within one token's tuple, if any, are each counted separately: never deduplicated."
+    },
+    "seed": null,
+    "workload": null
+  },
+  "git": {
+    "branch": "r2-main",
+    "candidate_status": "CANDIDATE",
+    "clean": true,
+    "commit": "22b721e9e8c165b2ffd717c7f9413e3512c90784",
+    "dirty_definition": "tracked files modified (untracked files ignored)",
+    "note": null,
+    "repo_root": "C:\\Users\\alpel\\Desktop\\Argine3"
+  },
+  "hardware": {
+    "cores_logical": 16,
+    "cores_physical": 12,
+    "cpu": "13th Gen Intel(R) Core(TM) i5-1340P",
+    "cpu_source": "windows-registry:ProcessorNameString",
+    "machine": "AMD64",
+    "os": "Windows-11-10.0.26200-SP0",
+    "os_release": "11",
+    "os_version": "10.0.26200",
+    "ram_total": 16876888064
+  },
+  "identity": {
+    "end_utc": "2026-11-08T08:56:24Z",
+    "experiment_id": "R2-05",
+    "outcome": "PASS",
+    "run_id": "da82e15b61c94019840477642618565a",
+    "runner_schema_version": 1,
+    "start_utc": "2026-11-08T08:56:24Z"
+  },
+  "schema_version": 1,
+  "software": {
+    "argine_version": "0.1.0",
+    "os": "Windows-11-10.0.26200-SP0",
+    "python_version": "3.13.9",
+    "runtime_identity": null
+  }
+}

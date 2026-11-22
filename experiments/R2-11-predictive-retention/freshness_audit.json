@@ -1,0 +1,216 @@
+{
+  "all_prompt_similarities_sorted_desc": [
+    {
+      "a": "r2-11-summarization-v2",
+      "a_corpus": "r2_11_new",
+      "b": "r2-11-summarization-v3",
+      "b_corpus": "r2_11_new",
+      "jaccard_8gram": 0.059602649006622516
+    },
+    {
+      "a": "r2-11-summarization-v1",
+      "a_corpus": "r2_11_new",
+      "b": "r2-11-summarization-v2",
+      "b_corpus": "r2_11_new",
+      "jaccard_8gram": 0.05921052631578947
+    },
+    {
+      "a": "r2-11-summarization-v1",
+      "a_corpus": "r2_11_new",
+      "b": "r2-11-summarization-v3",
+      "b_corpus": "r2_11_new",
+      "jaccard_8gram": 0.05784061696658098
+    },
+    {
+      "a": "r2-11-summarization-v2",
+      "a_corpus": "r2_11_new",
+      "b": "r2-09-eval-summarization-001",
+      "b_corpus": "r2_10_eval",
+      "jaccard_8gram": 0.03671071953010279
+    },
+    {
+      "a": "r2-11-summarization-v3",
+      "a_corpus": "r2_11_new",
+      "b": "r2-09-eval-summarization-001",
+      "b_corpus": "r2_10_eval",
+      "jaccard_8gram": 0.0357653791130186
+    },
+    {
+      "a": "r2-11-summarization-v1",
+      "a_corpus": "r2_11_new",
+      "b": "r2-09-eval-summarization-001",
+      "b_corpus": "r2_10_eval",
+      "jaccard_8gram": 0.03551136363636364
+    },
+    {
+      "a": "r2-11-summarization-v2",
+      "a_corpus": "r2_11_new",
+      "b": "r2-bridge01-summarization-001",
+      "b_corpus": "r2_bridge01_holdout",
+      "jaccard_8gram": 0.032467532467532464
+    },
+    {
+      "a": "r2-11-summarization-v3",
+      "a_corpus": "r2_11_new",
+      "b": "r2-bridge01-summarization-001",
+      "b_corpus": "r2_bridge01_holdout",
+      "jaccard_8gram": 0.031725888324873094
+    },
+    {
+      "a": "r2-11-summarization-v1",
+      "a_corpus": "r2_11_new",
+      "b": "r2-bridge01-summarization-001",
+      "b_corpus": "r2_bridge01_holdout",
+      "jaccard_8gram": 0.031525851197982346
+    },
+    {
+      "a": "r2-11-coding-v1",
+      "a_corpus": "r2_11_new",
+      "b": "r2-09-eval-coding-001",
+      "b_corpus": "r2_10_eval",
+      "jaccard_8gram": 0.0
+    },
+    {
+      "a": "r2-11-coding-v1",
+      "a_corpus": "r2_11_new",
+      "b": "r2-09-eval-instruction-001",
+      "b_corpus": "r2_10_eval",
+      "jaccard_8gram": 0.0
+    },
+    {
+      "a": "r2-11-coding-v1",
+      "a_corpus": "r2_11_new",
+      "b": "r2-09-eval-reasoning-001",
+      "b_corpus": "r2_10_eval",
+      "jaccard_8gram": 0.0
+    },
+    {
+      "a": "r2-11-coding-v1",
+      "a_corpus": "r2_11_new",
+      "b": "r2-09-eval-summarization-001",
+      "b_corpus": "r2_10_eval",
+      "jaccard_8gram": 0.0
+    },
+    {
+      "a": "r2-11-coding-v1",
+      "a_corpus": "r2_11_new",
+      "b": "r2-bridge01-coding-001",
+      "b_corpus": "r2_bridge01_holdout",
+      "jaccard_8gram": 0.0
+    },
+    {
+      "a": "r2-11-coding-v1",
+      "a_corpus": "r2_11_new",
+      "b": "r2-bridge01-instruction-001",
+      "b_corpus": "r2_bridge01_holdout",
+      "jaccard_8gram": 0.0
+    }
+  ],
+  "all_source_similarities_sorted_desc": [
+    {
+      "a": "summarization_r2_11_source_01_gardening.txt",
+      "b": "summarization_technical_source.txt",
+      "b_corpus": "r2_10_dev",
+      "jaccard_12gram": 0.0
+    },
+    {
+      "a": "summarization_r2_11_source_01_gardening.txt",
+      "b": "summarization_eval_source.txt",
+      "b_corpus": "r2_10_eval",
+      "jaccard_12gram": 0.0
+    },
+    {
+      "a": "summarization_r2_11_source_01_gardening.txt",
+      "b": "summarization_bridge_source.txt",
+      "b_corpus": "r2_bridge01_holdout",
+      "jaccard_12gram": 0.0
+    },
+    {
+      "a": "summarization_r2_11_source_02_transit.txt",
+      "b": "summarization_technical_source.txt",
+      "b_corpus": "r2_10_dev",
+      "jaccard_12gram": 0.0
+    },
+    {
+      "a": "summarization_r2_11_source_02_transit.txt",
+      "b": "summarization_eval_source.txt",
+      "b_corpus": "r2_10_eval",
+      "jaccard_12gram": 0.0
+    },
+    {
+      "a": "summarization_r2_11_source_02_transit.txt",
+      "b": "summarization_bridge_source.txt",
+      "b_corpus": "r2_bridge01_holdout",
+      "jaccard_12gram": 0.0
+    },
+    {
+      "a": "summarization_r2_11_source_03_wifi.txt",
+      "b": "summarization_technical_source.txt",
+      "b_corpus": "r2_10_dev",
+      "jaccard_12gram": 0.0
+    },
+    {
+      "a": "summarization_r2_11_source_03_wifi.txt",
+      "b": "summarization_eval_source.txt",
+      "b_corpus": "r2_10_eval",
+      "jaccard_12gram": 0.0
+    },
+    {
+      "a": "summarization_r2_11_source_03_wifi.txt",
+      "b": "summarization_bridge_source.txt",
+      "b_corpus": "r2_bridge01_holdout",
+      "jaccard_12gram": 0.0
+    },
+    {
+      "a": "summarization_r2_11_source_01_gardening.txt",
+      "b": "summarization_r2_11_source_02_transit.txt",
+      "b_corpus": "r2_11_new",
+      "jaccard_12gram": 0.0
+    },
+    {
+      "a": "summarization_r2_11_source_01_gardening.txt",
+      "b": "summarization_r2_11_source_03_wifi.txt",
+      "b_corpus": "r2_11_new",
+      "jaccard_12gram": 0.0
+    },
+    {
+      "a": "summarization_r2_11_source_02_transit.txt",
+      "b": "summarization_r2_11_source_03_wifi.txt",
+      "b_corpus": "r2_11_new",
+      "jaccard_12gram": 0.0
+    }
+  ],
+  "artifact": "R2-11_FRESHNESS_AUDIT",
+  "corpora_compared_against": [
+    "r2_10_dev (research2/workloads/r2_08)",
+    "r2_10_eval (research2/workloads/r2_09)",
+    "r2_bridge01_holdout (research2/workloads/r2_bridge01)",
+    "r2_11_new (each other, within-corpus)"
+  ],
+  "counts": {
+    "pairwise_comparisons_prompts": 162,
+    "pairwise_comparisons_sources": 12,
+    "r2_10_dev_items": 0,
+    "r2_10_eval_items": 4,
+    "r2_11_new_items": 12,
+    "r2_bridge01_items": 4
+  },
+  "max_prompt_similarity_observed": {
+    "a": "r2-11-summarization-v2",
+    "a_corpus": "r2_11_new",
+    "b": "r2-11-summarization-v3",
+    "b_corpus": "r2_11_new",
+    "jaccard_8gram": 0.059602649006622516
+  },
+  "max_source_passage_similarity_observed": {
+    "a": "summarization_r2_11_source_01_gardening.txt",
+    "b": "summarization_technical_source.txt",
+    "b_corpus": "r2_10_dev",
+    "jaccard_12gram": 0.0
+  },
+  "method": "sha256 exact-duplicate check; whitespace-normalized exact-duplicate check; workload_id/prompt_id reuse check; 8-word-shingle Jaccard similarity (prompts) and 12-word-shingle Jaccard similarity (summarization source passages) as a lexical/shingle similarity AUDIT AID, not sole semantic criterion. No model output was inspected while authoring or auditing this corpus.",
+  "pass": true,
+  "schema_version": 1,
+  "similarity_flag_threshold_8gram_jaccard": 0.5,
+  "violations": []
+}

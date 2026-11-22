@@ -1,0 +1,65 @@
+{
+ "amended_schedule_sha256": "e87dc48518dd0281d5eeadd0c8db7a9cfc2234d0bce9d253f464566e43f511a0",
+ "amendment_design": "PRIMARY_PLUS_8G",
+ "amendment_freeze_sha256": "ea0d6719f6d4f92dd77b597662ea3903bc22db70647e37dd8b4cf9ec06c9b3f6",
+ "analysis_before_complete_acquisition": "refused",
+ "artifact": "R3-04-OPENING-FREEZE",
+ "authorization_required_from": "Luca (separate explicit authorization)",
+ "blocks": {
+  "1.5": 18,
+  "8": 6
+ },
+ "campaign_authorized": false,
+ "classification_rule": {
+  "INCONCLUSIVE": "CI contains zero",
+  "NET_LOSS": "95% CI lower bound > 0",
+  "NET_WIN": "95% CI upper bound < 0"
+ },
+ "clean_environment_attestation_required": true,
+ "confidence_level": 0.95,
+ "counted_launches": 144,
+ "created_utc": "2026-11-21T10:35:03Z",
+ "driver_commit": "a3482a74cbad84458aecfee4c73970c44b366f7f",
+ "driver_path": "tools/r3_04_acquire.py",
+ "driver_sha256_lf": "3abf28d6b267aec50dff936fd5a9f840cc9039f4e1c549d292b3f09b64f4c26d",
+ "driver_sha256_raw": "3abf28d6b267aec50dff936fd5a9f840cc9039f4e1c549d292b3f09b64f4c26d",
+ "fixed_n": true,
+ "freeze_sha256": "3f6ea9b05c4c6d4784a6d6570f7f5a0fc81b3d94025fa5b10ba0bcfa7d97968d",
+ "frozen_schedule_sha256": "9c37d12a53dded51a6a5fed9351db8a430248425ddd703b29b0f636013d43a06",
+ "gate2_classification": "R3_04_MECHANISM_PASS",
+ "gate2_evidence_commit": "7657934",
+ "gate2_freeze_sha256": "59fd7ac62242e8d126f6a8d7b6b31586b82119f9f8afccd5af20ded9237b2958",
+ "gate2_shutdown_helper_status": "R3_04_SHUTDOWN_HELPER_VALIDATED_ON_REAL_MODEL",
+ "head_commit_at_creation": "5704a8cccb4035597b6d351291fffe7a5961f3cb",
+ "helper_fallback": "fails the launch closed",
+ "host_identity_attestation": {
+  "created_unix": 1795257161.2556226,
+  "model_free": true,
+  "verdict": "IDENTITY_MATCHES_FROZEN_PLAN"
+ },
+ "model": {
+  "path": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf",
+  "sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+  "size_bytes": 18632184480
+ },
+ "optional_stopping": false,
+ "physical_launches": 146,
+ "primary_budget": "1.5",
+ "primary_endpoint": "decode wall ms/token",
+ "primary_estimator": "frozen paired block t-interval over DELTA_NET = P - A (V.classify_primary)",
+ "primary_n_blocks": 18,
+ "protocol_commit": "4a0aa2d",
+ "protocol_freeze_sha256": "a88359b52891f93ec49e67978d92c2eb3b73db588611bce46b3103b2978c1202",
+ "resume_semantics": "deterministic: accepted prefix by atomic records, orphans classified non-counted, one rerun of the same slot then abort, no replacement, no imputation",
+ "runtime_path": "C:\\Users\\alpel\\Desktop\\Argine4-r3build-r3-03b\\llama.cpp\\build-r3-03b\\bin\\llama-server.exe",
+ "runtime_sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5",
+ "shutdown_method_required": "own_console_helper",
+ "status": "OPENING_FROZEN_CAMPAIGN_NOT_AUTHORIZED",
+ "store": {
+  "path": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs",
+  "sha256": "fef943ae0bc017864a47d41c1fc90d422016045f7e8705b1d138b7defd8c5146",
+  "size_bytes": 17553387520
+ },
+ "timing_4GiB": "omitted (0 launches)",
+ "warmups": 2
+}

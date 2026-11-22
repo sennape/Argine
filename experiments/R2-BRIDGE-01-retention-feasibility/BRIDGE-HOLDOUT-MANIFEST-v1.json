@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "artifact": "BRIDGE-HOLDOUT-MANIFEST-v1",
+  "note": "Additive. Records the identity (not the content judgement) of the four freshly-authored BRIDGE holdout prompt specifications. Freezes them BEFORE any capture. No prompt file may be edited after this freeze without creating a new prospective protocol version (e.g. BRIDGE-HOLDOUT-MANIFEST-v2.json).",
+  "freshness_audit_reference": "experiments/R2-BRIDGE-01-retention-feasibility/PHASE2A0-FRESHNESS-AUDIT.json",
+  "freshness_audit_overall_pass": true,
+  "original_phase0_contract_digest": "e4ef4268e6bc207f20d5f4a56c165b75b977536600ff9d6f7e59604f77a889fc",
+  "phase01_dev_selection_rule_digest": "5954a0f6d13fcf427124f8b7f7d7f009d2d76fbe82e4b4e28c6aa2167fc8eb92",
+  "pre_freeze_git_head": "650c9091ccbddd2037ff8343dee9e880309b67b4",
+  "cells": [
+    {
+      "workload_id": "bridge-coding-v1",
+      "category": "coding",
+      "source_path": "research2/workloads/r2_bridge01/bridge-coding-v1.json",
+      "prompt_item_id": "r2-bridge01-coding-001",
+      "sha256": "a179a10e269549c3ce4af34bdf0f0c84a414097852eb6284f51444f3516c1ba5",
+      "item_count": 1,
+      "cli_split_field": "eval",
+      "provenance_split_identity": "bridge_holdout",
+      "n_predict": 512,
+      "source_text_sha256": null,
+      "source_text_path": null
+    },
+    {
+      "workload_id": "bridge-reasoning-v1",
+      "category": "reasoning",
+      "source_path": "research2/workloads/r2_bridge01/bridge-reasoning-v1.json",
+      "prompt_item_id": "r2-bridge01-reasoning-001",
+      "sha256": "f152008e9935c4fa536deb29e8b3124c71b2ae32314b2082c524bc764828cc1b",
+      "item_count": 1,
+      "cli_split_field": "eval",
+      "provenance_split_identity": "bridge_holdout",
+      "n_predict": 512,
+      "source_text_sha256": null,
+      "source_text_path": null
+    },
+    {
+      "workload_id": "bridge-summarization-v1",
+      "category": "summarization",
+      "source_path": "research2/workloads/r2_bridge01/bridge-summarization-v1.json",
+      "prompt_item_id": "r2-bridge01-summarization-001",
+      "sha256": "6fb0210e02be9b8df454cc557e7cfff70aa6d2cc2781e852339f04487521f073",
+      "item_count": 1,
+      "cli_split_field": "eval",
+      "provenance_split_identity": "bridge_holdout",
+      "n_predict": 512,
+      "source_text_sha256": "bcc91e62c5a04805644759a2de336fc8ebd04af229f0f490417b17265a062ed8",
+      "source_text_path": "research2/workloads/r2_bridge01/sources/summarization_bridge_source.txt"
+    },
+    {
+      "workload_id": "bridge-instruction-v1",
+      "category": "instruction",
+      "source_path": "research2/workloads/r2_bridge01/bridge-instruction-v1.json",
+      "prompt_item_id": "r2-bridge01-instruction-001",
+      "sha256": "bbc9f6f92950f6f006465cdb8b2008c78aa5f29aa3980df7e3dac2c6a3944dcb",
+      "item_count": 1,
+      "cli_split_field": "eval",
+      "provenance_split_identity": "bridge_holdout",
+      "n_predict": 512,
+      "source_text_sha256": null,
+      "source_text_path": null
+    }
+  ],
+  "no_trace_captured_statement": "No BRIDGE holdout trace exists on any host as of this manifest freeze.",
+  "manifest_digest_sha256": "ebe8735f3ac9105a1d001b40cdd8189e780772b350328aeba131be3af015147e"
+}
