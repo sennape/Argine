@@ -54,7 +54,7 @@ class VerifierIsolation(unittest.TestCase):
         _rm(cls.tmp)
 
     def setUp(self):
-        _git(self.caller, "reset", "-q", "--hard", "HEAD")
+        _git(self.caller, "reset", "-q", "--hard", "HEAD"); _git(self.caller, "clean", "-fdq")
         self.assertEqual(_git(self.caller, "status", "--porcelain").stdout, "", "caller must start clean")
 
     def test_negative_control_direct_run_dirties_under_crlf_write(self):
@@ -83,6 +83,43 @@ class VerifierIsolation(unittest.TestCase):
         for name in ["R3 closure", "R3 paper", "R4 Phase 0", "R4 Phase 1", "R4 Phase 2", "R1 registry", "R2 paper freeze", "README index", "links", "consolidation"]:
             self.assertIn("PASS " + name, r.stdout)
         self.assertEqual(_git(self.caller, "status", "--porcelain").stdout, "")
+
+    # --- caller-state preflight: isolation must never hide a dirty caller -------------------------------------
+    def _assert_refused(self, cmd):
+        r = subprocess.run([sys.executable, *cmd], cwd=self.caller, env=self.env, capture_output=True, text=True)
+        self.assertNotEqual(r.returncode, 0, r.stdout[-1500:])
+        self.assertIn("caller working tree is dirty", r.stderr)
+        self.assertNotIn("PASS ", r.stdout, "no verification may run against a dirty caller")
+        return r
+
+    def test_dirty_caller_is_not_hidden(self):
+        target = Path(self.caller, "CONTRIBUTING.md"); before = target.read_bytes() + b"\nlocal edit\n"
+        target.write_bytes(before)  # disposable fixture; the caller itself is a throw-away clone
+        for cmd in (["shared/tooling/verify_all.py", "--skip-unittest"], ["shared/tooling/run_frozen_verifier.py", "paper/research3/scripts/verify_paper.py"]):
+            self._assert_refused(cmd)
+        self.assertEqual(target.read_bytes(), before, "the caller modification must stay untouched")
+        self.assertIn("CONTRIBUTING.md", _git(self.caller, "status", "--porcelain").stdout)
+
+    def test_staged_change_is_not_hidden(self):
+        target = Path(self.caller, "CONTRIBUTING.md"); target.write_bytes(target.read_bytes() + b"\nstaged edit\n")
+        _git(self.caller, "add", "CONTRIBUTING.md")
+        self.assertTrue(_git(self.caller, "status", "--porcelain").stdout.startswith("M "))
+        self._assert_refused(["shared/tooling/verify_all.py", "--skip-unittest"])
+        self.assertTrue(_git(self.caller, "status", "--porcelain").stdout.startswith("M "), "staged change must remain staged")
+
+    def test_deleted_and_untracked_files_are_not_hidden(self):
+        os.remove(Path(self.caller, "CONTRIBUTING.md"))
+        self._assert_refused(["shared/tooling/verify_all.py", "--skip-unittest"])
+        _git(self.caller, "checkout", "--", "CONTRIBUTING.md")
+        Path(self.caller, "stray_untracked.txt").write_text("x", encoding="utf-8")
+        self._assert_refused(["shared/tooling/run_frozen_verifier.py", "experiments/R4-00-causal-eviction-distillation/phase0.py", "verify"])
+        self.assertTrue(Path(self.caller, "stray_untracked.txt").exists())
+
+    def test_clean_caller_after_r3_verifier(self):
+        self.test_r3_paper_verifier_passes_and_leaves_caller_clean()
+
+    def test_full_verify_clean(self):
+        self.test_verify_all_passes_and_leaves_caller_clean()
 
 
 if __name__ == "__main__":

@@ -33,6 +33,11 @@ PLAIN = [
 
 
 def main() -> int:
+    try:
+        rfv.preflight()
+    except rfv.DirtyCaller as e:
+        print("VERIFICATION REFUSED:", e, file=sys.stderr)
+        return 2
     results = []
     for name, script, args in FROZEN:
         results.append((name, rfv.run(script, *args)))

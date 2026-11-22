@@ -14,7 +14,11 @@ The layer (shared/tooling/gitcompat/sitecustomize.py) answers the verifier's his
 manifests/git-object-equivalence.json, and only when the clone's Git objects equal the recorded originals.
 Child interpreters (a verifier that runs another verifier) inherit it through PYTHONPATH.
 
-Verification is of the COMMITTED state (HEAD); uncommitted caller changes are not seen by the verifier.
+Because the verifier sees only committed HEAD, the caller is first required to be COMPLETELY clean (`git status
+--porcelain` empty: no modified, staged, deleted or untracked files). A dirty caller makes the run fail before any
+verification, so a dirty-tree check inside a frozen verifier can never be bypassed by the isolation. Nothing is
+committed, staged, restored or filtered automatically. Untracked-file policy: any untracked, non-ignored file fails
+(stricter than the historical verifiers, and simpler and safer than distinguishing evidence paths).
 Set ARGINE_KEEP_VERIFY_TREE=1 to keep the clone for diagnosis (its path is printed)."""
 from __future__ import annotations
 
@@ -40,7 +44,28 @@ def make_clone(dest: str) -> None:
     subprocess.run(["git", "-c", "core.longpaths=true", "-c", "core.autocrlf=false", "clone", "-q", "--no-hardlinks", str(ROOT), dest], check=True)
 
 
+class DirtyCaller(RuntimeError):
+    pass
+
+
+def preflight(root: Path = ROOT) -> None:
+    """Fail unless the caller checkout is completely clean. Raises DirtyCaller with the offending entries."""
+    r = subprocess.run(["git", "-C", str(root), "status", "--porcelain"], capture_output=True, text=True)
+    if r.returncode != 0:
+        raise DirtyCaller(f"cannot read the caller's Git status (rc={r.returncode}): {r.stderr.strip()}")
+    lines = [l for l in r.stdout.splitlines() if l.strip()]
+    if lines:
+        shown = "\n".join("  " + l for l in lines[:20]) + (f"\n  ... and {len(lines) - 20} more" if len(lines) > 20 else "")
+        raise DirtyCaller("caller working tree is dirty; frozen verifiers run on a clone of committed HEAD and would not see these changes. "
+                          "Commit, stash or discard them yourself, then re-run. `git status --porcelain` shows:\n" + shown)
+
+
 def run(script: str, *args: str) -> int:
+    try:
+        preflight()
+    except DirtyCaller as e:
+        print("VERIFICATION REFUSED:", e, file=sys.stderr)
+        return 2
     tmp = tempfile.mkdtemp(prefix="arv")  # short path: Windows path-length limits
     clone = os.path.join(tmp, "r")
     try:
