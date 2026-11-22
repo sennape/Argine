@@ -1,0 +1,42 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "pre_run_machine_gate": {
+    "checks": [
+      "model_hash_matches_frozen_identity",
+      "runtime_hash_matches_frozen_identity",
+      "hardware_identity_matches_HARDWARE-IDENTITY-STAMP.json (or this IS the first run, which creates the stamp)",
+      "sufficient_free_ram_via_argine_planner_plan_feasibility (reusing the exact fix from commit f053059)",
+      "cpu_or_gpu_load_below_threshold_where_measurable",
+      "power_mode_matches_frozen_machine_state_contract (where OS-queryable)",
+      "output_record_path_unused_for_this_exact_run_id",
+      "no_concurrent_benchmark_process (exclusive lock file, same pattern as tools/r2_11_capture_driver.py and tools/r2_11_eval_runner.py)",
+      "operator_attested_clean_environment flag present and true"
+    ],
+    "fail_closed": "If ANY check fails, the run is NOT performed; the gate failure is recorded and the campaign halts for that run, never silently proceeding with a weakened condition."
+  },
+  "per_run_record_schema": [
+    "run_id (globally unique, e.g. uuid4 or a deterministic hash of workload+budget+policy+repetition+ordering_block+timestamp)",
+    "workload_id",
+    "policy_id",
+    "budget_gib",
+    "repetition_index",
+    "ordering_block (warmup|counted)",
+    "cell_index",
+    "position_in_abba_sequence",
+    "timestamps (t0..t4)",
+    "environment (hardware stamp reference, machine-state attestation)",
+    "runtime_metrics (all fields from runtime_metrics.json)",
+    "output_token_digest (sha256 of the generated token-ID sequence or text)"
+  ],
+  "persistence": {
+    "method": "Exactly the same atomic write-then-rename pattern as tools/r2_11_eval_runner.py's atomic_write_json/cell_path, extended with an exclusive run-id check: a run record is written ONCE; a second attempt to write the same run_id must fail loudly (duplicate-run-ID prevention) rather than silently overwrite.",
+    "resumability": "The campaign is resumable: on restart, any run_id whose record already exists on disk (and whose recorded configuration matches the expected cell) is skipped; only missing runs are (re-)executed.",
+    "duplicate_writer_prevention": "An exclusive lock file (O_CREAT|O_EXCL), identical in spirit to tools/r2_11_eval_runner.py's acquire_lock/release_lock, held for the duration of the whole campaign process (not per-run, since the campaign is a single long-running sequential process on one machine)."
+  },
+  "cooldown_thermal_policy": {
+    "if_temperature_telemetry_available": "Freeze an allowed CPU temperature range (to be filled in HARDWARE-IDENTITY-STAMP.json from the host's idle baseline at first run, e.g. idle_temp_C + 15C as a conservative ceiling) and a pause-until-below-ceiling rule between paired blocks.",
+    "if_not_reliably_available": "Conservative FIXED pause policy, applied uniformly regardless of any observed performance difference: 15 seconds between every paired AB/BA run, 60 seconds between every (workload,budget) cell. This exact rule is frozen now; it must NOT be changed after observing that one policy runs slower (per section 23's explicit instruction)."
+  },
+  "r2_12_runtime_opened_gate": "Runtime execution (any of the 144 process launches, warmups included) must NOT begin before a SEPARATE, explicit R2_12_RUNTIME_OPENED commit exists, analogous to R2-11's R2_11_EVAL_OPENED gate. This Phase-0 freeze does not create that commit."
+}

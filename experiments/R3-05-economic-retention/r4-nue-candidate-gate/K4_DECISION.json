@@ -1,0 +1,31 @@
+{
+ "artifact": "R3-05-R4-K4-DECISION",
+ "dev_sign_consistent": {
+  "NUE_LO": true,
+  "NUE_X": true
+ },
+ "kappa_low_ms_per_MB": 0.37920226183054595,
+ "naming": "Phase 0 defines no mechanism-pass label; R3_05_NUE_MECHANISM_PASS / R3_05_PREDICTIVE_RETENTION_KILLED are the labels the R4 prompt prescribes. A pass requires K4_PASS on EVAL and positive DEV bytes avoided (Phase 0 success-rule sign consistency).",
+ "overall": "R3_05_PREDICTIVE_RETENTION_KILLED",
+ "per_candidate": {
+  "CES": {
+   "classification": "K4_FAIL_INFEASIBLE",
+   "gross_value_ms_per_token": 0.5152539661391565,
+   "threshold_ms_per_token": 10.0,
+   "tier": "<10"
+  },
+  "NUE_LO": {
+   "classification": "K4_FAIL_INFEASIBLE",
+   "gross_value_ms_per_token": 4.408353705740072,
+   "threshold_ms_per_token": 10.0,
+   "tier": "<10"
+  },
+  "NUE_X": {
+   "classification": "K4_FAIL_INFEASIBLE",
+   "gross_value_ms_per_token": 8.10998057206132,
+   "threshold_ms_per_token": 10.0,
+   "tier": "<10"
+  }
+ },
+ "rule": "K4 (Phase 0): a candidate whose benefit at ZERO policy cost (kappa_low x EVAL bytes avoided vs A) is below 10 ms/token is infeasible"
+}

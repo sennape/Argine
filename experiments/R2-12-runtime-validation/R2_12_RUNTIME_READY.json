@@ -1,0 +1,82 @@
+{
+  "artifact": "R2-12-RUNTIME-READY",
+  "schema_version": 1,
+  "state": "R2_12_RUNTIME_READY",
+  "prior_state": "R2_12_PROTOCOL_FROZEN",
+  "state_machine_position": "2 of 5 (R2_12_PROTOCOL_FROZEN -> R2_12_RUNTIME_READY -> R2_12_RUNTIME_OPENED -> R2_12_RUNTIME_COMPLETE -> R2_12_EVALUATED_CLOSED)",
+  "r2_12_phase0_contract_digest_reverified": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad",
+  "r2_12_phase0_contract_validate_errors": [],
+  "readiness_preparation_and_fix_commit_history": [
+    {
+      "commit": "6fd4dfa",
+      "summary": "R2-12 Phase 0: freeze prospective real-runtime validation protocol (R2_12_PROTOCOL_FROZEN)"
+    },
+    {
+      "commit": "d07d405",
+      "summary": "prepare live-host runtime-readiness gate (readiness driver + execution-driver prep, no execution)"
+    },
+    {
+      "commit": "1b864f6",
+      "summary": "readiness driver: fix power-mode localization false-positive (GUID-based classification)"
+    },
+    {
+      "commit": "744e6e4",
+      "summary": "execution driver: fix late-bound LOCK_PATH default argument"
+    }
+  ],
+  "live_readiness_attempts": {
+    "attempt_1": {
+      "outcome": "BLOCKING_FAILURE",
+      "cause": "power_mode false positive from locale-dependent substring matching (Italian powercfg output); preserved unmodified as RUNTIME-READINESS-REPORT-ATTEMPT-1-POWER-MODE-FALSE-POSITIVE.json",
+      "fixed_by_commit": "1b864f6"
+    },
+    "attempt_2": {
+      "outcome": "PASS",
+      "report_archived_as": "RUNTIME-READINESS-REPORT-ATTEMPT-2-PASS.json",
+      "generated_at_utc": "2026-11-14T14:49:35Z",
+      "n_checks": 23,
+      "n_pass": 22,
+      "n_blocking_failure": 0,
+      "n_advisory": 1
+    }
+  },
+  "zero_blocking_failures_on_real_host": true,
+  "advisory_checks_present": [
+    {
+      "name": "python_interpreter",
+      "detail": "C:\\Users\\alpel\\anaconda3\\python.exe (3.13.9)",
+      "permitted_by_frozen_contract": true,
+      "reason": "check_python() reports this unconditionally as ADVISORY by design -- it is a purely informational field (which interpreter/version ran the driver), not a gate defined anywhere in hardware_contract.json or machine_state_contract.json; it was never capable of blocking."
+    }
+  ],
+  "live_host_identity": {
+    "cpu_identity": "13th Gen Intel(R) Core(TM) i5-1340P",
+    "physical_ram_bytes_detail": "16876888064 bytes",
+    "gpu_or_igpu_identity": "Intel(R) Iris(R) Xe Graphics",
+    "windows_version": "Microsoft Windows 11 Home 10.0.26200",
+    "storage_device_hosting_expert_store": "disk number 0 for C:",
+    "model_sha256_detail": "expected=a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32 actual=a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+    "runtime_sha256_detail": "expected=a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3 actual=a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+    "runtime_resolved_detail": "tier=registered path=C:\\Users\\alpel\\Desktop\\Argine2\\llama-research-v2\\llama-server.exe stale_env_note=None",
+    "argine_llama_dir_detail": "C:\\Users\\alpel\\Desktop\\Argine2\\llama-research-v2",
+    "note": "These are NOT yet a frozen HARDWARE-IDENTITY-STAMP.json -- hardware_contract.json defines that stamp as created at the FIRST REAL RUN's pre-run gate (execution_plan.json.pre_run_machine_gate), which has not happened yet. This section records what the readiness driver observed, for provenance, not a second frozen stamp."
+  },
+  "power_plan": {
+    "guid": "381b4222-f694-41f0-9685-ff5bb260df2e",
+    "name": "Balanced",
+    "observed_raw_powercfg_output": "active scheme is Balanced (381b4222-f694-41f0-9685-ff5bb260df2e) -- not Power Saver; must stay fixed for the whole campaign, recorded at first real run; raw='GUID combinazione risparmio energia: 381b4222-f694-41f0-9685-ff5bb260df2e  (Bilanciato)'",
+    "must_remain_fixed_for_the_whole_campaign": true,
+    "rule_source": "machine_state_contract.json.required_conditions_for_publication_quality_runs (fixed power mode) and execution_plan.json.pre_run_machine_gate (power_mode_matches_frozen_machine_state_contract, where OS-queryable)"
+  },
+  "no_scientific_run_exists": {
+    "runtime_results_directory_exists": false,
+    "any_tokens_per_second_result_exists": false,
+    "r2_12_runtime_opened_exists": false,
+    "warmups_executed": 0,
+    "counted_executions_executed": 0
+  },
+  "r2_12_runtime_opened_mechanically_ready_for_separate_authorization": true,
+  "r2_12_runtime_opened_created_by_this_artifact": false,
+  "next_required_step": "R2_12_RUNTIME_OPENED is a separate, explicit commit (execution_plan.json.r2_12_runtime_opened_gate) that must be authorized independently; this artifact does not create it. No runtime execution, warmup, or counted measurement may begin before that commit exists.",
+  "stop_condition": "Stop at R2_12_RUNTIME_READY. Do not create R2_12_RUNTIME_OPENED. Do not execute R2-12."
+}

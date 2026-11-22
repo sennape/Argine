@@ -1,0 +1,36 @@
+{
+ "artifact": "R4-00-PROTOCOL",
+ "experiment_id": "R4-00-causal-eviction-distillation",
+ "phases": [
+  "Phase 0 (this commit): freeze protocol; EVAL LOCKED; no replay, training or scoring.",
+  "Phase 1: implement the frozen replay/feature/teacher/learner code; synthetic causality tests; verify A fidelity on TRAIN and VALIDATION; extract TRAIN labels; fit CHEAP and RICH on TRAIN; score VALIDATION once; hash-lock fit and VALIDATION scores.",
+  "Phase 2: open EVAL once; score all frozen arms; apply DECISION_RULES; classify; close."
+ ],
+ "prohibitions": [
+  "no model inference",
+  "no runtime change",
+  "no new traces",
+  "no EVAL access before the Phase 1 lock",
+  "no change to Research 3 artifacts"
+ ],
+ "question": "How much of the clairvoyant expert-eviction optimum can be recovered by a cheap causal policy using only information available at eviction-decision time?",
+ "reader_facing_name": "Causal Future-Distance Distillation",
+ "regime": {
+  "budget_bytes": 1610612736,
+  "model": "Qwen3-30B-A3B-Q4_K_M (frozen identity of the traces)",
+  "replay": "offline, integer-exact, routing traces only"
+ },
+ "research3_preservation": {
+  "classification": "R3_CLOSED_NEGATIVE_PREDICTIVE_RETENTION_NOT_VIABLE_IN_TESTED_REGIME",
+  "closure_commit": "3aa389eb31da6962711d74413b992803ae20b544",
+  "closure_freeze": "760a22d69abdd207c7ecd4b4f1012b85711b20aa3cb623cddb55d0c8802a5717",
+  "paper_commit": "337000808896e54955de0278686c5b7dae001b4e",
+  "rule": "Research 4 is additive and does not reinterpret Research 3 results."
+ },
+ "shorthand": "CFDC",
+ "source": {
+  "branch": "r4-main",
+  "source_r3_head": "f88001558542b648c0a3abff54c919adedf27809"
+ },
+ "specific_question": "Can a compact deployable eviction rule, distilled offline from clairvoyant next-use supervision but evaluated causally under its own cache state, recover enough of the frozen Belady miss-byte headroom to justify any later runtime implementation?"
+}

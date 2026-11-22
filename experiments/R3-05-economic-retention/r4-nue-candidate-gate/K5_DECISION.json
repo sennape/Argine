@@ -1,0 +1,9 @@
+{
+ "artifact": "R3-05-R4-K5-DECISION",
+ "caveat": "Cost is not measured here. NUE_LO is cheaper than NUE_X in principle, so the zero-cost ratio is not the final K5 input; the final K5 uses measured costs (net = benefit - cost).",
+ "classification": "R3_05_K5_NUE_LO_NOT_SUFFICIENT",
+ "ratio": 0.5435714261667581,
+ "ratio_exact": "5952172032/10950119424",
+ "rule": "K5 (Phase 0): prefer NUE_LO if its net value >= 80% of NUE_X's. Evaluated at ZERO cost (net = benefit), the only valid evaluation before cost measurement.",
+ "threshold": 0.8
+}

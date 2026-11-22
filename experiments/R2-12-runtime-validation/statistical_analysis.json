@@ -1,0 +1,24 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "unit_of_analysis": "paired difference per repetition index within a (workload,budget) cell: delta_tps[i] = B_tps[i] - A_tps[i] is NOT used raw as an independent sample across all 4 workloads x 5 reps = 20 'samples' at a budget. Tokens/runs are never treated as independent samples (per section 14).",
+  "per_cell_statistic": {
+    "step_1": "Within each (workload,budget) cell, compute the 5 paired per-repetition deltas: delta_tps[i] = PredictedProtectPolicy_tps[i] - B_selected_tps[i], for i matched by repetition index within the ABBA sequence (the i-th A occurrence paired with the i-th B occurrence, in occurrence order, not raw list position).",
+    "step_2": "Compute the per-cell mean delta_tps = mean of the 5 paired deltas (and, where useful, median for robustness reporting)."
+  },
+  "primary_aggregate_statistic": {
+    "unit": "workload instance (at the primary 4 GiB budget) -- the same paired-resampling-unit convention as R2-11's bootstrap (workload instance, not repetition or token)",
+    "step": "Equal-weight mean of the 4 per-workload mean delta_tps values at 4 GiB. No token-count weighting.",
+    "small_n_caveat": "With only 4 workloads, the bootstrap CI below has limited resolution (4 resampling units) and should be interpreted with appropriate caution; this caveat is disclosed prospectively, not discovered after seeing a narrow or wide interval."
+  },
+  "bootstrap": {
+    "implementation_reuse": "argine.research2.r2_11.bootstrap.paired_bootstrap_ci -- the exact same frozen, already-tested implementation used for R2-11, reused unmodified (it is generic over any list of paired deltas; no R2-12-specific reimplementation).",
+    "resamples": 100000,
+    "seed": 42,
+    "confidence_level": 0.95,
+    "input": "the 4 per-workload mean delta_tps values at the primary 4 GiB budget",
+    "quantile_method": "linear interpolation of the empirical CDF (numpy.percentile default 'linear'), 2.5th/97.5th percentiles, identical to R2-11."
+  },
+  "secondary_budget_statistics": "Identical per-cell and aggregate procedure applied independently at 1.5 GiB and 8 GiB (own bootstrap CI each, not pooled with the primary 4 GiB budget).",
+  "no_post_hoc_procedure_changes": "This statistical procedure is frozen before any R2-12 execution and must not be altered after seeing results."
+}

@@ -1,0 +1,44 @@
+{
+  "llama_cpp_commit": "254b177307b14d055bbe4c050c9c441a1e06d8a4",
+  "llama_cpp_repo": "https://github.com/ggml-org/llama.cpp",
+  "patches": [
+    "0001-argine-route-log.patch",
+    "0002-argine-expert-store.patch",
+    "0003-argine-research-trace.patch",
+    "0004-argine-retention-policy-cmake.patch (unchanged from v3: wires argine-retention-policy.{h,cpp} into ggml-cpu CMakeLists.txt)",
+    "argine-store.{h,cpp} (current repo version, R2-12 commit f91c7f0: adds trace-writer diagnostic counters (trace_requested/trace_opened/trace_rows_attempted/trace_rows_written/trace_write_failed), an stderr line at trace-open time, and ferror()/fflush()-return-code checking in servi_evento_con_politica so a failed trace write is surfaced instead of silently ignored -- no retention-policy decision, parameter, or eviction logic changed)",
+    "argine-experts.{h,cpp} (current repo version, R2-12 commit f91c7f0: adds a fail-closed GGML_ABORT in Contesto::inizializza() if ARGINE_RETENTION_POLICY is requested while the read mode is not LETTURA_BLOCCO (ARGINE_EXPERT_READ=blocco), and an unconditional (non-verbose-gated) trace diagnostic summary in Contesto::~Contesto())",
+    "argine-research.{h,cpp} (current repo version, unchanged from v3)",
+    "argine-retention-policy.{h,cpp} (current repo version, unchanged from v3)"
+  ],
+  "realizes_commits": [
+    "ae71fbe",
+    "70b93d4",
+    "71bd3c0",
+    "f91c7f0 (this build: fail-closed ARGINE_EXPERT_READ guard + trace-writer diagnostics)"
+  ],
+  "fixes_since_v3": {
+    "root_cause": "Real Windows host run of llama-research-v3 (b_selected, decay=0.99, interval=64) completed 512 tokens of real inference with the retention-policy startup line printed and ARGINE_RETENTION_TRACE opened successfully, but the trace file remained 0 bytes. Root cause: psx_cache_attach_retention_policy()/servi_evento_con_politica() (the sole location of both the retention-policy decision dispatch for the cache and the trace writer) is reached ONLY via psx_cache_ensure_many(), which is called ONLY when ARGINE_EXPERT_READ=blocco. The host run left ARGINE_EXPERT_READ unset, so the default LETTURA_ASINCRONA read mode (psx_cache_avvia/psx_cache_attendi) served every real expert read instead -- a path with zero awareness of the retention policy. The policy object was created and the startup line printed correctly, but it was never actually consulted for any real eviction/admission decision during that run. Confirmed both by static code-path analysis and against the real host log (diagnostic-b_selected-v3.out.log: 'lettura asincrono' printed immediately after 'retention policy attiva'). The trace-writer code itself was already correct (per-event conditioning, correct before/after causality, already called fflush()) -- the bug was that its only call site was never reached.",
+    "fix": "Contesto::inizializza() now aborts at startup (GGML_ABORT) if a retention policy is requested while the read mode is not LETTURA_BLOCCO, using the same fail-closed template already in place for ARGINE_EXPERT_SHARDS=1 a few lines above it. ARGINE_EXPERT_READ=blocco is now a hard requirement for using ARGINE_RETENTION_POLICY on this runtime.",
+    "diagnostics_added": "Five new counters on psx_retention_stats (trace_requested, trace_opened, trace_rows_attempted, trace_rows_written, trace_write_failed), readable via psx_cache_get_retention_stats(); an stderr line printed at successful trace-open time; an unconditional (not -v-gated) summary line printed in Contesto's destructor whenever a retention policy was active, reporting all four counters with an explicit warning if events were observed but zero rows were written.",
+    "test_coverage": "patches/argine-retention-integration-test.cpp sections 7-10 (37 checks total, all passing against the real Qwen_Qwen3-30B-A3B-Q4_K_M.psxs store), exercising the same psx_cache_ensure_many() entry point used by real inference: (7) a trace-enabled event produces a non-empty JSONL row with real policy fields -- the exact symptom reproduced and fixed; (8) multiple events produce multiple distinct rows; (9) no ARGINE_RETENTION_TRACE set produces no file, policy still served; (10) a forced write failure (ARGINE_RETENTION_TRACE=/dev/full) is surfaced via trace_write_failed rather than silently swallowed.",
+    "known_test_gap": "The new ARGINE_EXPERT_READ fail-closed guard lives in Contesto::inizializza(), which requires a full ggml/llama.cpp context to instantiate and is not reachable from the psx_cache-level integration-test harness (same limitation as the pre-existing ARGINE_EXPERT_SHARDS=1 guard a few lines above it, which also has no dedicated unit test). Its real coverage is this runtime rebuild and the next host run's startup behavior."
+  },
+  "predecessor_runtime": {
+    "name": "llama-research-v3",
+    "sha256": "ea72912f878340bc77e999a3870ace0caf94d532afc9afd14cee0b7296b37a7d",
+    "note": "left unchanged on disk at its original path (Argine2/llama-research-v3/); historical identity preserved, not overwritten. v3 remains the record of the run that discovered the 0-byte-trace symptom."
+  },
+  "compiler": "x86_64-w64-mingw32-g++-posix (GCC) 10-posix 20220113",
+  "compiler_deviation_note": "Same toolchain and same _WIN32_WINNT=0x0A00/WINVER=0x0A00 deviation as llama-research-v3 (see v3's BUILD-INFO.json for the full explanation). Unchanged in this build: only ggml-cpu/argine-store.cpp and ggml-cpu/argine-experts.cpp were recompiled (incremental ninja build against the same configured build-win/ tree used for v3), and all four binaries were relinked against the updated ggml-cpu.a. No new compiler-flag deviation introduced.",
+  "built_utc": "2026-11-14T19:48:00Z",
+  "built_on": "Same Argine2 build container (Linux) and same user-owned ~/toolchain/ prefix used for llama-research-v3. Incremental ninja rebuild (only the two changed .cpp files recompiled, four binaries relinked) against the already-configured build-win/ CMake tree from the v3 build.",
+  "runtime_tested": false,
+  "runtime_tested_note": "Not executed in this Linux build environment (PE32+ Windows binaries). Verified here only by static inspection: objdump import-table DLL names (identical per-binary shape to v3: llama-server/imatrix/perplexity link ADVAPI32/KERNEL32/SHELL32/WS2_32/msvcrt, llama-quantize links ADVAPI32/KERNEL32/msvcrt only, same as v3), and 'strings' search confirming all four new diagnostic format strings are present in llama-server.exe and the original 'retention policy attiva' startup line is unchanged. Live confirmation that ARGINE_EXPERT_READ=blocco now produces a non-empty ARGINE_RETENTION_TRACE file, and that omitting it now aborts at startup instead of silently creating an inert policy, must happen on the real Windows host -- left to the user's own next run, not claimed here.",
+  "binaries": {
+    "llama-imatrix.exe": "bb9496da8749972a1dedde310e9e6d98c0735cf9f2c0492e84cb597287f6b959",
+    "llama-perplexity.exe": "a30608d6eb28c69497f9a9f89fe4d0c32651add46884f61e184d6b8ddb2b43d7",
+    "llama-quantize.exe": "b44bf777e2692e6eb72b3486d6ff71ae692668f1cda7c5b738877befb45bf90b",
+    "llama-server.exe": "b035d3913e2b88a58860fe4120f912c908f1fd7be37f8e4341089bfad2ad4d2e"
+  }
+}

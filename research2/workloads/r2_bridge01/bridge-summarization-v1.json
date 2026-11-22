@@ -1,0 +1,22 @@
+{
+  "name": "bridge-summarization-v1",
+  "version": "r2-bridge01-v1",
+  "split": "eval",
+  "semantic_category": "summarization",
+  "description": "R2-BRIDGE-01 fresh held-out summarization specification with a new committed local source input (bicycle commuting/maintenance). No web/network dependency. New source passage, not a reuse of the R2-08 expert-store background or the R2-09 home-battery-backup EVAL source.",
+  "n_predict": 512,
+  "source_input": {
+    "path": "research2/workloads/r2_bridge01/sources/summarization_bridge_source.txt",
+    "committed_locally": true,
+    "web_network_dependency": false
+  },
+  "items": [
+    {
+      "id": "r2-bridge01-summarization-001",
+      "segment": "bridge-summarization-v1",
+      "prompt": "Read the source text below and produce: (1) a concise summary in 5-7 bullet points, (2) three practical recommendations for someone choosing a bicycle for daily commuting, and (3) one limitation or uncertainty that the source does not fully resolve. Do not add facts that are not supported by the source.\n\nSOURCE TEXT:\nTitle: Practical notes on choosing and maintaining a bicycle for daily commuting\n\nA bicycle used for daily commuting has different priorities than one used mainly\nfor recreation or racing. The three factors that matter most for a commuter are\nreliability, comfort over repeated short trips, and low ongoing maintenance effort,\nroughly in that order. A bike that requires frequent adjustment or that is\nuncomfortable after twenty minutes will quietly stop getting used, regardless of\nhow capable it is on paper.\n\nFrame geometry affects comfort directly. An upright riding position, achieved\nthrough a higher handlebar relative to the saddle, reduces strain on the wrists,\nshoulders, and lower back during short, frequent rides in street clothes. A more\naggressive, low handlebar position is better suited to speed over long distances\nbut is less forgiving for someone who commutes in work clothing and stops\nfrequently at intersections.\n\nDrivetrain choice is a tradeoff between simplicity and range. A single-speed or\ninternally geared hub drivetrain has far fewer exposed, wear-prone parts than a\nmulti-speed derailleur system, and tolerates rain and road grit with less frequent\ncleaning. A derailleur drivetrain offers a wider range of gears for hilly commutes\nbut needs periodic cable and derailleur-hanger adjustment, especially after the\nbike is bumped or transported.\n\nTires are the single most common source of commuting delays. Narrow, high-pressure\ntires roll faster but puncture more easily on debris-strewn urban streets; wider\ntires with a puncture-resistant belt roll slightly slower but dramatically reduce\nmid-commute flat tires. Keeping tires at the pressure printed on the sidewall,\nchecked roughly every two weeks, is the single cheapest way to reduce both\npunctures and rolling resistance.\n\nBasic maintenance that materially affects reliability includes: lubricating the\nchain every one to two weeks of commuting (more often in wet weather), keeping\nbrake pads replaced before they wear down to the metal backing, and checking that\nboth wheels spin freely without rubbing against the brake pads. Weather protection\nsuch as fenders and a chain guard reduces the frequency of all of the above, at a\nsmall cost in weight and a small increase in purchase price.\n"
+    }
+  ],
+  "provenance_split_identity": "bridge_holdout",
+  "cli_split_field_note": "argine.research.cli's 'research trace --split' flag only accepts {dev, eval} (argine/research/cli.py 'trace' subparser, choices=['dev','eval']); there is no third CLI-level split value. Per the loader (argine/research/workloads.py:load, the 'items'-schema fallback branch), the CLI-facing 'split' field here is literal plumbing selecting which dict key the prompts load under -- it is set to the already-supported value 'eval' so this file can be captured with the existing CLI and loader, with NO code change. The true provenance-level identity of this corpus (a fresh BRIDGE holdout, distinct from and never to be confused with the R2-09 EVAL corpus) is tracked entirely by workload_id, file path, output directory, and the 'provenance_split_identity' field above plus experiments/R2-BRIDGE-01-retention-feasibility/dev_holdout_separation.json -- exactly mirroring how R2-09's own EVAL corpus is externally distinguished from R2-08's DEV corpus by workload_id/path/manifest, not by a unique CLI split string."
+}

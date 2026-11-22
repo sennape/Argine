@@ -1,0 +1,18 @@
+{
+  "cell_key": "coding-v1_seed-43__markov_transition__markov_transition_default__805db8c0249d46b9",
+  "cell_record_digest": "3a05c42f8002180b3813e646c88e774d6b5ce91373e5cb34e9ae46c761a31b10",
+  "config_id": "markov_transition/default",
+  "deterministic": true,
+  "dev_cell_id": "coding-v1/seed-43",
+  "family_id": "markov_transition",
+  "recall_at_k_h1": 0.42194229112833764,
+  "recall_at_k_h16": 0.3009212589605735,
+  "recall_at_k_h4": 0.3347235785590278,
+  "result_digest": "f424768daca32793a33eeb5ab5f5dfe41c0980eb28d4d9b85d9430976de88cc6",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 18576,
+    "h16": 17856,
+    "h4": 18432
+  }
+}

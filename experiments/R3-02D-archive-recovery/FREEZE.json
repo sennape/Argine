@@ -1,0 +1,26 @@
+{
+  "anchor_commit": "787456f9a6829ef9008c57c81a536ffeba0845dd",
+  "artifact": "R3-02D-FREEZE",
+  "artifacts": {
+    "ARCHIVE_VERIFICATION.json": "0faffb22fb4f64ec9ba61fb74da333dab505f560631bfca10ef8bae6d0dc2dba",
+    "RECOVERY_INCIDENT.json": "50e372b593e64f4f60f5f3779ea32806131cdef297edd1d8058e8b627e73a785",
+    "RECOVERY_RESULT.json": "e1abe9a6642cfb7c78a52a9bea0464c26f2c3a58de0db496dd540cbf1c97917c",
+    "RESUME_PLAN.json": "0217628f03d94155a017bfd9a274d0ce6a8aee637b9bcb3c5a98baaf7a235889",
+    "STORAGE_PROJECTION.json": "4c480099e97bf3bdf3167bde4c95b7195a9bde66f9fe7479a2591b57ba81504b"
+  },
+  "created_utc": "2026-11-18T06:08:43Z",
+  "no_model_loaded": true,
+  "phase": "R3-02D",
+  "protocol_digest": "f8d4b3199c4c74555353e5f796eaf7d7c3687da97883ee07f7d1c81233c9469c",
+  "r3_02c_freeze": "dd0991c8e5f2beebffceb5fe8d35fecb9b31bbdd2bfcd5d59bdfcf7c7c54df04",
+  "recovered": {
+    "admission": "ADMISSIBLE",
+    "archive_bytes": 1566236582,
+    "archive_sha256": "dc6b6056eed0bb64eb2dc13f17ef0cf9f364c30fe10a0f7bf668ac0423a9edb7",
+    "config": "A-8GiB",
+    "logical_bytes": 30941123714,
+    "logical_sha256": "a598543f1e6df6f8767361c6d34fae23879e28d661077edbde612f33e8495901"
+  },
+  "status": "ARCHIVE_RECOVERED_AND_RESUME_READY",
+  "updated_by": "hotfix 6 final"
+}

@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-10-phase0-contract-v1.0",
+  "name": "R2-10 candidate causal predictor families and null/trivial baselines (finite, DEV-only-tunable grids)",
+  "principle": "Families are candidates, not predetermined winners. R2-06 found same-layer transition dependence (median NMI ~0.099, 'measurable but modest') -- this does NOT preselect a Markov/transition predictor as correct; it is one candidate among several, benchmarked on equal footing. Before adding materially more complex ML models, this Phase 0 freezes only causal, deterministic, finite-grid families; whether they are sufficient is an R2-10-DEV-tournament question, not decided here.",
+  "common_requirements": [
+    "explicit causal state (built only from causal_boundary.json.allowed events)",
+    "deterministic implementation (no RNG, or RNG explicitly seeded and recorded)",
+    "finite declared hyperparameter grid",
+    "DEV-only selection (selection_rule.json)",
+    "reproducible tie-breaking via output_contract.json.apply_output_contract"
+  ],
+  "families": [
+    {
+      "family_id": "global_frequency",
+      "name": "Trivial/global-frequency baseline",
+      "causal_state": "cumulative count of each expert_id observed in the same-layer stream up to and including position i.",
+      "score_rule": "score(e) = cumulative_count[e]",
+      "hyperparameters": {
+        "tunable": false,
+        "fixed": {}
+      },
+      "role": "null/trivial baseline (section 7), not expected to be competitive; establishes the floor."
+    },
+    {
+      "family_id": "last_observation",
+      "name": "Recent-set / last-observation baseline",
+      "causal_state": "the single most recent same-layer expert_set observed at position i (or the empty set at cold start).",
+      "score_rule": "score(e) = 1.0 if e in last_observed_set else 0.0",
+      "hyperparameters": {
+        "tunable": false,
+        "fixed": {}
+      },
+      "role": "null/trivial baseline (section 7); tests whether simple persistence beats global frequency."
+    },
+    {
+      "family_id": "recency_window",
+      "name": "Recency-based predictor (fixed-width sliding window frequency)",
+      "causal_state": "count of each expert_id within the last W same-layer observations ending at position i (ring buffer).",
+      "score_rule": "score(e) = count_in_window(e)",
+      "hyperparameters": {
+        "tunable": true,
+        "search_space": {
+          "window_W": [
+            4,
+            16,
+            64,
+            256
+          ]
+        }
+      },
+      "role": "candidate family."
+    },
+    {
+      "family_id": "markov_transition",
+      "name": "Transition / Markov-style predictor (order-1, same layer)",
+      "causal_state": "empirical transition counts P(next_expert | current_expert) accumulated causally over same-layer consecutive pairs up to position i, using the SAME token-to-token same-layer transition unit R2-06 already defined (pairwise set-to-set expansion for multi-expert source/target).",
+      "score_rule": "score(e) = sum over experts c in the CURRENT observed set at position i of transition_count[c][e], normalized is not required since only relative order matters for top-k selection.",
+      "hyperparameters": {
+        "tunable": false,
+        "fixed": {}
+      },
+      "role": "candidate family; directly operationalizes the R2-06 same-layer transition-dependence finding as a predictor rather than assuming it transfers."
+    },
+    {
+      "family_id": "decayed_transition",
+      "name": "Decayed transition/frequency predictor",
+      "causal_state": "same as markov_transition but with exponential decay applied to counts at each new observation, decay_factor < 1 (mirrors R2-09A's aged_frequency caching family, applied here to transition counts instead of residency counts).",
+      "score_rule": "score(e) = decayed_transition_count[current_set][e]",
+      "hyperparameters": {
+        "tunable": true,
+        "search_space": {
+          "decay_factor": [
+            0.9,
+            0.99,
+            0.999
+          ]
+        }
+      },
+      "role": "candidate family."
+    },
+    {
+      "family_id": "recency_frequency_transition_blend",
+      "name": "Combination of recency + frequency + transition information",
+      "causal_state": "linear combination of recency_window, global_frequency, and markov_transition scores, each independently causal.",
+      "score_rule": "score(e) = w_r * recency_window_score(e) + w_f * global_frequency_score(e) + w_t * markov_transition_score(e), scores normalized to [0,1] by their own max before blending to make weights meaningful.",
+      "hyperparameters": {
+        "tunable": true,
+        "search_space": {
+          "(w_r,w_f,w_t)": [
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              1
+            ],
+            [
+              0.34,
+              0.33,
+              0.33
+            ],
+            [
+              0.5,
+              0.25,
+              0.25
+            ],
+            [
+              0.25,
+              0.25,
+              0.5
+            ]
+          ]
+        }
+      },
+      "role": "candidate family; the (1,0,0)/(0,1,0)/(0,0,1) grid points are intentionally degenerate re-expressions of recency_window(W=16 default)/global_frequency/markov_transition, giving the blend a built-in sanity check against its own ingredients."
+    }
+  ],
+  "null_trivial_baselines": {
+    "causal_runtime_candidates": [
+      "global_frequency",
+      "last_observation"
+    ],
+    "analytical_reference_only": [
+      {
+        "family_id": "shuffled_null",
+        "name": "Shuffled/non-causal null (analytical reference)",
+        "definition": "Same-layer expert sequence is shuffled (breaking true temporal order) before computing any descriptive statistic against it, exactly mirroring the shuffled-null convention already used in R2-06/R2-07 (null_baseline.py in both). Used ONLY to show what a predictor could achieve by chance / marginal structure alone, as a descriptive upper-irrelevance check -- it is explicitly NOT a deployable causal policy and MUST NOT be scored with apply_output_contract as if it were a runtime predictor candidate, and MUST NOT appear in selection_rule.json's selection pool.",
+        "classification": "ANALYTICAL_REFERENCE_ONLY"
+      }
+    ]
+  },
+  "deferred_to_full_tournament": "Only global_frequency and last_observation are implemented in Phase 0 (argine/research2/r2_10/baselines.py), sufficient to exercise causal_walk.py and output_contract.py end-to-end for the leakage/determinism/cardinality tests. recency_window, markov_transition, decayed_transition, and the blend are frozen here as contract (family_id, causal_state, score_rule, finite grid) but their implementations are written in the R2-10 DEV tournament phase, not Phase 0, per the handoff's instruction to stop at Phase 0."
+}

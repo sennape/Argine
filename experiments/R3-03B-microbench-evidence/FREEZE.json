@@ -1,0 +1,27 @@
+{
+ "artifact": "R3-03B-MICROBENCH-FREEZE",
+ "classification": "MICROBENCH_COST_ATTRIBUTION_READY",
+ "parents": {
+  "protocol_commit": "23a31fad2514079c5e19ed5b05a05f19b6d9ec86",
+  "implementation_commit": "ed0e4742acf3a98723326605eee58d1139357a99",
+  "tooling_fix_commit": "a476471c37dbed7a348ca703d64813d6872340bc",
+  "protocol_freeze_sha256": "d0dd74510918d711c0ae6a8dd35f97c40d8cb3a573ff32f82955ebbe30686882",
+  "protocol_json_sha256": "295e8e3f3e376248998baf3ea5fa845c8f3b793706ed3e1c7aae0d8b463b1ae5",
+  "r3_03a_conformance_commit": "3c37870c2b1ed08609f61cee05674b38960be3a7"
+ },
+ "compiler": "MSVC 19.44.35229 x64",
+ "microbench_binary_sha256": "d9eb52d7e5de77629da9bad9fa60b174c80598a7ad98aa741f82fb5eda00cbb3",
+ "c_predictor_ns_per_call": 123679.45268590575,
+ "c_predictor_ci95_halfwidth_ns": 215.96646929803023,
+ "c_predictor_token_ms": 5.936613728923476,
+ "files_sha256": {
+  "README.md": "124c256e511d17d4b3709dcf572e960d598347112b662676e7c8ed875a63780a",
+  "MICROBENCH_RESULT.json": "bff51715ae74f380127ec04a19403d816d15935472fea77d6f516737fc53484e",
+  "EVIDENCE_MANIFEST.json": "79c7eda2074954253a1bac64f98e3b0135699348f5669c4a597cdb8ea56365d8",
+  "validate_evidence.py": "bb692379ef142aa2d47484bc71e05c985a20b9f9343c8fd7181ae41664cbeca1",
+  "tests/test_evidence.py": "8e55dd2ce45d226ec2daed2df8ba8c3232f996b337b20a6d4a628c1723f276ed"
+ },
+ "host_records_manifest_sha256": "79c7eda2074954253a1bac64f98e3b0135699348f5669c4a597cdb8ea56365d8",
+ "freeze_method": "freeze_sha256 = sha256 of json.dumps(object without freeze_sha256, sort_keys=True, separators=(',',':'))",
+ "freeze_sha256": "abb451010b04782a56c51420485908871e1a77e87dd18b22f75b5e0580dd7009"
+}

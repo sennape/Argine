@@ -1,0 +1,257 @@
+{
+  "artifact": "R3-01-OFFLINE-VALIDATION",
+  "canonical_r2_12_sweep": {
+    "admissible": 0,
+    "expected_admissible": 0,
+    "pass": true,
+    "records_scanned": 161
+  },
+  "cases": [
+    {
+      "expected": "ADMISSIBLE",
+      "failures": [],
+      "id": 1,
+      "name": "synthetic valid TRACE_COUNT",
+      "observed_status": "ADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "ADMISSIBLE",
+      "failures": [],
+      "id": 2,
+      "name": "synthetic valid TIMING",
+      "observed_status": "ADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "ADMISSIBLE",
+      "failures": [],
+      "id": 3,
+      "name": "valid paired cell",
+      "observed_status": "ADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "INADMISSIBLE",
+      "failures": [
+        "V1_REQUIRED_FIELDS",
+        "X7_COUNTER_INVARIANTS"
+      ],
+      "id": 4,
+      "name": "missing TRACE_COUNT telemetry",
+      "observed_status": "INADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "INADMISSIBLE",
+      "failures": [
+        "V1_REQUIRED_FIELDS"
+      ],
+      "id": 5,
+      "name": "missing TIMING telemetry",
+      "observed_status": "INADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "INADMISSIBLE",
+      "failures": [
+        "C1_SAME_CELL"
+      ],
+      "id": 6,
+      "name": "mismatched workload",
+      "observed_status": "INADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "INADMISSIBLE",
+      "failures": [
+        "C1_SAME_CELL"
+      ],
+      "id": 7,
+      "name": "mismatched seed",
+      "observed_status": "INADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "INADMISSIBLE",
+      "failures": [
+        "C1_SAME_CELL"
+      ],
+      "id": 8,
+      "name": "mismatched budget",
+      "observed_status": "INADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "INADMISSIBLE",
+      "failures": [
+        "C1_SAME_CELL"
+      ],
+      "id": 9,
+      "name": "mismatched policy params",
+      "observed_status": "INADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "INADMISSIBLE",
+      "failures": [
+        "C2_OUTPUT_IDENTITY"
+      ],
+      "id": 10,
+      "name": "mismatched output token digest",
+      "observed_status": "INADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "INADMISSIBLE",
+      "failures": [
+        "V5_COMPLETENESS"
+      ],
+      "id": 11,
+      "name": "incomplete trace",
+      "observed_status": "INADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "INADMISSIBLE",
+      "failures": [
+        "V8_BUDGET_INVARIANT"
+      ],
+      "id": 12,
+      "name": "budget violation",
+      "observed_status": "INADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "INADMISSIBLE",
+      "failures": [
+        "V3_IDENTITIES_HEX64"
+      ],
+      "id": 13,
+      "name": "non-hex identity",
+      "observed_status": "INADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "INADMISSIBLE",
+      "failures": [
+        "X1_CONTRACT_DIGEST"
+      ],
+      "id": 14,
+      "name": "altered contract digest",
+      "observed_status": "INADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "INADMISSIBLE",
+      "failures": [
+        "V2_MODE",
+        "X1_CONTRACT_DIGEST",
+        "X2_SCHEMA_VERSION"
+      ],
+      "id": 15,
+      "name": "canonical R2-12 record",
+      "observed_status": "INADMISSIBLE",
+      "pass": true
+    },
+    {
+      "expected": "ADMISSIBLE",
+      "failures": [],
+      "id": 16,
+      "name": "real conformance trace extraction",
+      "observed_status": "ADMISSIBLE",
+      "pass": true
+    }
+  ],
+  "contract_digest": "99a68c73c5a3caba4fd53937f27907375734f3866c84e18d4ecb944013efa073",
+  "determinism": {
+    "bytes_identical": true,
+    "output_digest_container_independent": true,
+    "output_digest_empty_defined": true,
+    "output_digest_order_sensitive": true,
+    "output_digest_v1": "619357aadf10ba4530b477b7c6f08a4b6e9dae1a1da3605f55e278ec8275f33a",
+    "pass": true,
+    "record_digest_stable": true
+  },
+  "phase": "R3-01",
+  "r3_00a_audit_digest": "eb94bc2ce783b417a4590c2acc60d78cd4e1d452a132e6258575cea10bcc1053",
+  "real_trace_fixture": {
+    "archive": {
+      "bytes": 1921137735,
+      "copied_into_repository": false,
+      "copy_policy": "never copied when larger than 8388608 bytes; referenced and hashed only",
+      "inside_repository": true,
+      "path": "experiments\\R2-12-runtime-validation\\conformance_traces\\conformance-b_selected-20261115.jsonl",
+      "sha256": "3ae926280e0fb092aabf196cacb98fe59742901fd4ba8fc1217b00bdd2fd384f",
+      "trace_format": "argine-retention-decision-trace/v1"
+    },
+    "extraction": {
+      "budget_violations": 0,
+      "completeness": "COMPLETE",
+      "completion_rows": 9504,
+      "decision_rows": 9504,
+      "evictions": 8988,
+      "max_step": 9503,
+      "miss_bytes": 30100414464,
+      "miss_expert_events": 10486,
+      "peak_resident_bytes": 4294950912
+    },
+    "note": "offline parser/extractor fixture only; the trace covers a single layer and is not R3 scientific evidence",
+    "record_admission": {
+      "checks": [
+        {
+          "detail": "all present",
+          "id": "V1_required_fields",
+          "ok": true
+        },
+        {
+          "detail": "declared='TRACE_COUNT' expected='TRACE_COUNT'",
+          "id": "V2_mode",
+          "ok": true
+        },
+        {
+          "detail": "ok",
+          "id": "V3_identities_hex64",
+          "ok": true
+        },
+        {
+          "detail": "3ae926280e0fb092...",
+          "id": "V4_trace_hex64",
+          "ok": true
+        },
+        {
+          "detail": "status='COMPLETE'",
+          "id": "V5_completeness",
+          "ok": true
+        },
+        {
+          "detail": "bytes=30100414464 miss_bytes=30100414464",
+          "id": "V6_bytes_consistency",
+          "ok": true
+        },
+        {
+          "detail": "reads=31458 misses=10486",
+          "id": "V7_count_consistency",
+          "ok": true
+        },
+        {
+          "detail": "peak=4294950912 budget=4294967296",
+          "id": "V8_budget_invariant",
+          "ok": true
+        }
+      ],
+      "failures": [],
+      "failures_frozen_ids": [],
+      "status": "ADMISSIBLE"
+    },
+    "record_digest": "3e83c476ca854de593ebc69d752e4cd78b774f05491e028535af084ebe9315c6",
+    "skipped": false,
+    "trace": "experiments\\R2-12-runtime-validation\\conformance_traces\\conformance-b_selected-20261115.jsonl"
+  },
+  "summary": {
+    "all_pass": true,
+    "failed": 0,
+    "passed": 16,
+    "total": 16
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "artifact": "R2-12-RETENTION-POLICY-CONFORMANCE-EVIDENCE",
+  "schema_version": 1,
+  "state": "R2_12_RUNTIME_POLICY_CONFORMANCE_EVIDENCE",
+  "prior_state": "R2_12_RUNTIME_BLOCKED_CAPABILITY",
+  "parent_blocked_capability_commit": "04e19f4",
+  "parent_implementation_commit": "c2f9a68",
+  "r2_12_phase0_contract_digest_reverified": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad",
+  "scope_of_this_evidence": "Verifies the standalone C++ retention-policy module (patches/argine-retention-policy.{h,cpp}) against the frozen Python reference classes (AgedFrequency, PredictedProtectPolicy) on SYNTHETIC traces only. Does NOT verify the (not-yet-written) integration into the real multi-threaded cache (patches/argine-store.cpp / argine-experts.cpp) -- see experiments/R2-12-runtime-validation/RETENTION-POLICY-INTEGRATION-DESIGN.md for what that integration still requires and why it must be built and validated on the real host, not this sandbox (no llama.cpp/ggml checkout here).",
+  "test_suite": "tests/test_r2_12_retention_policy_conformance.py",
+  "test_result_summary": "33 passed in 2.39s",
+  "test_result_raw_tail": [
+    "cachedir: .pytest_cache",
+    "rootdir: /sessions/rcw-01m8e8kzl6gn7hgy1brzj9qg/mnt/Desktop--Argine3",
+    "configfile: pyproject.toml",
+    "collecting ... collected 33 items",
+    "",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[1-1610612736-pair0] PASSED [  3%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[1-4294967296-pair1] PASSED [  6%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[1-8589934592-pair2] PASSED [  9%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[2-1610612736-pair0] PASSED [ 12%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[2-4294967296-pair1] PASSED [ 15%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[2-8589934592-pair2] PASSED [ 18%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[3-1610612736-pair0] PASSED [ 21%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[3-4294967296-pair1] PASSED [ 24%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[3-8589934592-pair2] PASSED [ 27%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[4-1610612736-pair0] PASSED [ 30%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[4-4294967296-pair1] PASSED [ 33%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[4-8589934592-pair2] PASSED [ 36%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[5-1610612736-pair0] PASSED [ 39%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[5-4294967296-pair1] PASSED [ 42%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_b_selected_cross_language_conformance[5-8589934592-pair2] PASSED [ 45%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_predicted_protect_cross_language_conformance[10-1610612736-pair0] PASSED [ 48%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_predicted_protect_cross_language_conformance[10-4294967296-pair1] PASSED [ 51%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_predicted_protect_cross_language_conformance[10-8589934592-pair2] PASSED [ 54%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_predicted_protect_cross_language_conformance[11-1610612736-pair0] PASSED [ 57%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_predicted_protect_cross_language_conformance[11-4294967296-pair1] PASSED [ 60%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_predicted_protect_cross_language_conformance[11-8589934592-pair2] PASSED [ 63%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_predicted_protect_cross_language_conformance[12-1610612736-pair0] PASSED [ 66%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_predicted_protect_cross_language_conformance[12-4294967296-pair1] PASSED [ 69%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_predicted_protect_cross_language_conformance[12-8589934592-pair2] PASSED [ 72%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_causality_future_mutation_does_not_change_past_decisions[b_selected] PASSED [ 75%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_causality_future_mutation_does_not_change_past_decisions[predicted_protect] PASSED [ 78%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_unknown_policy_id_is_rejected PASSED [ 81%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_out_of_frozen_grid_b_selected_pair_is_rejected PASSED [ 84%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_predicted_protect_predictor_decay_must_be_frozen_value PASSED [ 87%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_predicted_protect_missing_topk_or_nexperts_is_rejected PASSED [ 90%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_tie_break_is_last_ref_then_layer_expert PASSED [ 93%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_memory_correctness_never_exceeds_budget[b_selected] PASSED [ 96%]",
+    "tests/test_r2_12_retention_policy_conformance.py::test_memory_correctness_never_exceeds_budget[predicted_protect] PASSED [100%]",
+    "",
+    "============================== 33 passed in 2.39s =============================="
+  ],
+  "conformance_dimensions_verified": {
+    "cross_language_bit_for_bit_agreement": {
+      "status": "PASS",
+      "coverage": "both frozen conditions (b_selected, predicted_protect); all three frozen B_selected(M) (decay, interval) pairs (1.5/4/8 GiB); 5 random seeds for b_selected, 3 for predicted_protect; 60-event synthetic traces, 3 layers, 12 experts, up to 4 experts per event",
+      "method": "Python side calls the ACTUAL frozen reference classes directly (argine.research2.r2_09a.policies.AgedFrequency, argine.research2.r2_bridge01.retention_policies.PredictedProtectPolicy), never a reimplementation; C++ side runs the new module as a subprocess over the identical JSON-lines trace; every event's missed/evicted/resident/resident_bytes compared exactly"
+    },
+    "causality": {
+      "status": "PASS",
+      "method": "decisions at steps [0, cut) recomputed with the trace from `cut` onward replaced by an unrelated random continuation; decisions up to the cut point proven byte-identical, both policies"
+    },
+    "tie_breaking": {
+      "status": "PASS",
+      "rule_verified": "(score, last_ref, stable (layer, expert_id)) ascending, exactly matching policies.py:AgedFrequency._choose_victim"
+    },
+    "fail_closed_configuration": {
+      "status": "PASS",
+      "cases_verified": [
+        "unknown ARGINE_RETENTION_POLICY identifier -> rejected",
+        "aged_frequency (decay, interval) pair outside the three frozen B_selected(M) pairs -> rejected",
+        "predicted_protect predictor decay in the general R2-10 grid but not R2-12's frozen 0.99 -> rejected",
+        "predicted_protect missing/zero top_k or n_experts -> rejected"
+      ]
+    },
+    "memory_correctness": {
+      "status": "PASS",
+      "checks": "resident_bytes never exceeds budget across a 200-event stress trace with a budget not a clean multiple of object size; no duplicate resident (layer,expert) keys; no out-of-range expert ids"
+    },
+    "output_equivalence_against_real_model": {
+      "status": "NOT RUN",
+      "reason": "Requires loading the real model and running real (even if non-timed) inference with the integrated runtime, which does not exist yet (the module is not wired into argine-store.cpp / argine-experts.cpp -- see the integration design doc) and which this phase's hard restrictions forbid running from this sandbox in any case. This is the same category of evidence the R2-12 readiness gate itself required the real host to produce, independently re-verified afterward rather than assumed."
+    },
+    "real_runtime_selectability": {
+      "status": "NOT YET TRUE",
+      "reason": "The module exists and is verified in isolation, but patches/argine-store.cpp and patches/argine-experts.cpp have not been modified to call it. Today's compiled llama-server.exe still has exactly the one fixed LRU eviction behavior recorded in R2_12_RUNTIME_BLOCKED_CAPABILITY.json; this evidence package does not change that fact by itself."
+    }
+  },
+  "r2_12_runtime_policy_conformance_pass_reached": false,
+  "why_not_reached": "R2_12_RUNTIME_POLICY_CONFORMANCE_PASS requires, among other things, that 'both frozen policies are genuinely selectable in the real runtime' and that 'deterministic output behavior remains valid' against the real model. Neither condition can be true yet: the real runtime has not been modified (only designed), and no real-model correctness run exists or has been attempted from this sandbox. Declaring PASS now would misrepresent synthetic-trace software verification as evidence about the real runtime, which is exactly the failure mode this whole phase exists to prevent.",
+  "campaign_state": {
+    "warmup_runs_executed": 0,
+    "counted_runs_executed": 0,
+    "benchmark_count": "0 / 120",
+    "tokens_per_second_result_exists": false
+  },
+  "next_required_steps": [
+    "On the real host, with the real llama.cpp fork checked out: implement the integration specified in RETENTION-POLICY-INTEGRATION-DESIGN.md inside patches/argine-store.cpp and patches/argine-experts.cpp.",
+    "Build llama-server with the modified patches on the real host.",
+    "Run a non-timed correctness check (same model, same deterministic generation config, same prompt) proving output-token-sequence equivalence between the unmodified runtime and the policy-integrated runtime with ARGINE_RETENTION_POLICY unset (must be byte-identical: zero behavior change for the existing default path).",
+    "Then, with a frozen policy selected, run the same non-timed correctness check and report hits/misses/evictions/policy provenance from the real run for independent review.",
+    "Only after that evidence is produced and independently re-verified may R2_12_RUNTIME_POLICY_CONFORMANCE_PASS be created, and only then may Session 1 / 4 GiB resume."
+  ],
+  "stop_condition": "No warmup, no counted run, no benchmark, no tokens/s measurement may occur until R2_12_RUNTIME_POLICY_CONFORMANCE_PASS is reached and separately committed."
+}

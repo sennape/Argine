@@ -1,0 +1,52 @@
+{
+ "artifact": "R4-01-VALIDATION-OPENED",
+ "branch": "r4-main",
+ "cheap_rule_hash": "8603908b188c3346c7ed86e1d6914f378c869e017a305fccf9b1adafc734fcf2",
+ "eval_state": "LOCKED",
+ "feature_contract_hash": "0c0aa3920228306cf6341a33fef907edb828ce64a8e8f0a13c25c402141468bd",
+ "implementation_commit": "db84d702989a3334578b00c1922063056118cd94",
+ "implementation_files_lf_sha256": {
+  "_rich_infer.c": "f7616429593740b374115c1aeb26e66fc6f44d1eb12e25123d7c4c2a6f417a12",
+  "engine.py": "289bf2c783b54e5fe5d822da6aa964dd6d1d7b1659e42a7fa2c88ff99e6a6837",
+  "models.py": "f973722329f0bea979d8643cd1ecf66b730744702270faf11e79ace7dd433954",
+  "phase1.py": "3f27e1ccea9b62e1e15c17486ce8585c6e0908cff041d56abbb02d57cf277c40"
+ },
+ "model_hashes": {
+  "artifact": "R4-01-MODEL-HASHES",
+  "cheap_model_file_lf_sha256": "5c51be3dd445c4f62729e7c15e2eefa3b2078e055d713acc5b17a5f0192eb159",
+  "cheap_rule_md_lf_sha256": "a4bbeaa9392f7c5f8b2db143422d8ec7d8acd98166a899740a303a47601cd2a7",
+  "cheap_tree_hash": "8603908b188c3346c7ed86e1d6914f378c869e017a305fccf9b1adafc734fcf2",
+  "decayed_count_config_sha256": "22c206cd38699fbef0b5d6dab727178b1ab0a7f29b7be1da38706680b522236d",
+  "feature_contract_lf_sha256": "0c0aa3920228306cf6341a33fef907edb828ce64a8e8f0a13c25c402141468bd",
+  "feature_schema_hash": "cfa26696cfac6a486978a88b873a1224590cf8a19e1995bbc2f1bee60c34a598",
+  "model_contract_lf_sha256": "1a9e3d062ab4ac10bd2b0c7131f51f583e5925bf52d3ffda7a27cab21e2beda0",
+  "replay_engine_lf_sha256": "289bf2c783b54e5fe5d822da6aa964dd6d1d7b1659e42a7fa2c88ff99e6a6837",
+  "rich_model_digest": "8206a5098d0c1a094b91c5da3b9ecbcc0d07adefc584f78df10d6b043f58c3af",
+  "rich_model_file_lf_sha256": "61e899e018c06c9ba144d4c3eec8fea6e922d1c93df5c1814625b89d0f59e1e3"
+ },
+ "phase0_commit": "35410947d51895326aa7e6c39a09825e2ffb4c0c",
+ "phase0_contract_digest": "fa0ff8d4c93b463a99bdba4a65625251fa00c8102f5b2d788f8f22e73a20d64e",
+ "phase0_freeze_sha256": "41e9aa82fcf59155b6c98504ff08bee6ca2feb74027675e3fbce10778ca318be",
+ "replay_fidelity_lf_sha256": "db3c91c8357119f100d4fd9edf8f004a3854d9202a7b4e7d5872160344bb901d",
+ "replay_hash": "289bf2c783b54e5fe5d822da6aa964dd6d1d7b1659e42a7fa2c88ff99e6a6837",
+ "rich_model_hash": "8206a5098d0c1a094b91c5da3b9ecbcc0d07adefc584f78df10d6b043f58c3af",
+ "rule": "no source change affecting policy behaviour is permitted after this record; scoring runs once",
+ "state": "VALIDATION_OPENED_NO_OUTCOME",
+ "validation_outcome_contained": false,
+ "validation_plan_lf_sha256": "dda41c9008f8717e00de2a70bd334195e5756aa4908d694f4b0fbb6fadc6d9e5",
+ "validation_trace_count": 12,
+ "validation_trace_sha256": {
+  "r2-11-coding-v1": "da9a4535640fc1f64a2e7a3d8d01e456854c36daa08d70be99fb2e2a738d5ffd",
+  "r2-11-coding-v2": "dfe19f93e42a809d44a45a22af238e049e4aaf8eb99219132cdf9b6e2313588b",
+  "r2-11-coding-v3": "40a29f54c02b3f23a558d6d601b59e60d3f67fdb29f8cd8005e45fbc2a97e98d",
+  "r2-11-instruction-v1": "085dca7571fced800a4605311ae11d6264e95b90bf953858e8dbabb9ff42bf08",
+  "r2-11-instruction-v2": "6abad7c87176f18d0f28abf1d8cc2fa78e6dc14b5722a0f76dffb41daed4b54e",
+  "r2-11-instruction-v3": "3b8d5090f2191c1f0125f1e32acdf986cd7cb3765b14d30ea564f1397b0b4319",
+  "r2-11-reasoning-v1": "d65807d8ea692a0dc7dbdd24492b4abe15d402b4d71bbe7c41befe5013c77a9e",
+  "r2-11-reasoning-v2": "bd77666adb5b568d7247438acb36a752ec17c0d0a2ee3bd5577ae9d96d4e23b2",
+  "r2-11-reasoning-v3": "25912ff92747a52cabf13e48d535998f47b344272b04748671e2174d499fca73",
+  "r2-11-summarization-v1": "6df5f46d25149682b8e986d45ee4739ede271925433cd6b81205bd3d8ceacb9d",
+  "r2-11-summarization-v2": "44b1db845bb5f4c71b4ee5158f445e94706bcb1287bc8298ae5b712632d99b95",
+  "r2-11-summarization-v3": "eabe70fe56d2e1e33cdc6c6b9acc9820ed764aed38f369e5d514c6adfabf91fa"
+ }
+}

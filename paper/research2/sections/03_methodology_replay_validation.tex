@@ -1,0 +1,73 @@
+\section{Methodology and Replay Validation (R-01)}
+\label{sec:replay-validation}
+
+All retention-policy comparisons in this report are computed by
+\emph{offline replay} against a captured expert-request trace, not by
+re-running the model. This is substantially cheaper and more reproducible
+than live experimentation, but it is only scientifically meaningful if
+the replay model's accounting of hits, misses, and evictions agrees with
+what the real runtime actually does. R-01 establishes this agreement
+before any policy is compared.
+
+\input{tables/table1_configuration}
+
+\paragraph{Trace and replay contract.} The trace used throughout this
+report (Table~\ref{tab:configuration}) was captured from a real
+Qwen3-30B-A3B~\cite{qwen3technicalreport} MoE model instance, served by
+a patched \texttt{llama.cpp}~\cite{gerganov2023llamacpp} runtime, running
+a coding workload, recording, per routing
+step and layer, the exact set of routed experts and the real runtime's
+own cache events (admissions, hits, misses, evictions) under its own
+16-shard retention architecture at a 4~GiB budget. The trace is
+normalized into a versioned contract (R2Trace v1) that records per-layer
+expert byte sizes, preserves step/token grouping, and documents its
+cold-start convention explicitly rather than assuming equivalence to a
+warm runtime state.
+
+\paragraph{Behavioral (Level-D) validation.} The central validation
+claim is that an \emph{independent} offline replay of the captured trace,
+using the real runtime's own recorded shard map, reproduces the real
+runtime's own recorded cache events exactly. Table~\ref{tab:level-d}
+reports the measured agreement.
+
+\begin{table}[t]
+\centering
+\caption{Level-D behavioral validation: real-runtime telemetry vs.\
+independent offline replay, over the measured workload (R-01, run
+\texttt{bb6d8ca3\ldots}).}
+\label{tab:level-d}
+\small
+\begin{tabular}{@{}lr@{}}
+\toprule
+Quantity & Value \\
+\midrule
+Event disagreement rate & 0.0 \\
+Workload fidelity & PASS \\
+Full-trace fidelity & PASS \\
+Runtime misses & 138{,}944 \\
+Replay-predicted misses & 138{,}944 \\
+Runtime evictions & 136{,}602 \\
+Replay-predicted evictions & 136{,}602 \\
+Runtime miss bytes & 132{,}974{,}714{,}880 \\
+Replay-predicted miss bytes & 132{,}974{,}714{,}880 \\
+Unexplained tail disagreements & 0 \\
+EXP-021 (replay-fidelity) closure & PASS \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Runtime and replay misses, evictions, and miss bytes agree \emph{exactly}
+(not merely approximately), and the trace's own recorded shard map
+(16 shards, matching the real runtime's architecture at the 4~GiB
+capture budget) is used, rather than re-derived. This supports treating
+offline replay over this trace as a faithful substitute for the real
+runtime for the policy comparisons in
+Sections~\ref{sec:oracle-headroom}--\ref{sec:recoverable-envelope}.
+
+\paragraph{Scope of this claim.} This is a single validated trace, from a
+single captured workload, on a single model configuration. It
+demonstrates that replay \emph{can} faithfully reproduce a real runtime
+under the conditions exercised by this specific capture; it is not
+evidence that offline replay is faithful in general, across arbitrary
+workloads, models, or capacities (see Limitations,
+Section~\ref{sec:limitations}).

@@ -1,0 +1,17 @@
+{
+  "name": "r2-11-coding-v3",
+  "version": "r2-11-v1",
+  "split": "eval",
+  "semantic_category": "coding",
+  "description": "R2-11 fresh confirmatory coding specification #3: dynamic programming on intervals. New task, authored for R2-11 only.",
+  "n_predict": 512,
+  "items": [
+    {
+      "id": "r2-11-coding-v3",
+      "segment": "r2-11-coding-v3",
+      "prompt": "Write a Python function `min_cost_to_merge_stones(piles)` that computes the minimum total cost to merge a list of stone piles into a single pile, where the cost of merging any two adjacent piles equals the sum of their sizes, and the merged pile's size becomes available for further merges. Solve this with interval dynamic programming (not a greedy heuristic), using a prefix-sum array for O(1) range-sum queries inside the DP transition, with overall complexity O(n^3) or better. Include a docstring, state the DP recurrence in a comment, and provide 3 example assertions: 2 piles, 3 piles, and 4 piles with at least one repeated pile size. Briefly explain why this problem has the optimal-substructure property that interval DP relies on."
+    }
+  ],
+  "provenance_split_identity": "r2_11_eval",
+  "cli_split_field_note": "argine.research.cli's 'research trace --split' flag only accepts {dev, eval} (argine/research/cli.py 'trace' subparser, choices=['dev','eval']); there is no third CLI-level split value. Per the loader (argine/research/workloads.py:load, the 'items'-schema fallback branch), the CLI-facing 'split' field here is literal plumbing selecting which dict key the prompts load under -- it is set to the already-supported value 'eval' so this file can be captured with the existing CLI and loader, with NO code change. The true provenance-level identity of this corpus (a fresh, entirely new R2-11 confirmatory EVAL corpus -- distinct from R2-10 DEV, R2-10 EVAL, and R2-BRIDGE-01's holdout) is tracked entirely by workload_id, file path, output directory, and the 'provenance_split_identity' field below, plus experiments/R2-11-predictive-retention/eval_manifest.json -- exactly mirroring how R2-BRIDGE-01's own fresh holdout was externally distinguished from R2-09/R2-10 by workload_id/path/manifest, not by a unique CLI split string."
+}

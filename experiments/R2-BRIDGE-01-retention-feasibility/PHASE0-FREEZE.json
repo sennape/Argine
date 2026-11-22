@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "freeze_version": "1.0.0",
+  "freeze_name": "R2-BRIDGE-01-Phase0-Contract-Freeze",
+  "freeze_timestamp_utc": "2026-11-13T22:35:00Z",
+  "status": "FROZEN",
+  "outcome": "PHASE0_CONTRACT_FROZEN_NOT_EXECUTED",
+  "contract_version": "r2-bridge01-phase0-contract-v1.0",
+  "contract_digest": "e4ef4268e6bc207f20d5f4a56c165b75b977536600ff9d6f7e59604f77a889fc",
+  "upstream_bindings": {
+    "r2_09b_contract_digest": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28",
+    "r2_10_phase0_contract_digest": "4d2288b7b4a812fd85d96aa7c2227d639b52f5131bff305d687e03970f53d725",
+    "r2_10_closure_commit": "e13d89f97ea50452d8e0605c2bbed1f4e4ce589f"
+  },
+  "git_head_before_this_freeze_commit": "e13d89f97ea50452d8e0605c2bbed1f4e4ce589f",
+  "frozen_predictor": "decayed_transition/decay=0.99",
+  "frozen_mechanism_grid_size": 12,
+  "frozen_budgets_bytes": [1610612736, 4294967296, 8589934592],
+  "primary_budget_bytes": 4294967296,
+  "bridge_corpus_captured": false,
+  "bridge_results_exist": false,
+  "r2_11_started": false,
+  "r2_12_started": false,
+  "r2_10_modified": false,
+  "evidence_hashes": {
+    "retention_policy_space_sha256": null,
+    "note": "Per-file SHA256 values are embedded inside contract_digest's own canonical material (see argine.research2.r2_bridge01.contract.compute_contract_digest); not duplicated here to avoid two sources of truth."
+  },
+  "next_authorized_action": "None automatically. A future, SEPARATE authorization is required to: (a) finalize/freeze the mechanism-selection choice (if any) made from DEVELOPMENT data, (b) capture the new BRIDGE holdout corpus, (c) open BRIDGE_HOLDOUT, (d) run the full retention experiment, (e) inspect BRIDGE results."
+}

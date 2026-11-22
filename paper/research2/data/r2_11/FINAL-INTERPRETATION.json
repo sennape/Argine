@@ -1,0 +1,16 @@
+{
+  "artifact": "R2_11_FINAL_INTERPRETATION",
+  "generated_utc": "2026-11-14T09:40:00Z",
+  "classification": "R2_11_PASS",
+  "scope_reminder": "R2-11 is retention evidence only: miss_bytes_per_decode_step is a memory-access-pattern metric, not a runtime/latency/throughput measurement. No tokens/s, latency, or speedup claim is made or implied anywhere in this evaluation.",
+  "headline_finding": "At the primary 4 GiB budget, PredictedProtectPolicy reduces miss_bytes_per_decode_step by a mean of 87,476.85 bytes/decode-step relative to B_selected(M) across the 12 fresh R2-11 workloads (equal-weight mean, no token-count weighting), with a 95% paired bootstrap CI of [-154,123.32, -27,178.93] -- entirely below zero. 9 of 12 workloads individually improve (delta <= 0) at this exact boundary threshold; no single improving workload accounts for more than 27.6% of the total positive byte reduction (well under the 50% dominance limit).",
+  "budget_sensitivity_honestly_reported": "The retention effect is budget-dependent and should not be characterized as uniform: at 1.5 GiB (tight budget, high eviction pressure) the mean delta is much larger in magnitude (-779,296.06 bytes/decode-step) than at the primary 4 GiB budget. At 8 GiB the mean delta is EXACTLY 0.0 -- PredictedProtectPolicy and B_selected(M) produced byte-for-byte identical miss_bytes_per_decode_step results for every one of the 12 workloads at that budget. This is not a small or negligible effect being rounded down to zero; it is a literal tie, consistent with 8 GiB being generous enough on these 12 workloads that eviction pressure -- and therefore any opportunity for a predictive eviction shield to change which object is evicted -- is minimal to nonexistent. This null finding at the generous budget is reported as such, not minimized or explained away.",
+  "magnitude_caveat": "These are absolute byte counts per decode step; no percentage/relative improvement claim should be read as implying a proportional runtime or latency benefit of the same magnitude -- R2-11 measures retention only. A relative-to-B_selected percentage is reported in PRIMARY-AGGREGATE.json for reference, but is not itself a PASS criterion and must not be called 'large' or 'material' without R2-12 runtime evidence, per decision_rules.json's practical_effect_interpretation clause.",
+  "negative_null_findings": [
+    "Mean delta at 8 GiB is exactly 0.0 (a literal tie across all 12 workloads, not merely a small/statistically-insignificant effect).",
+    "3 of 12 workloads (25%) show delta > 0 (predicted-protect worse) at the primary 4 GiB budget; the aggregate and bootstrap CI nonetheless both favor predicted-protect, and the PASS threshold of >=9/12 is met exactly at 9, not comfortably exceeded.",
+    "No percentage/relative claim is being elevated to a headline number; only the absolute byte-level metric drives the PASS/FAIL/INCONCLUSIVE classification, per the frozen decision rule."
+  ],
+  "r2_12_gate_outcome": "R2-12 MAY BE PROPOSED FOR PROSPECTIVE RUNTIME VALIDATION.",
+  "r2_12_not_started": true
+}

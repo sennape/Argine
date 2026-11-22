@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "artifact": "PHASE2A0-STATE-TRANSITION",
+  "note": "Additive substitute for the missing code-level BRIDGE state-transition mechanism (this repository has no general state-machine enforcement code for any of EVAL_*/BRIDGE_*; every prior transition in this lineage -- EVAL_ACQUISITION_PLANNED, EVAL_CAPTURED_SEALED, EVAL_OPENED -- was recorded the same way, as a manually-authored additive JSON file). Building a general transition-enforcement mechanism is out of scope for this phase and is reported, not implemented.",
+  "state_machine_reference": "experiments/R2-BRIDGE-01-retention-feasibility/corpus_acquisition_contract.json.capture_seal_open_state_machine",
+  "transition_history": [
+    {
+      "state": "BRIDGE_LOCKED",
+      "source": "corpus_acquisition_contract.json (frozen, Phase 0)"
+    },
+    {
+      "state": "BRIDGE_HOLDOUT_SPECS_FROZEN",
+      "source": "research2/workloads/r2_bridge01/bridge-*-v1.json (4 files) + BRIDGE-HOLDOUT-MANIFEST-v1.json (this phase, additive)",
+      "manifest_digest_sha256": "ebe8735f3ac9105a1d001b40cdd8189e780772b350328aeba131be3af015147e"
+    },
+    {
+      "state": "BRIDGE_ACQUISITION_PLANNED",
+      "source": "PHASE2A-ACQUISITION-PLAN-v1.json (this phase, additive)",
+      "acquisition_plan_digest_sha256": "33cab68f3ff05e5d3cb442aac6bb6e2eb0f4b026ebdc5157101c4e2905150fdd",
+      "sealed_by": "this session"
+    }
+  ],
+  "current_state": "BRIDGE_ACQUISITION_PLANNED",
+  "not_yet_reached": [
+    "BRIDGE_CAPTURED_SEALED",
+    "BRIDGE_OPENED",
+    "BRIDGE_EVALUATED_CLOSED"
+  ],
+  "original_phase0_contract_digest_unchanged": "e4ef4268e6bc207f20d5f4a56c165b75b977536600ff9d6f7e59604f77a889fc",
+  "phase01_dev_selection_rule_digest_unchanged": "5954a0f6d13fcf427124f8b7f7d7f009d2d76fbe82e4b4e28c6aa2167fc8eb92",
+  "phase1_selection_freeze_classification": "DEV_RETENTION_SIGNAL_POSITIVE",
+  "phase1_selected_config_id": "predicted_protect/budget=4294967296",
+  "no_bridge_trace_or_result_exists_statement": "No BRIDGE holdout trace exists on any host, and no BRIDGE holdout result has been computed or inspected, as of this state record.",
+  "state_record_digest_sha256": "d7f72387b73c1350e50415b686966c8517a975c7398e02b09806028099dc7b12"
+}

@@ -1,0 +1,36 @@
+Title: Practical notes on choosing and maintaining a bicycle for daily commuting
+
+A bicycle used for daily commuting has different priorities than one used mainly
+for recreation or racing. The three factors that matter most for a commuter are
+reliability, comfort over repeated short trips, and low ongoing maintenance effort,
+roughly in that order. A bike that requires frequent adjustment or that is
+uncomfortable after twenty minutes will quietly stop getting used, regardless of
+how capable it is on paper.
+
+Frame geometry affects comfort directly. An upright riding position, achieved
+through a higher handlebar relative to the saddle, reduces strain on the wrists,
+shoulders, and lower back during short, frequent rides in street clothes. A more
+aggressive, low handlebar position is better suited to speed over long distances
+but is less forgiving for someone who commutes in work clothing and stops
+frequently at intersections.
+
+Drivetrain choice is a tradeoff between simplicity and range. A single-speed or
+internally geared hub drivetrain has far fewer exposed, wear-prone parts than a
+multi-speed derailleur system, and tolerates rain and road grit with less frequent
+cleaning. A derailleur drivetrain offers a wider range of gears for hilly commutes
+but needs periodic cable and derailleur-hanger adjustment, especially after the
+bike is bumped or transported.
+
+Tires are the single most common source of commuting delays. Narrow, high-pressure
+tires roll faster but puncture more easily on debris-strewn urban streets; wider
+tires with a puncture-resistant belt roll slightly slower but dramatically reduce
+mid-commute flat tires. Keeping tires at the pressure printed on the sidewall,
+checked roughly every two weeks, is the single cheapest way to reduce both
+punctures and rolling resistance.
+
+Basic maintenance that materially affects reliability includes: lubricating the
+chain every one to two weeks of commuting (more often in wet weather), keeping
+brake pads replaced before they wear down to the metal backing, and checking that
+both wheels spin freely without rubbing against the brake pads. Weather protection
+such as fenders and a chain guard reduces the frequency of all of the above, at a
+small cost in weight and a small increase in purchase price.

@@ -1,0 +1,19 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "historical_discipline": {
+    "r2_10_category_b": "CLOSED / Category B. Not reinterpreted by R2-12's existence.",
+    "r2_10_original_r2_11_not_proposed_decision": "NOT PROPOSED under the original R2-10 frozen rules. Not rewritten by R2-11's or R2-12's existence -- R2-11/R2-12 exist only because of NEW prospective R2-BRIDGE-01/R2-11 evidence.",
+    "r2_bridge01_bridge_positive": "CLOSED / BRIDGE_POSITIVE. Not reinterpreted.",
+    "r2_11_pass": "R2_11_EVALUATED_CLOSED / R2_11_PASS (commit 0ccd36d). Not reinterpreted, not re-scored, not re-opened by R2-12."
+  },
+  "why_r2_12_exists": "Solely because decision_rules.json's r2_12_gate (frozen in R2-11 Phase 0, applied in R2-11's closure commit 0ccd36d) evaluated to 'R2-12 MAY BE PROPOSED FOR PROSPECTIVE RUNTIME VALIDATION' given the R2_11_PASS classification.",
+  "code_reused_verbatim_from_prior_phases": [
+    "argine.research2.r2_11.bootstrap.paired_bootstrap_ci (statistical_analysis.json)",
+    "argine.planner.plan() feasibility check (execution_plan.json pre-run gate, hardware_contract.json)",
+    "argine.research.trace.PHASE_DECODE / counted_step() / served_steps() (runtime_metrics.json counting rule)",
+    "atomic write-then-rename persistence pattern from tools/r2_11_eval_runner.py (execution_plan.json)",
+    "exclusive-lock duplicate-writer-prevention pattern from tools/r2_11_capture_driver.py and tools/r2_11_eval_runner.py (execution_plan.json)"
+  ],
+  "no_result_of_any_kind_exists_yet": true
+}

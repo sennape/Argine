@@ -1,0 +1,139 @@
+% References for the present paper.
+% Entries were inherited from the preceding study's frozen bibliography (paper/research2/references.bib). The entries for
+% ExpertFlow, LayerScope, MoE-Infinity and ProMoE were corrected on 2026-11-22 against the current arXiv records (author lists,
+% titles, versions). Convention for arXiv-only entries: year = year of first arXiv submission; the note gives the version
+% whose metadata is used. No new external citation was added. The two internal entries describe frozen repository artifacts.
+
+@inproceedings{shazeer2017sparsely,
+  author    = {Noam Shazeer and Azalia Mirhoseini and Krzysztof Maziarz and Andy Davis and Quoc V. Le and Geoffrey E. Hinton and Jeff Dean},
+  title     = {Outrageously Large Neural Networks: The Sparsely-Gated {Mixture-of-Experts} Layer},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2017}
+}
+
+@article{fedus2022switch,
+  author  = {William Fedus and Barret Zoph and Noam Shazeer},
+  title   = {Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity},
+  journal = {Journal of Machine Learning Research},
+  volume  = {23},
+  number  = {120},
+  pages   = {1--39},
+  year    = {2022}
+}
+
+@inproceedings{sheng2023flexgen,
+  author    = {Ying Sheng and Lianmin Zheng and Binhang Yuan and Zhuohan Li and Max Ryabinin and Beidi Chen and Percy Liang and Christopher R{\'e} and Ion Stoica and Ce Zhang},
+  title     = {{FlexGen}: High-Throughput Generative Inference of Large Language Models with a Single {GPU}},
+  booktitle = {Proceedings of the 40th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {202},
+  pages     = {31094--31116},
+  year      = {2023},
+  publisher = {PMLR}
+}
+
+@misc{eliseev2023offloading,
+  author = {Artyom Eliseev and Denis Mazur},
+  title  = {Fast Inference of {Mixture-of-Experts} Language Models with Offloading},
+  year   = {2023},
+  note   = {arXiv preprint arXiv:2312.17238}
+}
+
+@misc{xue2025moeinfinity,
+  author = {Leyang Xue and Yao Fu and Zhan Lu and Chuanhao Sun and Luo Mai and Mahesh Marina},
+  title  = {{MoE-Infinity}: Efficient {MoE} Inference on Personal Machines with Sparsity-Aware Expert Cache},
+  year   = {2024},
+  note   = {arXiv preprint arXiv:2401.14361 (first submitted January 2024; metadata of v3, March 2025)}
+}
+
+@inproceedings{kamahori2025fiddler,
+  author    = {Keisuke Kamahori and Tian Tang and Yile Gu and Kan Zhu and Baris Kasikci},
+  title     = {{Fiddler}: {CPU-GPU} Orchestration for Fast Inference of {Mixture-of-Experts} Models},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2025}
+}
+
+@article{belady1966replacement,
+  author  = {L. A. Belady},
+  title   = {A Study of Replacement Algorithms for a Virtual-Storage Computer},
+  journal = {IBM Systems Journal},
+  volume  = {5},
+  number  = {2},
+  pages   = {78--101},
+  year    = {1966},
+  doi     = {10.1147/SJ.52.0078}
+}
+
+@article{liu2026survey,
+  author    = {Jiacheng Liu and Peng Tang and Wenfeng Wang and Yuhang Ren and Xiaofeng Hou and Pheng-Ann Heng and Minyi Guo and Chao Li},
+  title     = {A Survey on Inference Optimization Techniques for {Mixture of Experts} Models},
+  journal   = {ACM Computing Surveys},
+  volume    = {58},
+  number    = {10},
+  articleno = {247},
+  pages     = {1--37},
+  year      = {2026},
+  doi       = {10.1145/3794845}
+}
+
+@misc{gerganov2023llamacpp,
+  author       = {Georgi Gerganov and llama.cpp contributors},
+  title        = {{llama.cpp}: {LLM} inference in {C/C++}},
+  year         = {2023},
+  howpublished = {GitHub repository},
+  url          = {https://github.com/ggml-org/llama.cpp}
+}
+
+@misc{qwen3technicalreport,
+  author        = {{Qwen Team}},
+  title         = {{Qwen3} Technical Report},
+  year          = {2025},
+  eprint        = {2505.09388},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2505.09388}
+}
+
+@misc{promoe2025,
+  author = {Xiaoniu Song and Zihang Zhong and Rong Chen and Haibo Chen},
+  title  = {{ProMoE}: Fast {MoE}-based {LLM} Serving using Proactive Caching},
+  year   = {2024},
+  note   = {arXiv preprint arXiv:2410.22134 (first submitted October 2024; latest revision v3, September 2025)}
+}
+
+@misc{layerscope2025,
+  author = {Enda Yu and Dezun Dong and Zhaoning Zhang and Zhe Bai and Weiling Yang and Haojie Wang and Dongsheng Li and Yongwei Wu and Xiangke Liao},
+  title  = {{LayerScope}: Predictive Cross-Layer Scheduling for Efficient Multi-Batch {MoE} Inference on Legacy Servers},
+  year   = {2026},
+  note   = {arXiv preprint arXiv:2509.23638 (v2, April 2026; stated venue ICS '26, Belfast, July 2026; first submitted September 2025 as ``PreScope: Unleashing the Power of Prefetching for Resource-Constrained {MoE} Inference'')}
+}
+
+@misc{expertflow2026,
+  author = {Xin He and Shunkang Zhang and Kaijie Tang and Shaohuai Shi and Yuxin Wang and Zihao Zeng and Zhenheng Tang and Xiaowen Chu and Haiyan Yin and Ivor W. Tsang and Yew Soon Ong},
+  title  = {{ExpertFlow}: Efficient {Mixture-of-Experts} Inference via Predictive Expert Caching and Token Scheduling},
+  year   = {2026},
+  note   = {arXiv preprint arXiv:2410.17954 (v2, April 2026; stated venue DAC '26, Long Beach, July 2026; first submitted October 2024 as ``ExpertFlow: Optimized Expert Activation and Token Allocation for Efficient {Mixture-of-Experts} Inference'')}
+}
+
+@misc{localroutingconsistency2025,
+  author = {Jingcong Liang and Siyuan Wang and Miren Tian and Yitong Li and Duyu Tang and Zhongyu Wei},
+  title  = {Not All Models Suit Expert Offloading: On Local Routing Consistency of Mixture-of-Expert Models},
+  year   = {2025},
+  note   = {arXiv preprint arXiv:2505.16056}
+}
+
+@misc{argine2paper,
+  author       = {sennape},
+  title        = {Clairvoyant-Comparator Expert Retention, Routing Structure, and Causal Predictive-Retention Validation in Memory-Constrained Mixture-of-Experts Inference},
+  year         = {2026},
+  howpublished = {Preceding-study manuscript (repository location in the provenance appendix)},
+  note         = {Final corrected edition, commit 4ce35fe}
+}
+
+@misc{argine3evidence,
+  author       = {sennape},
+  title        = {{Argine} frozen evidence and closure record of the present study},
+  year         = {2026},
+  howpublished = {Frozen-evidence repository record (location in the provenance appendix)},
+  note         = {Closure freeze 760a22d69abdd207c7ecd4b4f1012b85711b20aa3cb623cddb55d0c8802a5717, commit 3aa389e}
+}

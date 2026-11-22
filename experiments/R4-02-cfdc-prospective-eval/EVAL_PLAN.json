@@ -1,0 +1,106 @@
+{
+ "arms": [
+  "A",
+  "BELADY",
+  "NUE_X",
+  "DECAYED_COUNT",
+  "CHEAP",
+  "RICH"
+ ],
+ "artifact": "R4-02-EVAL-PLAN",
+ "budget_bytes": 1610612736,
+ "code_files_lf_sha256": {
+  "phase2.py": "ea52b5299de460e9c22952a1036bd8f1bf76bad4138c19e52c66c619310050f2",
+  "runner.py": "cddc9c7c452f1d8653147e3fdb7809e73f7dc0aafeaceabb5266abe6c9946fb9"
+ },
+ "corpus_note": "exactly the four canonical R2-09 EVAL traces frozen in Phase 0; no substitution, no new prompt/trace, no model run",
+ "eval_corpus": [
+  {
+   "category": "coding",
+   "normalized_step_count": 523,
+   "trace_sha256": "46104e88a19136153d3223862cd392181d80cc6bfc07e063f009cb7347a392d3",
+   "workload_id": "coding-eval-v1"
+  },
+  {
+   "category": "reasoning",
+   "normalized_step_count": 524,
+   "trace_sha256": "9adc1ce8801b766fffe64fc54ffc80c7b7bf6dc16b7fe46bcc5c0b3c9a87c0ae",
+   "workload_id": "reasoning-eval-v1"
+  },
+  {
+   "category": "summarization",
+   "normalized_step_count": 523,
+   "trace_sha256": "e33fa1e2951498c8e03b6c7fb9e967040e6eae7c8a638e0e2b4ca083e5c8ae33",
+   "workload_id": "summarization-eval-v1"
+  },
+  {
+   "category": "instruction",
+   "normalized_step_count": 523,
+   "trace_sha256": "6a51113fc830b63fc1b8a60c394e16f84df2ff04fb2a566dd1653a96f202dd50",
+   "workload_id": "instruction-eval-v1"
+  }
+ ],
+ "execution_protocol": {
+  "hash_check_first": true,
+  "orchestrator": "phase2.py run",
+  "resume": "per-unit scratch caches and pickle checkpoints; a completed unit is never recomputed",
+  "workers": 2
+ },
+ "forbidden": [
+  "policy/model/feature/threshold/comparator/rule change",
+  "rescue",
+  "new candidate",
+  "tuning",
+  "rerunning a unit in search of a better value",
+  "Phase 3 unless CHEAP is classified viable"
+ ],
+ "non_gating_reports": [
+  "EVAL workloads on which CHEAP beats the best comparator",
+  "block-bootstrap 90% interval (64-token decode blocks, seed 0, 2000 resamples)",
+  "VALIDATION comparator captures with/without r2-11-coding-v1 (imported)",
+  "REPLICATE_CHECK seed-43: NOT COMPUTED (report-only, outside the Phase 2 scope of four EVAL traces)",
+  "teacher-agreement shift diagnostic on EVAL: NOT COMPUTED (done on TRAIN in Phase 1; needs no further evidence for classification)"
+ ],
+ "numpy": "2.2.6",
+ "primary_endpoint": "capture(P) = sum(B_A - B_P) / sum(B_A - B_Belady), decode miss bytes at 1.5 GiB, pooled over the four EVAL traces, exact rational, uncapped",
+ "purpose": "Open the frozen EVAL corpus exactly once, score the six frozen arms, apply the preregistered rules mechanically, close Research 4 CFDC.",
+ "python": "3.10.12",
+ "replay": "frozen Phase 1 engine; own-state replay; one cold-cache replay per (trace, arm); each (trace, arm) unit is executed exactly once; technical checkpoint/resume is deterministic and does not alter a completed result",
+ "rules": {
+  "A": "capture_VAL(CHEAP) >= 1/4 AND capture_EVAL(CHEAP) >= 1/4",
+  "B": "capture_EVAL(CHEAP) >= max(1/4, max(NUE_X, DECAYED_COUNT) + 3/100)",
+  "C": "capture_w(CHEAP) >= 0 for every EVAL workload; undefined denominator fails",
+  "RICH_gate": "capture_VAL(RICH) >= 1/4 AND capture_EVAL(RICH) >= 1/4",
+  "classification_order": [
+   [
+    "integrity failure (A not reproducing its frozen TRAIN/VALIDATION reference, budget violation, invalid denominator, any frozen identity mismatch)",
+    "R4_CFDC_INVALID"
+   ],
+   [
+    "A and B and C",
+    "R4_CFDC_CHEAP_VIABLE"
+   ],
+   [
+    "A and B and not C",
+    "R4_CFDC_HETEROGENEOUS_NOT_VIABLE"
+   ],
+   [
+    "A and not B",
+    "R4_CFDC_CHEAP_NOT_INCREMENTAL"
+   ],
+   [
+    "not A and RICH gate passes",
+    "R4_CFDC_CAUSAL_INFORMATION_PRESENT_CHEAP_NOT_DEMONSTRATED"
+   ],
+   [
+    "not A and RICH gate fails",
+    "R4_CFDC_CAUSAL_STATE_INSUFFICIENT"
+   ]
+  ]
+ },
+ "state_transition": "LOCKED -> OPENED -> CLOSED",
+ "test_files_lf_sha256": {
+  "tests/test_phase2.py": "ef5900b1ecd6e8ecb45ba206b2d2471ab9512c1e6b85375b59fac7a5f215175b"
+ },
+ "validation_import": "VALIDATION_RESULTS.json / VALIDATION_DECISION.json of Phase 1 are imported verbatim (hash-checked); nothing is recomputed"
+}

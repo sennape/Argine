@@ -1,0 +1,30 @@
+{
+  "policy": "b_selected",
+  "malformed_lines": 0,
+  "decision_rows": 9504,
+  "completion_rows": 9504,
+  "max_cache_resident_bytes_post_service": 4294950912,
+  "budget_violations_post_service": [],
+  "budget_violations_policy_resident": [],
+  "max_policy_resident_bytes_after": 4294950912,
+  "first_evicted_step": 354,
+  "num_steps_with_eviction": 2839,
+  "last_decision_step": 9503,
+  "last_completion_step": 9503,
+  "policy_names_seen": [
+    "b_selected"
+  ],
+  "policy_params_seen": [
+    "{\"aging_interval_steps\": 64, \"decay_factor\": 0.99, \"n_experts\": 0, \"predictor_decay\": 0, \"top_k\": 0}"
+  ],
+  "budget_bytes_seen": [
+    4294967296
+  ],
+  "decisions_file_rows": 9504,
+  "decisions_file_malformed": 0,
+  "decisions_file_steps_match_trace_decision_steps": true,
+  "decision_steps_eq_completion_steps": true,
+  "num_decision_steps": 9504,
+  "num_completion_steps": 9504,
+  "last_decision_has_matching_completion": true
+}

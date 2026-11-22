@@ -1,0 +1,50 @@
+{
+  "artifact": "R3-00A-FREEZE",
+  "audit": {
+    "admissible_under_r3_contract": 0,
+    "audit_digest": "eb94bc2ce783b417a4590c2acc60d78cd4e1d452a132e6258575cea10bcc1053",
+    "canonical_runs": 120,
+    "path": "experiments/R3-00A-observability-contract/CANONICAL_R2_12_AUDIT.json",
+    "sha256": "b01b284f775cad9d36e68ccb60c11dfcb2adad1be33630c4387dbecd749bb829"
+  },
+  "canonical_anchor_commit": "4ce35fef61cd9c8155c3b88222cb6b52a3f62fb6",
+  "contract": {
+    "contract_digest": "99a68c73c5a3caba4fd53937f27907375734f3866c84e18d4ecb944013efa073",
+    "path": "experiments/R3-00A-observability-contract/OBSERVABILITY_CONTRACT.json",
+    "sha256": "a4fff70d96f9c1e0b40f1718dffecad39549f2e0160279b77d7cbdc42a617b45",
+    "version": 1
+  },
+  "created_utc": "2026-11-16T21:53:14Z",
+  "frozen_scope": [
+    "observability contract v1 (fields, classes, modes, admissibility rules)",
+    "canonical R2-12 run-set definition and audit"
+  ],
+  "not_frozen": [
+    "R3 primary policy",
+    "R3 primary scientific endpoint",
+    "DEV policy-selection rule",
+    "EVAL decision rules"
+  ],
+  "phase": "R3-00A",
+  "prohibited_actions": [
+    "using diagnostic/warmup/pre-canonical records in analysis",
+    "treating miss bytes as throughput evidence",
+    "claiming policy-overhead isolation without a sham control",
+    "changing this contract after EVAL is opened"
+  ],
+  "r2_evidence": {
+    "canonical_runs": 120,
+    "modified": false,
+    "runtime_results_top_level_files": 161
+  },
+  "status": "PASS_OBSERVABILITY_READY",
+  "tests": {
+    "path": "experiments/R3-00A-observability-contract/tests/test_telemetry_contract.py",
+    "result": "26 passed (python -m unittest, standard library only, no model)",
+    "sha256": "2e2d0ae278838043a64858aafe2adcb54070bb49ef37bbd3f9a7492ae5ec80a1"
+  },
+  "validator": {
+    "path": "experiments/R3-00A-observability-contract/validator/telemetry_contract.py",
+    "sha256": "67bac44773139b84990759eee534b0bb53d8b83c9369445084c493280bab567d"
+  }
+}

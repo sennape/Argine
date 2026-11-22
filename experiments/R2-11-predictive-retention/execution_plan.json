@@ -1,0 +1,52 @@
+{
+  "artifact": "R2-11-EXECUTION-PLAN",
+  "current_state": "R2_11_ACQUISITION_PLANNED (this Phase-0 freeze stops here; capture/sealing/opening/evaluation are future phases, explicitly not performed now)",
+  "determinism_repeat_requirements": {
+    "frozen_before_eval_opening": true,
+    "minimum": "at least one repeated workload per category (4 total: one coding, one reasoning, one summarization, one instruction-following) at the primary 4 GiB budget, plus representative secondary-budget repeats (at least one cell at 1.5 GiB and one at 8 GiB)."
+  },
+  "execution_architecture": {
+    "atomic_per_cell_persistence": "Each (workload, budget, policy) cell is written as its own complete, atomically-renamed result record (write-to-temp-then-rename pattern, mirroring R2-BRIDGE-01's incremental read-modify-write pattern under the sandboxed-environment timeout constraints already observed in that phase), so partial progress survives a timeout or interruption.",
+    "checkpointed": "Progress is checkpointed after every cell (not batched), because the R2-BRIDGE-01 phase empirically showed that even a 3-cell batch could hit the sandboxed 180s per-call budget mid-run; R2-11's 72-cell matrix is sized assuming the same per-cell-checkpoint discipline.",
+    "concurrent_writer_protection": "Strictly sequential execution, one cell at a time, matching R2-BRIDGE-01's and R2-10's own 'no parallel writers' rule; no two processes write the same result file concurrently.",
+    "deterministic": "For identical trace/budget/baseline/predictor/retention-policy/configuration, scientific replay outputs must be bit-identical (run_fast()/run_fast_bridge() are both already proven deterministic and side-effect-free on inputs).",
+    "duplicate_cell_protection": "Before computing a cell, the executor checks whether a result record for that exact (workload_id, budget, policy, config_digest) key already exists and is well-formed; if so, it is reused rather than recomputed, and never silently overwritten.",
+    "no_full_tournament_state_in_memory": "The executor processes and persists one cell at a time; it does not require holding all 72 cells' intermediate state in memory simultaneously.",
+    "resumable": true
+  },
+  "expected_future_evaluation_matrix": {
+    "budgets_bytes": [
+      1610612736,
+      4294967296,
+      8589934592
+    ],
+    "note": "12 workloads x 3 budgets x 2 policies = 72. If O_B is included as a secondary comparator, it is recorded separately and does not affect policy selection, because no policy selection exists in R2-11 (instruction #23). No alternative policies may be added after opening EVAL.",
+    "policies": [
+      "PredictedProtectPolicy",
+      "B_selected(M)"
+    ],
+    "primary_scientific_policy_cells": 72,
+    "workloads": 12
+  },
+  "memory_correctness_requirements": [
+    "resident bytes <= configured budget for every cell",
+    "budget violations = 0",
+    "overflow accounting valid (overflow_misses tracked and consistent with resident/budget state)",
+    "expert sizes correct (reused from the already-validated fast_replay/retention_policies expert-size accounting)",
+    "deterministic eviction",
+    "protected experts cannot create hidden overcommit (PredictedProtectPolicy's protection set is bounded and accounted for within the same budget enforcement as any other resident expert)",
+    "invalid configuration fails closed (e.g. an unrecognized budget or policy config raises rather than silently defaulting)"
+  ],
+  "schema_version": 1,
+  "state_machine": [
+    "R2_11_PROTOCOL_FROZEN",
+    "R2_11_ACQUISITION_PLANNED",
+    "R2_11_CAPTURED_SEALED",
+    "R2_11_EVAL_OPENED",
+    "R2_11_EVALUATED_CLOSED"
+  ],
+  "state_machine_rules": {
+    "eval_opening_is_separate_explicit_commit_before_scoring": true,
+    "no_retention_result_may_be_computed_before_R2_11_EVAL_OPENED": true
+  }
+}

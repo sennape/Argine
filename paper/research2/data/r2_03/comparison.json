@@ -1,0 +1,225 @@
+{
+  "global_lru_miss_rate_vs_budget": [
+    {
+      "budget_bytes": 1610612736,
+      "miss_rate": 0.5587817147856518
+    },
+    {
+      "budget_bytes": 2147483648,
+      "miss_rate": 0.466959208223972
+    },
+    {
+      "budget_bytes": 4294967296,
+      "miss_rate": 0.24284366797900261
+    },
+    {
+      "budget_bytes": 8589934592,
+      "miss_rate": 0.05435258092738408
+    },
+    {
+      "budget_bytes": 17179869184,
+      "miss_rate": 0.006650535870516185
+    }
+  ],
+  "oracle_gaps_by_budget": {
+    "1610612736": {
+      "Global-LRU": {
+        "baseline": "Global-LRU",
+        "miss_byte_reduction": 103574900736,
+        "miss_reduction": 36149,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.44112006998514136,
+        "relative_miss_reduction": 0.4421787846168901
+      },
+      "LFU": {
+        "baseline": "LFU",
+        "miss_byte_reduction": 113832566784,
+        "miss_reduction": 39825,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.46451378232384005,
+        "relative_miss_reduction": 0.4661820480404551
+      },
+      "Runtime-Sharded-LRU": {
+        "baseline": "Runtime-Sharded-LRU",
+        "miss_byte_reduction": 99387924480,
+        "miss_reduction": 34667,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.4309731187496733,
+        "relative_miss_reduction": 0.4318799053195465
+      }
+    },
+    "17179869184": {
+      "Global-LRU": {
+        "baseline": "Global-LRU",
+        "miss_byte_reduction": 0,
+        "miss_reduction": 0,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.0,
+        "relative_miss_reduction": 0.0
+      },
+      "LFU": {
+        "baseline": "LFU",
+        "miss_byte_reduction": 0,
+        "miss_reduction": 0,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.0,
+        "relative_miss_reduction": 0.0
+      },
+      "Runtime-Sharded-LRU": {
+        "baseline": "Runtime-Sharded-LRU",
+        "miss_byte_reduction": 0,
+        "miss_reduction": 0,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.0,
+        "relative_miss_reduction": 0.0
+      }
+    },
+    "2147483648": {
+      "Global-LRU": {
+        "baseline": "Global-LRU",
+        "miss_byte_reduction": 93423513600,
+        "miss_reduction": 32497,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.475529762230897,
+        "relative_miss_reduction": 0.4756725899470125
+      },
+      "LFU": {
+        "baseline": "LFU",
+        "miss_byte_reduction": 108480393216,
+        "miss_reduction": 37959,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.512863953810997,
+        "relative_miss_reduction": 0.5144890214150176
+      },
+      "Runtime-Sharded-LRU": {
+        "baseline": "Runtime-Sharded-LRU",
+        "miss_byte_reduction": 92668243968,
+        "miss_reduction": 32232,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.4735057311480153,
+        "relative_miss_reduction": 0.4736308465460744
+      }
+    },
+    "4294967296": {
+      "Global-LRU": {
+        "baseline": "Global-LRU",
+        "miss_byte_reduction": 59855155200,
+        "miss_reduction": 20775,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.5859449007718049,
+        "relative_miss_reduction": 0.584733597905936
+      },
+      "LFU": {
+        "baseline": "LFU",
+        "miss_byte_reduction": 69826056192,
+        "miss_reduction": 24370,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.6227662858805563,
+        "relative_miss_reduction": 0.62289131990594
+      },
+      "Runtime-Sharded-LRU": {
+        "baseline": "Runtime-Sharded-LRU",
+        "miss_byte_reduction": 61055373312,
+        "miss_reduction": 21189,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.5907533006728861,
+        "relative_miss_reduction": 0.5895167348301478
+      }
+    },
+    "8589934592": {
+      "Global-LRU": {
+        "baseline": "Global-LRU",
+        "miss_byte_reduction": 16179056640,
+        "miss_reduction": 5602,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.7065525368501716,
+        "relative_miss_reduction": 0.704476861167002
+      },
+      "LFU": {
+        "baseline": "LFU",
+        "miss_byte_reduction": 18922143744,
+        "miss_reduction": 6606,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.7379448657585451,
+        "relative_miss_reduction": 0.7376060741402412
+      },
+      "Runtime-Sharded-LRU": {
+        "baseline": "Runtime-Sharded-LRU",
+        "miss_byte_reduction": 16792326144,
+        "miss_reduction": 5819,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.7142066478519912,
+        "relative_miss_reduction": 0.7123270902191211
+      }
+    }
+  },
+  "oracle_miss_rate_vs_budget": [
+    {
+      "budget_bytes": 1610612736,
+      "miss_rate": 0.31170029527559057
+    },
+    {
+      "budget_bytes": 2147483648,
+      "miss_rate": 0.24483951224846895
+    },
+    {
+      "budget_bytes": 4294967296,
+      "miss_rate": 0.10084481627296588
+    },
+    {
+      "budget_bytes": 8589934592,
+      "miss_rate": 0.016062445319335084
+    },
+    {
+      "budget_bytes": 17179869184,
+      "miss_rate": 0.006650535870516185
+    }
+  ],
+  "primary_curve_relative_miss_byte_reduction_vs_budget": [
+    {
+      "budget_bytes": 1610612736,
+      "relative_miss_byte_reduction": 0.44112006998514136,
+      "relative_miss_reduction": 0.4421787846168901
+    },
+    {
+      "budget_bytes": 2147483648,
+      "relative_miss_byte_reduction": 0.475529762230897,
+      "relative_miss_reduction": 0.4756725899470125
+    },
+    {
+      "budget_bytes": 4294967296,
+      "relative_miss_byte_reduction": 0.5859449007718049,
+      "relative_miss_reduction": 0.584733597905936
+    },
+    {
+      "budget_bytes": 8589934592,
+      "relative_miss_byte_reduction": 0.7065525368501716,
+      "relative_miss_reduction": 0.704476861167002
+    },
+    {
+      "budget_bytes": 17179869184,
+      "relative_miss_byte_reduction": 0.0,
+      "relative_miss_reduction": 0.0
+    }
+  ],
+  "reproduction_check": {
+    "message": "4 GiB point exactly reproduces R2-02's registered PASS evidence for ['Global-LRU', 'Oracle-Global-Belady'].",
+    "mismatches": {},
+    "ok": true
+  }
+}

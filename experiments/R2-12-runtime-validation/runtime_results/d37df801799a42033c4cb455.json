@@ -1,0 +1,78 @@
+{
+  "run_id": "d37df801799a42033c4cb455",
+  "workload_id": "r2-11-coding-v1",
+  "budget_gib": 4.0,
+  "policy_id": "b_selected",
+  "repetition_index": 5,
+  "ordering_block": "counted",
+  "cell_index": 0,
+  "position_in_abba_sequence": 8,
+  "warmup": false,
+  "counted": true,
+  "timestamps": {
+    "t0_process_start": 212786.338533,
+    "t1_model_ready_check_started": 212787.1351618,
+    "t1_model_ready": 212791.7030284,
+    "t2_request_sent": 212791.7030904,
+    "t3_first_token": 212803.8586819,
+    "t4_last_token": 212927.3713222
+  },
+  "environment": {
+    "ARGINE_EXPERT_STORE": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs",
+    "ARGINE_EXPERT_BUDGET": "4294967296",
+    "ARGINE_EXPERT_SHARDS": "1",
+    "ARGINE_EXPERT_READ": "blocco",
+    "ARGINE_RETENTION_POLICY": "b_selected",
+    "ARGINE_PREFETCH": null,
+    "ARGINE_RETENTION_DECAY": "0.99",
+    "ARGINE_RETENTION_INTERVAL": "64",
+    "process_identity_pid": 11892
+  },
+  "runtime_metrics": {
+    "decode_tokens_per_second": 4.137247175638587,
+    "ttft_seconds": 12.155591499991715,
+    "end_to_end_time_to_final_token_seconds": 135.66823179999483,
+    "total_decode_time_seconds": 123.512079,
+    "tokens_generated": 512,
+    "expert_bytes_read": null,
+    "expert_read_count": null,
+    "expert_miss_bytes": null,
+    "expert_io_best_effort": {
+      "expert_tensors_served_from_store": null,
+      "expert_tensors_expected": null,
+      "approx_mib_read": null,
+      "note": "best-effort stderr parse"
+    },
+    "cpu_time_seconds": 1042.4375,
+    "peak_resident_memory_bytes": 5952212992,
+    "metrics_source_note": "psutil",
+    "wall_clock_seconds": 141.03278919999138,
+    "budget_violations": 0,
+    "prediction_overhead_seconds": null,
+    "retention_policy_overhead_seconds": null,
+    "overhead_note": "prediction/retention-policy overhead isolation requires the calibration step instrumentation_contract.json itself requires BEFORE any publication-quality run; not performed by this driver, so left None rather than approximated"
+  },
+  "workload_identity": {
+    "path": "C:\\Users\\alpel\\Desktop\\Argine3\\research2\\workloads\\r2_11\\r2-11-coding-v1.json",
+    "sha256": "3cc6a2f89fcc6600f894c967861e6ff5f53cb0b2d460fe7fc459481d8cca2019"
+  },
+  "canonical": true,
+  "diagnostic_only": false,
+  "trace_enabled": false,
+  "pre_popen_env_check": {
+    "retention_trace_env_present": false,
+    "trace_output_variables_present": []
+  },
+  "output_text": " \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion. \n\nThe function should not use any external libraries, and should not use recursion.",
+  "output_token_digest": "9d7f18190a03757c4310388d5bc0d51d92d55896735f358faa5b54a2e16f7f03",
+  "process_cleanup": {
+    "ok": true,
+    "method": "terminate",
+    "exit_code": 1
+  },
+  "driver_managed_artifact_bytes_written": 5621,
+  "external_trace_output_detected": null,
+  "external_trace_output_note": "Not scanned (avoids expensive full-disk scanning per-launch). The pre-Popen fail-closed assertion above is the actual defense against an external/inherited trace path being used by the child process; this field documents the limit rather than silently implying full coverage.",
+  "status": "completed_ok",
+  "ok": true
+}

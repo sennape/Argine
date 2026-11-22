@@ -1,0 +1,159 @@
+{
+ "arms": [
+  "A",
+  "BELADY",
+  "NUE_X",
+  "DECAYED_COUNT",
+  "CHEAP",
+  "RICH"
+ ],
+ "artifact": "R4-01-VALIDATION-PLAN",
+ "budget_bytes": 1610612736,
+ "executions": "exactly once; the scorer refuses to run unless VALIDATION_OPENED.json is committed and refuses to overwrite VALIDATION_RESULTS.json",
+ "gate": "CHEAP capture >= 1/4 (VALIDATION half of rule A); reported, not acted on",
+ "integrity": [
+  "A reproduces the frozen R2-11 reference on every trace",
+  "no budget violation",
+  "pooled denominator > 0"
+ ],
+ "no_classification": "the final R4 class needs EVAL (Phase 2)",
+ "note": "Frozen before validation outcomes are read; contains no outcome.",
+ "primary_endpoint": "capture(P) = sum(B_A - B_P) / sum(B_A - B_BELADY) over the 12 traces (decode miss bytes, exact rational)",
+ "scorer": "phase1.py score (score_trace/assemble)",
+ "sensitivity_nongating": "same endpoint excluding r2-11-coding-v1 (prompt shared with the Research 3 stream)",
+ "split": "VALIDATION",
+ "traces": [
+  {
+   "category": "coding",
+   "frozen_A_reference": {
+    "decode_bytes_missed": 294412750848,
+    "decode_misses": 102334,
+    "decode_steps": 511
+   },
+   "source_path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v1\\run-00-4G\\trace.jsonl.gz",
+   "trace_sha256": "da9a4535640fc1f64a2e7a3d8d01e456854c36daa08d70be99fb2e2a738d5ffd",
+   "workload_id": "r2-11-coding-v1"
+  },
+  {
+   "category": "coding",
+   "frozen_A_reference": {
+    "decode_bytes_missed": 303145684992,
+    "decode_misses": 105469,
+    "decode_steps": 511
+   },
+   "source_path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v2\\run-00-4G\\trace.jsonl.gz",
+   "trace_sha256": "dfe19f93e42a809d44a45a22af238e049e4aaf8eb99219132cdf9b6e2313588b",
+   "workload_id": "r2-11-coding-v2"
+  },
+  {
+   "category": "coding",
+   "frozen_A_reference": {
+    "decode_bytes_missed": 284929376256,
+    "decode_misses": 98987,
+    "decode_steps": 511
+   },
+   "source_path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v3\\run-00-4G\\trace.jsonl.gz",
+   "trace_sha256": "40a29f54c02b3f23a558d6d601b59e60d3f67fdb29f8cd8005e45fbc2a97e98d",
+   "workload_id": "r2-11-coding-v3"
+  },
+  {
+   "category": "instruction",
+   "frozen_A_reference": {
+    "decode_bytes_missed": 305815449600,
+    "decode_misses": 106356,
+    "decode_steps": 511
+   },
+   "source_path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v1\\run-00-4G\\trace.jsonl.gz",
+   "trace_sha256": "085dca7571fced800a4605311ae11d6264e95b90bf953858e8dbabb9ff42bf08",
+   "workload_id": "r2-11-instruction-v1"
+  },
+  {
+   "category": "instruction",
+   "frozen_A_reference": {
+    "decode_bytes_missed": 316969168896,
+    "decode_misses": 110356,
+    "decode_steps": 511
+   },
+   "source_path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v2\\run-00-4G\\trace.jsonl.gz",
+   "trace_sha256": "6abad7c87176f18d0f28abf1d8cc2fa78e6dc14b5722a0f76dffb41daed4b54e",
+   "workload_id": "r2-11-instruction-v2"
+  },
+  {
+   "category": "instruction",
+   "frozen_A_reference": {
+    "decode_bytes_missed": 314848456704,
+    "decode_misses": 109590,
+    "decode_steps": 511
+   },
+   "source_path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v3\\run-00-4G\\trace.jsonl.gz",
+   "trace_sha256": "3b8d5090f2191c1f0125f1e32acdf986cd7cb3765b14d30ea564f1397b0b4319",
+   "workload_id": "r2-11-instruction-v3"
+  },
+  {
+   "category": "reasoning",
+   "frozen_A_reference": {
+    "decode_bytes_missed": 319191146496,
+    "decode_misses": 110885,
+    "decode_steps": 511
+   },
+   "source_path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v1\\run-00-4G\\trace.jsonl.gz",
+   "trace_sha256": "d65807d8ea692a0dc7dbdd24492b4abe15d402b4d71bbe7c41befe5013c77a9e",
+   "workload_id": "r2-11-reasoning-v1"
+  },
+  {
+   "category": "reasoning",
+   "frozen_A_reference": {
+    "decode_bytes_missed": 291207131136,
+    "decode_misses": 101096,
+    "decode_steps": 511
+   },
+   "source_path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v2\\run-00-4G\\trace.jsonl.gz",
+   "trace_sha256": "bd77666adb5b568d7247438acb36a752ec17c0d0a2ee3bd5577ae9d96d4e23b2",
+   "workload_id": "r2-11-reasoning-v2"
+  },
+  {
+   "category": "reasoning",
+   "frozen_A_reference": {
+    "decode_bytes_missed": 296638746624,
+    "decode_misses": 103037,
+    "decode_steps": 511
+   },
+   "source_path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v3\\run-00-4G\\trace.jsonl.gz",
+   "trace_sha256": "25912ff92747a52cabf13e48d535998f47b344272b04748671e2174d499fca73",
+   "workload_id": "r2-11-reasoning-v3"
+  },
+  {
+   "category": "summarization",
+   "frozen_A_reference": {
+    "decode_bytes_missed": 304009150464,
+    "decode_misses": 105730,
+    "decode_steps": 511
+   },
+   "source_path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v1\\run-00-4G\\trace.jsonl.gz",
+   "trace_sha256": "6df5f46d25149682b8e986d45ee4739ede271925433cd6b81205bd3d8ceacb9d",
+   "workload_id": "r2-11-summarization-v1"
+  },
+  {
+   "category": "summarization",
+   "frozen_A_reference": {
+    "decode_bytes_missed": 313077252096,
+    "decode_misses": 108899,
+    "decode_steps": 511
+   },
+   "source_path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v2\\run-00-4G\\trace.jsonl.gz",
+   "trace_sha256": "44b1db845bb5f4c71b4ee5158f445e94706bcb1287bc8298ae5b712632d99b95",
+   "workload_id": "r2-11-summarization-v2"
+  },
+  {
+   "category": "summarization",
+   "frozen_A_reference": {
+    "decode_bytes_missed": 297412632576,
+    "decode_misses": 103278,
+    "decode_steps": 511
+   },
+   "source_path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v3\\run-00-4G\\trace.jsonl.gz",
+   "trace_sha256": "eabe70fe56d2e1e33cdc6c6b9acc9820ed764aed38f369e5d514c6adfabf91fa",
+   "workload_id": "r2-11-summarization-v3"
+  }
+ ]
+}

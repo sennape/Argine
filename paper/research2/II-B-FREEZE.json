@@ -1,0 +1,157 @@
+{
+  "freeze_version": "1.0.0",
+  "freeze_name": "Research-II-B-Paper-Tranche-Freeze",
+  "freeze_timestamp_utc": "2026-11-08T19:03:03Z",
+  "status": "PAPER-FROZEN",
+  "scope": "Research II-B only (R2-05, R2-06, R2-07, R2-08) integrated into the cumulative Research II-A + II-B + II-C manuscript. II-A remains frozen/preserved. II-C is NOT started and remains a placeholder.",
+  "research_phase_classification": {
+    "II-A": "CLOSED / PASS / PAPER-FROZEN",
+    "II-B": "CLOSED / PASS / PAPER-FROZEN",
+    "II-C": "FUTURE / NOT STARTED"
+  },
+  "historical_freeze_records": {
+    "II-A": "II-A-FREEZE.json (preserved; not overwritten)"
+  },
+  "canonical_runs": {
+    "R2-05": {
+      "run_id": "da82e15b61c94019840477642618565a",
+      "status": "PASS",
+      "name": "Expert Frequency and Concentration",
+      "canonical_digest": "4a1b72cdfcd37144446fc1a106b6fa8d559d10bc0729e1baf16dda7c1fa620df",
+      "git_commit": "22b721e9e8c165b2ffd717c7f9413e3512c90784"
+    },
+    "R2-06": {
+      "run_id": "2e075161f02443ff822279add6938ca4",
+      "status": "PASS",
+      "name": "Routing Transition Structure",
+      "canonical_digest": "a727edf42735286420d326baad481687167d3d0aba0444a527183c084140926e",
+      "git_commit": "2e00b46ec67c5402fdeec7054adb1614271b802b"
+    },
+    "R2-07": {
+      "run_id": "af28e8c6dc5044a18e4a86137d59156a",
+      "status": "PASS",
+      "name": "Reuse Distance and Working-Set Structure",
+      "canonical_digest": "ad36e615970b196b64ba3a3fdc2559e252cc8627e5d17d0d830d16742f59281a",
+      "git_commit": "0472a46adc06214c65ed90f3a6e011e475ccee33"
+    },
+    "R2-08": {
+      "run_id": "6165471a12574e05b48932aac2f1626c",
+      "status": "PASS",
+      "name": "Routing Drift and Workload Dependence",
+      "canonical_digest": "f5db4e0bf43ce4243edb303441e82ceefa5a0aeb5754143292f1230f220527c3",
+      "git_commit": "b9f317b8cf9619c68b0ee75b7ff23d83bb070600"
+    }
+  },
+  "canonical_headline_metrics": {
+    "r2_05": {
+      "total_routing_requests": 205048,
+      "layers": 48,
+      "nominal_experts_per_layer": 128,
+      "top_k_routing": 8,
+      "median_normalized_entropy": 0.8521530182050354,
+      "median_effective_expert_fraction": 0.513554224151178,
+      "median_top_8_share": 0.3000919373106534,
+      "min_top_8_share": 0.15945065176908751,
+      "max_top_8_share": 0.4073556797020484,
+      "median_experts_for_80pct_traffic": 43.0,
+      "min_experts_for_80pct_traffic": 31,
+      "max_experts_for_80pct_traffic": 68,
+      "most_concentrated_layer": 31,
+      "least_concentrated_layer": 0
+    },
+    "r2_06": {
+      "total_pairwise_transition_observations": 1637312,
+      "observation_unit": "pairwise set-to-set transition observations (top-8 x top-8), not independent samples",
+      "layers": 48,
+      "nominal_experts_per_layer": 128,
+      "median_nmi": 0.0989325510804687,
+      "min_nmi": 0.08257545058595259,
+      "max_nmi": 0.13678327969122506,
+      "fraction_layers_positive_nmi": 1.0,
+      "median_conditional_entropy": 3.735329608094245,
+      "median_self_transition_lift": 4.18503995784333,
+      "median_top_1_outgoing_probability": 0.0903966894977169,
+      "median_outgoing_effective_target_fraction": 0.7169950308335794,
+      "max_supported_transition_lift": 31.90476190476191,
+      "strongest_nmi_layer": 37,
+      "weakest_nmi_layer": 45
+    },
+    "r2_07": {
+      "total_reuse_events": 199784,
+      "total_first_observations": 5264,
+      "layers": 48,
+      "median_immediate_reuse": 0.42561606101711047,
+      "reuse_le4_fraction": 0.6415319972958208,
+      "reuse_le16_fraction": 0.8602290781936344,
+      "median_token_reuse_gap": 2.0,
+      "median_p90_reuse_gap": 24.0,
+      "median_distinct_intervening_reuse_distance": 8.0,
+      "median_working_set": {"W8": 30.0, "W32": 57.0, "W128": 89.5, "W256": 102.5},
+      "frequency_vs_reuse_gap_spearman": -0.6506356646901621,
+      "observed_vs_null": {
+        "immediate_reuse": {"observed": 0.42561606101711047, "null": 0.1872837920856933, "ratio": 2.272572849349218, "difference": 0.23833226893141718},
+        "reuse_le4": {"observed": 0.6415319972958208, "null": 0.4780377165808436, "ratio": 1.3420112577818486},
+        "reuse_le16": {"observed": 0.8602290781936344, "null": 0.8207671793744822, "ratio": 1.048079284614215},
+        "median_gap": {"observed": 2.0, "null": 5.0},
+        "median_p90_gap": {"observed": 24.0, "null": 26.0},
+        "distinct_intervening": {"observed": 8.0, "null": 24.0},
+        "W8": {"observed": 30.0, "null": 39.0},
+        "W32": {"observed": 57.0, "null": 73.5},
+        "W128": {"observed": 89.5, "null": 97.0},
+        "W256": {"observed": 102.5, "null": 105.5}
+      }
+    },
+    "r2_08": {
+      "matrix": "4 workloads x 2 replicates = 8 cells",
+      "reused_captures": 1,
+      "new_captures": 7,
+      "matched_decode_horizon_H": 388,
+      "temporal_windows": 8,
+      "window_length": 48,
+      "median_temporal_jsd": 0.13555607945845186,
+      "median_same_workload_replicate_jsd": 0.0,
+      "median_cross_workload_jsd": 0.2994961896155197,
+      "cross_workload_to_temporal_ratio": 2.2093895811387476,
+      "median_top8_temporal_jaccard_distance": 0.6060606060606061,
+      "strongest_workload_pair": "reasoning-v1 seed 42 vs instruction-v1 seed 42 (median layer frequency JSD 0.4213417846694305)",
+      "most_stable_workload": "instruction-v1",
+      "least_stable_workload": "coding-v1",
+      "most_stable_layer": 47,
+      "least_stable_layer": 12,
+      "predeclared_regime": "WORKLOAD_DEPENDENCE_DOMINANT",
+      "dominance_ratio_threshold": 1.5,
+      "stable_low_drift_jsd_threshold": 0.05,
+      "configuration_compatibility": true,
+      "decoding_protocol": "deterministic (temperature=0.0, top_k=1); replicate JSD=0.0 is a reproducibility check at reported resolution, not a general zero-stochastic-variability claim",
+      "canonical_model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+      "canonical_runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3"
+    },
+    "causal_recovery_status": "NOT_YET_MEASURED -- II-C"
+  },
+  "source_trace_sha256_r2_05_06_07_and_reused_r2_08_coding_seed42": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+  "r2_08_capture_id_audit": {
+    "status": "DOCUMENTED_INTENTIONAL_REPRESENTATION",
+    "finding": "Reused coding-v1/seed-42 has capture_run_id/capture_source from R2-01 (bb6d8ca34dbc4537a43d54be30c9f3e1 / 286a41477ce54d5fb9ccc24f4e508f22). Seven R2-08-managed new cells have capture_run_id=null and capture_source=null, but each records trace path, trace SHA-256, workload identity/version, seed, model SHA-256, runtime SHA-256, configuration fingerprint, validation state, canonical status, and is bound to canonical R2-08 run 6165471a12574e05b48932aac2f1626c and digest f5db4e0bf43ce4243edb303441e82ceefa5a0aeb5754143292f1230f220527c3.",
+    "action_taken": "Documented explicitly in manuscript, provenance appendix, limitations, and this manifest. No capture IDs invented. No scientific traces modified. No model capture recaptured."
+  },
+  "iib_data_snapshot_digest": {
+    "description": "sha256 of the sorted concatenation of per-file sha256sums over paper/research2/data/r2_05-r2_08/**",
+    "value": "444ffd6bb13cd2f39460100b4a8ac4ee5b1e20d87ac0a572868166d5ec070367",
+    "file_count": 49
+  },
+  "claim_ledger": {
+    "path": "paper/research2/claims/claim_ledger.md",
+    "digest": "5cb8ce6ce8894a2eddd30deb8b32bba5d22c656ee68fbdc7ec01a7625064e546"
+  },
+  "paper_source_digest": {
+    "description": "sha256 of sorted concatenation of per-file sha256sums over paper/research2 sections, tables, figures, data, claims, manuscript.tex, references.bib, and II-A-FREEZE.json (excludes II-B-FREEZE.json to avoid self-reference)",
+    "value": "fb89477e46e1052263efa9dc42386b44c0e30ee6cafe7c5193b5b1f2054eef5b"
+  },
+  "prohibited_phrases": [
+    "performance improvement",
+    "memory saving",
+    "faster inference",
+    "demonstrated recoverability"
+  ],
+  "notes": "This manifest makes the II-B paper tranche auditable: headline numbers, run IDs, digests, R2-08 configuration hashes, and the capture-ID audit are recorded. It preserves II-A-FREEZE.json as the historical II-A record. Do NOT implement R2-09, execute new model captures, or modify scientific evidence during/for this paper freeze."
+}

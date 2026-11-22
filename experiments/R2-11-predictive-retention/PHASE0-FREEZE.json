@@ -1,0 +1,33 @@
+{
+  "acquisition_state": "R2_11_ACQUISITION_PLANNED",
+  "artifact": "R2-11-PHASE0-FREEZE",
+  "component_files": [
+    "contract.json",
+    "decision_rules.json",
+    "metrics_contract.json",
+    "causal_boundary.json",
+    "retention_policy.json",
+    "baseline_mapping.json",
+    "eval_manifest.json",
+    "acquisition_plan.json",
+    "freshness_audit.json",
+    "instrumentation_dependency.json",
+    "execution_plan.json",
+    "provenance.json",
+    "audit.json"
+  ],
+  "contract_digest": "5dd3a3987aa74230693135d4ec20c5b8fd0a0de58a30b3b1646ccb2ce7b94f2a",
+  "historical_statements_unchanged": {
+    "r2_10_category_b": true,
+    "r2_11_not_proposed_under_original_r2_10_rules": true
+  },
+  "no_r2_11_capture_performed": true,
+  "no_r2_11_eval_opened": true,
+  "no_r2_11_result_computed_or_inspected": true,
+  "no_r2_12_started": true,
+  "r2_11_started_by": "new prospective R2-BRIDGE-01 evidence (BRIDGE_POSITIVE) only",
+  "schema_version": 1,
+  "state": "R2_11_PROTOCOL_FROZEN",
+  "stop_condition": "Stop at R2_11_PROTOCOL_FROZEN / R2_11_ACQUISITION_PLANNED. Do not execute R2-11.",
+  "workload_specs_count": 12
+}

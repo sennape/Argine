@@ -1,0 +1,46 @@
+{
+  "all_pass": true,
+  "archive": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-02-p4\\traces\\A-8GiB.zst",
+  "archive_bytes": 1566236582,
+  "archive_sha256": "dc6b6056eed0bb64eb2dc13f17ef0cf9f364c30fe10a0f7bf668ac0423a9edb7",
+  "artifact": "R3-02D-ARCHIVE-VERIFICATION",
+  "checks": {
+    "budget_violations": true,
+    "complete": true,
+    "completion_rows": true,
+    "decision_rows": true,
+    "expert_miss_bytes": true,
+    "logical_bytes_equal": true,
+    "logical_sha_equal": true,
+    "resident_bytes_peak": true
+  },
+  "counters": {
+    "budget_bytes": 8589934592,
+    "budget_violations": 0,
+    "complete": true,
+    "completion_gaps": 0,
+    "completion_rows": 74016,
+    "decision_rows": 74016,
+    "evicted_expert_events": 11725,
+    "hit_expert_events": 589938,
+    "last_line_is_completion": true,
+    "max_step": 74015,
+    "miss_bytes": 42229997568,
+    "miss_expert_events": 14718,
+    "peak_resident_bytes": 8589901824,
+    "policy_ids": [
+      "b_selected"
+    ],
+    "requested_expert_events": 604656,
+    "steps_completed": 74016
+  },
+  "created_utc": "2026-11-18T05:56:37Z",
+  "expected_logical_bytes": 30941123714,
+  "expected_logical_sha256": "a598543f1e6df6f8767361c6d34fae23879e28d661077edbde612f33e8495901",
+  "logical_bytes": 30941123714,
+  "logical_sha256": "a598543f1e6df6f8767361c6d34fae23879e28d661077edbde612f33e8495901",
+  "phase": "R3-02D",
+  "ratio": 0.05062,
+  "seconds": 628.3,
+  "streaming_only": true
+}

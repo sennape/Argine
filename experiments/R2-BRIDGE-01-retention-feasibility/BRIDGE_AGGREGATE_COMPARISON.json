@@ -1,0 +1,40 @@
+{
+  "aggregation_rule": "mean over the 4 BRIDGE-holdout instances, equal weight per instance (per decision_rules.json)",
+  "artifact": "BRIDGE_AGGREGATE_COMPARISON",
+  "interpretation_note": "Effect is small in absolute terms (relative difference well under 1% at every budget) and must not be rounded to zero or oversold; consistent with the DEV-level effect of ~0.032486% relative improvement at 4 GiB observed earlier in R2-BRIDGE-01 selection. This is replay-level retention evidence only; no runtime speedup is claimed.",
+  "primary_budget_bytes": 4294967296,
+  "primary_metric": "miss_bytes_per_decode_step",
+  "primary_result": {
+    "absolute_difference": -57784.86105671525,
+    "all_workloads_delta_le_0": true,
+    "dominant_workload_over_three_quarters_of_reduction": null,
+    "mean_b_selected_miss_bytes_per_decode_step": 250325713.40900195,
+    "mean_predicted_protect_miss_bytes_per_decode_step": 250267928.54794523,
+    "per_workload_delta": {
+      "bridge-coding-v1": -142189.7142857015,
+      "bridge-instruction-v1": -40326.76320937276,
+      "bridge-reasoning-v1": -38306.8180038929,
+      "bridge-summarization-v1": -10316.148727983236
+    },
+    "relative_difference_pct": -0.023083869519349688,
+    "sign_convention": "negative = predicted_protect better (fewer miss bytes per decode step) than B_selected"
+  },
+  "schema_version": 1,
+  "secondary_budgets": {
+    "1610612736": {
+      "absolute_difference": -801593.6125243902,
+      "all_workloads_delta_le_0": true,
+      "mean_b_selected_miss_bytes_per_decode_step": 600632979.2876712,
+      "mean_predicted_protect_miss_bytes_per_decode_step": 599831385.6751468,
+      "relative_difference_pct": -0.13345814168829873
+    },
+    "8589934592": {
+      "absolute_difference": 0.0,
+      "all_workloads_delta_le_0": true,
+      "mean_b_selected_miss_bytes_per_decode_step": 47749827.3816047,
+      "mean_predicted_protect_miss_bytes_per_decode_step": 47749827.3816047,
+      "relative_difference_pct": 0.0
+    }
+  },
+  "secondary_budgets_both_nonpositive": true
+}

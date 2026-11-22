@@ -1,0 +1,49 @@
+{
+  "analysis_lock": {
+    "statuses": [
+      "R3_02G_EVAL_LOCKED",
+      "R3_02G_EVAL_READY"
+    ],
+    "unlock": "600/600 pairs and 1200/1200 admissions"
+  },
+  "artifact": "R3-02G-EXECUTION-CONTRACT",
+  "cooldowns_seconds": {
+    "adjacent": 15,
+    "block": 60
+  },
+  "failure_semantics": {
+    "n_fixed": 600,
+    "retries_counted": false,
+    "retry": "one retry, same global launch and identity",
+    "second_failure": "FAILED, campaign incomplete, resumable"
+  },
+  "host_rules": [
+    "same physical host",
+    "runtime SHA 3f094f5b...",
+    "same model/store/workload",
+    "4 GiB configuration",
+    "browsers and streaming closed",
+    "no heavy background work",
+    "fixed non-Power-Saver mode",
+    "operator attestation",
+    "RAM gate: planner requirement for 4 GiB (>=6.55 GiB available)"
+  ],
+  "no_interim_analysis": [
+    "no bootstrap",
+    "no median B-A",
+    "no precision verdict",
+    "no stopping on timing"
+  ],
+  "resume": {
+    "skips": "SUCCEEDED",
+    "state": "state.json",
+    "unit": "pair boundary at block boundary"
+  },
+  "schedule_digest": "ba7eb1b7e94f89ed1d5d02c4a9742f8307bc050860cc08fdd23aeae0832b5e40",
+  "session_command": "--session N executes exactly that session's 120 counted launches",
+  "warmups": {
+    "count": 2,
+    "counted": false,
+    "session": "only session 1, before pair 1"
+  }
+}

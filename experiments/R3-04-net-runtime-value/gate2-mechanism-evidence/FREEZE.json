@@ -1,0 +1,52 @@
+{
+ "acquisition_opened": false,
+ "artifact": "R3-04-GATE2-MECHANISM-FREEZE",
+ "audit_checks": 30,
+ "classification": "R3_04_MECHANISM_PASS",
+ "files_sha256": {
+  "AUDIT.json": "032904d0449b9eb84a56e010d0bc0b8d2f1805b8ca3931a92a70c27de7b23cf2",
+  "GATE_INPUTS.json": "62ddf0d8d6e8fcc4c6a2366a217c9c16829c307a408de366a90b22234a7f21e9",
+  "LAUNCH_TIMING.json": "c745249e8927dd87e34a3cfc313ac71f87453e928290d744e6b67a53df444d90",
+  "MECHANISM_GATES.json": "e97edc61760457e41cc27230c99b93defbe6e87c59d6c834b55d278e6d58fb4e",
+  "MECHANISM_METRICS.json": "269e2b5b403cb469e7a84d1b65f4172364fc174f75ec87788bc159a52ca0fd90",
+  "ORIGINAL_FILE_SHA256.json": "04166d0f56d93ae110f2bf79d2a2298a37a89b3692100061915fb2144ee46872",
+  "README.md": "684d68347917db89625606e710af91269200beef7f05216406b4a7fc71783506",
+  "audit_gate2.py": "a0bf10026082e6bd91b366c044db0ad7e09af0274def17d584bc4f794b6e0ddd",
+  "records_sanitised/M01.json": "a924de1efbd998a566baeb4cbe3268e33277bb9b113f9c42f32396ffe17e3a48",
+  "records_sanitised/M02.json": "963b01ec643176b99ff620bd6624717dddcb7c1115f8b3a0657ca72116b1268b",
+  "records_sanitised/M03.json": "5d26a9ffc110ec833044aca4c07bfb23e258234fe316321cbc78c4c7f102b073",
+  "records_sanitised/M04.json": "09de9c3ce394e14afa8e775564f099608fa212b714035699a7a5734ff9b095b2",
+  "records_sanitised/M05.json": "4da0ad68af936e663cc696350f29aa49a36eb4d9251a46ded84ea6f2ec974013",
+  "records_sanitised/M06.json": "dfe5109c87c32e761116deda1d22c2847f0f59db0bebed5bbc5e1623c5b6e83b",
+  "records_sanitised/M07.json": "f29980719fcd76c7a2972a36dfb2572b8757d3f09d0ccab5c724f701782a2b8d",
+  "records_sanitised/M08.json": "8a8d90677feba7e462248fb655a3b420208a88bc618cfcd5e90bfaaeed2037b8",
+  "records_sanitised/M09.json": "dccc0d5d32678dbe9baceb2ce0c33b0884e449166f7a00fc9588e82fe9513697",
+  "records_sanitised/M10.json": "46f0b9fe478f498cfd31e76c9a6f77bdbe210ca28a2d51f940d4c7bc2a569ebe"
+ },
+ "freeze_sha256": "59fd7ac62242e8d126f6a8d7b6b31586b82119f9f8afccd5af20ded9237b2958",
+ "launches": 10,
+ "limitations": [
+  "Mechanism evidence only: no wall-time, throughput or NET_WIN/NET_LOSS statement.",
+  "Traced launches: durations here are not timing-campaign durations.",
+  "Model/store file sha256 not re-hashed in this session (identity by frozen path, store layout, budget and output-token digest).",
+  "Raw traces were deleted by the driver after reduction by design; counters are not re-derivable from traces now (compact records + trace sha256/size persisted).",
+  "Real-model shutdown validated on 10 traced launches only; untraced launches are not yet observed with the helper."
+ ],
+ "mechanism_schedule_sha256": "71a8d474a2c28ea38ef61946d5ae5473b7d565cb438e6dd44d894bd0e1b0b63f",
+ "opening_freeze_exists": false,
+ "parents": {
+  "gate1_commit": "d7e8f38",
+  "gate1_freeze_sha256": "6379572091345e38f130a62a18d9fd5acdaef673f92439c44ff2bea8de8d6f42",
+  "gate2_tooling_commit": "2345808",
+  "protocol_commit": "4a0aa2d",
+  "tooling_commit": "6b22fdd"
+ },
+ "protocol_freeze_sha256": "a88359b52891f93ec49e67978d92c2eb3b73db588611bce46b3103b2978c1202",
+ "runtime_sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5",
+ "shutdown_helper_status": "R3_04_SHUTDOWN_HELPER_VALIDATED_ON_REAL_MODEL",
+ "shutdown_latency_s": {
+  "limit": 60.0,
+  "max": 2.073136599967256,
+  "median": 1.5477534499950707
+ }
+}

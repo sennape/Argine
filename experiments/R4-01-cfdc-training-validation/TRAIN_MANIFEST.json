@@ -1,0 +1,284 @@
+{
+ "artifact": "R4-01-TRAIN-MANIFEST",
+ "feature_distributions": {
+  "decayed_count_fx": {
+   "max": 6042429,
+   "mean": 1191530.5087480736,
+   "min": 64231,
+   "quantiles_0_1_25_50_75_99_100": [
+    64231.0,
+    65536.0,
+    453691.0,
+    930467.0,
+    1616843.75,
+    4666122.409999989,
+    6042429.0
+   ]
+  },
+  "events_since_admission": {
+   "max": 16304,
+   "mean": 260.88984566453024,
+   "min": 1,
+   "quantiles_0_1_25_50_75_99_100": [
+    1.0,
+    1.0,
+    24.0,
+    63.0,
+    212.0,
+    3459.0,
+    16304.0
+   ]
+  },
+  "events_since_last_ref": {
+   "max": 246,
+   "mean": 41.18072868193794,
+   "min": 1,
+   "quantiles_0_1_25_50_75_99_100": [
+    1.0,
+    1.0,
+    14.0,
+    33.0,
+    55.0,
+    156.0,
+    246.0
+   ]
+  },
+  "expert_bytes": {
+   "max": 3059712,
+   "mean": 2855651.602497055,
+   "min": 2654208,
+   "quantiles_0_1_25_50_75_99_100": [
+    2654208.0,
+    2654208.0,
+    2654208.0,
+    2654208.0,
+    3059712.0,
+    3059712.0,
+    3059712.0
+   ]
+  },
+  "expert_id": {
+   "max": 127,
+   "mean": 64.0720898687375,
+   "min": 0,
+   "quantiles_0_1_25_50_75_99_100": [
+    0.0,
+    1.0,
+    31.0,
+    64.0,
+    97.0,
+    126.0,
+    127.0
+   ]
+  },
+  "frequency_rank": {
+   "max": 579,
+   "mean": 277.6921557560617,
+   "min": 0,
+   "quantiles_0_1_25_50_75_99_100": [
+    0.0,
+    5.0,
+    139.0,
+    278.0,
+    417.0,
+    552.0,
+    579.0
+   ]
+  },
+  "hits_since_admission": {
+   "max": 308,
+   "mean": 3.9223987414362256,
+   "min": 0,
+   "quantiles_0_1_25_50_75_99_100": [
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    3.0,
+    62.0,
+    308.0
+   ]
+  },
+  "in_prev_layer_event": {
+   "max": 1,
+   "mean": 0.7033852095993941,
+   "min": 0,
+   "quantiles_0_1_25_50_75_99_100": [
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "layer_cycle_offset": {
+   "max": 48,
+   "mean": 26.85691855703863,
+   "min": 1,
+   "quantiles_0_1_25_50_75_99_100": [
+    1.0,
+    1.0,
+    15.0,
+    28.0,
+    39.0,
+    48.0,
+    48.0
+   ]
+  },
+  "layer_id": {
+   "max": 47,
+   "mean": 23.66985282439652,
+   "min": 0,
+   "quantiles_0_1_25_50_75_99_100": [
+    0.0,
+    0.0,
+    12.0,
+    24.0,
+    36.0,
+    47.0,
+    47.0
+   ]
+  },
+  "mean_reuse_interval": {
+   "max": 1000000,
+   "mean": 33249.69589347526,
+   "min": 1,
+   "quantiles_0_1_25_50_75_99_100": [
+    1.0,
+    1.0,
+    3.0,
+    5.0,
+    9.0,
+    1000000.0,
+    1000000.0
+   ]
+  },
+  "occupancy_permille": {
+   "max": 999,
+   "mean": 998.5594382712441,
+   "min": 998,
+   "quantiles_0_1_25_50_75_99_100": [
+    998.0,
+    998.0,
+    998.0,
+    999.0,
+    999.0,
+    999.0,
+    999.0
+   ]
+  },
+  "pending_misses": {
+   "max": 105,
+   "mean": 5.481050927652759,
+   "min": 1,
+   "quantiles_0_1_25_50_75_99_100": [
+    1.0,
+    1.0,
+    2.0,
+    3.0,
+    5.0,
+    67.0,
+    105.0
+   ]
+  },
+  "prev_reuse_interval": {
+   "max": 1000000,
+   "mean": 33250.49254137487,
+   "min": 1,
+   "quantiles_0_1_25_50_75_99_100": [
+    1.0,
+    1.0,
+    1.0,
+    2.0,
+    7.0,
+    1000000.0,
+    1000000.0
+   ]
+  },
+  "recency_rank": {
+   "max": 579,
+   "mean": 277.6921557560617,
+   "min": 0,
+   "quantiles_0_1_25_50_75_99_100": [
+    0.0,
+    5.0,
+    139.0,
+    278.0,
+    417.0,
+    552.0,
+    579.0
+   ]
+  },
+  "reload_count": {
+   "max": 128,
+   "mean": 20.557681413887348,
+   "min": 0,
+   "quantiles_0_1_25_50_75_99_100": [
+    0.0,
+    0.0,
+    6.0,
+    16.0,
+    30.0,
+    75.0,
+    128.0
+   ]
+  }
+ },
+ "raw_rows": "not committed (regenerable by `phase1.py labels`; hashes above)",
+ "seed43_used": false,
+ "split": "TRAIN (4 DEV seed-42 traces)",
+ "target_distribution": {
+  "mean": 7.51129091113543,
+  "never_used_again_fraction": 0.03260636203780968,
+  "quantiles_0_1_25_50_75_99_100": [
+   1.0,
+   1.584962500721156,
+   5.321928094887363,
+   7.149747119504682,
+   8.839203788096944,
+   21.0,
+   21.0
+  ],
+  "rows": 3865994,
+  "std": 3.411534372082379
+ },
+ "total_a_eviction_decisions": 444729,
+ "total_candidate_rows": 3865994,
+ "total_sampled_decisions": 6951,
+ "traces": [
+  {
+   "a_eviction_decisions": 91939,
+   "candidate_rows": 796407,
+   "sampled_decisions": 1437,
+   "served_events": 19004,
+   "source_trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+   "trace": "coding-v1__seed-42"
+  },
+  {
+   "a_eviction_decisions": 113167,
+   "candidate_rows": 984990,
+   "sampled_decisions": 1769,
+   "served_events": 25143,
+   "source_trace_sha256": "9934371d18a1ad3f0e2cb2a5e89cad87ed4e7a002732190646cfff9a0b489f54",
+   "trace": "instruction-v1__seed-42"
+  },
+  {
+   "a_eviction_decisions": 119935,
+   "candidate_rows": 1042995,
+   "sampled_decisions": 1874,
+   "served_events": 25141,
+   "source_trace_sha256": "8dff85b9e99f6e10a2a6a608585c77102c65597561c2cf55dd4471e37eb48b3b",
+   "trace": "reasoning-v1__seed-42"
+  },
+  {
+   "a_eviction_decisions": 119688,
+   "candidate_rows": 1041602,
+   "sampled_decisions": 1871,
+   "served_events": 25145,
+   "source_trace_sha256": "dc24bde642278f4a8d75c6eae077121faed8562d04e4d9fed2d7cb87aa39a9bf",
+   "trace": "summarization-v1__seed-42"
+  }
+ ]
+}

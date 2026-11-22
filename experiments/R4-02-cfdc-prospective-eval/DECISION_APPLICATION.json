@@ -1,0 +1,69 @@
+{
+ "artifact": "R4-02-DECISION-APPLICATION",
+ "classification": "R4_CFDC_CAUSAL_STATE_INSUFFICIENT",
+ "comparator_reaches_viability": {
+  "DECAYED_COUNT": [
+   false,
+   false
+  ],
+  "NUE_X": [
+   false,
+   false
+  ],
+  "label_applies": false
+ },
+ "eval_captures": {
+  "CHEAP": "-834558/2785927",
+  "DECAYED_COUNT": "424692/13929635",
+  "NUE_X": "1305681/13929635",
+  "RICH": "2661517/13929635"
+ },
+ "eval_captures_float": {
+  "CHEAP": -0.29956204882611787,
+  "DECAYED_COUNT": 0.03048837963090921,
+  "NUE_X": 0.09373404256464725,
+  "RICH": 0.1910686819862832
+ },
+ "integrity_ok": true,
+ "precedence": "frozen DECISION_RULES.classification_order applied top to bottom",
+ "rich_gate": {
+  "passed": false,
+  "rich_eval_ge_25": false,
+  "rich_validation_ge_25": false
+ },
+ "rule_A": {
+  "cheap_eval_ge_25": false,
+  "cheap_validation_ge_25": false,
+  "passed": false
+ },
+ "rule_B": {
+  "best_comparator": "NUE_X",
+  "best_comparator_capture_float": 0.09373404256464725,
+  "cheap_reaches_required": false,
+  "note": "cannot upgrade a failed VALIDATION",
+  "passed": false,
+  "required_capture": "1/4",
+  "required_capture_float": 0.25
+ },
+ "rule_C": {
+  "passed": false,
+  "per_workload_cheap_capture": {
+   "coding-eval-v1": -0.3307916245307741,
+   "instruction-eval-v1": -0.36019456925295323,
+   "reasoning-eval-v1": -0.18889005044037321,
+   "summarization-eval-v1": -0.3157152014464518
+  },
+  "per_workload_sign": {
+   "coding-eval-v1": "-",
+   "instruction-eval-v1": "-",
+   "reasoning-eval-v1": "-",
+   "summarization-eval-v1": "-"
+  }
+ },
+ "validation_captures_imported": {
+  "CHEAP": "-7411084/20561187",
+  "DECAYED_COUNT": "-383910/6853729",
+  "NUE_X": "508278/6853729",
+  "RICH": "6354125/41122374"
+ }
+}

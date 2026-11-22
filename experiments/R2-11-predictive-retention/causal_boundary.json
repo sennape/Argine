@@ -1,0 +1,54 @@
+{
+  "allowed": [
+    {
+      "definition": "All (token_index, expert_set) entries yielded by Trace.token_selections(l, phase) at iterator positions <= i (current observation and everything causally before it in the same layer's own stream). Backing feature families: recency, cumulative_frequency, decayed_aged_frequency, same_layer_transition_history (all already allowed by prediction_contract.json.allowed_feature_families).",
+      "id": "same_layer_history_upto_i"
+    },
+    {
+      "definition": "Routing outcomes at layers < l of the SAME step/token t, because they have already executed earlier in the same forward pass. Matches prediction_contract.json.input_time_semantics.allowed verbatim ('layers < l of the same step t').",
+      "id": "intrastep_cross_layer_lt_l"
+    },
+    {
+      "definition": "Routing/cache-state history from any layer at steps that completed strictly before the step containing iterator position i. Backing feature family: cross_layer_routing_history (allowed, candidate, not established superior).",
+      "id": "prior_step_any_layer_history"
+    },
+    {
+      "definition": "Deterministic internal state accumulated only from allowed events above (e.g. running counts, decay accumulators, last-seen maps). Must not be reset using any forbidden information.",
+      "id": "predictor_internal_state"
+    }
+  ],
+  "contract_version": "r2-11-phase0-contract-v1.0",
+  "forbidden": [
+    {
+      "definition": "The expert set E_{t+h,l} being predicted.",
+      "id": "target_event_itself"
+    },
+    {
+      "definition": "Any Trace.token_selections(l, phase) entry at iterator position > i (anything causally after the prediction instant in the same layer's own stream, including the entries strictly between i and i+h for h>1).",
+      "id": "same_layer_future"
+    },
+    {
+      "definition": "Any layer > l of the SAME step t containing iterator position i -- has not executed yet at the causal instant of prediction.",
+      "id": "same_step_later_layer"
+    },
+    {
+      "definition": "Any routing/cache event at a step occurring after the step containing iterator position i, regardless of layer.",
+      "id": "future_steps_other_layers"
+    },
+    {
+      "definition": "Any EVAL trace, EVAL result, or post-hoc label not observable at runtime. R2-10 Phase 0 never opens experiments/R2-09-prediction-benchmark/eval_manifest.json's locked contents.",
+      "id": "eval_labels"
+    }
+  ],
+  "mechanical_audit_requirement": "argine/research2/r2_10/causal_walk.py's CausalEvent generator remains the SOLE path by which R2-11 predictor code receives trace-derived data (R2-11 does not introduce a new predictor; it reuses R2-10/R2-BRIDGE-01's PredictedProtectPolicy and decayed_transition predictor unchanged). tests/test_r2_bridge01_leakage.py and tests/test_r2_10_leakage.py already enforce this empirically; test_r2_11_causality.py adds an R2-11-specific synthetic-trace future-alteration invariance test to make the dependency explicit for this experiment, per instruction #17.",
+  "name": "R2-11 causal boundary -- reused verbatim from R2-10/R2-BRIDGE-01, no modification",
+  "prediction_instant": {
+    "definition": "A prediction for target routing event (t+h, l) is considered made at the causal instant immediately AFTER the predictor has observed the routing decision at (t, l) (the 'current' same-layer observation) and BEFORE any information from (t+h, l) exists. For h=1 this is the instant between observing (t,l) and (t+1,l) in the SAME-LAYER iterator order defined by Trace.token_selections(l, phase) (the exact unit R2-06 already established as the canonical token-to-token same-layer transition unit). 't' here indexes positions in that iterator's own yielded order, not raw token_index, because a layer need not route every token and R2-06 already established that consecutive must mean consecutive-in-iterator-order.",
+    "horizon_semantics": "h counts SAME-LAYER iterator-yielded steps, never raw token_index distance and never cross-layer steps. Target for horizon h at iterator position i is the entry at iterator position i+h of the SAME Trace.token_selections(l, phase) stream. h=1/4/16 are therefore 1/4/16 same-layer routing EVENTS ahead, which may correspond to a different number of raw tokens if the layer has gaps (see Trace.token_selections docstring); this is deliberate and documented so h is never silently reinterpreted as token or wall-clock distance."
+  },
+  "relation_to_prior_boundaries": "Identical to R2-BRIDGE-01's own causal boundary, which was itself the unmodified R2-10 boundary. R2-11 introduces no change at any point in this chain.",
+  "reuse_statement": "R2-11 freezes the IDENTICAL causal boundary already validated in R2-10 (and inherited unchanged by R2-BRIDGE-01). No new feature family, no new allowed/forbidden category, and no change to prediction_instant or horizon_semantics is introduced for R2-11. The content below is a byte-for-byte copy of the R2-10 source file's own fields (not a paraphrase), re-embedded here only so this experiment's contract is self-contained and independently digestible.",
+  "reused_content_sha256": "637bc9b1bc3c90f4a3c1408d220d8c577fefd9341bf9bfdb6257bf29be231b71",
+  "reused_from": "experiments/R2-10-working-set-predictor/causal_boundary.json",
+  "schema_version": 1
+}

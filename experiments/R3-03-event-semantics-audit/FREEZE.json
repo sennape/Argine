@@ -1,0 +1,13 @@
+{
+ "anchor_commit": "fd42d77546e44be342436846f7688744cb5ffa40",
+ "files": {
+  "../../tools/r3_event_semantics_audit.py": "67c0f5e804169a219eed83856080fe7c1b7952356333f21c684d2508885759f2",
+  "AUDIT.json": "8dc4116dcd68148054012c89c3d329480be4cd8f1a249162dfa9b9795cd0a1f5",
+  "AUDIT_RAW_1.5GiB.json": "890b2eb20e198eb9c160b9d2608c9f1904657d5f3ac8ee94350b49368053866b",
+  "AUDIT_RAW_4GiB.json": "7cf38449d1462fa3fecfefa3f79f946a02fe69cedb65838843f0454aff6b56be",
+  "AUDIT_RAW_8GiB.json": "d782aa64d3f7d34b6082530018bbe4a454ae29a379d71ec6ba5afe0dde6154cb",
+  "README.md": "4b370569be688c26da0e90c3e4d383914d19fb4526f76a367dfa9d4e3bc60876",
+  "build_artifacts.py": "bc3c3152ece8998c1d3bb60b1b57a388cf3638024b514303bdbe7269ca59bdb2",
+  "tests/test_event_semantics.py": "47d36b48c3552bca31b2da1167add3e26c7754da2f54294c96ffe8036f1b3108"
+ }
+}

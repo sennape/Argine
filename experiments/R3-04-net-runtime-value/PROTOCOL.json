@@ -1,0 +1,357 @@
+{
+ "acquisition_opened": false,
+ "admission_rule": "token digest == frozen digest; 512 tokens; shutdown graceful; exactly one policy_timing record with calls == 24672; server timings present; duplicate_event_refusals == 0; no error; runtime sha256 == frozen",
+ "arms": {
+  "A": {
+   "policy_id": "b_selected"
+  },
+  "P": {
+   "policy_id": "predicted_protect",
+   "role": "full policy"
+  },
+  "S": {
+   "policy_id": "predicted_protect_sham",
+   "role": "identical predictive bookkeeping, victims chosen exactly as b_selected"
+  }
+ },
+ "artifact": "R3-04-PROTOCOL",
+ "configs": {
+  "1.5": {
+   "A": {
+    "arm": "A",
+    "budget_bytes": 1610612736,
+    "budget_label": "1.5",
+    "config_id": "A-1.5GiB",
+    "params": {
+     "aging_interval_steps": 1,
+     "decay_factor": 0.999
+    },
+    "policy_id": "b_selected"
+   },
+   "P": {
+    "arm": "P",
+    "budget_bytes": 1610612736,
+    "budget_label": "1.5",
+    "config_id": "P-1.5GiB",
+    "params": {
+     "aging_interval_steps": 1,
+     "decay_factor": 0.999,
+     "n_experts": 128,
+     "predictor_decay": 0.99,
+     "top_k": 8
+    },
+    "policy_id": "predicted_protect"
+   },
+   "S": {
+    "arm": "S",
+    "budget_bytes": 1610612736,
+    "budget_label": "1.5",
+    "config_id": "S-1.5GiB",
+    "params": {
+     "aging_interval_steps": 1,
+     "decay_factor": 0.999,
+     "n_experts": 128,
+     "predictor_decay": 0.99,
+     "top_k": 8
+    },
+    "policy_id": "predicted_protect_sham"
+   }
+  },
+  "4": {
+   "A": {
+    "arm": "A",
+    "budget_bytes": 4294967296,
+    "budget_label": "4",
+    "config_id": "A-4GiB",
+    "params": {
+     "aging_interval_steps": 64,
+     "decay_factor": 0.99
+    },
+    "policy_id": "b_selected"
+   },
+   "P": {
+    "arm": "P",
+    "budget_bytes": 4294967296,
+    "budget_label": "4",
+    "config_id": "P-4GiB",
+    "params": {
+     "aging_interval_steps": 64,
+     "decay_factor": 0.99,
+     "n_experts": 128,
+     "predictor_decay": 0.99,
+     "top_k": 8
+    },
+    "policy_id": "predicted_protect"
+   },
+   "S": {
+    "arm": "S",
+    "budget_bytes": 4294967296,
+    "budget_label": "4",
+    "config_id": "S-4GiB",
+    "params": {
+     "aging_interval_steps": 64,
+     "decay_factor": 0.99,
+     "n_experts": 128,
+     "predictor_decay": 0.99,
+     "top_k": 8
+    },
+    "policy_id": "predicted_protect_sham"
+   }
+  },
+  "8": {
+   "A": {
+    "arm": "A",
+    "budget_bytes": 8589934592,
+    "budget_label": "8",
+    "config_id": "A-8GiB",
+    "params": {
+     "aging_interval_steps": 16,
+     "decay_factor": 0.999
+    },
+    "policy_id": "b_selected"
+   },
+   "P": {
+    "arm": "P",
+    "budget_bytes": 8589934592,
+    "budget_label": "8",
+    "config_id": "P-8GiB",
+    "params": {
+     "aging_interval_steps": 16,
+     "decay_factor": 0.999,
+     "n_experts": 128,
+     "predictor_decay": 0.99,
+     "top_k": 8
+    },
+    "policy_id": "predicted_protect"
+   },
+   "S": {
+    "arm": "S",
+    "budget_bytes": 8589934592,
+    "budget_label": "8",
+    "config_id": "S-8GiB",
+    "params": {
+     "aging_interval_steps": 16,
+     "decay_factor": 0.999,
+     "n_experts": 128,
+     "predictor_decay": 0.99,
+     "top_k": 8
+    },
+    "policy_id": "predicted_protect_sham"
+   }
+  }
+ },
+ "counted_launches": {
+  "1.5": 108,
+  "4": 36,
+  "8": 36
+ },
+ "decision_rule": {
+  "INCONCLUSIVE": "CI contains 0",
+  "NET_LOSS": "CI lower bound > 0",
+  "NET_WIN": "CI upper bound < 0",
+  "ci": "two-sided 95% t interval over blocks, df = 17",
+  "claim_classes": {
+   "Q1_NO_COST_RECOVERY_RESOLVED": "NET_LOSS otherwise (the mechanism phase states separately whether retention improved: P improves retention but does not recover cost)",
+   "Q2_PARTIAL_COST_RECOVERY_STILL_SLOWER": "NET_LOSS and 95% CI of DELTA_RETENTION_ADJ entirely < 0",
+   "Q3_APPROXIMATE_BREAK_EVEN_BOUNDED": "INCONCLUSIVE and precision adequate",
+   "Q4_NET_RUNTIME_WIN": "NET_WIN",
+   "Q5_NO_RELIABLE_CONCLUSION": "INCONCLUSIVE and precision inadequate"
+  },
+  "no_practical_threshold": "No arbitrary percentage threshold is used. The only scale is the measured bookkeeping cost, used for precision planning, not for classification.",
+  "precision_flag": "adequate iff CI half-width <= DELTA_COST_REF/3 = 5.822124 ms/token",
+  "scope": "PRIMARY budget 1.5 GiB, DELTA_NET in decode wall ms/token only",
+  "secondary_budgets": "descriptive; no classification label; they can never override the primary classification",
+  "tokens_per_second": "reported, sign-reversed, never used to classify"
+ },
+ "estimands": {
+  "DELTA_COST": "S - A",
+  "DELTA_NET": "P - A (= DELTA_COST + DELTA_RETENTION)",
+  "DELTA_RETENTION": "P - S",
+  "DELTA_RETENTION_ADJ": "DELTA_RETENTION wall minus POL_RET (removes the measured extra bookkeeping of P over S)",
+  "POL_COST/POL_RET/POL_NET": "same contrasts of policy_ms_per_token",
+  "negative_wall_net": "P faster than A",
+  "rho_cost": "mean(DELTA_COST)/mean(POL_COST), 95% Fieller df=N-1 (R3-03B continuation; descriptive at every budget)",
+  "unit": "block-level contrast of 2-launch arm means"
+ },
+ "failure_rule": "same as R3-03B: a failed launch is retained as FAILED; the same slot may be rerun once with attempt+1; a second failure aborts the campaign; no imputation/replacement/reordering/outlier removal",
+ "future_gate": "HoPi apples-to-apples comparison: see CLAIM_BOUNDARIES.md section 'Future HoPi gate'; not part of R3-04",
+ "mechanism_phase": {
+  "fail_closed_gates": [
+   "any launch digest != frozen digest",
+   "events != 24672 or passes != 514",
+   "frozen R2 replay mismatch (R3-03A analyser) for A, S or P",
+   "S decisions differ from A decisions (decomposition invalid)",
+   "P timing-OFF vs ON canonical trace differs",
+   "budget violation",
+   "duplicate refusal"
+  ],
+  "launches": 10,
+  "metrics": [
+   "decode miss bytes/token",
+   "decode hits",
+   "decode evictions",
+   "all-pass totals",
+   "protected_before effect",
+   "resident bytes peak"
+  ],
+  "no_outcome_gating": "the magnitude/sign of the retention improvement never gates the timing campaign",
+  "purpose": "exact aggregate retention metrics + conformance of A/S/P at each R3-04 budget on the reused runtime; NOT timing",
+  "sha256": "71a8d474a2c28ea38ef61946d5ae5473b7d565cb438e6dd44d894bd0e1b0b63f",
+  "trace_in_timing_campaign": false
+ },
+ "model_runs_performed": false,
+ "n_blocks": {
+  "1.5": 18,
+  "4": 6,
+  "8": 6
+ },
+ "optional_stopping": "none: N per budget is a constant of this protocol, the driver has no N option, no estimator runs before the fixed N is complete",
+ "parents": {
+  "r2_10_selection_record": {
+   "path": "experiments/R2-10-working-set-predictor/PHASE2-SELECTION-RECORD.json",
+   "sha256": "84bed80bb1bc18362976c8c140b4c6821c93df72dd7d6532848e448a75cdfeda",
+   "sha256_lf": "f2ac01fa2822a59094353df1f1c09761e2f87dd841e906e1bf13575678be89e6"
+  },
+  "r2_11_final_interpretation": {
+   "path": "experiments/R2-11-predictive-retention/FINAL-INTERPRETATION.json",
+   "sha256": "73290ca42404f6fe78d90402673112ed4df49246ae88da06c32e914c1b76fc93",
+   "sha256_lf": "702e05dd055851a53e69bd2595bd321bfa29e3e02899d35b305dd71544e46613"
+  },
+  "r2_11_per_budget_comparison": {
+   "path": "experiments/R2-11-predictive-retention/PER-BUDGET-COMPARISON.json",
+   "sha256": "9042bcda3d2f00cfd4afc7b071f0ad7a2c846d266d586580867b5ab55271707a",
+   "sha256_lf": "a8766092ab74b2b24574e8fb882bfd6f0b46bf5c57cce587e9fe23a6a692451d"
+  },
+  "r2_12_1_5gib_analysis": {
+   "path": "experiments/R2-12-runtime-validation/R2_12_1_5GIB_SECONDARY_FORMAL_ANALYSIS.json",
+   "sha256": "11ee66ed257aaeed3499d5943b59137fd064bf9fe602cb0b75ad9a80abdb1453",
+   "sha256_lf": "7def8615ccc34f0237a0105fe038787174e2864e2cd8654e2e066982638411e4"
+  },
+  "r2_12_4gib_analysis": {
+   "path": "experiments/R2-12-runtime-validation/R2_12_4GIB_PRIMARY_FORMAL_ANALYSIS.json",
+   "sha256": "261331e4d16ca786ccd9bb766278bb27032a2fd2e626b111d7b9b9ec85f0e71f",
+   "sha256_lf": "7e6979d47415a74e47196f214a49eff0ac394e0766425170ba9c730cd49b433e"
+  },
+  "r2_12_8gib_analysis": {
+   "path": "experiments/R2-12-runtime-validation/R2_12_8GIB_SECONDARY_FORMAL_ANALYSIS.json",
+   "sha256": "6264a16fa5f131afc5a2a096ead8a56455b177e9c3a23f0acdd4034d06894d55",
+   "sha256_lf": "92f29d687d3cc30bde33dbcf8bf53df58d11b9ad80ae2c06fec06c7f26fd38a1"
+  },
+  "r2_12_final_closure": {
+   "path": "experiments/R2-12-runtime-validation/R2_12_FINAL_CLOSURE.json",
+   "sha256": "244afaf8e12fd73b999eef821dec792c84751f5ec5d2d0a64cfab6a9ecef09bb",
+   "sha256_lf": "d2e9a30044bf08f9db8b113ad7112efcdc036a57a7f8e6ef9471a44e2a0eb3fa"
+  },
+  "r2_bridge_final_interpretation": {
+   "path": "experiments/R2-BRIDGE-01-retention-feasibility/BRIDGE_FINAL_INTERPRETATION.json",
+   "sha256": "a0d87adfdc6c1c7dbe4f60a3aa1856ea940ced1b435ffcc3ae1868700096c7a0",
+   "sha256_lf": "a88fa974b134d5e56b3a4e9caac4b655380ad55a55ef8da5ee29e792798db25f"
+  },
+  "r3_02_acquisition_plan": {
+   "path": "experiments/R3-02-calibration-mechanism/ACQUISITION_PLAN.json",
+   "sha256": "8de9dfb0108e090d495f0a88d4b8c7802bcb6cb61c6280cb30e5541b8bfbd598",
+   "sha256_lf": "3447b69504ba22a91bf809651c74e2f7b69f1dc46eb431949a5f6908f75792fc"
+  },
+  "r3_02a_sham_equivalence": {
+   "path": "experiments/R3-02A-sham-control/EQUIVALENCE.json",
+   "sha256": "37954a315e7990948862a023218edb1bd935ef349cbfb378c3caa007b9ca237e",
+   "sha256_lf": "8be5c1f34aceb77d0cc01fd700dfc26a3f6f37065ddd2a646cc91d5438995ac6"
+  },
+  "r3_03_event_semantics_freeze": {
+   "path": "experiments/R3-03-event-semantics-audit/FREEZE.json",
+   "sha256": "ad6f8a4292fa59929ce80da48cea8755fac53f26167e93c41ccc2d7d0d768834",
+   "sha256_lf": "ad6f8a4292fa59929ce80da48cea8755fac53f26167e93c41ccc2d7d0d768834"
+  },
+  "r3_03a_conformance_freeze": {
+   "path": "experiments/R3-03A-runtime-semantic-conformance/FREEZE.json",
+   "sha256": "0ebcd1354e3bd1d1454bce056fc0cd7430ea8997d33e8e9ed6134d1e3a632cc5",
+   "sha256_lf": "0ebcd1354e3bd1d1454bce056fc0cd7430ea8997d33e8e9ed6134d1e3a632cc5"
+  },
+  "r3_03a_correction_freeze": {
+   "path": "experiments/R3-03A-runtime-semantic-correction/FREEZE.json",
+   "sha256": "fd2e62507f01da026f1cab6f6100e76444d7e4b5869318ed94b949139c144faf",
+   "sha256_lf": "fd2e62507f01da026f1cab6f6100e76444d7e4b5869318ed94b949139c144faf"
+  },
+  "r3_03b_conformance_freeze": {
+   "path": "experiments/R3-03B-instrumented-conformance-evidence/FREEZE.json",
+   "sha256": "f66b5d80163e7ed1870ad9515bdb42db3c4adf90ffca2c697e61c2b29d89e754",
+   "sha256_lf": "f66b5d80163e7ed1870ad9515bdb42db3c4adf90ffca2c697e61c2b29d89e754"
+  },
+  "r3_03b_e2e_amendment_1": {
+   "path": "experiments/R3-03B-end-to-end-opening/E2E_FREEZE_AMENDMENT_1.json",
+   "sha256": "9cf555c031e635c2a1eeb5c077a61aba301af5c20bd4ad29a0215690a2a246a4",
+   "sha256_lf": "9cf555c031e635c2a1eeb5c077a61aba301af5c20bd4ad29a0215690a2a246a4"
+  },
+  "r3_03b_e2e_freeze": {
+   "path": "experiments/R3-03B-end-to-end-opening/E2E_FREEZE.json",
+   "sha256": "ef6bb8e95d37bd429b3459339c81b2a2e45e666862a923c04d59df8126fa2385",
+   "sha256_lf": "ef6bb8e95d37bd429b3459339c81b2a2e45e666862a923c04d59df8126fa2385"
+  },
+  "r3_03b_final_freeze": {
+   "freeze_sha256_field": "1846b00954e033bc9a4cb136cd05373a411d7a8de699923235f31dbfd2f53448",
+   "path": "experiments/R3-03B-final-evidence/FREEZE.json",
+   "sha256": "0e987eeb48a63085f381b9f712c0fe3bdaaec3ae739385d612818f3d87373f43",
+   "sha256_lf": "0e987eeb48a63085f381b9f712c0fe3bdaaec3ae739385d612818f3d87373f43"
+  },
+  "r3_03b_final_result": {
+   "path": "experiments/R3-03B-final-evidence/FINAL_RESULT.json",
+   "sha256": "4ac3bb604141641551e9cb4a575e1d6ee1de76a61ad9ab30cfd81094c1b2e0d6",
+   "sha256_lf": "4ac3bb604141641551e9cb4a575e1d6ee1de76a61ad9ab30cfd81094c1b2e0d6"
+  },
+  "r3_03b_final_validator": {
+   "path": "experiments/R3-03B-final-evidence/validate_final.py",
+   "sha256": "d982096a6d30ff553c74eb28031cedb6c63817d7c689e5db2e0da97769cd262b",
+   "sha256_lf": "d982096a6d30ff553c74eb28031cedb6c63817d7c689e5db2e0da97769cd262b"
+  },
+  "r3_03b_microbench_freeze": {
+   "path": "experiments/R3-03B-microbench-evidence/FREEZE.json",
+   "sha256": "e74d6641badec7ed4c1a6b924e9efb8de0c673819d673297e1d62ef358cc4179",
+   "sha256_lf": "e74d6641badec7ed4c1a6b924e9efb8de0c673819d673297e1d62ef358cc4179"
+  }
+ },
+ "planning_inputs_sha256": {
+  "BUDGET_SELECTION.json": "3ea4f3dfb7920d48284e5aace2d35c9b1323293e7d6f81c4ae4116f5b3ab945f",
+  "SAMPLE_SIZE.json": "7c7eabb585e7778741b7eedb59a23c0516497643270d33cd48abedaa434e4ca4",
+  "SCHEDULE.json": "d901e6ef03067513a8c1c7230e052d795656c3ee1f1ec955d3d57a71ac933366"
+ },
+ "primary_endpoint": {
+  "definition": "server timings predicted_ms / predicted_n (n=512), lower is better",
+  "frozen_before_acquisition": true,
+  "name": "decode_wall_ms_per_token"
+ },
+ "question": "Does the retention benefit produced by the REAL predicted_protect policy recover its own predictor/bookkeeping cost and improve corrected-runtime end-to-end performance relative to b_selected?",
+ "runtime": {
+  "new_instrumentation_required": false,
+  "reuse": true,
+  "sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5",
+  "why": "policy_timing (r3-03b-v1) already gives per-arm policy time; retention mechanism counters are obtained from dedicated trace launches (exact, deterministic policy) not from new runtime counters, so the conformant R3-03B binary is reused and nothing is rebuilt"
+ },
+ "schedule": {
+  "file": "SCHEDULE.json",
+  "mechanism_schedule_sha256": "71a8d474a2c28ea38ef61946d5ae5473b7d565cb438e6dd44d894bd0e1b0b63f",
+  "timing_schedule_sha256": "9c37d12a53dded51a6a5fed9351db8a430248425ddd703b29b0f636013d43a06"
+ },
+ "schema": "r3-04-protocol-v1",
+ "secondary_endpoints": [
+  "decode_tokens_per_second = 1000 / ms_per_token (per launch, then block means; reversed sign)",
+  "policy_ms_per_token = policy_timing.ns_total / 512 / 1e6 per arm",
+  "decode miss bytes per token, hits, evictions (mechanism phase, trace-derived, exact)",
+  "ttft/prefill ms (descriptive)"
+ ],
+ "shutdown": "see SHUTDOWN_PLAN.md: diagnosis undetermined; tooling-only change (own console + attach/generate helper) validated model-free then in the mechanism phase; fallback = R3-03B path; graceful semantics and policy_timing emission unchanged",
+ "status": "R3_04_PROTOCOL_FROZEN",
+ "total_counted_launches": 180,
+ "warmup": {
+  "rule": "ONE uncounted warmup launch per budget campaign, executed with the first arm of block 1 under the identical env, 60 s cooldown after; recorded, never in any estimator; frozen now",
+  "why": "R3-03B had none and its block 1 was the most influential block (descriptive finding); R2-12 used warmups; a warmup removes the cold-start confound from block 1 at a cost of 3 launches"
+ },
+ "workload": {
+  "context": 4096,
+  "id": "r2-11-coding-v1",
+  "n_predict": 512,
+  "seed": 42,
+  "single_workload": true,
+  "temperature": 0,
+  "top_k": 1
+ }
+}

@@ -1,0 +1,18 @@
+{
+  "cell_key": "summarization-v1_seed-42__global_frequency__global_frequency_default__a9382c4d5a473d10",
+  "cell_record_digest": "4534d52a77bb18543779a8024662af8618f6a77513fc1061740fb3f6ee791d1b",
+  "config_id": "global_frequency/default",
+  "deterministic": true,
+  "dev_cell_id": "summarization-v1/seed-42",
+  "family_id": "global_frequency",
+  "recall_at_k_h1": 0.3307569296375267,
+  "recall_at_k_h16": 0.3111353937937606,
+  "recall_at_k_h4": 0.3244699146198357,
+  "result_digest": "5e7e77f5ace7c457e78196ca09648b12dcf07f9a11c3b5ff530e5d5de97dea8e",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 24857,
+    "h16": 24137,
+    "h4": 24713
+  }
+}

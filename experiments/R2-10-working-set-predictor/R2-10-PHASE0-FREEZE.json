@@ -1,0 +1,30 @@
+{
+  "freeze_version": "1.0.0",
+  "freeze_name": "Research-II-R2-10-Phase0-Benchmark-Contract-Freeze",
+  "freeze_timestamp_utc": "2026-11-11T21:55:00Z",
+  "status": "PHASE0_FROZEN",
+  "outcome": "CONTRACT_DEFINED_AND_TESTED_NO_TOURNAMENT_RUN",
+  "repo_commit_at_freeze": "c3469b67bdd6c4e37cce196188caf34e0ac59524",
+  "phase0_contract_version": "r2-10-phase0-contract-v1.0",
+  "phase0_contract_digest": "4d2288b7b4a812fd85d96aa7c2227d639b52f5131bff305d687e03970f53d725",
+  "upstream_r2_09b_contract_digest": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28",
+  "upstream_r2_09a_tournament_digest": "5b600d1451983dabafdfbd6ea6bfdc4c4c3bdcf9327c9ec4d57c25025759f847",
+  "upstream_r2_09a_dev_corpus_digest": "f758b77492eebc38bc81ba22d6b06ab8f19138d1099b635821369a4d022d9398",
+  "corpus_trace_references": {
+    "dev_cells": 8,
+    "source_manifest": "experiments/R2-09-prediction-benchmark/r2_09a/dev_corpus_manifest.json",
+    "eval_status": "ACQUISITION_CONTRACT_FROZEN_NOT_EXECUTED / EVAL_LOCKED (untouched)"
+  },
+  "target_definition": "next_step_same_layer_routing (adopted verbatim from experiments/R2-09-prediction-benchmark/prediction_contract.json); horizons h=1 (primary), h=4/h=16 (secondary), all measured in same-layer iterator-yielded steps (causal_boundary.json)",
+  "metric_definition": "future_requested_expert_recall_at_k (adopted verbatim from experiments/R2-09-prediction-benchmark/metrics_contract.json.prediction_metrics); secondary diagnostics: precision_at_k, f1, jaccard, ranking_metric_ndcg_or_map, byte_weighted_recall_optional",
+  "allowed_feature_contract": "causal_boundary.json (allowed: same_layer_history_upto_i, intrastep_cross_layer_lt_l, prior_step_any_layer_history, predictor_internal_state)",
+  "forbidden_information": "causal_boundary.json (forbidden: target_event_itself, same_layer_future, same_step_later_layer, future_steps_other_layers, eval_labels)",
+  "predictor_candidate_grid": "predictor_space.json: global_frequency, last_observation (implemented), recency_window, markov_transition, decayed_transition, recency_frequency_transition_blend (contract-frozen, implementation deferred to DEV tournament phase); shuffled_null is ANALYTICAL_REFERENCE_ONLY, never a runtime candidate",
+  "dev_eval_protocol": "dev_eval_protocol.json: reuses R2-09A's 8 frozen DEV cells verbatim; EVAL remains EVAL_LOCKED and untouched",
+  "selection_rule": "selection_rule.json: DEV_ONLY, equal weight per instance, h=1 primary statistic, 3-step tie-break",
+  "deterministic_tie_breaking": "output_contract.json: sort by (-score, expert_id) ascending; cold start/unseen experts score 0.0; apply_output_contract raises on any contract violation",
+  "leakage_test_status": "PASS -- tests/test_r2_10_leakage.py (9/9), including structural history-slice proof and behavioral future-alteration invariance for both same_layer_future and same_step_later_layer boundaries",
+  "contract_test_status": "see test run recorded in this freeze's accompanying commit; tests/test_r2_10_contract.py validates digest, upstream binding, DEV/EVAL firewall, and all component completeness checks",
+  "scope": "Phase 0 only. No R2-10 DEV predictor tournament has been run beyond exercising global_frequency/last_observation on synthetic traces for contract testing. No R2-11, no R2-12, no EVAL access, no R2-09A/R2-09B evidence modified.",
+  "not_started": ["R2-10 full DEV tournament", "R2-11 predictive retention", "R2-12 runtime validation"]
+}

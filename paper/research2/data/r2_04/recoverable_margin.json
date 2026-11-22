@@ -1,0 +1,332 @@
+{
+  "capacity_constrained_budgets": [
+    1610612736,
+    2147483648,
+    4294967296,
+    8589934592
+  ],
+  "curve_shape": {
+    "classification": "collapse_at_effective_residency",
+    "reason": "the curve rises (or holds) up to the budget immediately before the observed effective-residency budget (17179869184 bytes), then collapses to its global minimum exactly at that budget"
+  },
+  "decomposition_by_budget": {
+    "1610612736": {
+      "policy_information_headroom": {
+        "baseline": "Global-LRU",
+        "interpretation": "Global-LRU vs Oracle-Global-Belady: both global cache scope -- the scientifically clean primary upper bound for future causal prediction/retention work. This is THEORETICAL/INFORMATIONAL HEADROOM, not demonstrated causally recoverable performance (that is II-C's job, not R2-04's).",
+        "miss_byte_reduction": 103574900736,
+        "miss_reduction": 36149,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.44112006998514136,
+        "relative_miss_reduction": 0.4421787846168901
+      },
+      "structural_sharding_gap": {
+        "baseline": "Runtime-Sharded-LRU",
+        "interpretation": "Runtime-Sharded-LRU vs Global-LRU: both causal; approximates the runtime's sharded-retention-structure effect under the existing offline model. LIMITATION (preserved from R2-02): the offline ShardedLRU's shard-to-key mapping is statistical, not the runtime's exact address-derived shard mapping. This gap may be negative (sharding itself reducing misses relative to Global-LRU) -- that is a valid observed result, not an error.",
+        "miss_byte_reduction": -4186976256,
+        "miss_reduction": -1482,
+        "oracle": "Global-LRU",
+        "oracle_dominates": false,
+        "relative_miss_byte_reduction": -0.018155869786195888,
+        "relative_miss_reduction": -0.018462688426560358
+      },
+      "total_observed_upper_bound_gap": {
+        "baseline": "Runtime-Sharded-LRU",
+        "interpretation": "Runtime-Sharded-LRU vs Oracle-Global-Belady: includes BOTH structural and information differences; must not be described purely as 'prediction headroom' -- it also contains the structural sharding effect above.",
+        "miss_byte_reduction": 99387924480,
+        "miss_reduction": 34667,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.4309731187496733,
+        "relative_miss_reduction": 0.4318799053195465
+      }
+    },
+    "17179869184": {
+      "policy_information_headroom": {
+        "baseline": "Global-LRU",
+        "interpretation": "Global-LRU vs Oracle-Global-Belady: both global cache scope -- the scientifically clean primary upper bound for future causal prediction/retention work. This is THEORETICAL/INFORMATIONAL HEADROOM, not demonstrated causally recoverable performance (that is II-C's job, not R2-04's).",
+        "miss_byte_reduction": 0,
+        "miss_reduction": 0,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.0,
+        "relative_miss_reduction": 0.0
+      },
+      "structural_sharding_gap": {
+        "baseline": "Runtime-Sharded-LRU",
+        "interpretation": "Runtime-Sharded-LRU vs Global-LRU: both causal; approximates the runtime's sharded-retention-structure effect under the existing offline model. LIMITATION (preserved from R2-02): the offline ShardedLRU's shard-to-key mapping is statistical, not the runtime's exact address-derived shard mapping. This gap may be negative (sharding itself reducing misses relative to Global-LRU) -- that is a valid observed result, not an error.",
+        "miss_byte_reduction": 0,
+        "miss_reduction": 0,
+        "oracle": "Global-LRU",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.0,
+        "relative_miss_reduction": 0.0
+      },
+      "total_observed_upper_bound_gap": {
+        "baseline": "Runtime-Sharded-LRU",
+        "interpretation": "Runtime-Sharded-LRU vs Oracle-Global-Belady: includes BOTH structural and information differences; must not be described purely as 'prediction headroom' -- it also contains the structural sharding effect above.",
+        "miss_byte_reduction": 0,
+        "miss_reduction": 0,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.0,
+        "relative_miss_reduction": 0.0
+      }
+    },
+    "2147483648": {
+      "policy_information_headroom": {
+        "baseline": "Global-LRU",
+        "interpretation": "Global-LRU vs Oracle-Global-Belady: both global cache scope -- the scientifically clean primary upper bound for future causal prediction/retention work. This is THEORETICAL/INFORMATIONAL HEADROOM, not demonstrated causally recoverable performance (that is II-C's job, not R2-04's).",
+        "miss_byte_reduction": 93423513600,
+        "miss_reduction": 32497,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.475529762230897,
+        "relative_miss_reduction": 0.4756725899470125
+      },
+      "structural_sharding_gap": {
+        "baseline": "Runtime-Sharded-LRU",
+        "interpretation": "Runtime-Sharded-LRU vs Global-LRU: both causal; approximates the runtime's sharded-retention-structure effect under the existing offline model. LIMITATION (preserved from R2-02): the offline ShardedLRU's shard-to-key mapping is statistical, not the runtime's exact address-derived shard mapping. This gap may be negative (sharding itself reducing misses relative to Global-LRU) -- that is a valid observed result, not an error.",
+        "miss_byte_reduction": -755269632,
+        "miss_reduction": -265,
+        "oracle": "Global-LRU",
+        "oracle_dominates": false,
+        "relative_miss_byte_reduction": -0.0038591914986275833,
+        "relative_miss_reduction": -0.003894023775586675
+      },
+      "total_observed_upper_bound_gap": {
+        "baseline": "Runtime-Sharded-LRU",
+        "interpretation": "Runtime-Sharded-LRU vs Oracle-Global-Belady: includes BOTH structural and information differences; must not be described purely as 'prediction headroom' -- it also contains the structural sharding effect above.",
+        "miss_byte_reduction": 92668243968,
+        "miss_reduction": 32232,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.4735057311480153,
+        "relative_miss_reduction": 0.4736308465460744
+      }
+    },
+    "4294967296": {
+      "policy_information_headroom": {
+        "baseline": "Global-LRU",
+        "interpretation": "Global-LRU vs Oracle-Global-Belady: both global cache scope -- the scientifically clean primary upper bound for future causal prediction/retention work. This is THEORETICAL/INFORMATIONAL HEADROOM, not demonstrated causally recoverable performance (that is II-C's job, not R2-04's).",
+        "miss_byte_reduction": 59855155200,
+        "miss_reduction": 20775,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.5859449007718049,
+        "relative_miss_reduction": 0.584733597905936
+      },
+      "structural_sharding_gap": {
+        "baseline": "Runtime-Sharded-LRU",
+        "interpretation": "Runtime-Sharded-LRU vs Global-LRU: both causal; approximates the runtime's sharded-retention-structure effect under the existing offline model. LIMITATION (preserved from R2-02): the offline ShardedLRU's shard-to-key mapping is statistical, not the runtime's exact address-derived shard mapping. This gap may be negative (sharding itself reducing misses relative to Global-LRU) -- that is a valid observed result, not an error.",
+        "miss_byte_reduction": 1200218112,
+        "miss_reduction": 414,
+        "oracle": "Global-LRU",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.011612946948471516,
+        "relative_miss_reduction": 0.011518237208914114
+      },
+      "total_observed_upper_bound_gap": {
+        "baseline": "Runtime-Sharded-LRU",
+        "interpretation": "Runtime-Sharded-LRU vs Oracle-Global-Belady: includes BOTH structural and information differences; must not be described purely as 'prediction headroom' -- it also contains the structural sharding effect above.",
+        "miss_byte_reduction": 61055373312,
+        "miss_reduction": 21189,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.5907533006728861,
+        "relative_miss_reduction": 0.5895167348301478
+      }
+    },
+    "8589934592": {
+      "policy_information_headroom": {
+        "baseline": "Global-LRU",
+        "interpretation": "Global-LRU vs Oracle-Global-Belady: both global cache scope -- the scientifically clean primary upper bound for future causal prediction/retention work. This is THEORETICAL/INFORMATIONAL HEADROOM, not demonstrated causally recoverable performance (that is II-C's job, not R2-04's).",
+        "miss_byte_reduction": 16179056640,
+        "miss_reduction": 5602,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.7065525368501716,
+        "relative_miss_reduction": 0.704476861167002
+      },
+      "structural_sharding_gap": {
+        "baseline": "Runtime-Sharded-LRU",
+        "interpretation": "Runtime-Sharded-LRU vs Global-LRU: both causal; approximates the runtime's sharded-retention-structure effect under the existing offline model. LIMITATION (preserved from R2-02): the offline ShardedLRU's shard-to-key mapping is statistical, not the runtime's exact address-derived shard mapping. This gap may be negative (sharding itself reducing misses relative to Global-LRU) -- that is a valid observed result, not an error.",
+        "miss_byte_reduction": 613269504,
+        "miss_reduction": 217,
+        "oracle": "Global-LRU",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.02608341172781436,
+        "relative_miss_reduction": 0.026563838903170524
+      },
+      "total_observed_upper_bound_gap": {
+        "baseline": "Runtime-Sharded-LRU",
+        "interpretation": "Runtime-Sharded-LRU vs Oracle-Global-Belady: includes BOTH structural and information differences; must not be described purely as 'prediction headroom' -- it also contains the structural sharding effect above.",
+        "miss_byte_reduction": 16792326144,
+        "miss_reduction": 5819,
+        "oracle": "Oracle-Global-Belady",
+        "oracle_dominates": true,
+        "relative_miss_byte_reduction": 0.7142066478519912,
+        "relative_miss_reduction": 0.7123270902191211
+      }
+    }
+  },
+  "effective_residency_budget": 17179869184,
+  "figure_a_miss_rate_by_budget": [
+    {
+      "budget_bytes": 1610612736,
+      "global_lru_miss_rate": 0.5587817147856518,
+      "oracle_miss_rate": 0.31170029527559057
+    },
+    {
+      "budget_bytes": 2147483648,
+      "global_lru_miss_rate": 0.466959208223972,
+      "oracle_miss_rate": 0.24483951224846895
+    },
+    {
+      "budget_bytes": 4294967296,
+      "global_lru_miss_rate": 0.24284366797900261,
+      "oracle_miss_rate": 0.10084481627296588
+    },
+    {
+      "budget_bytes": 8589934592,
+      "global_lru_miss_rate": 0.05435258092738408,
+      "oracle_miss_rate": 0.016062445319335084
+    },
+    {
+      "budget_bytes": 17179869184,
+      "global_lru_miss_rate": 0.006650535870516185,
+      "oracle_miss_rate": 0.006650535870516185
+    }
+  ],
+  "figure_b_information_headroom_fraction_by_budget": [
+    {
+      "budget_bytes": 1610612736,
+      "relative_miss_byte_reduction": 0.44112006998514136,
+      "relative_miss_reduction": 0.4421787846168901
+    },
+    {
+      "budget_bytes": 2147483648,
+      "relative_miss_byte_reduction": 0.475529762230897,
+      "relative_miss_reduction": 0.4756725899470125
+    },
+    {
+      "budget_bytes": 4294967296,
+      "relative_miss_byte_reduction": 0.5859449007718049,
+      "relative_miss_reduction": 0.584733597905936
+    },
+    {
+      "budget_bytes": 8589934592,
+      "relative_miss_byte_reduction": 0.7065525368501716,
+      "relative_miss_reduction": 0.704476861167002
+    },
+    {
+      "budget_bytes": 17179869184,
+      "relative_miss_byte_reduction": 0.0,
+      "relative_miss_reduction": 0.0
+    }
+  ],
+  "figure_c_structural_vs_informational_absolute_gap_by_budget": [
+    {
+      "budget_bytes": 1610612736,
+      "informational_miss_byte_gap": 103574900736,
+      "structural_miss_byte_gap": -4186976256,
+      "total_miss_byte_gap": 99387924480
+    },
+    {
+      "budget_bytes": 2147483648,
+      "informational_miss_byte_gap": 93423513600,
+      "structural_miss_byte_gap": -755269632,
+      "total_miss_byte_gap": 92668243968
+    },
+    {
+      "budget_bytes": 4294967296,
+      "informational_miss_byte_gap": 59855155200,
+      "structural_miss_byte_gap": 1200218112,
+      "total_miss_byte_gap": 61055373312
+    },
+    {
+      "budget_bytes": 8589934592,
+      "informational_miss_byte_gap": 16179056640,
+      "structural_miss_byte_gap": 613269504,
+      "total_miss_byte_gap": 16792326144
+    },
+    {
+      "budget_bytes": 17179869184,
+      "informational_miss_byte_gap": 0,
+      "structural_miss_byte_gap": 0,
+      "total_miss_byte_gap": 0
+    }
+  ],
+  "headroom_persistence": {
+    "capacity_constrained_budgets_checked": [
+      1610612736,
+      2147483648,
+      4294967296,
+      8589934592
+    ],
+    "effective_residency_budget_excluded": 17179869184,
+    "oracle_strictly_improves_at_every_capacity_constrained_point": true,
+    "violations": []
+  },
+  "lfu_vs_global_lru": [
+    {
+      "budget_bytes": 1610612736,
+      "global_lru_miss_bytes": 234799792128,
+      "global_lru_misses": 81752,
+      "lfu_miss_bytes": 245057458176,
+      "lfu_misses": 85428,
+      "verdict": "LFU_WORSE"
+    },
+    {
+      "budget_bytes": 2147483648,
+      "global_lru_miss_bytes": 196461969408,
+      "global_lru_misses": 68318,
+      "lfu_miss_bytes": 211518849024,
+      "lfu_misses": 73780,
+      "verdict": "LFU_WORSE"
+    },
+    {
+      "budget_bytes": 4294967296,
+      "global_lru_miss_bytes": 102151507968,
+      "global_lru_misses": 35529,
+      "lfu_miss_bytes": 112122408960,
+      "lfu_misses": 39124,
+      "verdict": "LFU_WORSE"
+    },
+    {
+      "budget_bytes": 8589934592,
+      "global_lru_miss_bytes": 22898589696,
+      "global_lru_misses": 7952,
+      "lfu_miss_bytes": 25641676800,
+      "lfu_misses": 8956,
+      "verdict": "LFU_WORSE"
+    },
+    {
+      "budget_bytes": 17179869184,
+      "global_lru_miss_bytes": 2773131264,
+      "global_lru_misses": 973,
+      "lfu_miss_bytes": 2773131264,
+      "lfu_misses": 973,
+      "verdict": "LFU_EQUAL"
+    }
+  ],
+  "peak_opportunity": {
+    "max_absolute_miss_byte_headroom": {
+      "budget_bytes": 1610612736,
+      "value": 103574900736
+    },
+    "max_absolute_miss_headroom": {
+      "budget_bytes": 1610612736,
+      "value": 36149
+    },
+    "max_relative_miss_byte_headroom": {
+      "budget_bytes": 8589934592,
+      "value": 0.7065525368501716
+    },
+    "max_relative_miss_headroom": {
+      "budget_bytes": 8589934592,
+      "value": 0.704476861167002
+    }
+  }
+}

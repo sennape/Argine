@@ -1,0 +1,43 @@
+{
+  "not_yet_supported": [
+    {
+      "claim": "The model recognizes workload identity.",
+      "reason": "forbidden; R2-08 measures routing structure, not model cognition."
+    },
+    {
+      "claim": "Experts specialize semantically for these workloads.",
+      "reason": "forbidden unless independently established elsewhere."
+    },
+    {
+      "claim": "This explains the Oracle advantage.",
+      "reason": "forbidden unless independently established elsewhere."
+    },
+    {
+      "claim": "This improves cache performance / faster inference / lower latency / higher throughput.",
+      "reason": "R2-08 is not a runtime performance benchmark."
+    },
+    {
+      "claim": "This proves all MoE models behave this way.",
+      "reason": "scope limited to tested Qwen model/workloads/consumer-machine protocol."
+    }
+  ],
+  "scope": "Qwen3-30B-A3B-Q4_K_M, tested workload families, tested consumer-machine protocol only.",
+  "supported_now": [
+    {
+      "basis": "temporal_drift.median_temporal_jsd",
+      "claim": "Routing distributions exhibit measurable temporal drift under the tested protocol (median adjacent-window JSD=0.13555607945845186)."
+    },
+    {
+      "basis": "three-scale comparison",
+      "claim": "Cross-workload routing differences exceed same-workload replicate variability under the tested protocol (median cross-workload JSD=0.2994961896155197, median replicate JSD=0.0)."
+    },
+    {
+      "basis": "workload_metrics.*.bridges.r2_07",
+      "claim": "Short-horizon reuse locality is present across the tested workload families under the tested protocol (R2-07-compatible bridge metrics)."
+    },
+    {
+      "basis": "summary.classify_regime",
+      "claim": "Regime classification under predeclared thresholds is WORKLOAD_DEPENDENCE_DOMINANT (median_cross_workload_jsd >= 1.5 * replicate and temporal)."
+    }
+  ]
+}

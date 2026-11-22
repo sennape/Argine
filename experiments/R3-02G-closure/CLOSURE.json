@@ -1,0 +1,36 @@
+{
+ "artifact": "R3-02G-CLOSURE",
+ "cooldown_deviation_root_cause": "tools/r3_02g_session.py (R3-02H execution adapter) contains no cooldown/sleep logic, whereas tools/r3_02_acquire.py honours launch['cooldown_before_s'] (sleep, l.1179).",
+ "distinction": {
+  "protocol_failure": "Session 1 ran without the 15 s/60 s cooldowns required by R3-02H; it is therefore a protocol deviation and nonconfirmatory.",
+  "scientific_negative_result": "NONE. No R3-02G confirmatory result exists; none was computed or inspected.",
+  "voluntary_design_supersession": "Independent review (STOP_R3_02G_AND_REDESIGN) and the R3 event-granularity audit (R2_R3_EVENT_SEMANTICS_NOT_EQUIVALENT) superseded the design before unblinding."
+ },
+ "preserved_artifact_sha256": {
+  "R3-02-phase2-mechanism/ANALYSIS.json": "7c682f8f504974157458bab85e013c7926d7e61742db31a5016442b526b0cdba",
+  "R3-02-phase2-mechanism/CLASSIFICATION.json": "7b667ee5a49a0d10355e82a625410c1e18787766661341243db953437bf5daeb",
+  "R3-02-phase2-mechanism/FREEZE.json": "748f2e5dbc02ef1d3d09c982c543d0e5c386789526f862dd06ee008adc979dbd",
+  "R3-02G-precision-extension/FEASIBILITY.json": "0872533dd9c8cfc995789ff89d9b4b0d9119a74eb1b64887d35bebcb19772f0b",
+  "R3-02G-precision-extension/FREEZE.json": "f8619c92ebcea1a0480be04073089eef427644119cbd68d2da6968e6559d3e6f",
+  "R3-02G-precision-extension/PRECISION_SCALING.json": "c1b26718d67513244638b3f3ab1c37c9efaa739c3ae809b86114de4c93258243",
+  "R3-02G-precision-extension/PREREGISTRATION.json": "e025261e24b48b5d2efd9fcffae9d53516895de8f0e0aaae265b279ae50fc1bb",
+  "R3-02H-multisession/EXECUTION_CONTRACT.json": "e629549963b97b3bff5ab07aa8a0b3033aa5d83dcaed01122d91bc711229920a",
+  "R3-02H-multisession/FREEZE.json": "32ae3973684885e1b056537c42be1c90df04103d15960f87027271c61c979e74",
+  "R3-02H-multisession/GLOBAL_SCHEDULE.json": "532454c12fc08b549714a0fdeb8f720aa2fd2e7bb77b8591f73b07d1ead75703",
+  "R3-02H-multisession/SESSION_PLAN.json": "b6748621e46dc5b88c89631c5eb6d757452f9c649ab369cc7529bc47c11c7778"
+ },
+ "r3_02_classification_unchanged": "MECHANISM_INSUFFICIENT",
+ "r3_02g_status": "R3_02G_TERMINATED_INCOMPLETE",
+ "reason": "DESIGN_SUPERSEDED_BEFORE_UNBLINDING",
+ "session1_seal": {
+  "ab_result_computed": false,
+  "content_hashes_only": true,
+  "files": 488,
+  "manifest": "SESSION1_SEAL_MANIFEST.json",
+  "root_sha256": "5cd6c6f60cafb6997654de605979bce50d8e15bf1d68003c4a94264573e6327b",
+  "unblinded": false
+ },
+ "session1_status": "PROTOCOL_DEVIATION_NONCONFIRMATORY_SEALED",
+ "statement": "This is a design supersession, NOT a failed scientific hypothesis.",
+ "successor_policy": "No R3-02G result (Session 1 included) is used by any successor experiment. Session 1 data stay sealed and may only be examined by a future explicitly approved exploratory analysis, never as confirmatory."
+}

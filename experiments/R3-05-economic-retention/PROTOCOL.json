@@ -1,0 +1,211 @@
+{
+ "analysis_plan": "R1 fidelity -> R2 ceiling -> R3 CES + PP_CURVE -> R4 DEV selection then EVAL replay of NUE_X/NUE_LO -> R5 microbench + ranking equivalence -> R6 classify_phase1. Deterministic replays (no CI needed); kappa and transfer factor fixed by constants.",
+ "artifact": "R3-05-PHASE0-PROTOCOL",
+ "benchmark_gate": "Paired A vs candidate (plus sham-equivalent control if the candidate has a no-op twin) palindromic blocks at 1.5 GiB; block count chosen prospectively from the projected net and the R3-04 DELTA_NET block sd so the 95% CI half-width <= projected net / 2; efficiency review > 60 min, separate authorization > 4 h; classification frozen before acquisition.",
+ "break_even_threshold": "NET_PROJ_EVAL = 0 ms/token; the CURRENT design's derived envelope is in ECONOMIC_ENVELOPE.json",
+ "candidates": {
+  "A": {
+   "definition": "b_selected(1.5 GiB) = aged_frequency decay 0.999 interval 1, frozen",
+   "role": "baseline"
+  },
+  "BELADY": {
+   "definition": "Global Belady MIN over the same stream, same per-layer byte sizes, same budget, same atomic-event rule",
+   "role": "clairvoyant ceiling only (non-causal, never a candidate)"
+  },
+  "CES": {
+   "definition": "b_selected, plus: while serving an event at layer L, residents (L,e) with e in that event's served set are never chosen as victim (total fallback to unrestricted b_selected if no other candidate). Uses no predictor.",
+   "role": "zero-cost structural baseline"
+  },
+  "NUE_AMORT": {
+   "definition": "NUE_X with layer predictions refreshed every N same-layer events, N in {2,4,10}; held between refreshes.",
+   "role": "FALLBACK 2 (only if NUE_X fails the cost ratio)"
+  },
+  "NUE_LO": {
+   "definition": "NUE_X with the selected variant's key, but in_l = 1 iff e was in layer l's most recent observed event (last_observation; no transition state).",
+   "role": "FALLBACK 1 (cheap surrogate)"
+  },
+  "NUE_X": {
+   "definition": "CES, plus victim key for resident (l,e) = (in_l, aged_score, last_ref, layer, expert) ascending, where in_l = 1 if e is in layer l's current top_k decayed_transition (decay 0.99, top_k = frozen) prediction for layer l's NEXT event (computed after l's most recent event), else 0. Variants frozen for DEV selection: NUE_X_LEX (lexicographic as written), NUE_X_SOFT1 / NUE_X_SOFT4 (key = (aged_score + lambda*in_l, last_ref, layer, expert), lambda in {1,4}). Predictor realized as the exact incremental form for cost measurement.",
+   "role": "PRIMARY candidate"
+  },
+  "PP": {
+   "definition": "predicted_protect, frozen",
+   "role": "reference (R3-04 P)"
+  },
+  "PP_CURVE": {
+   "definition": "PP with prediction refreshed every N same-layer events, N in {1,2,4,10,20,50,100} (f = 1/N), held between refreshes",
+   "role": "diagnostic (invocation-fraction vs benefit curve)"
+  }
+ },
+ "claim_boundaries": "CLAIM_BOUNDARIES.md",
+ "compute_budget": {
+  "phase1_cpu_hours_max": 3.0,
+  "phase1_model_hours": 0.0,
+  "rule": "any step projected > 60 min needs an explicit efficiency review; > 4 h needs separate prospective authorization"
+ },
+ "conformance_gate": "Short traced real-model probe (<= 2 launches at 1.5 GiB): runtime decisions match offline replay event-for-event; decode miss counts match the R4 EVAL replay exactly; token digest unchanged.",
+ "constants": {
+  "cost_reduction_factors": [
+   1,
+   2,
+   4,
+   10,
+   25
+  ],
+  "invocation_fractions": [
+   1.0,
+   0.5,
+   0.25,
+   0.1,
+   0.05,
+   0.02,
+   0.01
+  ],
+  "k2_ces_fraction": 0.8,
+  "k3_amortization_max_retained_at_f010": 0.2,
+  "k5_surrogate_fraction": 0.8,
+  "kappa_low_fraction": 0.5,
+  "margin_justification": "10 ms/token is ~1.9% of A and ~1.9x the R3-04 18-block DELTA_NET 95% CI half-width (5.37 ms), so a FEASIBLE result is resolvable by a benchmark no larger than R3-04's primary; ratio >= 2 is applied AFTER halving kappa and a 4x microbench->runtime transfer (observed 3.65x), i.e. on top of already conservative conversions.",
+  "matrix_benefit_multiples": [
+   1,
+   2,
+   5,
+   10,
+   25,
+   50,
+   100,
+   300
+  ],
+  "matrix_cost_reduction_factors": [
+   1,
+   2,
+   4,
+   10,
+   25,
+   100
+  ],
+  "microbench_to_runtime_transfer_factor": 4.0,
+  "primary_candidate": "NUE_X",
+  "success_benefit_cost_ratio": 2.0,
+  "success_net_margin_ms_per_token": 10.0,
+  "surrogate_candidate": "NUE_LO"
+ },
+ "dev_eval_separation": {
+  "fallback": "if R2 DEV traces are unavailable: DEV = R3-04 stream decode tokens 0..255, EVAL = tokens 256..511 (policy state carried through, endpoints computed per half)",
+  "primary": "DEV = R2-09A DEV corpus traces (coding/instruction/reasoning/summarization, seed-42) at 1.5 GiB, read-only from the R2 evidence root, if present and hash-verifiable; EVAL = R3-04 decode stream",
+  "rule": "NUE_X variant chosen on DEV only (max bytes avoided); EVAL is scored once for the selected variant, NUE_LO, CES, PP, BELADY; no re-selection after EVAL"
+ },
+ "diagnosis_motivating_redesign": [
+  "COST: PredictedProtectPolicy::predict_for_layer recomputes, per semantic event (48/token), a dense |current_set| x n_experts = 8 x 128 scan with one unordered_map probe and one std::pow per cell, then stable_sorts 128 ids, although only |prev| x |cur| = 64 transition cells change per event. Runtime incremental cost 464 us/event (483.4 vs 19.2); microbench predictor component 123.7 us/call.",
+  "VALUE: the protected set for layer L, computed after L's event at token t, is consulted during L's access at token t+1, i.e. it predicts the event CURRENTLY being served, whose true set is known. Its only possible effect is preventing intra-event self-eviction; it never informs cross-layer eviction, where the clairvoyant headroom lies.",
+  "CEILING: on the R2 coding-v1 trace at 1.5 GiB, Belady removes ~40% of b_selected misses; the current mechanism captures ~0.2% of that prior ceiling."
+ ],
+ "evidence_ladder": [
+  {
+   "cost": "done",
+   "model": false,
+   "rung": "R0",
+   "what": "static analysis + economic envelope (this freeze)"
+  },
+  {
+   "cost": "<= 45 min CPU (3 x 5-10 GB streaming parse)",
+   "model": false,
+   "rung": "R1",
+   "what": "stream extraction + identity across 3 traces + replay fidelity (K0)"
+  },
+  {
+   "cost": "<= 10 min",
+   "model": false,
+   "rung": "R2",
+   "what": "BELADY ceiling on the R3-04 stream at 1.5/4/8 GiB (K1)"
+  },
+  {
+   "cost": "<= 30 min (Python reference predictor)",
+   "model": false,
+   "rung": "R3",
+   "what": "CES (K2) and PP_CURVE (K3)"
+  },
+  {
+   "cost": "<= 45 min",
+   "model": false,
+   "rung": "R4",
+   "what": "NUE_X variants on DEV, selected NUE_X + NUE_LO on EVAL (K4, K5)"
+  },
+  {
+   "cost": "<= 30 min incl. build",
+   "model": false,
+   "rung": "R5",
+   "what": "standalone C++ microbench: exact incremental predictor + NUE victim path vs b_selected; ranking equivalence"
+  },
+  {
+   "cost": "seconds",
+   "model": false,
+   "rung": "R6",
+   "what": "classify_phase1 -> FEASIBLE / MARGINAL / INFEASIBLE"
+  },
+  {
+   "cost": "<= 30 min, separate gate",
+   "model": true,
+   "rung": "R7",
+   "what": "ONLY IF FEASIBLE: runtime realization + conformance probe (traced, short)"
+  },
+  {
+   "cost": "efficiency review if > 60 min; separate prospective authorization if > 4 h",
+   "model": true,
+   "rung": "R8",
+   "what": "ONLY IF R7 passes: paired wall benchmark"
+  }
+ ],
+ "failure_rule": "R3_05_MARGINAL if the best candidate has 0 < NET_PROJ_EVAL < margin or ratio < 2 (no runtime campaign authorized; report only). R3_05_INFEASIBLE if no candidate has NET_PROJ_EVAL > 0.",
+ "families_evaluated": {
+  "A_frequency_reduction": "diagnostic PP_CURVE + fallback NUE_AMORT; cannot help PP because PP's value ceiling (0.57 ms) is below any realistic cost",
+  "B_cheap_gate": "deferred: gating a ~0 value decision cannot create value; revisit in R4 once a valuable decision exists",
+  "C_phase_aware": "secondary endpoint only (prefill vs decode); decode at fixed budget is homogeneous",
+  "D_incremental": "adopted as the cost realization of NUE_X (H3)",
+  "E_cheap_surrogate": "fallback 1 NUE_LO",
+  "F_economic_retention": "adopted as the value mechanism of NUE_X (victim by predicted next use)",
+  "G_high_cost_misses": "secondary endpoint (byte-weighted); byte sizes vary only modestly by layer",
+  "H_portfolio": "R4"
+ },
+ "frozen_data_allowed": {
+  "R2_DEV_traces": "R2-09A DEV instances, read-only",
+  "R3_04_stream": "R3-03A-conformance-run2 traces A-4GiB (sha256 154502dafdefede307f76169d830a268dc67c86ff1945e9f8fd0e6d38755b990), B-4GiB (677217ec...), C-8GiB; same output token digest ac28efbe... as R3-04; read-only, only (pass, layer, bytes_of_layer, requested_experts) extracted to an additive derived file",
+  "frozen_counters": "Gate 2 MECHANISM_METRICS, R3-04 final evidence, R3-03B microbench (cost transfer)"
+ },
+ "hypotheses": {
+  "H0_null": "No causal candidate's projected net benefit (kappa_low benefit minus 4x-transferred microbench cost) reaches 10 ms/token on EVAL.",
+  "H1_misdirected_value": "Most of predicted_protect's 0.09% miss-byte reduction is reproduced by a ZERO-COST exact current-event shield (CES).",
+  "H2_cross_layer_value": "Using each resident's OWN layer's next-visit prediction to rank eviction victims (NUE) removes a materially larger fraction of b_selected misses than predicted_protect, approaching a non-trivial fraction of the clairvoyant headroom.",
+  "H3_cost_floor": "An exact incremental reformulation of decayed_transition (scale-normalized dense rows, no pow on read, partial top-k) reduces incremental policy cost by >= 50x while preserving the predicted sets.",
+  "H4_no_amortization_needed": "If H3 holds, invocation-frequency reduction is unnecessary; if H3 fails, amortization is only useful if benefit retained falls sub-linearly with refresh rate."
+ },
+ "kill_rules": {
+  "K0_FIDELITY": "offline replay must reproduce the Gate 2 1.5 GiB decode counters of A and PP integer-exactly; otherwise Phase 1 is INVALID and nothing is interpreted",
+  "K1_CEILING": "if BELADY bytes avoided x kappa_low < 10 ms/token on the R3-04 stream: stop predictive retention as the primary R3 path (no causal policy can pay with margin)",
+  "K2_PP_RETIRED": "if CES >= 80% of PP's bytes avoided: predicted_protect is retired permanently (its value was not predictive)",
+  "K3_NO_AMORTIZATION": "if PP_CURVE keeps <= 20% of PP benefit at f = 0.10: the invocation-reduction family is dropped",
+  "K4_BENEFIT_FLOOR": "if a candidate's benefit at ZERO cost (kappa_low x bytes avoided) < 10 ms/token it is INFEASIBLE regardless of any cost optimization; no cost engineering is done for it",
+  "K5_PREFER_SURROGATE": "if NUE_LO net >= 80% of NUE_X net: NUE_LO becomes the R3-05 candidate (prefer the cheaper baseline)"
+ },
+ "new_data_required": "None model-bearing for the Phase 1 decision. New derived artifacts: extracted stream, replay results, one standalone C++ microbenchmark of the candidate decision path (new file in this directory; runtime sources untouched).",
+ "parents": {
+  "r3_04_closure_commit": "91aa9b48a317934fcd985d63ca6e4bcab7ee9741",
+  "r3_04_final_evidence_commit": "0f7242798cea2e45d0cd9c5d89653327583d19b2",
+  "r3_04_final_evidence_freeze": "71fca58e65853c325ba7622d7565e51be85a54f46394de8d4f4ee2e0753adfa2",
+  "r3_04_status": "R3_04_CLOSED_NET_LOSS"
+ },
+ "primary_endpoint": "NET_PROJ_EVAL(c) at 1.5 GiB = kappa_low * (A minus c decode miss bytes per token on the EVAL stream) - transfer_factor * (c minus b_selected microbench ns/event) * events_per_token; ms/token; positive = c faster than A.",
+ "r3_r4_boundary": "R3-05 tests ONE fixed causal retention rule (NUE_X, or its surrogate) with no runtime switching, no regime detection and no learned controller. Gating, policy portfolios and adaptive controllers (families B and H) are reserved for R4 and are only described, never evaluated, here.",
+ "research_question": "What is the minimum decision cost required to capture a useful fraction of future-retention value at 1.5 GiB, and does any causal predictive retention decision exist whose projected value exceeds its projected cost by the pre-registered margin? If none exists even at zero decision cost, per-token predictive retention is declared uneconomic in the tested regime.",
+ "runtime_realization_gate": "Before any model launch: the candidate is implemented additively in the retention-policy module behind a new policy id; C++ vs Python bit-identical decisions on the extracted R3-04 stream (offline conformance harness); A/PP/sham semantics unchanged; separate human approval.",
+ "secondary_endpoints": [
+  "decode misses and miss bytes per token vs A, CES, PP, BELADY at 1.5 / 4 / 8 GiB",
+  "fraction of clairvoyant headroom captured",
+  "PP_CURVE retained-benefit fraction at each f",
+  "byte-weighted vs count-weighted miss reduction (miss-cost heterogeneity, family G)",
+  "prefill vs decode split of the effect (family C)",
+  "ranking equivalence of the incremental predictor vs the frozen reference (event-level top_k set agreement)"
+ ],
+ "success_rule": "R3_05_FEASIBLE iff replay fidelity gate passes AND the DEV-selected candidate has dev and eval miss-byte reductions > 0 AND NET_PROJ_EVAL >= 10 ms/token AND benefit_low / cost_high >= 2. Executable: phase0.classify_phase1.",
+ "title": "R3-05 Economic predictive retention: is there a decision whose value exceeds its cost?"
+}

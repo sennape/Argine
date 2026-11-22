@@ -1,0 +1,17 @@
+{
+  "name": "r2-11-reasoning-v3",
+  "version": "r2-11-v1",
+  "split": "eval",
+  "semantic_category": "reasoning",
+  "description": "R2-11 fresh confirmatory reasoning specification #3: logical consistency/truth-teller puzzle. New task, authored for R2-11 only.",
+  "n_predict": 512,
+  "items": [
+    {
+      "id": "r2-11-reasoning-v3",
+      "segment": "r2-11-reasoning-v3",
+      "prompt": "Four people -- Pike, Quinn, Rae, and Sol -- each make exactly one statement about who stole a missing library book. Pike says: \"Quinn did it.\" Quinn says: \"Sol did not do it.\" Rae says: \"I did not do it, and Pike did not do it either.\" Sol says: \"Exactly one of us is lying.\" It is known that exactly one person stole the book, and that among the four statements, the number of true statements is not equal to the number of false statements. Determine who stole the book. Work through the possibilities systematically (e.g., by assuming each person in turn is the thief and checking which statements must then be true or false), and explicitly rule out every scenario that fails either the 'exactly one thief' condition or the 'true count != false count' condition before settling on the answer."
+    }
+  ],
+  "provenance_split_identity": "r2_11_eval",
+  "cli_split_field_note": "argine.research.cli's 'research trace --split' flag only accepts {dev, eval} (argine/research/cli.py 'trace' subparser, choices=['dev','eval']); there is no third CLI-level split value. Per the loader (argine/research/workloads.py:load, the 'items'-schema fallback branch), the CLI-facing 'split' field here is literal plumbing selecting which dict key the prompts load under -- it is set to the already-supported value 'eval' so this file can be captured with the existing CLI and loader, with NO code change. The true provenance-level identity of this corpus (a fresh, entirely new R2-11 confirmatory EVAL corpus -- distinct from R2-10 DEV, R2-10 EVAL, and R2-BRIDGE-01's holdout) is tracked entirely by workload_id, file path, output directory, and the 'provenance_split_identity' field below, plus experiments/R2-11-predictive-retention/eval_manifest.json -- exactly mirroring how R2-BRIDGE-01's own fresh holdout was externally distinguished from R2-09/R2-10 by workload_id/path/manifest, not by a unique CLI split string."
+}

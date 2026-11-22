@@ -1,0 +1,62 @@
+{
+ "artifact": "R3-03B-FINAL-RESULT",
+ "classification": "R3_03B_EXPLAINED",
+ "frozen_rule": "EXPLAINED iff the 95% Fieller CI for rho is bounded and entirely inside [0.5, 2.0]",
+ "equivalence_interval": [
+  0.5,
+  2.0
+ ],
+ "n_blocks": 20,
+ "counted_launches": 80,
+ "mean_O_ms_per_token": 17.466373388671876,
+ "mean_P_ms_per_token": 19.35448501953125,
+ "rho": 0.9024457830340606,
+ "fieller": {
+  "lo": 0.8759943227325426,
+  "hi": 0.9286851073705427,
+  "bounded": true,
+  "g": 6.567541059277687e-05,
+  "t": 2.093024054408307,
+  "df": 19
+ },
+ "performance": {
+  "old_runtime_overhead_ms_per_token": 57.35715195312502,
+  "old_runtime_source": "experiments/R3-02-phase2-mechanism/ANALYSIS.json timing['8'] mean(b)-mean(a) (old runtime, 5 launches per arm, not ABBA)",
+  "corrected_overhead_ms_per_token": 17.466373388671876,
+  "descriptive_reduction_ms": 39.89077856445314,
+  "descriptive_reduction_pct": 69.54804624374268,
+  "microbench_P_ms_per_token": 5.936613728923476,
+  "in_situ_P_ms_per_token": 19.35448501953125,
+  "in_situ_over_microbench": 3.2601893778662476,
+  "in_situ_P_us_per_call_contrast": 403.21843790690104,
+  "microbench_c_predictor_us_per_call": 123.67945268590574,
+  "O_minus_P_ms_per_token": -1.888111630859374,
+  "mean_wall_ms_per_token": {
+   "b_selected": 100.84604619140626,
+   "predicted_protect_sham": 118.31241958007813
+  },
+  "mean_policy_ms_per_token": {
+   "b_selected": 1.2007139208984374,
+   "predicted_protect_sham": 20.555198940429687
+  },
+  "mean_P_fraction_of_b_selected_step": 0.1919211089624312
+ },
+ "agreement_with_campaign_complete": {
+  "blocks": true,
+  "fieller": true,
+  "complete_launches": 80
+ },
+ "orphan_zero_weight": {
+  "orphan_has_timing_fields": false,
+  "orphan_identity_is_counted": false,
+  "estimator_inputs": "80 counted summaries (seq 1..80, attempt [1, 2])",
+  "result_unchanged_under_orphan_perturbation": true,
+  "weight": 0.0
+ },
+ "interpretation": {
+  "O_over_P": "the observed sham-minus-b_selected wall overhead equals about 90% of the directly measured in-situ policy bookkeeping time (CI 0.876-0.929)",
+  "residual": "O - P is negative (-1.89 ms/token): measured bookkeeping time slightly exceeds the observed wall overhead, so there is no unexplained positive remainder at this resolution",
+  "claim_boundary": "see CLAIM_BOUNDARIES.md"
+ },
+ "no_further_model_runs_required": true
+}

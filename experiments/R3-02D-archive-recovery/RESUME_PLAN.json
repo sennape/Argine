@@ -1,0 +1,153 @@
+{
+  "artifact": "R3-02D-RESUME-PLAN",
+  "cells_on_disk": 20,
+  "completed_launches": 32,
+  "created_utc": "2026-11-18T06:08:43Z",
+  "includes_model_runs": true,
+  "launches": [
+    {
+      "config_id": "B-8GiB",
+      "kind": "TRACE_COUNT",
+      "n_predict": 512,
+      "repetition": null,
+      "seq": 33
+    },
+    {
+      "config_id": "C-8GiB",
+      "kind": "TRACE_COUNT",
+      "n_predict": 512,
+      "repetition": null,
+      "seq": 34
+    },
+    {
+      "config_id": "A-8GiB",
+      "kind": "TIMING_WARMUP",
+      "n_predict": 512,
+      "repetition": null,
+      "seq": 35
+    },
+    {
+      "config_id": "B-8GiB",
+      "kind": "TIMING_WARMUP",
+      "n_predict": 512,
+      "repetition": null,
+      "seq": 36
+    },
+    {
+      "config_id": "C-8GiB",
+      "kind": "TIMING_WARMUP",
+      "n_predict": 512,
+      "repetition": null,
+      "seq": 37
+    },
+    {
+      "config_id": "A-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 1,
+      "seq": 38
+    },
+    {
+      "config_id": "B-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 1,
+      "seq": 39
+    },
+    {
+      "config_id": "C-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 1,
+      "seq": 40
+    },
+    {
+      "config_id": "B-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 2,
+      "seq": 41
+    },
+    {
+      "config_id": "C-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 2,
+      "seq": 42
+    },
+    {
+      "config_id": "A-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 2,
+      "seq": 43
+    },
+    {
+      "config_id": "C-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 3,
+      "seq": 44
+    },
+    {
+      "config_id": "A-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 3,
+      "seq": 45
+    },
+    {
+      "config_id": "B-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 3,
+      "seq": 46
+    },
+    {
+      "config_id": "A-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 4,
+      "seq": 47
+    },
+    {
+      "config_id": "B-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 4,
+      "seq": 48
+    },
+    {
+      "config_id": "C-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 4,
+      "seq": 49
+    },
+    {
+      "config_id": "B-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 5,
+      "seq": 50
+    },
+    {
+      "config_id": "C-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 5,
+      "seq": 51
+    },
+    {
+      "config_id": "A-8GiB",
+      "kind": "TIMING_COUNTED",
+      "n_predict": 512,
+      "repetition": 5,
+      "seq": 52
+    }
+  ],
+  "note": "dry plan only; not executed",
+  "phase": "R3-02D",
+  "remaining": 20,
+  "run_dir": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-02-p4"
+}

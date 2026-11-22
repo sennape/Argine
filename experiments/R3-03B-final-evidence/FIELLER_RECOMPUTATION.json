@@ -1,0 +1,24 @@
+{
+ "artifact": "R3-03B-FIELLER-RECOMPUTATION",
+ "n_blocks": 20,
+ "df": 19,
+ "t": 2.093024054408307,
+ "mean_O": 17.466373388671876,
+ "mean_P": 19.35448501953125,
+ "var_mean_O": 0.08028820794495675,
+ "var_mean_P": 0.005615877137341393,
+ "cov_means_OP": 0.014137258195828095,
+ "g": 6.567541059277687e-05,
+ "rho": 0.9024457830340606,
+ "lo": 0.8759943227325426,
+ "hi": 0.9286851073705427,
+ "bounded": true,
+ "classification": "EXPLAINED",
+ "method": "direct quadratic solution of the Fieller condition on block-paired means; t quantile df=19 by incomplete-beta bisection",
+ "classification_rule": "EXPLAINED iff bounded and [lo, hi] inside [0.5, 2.0]",
+ "result": "R3_03B_EXPLAINED",
+ "boundary_checks": {
+  "lo_ge_0.5": true,
+  "hi_le_2.0": true
+ }
+}

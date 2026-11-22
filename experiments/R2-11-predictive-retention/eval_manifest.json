@@ -1,0 +1,131 @@
+{
+  "category_counts": {
+    "coding": 3,
+    "instruction": 3,
+    "reasoning": 3,
+    "summarization": 3
+  },
+  "corpus_design": "12 new confirmatory EVAL instances (3 coding, 3 reasoning, 3 summarization, 3 instruction-following). No new DEV-selection stage: the predictor and retention mechanism are already frozen from R2-BRIDGE-01 Phase 1; R2-11 is confirmatory, not another model/policy-selection tournament.",
+  "eval_status": "R2_11_PROTOCOL_FROZEN",
+  "eval_visibility_state": "R2_11_EVAL_LOCKED",
+  "eval_workload_specs": [
+    {
+      "category": "coding",
+      "cli_split_field": "eval",
+      "item_id": "r2-11-coding-v1",
+      "path": "research2/workloads/r2_11/r2-11-coding-v1.json",
+      "provenance_split_identity": "r2_11_eval",
+      "sha256": "3cc6a2f89fcc6600f894c967861e6ff5f53cb0b2d460fe7fc459481d8cca2019",
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "category": "coding",
+      "cli_split_field": "eval",
+      "item_id": "r2-11-coding-v2",
+      "path": "research2/workloads/r2_11/r2-11-coding-v2.json",
+      "provenance_split_identity": "r2_11_eval",
+      "sha256": "b229deb3824ea24d5820f0f102ba7e92f743784a73132f920dd38ace06be62e9",
+      "workload_id": "r2-11-coding-v2"
+    },
+    {
+      "category": "coding",
+      "cli_split_field": "eval",
+      "item_id": "r2-11-coding-v3",
+      "path": "research2/workloads/r2_11/r2-11-coding-v3.json",
+      "provenance_split_identity": "r2_11_eval",
+      "sha256": "9fa32b1641f17c017c8de7f5ca143b1d3edd3cb0e1045bdc998e258ce49b7d29",
+      "workload_id": "r2-11-coding-v3"
+    },
+    {
+      "category": "instruction",
+      "cli_split_field": "eval",
+      "item_id": "r2-11-instruction-v1",
+      "path": "research2/workloads/r2_11/r2-11-instruction-v1.json",
+      "provenance_split_identity": "r2_11_eval",
+      "sha256": "5a9c042b5d8ecac9ca92d189fe074f42c9f24747606ae8edc75567901d29266d",
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "category": "instruction",
+      "cli_split_field": "eval",
+      "item_id": "r2-11-instruction-v2",
+      "path": "research2/workloads/r2_11/r2-11-instruction-v2.json",
+      "provenance_split_identity": "r2_11_eval",
+      "sha256": "19522635506886477ff466b0ac0178960e22917d011965e2f016141c435ecc09",
+      "workload_id": "r2-11-instruction-v2"
+    },
+    {
+      "category": "instruction",
+      "cli_split_field": "eval",
+      "item_id": "r2-11-instruction-v3",
+      "path": "research2/workloads/r2_11/r2-11-instruction-v3.json",
+      "provenance_split_identity": "r2_11_eval",
+      "sha256": "5797b1237e3cdd6bb441b8f8037f09af87675ce189bc3cce78e475e1235e5b3b",
+      "workload_id": "r2-11-instruction-v3"
+    },
+    {
+      "category": "reasoning",
+      "cli_split_field": "eval",
+      "item_id": "r2-11-reasoning-v1",
+      "path": "research2/workloads/r2_11/r2-11-reasoning-v1.json",
+      "provenance_split_identity": "r2_11_eval",
+      "sha256": "bb82afa21e35b94c1e93910be4d4d50378a0ca5d040d40f387e6890243aa5791",
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "category": "reasoning",
+      "cli_split_field": "eval",
+      "item_id": "r2-11-reasoning-v2",
+      "path": "research2/workloads/r2_11/r2-11-reasoning-v2.json",
+      "provenance_split_identity": "r2_11_eval",
+      "sha256": "f286352e8f47d2a721f2858aa6cf5298a6ff99afb825635c7758fb2441cbae3d",
+      "workload_id": "r2-11-reasoning-v2"
+    },
+    {
+      "category": "reasoning",
+      "cli_split_field": "eval",
+      "item_id": "r2-11-reasoning-v3",
+      "path": "research2/workloads/r2_11/r2-11-reasoning-v3.json",
+      "provenance_split_identity": "r2_11_eval",
+      "sha256": "95204a47c6f380dd5dd63302e48216b62b9be8c92b9ffc968387cc5e1b527a56",
+      "workload_id": "r2-11-reasoning-v3"
+    },
+    {
+      "category": "summarization",
+      "cli_split_field": "eval",
+      "item_id": "r2-11-summarization-v1",
+      "path": "research2/workloads/r2_11/r2-11-summarization-v1.json",
+      "provenance_split_identity": "r2_11_eval",
+      "sha256": "ecc9425a9aeaec7e92a982d51cb742a804442e6765a192818bdac9b588820601",
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "category": "summarization",
+      "cli_split_field": "eval",
+      "item_id": "r2-11-summarization-v2",
+      "path": "research2/workloads/r2_11/r2-11-summarization-v2.json",
+      "provenance_split_identity": "r2_11_eval",
+      "sha256": "03da7f3363d91b9f390475461c1ac675134f1ba577d0fcabcfe106ac564bc5c6",
+      "workload_id": "r2-11-summarization-v2"
+    },
+    {
+      "category": "summarization",
+      "cli_split_field": "eval",
+      "item_id": "r2-11-summarization-v3",
+      "path": "research2/workloads/r2_11/r2-11-summarization-v3.json",
+      "provenance_split_identity": "r2_11_eval",
+      "sha256": "0abf4761b1b8fc6364afd1fa2e73c4a26c40b782707e8a54b718c0e76f511a8d",
+      "workload_id": "r2-11-summarization-v3"
+    }
+  ],
+  "manifest_version": "r2-11-phase0-v1",
+  "no_prior_r2_11_result_exists": true,
+  "results": null,
+  "schema_version": 1,
+  "spec_visibility": {
+    "fully_blinded": false,
+    "rationale": "Mirrors R2-09's own spec_visibility rationale: workload spec/prompt files are stored in the tracked repository for immutable provenance and SHA binding; this is not claimed as fully blinded to task content. No model output may be inspected while authoring or auditing the workload corpus (instruction #9), and no R2-11 result may be computed or inspected in this phase (instruction #28).",
+    "result_visibility": "R2_11_RESULT_LOCKED",
+    "status": "EVAL_PROMPTS_VISIBLE_BUT_RESULTS_HELD_OUT"
+  }
+}

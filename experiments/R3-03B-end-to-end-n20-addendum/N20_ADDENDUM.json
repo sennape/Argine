@@ -1,0 +1,70 @@
+{
+ "schema": "r3-03b-n20-addendum-v1",
+ "artifact": "R3-03B-END-TO-END-N20-PROSPECTIVE-ADDENDUM",
+ "status": "PRE_ACQUISITION_ADDENDUM_NO_END_TO_END_DATA_ACQUIRED",
+ "parents": {
+  "conformance_freeze_sha256": "29cd74284c92a29537e4d0d77987d172032639ecc99f7b5cd9aed6b48bcdc0a4",
+  "conformance_evidence_commit": "91b5894",
+  "conformance_classification": "R3_03B_INSTRUMENTED_CONFORMANCE_PASS",
+  "block_count_addendum_commit": "1dd8f716",
+  "microbench_freeze_sha256": "abb451010b04782a56c51420485908871e1a77e87dd18b22f75b5e0580dd7009",
+  "protocol_freeze_sha256": "d0dd74510918d711c0ae6a8dd35f97c40d8cb3a573ff32f82955ebbe30686882",
+  "runtime_sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5"
+ },
+ "prior_files_sha256_at_creation": {
+  "experiments/R3-03B-end-to-end-block-count/BLOCK_COUNT_ADDENDUM.json": "afd99681af35fda727af78681bef6813f7150369188bfc11afec7665656edd28",
+  "experiments/R3-03B-direct-cost-attribution/PROTOCOL.json": "295e8e3f3e376248998baf3ea5fa845c8f3b793706ed3e1c7aae0d8b463b1ae5"
+ },
+ "decision": {
+  "endpoint": "8 GiB primary (b_selected vs predicted_protect_sham)",
+  "fixed_N_blocks": 20,
+  "counted_physical_launches": 80,
+  "warmup_launches": 0,
+  "total_physical_launches": 80,
+  "previous_rule_minimum": {
+   "N_req": 9,
+   "launches": 36
+  },
+  "equals_protocol_cap": true
+ },
+ "why_N20": {
+  "rule_minimum_N": 9,
+  "p_explained_if_rho_1_at_N9": 0.530221907202608,
+  "p_explained_if_rho_1_at_N20": 0.9307717406341858,
+  "p_explained_at_N20_by_true_rho": {
+   "0.75": 0.37990528530607337,
+   "1.0": 0.9307717406341858,
+   "1.25": 0.9989201807564163,
+   "1.5": 0.9307717406341858
+  },
+  "p_explained_at_N9_by_true_rho": {
+   "0.75": 0.1340233670442229,
+   "1.0": 0.530221907202608,
+   "1.25": 0.8032466163277574,
+   "1.5": 0.530221907202608
+  },
+  "text": "N=9 satisfies the frozen precision gate (CI half-width <= 0.5 at rho=1) but resolves an EXPLAINED verdict with only ~53% probability at the scientifically central case rho=1. N=20 is the frozen protocol cap, is not a new quantity, and raises that probability to ~93% (approximate, historical-variance based). The choice is made before the first launch of any end-to-end campaign."
+ },
+ "unchanged_frozen_elements": [
+  "equivalence interval [0.5, 2.0]",
+  "Fieller 95% CI for rho with t quantile, df = blocks-1",
+  "ABBA block estimator (mean of per-block contrasts)",
+  "primary endpoint (8 GiB)",
+  "policies b_selected / predicted_protect_sham",
+  "workload r2-11-coding-v1, seed 42, greedy, 512 tokens, ctx 4096",
+  "8 GiB budget",
+  "decision rule and branches",
+  "instrumentation definitions (policy_timing r3-03b-v1)"
+ ],
+ "secondary_4GiB": {
+  "N_req": 215,
+  "cap": 10,
+  "classification": "UNDERPOWERED_FOR_EXPLAINED_VERDICT",
+  "run": false,
+  "capped_10_block_acquisition": "NOT PERFORMED, not planned",
+  "rho_ci_halfwidth_at_cap": 2.658974929522232,
+  "interval_width_available": 1.5
+ },
+ "timing_observation_disclosure": "No end-to-end timing campaign data exist. The four conformance launches were traced correctness runs (per-token decode 477-524 ms; ~126 ms untraced historically) and their timing fields are not evidence and were not used for this decision. N=20 was fixed by the researcher from the precision/power rationale above, which uses only the microbenchmark freeze and historical R3-02-p4 variance.",
+ "no_timing_claim": true
+}

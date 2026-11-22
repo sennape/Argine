@@ -1,0 +1,81 @@
+{
+  "decision_rules_category": "B (MEASURABLE_IMPROVEMENT_INSUFFICIENT_FOR_RETENTION): at least one causal_runtime_candidate (decayed_transition/decay=0.99) measurably and consistently exceeds both trivial baselines on DEV h=1 recall@k (margin +0.0326 absolute, ~8% relative, present in all 8 DEV cells and all 4 workloads, and at h=4/h=16 as well). The margin is moderate rather than large, so this is classified as Category B rather than Category C: it is suggestive that R2-11 (retention-integration) planning is worth scoping, but this DEV-tournament evidence alone does not establish a 'large' margin per decision_rules.json's Category C bar, and retention/runtime claims remain explicitly out of scope for R2-10 regardless.",
+  "experiment_id": "R2-10",
+  "forbidden_claims_not_made": [
+    "No retention (miss_bytes) improvement is claimed.",
+    "No runtime/latency/tokens-per-second claim is made.",
+    "No generalization beyond the 8 DEV cells is claimed (EVAL remains locked and was never accessed).",
+    "No change to AUDIT-ORACLE-001 CASE C / O_B=O* semantics is claimed."
+  ],
+  "generated_utc": "2026-11-11T23:00:36Z",
+  "margin_over_best_trivial_baseline_h1": 0.03258889879550175,
+  "per_family_best_vs_trivial": {
+    "decayed_transition": {
+      "config_id": "decayed_transition/decay=0.99",
+      "delta_vs_best_trivial_h1": 0.03258889879550175,
+      "mean_recall_h1": 0.4393972693581131
+    },
+    "markov_transition": {
+      "config_id": "markov_transition/default",
+      "delta_vs_best_trivial_h1": 0.020039504811785236,
+      "mean_recall_h1": 0.42684787537439656
+    },
+    "recency_frequency_transition_blend": {
+      "config_id": "recency_frequency_transition_blend/w_r=0.0,w_f=0.0,w_t=1.0",
+      "delta_vs_best_trivial_h1": 0.020039504811785236,
+      "mean_recall_h1": 0.42684787537439656
+    },
+    "recency_window": {
+      "config_id": "recency_window/window_W=16",
+      "delta_vs_best_trivial_h1": -0.039253627356256426,
+      "mean_recall_h1": 0.3675547432063549
+    }
+  },
+  "phase": "PHASE_2_SELECTION_AND_ANALYSIS",
+  "pool": "all 6 causal_runtime_candidate families (16 configs total): global_frequency, last_observation, recency_window(4), markov_transition, decayed_transition(3), recency_frequency_transition_blend(6). shuffled_null excluded (ANALYTICAL_REFERENCE_ONLY, never in pool).",
+  "schema_version": 1,
+  "scientific_answers": {
+    "A_causal_beats_trivial_on_dev_h1": true,
+    "B_recency_window_helps_beyond_last_observation": false,
+    "C_markov_helps": true,
+    "D_decay_helps_beyond_plain_markov": true,
+    "E_blend_beats_its_best_single_component": true,
+    "F_consistent_across_workloads": 0.012919000000000014,
+    "G_consistent_across_dev_cells_stdev": 0.005315297228385794,
+    "H_improvement_holds_at_longer_horizons": true,
+    "I_shuffled_null_status": "ANALYTICAL_REFERENCE_ONLY, never executed as a runtime candidate (frozen contract)."
+  },
+  "selected": {
+    "config_id": "decayed_transition/decay=0.99",
+    "family_id": "decayed_transition",
+    "mean_recall_h1": 0.4393972693581131,
+    "mean_recall_h16": 0.3224758371893329,
+    "mean_recall_h4": 0.3481974692653974,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.43511,
+      "coding-v1/seed-43": 0.436127,
+      "instruction-v1/seed-42": 0.448511,
+      "instruction-v1/seed-43": 0.448566,
+      "reasoning-v1/seed-42": 0.436959,
+      "reasoning-v1/seed-43": 0.43744,
+      "summarization-v1/seed-42": 0.436145,
+      "summarization-v1/seed-43": 0.43632
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.435619,
+      "instruction": 0.448538,
+      "reasoning": 0.437199,
+      "summarization": 0.436233
+    },
+    "stdev_h1_across_8_dev_cells": 0.005315297228385794
+  },
+  "selection_rule_applied": "experiments/R2-10-working-set-predictor/selection_rule.json (DEV_ONLY, equal weight per instance, h=1 primary, tie-break: higher h1 -> fewer hyperparameters -> lexical config_id)",
+  "trivial_baselines": {
+    "global_frequency": {
+      "mean_recall_h1": 0.3327398851601756
+    },
+    "last_observation": {
+      "mean_recall_h1": 0.4068083705626113
+    }
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "artifact": "R3-02A-EQUIVALENCE",
+  "cases": [
+    {
+      "b_selected_final": {
+        "evictions": 0,
+        "hits": 144,
+        "misses": 16,
+        "policy_id": "b_selected",
+        "predictor_decisions": 0,
+        "protected_fallbacks": 0,
+        "resident_bytes": 1600
+      },
+      "case": "no_pressure",
+      "checks": {
+        "all_runs_exit_zero": true,
+        "b_selected_regression_identical": true,
+        "predicted_protect_regression_identical": true,
+        "sham_policy_id_distinct": true,
+        "sham_predictor_decisions_positive": true,
+        "sham_vs_b_selected_counters_identical": true,
+        "sham_vs_b_selected_stdout_identical": true
+      },
+      "events": 80,
+      "pass": true,
+      "sham_final": {
+        "evictions": 0,
+        "hits": 144,
+        "misses": 16,
+        "policy_id": "predicted_protect_sham",
+        "predictor_decisions": 80,
+        "protected_fallbacks": 0,
+        "resident_bytes": 1600
+      }
+    },
+    {
+      "b_selected_final": {
+        "evictions": 0,
+        "hits": 317,
+        "misses": 3,
+        "policy_id": "b_selected",
+        "predictor_decisions": 0,
+        "protected_fallbacks": 0,
+        "resident_bytes": 300
+      },
+      "case": "repeated_reuse",
+      "checks": {
+        "all_runs_exit_zero": true,
+        "b_selected_regression_identical": true,
+        "predicted_protect_regression_identical": true,
+        "sham_policy_id_distinct": true,
+        "sham_predictor_decisions_positive": true,
+        "sham_vs_b_selected_counters_identical": true,
+        "sham_vs_b_selected_stdout_identical": true
+      },
+      "events": 120,
+      "pass": true,
+      "sham_final": {
+        "evictions": 0,
+        "hits": 317,
+        "misses": 3,
+        "policy_id": "predicted_protect_sham",
+        "predictor_decisions": 120,
+        "protected_fallbacks": 0,
+        "resident_bytes": 300
+      }
+    },
+    {
+      "b_selected_final": {
+        "evictions": 703,
+        "hits": 89,
+        "misses": 711,
+        "policy_id": "b_selected",
+        "predictor_decisions": 0,
+        "protected_fallbacks": 0,
+        "resident_bytes": 800
+      },
+      "case": "eviction_heavy",
+      "checks": {
+        "all_runs_exit_zero": true,
+        "b_selected_regression_identical": true,
+        "predicted_protect_regression_identical": true,
+        "sham_policy_id_distinct": true,
+        "sham_predictor_decisions_positive": true,
+        "sham_vs_b_selected_counters_identical": true,
+        "sham_vs_b_selected_stdout_identical": true
+      },
+      "events": 200,
+      "pass": true,
+      "sham_final": {
+        "evictions": 703,
+        "hits": 89,
+        "misses": 711,
+        "policy_id": "predicted_protect_sham",
+        "predictor_decisions": 200,
+        "protected_fallbacks": 0,
+        "resident_bytes": 800
+      }
+    },
+    {
+      "b_selected_final": {
+        "evictions": 1738,
+        "hits": 50,
+        "misses": 1750,
+        "policy_id": "b_selected",
+        "predictor_decisions": 0,
+        "protected_fallbacks": 0,
+        "resident_bytes": 1200
+      },
+      "case": "multi_layer",
+      "checks": {
+        "all_runs_exit_zero": true,
+        "b_selected_regression_identical": true,
+        "predicted_protect_regression_identical": true,
+        "sham_policy_id_distinct": true,
+        "sham_predictor_decisions_positive": true,
+        "sham_vs_b_selected_counters_identical": true,
+        "sham_vs_b_selected_stdout_identical": true
+      },
+      "events": 600,
+      "pass": true,
+      "sham_final": {
+        "evictions": 1738,
+        "hits": 50,
+        "misses": 1750,
+        "policy_id": "predicted_protect_sham",
+        "predictor_decisions": 600,
+        "protected_fallbacks": 0,
+        "resident_bytes": 1200
+      }
+    },
+    {
+      "b_selected_final": {
+        "evictions": 90,
+        "hits": 33,
+        "misses": 95,
+        "policy_id": "b_selected",
+        "predictor_decisions": 0,
+        "protected_fallbacks": 0,
+        "resident_bytes": 500
+      },
+      "case": "ties",
+      "checks": {
+        "all_runs_exit_zero": true,
+        "b_selected_regression_identical": true,
+        "predicted_protect_regression_identical": true,
+        "sham_policy_id_distinct": true,
+        "sham_predictor_decisions_positive": true,
+        "sham_vs_b_selected_counters_identical": true,
+        "sham_vs_b_selected_stdout_identical": true
+      },
+      "events": 60,
+      "pass": true,
+      "sham_final": {
+        "evictions": 90,
+        "hits": 33,
+        "misses": 95,
+        "policy_id": "predicted_protect_sham",
+        "predictor_decisions": 60,
+        "protected_fallbacks": 0,
+        "resident_bytes": 500
+      }
+    },
+    {
+      "b_selected_final": {
+        "evictions": 0,
+        "hits": 78,
+        "misses": 2,
+        "policy_id": "b_selected",
+        "predictor_decisions": 0,
+        "protected_fallbacks": 0,
+        "resident_bytes": 200
+      },
+      "case": "budget_boundary",
+      "checks": {
+        "all_runs_exit_zero": true,
+        "b_selected_regression_identical": true,
+        "predicted_protect_regression_identical": true,
+        "sham_policy_id_distinct": true,
+        "sham_predictor_decisions_positive": true,
+        "sham_vs_b_selected_counters_identical": true,
+        "sham_vs_b_selected_stdout_identical": true
+      },
+      "events": 80,
+      "pass": true,
+      "sham_final": {
+        "evictions": 0,
+        "hits": 78,
+        "misses": 2,
+        "policy_id": "predicted_protect_sham",
+        "predictor_decisions": 80,
+        "protected_fallbacks": 0,
+        "resident_bytes": 200
+      }
+    }
+  ],
+  "fail_closed": {
+    "all_rejected": true,
+    "sham_missing_params_rejected": true,
+    "sham_top_k_zero_rejected": true,
+    "unknown_policy_rejected": true
+  },
+  "summary": {
+    "all_pass": true,
+    "cases": 6,
+    "passed": 6
+  }
+}

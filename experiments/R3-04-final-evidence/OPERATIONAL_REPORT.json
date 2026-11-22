@@ -1,0 +1,49 @@
+{
+ "budget_1.5GiB": {
+  "duration_h": 9.63721342186133,
+  "first_start": "2026-11-21 11:40:22 (UTC+01:00, CET)",
+  "last_finish": "2026-11-21 21:18:36 (UTC+01:00, CET)",
+  "launches": 109,
+  "mean_launch_interval_s_start_to_start": 318.3652459007722
+ },
+ "budget_8GiB": {
+  "duration_h": 1.1097108542256886,
+  "first_start": "2026-11-21 21:19:37 (UTC+01:00, CET)",
+  "last_finish": "2026-11-21 22:26:12 (UTC+01:00, CET)",
+  "launches": 37,
+  "mean_launch_interval_s_start_to_start": 108.49220303032133
+ },
+ "campaign_finish": "2026-11-21 22:26:12 (UTC+01:00, CET)",
+ "campaign_opened": "2026-11-21 11:39:21 (UTC+01:00, CET)",
+ "campaign_start_first_launch": "2026-11-21 11:40:22 (UTC+01:00, CET)",
+ "disk_anomalies": "none recorded (no failed/orphan/interrupted artifacts; 146 records, 292 launch logs)",
+ "estimates_h_operational_evidence_only": {
+  "central": 8.04,
+  "high": 9.43,
+  "low": 6.76
+ },
+ "exceeds_high_estimate": true,
+ "failed_runs": 0,
+ "note": "Overrun is consistent with slower-than-assumed untraced 1.5 GiB decode (observed ~527 ms/token mean); the 1.5 GiB decode time was an assumed bound in the time model, not an observation",
+ "orphans": 0,
+ "shutdown_failures": 0,
+ "total_wall_h_first_start_to_last_finish": 10.763862341576152,
+ "total_wall_h_opened_to_finish": 10.780795597831409,
+ "vs_estimate": {
+  "central": {
+   "actual_minus_estimate_h": 2.7238623415761527,
+   "actual_over_estimate": 1.3387888484547454,
+   "estimate_h": 8.04
+  },
+  "high": {
+   "actual_minus_estimate_h": 1.3338623415761521,
+   "actual_over_estimate": 1.1414488167100905,
+   "estimate_h": 9.43
+  },
+  "low": {
+   "actual_minus_estimate_h": 4.003862341576152,
+   "actual_over_estimate": 1.5922873286355255,
+   "estimate_h": 6.76
+  }
+ }
+}

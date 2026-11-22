@@ -1,0 +1,40 @@
+{
+  "anchor_commit": "30f0d9860c65b41ef6e4417ef66574d6d4cb58ca",
+  "artifact": "R3-02B-FREEZE",
+  "artifacts": {
+    "DRY_RUN_VALIDATION.json": "19d6ab4b5ea064800c3a68c1dd715299b844e1b16908ceb73461084a932f1635",
+    "IMPLEMENTATION.json": "43a9a464b695eb2980720920ffbc83fc461ed430f731544604c777f291745195",
+    "NTFS_COMPRESSION_TEST.json": "9dadc613a366e7dab3e9cf9239c30496b4b703ad549e98dde8f70847ff670eb6",
+    "README.md": "622f6b7b47e74a892853fdbc3afe8cb4429c5faa7d33b81b1395f62d94b13b77",
+    "STORAGE_MODEL.json": "70205bfbbe8f2c0f8d532a1f68e5711542bd49b69d08e3d2394d06ad42a446bb",
+    "tests/test_driver.py": "9a9aaa452e826097e8172992019b9f5962bdd457037bc19d7c2b8adf541dd866",
+    "tools/r3_02_acquire.py": "fb754959baaeef7af8e072e02bc39347133cb79ed2f1b7da09df13ce4d0de8b7"
+  },
+  "created_utc": "2026-11-18T06:08:50Z",
+  "frozen_scope": [
+    "acquisition driver CLI and contract checks",
+    "preflight gate",
+    "trace reuse implementation",
+    "state machine, resume and rerun rules",
+    "dry-run validation"
+  ],
+  "hotfix_edition": 6,
+  "no_acquisition": true,
+  "no_model_loaded": true,
+  "not_frozen": [
+    "Phase 1 execution",
+    "scientific analysis",
+    "cost-aware policy",
+    "primary scientific endpoint",
+    "EVAL rules"
+  ],
+  "phase": "R3-02B",
+  "protocol_digest": "f8d4b3199c4c74555353e5f796eaf7d7c3687da97883ee07f7d1c81233c9469c",
+  "r3_02_freeze_sha256": "c8159983ca44aea465165030695a199be5fe6738c697a20c6f8679def062faba",
+  "status": "PASS_ACQUISITION_DRIVER_READY",
+  "storage_classification": "LOSSLESS_ARCHIVE_STORAGE_SAFE",
+  "supersedes": {
+    "freeze_commit": "787456f9a6829ef9008c57c81a536ffeba0845dd",
+    "reason": "streaming archive verification + verified recovery resume ordering; evidence schema unchanged"
+  }
+}

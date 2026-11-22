@@ -1,0 +1,29 @@
+{
+  "budgets_bytes": [
+    1610612736,
+    4294967296,
+    8589934592
+  ],
+  "contract_version": "r2-11-phase0-contract-v1.0",
+  "o_b_comparator_note": "Where scientifically meaningful, recovery relative to O_B (the implemented clairvoyant comparator) may also be reported. O_B must always be described only as the implemented clairvoyant comparator; it is never called the proven optimum O*, and O_B=O* is never inferred. If included, O_B is recorded as a secondary comparator only and never affects policy selection, because no policy selection exists in R2-11 (the policy is already frozen).",
+  "primary_metric": {
+    "aggregation_rule": "Equal-weight arithmetic mean across the 12 fresh R2-11 evaluation instances. Never weighted by token count.",
+    "lower_is_better": true,
+    "metric_id": "miss_bytes_per_decode_step",
+    "paired_delta_definition": "delta_i(M) = PredictedProtectPolicy_i(M) - B_selected_i(M), per fresh evaluation instance i and budget M. delta < 0 means predictive retention is better.",
+    "primary_budget_bytes": 4294967296
+  },
+  "schema_version": 1,
+  "secondary_metrics": [
+    "total_miss_bytes",
+    "misses_per_decode_step",
+    "total_misses",
+    "evictions",
+    "peak_resident_bytes",
+    "budget_violations (must be zero for every cell; non-zero is a correctness failure, not a scientific result)",
+    "overflow_misses",
+    "per_workload_delta",
+    "per_category_aggregate (coding / reasoning / summarization / instruction, 3 instances each)",
+    "secondary_budget_aggregate (1.5 GiB and 8 GiB, equal-weight mean delta)"
+  ]
+}

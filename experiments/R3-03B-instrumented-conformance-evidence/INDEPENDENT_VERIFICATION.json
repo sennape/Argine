@@ -1,0 +1,24 @@
+{
+ "artifact": "R3-03B-INSTRUMENTED-CONFORMANCE-INDEPENDENT-VERIFICATION",
+ "performed_by": "separate stdlib-only re-derivation (validate_evidence.py: scan_trace + record checks); does not import tools/r3_03b_conformance.py or tools/r3_03a_trace.py",
+ "trace_sha256_rehash_on_mounted_files": {
+  "A-8GiB-OFF": "f6bfed9780c354243bd1b66b334d34aecce6f1ee205a12ebe50e812773c88e4e",
+  "A-8GiB-ON": "f6bfed9780c354243bd1b66b334d34aecce6f1ee205a12ebe50e812773c88e4e",
+  "B-8GiB-OFF": "0a352d5808100902f17c1e059218f52ee53c0faefedb1d285b4c4f14dc4e8844",
+  "B-8GiB-ON": "0a352d5808100902f17c1e059218f52ee53c0faefedb1d285b4c4f14dc4e8844",
+  "matches_driver_records": true
+ },
+ "trace_line_count_wc": {"A-8GiB-OFF": 49344, "B-8GiB-OFF": 49344},
+ "streaming_scan": {
+  "A-8GiB-OFF": {"policy_rows": 24672, "completion_rows": 24672, "unparsed": 0, "alternating": true, "passes": 514, "events_per_pass": [48], "unique_events": 24672, "budget_violations": 0, "max_policy_bytes": 8589901824},
+  "B-8GiB-OFF": {"policy_rows": 24672, "completion_rows": 24672, "unparsed": 0, "alternating": true, "passes": 514, "events_per_pass": [48], "unique_events": 24672, "budget_violations": 0, "max_policy_bytes": 8589901824},
+  "B-8GiB-ON": {"policy_rows": 24672, "completion_rows": 24672, "unparsed": 0, "alternating": true, "passes": 514, "events_per_pass": [48], "unique_events": 24672, "budget_violations": 0},
+  "A-8GiB-ON": "not separately scanned: byte-identical (same sha256) to A-8GiB-OFF"
+ },
+ "stderr_grep": {"error_violation_duplicate_hits": {"A-8GiB-OFF": 0, "A-8GiB-ON": 0, "B-8GiB-OFF": 0, "B-8GiB-ON": 0}, "policy_timing_lines": {"A-8GiB-OFF": 0, "A-8GiB-ON": 1, "B-8GiB-OFF": 0, "B-8GiB-ON": 1}},
+ "limitations_of_this_verification": [
+  "the new runtime binary tree is not mounted in this workspace; its sha256 was enforced by the host driver (T1 hashes the exe and refuses on mismatch) and is not re-hashed here",
+  "sham-vs-b_selected row-level equivalence and OFF-vs-ON canonical comparison were computed by the host driver; OFF-vs-ON identity is independently confirmed here by identical sha256 of the full trace files",
+  "launch wall-clock start/stop times are taken from file modification times and server log timestamps"
+ ]
+}

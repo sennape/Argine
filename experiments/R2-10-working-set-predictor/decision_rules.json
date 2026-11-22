@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-10-phase0-contract-v1.0",
+  "name": "R2-10 acceptance / interpretation rules (frozen before results)",
+  "principle": "No arbitrary PASS threshold is defined merely to force a positive result. Negative results are valid and must not be reframed as positive.",
+  "interpretation_categories": [
+    {
+      "category": "A",
+      "label": "NO_USEFUL_CAUSAL_SIGNAL",
+      "definition": "No causal_runtime_candidate family's DEV primary_selection_statistic (h=1 recall@k) exceeds BOTH trivial baselines (global_frequency and last_observation) by an amount distinguishable from DEV-to-DEV cell variance (reported, not a fabricated numeric cutoff). Shuffled_null is reported alongside as the chance/marginal-structure reference."
+    },
+    {
+      "category": "B",
+      "label": "MEASURABLE_IMPROVEMENT_INSUFFICIENT_FOR_RETENTION",
+      "definition": "At least one causal_runtime_candidate measurably exceeds both trivial baselines on DEV h=1 recall@k, but R2-10 Phase 0/DEV-tournament evidence alone does not establish whether this translates into a retention benefit (miss-byte reduction) -- that question is explicitly reserved for R2-11 and is NOT answered by R2-10."
+    },
+    {
+      "category": "C",
+      "label": "STRONG_CAUSAL_PREDICTION_JUSTIFYING_R2_11",
+      "definition": "Category B holds AND the margin over trivial baselines is large and consistent across all 8 DEV cells (not driven by one workload), making a retention-integration experiment (R2-11) scientifically motivated. Category C is a recommendation to proceed to R2-11 planning, NOT a retention result and NOT a runtime-speedup claim."
+    }
+  ],
+  "forbidden_claims_from_r2_10": [
+    "retention improvement (miss_bytes reduction) -- requires R2-11",
+    "runtime speedup / tokens-per-second / latency change -- requires R2-12",
+    "generalization beyond the 8 DEV cells (EVAL remains locked)",
+    "O_B = O* or any strengthening of AUDIT-ORACLE-001 CASE C semantics"
+  ],
+  "leakage_audit": {
+    "status": "FIRST_CLASS_SCIENTIFIC_TEST, not merely code quality",
+    "method": "Construct a synthetic trace T and a second synthetic trace T' identical to T up to and including iterator position i, but with every same-layer entry at iterator position > i deliberately altered (different expert sets). For every predictor family exercised in Phase 0, the prediction made at position i for ANY horizon h must be bit-identical between a run against T and a run against T' when only entries <= i are supplied as causal state. tests/test_r2_10_leakage.py implements this for causal_walk.py directly (the single path all predictors consume) plus for every Phase-0-implemented family.",
+    "additional_check": "A second synthetic-trace variant alters ONLY layers > l of the same step t (same-step future layers) while leaving layers <= l and all other steps identical; predictions for layer l at that step must again be unaffected -- this specifically exercises the same_step_later_layer forbidden boundary distinct from the same_layer_future boundary."
+  },
+  "determinism_audit": {
+    "status": "FIRST_CLASS_TEST",
+    "method": "Same trace + same predictor config + same horizon run twice must yield bit-identical predictions and metrics for every Phase-0-implemented family. No predictor in predictor_space.json uses unseeded randomness; none currently uses randomness at all."
+  }
+}

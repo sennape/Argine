@@ -1,0 +1,35 @@
+{
+  "artifact": "R2-10-PHASE3F-PER-HORIZON-ANALYSIS",
+  "note": "Required-analysis points 2 (h=4,h=16) and 10 (is horizon degradation stable)",
+  "selected_predictor_mean_recall_by_horizon": {
+    "h1": 0.4498165836714136,
+    "h4": 0.3611200086137611,
+    "h16": 0.34028718014212944
+  },
+  "global_frequency_mean_recall_by_horizon": {
+    "h1": 0.34948001291273756,
+    "h4": 0.3428985972983549,
+    "h16": 0.33220594930938796
+  },
+  "last_observation_mean_recall_by_horizon": {
+    "h1": 0.4014730177755248,
+    "h4": 0.2995297203313133,
+    "h16": 0.2648204400248406
+  },
+  "monotonic_decreasing_h1_gt_h4_gt_h16": {
+    "decayed_transition/decay=0.99": true,
+    "global_frequency/default": true,
+    "last_observation/default": true
+  },
+  "selected_margin_over_last_observation_by_horizon": {
+    "h1": 0.048343565895888785,
+    "h4": 0.06159028828244778,
+    "h16": 0.07546674011728882
+  },
+  "selected_margin_over_global_frequency_by_horizon": {
+    "h1": 0.10033657075867602,
+    "h4": 0.018221411315406166,
+    "h16": 0.008081230832741482
+  },
+  "interpretation": "Selected predictor's recall decreases monotonically with horizon (h1>h4>h16), matching the shape already observed on DEV. Margin over last_observation GROWS with horizon (last_observation decays faster since it mechanically relies on the most recent step, which becomes stale further out). Margin over global_frequency SHRINKS with horizon and is not uniformly positive at h=16 (see PHASE3E per-workload analysis: instruction-eval-v1 at h=16 is a negative cell for selected vs global_frequency) -- horizon degradation is stable in shape for the selected predictor itself, but its relative advantage over global_frequency specifically is not stable across horizons."
+}

@@ -1,0 +1,149 @@
+{
+ "artifact": "R3-05-R4-EVAL-RESULTS",
+ "budget": "1.5 GiB",
+ "canonical_stream_sha256": "24fcc3e31e800826acb353c627326d4665af7b05c88a3138b18b79c5c435e776",
+ "lo_over_x_value_ratio": 0.5435714261667581,
+ "primary_comparisons": {
+  "NUE_LO-A": 5952172032,
+  "NUE_LO-CES": 5256474624,
+  "NUE_X-A": 10950119424,
+  "NUE_X-CES": 10254422016
+ },
+ "raw": {
+  "NUE_LO": {
+   "all_pass": {
+    "evictions": 104733,
+    "hits": 96255,
+    "miss_bytes": 302915837952,
+    "misses": 105297
+   },
+   "arm": "NUE_LO:LEX",
+   "budget_bytes": 1610612736,
+   "budget_violations": 0,
+   "decode": {
+    "evictions": 104389,
+    "hits": 96067,
+    "miss_bytes": 300325404672,
+    "misses": 104391
+   },
+   "decode_protected_entries": 200458,
+   "decode_protected_events": 24576,
+   "events": 24672,
+   "overflow_events": 0,
+   "overflow_misses": 0,
+   "resident_peak_bytes": 1610588160
+  },
+  "NUE_X": {
+   "all_pass": {
+    "evictions": 103013,
+    "hits": 97976,
+    "miss_bytes": 297889320960,
+    "misses": 103576
+   },
+   "arm": "NUE_X:LEX",
+   "budget_bytes": 1610612736,
+   "budget_violations": 0,
+   "decode": {
+    "evictions": 102679,
+    "hits": 97778,
+    "miss_bytes": 295327457280,
+    "misses": 102680
+   },
+   "decode_protected_entries": 196608,
+   "decode_protected_events": 24576,
+   "events": 24672,
+   "overflow_events": 0,
+   "overflow_misses": 0,
+   "resident_peak_bytes": 1610588160
+  }
+ },
+ "rows": {
+  "A": {
+   "belady_byte_headroom_fraction": 0.0,
+   "belady_miss_headroom_fraction": 0.0,
+   "budget_violations": 0,
+   "decode_miss_bytes": 306277576704,
+   "decode_misses": 106491,
+   "evictions": 106490,
+   "fraction_of_belady_ceiling_ms": 0.0,
+   "gross_value_ms_per_token_vs_A": 0.0,
+   "gross_value_ms_per_token_vs_CES": -0.5152539661391565,
+   "hits": 93967,
+   "miss_bytes_avoided_vs_A": 0,
+   "miss_bytes_avoided_vs_CES": -695697408,
+   "miss_bytes_per_token": 598198392.0,
+   "misses_avoided_vs_A": 0,
+   "misses_avoided_vs_CES": -245,
+   "misses_per_token": 207.990234375,
+   "note": "bound from the frozen R3 results",
+   "overflow_events": 0,
+   "resident_peak_bytes": 1610588160,
+   "value_tier_vs_A": "<10"
+  },
+  "CES": {
+   "belady_byte_headroom_fraction": 0.005587495285032725,
+   "belady_miss_headroom_fraction": 0.005656500357860227,
+   "budget_violations": 0,
+   "decode_miss_bytes": 305581879296,
+   "decode_misses": 106246,
+   "evictions": 106245,
+   "fraction_of_belady_ceiling_ms": 0.005587495285032725,
+   "gross_value_ms_per_token_vs_A": 0.5152539661391565,
+   "gross_value_ms_per_token_vs_CES": 0.0,
+   "hits": 94212,
+   "miss_bytes_avoided_vs_A": 695697408,
+   "miss_bytes_avoided_vs_CES": 0,
+   "miss_bytes_per_token": 596839608.0,
+   "misses_avoided_vs_A": 245,
+   "misses_avoided_vs_CES": 0,
+   "misses_per_token": 207.51171875,
+   "note": "bound from the frozen R3 results",
+   "overflow_events": 0,
+   "resident_peak_bytes": 1610588160,
+   "value_tier_vs_A": "<10"
+  },
+  "NUE_LO": {
+   "belady_byte_headroom_fraction": 0.04780488295926446,
+   "belady_miss_headroom_fraction": 0.048484288781659085,
+   "budget_violations": 0,
+   "decode_miss_bytes": 300325404672,
+   "decode_misses": 104391,
+   "evictions": 104389,
+   "fraction_of_belady_ceiling_ms": 0.04780488295926446,
+   "gross_value_ms_per_token_vs_A": 4.408353705740072,
+   "gross_value_ms_per_token_vs_CES": 3.8930997396009155,
+   "hits": 96067,
+   "miss_bytes_avoided_vs_A": 5952172032,
+   "miss_bytes_avoided_vs_CES": 5256474624,
+   "miss_bytes_per_token": 586573056.0,
+   "misses_avoided_vs_A": 2100,
+   "misses_avoided_vs_CES": 1855,
+   "misses_per_token": 203.888671875,
+   "overflow_events": 0,
+   "resident_peak_bytes": 1610588160,
+   "value_tier_vs_A": "<10"
+  },
+  "NUE_X": {
+   "belady_byte_headroom_fraction": 0.08794590859269848,
+   "belady_miss_headroom_fraction": 0.0879874402604299,
+   "budget_violations": 0,
+   "decode_miss_bytes": 295327457280,
+   "decode_misses": 102680,
+   "evictions": 102679,
+   "fraction_of_belady_ceiling_ms": 0.08794590859269848,
+   "gross_value_ms_per_token_vs_A": 8.10998057206132,
+   "gross_value_ms_per_token_vs_CES": 7.594726605922162,
+   "hits": 97778,
+   "miss_bytes_avoided_vs_A": 10950119424,
+   "miss_bytes_avoided_vs_CES": 10254422016,
+   "miss_bytes_per_token": 576811440.0,
+   "misses_avoided_vs_A": 3811,
+   "misses_avoided_vs_CES": 3566,
+   "misses_per_token": 200.546875,
+   "overflow_events": 0,
+   "resident_peak_bytes": 1610588160,
+   "value_tier_vs_A": "<10"
+  }
+ },
+ "selected_variant": "LEX"
+}

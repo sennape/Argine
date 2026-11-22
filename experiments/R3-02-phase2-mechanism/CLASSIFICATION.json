@@ -1,0 +1,80 @@
+{
+  "artifact": "R3-02-PHASE2-CLASSIFICATION",
+  "conditions": [
+    {
+      "id": 1,
+      "measured": "7/7 records, 7 admissions",
+      "pass": true,
+      "requirement": "7/7 TRACE_COUNT admissible"
+    },
+    {
+      "id": 2,
+      "measured": "35 cells, 35 admissions",
+      "pass": true,
+      "requirement": "35/35 CELL admissible"
+    },
+    {
+      "id": 3,
+      "measured": {
+        "1.5": true,
+        "4": true,
+        "8": true
+      },
+      "pass": true,
+      "requirement": "A/B trajectories identical at all budgets"
+    },
+    {
+      "id": 4,
+      "measured": {
+        "1.5": 73968,
+        "4": 73968,
+        "8": 73968
+      },
+      "pass": true,
+      "requirement": "predictive bookkeeping activity > 0"
+    },
+    {
+      "id": 5,
+      "measured": "miss bytes > 0 and evictions > 0 at all budgets",
+      "pass": true,
+      "requirement": "retention traffic > 0 on at least one budget"
+    },
+    {
+      "id": 6,
+      "measured": {
+        "half_width": 0.030396048828124966,
+        "threshold": 0.00266463701171875
+      },
+      "pass": false,
+      "requirement": "4 GiB precision: CI half-width <= 1% of median A step time"
+    },
+    {
+      "id": 7,
+      "measured": "52 records identity-matched, contract 99a68c73, schema 1, budgets intact",
+      "pass": true,
+      "requirement": "frozen identities/invariants satisfied"
+    }
+  ],
+  "cost_model": "COST_MODEL_DESIGN_NOT_YET_ALLOWED",
+  "failed_conditions": [
+    6
+  ],
+  "final_classification": "MECHANISM_INSUFFICIENT",
+  "generated_utc": "2026-11-18T21:50:16Z",
+  "interpretation": {
+    "not_claimed": [
+      "the R2 throughput regression is not causally explained",
+      "no causal I/O attribution",
+      "no cost-aware throughput improvement",
+      "no generalization beyond this host/model/workload"
+    ],
+    "supported": [
+      "sham retention behaviour is identical to b_selected at 1.5, 4 and 8 GiB (byte-identical rows after excluding policy-internal fields; identical counters)",
+      "predictive bookkeeping executed: 73,968 of 74,016 sham decision rows carry non-empty predicted sets, while b_selected carries none",
+      "expert-memory traffic is present at every budget (8.25e7 to 6.43e8 miss bytes per token)",
+      "the sham is measurably slower than b_selected: median +0.0667 s/token at 4 GiB (+25.3%), +0.0579 s/token at 8 GiB (+44.8%)"
+    ]
+  },
+  "phase": "R3-02 Phase 2",
+  "protocol_digest": "f8d4b3199c4c74555353e5f796eaf7d7c3687da97883ee07f7d1c81233c9469c"
+}

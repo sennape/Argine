@@ -1,0 +1,30 @@
+{
+ "artifact": "R3-05-R4-HEADROOM-CAPTURE",
+ "belady_context": {
+  "byte_headroom": 124509708288,
+  "ceiling_ms": 92.21555273959194,
+  "miss_headroom": 43313,
+  "per_token_misses": 84.595703125
+ },
+ "captured": {
+  "CES": {
+   "fraction_of_belady_byte_headroom": 0.005587495285032725,
+   "fraction_of_belady_miss_headroom": 0.005656500357860227,
+   "ms_per_token": 0.5152539661391565,
+   "tier": "<10"
+  },
+  "NUE_LO": {
+   "fraction_of_belady_byte_headroom": 0.04780488295926446,
+   "fraction_of_belady_miss_headroom": 0.048484288781659085,
+   "ms_per_token": 4.408353705740072,
+   "tier": "<10"
+  },
+  "NUE_X": {
+   "fraction_of_belady_byte_headroom": 0.08794590859269848,
+   "fraction_of_belady_miss_headroom": 0.0879874402604299,
+   "ms_per_token": 8.10998057206132,
+   "tier": "<10"
+  }
+ },
+ "conservative_ceiling_ms_per_token": 92.21555273959194
+}

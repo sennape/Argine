@@ -1,0 +1,177 @@
+{
+  "artifact": "R3-02B-IMPLEMENTATION",
+  "cli": {
+    "dry_run": "... --dry-run",
+    "preflight": "python tools/r3_02_acquire.py --plan experiments/R3-02-calibration-mechanism/ACQUISITION_PLAN.json --stage preflight",
+    "required_flag_for_execution": "--attest-clean-environment",
+    "scientific": "python tools/r3_02_acquire.py --plan experiments/R3-02-calibration-mechanism/ACQUISITION_PLAN.json --stage scientific"
+  },
+  "cooldowns": "from plan cooldown_before_s (15 s adjacent controls, 60 s blocks/non-paired)",
+  "created_utc": "2026-11-18T06:08:50Z",
+  "driver": {
+    "path": "tools/r3_02_acquire.py",
+    "sha256": "fb754959baaeef7af8e072e02bc39347133cb79ed2f1b7da09df13ce4d0de8b7"
+  },
+  "dry_run_artifact": {
+    "path": "experiments/R3-02B-acquisition-driver/DRY_RUN_VALIDATION.json",
+    "sha256": "19d6ab4b5ea064800c3a68c1dd715299b844e1b16908ceb73461084a932f1635"
+  },
+  "evidence_persistence": {
+    "admissions": "admissions/<name>.json",
+    "atomic": true,
+    "cells": "cells/cell-<cfg>-r<n>.json (built only through the frozen R3-01 build_cell)",
+    "logs": "logs/<seq>-<cfg>.stdout.log / .stderr.log with sha256 and bytes",
+    "raw_traces_in_git": false,
+    "records": [
+      "records/trace_count-<cfg>.json",
+      "records/timing-<cfg>-r<n>.json",
+      "records/warmup-<cfg>-r0.json"
+    ]
+  },
+  "frozen_plan_validation": {
+    "checks": [
+      "plan artifact/status",
+      "protocol digest",
+      "sequence 1..52",
+      "stage cardinalities",
+      "trace reuse 1->5",
+      "n_predict per stage",
+      "runtime/contract digests",
+      "no measurements flag"
+    ],
+    "protocol_digest": "f8d4b3199c4c74555353e5f796eaf7d7c3687da97883ee07f7d1c81233c9469c"
+  },
+  "hotfix": {
+    "fix": "main guard moved to the end of the module; execution defaults made late-bound for testability",
+    "reason": "live NameError: execute_stage was defined after the __main__ guard, so script mode called main() before the engine existed",
+    "regression_tests": [
+      "module symbol completeness",
+      "guard is last top-level statement",
+      "real script-mode dry-run (preflight, scientific)",
+      "mocked main()->execute_stage orchestration"
+    ],
+    "supersedes_freeze_commit": "acbde8e9c61c1870d086ca495c5ce4bad33fe2b5"
+  },
+  "hotfix_2": {
+    "fix": "repository-root sys.path bootstrap; canonical planner import guard; correct PlanRequest/plan call sequence",
+    "reason": "live ModuleNotFoundError: no 'argine' when running tools/r3_02_acquire.py",
+    "regression_tests": [
+      "real script from repo root",
+      "real script from another cwd",
+      "no PYTHONPATH",
+      "planner path inside this repo",
+      "gate wiring",
+      "fail-closed when planner unavailable",
+      "fail-closed when infeasible",
+      "gate never starts llama-server"
+    ],
+    "supersedes_freeze_commit": "4b643553b608338cd0036e59318a1b9ba7c05110"
+  },
+  "hotfix_3": {
+    "fix": "canonical items[0].prompt construction; full TRACE_COUNT/TIMING/CELL/stderr persistence with atomic writes; preflight provenance v2; storage gate + NTFS/storage measurements",
+    "reason": "workload prompt was empty (items schema) and the live path persisted no R3-01 evidence",
+    "storage_outcome": "STORAGE_REDESIGN_REQUIRED (no scientific schema change made)",
+    "supersedes_freeze_commit": "1da83fcee1f210479f86248f34aae527ace5f871"
+  },
+  "hotfix_5": {
+    "fix": "shutdown metadata captured (alive-before, terminate/kill, verified), schema-3 evidence, canonical clean-launch predicate, stage-summary invariant, offline --authorize-preflight diagnostic",
+    "reason": "preflight persisted exit_code=1 for intentional Windows terminate although the request succeeded; stage SUCCEEDED then contradicted the authorization predicate",
+    "root_cause": "SUCCESSFUL_REQUEST_BAD_SHUTDOWN (TerminateProcess yields exit code 1)",
+    "supersedes_freeze_commit": "5b774a2d47c4a9c6f670ab59bae31eec7282f046"
+  },
+  "hotfix_6": {
+    "fix": "streaming verification (no temp decompression), verified recovery of interrupted raw+archive pairs before the storage gate, canonical admission creation, non-retryable storage failures, measured scientific ratio in the operational model",
+    "reason": "A-8GiB raw trace completed but verification wrote a full decompressed temp copy and hit ENOSPC; state FAILED with the raw retained, blocking resume",
+    "recovery": {
+      "admission": "ADMISSIBLE",
+      "archive_bytes": 1566236582,
+      "config": "A-8GiB",
+      "logical_bytes": 30941123714,
+      "raw_removed": true
+    },
+    "supersedes_freeze_commit": "787456f9a6829ef9008c57c81a536ffeba0845dd"
+  },
+  "identity_validation": {
+    "fail_closed": true,
+    "hashed_objects": [
+      "runtime",
+      "model",
+      "store",
+      "workload"
+    ],
+    "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+    "runtime_sha256": "3f094f5b5f4963f488b63722f365068f09e2aa3b12e2096969da99f471bbd644",
+    "store_sha256": "fef943ae0bc017864a47d41c1fc90d422016045f7e8705b1d138b7defd8c5146",
+    "workload_sha256": "c02f9657d12d874cc43523e2b609bb604a68a6a8b267b2ffac6d3420c509b730"
+  },
+  "no_model_loaded": true,
+  "no_scientific_analysis": true,
+  "phase": "R3-02B",
+  "preflight_gate": "stage_status.preflight == SUCCEEDED and >=1 SUCCEEDED preflight record required before scientific",
+  "preflight_provenance": {
+    "canonical_predicate": "launch_clean(): request success + ADMISSIBLE + clean shutdown (exit 0, or documented Windows terminate-1 with verified intentional shutdown, no kill, no stderr error markers)",
+    "new_preflight_required": true,
+    "old_state_authorizes_scientific": false,
+    "required_fields": [
+      "request_completed_successfully",
+      "server_return_code",
+      "shutdown_mode",
+      "intentional_shutdown",
+      "shutdown_verified",
+      "kill_used",
+      "process_alive_before_shutdown",
+      "stderr_error_markers",
+      "output_token_digest",
+      "budget_invariant_ok",
+      "admission"
+    ],
+    "schema": 3
+  },
+  "project_import_resolution": {
+    "bootstrap": "sys.path.insert(0, Path(__file__).resolve().parents[1]) when absent",
+    "canonical_check": "argine.planner.__file__ must live under the repository",
+    "free_ram_gate": "planner.PlanRequest(ctx=4096, threads=0, backend='cpu', expert_store=True, expert_store_budget=budget) then planner.plan(model, hw, req)",
+    "planner_module": "C:\\Users\\alpel\\Desktop\\Argine4\\argine\\planner.py",
+    "repo_root": "C:\\Users\\alpel\\Desktop\\Argine4",
+    "requires_pythonpath_or_install": false
+  },
+  "rerun_rule": "one retry with identical configuration/repetition/slot/parameters/identities; second failure -> INADMISSIBLE",
+  "state_machine": [
+    "PLANNED",
+    "RUNNING",
+    "SUCCEEDED",
+    "FAILED",
+    "INADMISSIBLE"
+  ],
+  "storage": {
+    "classification": "LOSSLESS_ARCHIVE_STORAGE_SAFE",
+    "conservative_physical_peak_gib": 82.5,
+    "expected_physical_peak_gib": 72.98,
+    "free_gib_measured": 65.06,
+    "gate": "required_free_for_trace = 15 GiB reserve + 110% logical + one temp archive (ratio 0.05062); prior archives excluded to avoid double counting",
+    "ntfs_compression": {
+      "lossless": true,
+      "new_files_inherit": true,
+      "parser_equivalent": true,
+      "ratio": 0.4757,
+      "runtime_change_required": false
+    },
+    "required_free_gib": {
+      "conservative": 97.5,
+      "expected": 87.98
+    }
+  },
+  "tests": {
+    "path": "experiments/R3-02B-acquisition-driver/tests/test_driver.py",
+    "result": "100 passed (unittest: mocks, live-path, evidence, archive, verification, recovery, authorization)",
+    "sha256": "9a9aaa452e826097e8172992019b9f5962bdd457037bc19d7c2b8adf541dd866"
+  },
+  "trace_reuse": "one trace artifact per configuration, referenced by its 5 counted TIMING cells; stored outside git",
+  "workload": {
+    "construction": "items[0].prompt (same as R2-12 resolve_workload)",
+    "fail_closed_on_unsupported_schema": true,
+    "n_predict": 512,
+    "prompt_chars": 816,
+    "sha256": "c02f9657d12d874cc43523e2b609bb604a68a6a8b267b2ffac6d3420c509b730"
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "admission_rules": {
+    "frozen": [
+      "V1_required_fields",
+      "V2_mode",
+      "V3_identities_hex64",
+      "V4_trace_hex64",
+      "V5_completeness",
+      "V6_bytes_consistency",
+      "V7_count_consistency",
+      "V8_budget_invariant",
+      "V9_timing_positive",
+      "V10_overhead_counters",
+      "C1_same_cell",
+      "C2_output_identity"
+    ],
+    "r3_01": [
+      "X1_CONTRACT_DIGEST",
+      "X2_SCHEMA_VERSION",
+      "X3_SEED_PRESENT",
+      "X4_SCIENTIFIC_STATUS",
+      "X5_OUTPUT_DIGEST",
+      "X6_TRACE_BUDGET",
+      "X7_COUNTER_INVARIANTS"
+    ]
+  },
+  "artifact": "R3-01-IMPLEMENTATION",
+  "contract_digest": "99a68c73c5a3caba4fd53937f27907375734f3866c84e18d4ecb944013efa073",
+  "contract_version": 1,
+  "module": {
+    "path": "experiments/R3-01-telemetry-realization/r3_telemetry/telemetry.py",
+    "sha256": "7a494e1a7177f91a5139246749868c340bba8deecec4f38959d361435470d7bc"
+  },
+  "output_token_digest_semantics": {
+    "depends_on": [
+      "ordered token ids"
+    ],
+    "empty_sequence": "digest of the prefix alone",
+    "hashed_bytes": "prefix 'argine-output-tokens-v1\\n', then each token id in decimal ASCII followed by '\\n', in completion order",
+    "independent_of": [
+      "prompt text",
+      "JSON formatting",
+      "logging mode",
+      "host"
+    ],
+    "version": "argine-output-tokens-v1"
+  },
+  "phase": "R3-01",
+  "record_types": {
+    "CELL": {
+      "composition": "TRACE_COUNT + TIMING of the same physical configuration",
+      "identity_fields": [
+        "output_token_digest"
+      ],
+      "same_cell_fields": [
+        "workload_id",
+        "seed",
+        "budget_bytes",
+        "policy_id",
+        "identity.policy_params_sha256"
+      ]
+    },
+    "TIMING": {
+      "overhead_fields": [
+        "events_served",
+        "process_cpu_seconds",
+        "isolated"
+      ],
+      "required_top_level": [
+        "telemetry_schema_version",
+        "mode",
+        "scientific_status",
+        "contract_digest",
+        "workload_id",
+        "seed",
+        "budget_bytes",
+        "policy_id",
+        "policy_params",
+        "output_token_digest",
+        "output_token_count",
+        "identity",
+        "timing",
+        "telemetry"
+      ],
+      "source": "measured wall clock and process CPU time",
+      "timing_fields": [
+        "ttft_seconds",
+        "decode_duration_seconds",
+        "tokens_generated",
+        "process_cpu_seconds",
+        "decode_step_wall_time"
+      ]
+    },
+    "TRACE_COUNT": {
+      "counters": [
+        "expert_bytes_read",
+        "expert_read_count",
+        "expert_miss_bytes",
+        "expert_miss_count",
+        "expert_hits",
+        "expert_evictions",
+        "resident_bytes_peak",
+        "requested_expert_events",
+        "hit_expert_events",
+        "miss_expert_events",
+        "slices_per_expert",
+        "decision_rows",
+        "completion_rows",
+        "max_step",
+        "budget_violations",
+        "trace_budget_bytes"
+      ],
+      "exactness": {
+        "expert_bytes_read": "EXACT_RUNTIME",
+        "expert_miss_bytes": "EXACT_RUNTIME",
+        "expert_read_count": "DERIVED_RUNTIME"
+      },
+      "required_top_level": [
+        "telemetry_schema_version",
+        "mode",
+        "scientific_status",
+        "contract_digest",
+        "workload_id",
+        "seed",
+        "budget_bytes",
+        "policy_id",
+        "policy_params",
+        "output_token_digest",
+        "output_token_count",
+        "identity",
+        "telemetry"
+      ],
+      "source": "retention-decision trace (JSONL)"
+    }
+  },
+  "telemetry_schema_version": 1,
+  "tests": {
+    "path": "experiments/R3-01-telemetry-realization/tests/test_r3_telemetry.py",
+    "sha256": "a26b0818ff7833e629bdc5a59fb4526d1cd666f2392145a94657ddbb46cef77a"
+  },
+  "trace_archival_semantics": {
+    "copy_rule": "never copied into Git above 8388608 bytes; referenced and hashed only",
+    "fields": [
+      "path",
+      "inside_repository",
+      "sha256",
+      "bytes",
+      "trace_format",
+      "copied_into_repository",
+      "copy_policy"
+    ]
+  }
+}

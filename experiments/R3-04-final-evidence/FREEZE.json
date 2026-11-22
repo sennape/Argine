@@ -1,0 +1,19 @@
+{
+ "amended_schedule_sha256": "e87dc48518dd0281d5eeadd0c8db7a9cfc2234d0bce9d253f464566e43f511a0",
+ "amendment_freeze_sha256": "ea0d6719f6d4f92dd77b597662ea3903bc22db70647e37dd8b4cf9ec06c9b3f6",
+ "analysis_command": "python tools/r3_04_acquire.py --analyze --out-dir <timing dir> --protocol-freeze-sha256 a88359b52891f93ec49e67978d92c2eb3b73db588611bce46b3103b2978c1202 --amendment-sha256 ea0d6719f6d4f92dd77b597662ea3903bc22db70647e37dd8b4cf9ec06c9b3f6",
+ "artifact": "R3-04-FINAL-EVIDENCE-FREEZE",
+ "driver_sha256": "3abf28d6b267aec50dff936fd5a9f840cc9039f4e1c549d292b3f09b64f4c26d",
+ "files_sha256": {
+  "ARM_STATISTICS.json": "fbd93c2ca3ce27a8f6fd0f21b5390ef04d6b0c767b111b31ccd101155501cac1",
+  "CAMPAIGN_INTEGRITY.json": "4f01d895fd44d6467461f785b2b9efd2e1ba2b6d4c83035f1cdfb05e3122d74a",
+  "CLAIM_BOUNDARIES.md": "6bdf58a47d1ae2ed686cb467211f6feed59f0b6afbe79d91f402f1317c3c69e7",
+  "OFFICIAL_ANALYSIS.json": "c9e84e2bb874635f74860b1b15343dc5457993cded8545fef8df25a2992dd3ae",
+  "OPERATIONAL_REPORT.json": "85e165d6b27e077bb4780fd9a12f7f26132508327d07cd2ab6309ce207817d26",
+  "ORIGINAL_FILE_SHA256.json": "c9599a927509cc89bfb8d3e68a7fbfb1d1d917f61607469610f0c2d34514c7fa",
+  "SANITISED_RECORDS.json": "334dc9a32b22811216fe214893043705ed589fdfcb7734365f175c8677551a92"
+ },
+ "freeze_sha256": "71fca58e65853c325ba7622d7565e51be85a54f46394de8d4f4ee2e0753adfa2",
+ "opening_freeze_sha256": "3f6ea9b05c4c6d4784a6d6570f7f5a0fc81b3d94025fa5b10ba0bcfa7d97968d",
+ "protocol_freeze_sha256": "a88359b52891f93ec49e67978d92c2eb3b73db588611bce46b3103b2978c1202"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "reasoning-v1",
+  "version": "r2-08-v1",
+  "description": "R2-08 fixed analytical/multi-step reasoning workload (frozen for routing drift analysis).",
+  "n_predict": 512,
+  "splits": {
+    "dev": [
+      {
+        "id": "r2-08-reason-dev-1",
+        "segment": "reasoning-v1",
+        "prompt": "Solve step by step. A workshop has three machines A, B, and C producing the same part. In one hour A makes 24 parts, B makes 18 parts, and C makes 30 parts. The defect rates are 2% for A, 3% for B, and 1% for C. (1) If the workshop runs all three machines for 5 hours, how many total parts are produced and what is the expected number of defective parts? (2) If one part is selected uniformly at random from that 5-hour production and found defective, what is the probability it came from machine B? Show all calculations and justify each step."
+      }
+    ]
+  }
+}

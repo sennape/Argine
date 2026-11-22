@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "artifact": "R2-BRIDGE-01-PHASE1-SECONDARY-BUDGET-ROBUSTNESS",
+  "role": "descriptive_only_not_used_for_selection",
+  "budgets": {
+    "1610612736": {
+      "selected_mechanism_mean": 599061418.2261738,
+      "baseline_mean": 599967231.3925142,
+      "delta": -905813.1663404703,
+      "selected_le_baseline_every_instance": true,
+      "per_instance_delta": {
+        "coding-v1__seed-42": -798720.0,
+        "coding-v1__seed-43": -798720.0,
+        "instruction-v1__seed-42": -754377.3933464289,
+        "instruction-v1__seed-43": -754377.3933464289,
+        "reasoning-v1__seed-42": -1004201.3307240009,
+        "reasoning-v1__seed-43": -1004201.3307240009,
+        "summarization-v1__seed-42": -1065953.9412915707,
+        "summarization-v1__seed-43": -1065953.9412915707
+      }
+    },
+    "8589934592": {
+      "selected_mechanism_mean": 43221096.976686135,
+      "baseline_mean": 43221096.976686135,
+      "delta": 0.0,
+      "selected_le_baseline_every_instance": true,
+      "per_instance_delta": {
+        "coding-v1__seed-42": 0.0,
+        "coding-v1__seed-43": 0.0,
+        "instruction-v1__seed-42": 0.0,
+        "instruction-v1__seed-43": 0.0,
+        "reasoning-v1__seed-42": 0.0,
+        "reasoning-v1__seed-43": 0.0,
+        "summarization-v1__seed-42": 0.0,
+        "summarization-v1__seed-43": 0.0
+      }
+    }
+  }
+}

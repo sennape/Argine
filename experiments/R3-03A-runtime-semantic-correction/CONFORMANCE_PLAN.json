@@ -1,0 +1,49 @@
+{
+ "artifact": "R3-03A-CONFORMANCE-PLAN",
+ "before_any_timing": "CONFORMANCE_RESULT.json must read R3_03A_SEMANTIC_CONFORMANCE_PASS and be committed as a separate evidence commit",
+ "c7": "resident bytes <= budget after every event (explicit, from trace) and no duplicate-semantic-event refusal",
+ "chrome_youtube_requirement": "none",
+ "classification_labels": [
+  "R3_03A_RUNTIME_SEMANTIC_CONFORMANCE_PASS",
+  "R3_03A_RUNTIME_SEMANTIC_CONFORMANCE_FAIL"
+ ],
+ "command_windows": "cd /D C:\\Users\\alpel\\Desktop\\Argine4 && C:\\Users\\alpel\\anaconda3\\python.exe tools\\r3_03a_conformance.py --runtime C:\\Users\\alpel\\Desktop\\Argine4-r3build-r3-03a\\llama.cpp\\build-r3-03a\\bin\\llama-server.exe --runtime-sha256 e935005e5131b29d12b113b000fa52e798b4b4419a23724ec70af3f6875fcd76 --out-dir C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03A-conformance",
+ "expected_artifacts": [
+  "<out>/A-4GiB.trace.jsonl",
+  "<out>/B-4GiB.trace.jsonl",
+  "<out>/C-8GiB.trace.jsonl",
+  "<out>/*.stdout.log / *.stderr.log",
+  "<out>/CONFORMANCE_RESULT.json (result R3_03A_RUNTIME_SEMANTIC_CONFORMANCE_PASS|FAIL)"
+ ],
+ "expected_output_directory": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03A-conformance (must not exist beforehand; the tool refuses to overwrite a trace)",
+ "launches": [
+  {
+   "config_id": "A-4GiB",
+   "policy": "b_selected"
+  },
+  {
+   "config_id": "B-4GiB",
+   "policy": "predicted_protect_sham"
+  },
+  {
+   "config_id": "C-8GiB",
+   "policy": "predicted_protect"
+  }
+ ],
+ "note_on_budget_violations": "physical budget accounting is read from runtime stats; this plan does not weaken any existing control",
+ "pass_criteria": [
+  "C1 output-token digest == ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa for every launch",
+  "C2 every row has semantic_event (first_node=1)",
+  "C3 each forward pass has exactly 48 policy rows, layers 0..47 once; passes == 514",
+  "C4 no duplicate (pass,layer); rows == 514*48 = 24,672",
+  "C5 frozen R2 reference replay (protected_before, evicted, resident) matches every event",
+  "C6 sham trajectory equals corrected b_selected reference",
+  "C7 no duplicate-semantic-event refusal; no budget violation",
+  "C8 runtime SHA-256 equals declared new SHA and differs from 3f094f5b\u2026bbd644"
+ ],
+ "pre_step_dry_run": "cd /D C:\\Users\\alpel\\Desktop\\Argine4 && C:\\Users\\alpel\\anaconda3\\python.exe tools\\r3_03a_conformance.py --runtime C:\\Users\\alpel\\Desktop\\Argine4-r3build-r3-03a\\llama.cpp\\build-r3-03a\\bin\\llama-server.exe --runtime-sha256 e935005e5131b29d12b113b000fa52e798b4b4419a23724ec70af3f6875fcd76 --out-dir C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03A-conformance --dry-run",
+ "runtime_sha256": "e935005e5131b29d12b113b000fa52e798b4b4419a23724ec70af3f6875fcd76",
+ "status": "PREPARED_NOT_EXECUTED",
+ "timing": "NOT A TIMING BENCHMARK; no timing field is evidence",
+ "workload": "frozen R3-02 workload/seed/temperature/top_k, n_predict 512, context 4096"
+}

@@ -1,0 +1,92 @@
+{
+  "contract_version": "r2-12-phase0-contract-v1.0",
+  "schema_version": 1,
+  "timing_boundaries": {
+    "t0_process_start": "Runtime server process (llama-research-v2) launched for this run.",
+    "t1_model_ready": "Model weights fully resident and server reports ready-to-serve (health/readiness signal). Model load time = t1 - t0; EXCLUDED from all decode-throughput and latency metrics below.",
+    "t2_request_sent": "Generation request issued to the server for this run's fixed prompt.",
+    "t3_first_token": "First decode token emitted by the server. TTFT = t3 - t2 (includes prompt/prefill processing).",
+    "t4_last_token": "Final (n_predict-th) decode token emitted. End-to-end time to final token = t4 - t2. Total decode time = t4 - t3."
+  },
+  "primary_metric": {
+    "metric_id": "decode_tokens_per_second",
+    "definition": "n_decode_tokens / total_decode_time, where total_decode_time = t4 - t3 (steady-state decode window only). n_decode_tokens = n_predict - 1 (the token at t3 is the first decode token measured; the interval t3->t4 covers the remaining n_predict-1 token emissions) -- exact counting rule must match whatever argine's own step/decode-phase accounting already uses (argine.research.trace.PHASE_DECODE / counted_step), reused unmodified from R2-09A/R2-11, not redefined here.",
+    "excludes": [
+      "model_load_time (t1-t0)",
+      "TTFT / prefill time (t3-t2)"
+    ],
+    "lower_is_better": false,
+    "higher_is_better": true,
+    "aggregation_rule": "Per (workload,budget,policy): mean over the 5 repetitions (warmup discarded). Primary aggregate: equal-weight mean of the per-workload mean across the 4 corpus workloads at the primary 4 GiB budget. No token-count weighting."
+  },
+  "secondary_metrics": [
+    {
+      "metric_id": "ttft_seconds",
+      "definition": "t3 - t2",
+      "lower_is_better": true
+    },
+    {
+      "metric_id": "end_to_end_time_to_final_token_seconds",
+      "definition": "t4 - t2",
+      "lower_is_better": true
+    },
+    {
+      "metric_id": "total_decode_time_seconds",
+      "definition": "t4 - t3",
+      "lower_is_better": true
+    },
+    {
+      "metric_id": "expert_bytes_read",
+      "definition": "Total bytes read from the expert store during the decode window (t3->t4), from the runtime's own expert-store I/O counters.",
+      "lower_is_better": true
+    },
+    {
+      "metric_id": "expert_read_count",
+      "definition": "Total expert-store read operations during the decode window.",
+      "lower_is_better": true
+    },
+    {
+      "metric_id": "expert_miss_bytes",
+      "definition": "Bytes corresponding to expert-store cache misses during the decode window (same accounting family as R2-11's miss_bytes_per_decode_step, but measured on the real runtime's own counters, not replay).",
+      "lower_is_better": true
+    },
+    {
+      "metric_id": "page_cache_behavior",
+      "definition": "OS-level page-cache hit/miss or read-ahead counters where the OS/runtime exposes them; recorded best-effort, never assumed if unavailable.",
+      "lower_is_better": null,
+      "availability": "best-effort; direct_io=1 is required (see machine_state_contract.json), which minimizes OS page-cache involvement in expert-store reads specifically."
+    },
+    {
+      "metric_id": "cpu_time_seconds",
+      "definition": "Process CPU time (user+system) consumed during t0->t4, from the OS process accounting for the runtime process.",
+      "lower_is_better": true
+    },
+    {
+      "metric_id": "wall_clock_seconds",
+      "definition": "t4 - t0 (full run including model load).",
+      "lower_is_better": true
+    },
+    {
+      "metric_id": "peak_resident_memory_bytes",
+      "definition": "Peak resident set size of the runtime process over t0->t4.",
+      "lower_is_better": null,
+      "note": "Must not exceed the configured expert-store budget plus a fixed fixed overhead allowance for weights/runtime/KV-cache (see argine.planner); a violation is a memory-correctness failure, not a runtime result."
+    },
+    {
+      "metric_id": "budget_violations",
+      "definition": "Count of expert-store resident-byte budget violations detected during the run (must be zero; non-zero is a correctness failure per decision_rules.json, not a scientific throughput result).",
+      "lower_is_better": true
+    },
+    {
+      "metric_id": "prediction_overhead_seconds",
+      "definition": "CPU time attributable to the DecayedTransitionPredictor's per-layer predict()/update() calls, isolated via instrumentation (see instrumentation_contract.json); measured for PredictedProtectPolicy runs only (B_selected has no predictor).",
+      "lower_is_better": true
+    },
+    {
+      "metric_id": "retention_policy_overhead_seconds",
+      "definition": "CPU time attributable to the retention policy's own bookkeeping (victim selection, aging, score updates), isolated via instrumentation; measured for both policies for a fair comparison.",
+      "lower_is_better": true
+    }
+  ],
+  "counting_rule_reuse": "Decode-step counting and phase semantics reuse argine.research.trace.PHASE_DECODE and the counted_step()/served_steps() helpers used unmodified throughout R2-09A/R2-10/R2-11, so the R2-12 runtime token count is directly comparable to the R2-11 replay-based decode-step count for the same workload."
+}

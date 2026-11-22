@@ -1,0 +1,106 @@
+{
+  "freeze_version": "1.0.0",
+  "freeze_name": "Research-II-R2-09A-Causal-Baseline-Tournament-Freeze",
+  "freeze_timestamp_utc": "2026-11-10T21:54:01Z",
+  "status": "FROZEN",
+  "outcome": "PASS",
+  "r2_09b_contract_version": "r2-09b-contract-v1.1",
+  "r2_09b_contract_digest": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28",
+  "dev_corpus_digest": "f758b77492eebc38bc81ba22d6b06ab8f19138d1099b635821369a4d022d9398",
+  "tournament_digest": "5b600d1451983dabafdfbd6ea6bfdc4c4c3bdcf9327c9ec4d57c25025759f847",
+  "primary_budgets_bytes": [
+    1610612736,
+    4294967296,
+    8589934592
+  ],
+  "selected_baselines": {
+    "1610612736": {
+      "family_id": "aged_frequency",
+      "config_id": "aged_frequency/decay=0.999,interval=1",
+      "params": {
+        "aging_interval_steps": 1,
+        "decay_factor": 0.999,
+        "decay_form": "exponential_step_decay"
+      },
+      "Score_B_M": 599967231.3925142,
+      "mean_misses_per_decode_step": 208.7934470519952,
+      "cell_status": "OK",
+      "n_cells": 8,
+      "rank": 1,
+      "delta_vs_Global_LRU_score": -39209363.196942925,
+      "delta_vs_Global_LRU_pct": -6.1343552828506,
+      "delta_vs_LFU_score": -32016200.050171852,
+      "delta_vs_LFU_pct": -5.0659872486032675
+    },
+    "4294967296": {
+      "family_id": "aged_frequency",
+      "config_id": "aged_frequency/decay=0.99,interval=64",
+      "params": {
+        "aging_interval_steps": 64,
+        "decay_factor": 0.99,
+        "decay_form": "exponential_step_decay"
+      },
+      "Score_B_M": 238400316.38960198,
+      "mean_misses_per_decode_step": 82.85612329280758,
+      "cell_status": "OK",
+      "n_cells": 8,
+      "rank": 1,
+      "delta_vs_Global_LRU_score": -20967144.08320877,
+      "delta_vs_Global_LRU_pct": -8.083953185564207,
+      "delta_vs_LFU_score": -33138866.443009704,
+      "delta_vs_LFU_pct": -12.20408270265655
+    },
+    "8589934592": {
+      "family_id": "aged_frequency",
+      "config_id": "aged_frequency/decay=0.999,interval=16",
+      "params": {
+        "decay_factor": 0.999,
+        "aging_interval_steps": 16,
+        "decay_form": "exponential_step_decay"
+      },
+      "Score_B_M": 43221096.976686135,
+      "mean_misses_per_decode_step": 15.107638514363787,
+      "cell_status": "OK",
+      "n_cells": 8,
+      "rank": 1,
+      "delta_vs_Global_LRU_score": -4061973.7629782557,
+      "delta_vs_Global_LRU_pct": -8.590757113350476,
+      "delta_vs_LFU_score": -11446777.64901305,
+      "delta_vs_LFU_pct": -20.938764726792503
+    }
+  },
+  "source_trace_shas": [
+    "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+    "0ce54e852eb057893ae13e9aa2775bcc282744d59d9b74cac78fa8eafac7665c",
+    "9934371d18a1ad3f0e2cb2a5e89cad87ed4e7a002732190646cfff9a0b489f54",
+    "f7c9a2bbaea8c95e46d25dfc70662d67301fc4bd8508c2db63c018c870a6376d",
+    "8dff85b9e99f6e10a2a6a608585c77102c65597561c2cf55dd4471e37eb48b3b",
+    "fb38497d5f6c9d13465a9ed185f3c04204cb50835943bbfcca315df06f4bb65b",
+    "dc24bde642278f4a8d75c6eae077121faed8562d04e4d9fed2d7cb87aa39a9bf",
+    "94b4522adb0faeb521ab12b7b67cf111d0a6623392e215f1ba499e2c1cf9042c"
+  ],
+  "dev_instance_ids": [
+    "coding-v1__seed-42",
+    "coding-v1__seed-43",
+    "instruction-v1__seed-42",
+    "instruction-v1__seed-43",
+    "reasoning-v1__seed-42",
+    "reasoning-v1__seed-43",
+    "summarization-v1__seed-42",
+    "summarization-v1__seed-43"
+  ],
+  "evidence_hashes": {
+    "dev_corpus_manifest": "8cb1ab66efab9be644b70a776e66821fc0ecbb8d97c3e7586ec0b2df3a98d6c6",
+    "selection_summary": "04f7ef69da142bf8df9fcab12927664e98b85c44e9a6f496b4f93514404b68cb",
+    "tournament_results_csv_sha256": "73f8f67f3ad1753479ae44079091754ad7ccaa0ff930ffd918e2261758c11862",
+    "tournament_results_json_sha256": "7e07e833c6855bbbfb8bfc541744732a01c94f878e6dd2abee590fbe1ed0ee4f",
+    "checkpoint_manifest_sha256": "f031ca5fc1ba66bb7180317a68dc415664e697ba88dd8f14550b0b5f2ef0e7c1"
+  },
+  "git_commit_pre_commit": "69997513d2617ddebe0675159b8bf6ac0762978b",
+  "eval_result_visibility_state": "EVAL_LOCKED",
+  "eval_spec_visibility": "EVAL_PROMPTS_VISIBLE_BUT_RESULTS_HELD_OUT",
+  "no_predictor_result": true,
+  "engineering_materiality": "PENDING_POLICY_STREAM_CALIBRATION",
+  "stochastic_profile": "STOCHASTIC_PROFILE_UNRESOLVED",
+  "no_r2_01_r2_08_canonical_evidence_modified": true
+}

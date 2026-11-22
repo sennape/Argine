@@ -1,0 +1,15 @@
+{
+  "artifact": "R2_11_PRIMARY_AGGREGATE",
+  "generated_utc": "2026-11-14T09:40:00Z",
+  "primary_budget_bytes": 4294967296,
+  "primary_budget_gib": 4.0,
+  "primary_metric_id": "miss_bytes_per_decode_step",
+  "aggregation_rule": "No token-count weighting applied anywhere; aggregation is equal-weight arithmetic mean across the 12 fresh evaluation instances, per metrics_contract.json.",
+  "mean_delta_4gib_absolute": -87476.85322895646,
+  "b_selected_mean_mbps_4gib": 239944277.1663405,
+  "predicted_protect_mean_mbps_4gib": 239856800.31311154,
+  "relative_improvement_percent_vs_b_selected": -0.03645715341162876,
+  "n_workloads_delta_le_0_at_4gib": 9,
+  "n_workloads_total": 12,
+  "dominant_workload_fraction_of_total_positive_byte_reduction": 0.27626076260763255
+}

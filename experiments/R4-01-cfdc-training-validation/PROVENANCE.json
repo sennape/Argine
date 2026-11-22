@@ -1,0 +1,107 @@
+{
+ "artifact": "R4-01-PROVENANCE",
+ "eval_eviction_metrics_calculated": false,
+ "eval_trace_content_read": false,
+ "frozen_inputs": {
+  "canonical_stream_sha256": "24fcc3e31e800826acb353c627326d4665af7b05c88a3138b18b79c5c435e776",
+  "dev_results_lf_sha256": "b5e5f26e88e5b0b733020698d9c57f54790669f40e00e36e22ec6cf71845b03e",
+  "nue_x_eval_results_lf_sha256": "72d3c50e53f95c6537448e5e05d768d8a4a5cd02932cd5890362e3e2e005f0ac",
+  "r2_belady_results_lf_sha256": "8b928ec199306905e0bf223992ece58db376a91577d448eee28941be6b2e5109"
+ },
+ "implementation_commit": "db84d702989a3334578b00c1922063056118cd94",
+ "model_inference_runs": 0,
+ "numpy": "2.2.6",
+ "phase0_commit": "35410947d51895326aa7e6c39a09825e2ffb4c0c",
+ "phase0_contract_digest": "fa0ff8d4c93b463a99bdba4a65625251fa00c8102f5b2d788f8f22e73a20d64e",
+ "phase0_freeze_sha256": "41e9aa82fcf59155b6c98504ff08bee6ca2feb74027675e3fbce10778ca318be",
+ "python": "3.10.12",
+ "r2_11_folder_access": "read-only; no file in the R2-11 source was modified, renamed, normalized or copied into the repository",
+ "source_r3_head": "f88001558542b648c0a3abff54c919adedf27809",
+ "sources": {
+  "EVAL": "NOT READ (identity-only in Phase 0 DATA_SPLITS)",
+  "TRAIN": [
+   {
+    "id": "coding-v1__seed-42",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1"
+   },
+   {
+    "id": "instruction-v1__seed-42",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\instruction-v1-seed42\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "9934371d18a1ad3f0e2cb2a5e89cad87ed4e7a002732190646cfff9a0b489f54"
+   },
+   {
+    "id": "reasoning-v1__seed-42",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\reasoning-v1-seed42\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "8dff85b9e99f6e10a2a6a608585c77102c65597561c2cf55dd4471e37eb48b3b"
+   },
+   {
+    "id": "summarization-v1__seed-42",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\summarization-v1-seed42\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "dc24bde642278f4a8d75c6eae077121faed8562d04e4d9fed2d7cb87aa39a9bf"
+   }
+  ],
+  "VALIDATION": [
+   {
+    "id": "r2-11-coding-v1",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v1\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "da9a4535640fc1f64a2e7a3d8d01e456854c36daa08d70be99fb2e2a738d5ffd"
+   },
+   {
+    "id": "r2-11-coding-v2",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v2\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "dfe19f93e42a809d44a45a22af238e049e4aaf8eb99219132cdf9b6e2313588b"
+   },
+   {
+    "id": "r2-11-coding-v3",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v3\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "40a29f54c02b3f23a558d6d601b59e60d3f67fdb29f8cd8005e45fbc2a97e98d"
+   },
+   {
+    "id": "r2-11-instruction-v1",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v1\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "085dca7571fced800a4605311ae11d6264e95b90bf953858e8dbabb9ff42bf08"
+   },
+   {
+    "id": "r2-11-instruction-v2",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v2\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "6abad7c87176f18d0f28abf1d8cc2fa78e6dc14b5722a0f76dffb41daed4b54e"
+   },
+   {
+    "id": "r2-11-instruction-v3",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v3\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "3b8d5090f2191c1f0125f1e32acdf986cd7cb3765b14d30ea564f1397b0b4319"
+   },
+   {
+    "id": "r2-11-reasoning-v1",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v1\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "d65807d8ea692a0dc7dbdd24492b4abe15d402b4d71bbe7c41befe5013c77a9e"
+   },
+   {
+    "id": "r2-11-reasoning-v2",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v2\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "bd77666adb5b568d7247438acb36a752ec17c0d0a2ee3bd5577ae9d96d4e23b2"
+   },
+   {
+    "id": "r2-11-reasoning-v3",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v3\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "25912ff92747a52cabf13e48d535998f47b344272b04748671e2174d499fca73"
+   },
+   {
+    "id": "r2-11-summarization-v1",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v1\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "6df5f46d25149682b8e986d45ee4739ede271925433cd6b81205bd3d8ceacb9d"
+   },
+   {
+    "id": "r2-11-summarization-v2",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v2\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "44b1db845bb5f4c71b4ee5158f445e94706bcb1287bc8298ae5b712632d99b95"
+   },
+   {
+    "id": "r2-11-summarization-v3",
+    "path": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v3\\run-00-4G\\trace.jsonl.gz",
+    "sha256": "eabe70fe56d2e1e33cdc6c6b9acc9820ed764aed38f369e5d514c6adfabf91fa"
+   }
+  ]
+ }
+}

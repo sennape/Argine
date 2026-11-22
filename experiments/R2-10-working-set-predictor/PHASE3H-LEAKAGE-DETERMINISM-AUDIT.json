@@ -1,0 +1,26 @@
+{
+  "artifact": "R2-10-PHASE3H-LEAKAGE-DETERMINISM-AUDIT",
+  "generated_utc": "2026-11-13T21:21:16.908510Z",
+  "frozen_test_suite_rerun": {
+    "file": "tests/test_r2_10_leakage.py",
+    "modified_for_this_substep": false,
+    "result": "9 passed, 0 failed",
+    "tests": [
+      "test_causal_context_never_exposes_future_same_layer_entries",
+      "test_same_layer_future_alteration_does_not_change_past_predictions",
+      "test_same_step_later_layer_alteration_does_not_affect_layer_l_stream",
+      "test_target_at_horizon_indexing_and_end_of_trace_unavailable",
+      "test_determinism_same_trace_config_horizon_identical_predictions",
+      "test_cold_start_position_zero_satisfies_cardinality",
+      "test_apply_output_contract_cardinality_uniqueness_validity_and_errors",
+      "test_recall_at_k_matches_definition",
+      "test_shuffled_null_is_descriptive_only_and_reproducible"
+    ]
+  },
+  "empirical_eval_determinism_check": {
+    "method": "each (family, workload) cell scored twice from freshly-loaded trace + freshly-constructed predictor instance; results compared for bit-identical equality",
+    "result": "ALL_BIT_IDENTICAL",
+    "frozen_leakage_determinism_test_suite": "tests/test_r2_10_leakage.py -- 9/9 PASSED, unmodified"
+  },
+  "conclusion": "No leakage mechanism is introduced by reusing run_predictor_against_trace() against the EVAL traces: causal_walk's same_layer_stream/iter_causal_contexts/target_at enforce the same causal boundary used during DEV scoring, and the frozen synthetic-trace leakage tests pass unmodified. Determinism is confirmed empirically on the real EVAL traces (bit-identical across repeated runs for all 3 families x 4 workload instances) in addition to the frozen unit-level determinism test."
+}

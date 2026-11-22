@@ -1,0 +1,29 @@
+{
+ "artifact": "R4-02-FREEZE",
+ "cheap_tree_hash": "8603908b188c3346c7ed86e1d6914f378c869e017a305fccf9b1adafc734fcf2",
+ "contract_digest": "1b690816e6625333fbcac5bf188934ef2f51dbf8ab82ecd1ae7b59c3f02065e0",
+ "decision_application_lf_sha256": "d11f9b7b11ebcd6b964d877f447ecf394761233ec4e7c580915a58e4d79aa201",
+ "eval_state": "CLOSED",
+ "files_sha256": {
+  "CLAIM_BOUNDARIES.md": "223456d5dbffc8c61745a0f5e1e3270418d25287a16f24a7e664231111714c19",
+  "DECISION_APPLICATION.json": "d11f9b7b11ebcd6b964d877f447ecf394761233ec4e7c580915a58e4d79aa201",
+  "EVAL_OPENED.json": "ca78e689bfe79a6c2b447fb7c4c4d2fbcb7cdce14edcd29e809931214b64dc43",
+  "EVAL_PLAN.json": "c90b540da0d8862c0a7a9a691d598799150adc1c3f3141487420300f015fc8c2",
+  "EVAL_RAW_RESULTS.json": "1f5b34cf5492042f3f4828b7295fb0647f5bbf125afea466eb058f84d352bc64",
+  "EVAL_RESULTS.json": "cde30ab8159574a70b7a39598c04bd76b392ed40bbcd8055a3b7ab8486a0a454",
+  "FINAL_CLASSIFICATION.json": "762481f47a62480da42498ffd26dc9ea92436e8e735e55f92f74c402613ada20",
+  "PER_WORKLOAD_RESULTS.json": "6645843e3e2b0b34486466a37c3dccc62987dffa1dff20bcf3689d178cdc7612",
+  "PROVENANCE.json": "c1cbda9102d3f99311c03b0a472f6bacc8e354430d2619b46feeccbbd5c677c3",
+  "README.md": "db5d441abb8e29796020035cd8bdea6744ac852d33a9e2c91bef053393274b34",
+  "phase2.py": "ea52b5299de460e9c22952a1036bd8f1bf76bad4138c19e52c66c619310050f2",
+  "runner.py": "cddc9c7c452f1d8653147e3fdb7809e73f7dc0aafeaceabb5266abe6c9946fb9",
+  "tests/test_phase2.py": "5be1161deb7a99eab8efcc422d63e139bf1db2a98f4d61d83a18f93374a1ff81"
+ },
+ "final_classification": "R4_CFDC_CAUSAL_STATE_INSUFFICIENT",
+ "freeze_sha256": "fc411ef578decf6f7f380832885651f278d8696d9f46d60d2c9d10dce0cb1fdd",
+ "phase0_contract_digest": "fa0ff8d4c93b463a99bdba4a65625251fa00c8102f5b2d788f8f22e73a20d64e",
+ "phase1_contract_digest": "8d89ecd8198db93000456cde58f995e4fa23124d554402b61170a776d9a0e74f",
+ "phase1_freeze_sha256": "dbea96e96a386286e49b93e733fb1ed68b5fe22771d9b4d9cf7d8cf55f1756d5",
+ "rich_model_digest": "8206a5098d0c1a094b91c5da3b9ecbcc0d07adefc584f78df10d6b043f58c3af",
+ "state": "R4_CFDC_CLOSED"
+}

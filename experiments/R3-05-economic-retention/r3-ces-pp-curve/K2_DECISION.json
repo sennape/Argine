@@ -1,0 +1,23 @@
+{
+ "artifact": "R3-05-R3-K2-DECISION",
+ "classification": "R3_05_K2_RETIRE_CURRENT_PP",
+ "effect_metric": "decode miss bytes avoided vs A (the Phase 0 K2/K3 effect metric); misses reported alongside",
+ "inputs": {
+  "canonical_stream_sha256": "24fcc3e31e800826acb353c627326d4665af7b05c88a3138b18b79c5c435e776",
+  "events": 24672,
+  "passes": 514,
+  "phase0_freeze_sha256": "415f78a850a2917a2457797106589433f944c07a863f80b14cef88fde6232ae3",
+  "r1_classification": "R3_05_R1_FIDELITY_PASS",
+  "r1_freeze_sha256": "8d025fdfb3d2a48c54e4d905f3a0e3aad2dd70ed9fdabf602b21ec2b600c3382",
+  "r2_classification": "R3_05_K1_HEADROOM_PASS",
+  "r2_freeze_sha256": "8b22e41505e3c14b78b6c924b703f1da4b26643123a9240f7bd9ad7d232afa44",
+  "token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa"
+ },
+ "interpretation": "does not imply anything about NUE_X",
+ "misses_ratio": 2.4257425742574257,
+ "misses_ratio_exact": "245/101",
+ "ratio": 2.4297669627912963,
+ "ratio_exact": "695697408/286322688",
+ "rule": "K2 (Phase 0): retire current PP if CES decode miss bytes avoided >= 0.8 x PP decode miss bytes avoided (exact fractions)",
+ "threshold": 0.8
+}

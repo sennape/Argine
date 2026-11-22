@@ -1,0 +1,205 @@
+{
+ "artifact": "R3-03B-AUTHORITATIVE-MICROBENCH-RESULT",
+ "classification": "MICROBENCH_COST_ATTRIBUTION_READY",
+ "parents": {
+  "protocol_commit": "23a31fad2514079c5e19ed5b05a05f19b6d9ec86",
+  "implementation_commit": "ed0e4742acf3a98723326605eee58d1139357a99",
+  "tooling_fix_commit": "a476471c37dbed7a348ca703d64813d6872340bc",
+  "protocol_freeze_sha256": "d0dd74510918d711c0ae6a8dd35f97c40d8cb3a573ff32f82955ebbe30686882",
+  "r3_03a_conformance_commit": "3c37870c2b1ed08609f61cee05674b38960be3a7"
+ },
+ "identity": {
+  "compiler": "MSVC 19.44.35229 x64 (Italian banner)",
+  "flags": "/nologo /O2 /Ob2 /DNDEBUG /MT /EHsc /std:c++17 /arch:AVX2 /DNOMINMAX /W4",
+  "binary_sha256": "d9eb52d7e5de77629da9bad9fa60b174c80598a7ad98aa741f82fb5eda00cbb3",
+  "git_head_at_acquisition": "a476471c37dbed7a348ca703d64813d6872340bc",
+  "host": "13th Gen Intel Core i5-1340P, 12 cores / 16 threads, Windows 10.0.26200, power scheme Balanced"
+ },
+ "independent_validation": {
+  "checks": 52,
+  "all_passed": true,
+  "script": "validate_evidence.py"
+ },
+ "coefficients": {
+  "c_call_ns": {
+   "b_selected": {
+    "mean": 8802.635286064275,
+    "median": 8803.195930609598,
+    "sd_over_90_rep_means": 192.7734224311391,
+    "ci95_halfwidth": 40.37561164918953,
+    "relative_halfwidth": 0.004586764115185985,
+    "us": 8.802635286064275
+   },
+   "predicted_protect_sham": {
+    "mean": 132482.08797197003,
+    "median": 132402.69941634242,
+    "sd_over_90_rep_means": 1043.417788774517,
+    "ci95_halfwidth": 218.5396248928703,
+    "relative_halfwidth": 0.0016495786580530641,
+    "us": 132.48208797197003
+   },
+   "predicted_protect": {
+    "mean": 134282.259511457,
+    "median": 134050.37897211412,
+    "sd_over_90_rep_means": 1723.5052025867647,
+    "ci95_halfwidth": 360.981176022117,
+    "relative_halfwidth": 0.002688226853907816,
+    "us": 134.282259511457
+   }
+  },
+  "c_predictor": {
+   "ns_per_call": 123679.45268590575,
+   "us_per_call": 123.67945268590576,
+   "median_ns": 123580.62986381323,
+   "sd_ns": 1031.1322532691966,
+   "ci95_halfwidth_ns": 215.96646929803023,
+   "relative_precision": 0.0017461790508282327,
+   "ci95_ns": [
+    123463.48621660772,
+    123895.41915520378
+   ],
+   "ms_per_token_at_48_calls": 5.936613728923477,
+   "ci95_halfwidth_ms_per_token": 0.010366390526305452
+  },
+  "process_level": {
+   "per_process_ns": {
+    "1": 123537.92558365759,
+    "2": 124138.49194768698,
+    "3": 123361.94052637268
+   },
+   "spread_ns": 776.5514213143033,
+   "conservative_ci95_halfwidth_ns_df2": 1011.4451786789865,
+   "conservative_relative_halfwidth": 0.00817795645690344
+  },
+  "full_policy_minus_sham": {
+   "ns_per_call": 1800.171539486957,
+   "ci95_halfwidth_ns": 429.0917820059195,
+   "ms_per_token": 0.08640823389537394,
+   "fraction_of_sham_c_call": 0.013588037198416055,
+   "note": "different trajectory (11 fewer evictions); includes protected-set logic"
+  }
+ },
+ "component_attribution_inner_mode": {
+  "b_selected": {
+   "prediction_update_share": 0.0021819436150897382,
+   "victim_selection_share": 0.33661729456760814,
+   "other_share": 0.6612007618173021,
+   "ns_policy_total_per_call": 8713.525228779363,
+   "prediction_update_ns_per_call": 19.01242073785848,
+   "victim_selection_ns_per_call": 2933.123288658308,
+   "other_ns_per_call": 5761.389519383197,
+   "victim_calls_per_event": 1.6936608300907912
+  },
+  "predicted_protect_sham": {
+   "prediction_update_share": 0.9351099537482512,
+   "victim_selection_share": 0.02115995624185203,
+   "other_share": 0.043730090009896735,
+   "ns_policy_total_per_call": 132388.70122676177,
+   "prediction_update_ns_per_call": 123797.99228094827,
+   "victim_selection_ns_per_call": 2801.3391248739013,
+   "other_ns_per_call": 5789.369820939617,
+   "victim_calls_per_event": 1.6936608300907912
+  },
+  "predicted_protect": {
+   "prediction_update_share": 0.9246215792727548,
+   "victim_selection_share": 0.032097388812131075,
+   "other_share": 0.043281031915114135,
+   "ns_policy_total_per_call": 133879.7174935149,
+   "prediction_update_ns_per_call": 123788.07582144401,
+   "victim_selection_ns_per_call": 4297.189346447615,
+   "other_ns_per_call": 5794.452325623289,
+   "victim_calls_per_event": 1.6932149805447472
+  }
+ },
+ "timer": {
+  "per_call_outer_mean_ns": {
+   "b_selected": 8806.355517725897,
+   "predicted_protect_sham": 132504.60756232886,
+   "predicted_protect": 134019.50303537975
+  },
+  "outer_minus_bulk_c_call_ns": {
+   "b_selected": 3.720231661622165,
+   "predicted_protect_sham": 22.51959035883192,
+   "predicted_protect": -262.75647607725114
+  },
+  "inner_minus_outer_ns": {
+   "b_selected": 104.19062545035376,
+   "predicted_protect_sham": 105.99091187492013,
+   "predicted_protect": 83.89974239803269
+  },
+  "calibration_pairs_ns": {
+   "n": 3000000,
+   "mean": 14.122,
+   "median": 0.0,
+   "min": 0,
+   "max": 39300
+  },
+  "calibration_ticks_ns": {
+   "n": 3000000,
+   "mean": 100.32766666666667,
+   "median": 100.0,
+   "min": 100,
+   "max": 98000
+  },
+  "instrumentation_delta_difference_sham_minus_b_ns_per_call": 1.800286424566366,
+  "assessment": "negligible: bulk-timer primary has no per-call timer; outer-minus-bulk 3.7/22.5/-262.8 ns per call; instrumentation inner-minus-outer 104/106/84 ns per call; sham-minus-b_selected instrumentation difference 1.8 ns vs c_predictor 123,679 ns (0.0015%); host QPC tick 100 ns, which is why bulk is primary; no post-hoc correction applied or required by the protocol"
+ },
+ "vm_comparison_exploratory_nonauthoritative": {
+  "vm_ns_per_call": {
+   "b_selected": 11797.99,
+   "predicted_protect_sham": 49513.56,
+   "predicted_protect": 50433.97
+  },
+  "vm_c_predictor_ns": 37715.57,
+  "host_over_vm_ratio": {
+   "b_selected": 0.7461131333442624,
+   "predicted_protect_sham": 2.6756728454179024,
+   "predicted_protect": 2.6625359754835283,
+   "c_predictor": 3.27926775827346
+  },
+  "note": "not averaged or pooled; VM used g++ -O2, single process, outer-mode means over 12 reps"
+ },
+ "historical_r3_02_descriptive_exploratory": {
+  "hist_end_to_end_overhead_B_minus_A_ms_per_token": {
+   "8GiB": {
+    "A_step_ms": 126.15759,
+    "O_ms_per_token": 57.36
+   },
+   "4GiB": {
+    "A_step_ms": 273.25817,
+    "O_ms_per_token": 60.28
+   },
+   "1.5GiB": {
+    "O_ms_per_token": 86.38
+   }
+  },
+  "old_runtime_policy_calls_per_token": 144,
+  "direct_cost_if_applied_to_144_calls_ms": 17.809841186770427,
+  "corrected_direct_cost_at_48_calls_ms": 5.936613728923477,
+  "ratio_hist8GiB_over_corrected_direct": 9.662073804893055,
+  "ratio_hist8GiB_over_144call_direct": 3.2206912682976854,
+  "corrected_direct_pct_of_hist_A_step_8GiB": 4.705712695465629,
+  "caveats": "historical runtime had 3 policy accesses per layer; parameters differed (8 GiB: decay .999 interval 16 vs microbench .99/64 stream from A-4GiB); not causal; end-to-end test pending"
+ },
+ "limitations": [
+  "single routing stream (A-4GiB) and parameters decay .99 interval 64",
+  "hot-loop microbenchmark: no lock contention, no cache competition with inference threads",
+  "laptop CPU (hybrid cores), Balanced power scheme, no affinity pinning",
+  "3 processes only: process-level CI wider than rep-level CI",
+  "bulk estimator includes input-vector copy baseline subtraction (null mode)",
+  "no end-to-end or in-situ measurement"
+ ],
+ "can_claim": [
+  "on this host the corrected sham predictor adds 123.7 us/call (95% CI +/-0.22 us rep-level, +/-1.0 us process-level), 5.94 ms/token at 48 calls/token in a hot-loop replay of the A-4GiB stream",
+  "93.5% of sham policy time is prediction update; victim selection ~2.1%",
+  "timer/instrumentation overhead is negligible relative to c_predictor"
+ ],
+ "cannot_claim": [
+  "that bookkeeping explains the end-to-end sham vs b_selected difference (rho untested)",
+  "any predicted_protect throughput benefit",
+  "that the in-situ per-call cost equals the hot-loop cost",
+  "generalisation to other budgets, workloads or parameter sets",
+  "causal recovery of the historical R3-02 overhead"
+ ],
+ "block_count_addendum": "experiments/R3-03B-end-to-end-block-count/BLOCK_COUNT_ADDENDUM.json"
+}

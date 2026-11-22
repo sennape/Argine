@@ -1,0 +1,110 @@
+{
+ "anti_rescue": {
+  "forbidden": [
+   "second feature round",
+   "new model family",
+   "threshold relaxation",
+   "new training corpus",
+   "new EVAL corpus",
+   "EVAL-driven feature engineering",
+   "EVAL-driven hyperparameter tuning",
+   "post-hoc success metric",
+   "one more candidate",
+   "re-opening EVAL"
+  ],
+  "on_failure": "close the tested causal-retention direction for this regime; any fundamentally different idea is a new research question with its own Phase 0",
+  "one_experiment": true
+ },
+ "artifact": "R4-00-DECISION-RULES",
+ "authorized_next_step_if_viable": {
+  "later_gate": "estimated benefit >= 10 ms/token at kappa_low AND benefit / measured policy-computation cost >= 2.0",
+  "only": "standalone CHEAP policy-cost microbenchmark (no runtime implementation)",
+  "runtime_implementation": "may be proposed only after that later gate passes"
+ },
+ "classification_order": [
+  [
+   "integrity failure (A not reproducing its frozen TRAIN/VALIDATION reference, budget violation, invalid denominator, any frozen identity mismatch)",
+   "R4_CFDC_INVALID"
+  ],
+  [
+   "A and B and C",
+   "R4_CFDC_CHEAP_VIABLE"
+  ],
+  [
+   "A and B and not C",
+   "R4_CFDC_HETEROGENEOUS_NOT_VIABLE"
+  ],
+  [
+   "A and not B",
+   "R4_CFDC_CHEAP_NOT_INCREMENTAL"
+  ],
+  [
+   "not A and RICH gate passes",
+   "R4_CFDC_CAUSAL_INFORMATION_PRESENT_CHEAP_NOT_DEMONSTRATED"
+  ],
+  [
+   "not A and RICH gate fails",
+   "R4_CFDC_CAUSAL_STATE_INSUFFICIENT"
+  ]
+ ],
+ "companion_labels": {
+  "COMPARATOR_REACHES_VIABILITY": "reported alongside the class if NUE_X or DECAYED_COUNT has capture >= 1/4 on both VALIDATION and EVAL; it qualifies, never upgrades, the CHEAP class",
+  "C_status": "rule C is evaluated and reported in every class",
+  "RICH_status": "the RICH gate is evaluated and reported in every class"
+ },
+ "eval_audit": "EVAL is scored by one script whose SHA-256, the fitted-model hashes and the complete VALIDATION scores are committed in the Phase 1 lock before EVAL is read; the EVAL run is executed once and its output log is hashed; any re-execution is reported.",
+ "eval_opening": "EVAL is opened exactly once, after the TRAIN fit of CHEAP and RICH and the VALIDATION scores are written and hash-locked, whatever the VALIDATION outcome; all frozen arms (A, BELADY, NUE_X, DECAYED_COUNT, CHEAP, RICH) are scored in that single opening.",
+ "integrity_preconditions": [
+  "A reproduces its frozen decode miss bytes and misses on every TRAIN trace (R3-05 R4 DEV_RESULTS) and every VALIDATION trace (R2-11 eval_cells, 1.5 GiB)",
+  "NUE_X reproduces its frozen R3-05 R4 DEV_RESULTS rows on every TRAIN trace",
+  "BeladyGlobal reproduces the frozen R3-05 R2 decode miss bytes on the Research 3 canonical stream (r2.py replay)",
+  "every trace hash equals DATA_SPLITS before it is read"
+ ],
+ "label_meaning": "R4_CFDC_CAUSAL_STATE_INSUFFICIENT refers to the frozen feature vocabulary under RICH; if COMPARATOR_REACHES_VIABILITY is also present, the report must say that a frozen comparator reached the 25% level while the learned policies did not.",
+ "primary_endpoint": {
+  "aggregate": "capture(P) = sum_w (B_A,w - B_P,w) / sum_w (B_A,w - B_Bel,w) over all traces of the split (pooled bytes, exact rational arithmetic)",
+  "invalid_if": "pooled denominator sum_w (B_A,w - B_Bel,w) <= 0, or any budget violation (resident bytes > budget after any served event)",
+  "name": "capture",
+  "no_capping": "capture is not capped; values above 1 or below 0 are reported as computed",
+  "non_gating_reports": [
+   "number of EVAL workloads on which CHEAP beats the best comparator",
+   "block-bootstrap 90% interval of pooled capture over contiguous 64-token decode blocks (seed 0, 2000 resamples)",
+   "VALIDATION comparator captures with and without r2-11-coding-v1",
+   "REPLICATE_CHECK (seed-43) captures, report-only",
+   "teacher-agreement shift diagnostic"
+  ],
+  "per_trace": "capture_w(P) = (B_A,w - B_P,w) / (B_A,w - B_Bel,w), B = decode miss bytes at 1.5 GiB",
+  "report": [
+   "aggregate capture",
+   "absolute miss-byte reduction",
+   "per-workload capture",
+   "sign of improvement per workload"
+  ],
+  "undefined_workload": "if B_A,w - B_Bel,w <= 0 for a workload, its per-workload capture is UNDEFINED and counts as failing rule C"
+ },
+ "rich_interpretation": "If RICH fails the gate, the tested causal state representation does not contain enough generalizable information to support the CHEAP target. No new feature set, learner or rescue experiment follows inside Research 4.",
+ "rules": {
+  "A_operational_viability": "capture_VAL(CHEAP) >= 1/4 AND capture_EVAL(CHEAP) >= 1/4. A value in [0.20, 0.25) is a FAIL.",
+  "B_incremental_value": "capture_EVAL(CHEAP) >= max(1/4, max(capture_EVAL(NUE_X), capture_EVAL(DECAYED_COUNT)) + 3/100), comparators replayed under the same Research 4 replay",
+  "C_workload_consistency": "capture_w(CHEAP) >= 0 for every EVAL workload w",
+  "RICH_information_gate": "capture_VAL(RICH) >= 1/4 AND capture_EVAL(RICH) >= 1/4"
+ },
+ "secondary_endpoints": [
+  "misses per token",
+  "miss bytes per token",
+  "evictions",
+  "reloads",
+  "per-layer effects",
+  "per-workload effects",
+  "resident-set turnover",
+  "zero-cost ms/token = kappa_low * (B_A - B_P) / tokens / 1e6 with kappa_low = 0.3792 ms/MB (Research 3 Phase 0 transfer mapping)"
+ ],
+ "secondary_rule": "Secondary endpoints are descriptive. None may be promoted to primary after EVAL.",
+ "thresholds": {
+  "incremental_margin": "3/100",
+  "rich_gate": "1/4",
+  "viability": "1/4",
+  "workload_floor": "0"
+ },
+ "validation_role": "VALIDATION is used for no fitting, selection or threshold choice; a failed VALIDATION score triggers no change before EVAL."
+}

@@ -1,0 +1,18 @@
+{
+  "cell_key": "instruction-v1_seed-43__global_frequency__global_frequency_default__d7a5d7970cd43cef",
+  "cell_record_digest": "8b46e653acdd2004893eea5a92dd20ba9b23c97119ab99acfd1ac1aee0182609",
+  "config_id": "global_frequency/default",
+  "deterministic": true,
+  "dev_cell_id": "instruction-v1/seed-43",
+  "family_id": "global_frequency",
+  "recall_at_k_h1": 0.3561081603090295,
+  "recall_at_k_h16": 0.33922799602187964,
+  "recall_at_k_h4": 0.3490822810425773,
+  "result_digest": "0effd9b7fa4fc039a70035cf116e6609150e9513a95aa439304a2ca3ddc6609a",
+  "status": "OK",
+  "targets_scored": {
+    "h1": 24852,
+    "h16": 24132,
+    "h4": 24708
+  }
+}

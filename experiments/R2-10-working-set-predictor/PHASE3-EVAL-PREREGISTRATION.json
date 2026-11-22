@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "experiment_id": "R2-10",
+  "phase": "PHASE_3_EVAL_PREREGISTRATION",
+  "preregistered_utc": "2026-11-12T20:29:59Z",
+  "status": "PREREGISTERED_NOT_EXECUTED",
+  "note": "Created BEFORE any EVAL trace is read, inspected, or executed, per the Phase-3 handoff's own ordering. This record locks the frozen DEV-selected configuration so it cannot be retuned or replaced after EVAL is observed. It does NOT itself open, read, or execute against EVAL.",
+  "selected_predictor": {
+    "family_id": "decayed_transition",
+    "config_id": "decayed_transition/decay=0.99",
+    "hyperparameters": {
+      "decay_factor": 0.99
+    },
+    "hyperparameter_grid_origin": "experiments/R2-10-working-set-predictor/predictor_space.json (frozen Phase-0 contract, decay_factor in [0.9, 0.99, 0.999])",
+    "implementation_module": "argine.research2.r2_10.predictors.DecayedTransitionPredictor",
+    "implementation_revision_commit": "9ac0abab0c352edadba72a4a23517e6b22012b5b",
+    "implementation_note": "This commit also contains a differentially-verified performance optimization (sparse incremental cache) of the same mathematical predict() function used for DEV selection; see experiments/R2-10-working-set-predictor/PHASE2-PERFORMANCE-NOTE.md. No semantic change.",
+    "selection_basis": "experiments/R2-10-working-set-predictor/PHASE2-SELECTION-RECORD.json (DEV-only, frozen selection_rule.json)"
+  },
+  "frozen_comparison_baselines": {
+    "global_frequency": {
+      "config_id": "global_frequency/default",
+      "implementation_module": "argine.research2.r2_10.baselines.GlobalFrequencyBaseline"
+    },
+    "last_observation": {
+      "config_id": "last_observation/default",
+      "implementation_module": "argine.research2.r2_10.baselines.LastObservationBaseline"
+    }
+  },
+  "metrics": {
+    "primary": "future_requested_expert_recall_at_k, h=1 (recall_at_k_h1), equal weight per instance",
+    "secondary": [
+      "recall_at_k_h4",
+      "recall_at_k_h16"
+    ],
+    "aggregation_rule": "experiments/R2-10-working-set-predictor/selection_rule.json: mean over the N held-out instances of [mean over all (t,l,h) targets in that instance of recall_at_k(t,l)]. Equal weight per instance (never token/layer-count-weighted across instances, to prevent a longer trace dominating the average)."
+  },
+  "evaluation_horizons": [
+    1,
+    4,
+    16
+  ],
+  "tie_breaking": "N/A for EVAL execution -- EVAL evaluates exactly the single frozen selected configuration plus the two frozen trivial baselines; no re-selection or re-ranking occurs on EVAL (selection_rule.json's tie-break applies only to DEV selection, already resolved in Phase 2).",
+  "dataset_and_manifest_references": {
+    "eval_manifest": "experiments/R2-09-prediction-benchmark/eval_manifest.json",
+    "eval_manifest_sha256_at_preregistration": "08ae0d065362e62a83e6ac445df6c5a5d66fc45fdadf2f5bd38aee12a97e57a8",
+    "eval_workload_instances": [
+      "coding-eval-v1",
+      "reasoning-eval-v1",
+      "summarization-eval-v1",
+      "instruction-eval-v1"
+    ],
+    "r2_09b_contract_digest": "b6274b354e39854effcca1510f0f817a85a162ab80cb6d29a31041a9978a7b28",
+    "r2_10_phase0_contract_digest": "4d2288b7b4a812fd85d96aa7c2227d639b52f5131bff305d687e03970f53d725"
+  },
+  "frozen_decision_criteria": {
+    "decision_rules_source": "experiments/R2-10-working-set-predictor/decision_rules.json",
+    "dev_classification": "B (MEASURABLE_IMPROVEMENT_INSUFFICIENT_FOR_RETENTION)",
+    "forbidden_claims_restated": [
+      "retention improvement (miss_bytes reduction) -- requires R2-11",
+      "runtime speedup / tokens-per-second / latency change -- requires R2-12",
+      "generalization beyond the frozen held-out instances",
+      "O_B = O* or any strengthening of AUDIT-ORACLE-001 CASE C semantics"
+    ]
+  },
+  "commitment": "No retuning of decay_factor or substitution of another predictor family/config will occur after observing any EVAL result. Any such change would require a new experimental generation per eval_manifest.json's acquisition_protocol.post_eval_method_change clause."
+}

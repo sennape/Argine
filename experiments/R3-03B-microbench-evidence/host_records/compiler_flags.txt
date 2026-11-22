@@ -1,0 +1,1 @@
+cl /nologo /O2 /Ob2 /DNDEBUG /MT /EHsc /std:c++17 /arch:AVX2 /DNOMINMAX /W4 

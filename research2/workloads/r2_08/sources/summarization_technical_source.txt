@@ -1,0 +1,28 @@
+# Argine Expert Store and Routing Trace: Technical Background (R2-08 source)
+
+Sparse Mixture-of-Experts (MoE) transformer layers replace a dense feed-forward
+network with a set of expert networks and a router. For each token, the router
+selects a small subset of experts (top-k) whose outputs are combined. In
+memory-tiered inference, the full set of expert parameters may exceed available
+DRAM, so a runtime must decide which experts remain resident.
+
+An expert store maps expert tensor slices to storage and loads them on demand.
+Each expert is typically represented by multiple slices (for example gate, up,
+and down projections). A hard byte budget constrains the total resident expert
+memory. When a requested expert slice is not resident, the runtime issues a read
+from storage and may evict other slices according to a replacement policy such
+as least recently used (LRU), subject to pinning constraints.
+
+Routing traces record, for each forward pass and layer, the experts selected by
+the router. These traces can be analyzed offline to characterize concentration,
+transition structure, reuse distance, and working-set behavior. Replay engines
+can evaluate counterfactual residency policies over the same trace under a fixed
+budget, separating routing structure from runtime noise.
+
+Temporal drift refers to changes in routing distributions over the course of a
+single generation. Workload dependence refers to differences in routing
+structure across task families such as coding, reasoning, summarization, and
+instruction following. Replicate variability refers to differences between
+repeated runs of the same workload under the same protocol. Distinguishing these
+sources of variability is necessary before using routing structure to guide a
+causal retention or prefetch mechanism.

@@ -1,0 +1,105 @@
+{
+ "artifact": "R3-05-PREDICTOR-COST-MAP",
+ "components": [
+  {
+   "class": "data-structure (minor)",
+   "id": "event_entry",
+   "ops": "8 set-node allocations + copy to vector",
+   "shared_by": "A,S,P",
+   "where": "RetentionPolicy::access L264; std::set dedup L273"
+  },
+  {
+   "class": "data-structure (part of A's 19.2 us/event)",
+   "id": "hit_miss_lookup",
+   "ops": "linear scan of ~560 residents x 8 members",
+   "shared_by": "A,S,P",
+   "where": "find_resident L202-209 called at L281"
+  },
+  {
+   "class": "algorithmic (in A baseline)",
+   "id": "aging",
+   "ops": "interval=1 at 1.5 GiB: multiply ~560 scores per member (8x per event)",
+   "shared_by": "A,S,P",
+   "where": "apply_aging_if_due L216"
+  },
+  {
+   "class": "not dominant",
+   "id": "victim_selection",
+   "measured": "Gate 2 victim_selection ms total over launch: A 99.0, S 101.2, P 175.4 (1.5 GiB) -> P extra ~0.15 ms/token",
+   "ops": "O(residents) per eviction (~4.3 evictions/event); P adds O(top_k) membership per resident",
+   "shared_by": "A,S (P slightly more)",
+   "where": "choose_victim L228 (A,S) / PredictedProtectPolicy::choose_victim L402 (P)"
+  },
+  {
+   "class": "allocation (minor)",
+   "id": "history_append",
+   "ops": "copy 8 ids into an unbounded per-layer vector<vector> (grows to 514 entries/layer); heap allocation per event",
+   "shared_by": "S,P",
+   "where": "after_event L512"
+  },
+  {
+   "class": "data-structure + redundant pow",
+   "id": "transition_update",
+   "ops": "64 x (unordered_map find + std::pow + operator[] second hash probe/insert)",
+   "shared_by": "S,P",
+   "where": "after_event L515-527"
+  },
+  {
+   "class": "ALGORITHMIC (full recompute of a sparsely-changing quantity) x DATA-STRUCTURE (node hash map, LLC misses) -- DOMINANT",
+   "id": "predict_dense_rescan",
+   "ops": "8 x 128 = 1024 unordered_map finds on a map of up to 16,384 node entries per layer (48 layers), std::pow per found cell; vector<double>(128) + vector<uint32_t>(128) allocations; std::stable_sort of 128 (temp buffer); result vector copy; predicted_next_[layer] hash assignment",
+   "shared_by": "S,P",
+   "where": "predict_for_layer L446-483"
+  },
+  {
+   "class": "negligible; OFF in R3-04 timing",
+   "id": "timing_instrumentation",
+   "ops": "2-4 clock reads per event when ON",
+   "shared_by": "all, only traced",
+   "where": "access L266-L340 (steady_clock reads only when ARGINE_POLICY_TIMING=1)"
+  }
+ ],
+ "dominant_cost_classification": {
+  "dominant": "algorithmic x data-structure (memory locality)",
+  "frequency": "inherent (one refresh per semantic event, 48/token); not the root cause",
+  "language_runtime_integration": "not dominant (C++ /O2 /arch:AVX2); the 3.65x runtime inflation is memory/LLC contention with inference threads",
+  "locking": "none on this path"
+ },
+ "exact_incremental_reformulation": {
+  "expected_offline_cost": "low single-digit microseconds per event (ESTIMATE, to be measured in rung R5); with the 4x pre-registered transfer: <= ~0.6 ms/token",
+  "identity": "reference score_i[e] = sum_{c in cur} v(c,e) * g^(i - last(c,e)) = g^i * sum_c w(c,e) with w = v * g^(-last). g^i is common to all e, so ranking by sum_c w(c,e) is identical to the reference ranking (up to floating-point summation order).",
+  "predict": "1024 contiguous adds (SIMD) + partial top-k (nth_element) over 128",
+  "risk": "floating-point ties may order differently from the reference -> event-level set agreement is a secondary endpoint and a conformance-gate requirement",
+  "storage": "dense 128 x 128 per layer (float64: 128 KiB/layer, 6 MiB total), renormalise a layer by g^(i0) when g^(-i) exceeds 1e200",
+  "update": "w(c,e) += g^(-i) for the 64 changed cells; ONE pow per event, not per cell"
+ },
+ "measured_totals": {
+  "microbench_c_call_ns": {
+   "b_selected": 8802.6,
+   "predicted_protect": 134282.3,
+   "sham": 132482.1
+  },
+  "microbench_c_predictor_ns": 123679.5,
+  "per_probe_ns_offline": "123,679 ns / ~1,088 probes (1024 predict + 64 update) = ~114 ns per probe -> consistent with a cache-missing hash probe + pow, not with arithmetic",
+  "policy_ms_per_token": {
+   "A": 0.925,
+   "S": 23.297
+  },
+  "runtime_ns_per_event": {
+   "A": 19200.9,
+   "S": 483464.2
+  },
+  "runtime_transfer_factor_predictor_path": 3.65,
+  "wall_S_minus_A_ms": 14.588
+ },
+ "per_decode_event_shape": {
+  "cells_scanned_per_predict": 1024,
+  "current_set_size": 8,
+  "events_per_token": 48,
+  "n_experts": 128,
+  "residents_at_1.5GiB_approx": 560,
+  "transition_cells_changed_per_event": 64
+ },
+ "source": "patches/argine-retention-policy.cpp / .h (sha256 recorded in FREEZE.json sources_sha256); Python reference argine/research2/r2_bridge01/retention_policies.py",
+ "why_micro_optimisation_is_insufficient": "Even an exact ~100x cheaper predictor leaves the CURRENT mechanism at net ~+0.42 ms/token (its value ceiling is 0.57 ms): break-even, not a resolvable or useful win. Cost engineering is necessary but cannot be sufficient; the value must come from a different decision."
+}

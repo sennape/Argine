@@ -1,0 +1,47 @@
+{
+  "anchor_commit": "47da7ae074fe7262becda2105778d7131e272818",
+  "artifact": "R3-02A-FREEZE",
+  "artifacts": {
+    "BUILD_IDENTITY.json": "87d976a589834a7abf8c34cdfa4664c01aaf76c00738bb9e87434ad2c5a9ebb3",
+    "EQUIVALENCE.json": "37954a315e7990948862a023218edb1bd935ef349cbfb378c3caa007b9ca237e",
+    "IMPLEMENTATION.json": "b9df02a525eaea2ca68d1b01e5734369bee47ba617a58ce2b7e0760ef53ce5b5",
+    "README.md": "2cf52d5d411e69613530cb4f36ab1903f17b5afbb57239dfa5225954597b6985",
+    "patches/0006-argine-msvc-atomic-shim.patch": "109f13fab5b855e3ce87bf5ac02e040583a77a578ccccfbe5e5585315181d357",
+    "tests/test_r3_01_integration.py": "703e458058834b3acf87a0083b63604cf5f73049080934bff43e24f93e28c811",
+    "tools/r3_02a_equivalence.py": "350f90f714d2fdde9877a407f4c367db80136ce8b4ff365449b989e4eb3c68d7"
+  },
+  "created_utc": "2026-11-16T22:36:15Z",
+  "frozen_scope": [
+    "predicted_protect_sham policy identity and semantics",
+    "MSVC build recipe for the R3 sham runtime",
+    "offline equivalence and regression results"
+  ],
+  "not_frozen": [
+    "R3-02 calibration protocol",
+    "acquisition matrix",
+    "cost-aware policy",
+    "primary scientific endpoint",
+    "DEV selection",
+    "EVAL rules"
+  ],
+  "phase": "R3-02A",
+  "prohibited_actions": [
+    "loading the 30B model",
+    "inference",
+    "acquisition",
+    "benchmark",
+    "opening DEV/EVAL",
+    "modifying frozen R2/R3-00A/R3-01 artifacts"
+  ],
+  "r3_00a_integrity": {
+    "audit_sha256": "b01b284f775cad9d36e68ccb60c11dfcb2adad1be33630c4387dbecd749bb829",
+    "contract_digest": "99a68c73c5a3caba4fd53937f27907375734f3866c84e18d4ecb944013efa073",
+    "contract_sha256": "a4fff70d96f9c1e0b40f1718dffecad39549f2e0160279b77d7cbdc42a617b45",
+    "unchanged": true
+  },
+  "r3_01_integrity": {
+    "freeze_sha256": "691babfda4fa68cf4962bcc866195803443ba42146813a601bc0594adad9b531",
+    "unchanged": true
+  },
+  "status": "PASS_SHAM_REALIZED"
+}

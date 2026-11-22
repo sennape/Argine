@@ -1,0 +1,4 @@
+Microsoft (R) C/C++ Optimizing Compiler versione 19.44.35229 per x64
+Copyright (C) Microsoft Corporation. Tutti i diritti  sono riservati.
+
+uso: cl [ opzione... ] nomefile... [ /link opzione di collegamento... ]

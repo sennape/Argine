@@ -1,0 +1,155 @@
+{
+ "aggregate": {
+  "CHEAP": {
+   "B_A": 1226910965760,
+   "B_BELADY": 713408901120,
+   "B_P": 1380736696320,
+   "avoided_vs_A": -153825730560,
+   "capture": "-834558/2785927",
+   "capture_float": -0.29956204882611787,
+   "denominator": 513502064640
+  },
+  "DECAYED_COUNT": {
+   "B_A": 1226910965760,
+   "B_BELADY": 713408901120,
+   "B_P": 1211255119872,
+   "avoided_vs_A": 15655845888,
+   "capture": "424692/13929635",
+   "capture_float": 0.03048837963090921,
+   "denominator": 513502064640
+  },
+  "NUE_X": {
+   "B_A": 1226910965760,
+   "B_BELADY": 713408901120,
+   "B_P": 1178778341376,
+   "avoided_vs_A": 48132624384,
+   "capture": "1305681/13929635",
+   "capture_float": 0.09373404256464725,
+   "denominator": 513502064640
+  },
+  "RICH": {
+   "B_A": 1226910965760,
+   "B_BELADY": 713408901120,
+   "B_P": 1128796803072,
+   "avoided_vs_A": 98114162688,
+   "capture": "2661517/13929635",
+   "capture_float": 0.1910686819862832,
+   "denominator": 513502064640
+  }
+ },
+ "artifact": "R4-02-EVAL-RESULTS",
+ "belady_eval_miss_bytes": 713408901120,
+ "belady_headroom_bytes": 513502064640,
+ "best_causal_comparator": "NUE_X",
+ "budget_bytes": 1610612736,
+ "cheap_absolute_miss_byte_delta_vs_A": -153825730560,
+ "integrity": {
+  "budget_violations": 0,
+  "eval_trace_hashes_match": true,
+  "frozen_identities_match": true,
+  "ok": true,
+  "one_result_per_arm_per_trace": true,
+  "pooled_denominator": 513502064640,
+  "validation_imported_exactly": {
+   "cheap": "-7411084/20561187",
+   "decayed_count": "-383910/6853729",
+   "nue_x": "508278/6853729",
+   "rich": "6354125/41122374"
+  }
+ },
+ "miss_bytes_per_trace": {
+  "coding-eval-v1": {
+   "A": 297695526912,
+   "BELADY": 174409850880,
+   "CHEAP": 338477395968,
+   "DECAYED_COUNT": 297610518528,
+   "NUE_X": 286774272000,
+   "RICH": 278173716480
+  },
+  "instruction-eval-v1": {
+   "A": 293418860544,
+   "BELADY": 167765889024,
+   "CHEAP": 338678378496,
+   "DECAYED_COUNT": 288820224000,
+   "NUE_X": 281965694976,
+   "RICH": 269547724800
+  },
+  "reasoning-eval-v1": {
+   "A": 315481853952,
+   "BELADY": 191355457536,
+   "CHEAP": 338928095232,
+   "DECAYED_COUNT": 312541102080,
+   "NUE_X": 302772510720,
+   "RICH": 291538280448
+  },
+  "summarization-eval-v1": {
+   "A": 320314724352,
+   "BELADY": 179877703680,
+   "CHEAP": 364652826624,
+   "DECAYED_COUNT": 312283275264,
+   "NUE_X": 307265863680,
+   "RICH": 289537081344
+  }
+ },
+ "nongating": {
+  "block_bootstrap_90pct_pooled_capture": {
+   "CHEAP": {
+    "n_blocks": 32,
+    "p05": -0.36898101236052,
+    "p95": -0.23446034753494452,
+    "resamples": 2000,
+    "seed": 0,
+    "valid_resamples": 2000
+   },
+   "DECAYED_COUNT": {
+    "n_blocks": 32,
+    "p05": -0.017563966532847912,
+    "p95": 0.08056764492107066,
+    "resamples": 2000,
+    "seed": 0,
+    "valid_resamples": 2000
+   },
+   "NUE_X": {
+    "n_blocks": 32,
+    "p05": 0.07712929571062008,
+    "p95": 0.11114839135780274,
+    "resamples": 2000,
+    "seed": 0,
+    "valid_resamples": 2000
+   },
+   "RICH": {
+    "n_blocks": 32,
+    "p05": 0.1640708281536726,
+    "p95": 0.2192757145005583,
+    "resamples": 2000,
+    "seed": 0,
+    "valid_resamples": 2000
+   }
+  },
+  "eval_workloads_where_cheap_beats_best_comparator": {
+   "count": 0,
+   "definition": "CHEAP per-workload capture strictly above max(NUE_X, DECAYED_COUNT) on that workload",
+   "of": 4,
+   "workloads": []
+  },
+  "replicate_check_seed43": "NOT COMPUTED",
+  "teacher_agreement_shift_eval": "NOT COMPUTED (TRAIN diagnostic is in Phase 1)",
+  "validation_comparator_with_without_r2_11_coding_v1": {
+   "all_12": {
+    "CHEAP": -0.3604404745698777,
+    "DECAYED_COUNT": -0.05601476218274752,
+    "NUE_X": 0.07416079626142207,
+    "RICH": 0.1545174653583959
+   },
+   "excluding_coding_v1": {
+    "CHEAP": -0.35421926838874657,
+    "DECAYED_COUNT": -0.061437116908283775,
+    "NUE_X": 0.07404355282264005,
+    "RICH": 0.15519309723493524
+   },
+   "imported_from": "R4-01 VALIDATION_RESULTS.json"
+  }
+ },
+ "reference_A_eval_miss_bytes": 1226910965760,
+ "split": "EVAL (4 canonical R2-09 traces)"
+}

@@ -1,0 +1,15 @@
+{
+  "heterogeneity": {
+    "largest_cross_workload_jsd_layer": 19,
+    "least_temporally_stable_layer": 12,
+    "most_temporally_stable_layer": 47,
+    "primary_criterion": "median relevant JSD, tie-breaking by smallest layer id",
+    "smallest_cross_workload_jsd_layer": 0
+  },
+  "workload_temporal_medians": {
+    "coding-v1": 0.15135464227319934,
+    "instruction-v1": 0.10301332706590415,
+    "reasoning-v1": 0.12689422590222318,
+    "summarization-v1": 0.14421793301468053
+  }
+}

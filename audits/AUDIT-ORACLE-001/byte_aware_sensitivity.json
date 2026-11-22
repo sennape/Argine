@@ -1,0 +1,37 @@
+{
+  "audit": "AUDIT-ORACLE-001",
+  "trace": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+  "budget": 4294967296,
+  "phase": "decode",
+  "semantics": "v2",
+  "canonical_O_B_miss_bytes": 42296352768,
+  "canonical_O_B_misses": 14754,
+  "comparators": [
+    {
+      "comparator": "belady-size-tiebreak",
+      "misses": 14754,
+      "miss_bytes": 42296352768,
+      "evictions": 22977,
+      "peak_resident_bytes": 4294950912,
+      "budget_violations": 0,
+      "beats_canonical_O_B_miss_bytes": false,
+      "beats_canonical_O_B_misses": false,
+      "delta_miss_bytes_vs_O_B": 0,
+      "delta_misses_vs_O_B": 0
+    },
+    {
+      "comparator": "belady-byte-density",
+      "misses": 20966,
+      "miss_bytes": 57265680384,
+      "evictions": 29566,
+      "peak_resident_bytes": 4294950912,
+      "budget_violations": 0,
+      "beats_canonical_O_B_miss_bytes": false,
+      "beats_canonical_O_B_misses": false,
+      "delta_miss_bytes_vs_O_B": 14969327616,
+      "delta_misses_vs_O_B": 6212
+    }
+  ],
+  "classification": "NO_COUNTEREXAMPLE_FOUND",
+  "interpretation": "Falsificatory only. BELADY_BEATEN => O_B not byte-optimal on this canonical trace. NO_COUNTEREXAMPLE_FOUND => no counterexample found by these heuristics; does NOT establish optimality or near-optimality."
+}

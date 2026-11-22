@@ -1,0 +1,105 @@
+{
+ "status": "EXPLORATORY_NONAUTHORITATIVE",
+ "note": "Linux VM, g++ -O2, 12 interleaved reps, single process; feasibility only; not used for any protocol decision; not a performance claim",
+ "host_authoritative_run": "experiments/R3-03B-direct-cost-attribution/PROTOCOL.json authoritative_microbenchmark",
+ "schema": "r3-03b-microbench-v1",
+ "events": 24672,
+ "reps": 12,
+ "budget_bytes": 4294967296,
+ "decay": 0.99,
+ "interval": 64,
+ "logged_evictions_in_stream": 41786,
+ "verdict": "OK",
+ "timer": {
+  "clock": "std::chrono::steady_clock",
+  "back_to_back_pair_ns": {
+   "mean": 15.51,
+   "p50": 15.0,
+   "p99": 17.0
+  },
+  "min_nonzero_tick_ns": 13
+ },
+ "policies": {
+  "b_selected": {
+   "outer_ns_per_call": {
+    "mean": 11797.99,
+    "p50": 7955.0,
+    "p90": 23504.0,
+    "p99": 44108.0,
+    "p999": 409037.0,
+    "max": 1665241.0
+   },
+   "outer_ns_per_token_equiv_pass": {
+    "mean": 567191.33,
+    "p50": 468847.0,
+    "p90": 862506.0,
+    "p99": 1571575.0,
+    "p999": 17430234.0,
+    "max": 19535405.0
+   },
+   "between_rep_sd_of_mean_ns_per_call": 363.63,
+   "evictions_per_replay": 41786.0,
+   "inner_mode_outer_mean_ns_per_call": 11948.39,
+   "instrumentation_delta_ns_per_call": 150.4,
+   "inner_decomposition_fraction_of_policy_total": {
+    "prediction_update": 0.0019,
+    "victim_selection": 0.5853
+   },
+   "inner_victim_calls_per_event": 1.694
+  },
+  "predicted_protect_sham": {
+   "outer_ns_per_call": {
+    "mean": 49513.56,
+    "p50": 43813.0,
+    "p90": 68077.0,
+    "p99": 130866.0,
+    "p999": 582037.0,
+    "max": 11026489.0
+   },
+   "outer_ns_per_token_equiv_pass": {
+    "mean": 2380556.79,
+    "p50": 2154401.0,
+    "p90": 3206504.0,
+    "p99": 4729188.0,
+    "p999": 21920827.0,
+    "max": 26116207.0
+   },
+   "between_rep_sd_of_mean_ns_per_call": 7190.35,
+   "evictions_per_replay": 41786.0,
+   "inner_mode_outer_mean_ns_per_call": 50543.48,
+   "instrumentation_delta_ns_per_call": 1029.92,
+   "inner_decomposition_fraction_of_policy_total": {
+    "prediction_update": 0.7562,
+    "victim_selection": 0.1401
+   },
+   "inner_victim_calls_per_event": 1.694
+  },
+  "predicted_protect": {
+   "outer_ns_per_call": {
+    "mean": 50433.97,
+    "p50": 44540.0,
+    "p90": 69424.0,
+    "p99": 139853.0,
+    "p999": 565583.0,
+    "max": 9611286.0
+   },
+   "outer_ns_per_token_equiv_pass": {
+    "mean": 2424829.07,
+    "p50": 2195055.0,
+    "p90": 3231124.0,
+    "p99": 5199869.0,
+    "p999": 22026791.0,
+    "max": 35070414.0
+   },
+   "between_rep_sd_of_mean_ns_per_call": 8082.5,
+   "evictions_per_replay": 41775.0,
+   "inner_mode_outer_mean_ns_per_call": 51493.24,
+   "instrumentation_delta_ns_per_call": 1059.27,
+   "inner_decomposition_fraction_of_policy_total": {
+    "prediction_update": 0.7508,
+    "victim_selection": 0.1465
+   },
+   "inner_victim_calls_per_event": 1.693
+  }
+ }
+}

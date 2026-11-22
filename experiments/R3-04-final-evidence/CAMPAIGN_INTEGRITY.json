@@ -1,0 +1,46 @@
+{
+ "abort_marker": false,
+ "all_512_tokens_frozen_digest": true,
+ "all_admitted_no_failures": true,
+ "all_attempt_1": true,
+ "all_one_policy_timing_record": true,
+ "by_budget_kind": {
+  "1.5_counted": 108,
+  "1.5_warmup": 1,
+  "8_counted": 36,
+  "8_warmup": 1
+ },
+ "campaign_complete_marker_launches": 146,
+ "clean_environment_attestation": "NOT independently provable from artifacts: the driver refuses to open without --attest-clean-environment but does not persist it; own_console_helper is persisted per record",
+ "counted": 144,
+ "duplicate_event_refusals_total": 0,
+ "failed_attempt_files": [],
+ "identity": {
+  "amended_schedule_sha256": "e87dc48518dd0281d5eeadd0c8db7a9cfc2234d0bce9d253f464566e43f511a0",
+  "amendment_freeze": "ea0d6719f6d4f92dd77b597662ea3903bc22db70647e37dd8b4cf9ec06c9b3f6",
+  "driver_sha256": "3abf28d6b267aec50dff936fd5a9f840cc9039f4e1c549d292b3f09b64f4c26d",
+  "opening_freeze": "3f6ea9b05c4c6d4784a6d6570f7f5a0fc81b3d94025fa5b10ba0bcfa7d97968d",
+  "protocol_freeze": "a88359b52891f93ec49e67978d92c2eb3b73db588611bce46b3103b2978c1202",
+  "runtime_sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5"
+ },
+ "inter_launch_gap_s": {
+  "max": 60.97703576087952,
+  "min": 15.00259256362915
+ },
+ "interrupted_files": [],
+ "launch_log_file_count": 292,
+ "launches_at_4GiB": 0,
+ "orphan_files": [],
+ "physical_launches": 146,
+ "records_dir_file_count": 146,
+ "resume_markers": [],
+ "runtime_sha256_all_frozen": true,
+ "shutdown_all_own_console_helper_rc0_graceful": true,
+ "shutdown_latency_s": {
+  "max": 1.9051150999730453,
+  "mean": 1.1843075897243218,
+  "min": 0.7392039999831468
+ },
+ "slot_identity_matches_amended_schedule": true,
+ "warmups": 2
+}

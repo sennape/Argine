@@ -1,0 +1,53 @@
+{
+  "artifact": "RESEARCH_2_FINAL_CLOSURE",
+  "generated_utc": "2026-11-16",
+  "state": "RESEARCH_2_CLOSED",
+  "scope": "Final scientific and editorial closure of Argine Research 2, covering R2-01 through R2-12 and the complete Paper II manuscript (paper/research2/manuscript.tex).",
+  "milestone_statuses": {
+    "II-A (R2-01..R2-04)": "CLOSED / PASS / PAPER-FROZEN (II-A-FREEZE.json; Oracle-semantics amended per AUDIT-ORACLE-001)",
+    "II-B (R2-05..R2-08)": "CLOSED / PASS / PAPER-FROZEN (II-B-FREEZE.json; Oracle-semantics amended per AUDIT-ORACLE-001)",
+    "R2-09A/B": "CLOSED (benchmark contract frozen; DEV causal-baseline tournament executed)",
+    "R2-10": "CLOSED / Category B supported by held-out EVAL (not promoted)",
+    "R2-BRIDGE-01": "CLOSED / BRIDGE_POSITIVE",
+    "R2-11": "CLOSED / R2_11_PASS (72/72 cells)",
+    "R2-12": "CLOSED / R2_12_FAIL (primary 4 GiB classification)"
+  },
+  "preserved_constraints": {
+    "downstream_negative_runtime_result_does_not_retroactively_alter_earlier_classifications": true,
+    "r2_11_not_proposed_under_original_r2_10_rules_remains_historically_true": true,
+    "r2_12_primary_classification_is_sole_basis_for_r2_12_result_secondary_budgets_excluded": true,
+    "no_runtime_speedup_claimed": true,
+    "no_research_3_started": true,
+    "no_frozen_evidence_modified": true
+  },
+  "central_scientific_conclusion": "Predictive expert information is measurably useful for forecasting routing and can improve a replay-level retention metric, but the tested reactive predictive-retention realization does not convert that information into improved end-to-end decode throughput on the evaluated runtime configuration.",
+  "supporting_documents": {
+    "milestone_table": "audits/RESEARCH-2-FINAL-CLOSURE-REVIEW/MILESTONE_TABLE.md",
+    "claim_ledger": "audits/RESEARCH-2-FINAL-CLOSURE-REVIEW/CLAIM_LEDGER.{json,md}",
+    "reviewer_audit": "audits/RESEARCH-2-FINAL-CLOSURE-REVIEW/REVIEWER_AUDIT.md",
+    "literature_positioning": "audits/RESEARCH-2-FINAL-CLOSURE-REVIEW/LITERATURE_POSITIONING.md",
+    "r2_12_closure": "experiments/R2-12-runtime-validation/R2_12_FINAL_CLOSURE.json",
+    "paper_ii_provenance": "paper/research2/PAPER_II_PROVENANCE.{json,md}",
+    "paper_ii_freeze": "paper/research2/PAPER_II_FREEZE.json",
+    "manuscript": "paper/research2/manuscript.pdf"
+  },
+  "independent_reviewer_audit_summary": {
+    "blocking_scientific_issues": 0,
+    "needs_paper_fix": 1,
+    "disclosed_limitations": 5,
+    "detail": "audits/RESEARCH-2-FINAL-CLOSURE-REVIEW/REVIEWER_AUDIT.md"
+  },
+  "regression_integrity_verification": {
+    "r2_10_canonical_artifacts_unchanged": true,
+    "r2_bridge01_canonical_artifacts_unchanged": true,
+    "r2_11_canonical_artifacts_unchanged": true,
+    "r2_12_canonical_artifacts_unchanged": true,
+    "ii_a_ii_b_frozen_data_unchanged": true,
+    "r2_12_final_classification_remains_r2_12_fail": true,
+    "frozen_r2_12_contract_digest": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad",
+    "verify_paper_freeze_py_result": "PASS: all II-A and II-B paper-freeze consistency checks passed.",
+    "no_new_inference_performed": true,
+    "no_canonical_data_rewritten": true
+  },
+  "unresolved_question_inherited_by_future_research_3": "How can useful predictive expert information be converted into end-to-end runtime value when reactive predictive retention alone fails to improve throughput? Possible future directions mentioned cautiously (not preregistered, not started): cost-aware retention, proactive expert movement, prefetch, compute/I/O overlap, scheduling, adaptive allocation."
+}

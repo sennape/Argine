@@ -1,0 +1,370 @@
+{
+  "decayed_transition|decayed_transition/decay=0.9": {
+    "hparam_count": 1,
+    "mean_recall_h1": 0.42800984236854195,
+    "mean_recall_h16": 0.3037455338747206,
+    "mean_recall_h4": 0.34206935063746013,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.431398,
+      "coding-v1/seed-43": 0.432406,
+      "instruction-v1/seed-42": 0.441405,
+      "instruction-v1/seed-43": 0.441458,
+      "reasoning-v1/seed-42": 0.42183,
+      "reasoning-v1/seed-43": 0.422293,
+      "summarization-v1/seed-42": 0.416563,
+      "summarization-v1/seed-43": 0.416725
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.431902,
+      "instruction": 0.441432,
+      "reasoning": 0.422062,
+      "summarization": 0.416644
+    },
+    "stdev_recall_h1_across_8_cells": 0.009489123996087919
+  },
+  "decayed_transition|decayed_transition/decay=0.99": {
+    "hparam_count": 1,
+    "mean_recall_h1": 0.4393972693581131,
+    "mean_recall_h16": 0.3224758371893329,
+    "mean_recall_h4": 0.3481974692653974,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.43511,
+      "coding-v1/seed-43": 0.436127,
+      "instruction-v1/seed-42": 0.448511,
+      "instruction-v1/seed-43": 0.448566,
+      "reasoning-v1/seed-42": 0.436959,
+      "reasoning-v1/seed-43": 0.43744,
+      "summarization-v1/seed-42": 0.436145,
+      "summarization-v1/seed-43": 0.43632
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.435619,
+      "instruction": 0.448538,
+      "reasoning": 0.437199,
+      "summarization": 0.436233
+    },
+    "stdev_recall_h1_across_8_cells": 0.005315297228385794
+  },
+  "decayed_transition|decayed_transition/decay=0.999": {
+    "hparam_count": 1,
+    "mean_recall_h1": 0.4290845136031473,
+    "mean_recall_h16": 0.3162068979828357,
+    "mean_recall_h4": 0.338280947525267,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.423328,
+      "coding-v1/seed-43": 0.424331,
+      "instruction-v1/seed-42": 0.438227,
+      "instruction-v1/seed-43": 0.43828,
+      "reasoning-v1/seed-42": 0.426191,
+      "reasoning-v1/seed-43": 0.426674,
+      "summarization-v1/seed-42": 0.427737,
+      "summarization-v1/seed-43": 0.427909
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.42383,
+      "instruction": 0.438253,
+      "reasoning": 0.426432,
+      "summarization": 0.427823
+    },
+    "stdev_recall_h1_across_8_cells": 0.00549135918506584
+  },
+  "global_frequency|global_frequency/default": {
+    "hparam_count": 0,
+    "mean_recall_h1": 0.3327398851601756,
+    "mean_recall_h16": 0.31193918407155863,
+    "mean_recall_h4": 0.3249002810155195,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.327007,
+      "coding-v1/seed-43": 0.327775,
+      "instruction-v1/seed-42": 0.356065,
+      "instruction-v1/seed-43": 0.356108,
+      "reasoning-v1/seed-42": 0.316481,
+      "reasoning-v1/seed-43": 0.316836,
+      "summarization-v1/seed-42": 0.330757,
+      "summarization-v1/seed-43": 0.33089
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.327391,
+      "instruction": 0.356087,
+      "reasoning": 0.316658,
+      "summarization": 0.330823
+    },
+    "stdev_recall_h1_across_8_cells": 0.014458194167416508
+  },
+  "last_observation|last_observation/default": {
+    "hparam_count": 0,
+    "mean_recall_h1": 0.4068083705626113,
+    "mean_recall_h16": 0.25471050457374694,
+    "mean_recall_h4": 0.29483204649729733,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.42698,
+      "coding-v1/seed-43": 0.427972,
+      "instruction-v1/seed-42": 0.414856,
+      "instruction-v1/seed-43": 0.414906,
+      "reasoning-v1/seed-42": 0.392729,
+      "reasoning-v1/seed-43": 0.393148,
+      "summarization-v1/seed-42": 0.391866,
+      "summarization-v1/seed-43": 0.392009
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.427476,
+      "instruction": 0.414881,
+      "reasoning": 0.392939,
+      "summarization": 0.391938
+    },
+    "stdev_recall_h1_across_8_cells": 0.015050943615657153
+  },
+  "markov_transition|markov_transition/default": {
+    "hparam_count": 0,
+    "mean_recall_h1": 0.42684787537439656,
+    "mean_recall_h16": 0.31469520044917926,
+    "mean_recall_h4": 0.33635080675572115,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.420945,
+      "coding-v1/seed-43": 0.421942,
+      "instruction-v1/seed-42": 0.437035,
+      "instruction-v1/seed-43": 0.437088,
+      "reasoning-v1/seed-42": 0.422907,
+      "reasoning-v1/seed-43": 0.423391,
+      "summarization-v1/seed-42": 0.425655,
+      "summarization-v1/seed-43": 0.425821
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.421444,
+      "instruction": 0.437061,
+      "reasoning": 0.423149,
+      "summarization": 0.425738
+    },
+    "stdev_recall_h1_across_8_cells": 0.00609809246638025
+  },
+  "recency_frequency_transition_blend|recency_frequency_transition_blend/w_r=0.0,w_f=0.0,w_t=1.0": {
+    "hparam_count": 3,
+    "mean_recall_h1": 0.42684787537439656,
+    "mean_recall_h16": 0.31469520044917926,
+    "mean_recall_h4": 0.33635080675572115,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.420945,
+      "coding-v1/seed-43": 0.421942,
+      "instruction-v1/seed-42": 0.437035,
+      "instruction-v1/seed-43": 0.437088,
+      "reasoning-v1/seed-42": 0.422907,
+      "reasoning-v1/seed-43": 0.423391,
+      "summarization-v1/seed-42": 0.425655,
+      "summarization-v1/seed-43": 0.425821
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.421444,
+      "instruction": 0.437061,
+      "reasoning": 0.423149,
+      "summarization": 0.425738
+    },
+    "stdev_recall_h1_across_8_cells": 0.00609809246638025
+  },
+  "recency_frequency_transition_blend|recency_frequency_transition_blend/w_r=0.0,w_f=1.0,w_t=0.0": {
+    "hparam_count": 3,
+    "mean_recall_h1": 0.3327398851601756,
+    "mean_recall_h16": 0.31193918407155863,
+    "mean_recall_h4": 0.3249002810155195,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.327007,
+      "coding-v1/seed-43": 0.327775,
+      "instruction-v1/seed-42": 0.356065,
+      "instruction-v1/seed-43": 0.356108,
+      "reasoning-v1/seed-42": 0.316481,
+      "reasoning-v1/seed-43": 0.316836,
+      "summarization-v1/seed-42": 0.330757,
+      "summarization-v1/seed-43": 0.33089
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.327391,
+      "instruction": 0.356087,
+      "reasoning": 0.316658,
+      "summarization": 0.330823
+    },
+    "stdev_recall_h1_across_8_cells": 0.014458194167416508
+  },
+  "recency_frequency_transition_blend|recency_frequency_transition_blend/w_r=0.25,w_f=0.25,w_t=0.5": {
+    "hparam_count": 3,
+    "mean_recall_h1": 0.41331182223910484,
+    "mean_recall_h16": 0.328006391755407,
+    "mean_recall_h4": 0.3526267698670295,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.407646,
+      "coding-v1/seed-43": 0.408605,
+      "instruction-v1/seed-42": 0.426554,
+      "instruction-v1/seed-43": 0.426606,
+      "reasoning-v1/seed-42": 0.408743,
+      "reasoning-v1/seed-43": 0.409201,
+      "summarization-v1/seed-42": 0.409487,
+      "summarization-v1/seed-43": 0.409652
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.408126,
+      "instruction": 0.42658,
+      "reasoning": 0.408972,
+      "summarization": 0.40957
+    },
+    "stdev_recall_h1_across_8_cells": 0.007682119726823322
+  },
+  "recency_frequency_transition_blend|recency_frequency_transition_blend/w_r=0.34,w_f=0.33,w_t=0.33": {
+    "hparam_count": 3,
+    "mean_recall_h1": 0.4021033077144192,
+    "mean_recall_h16": 0.3301506825180103,
+    "mean_recall_h4": 0.35551088944314896,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.397026,
+      "coding-v1/seed-43": 0.39796,
+      "instruction-v1/seed-42": 0.417124,
+      "instruction-v1/seed-43": 0.417175,
+      "reasoning-v1/seed-42": 0.39622,
+      "reasoning-v1/seed-43": 0.396657,
+      "summarization-v1/seed-42": 0.397252,
+      "summarization-v1/seed-43": 0.397412
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.397493,
+      "instruction": 0.417149,
+      "reasoning": 0.396439,
+      "summarization": 0.397332
+    },
+    "stdev_recall_h1_across_8_cells": 0.008700123193253388
+  },
+  "recency_frequency_transition_blend|recency_frequency_transition_blend/w_r=0.5,w_f=0.25,w_t=0.25": {
+    "hparam_count": 3,
+    "mean_recall_h1": 0.39883693131957704,
+    "mean_recall_h16": 0.32908289274967273,
+    "mean_recall_h4": 0.357609305636829,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.394676,
+      "coding-v1/seed-43": 0.395605,
+      "instruction-v1/seed-42": 0.414972,
+      "instruction-v1/seed-43": 0.415022,
+      "reasoning-v1/seed-42": 0.39197,
+      "reasoning-v1/seed-43": 0.392387,
+      "summarization-v1/seed-42": 0.392953,
+      "summarization-v1/seed-43": 0.393111
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.39514,
+      "instruction": 0.414997,
+      "reasoning": 0.392179,
+      "summarization": 0.393032
+    },
+    "stdev_recall_h1_across_8_cells": 0.009395571060890033
+  },
+  "recency_frequency_transition_blend|recency_frequency_transition_blend/w_r=1.0,w_f=0.0,w_t=0.0": {
+    "hparam_count": 3,
+    "mean_recall_h1": 0.3675547432063549,
+    "mean_recall_h16": 0.3090230062465116,
+    "mean_recall_h4": 0.3423220471648231,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.363594,
+      "coding-v1/seed-43": 0.364442,
+      "instruction-v1/seed-42": 0.384555,
+      "instruction-v1/seed-43": 0.384602,
+      "reasoning-v1/seed-42": 0.361058,
+      "reasoning-v1/seed-43": 0.36144,
+      "summarization-v1/seed-42": 0.360301,
+      "summarization-v1/seed-43": 0.360446
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.364018,
+      "instruction": 0.384579,
+      "reasoning": 0.361249,
+      "summarization": 0.360373
+    },
+    "stdev_recall_h1_across_8_cells": 0.009923189564477818
+  },
+  "recency_window|recency_window/window_W=16": {
+    "hparam_count": 1,
+    "mean_recall_h1": 0.3675547432063549,
+    "mean_recall_h16": 0.3090230062465116,
+    "mean_recall_h4": 0.3423220471648231,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.363594,
+      "coding-v1/seed-43": 0.364442,
+      "instruction-v1/seed-42": 0.384555,
+      "instruction-v1/seed-43": 0.384602,
+      "reasoning-v1/seed-42": 0.361058,
+      "reasoning-v1/seed-43": 0.36144,
+      "summarization-v1/seed-42": 0.360301,
+      "summarization-v1/seed-43": 0.360446
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.364018,
+      "instruction": 0.384579,
+      "reasoning": 0.361249,
+      "summarization": 0.360373
+    },
+    "stdev_recall_h1_across_8_cells": 0.009923189564477818
+  },
+  "recency_window|recency_window/window_W=256": {
+    "hparam_count": 1,
+    "mean_recall_h1": 0.33472220620990406,
+    "mean_recall_h16": 0.31258171205378443,
+    "mean_recall_h4": 0.326374238682103,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.326135,
+      "coding-v1/seed-43": 0.32688,
+      "instruction-v1/seed-42": 0.351162,
+      "instruction-v1/seed-43": 0.351204,
+      "reasoning-v1/seed-42": 0.326958,
+      "reasoning-v1/seed-43": 0.327319,
+      "summarization-v1/seed-42": 0.333995,
+      "summarization-v1/seed-43": 0.334125
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.326507,
+      "instruction": 0.351183,
+      "reasoning": 0.327138,
+      "summarization": 0.33406
+    },
+    "stdev_recall_h1_across_8_cells": 0.009957011549179204
+  },
+  "recency_window|recency_window/window_W=4": {
+    "hparam_count": 1,
+    "mean_recall_h1": 0.3671363021431063,
+    "mean_recall_h16": 0.27709422839301306,
+    "mean_recall_h4": 0.31435809180328744,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.3808,
+      "coding-v1/seed-43": 0.381689,
+      "instruction-v1/seed-42": 0.381538,
+      "instruction-v1/seed-43": 0.381584,
+      "reasoning-v1/seed-42": 0.350149,
+      "reasoning-v1/seed-43": 0.350523,
+      "summarization-v1/seed-42": 0.355333,
+      "summarization-v1/seed-43": 0.355476
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.381244,
+      "instruction": 0.381561,
+      "reasoning": 0.350336,
+      "summarization": 0.355404
+    },
+    "stdev_recall_h1_across_8_cells": 0.01438100614421375
+  },
+  "recency_window|recency_window/window_W=64": {
+    "hparam_count": 1,
+    "mean_recall_h1": 0.353288312294051,
+    "mean_recall_h16": 0.32052406056016525,
+    "mean_recall_h4": 0.3409825269783994,
+    "per_cell_h1": {
+      "coding-v1/seed-42": 0.351665,
+      "coding-v1/seed-43": 0.352484,
+      "instruction-v1/seed-42": 0.375357,
+      "instruction-v1/seed-43": 0.375402,
+      "reasoning-v1/seed-42": 0.341352,
+      "reasoning-v1/seed-43": 0.341726,
+      "summarization-v1/seed-42": 0.344093,
+      "summarization-v1/seed-43": 0.344227
+    },
+    "per_workload_mean_h1": {
+      "coding": 0.352075,
+      "instruction": 0.37538,
+      "reasoning": 0.341539,
+      "summarization": 0.34416
+    },
+    "stdev_recall_h1_across_8_cells": 0.013333098430920745
+  }
+}

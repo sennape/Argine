@@ -1,0 +1,192 @@
+{
+ "event_counts": {
+  "actual_over_semantic": 3.0,
+  "calls_per_generated_token": 144.5625,
+  "calls_per_layer_group_histogram": {
+   "3": 24672
+  },
+  "calls_per_layer_per_decode_pass": 3.0,
+  "decode_calls": 73728,
+  "decode_calls_per_decode_pass": 144.0,
+  "decode_passes": 512,
+  "forward_passes": 514,
+  "layer_groups": 24672,
+  "layers": 48,
+  "layers_per_pass_histogram": {
+   "48": 514
+  },
+  "multi_token_passes": [
+   0,
+   2
+  ],
+  "policy_rows": 74016,
+  "policy_step_contiguous": true,
+  "semantic_events_if_one_per_layer_per_pass": 24672,
+  "tokens_generated": 512
+ },
+ "miss_position": {
+  "by_pass_kind": {
+   "decode": {
+    "evicted": [
+     39962,
+     3670,
+     3186
+    ],
+    "hit": [
+     156592,
+     192954,
+     193422
+    ],
+    "miss": [
+     40016,
+     3654,
+     3186
+    ]
+   },
+   "multi_token": {
+    "evicted": [
+     3097,
+     1987,
+     1737
+    ],
+    "hit": [
+     397,
+     2957,
+     3200
+    ],
+    "miss": [
+     4547,
+     1987,
+     1744
+    ]
+   }
+  },
+  "evictions_by_call_position": [
+   43059,
+   5657,
+   4923
+  ],
+  "extra_misses_over_first_call_only": 0.23721472970850258,
+  "fraction_of_misses_at_calls_2_and_3": 0.19173286901004824,
+  "hits_by_call_position": [
+   156989,
+   195911,
+   196622
+  ],
+  "logical_hit_rate_as_logged_all_calls": 0.9088175756132413,
+  "logical_hit_rate_first_call_only": 0.7789007303326189,
+  "misses_at_calls_2_and_3": 10571,
+  "misses_by_call_position": [
+   44563,
+   5641,
+   4930
+  ],
+  "total_misses": 55134
+ },
+ "r2_consecutive_event_identity": {
+  "decode_adjacent_pairs": 24480,
+  "fraction_identical_sets": 0.0031454248366013073,
+  "mean_jaccard": 0.29436285301478027
+ },
+ "set_identity": {
+  "all": {
+   "counts": {
+    "identical": 24672
+   },
+   "fully_different": 0.0,
+   "identical": 1.0,
+   "n_triplets": 24672,
+   "partially_different": 0.0
+  },
+  "bytes_of_layer_identical_within_triplets": true,
+  "decode": {
+   "counts": {
+    "identical": 24576
+   },
+   "fully_different": 0.0,
+   "identical": 1.0,
+   "n_triplets": 24576,
+   "partially_different": 0.0
+  },
+  "first_mismatch": null,
+  "multi_token": {
+   "counts": {
+    "identical": 96
+   },
+   "fully_different": 0.0,
+   "identical": 1.0,
+   "n_triplets": 96,
+   "partially_different": 0.0
+  }
+ },
+ "simulation": {
+  "collapse_onto_current_set": {
+   "R2_fraction_equal_to_current_set": 0.003553921568627451,
+   "R2_mean_overlap_with_current_set": 0.46962316176470587,
+   "R3_fraction_equal_to_current_set": 0.051470588235294115,
+   "R3_mean_overlap_with_current_set": 0.727328431372549
+  },
+  "decode_token_boundaries_compared": 24480,
+  "first_protected_set_divergence_at_comparable_event": {
+   "R2_protected_set": [
+    5,
+    10,
+    15,
+    18,
+    70,
+    82,
+    94,
+    119
+   ],
+   "R3_protected_set": [
+    5,
+    10,
+    18,
+    37,
+    70,
+    82,
+    94,
+    119
+   ],
+   "layer": 1,
+   "pass": 4,
+   "step": 579
+  },
+  "next_token_recall_at_k": {
+   "R2_semantics": 0.4684129901960784,
+   "R3_runtime_semantics": 0.43827103758169933,
+   "persistence_baseline_previous_set": 0.4231107026143791
+  },
+  "protected_set_consulted_at_first_call_of_next_token": {
+   "fraction_identical_R2_vs_R3": 0.07005718954248366,
+   "mean_jaccard_R2_vs_R3": 0.5648058423058894
+  },
+  "runtime_stream_conformance_vs_logged_protected_before": {
+   "comparable_rows": 74016,
+   "first_mismatch": null,
+   "fraction": 1.0,
+   "matching_rows": 74016,
+   "note": "simulated predictor fed the LOGGED 3x stream vs logged protected_before"
+  },
+  "state_effect": {
+   "effective_decay_per_token_R2": 0.99,
+   "effective_decay_per_token_R3": 0.970299,
+   "effective_time_constant_tokens_R2": 99.99999999999991,
+   "effective_time_constant_tokens_R3": 33.66890003703582,
+   "history_entries_R2": 24672,
+   "history_entries_R3": 74016,
+   "history_ratio": 3.0,
+   "transition_cell_updates_R2": 1640144,
+   "transition_cell_updates_R3": 5579360,
+   "transition_update_ratio": 3.4017500902359794
+  },
+  "within_token_sets_consulted": {
+   "call2_fraction_equal_to_current_set": 0.007965686274509803,
+   "call2_mean_overlap_with_current_set": 0.6116676879084967,
+   "call2_recall_of_next_token": 0.430218545751634,
+   "call3_fraction_equal_to_current_set": 0.018872549019607842,
+   "call3_mean_overlap_with_current_set": 0.6728451797385621,
+   "call3_recall_of_next_token": 0.43465073529411763
+  }
+ }
+}

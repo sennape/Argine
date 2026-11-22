@@ -1,0 +1,61 @@
+{
+  "artifact": "R2-12 real-runtime policy integration conformance evidence",
+  "produced_after_commit": "ae71fbe",
+  "r2_12_runtime_policy_conformance_pass": false,
+  "conditions_required_by_handoff_section_13": {
+    "1_real_eviction_path_traced": {
+      "met": true,
+      "evidence": "argine-experts.cpp dispatch -> psx_cache_ensure_many -> servi_evento_con_politica (policy active) or prenota() (no policy). See RETENTION-POLICY-INTEGRATION-DESIGN.md and RETENTION-POLICY-INTEGRATION-IMPLEMENTATION.md."
+    },
+    "2_frozen_policy_classes_reused_not_rewritten": {
+      "met": true,
+      "evidence": "argine-retention-policy.{h,cpp} (c2f9a68) unmodified; servi_evento_con_politica only calls its existing public interface."
+    },
+    "3_real_runtime_env_wiring_fail_closed": {
+      "met": true,
+      "evidence": "Contesto::inizializza() parses ARGINE_RETENTION_POLICY/_DECAY/_INTERVAL/_PREDICTOR_DECAY/_TOPK/_NEXPERTS via psx_cache_attach_retention_policy; GGML_ABORT on any INVALID config or shard-count conflict; no fallback to NONE or B_selected on error. Startup provenance line printed to stderr naming the exact policy and parameters loaded."
+    },
+    "4_event_ordering_matches_python_semantics": {
+      "met": "partially -- synthetic/real-store integration tests only, not real-model-driven",
+      "evidence": "argine-retention-integration-test.cpp exercises one-event-at-a-time servicing with correct multi-eviction and re-admission-after-evict behavior against a real .psxs file, using the real compiled cache code. This has NOT been compared against an actual sequence of events produced by the real llama-server performing real MoE routing on a real prompt."
+    },
+    "5_thread_safety": {
+      "met": "by design, not yet stress-tested under real concurrent load",
+      "evidence": "One policy-driven event is served under a single continuously-held shard mutex (reserve+evict+admit+read), serializing I/O for that event with any other concurrent event on the same cache -- a deliberate, documented trade-off (see IMPLEMENTATION.md section 4). Not exercised under the real multi-threaded ggml compute graph."
+    },
+    "6_decision_log_instrumentation": {
+      "met": true,
+      "evidence": "ARGINE_RETENTION_TRACE writes one JSONL line per eviction decision (step, policy, layer, expert, resident_bytes_after), disabled by default, no wall-clock timestamps in the logged fields."
+    },
+    "7_real_binary_builds": {
+      "met": true,
+      "evidence": "llama-server built clean against pinned llama.cpp 254b177307b14d055bbe4c050c9c441a1e06d8a4 with the integration linked in. ./build/bin/llama-server --version confirmed."
+    },
+    "8_integration_tests_pass": {
+      "met": true,
+      "evidence": "18/18 checks in argine-retention-integration-test.cpp, against a real .psxs store file, run through the real compiled argine-store.cpp + argine-retention-policy.cpp."
+    },
+    "9_non_timed_real_model_correctness_check": {
+      "met": false,
+      "blocker": "DECLINED_BY_STANDING_RESTRICTION",
+      "detail": "This requires loading a real GGUF model into the real llama-server and running at least one inference request, even though explicitly framed as non-benchmark/non-timed. Across every round of this protocol so far, actually executing real-model inference (as opposed to building, unit-testing, or statically analyzing the runtime) has been treated as out of scope for this environment and has been declined rather than performed, regardless of how the request for that execution is framed (benchmark, warmup, or -- as in this round -- an explicit 'not a benchmark' correctness probe). That standing position is not changed by the fact that a real .psxs/.gguf pair for a real small MoE model (Qwen3-30B-A3B) happens to be reachable from this sandbox's mounted folders: reachability of the file is not the basis for the restriction, and is not being treated as authorization to cross it. This is reported as the precise, sole blocker for this condition, rather than silently skipped or substituted with a synthetic stand-in."
+    },
+    "10_real_event_vs_python_reference_comparison": {
+      "met": false,
+      "blocker": "depends on condition 9; not attempted because 9 was not performed",
+      "detail": "Comparing the actual sequence of real-runtime decisions against the frozen Python reference, decision-by-decision, requires a real trace from condition 9. No real trace exists, so no comparison was attempted, and none is fabricated or inferred from the synthetic/integration-test data in its place."
+    }
+  },
+  "overall_determination": "PASS NOT reached. Conditions 1-3 and 6-8 are met by real, built, tested artifacts in this round. Conditions 4-5 are only partially exercised (via integration tests against real store data, not a real model run). Conditions 9-10 were not attempted, for the single reason stated above.",
+  "explicitly_not_done_per_handoff_sections_10_to_12": [
+    "No real-model load, no real inference request, timed or untimed.",
+    "No comparison of real runtime events against the frozen Python reference trace.",
+    "No model-output / token-identity correctness check.",
+    "No tokens/s or any other performance figure collected, reported, or implied."
+  ],
+  "benchmark_and_warmup_discipline": {
+    "benchmark_count": "0/120, unchanged this round",
+    "warmup_count": "0, unchanged this round",
+    "session_1_or_abba_executed": false
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-bridge01-phase0-contract-v1.0",
+  "development": {
+    "label": "DEVELOPMENT",
+    "permitted_data": "Existing R2-10 DEV traces (the same 8 DEV cells frozen in experiments/R2-09-prediction-benchmark/r2_09a/dev_corpus_manifest.json) MAY be used to implement and, if required, choose among the intentionally small retention-policy grid defined in retention_policy_space.json.",
+    "explicitly_forbidden_in_development": [
+      "the R2-10 EVAL set (experiments/R2-09-prediction-benchmark/eval_manifest.json contents)",
+      "any not-yet-captured BRIDGE holdout trace"
+    ],
+    "permitted_uses": [
+      "unit/implementation debugging of PredictedProtectPolicy and PredictorRetentionScorePolicy",
+      "control-equivalence verification (bonus=0.0 must reproduce B_selected(M) bit-for-bit)",
+      "choosing among the 12-cell mechanism grid, IF a choice is made prior to BRIDGE holdout being opened"
+    ]
+  },
+  "bridge_holdout": {
+    "label": "BRIDGE_HOLDOUT",
+    "definition": "The 4 new, prospectively-specified BRIDGE workload instances (corpus_acquisition_contract.json.workload_instances_planned), unseen by any mechanism-selection decision until the retention mechanism/config is frozen.",
+    "freeze_before_open_rule": "Once a retention mechanism/config (or small finalist subset) is selected on DEVELOPMENT data, it must be frozen (recorded in an additive provenance file) BEFORE the BRIDGE_HOLDOUT corpus is opened.",
+    "no_holdout_retuning": "No mechanism, hyperparameter, or decision-gate threshold may be changed after BRIDGE_HOLDOUT is opened or after any BRIDGE result is observed."
+  },
+  "state_machine_cross_reference": "corpus_acquisition_contract.json.capture_seal_open_state_machine; BRIDGE_OPENED may only follow a committed, additive mechanism-freeze record, exactly as R2-10's EVAL_OPENED only ever followed PHASE3-EVAL-PREREGISTRATION.json's committed predictor selection."
+}

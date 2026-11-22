@@ -1,0 +1,98 @@
+{
+ "artifact": "R4-00-FREEZE",
+ "bound_code_lf_sha256": {
+  "argine/research/oracle.py": "4ff1d21496dd4f446b06d94c09d44ba30ceeba2c386c6e8f9c5c36ce636ed26b",
+  "argine/research/policies.py": "2bd62163bb859fa2600f2c881219d3d47acf7ab7d7f403d9d9a678194d26a2dd",
+  "argine/research/replay.py": "065edb9bf71ad2481b3af16ffc4630c9cc2f6dc8a7ff11596ca245b0e354541f",
+  "argine/research/trace.py": "53a582c263c63b7397d6a6547054be4e007f190348b57e82edbb4fbf51fcfe47",
+  "argine/research2/r2_09a/policies.py": "ca0883e357a9631fc21a5671e1815b80cc4cc2af1c8f2e07ad9fa00ceb58386f",
+  "argine/research2/r2_10/predictors.py": "30aafc9f5746a1caa9b8ba3769216969f562efee33a2c6a4373afc765d7d6c8b",
+  "argine/research2/r2_bridge01/retention_policies.py": "3781b1114a7c5c66e5237c3ddc6d0f314394af9f1ce3cb4f1b026f85bb40943a",
+  "experiments/R3-05-economic-retention/phase0.py": "5754b5fd9a9f8663f224ec8700fe6e9857a63891257254352e8e7d62b94ee7d9",
+  "experiments/R3-05-economic-retention/r4-nue-candidate-gate/r4.py": "4c11e34a86181947cb6c9a9219d88b08f1b7ea9ed9c7bd9fb531fa49fd75b0ee"
+ },
+ "branch": "r4-main",
+ "contract_digest": "fa0ff8d4c93b463a99bdba4a65625251fa00c8102f5b2d788f8f22e73a20d64e",
+ "data_hashes": {
+  "EVAL": [
+   "46104e88a19136153d3223862cd392181d80cc6bfc07e063f009cb7347a392d3",
+   "9adc1ce8801b766fffe64fc54ffc80c7b7bf6dc16b7fe46bcc5c0b3c9a87c0ae",
+   "e33fa1e2951498c8e03b6c7fb9e967040e6eae7c8a638e0e2b4ca083e5c8ae33",
+   "6a51113fc830b63fc1b8a60c394e16f84df2ff04fb2a566dd1653a96f202dd50"
+  ],
+  "REPLICATE_CHECK": [
+   "0ce54e852eb057893ae13e9aa2775bcc282744d59d9b74cac78fa8eafac7665c",
+   "f7c9a2bbaea8c95e46d25dfc70662d67301fc4bd8508c2db63c018c870a6376d",
+   "fb38497d5f6c9d13465a9ed185f3c04204cb50835943bbfcca315df06f4bb65b",
+   "94b4522adb0faeb521ab12b7b67cf111d0a6623392e215f1ba499e2c1cf9042c"
+  ],
+  "TRAIN": [
+   "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+   "9934371d18a1ad3f0e2cb2a5e89cad87ed4e7a002732190646cfff9a0b489f54",
+   "8dff85b9e99f6e10a2a6a608585c77102c65597561c2cf55dd4471e37eb48b3b",
+   "dc24bde642278f4a8d75c6eae077121faed8562d04e4d9fed2d7cb87aa39a9bf"
+  ],
+  "VALIDATION": [
+   "da9a4535640fc1f64a2e7a3d8d01e456854c36daa08d70be99fb2e2a738d5ffd",
+   "dfe19f93e42a809d44a45a22af238e049e4aaf8eb99219132cdf9b6e2313588b",
+   "40a29f54c02b3f23a558d6d601b59e60d3f67fdb29f8cd8005e45fbc2a97e98d",
+   "085dca7571fced800a4605311ae11d6264e95b90bf953858e8dbabb9ff42bf08",
+   "6abad7c87176f18d0f28abf1d8cc2fa78e6dc14b5722a0f76dffb41daed4b54e",
+   "3b8d5090f2191c1f0125f1e32acdf986cd7cb3765b14d30ea564f1397b0b4319",
+   "d65807d8ea692a0dc7dbdd24492b4abe15d402b4d71bbe7c41befe5013c77a9e",
+   "bd77666adb5b568d7247438acb36a752ec17c0d0a2ee3bd5577ae9d96d4e23b2",
+   "25912ff92747a52cabf13e48d535998f47b344272b04748671e2174d499fca73",
+   "6df5f46d25149682b8e986d45ee4739ede271925433cd6b81205bd3d8ceacb9d",
+   "44b1db845bb5f4c71b4ee5158f445e94706bcb1287bc8298ae5b712632d99b95",
+   "eabe70fe56d2e1e33cdc6c6b9acc9820ed764aed38f369e5d514c6adfabf91fa"
+  ]
+ },
+ "endpoint": "capture(P) = sum_w (B_A,w - B_P,w) / sum_w (B_A,w - B_Bel,w) over all traces of the split (pooled bytes, exact rational arithmetic)",
+ "eval_state": "LOCKED",
+ "feature_vocabulary": [
+  "events_since_last_ref",
+  "decayed_count_fx",
+  "events_since_admission",
+  "hits_since_admission",
+  "reload_count",
+  "prev_reuse_interval",
+  "mean_reuse_interval",
+  "in_prev_layer_event",
+  "occupancy_permille",
+  "pending_misses",
+  "recency_rank",
+  "frequency_rank",
+  "expert_bytes",
+  "layer_id",
+  "expert_id",
+  "layer_cycle_offset"
+ ],
+ "files_sha256": {
+  "BASELINES.json": "ca72b9dbe1af8d237e652c3779282ba7fcac90c8839d7629f0c7b94d3558b2f3",
+  "CLAIM_BOUNDARIES.md": "53973901b2445007a9e4e73589025b586c17fb1ee3057594c3eafd6aae3ddd47",
+  "DATA_SPLITS.json": "007f6171d50b20e76c4e7ef5ef2ca367b58dd491b7adfe2fa5e9d1ef6384ce97",
+  "DECISION_RULES.json": "228a52c4567d55856dfb9460ba9324f77d7a9e15931703bdede592d1bc74f02b",
+  "FEATURE_CONTRACT.json": "0c0aa3920228306cf6341a33fef907edb828ce64a8e8f0a13c25c402141468bd",
+  "LITERATURE_BOUNDARY.md": "1fc356e39872416c862c9390d2134bed959763aac289b73a0055d95e5c2ab302",
+  "MODEL_CONTRACT.json": "1a9e3d062ab4ac10bd2b0c7131f51f583e5925bf52d3ffda7a27cab21e2beda0",
+  "PREREGISTRATION.md": "c6a4e97b361674e602f4bd2e3a6daf2bd9bf8b157a16673bbf719d037cd1f646",
+  "PROTOCOL.json": "7965f098214f63ce0198ee20d2cb8cc56cdeb96f4ffbb955a7bdfaf011aa8554",
+  "README.md": "c9027646088c5607789aaa9dbef8b7054f793e20bf205574709d317cbafe6410"
+ },
+ "freeze_sha256": "41e9aa82fcf59155b6c98504ff08bee6ca2feb74027675e3fbce10778ca318be",
+ "outcome_metrics_present": false,
+ "research3": {
+  "classification": "R3_CLOSED_NEGATIVE_PREDICTIVE_RETENTION_NOT_VIABLE_IN_TESTED_REGIME",
+  "closure_commit": "3aa389eb31da6962711d74413b992803ae20b544",
+  "closure_freeze": "760a22d69abdd207c7ecd4b4f1012b85711b20aa3cb623cddb55d0c8802a5717",
+  "paper_commit": "337000808896e54955de0278686c5b7dae001b4e"
+ },
+ "source_r3_head": "f88001558542b648c0a3abff54c919adedf27809",
+ "state": "R4_CFDC_PHASE0_FROZEN",
+ "thresholds": {
+  "incremental_margin": "3/100",
+  "rich_gate": "1/4",
+  "viability": "1/4",
+  "workload_floor": "0"
+ }
+}

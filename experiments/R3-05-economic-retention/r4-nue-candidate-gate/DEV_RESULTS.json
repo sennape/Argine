@@ -1,0 +1,471 @@
+{
+ "A_fidelity": "A reproduces the frozen R2-09A DEV cell (misses, miss bytes, accesses, peak resident) on all four traces",
+ "artifact": "R3-05-R4-DEV-RESULTS",
+ "budget": "1.5 GiB",
+ "runs": {
+  "coding-v1__seed-42": {
+   "A": {
+    "arm": "A",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 146304,
+     "events": 18288,
+     "hits": 69917,
+     "miss_bytes": 219677184000,
+     "misses": 76387,
+     "tokens": 381
+    },
+    "evictions_total": 91939,
+    "instance": "coding-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "CES": {
+    "arm": "CES",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 146304,
+     "events": 18288,
+     "hits": 70167,
+     "miss_bytes": 218968215552,
+     "misses": 76137,
+     "tokens": 381
+    },
+    "evictions_total": 91666,
+    "instance": "coding-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_LO:LEX": {
+    "arm": "NUE_LO:LEX",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 146304,
+     "events": 18288,
+     "hits": 71832,
+     "miss_bytes": 214263484416,
+     "misses": 74472,
+     "tokens": 381
+    },
+    "evictions_total": 89980,
+    "instance": "coding-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_X:LEX": {
+    "arm": "NUE_X:LEX",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 146304,
+     "events": 18288,
+     "hits": 71766,
+     "miss_bytes": 214403383296,
+     "misses": 74538,
+     "tokens": 381
+    },
+    "evictions_total": 89219,
+    "instance": "coding-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_X:SOFT1": {
+    "arm": "NUE_X:SOFT1",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 146304,
+     "events": 18288,
+     "hits": 71766,
+     "miss_bytes": 214403383296,
+     "misses": 74538,
+     "tokens": 381
+    },
+    "evictions_total": 89219,
+    "instance": "coding-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_X:SOFT4": {
+    "arm": "NUE_X:SOFT4",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 146304,
+     "events": 18288,
+     "hits": 71766,
+     "miss_bytes": 214403383296,
+     "misses": 74538,
+     "tokens": 381
+    },
+    "evictions_total": 89219,
+    "instance": "coding-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   }
+  },
+  "instruction-v1__seed-42": {
+   "A": {
+    "arm": "A",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 92076,
+     "miss_bytes": 299499577344,
+     "misses": 104148,
+     "tokens": 511
+    },
+    "evictions_total": 113167,
+    "instance": "instruction-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "CES": {
+    "arm": "CES",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 92399,
+     "miss_bytes": 298574954496,
+     "misses": 103825,
+     "tokens": 511
+    },
+    "evictions_total": 112822,
+    "instance": "instruction-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_LO:LEX": {
+    "arm": "NUE_LO:LEX",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 95904,
+     "miss_bytes": 288619905024,
+     "misses": 100320,
+     "tokens": 511
+    },
+    "evictions_total": 109313,
+    "instance": "instruction-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_X:LEX": {
+    "arm": "NUE_X:LEX",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 95635,
+     "miss_bytes": 289138434048,
+     "misses": 100589,
+     "tokens": 511
+    },
+    "evictions_total": 109033,
+    "instance": "instruction-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_X:SOFT1": {
+    "arm": "NUE_X:SOFT1",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 95635,
+     "miss_bytes": 289138434048,
+     "misses": 100589,
+     "tokens": 511
+    },
+    "evictions_total": 109033,
+    "instance": "instruction-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_X:SOFT4": {
+    "arm": "NUE_X:SOFT4",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 95635,
+     "miss_bytes": 289138434048,
+     "misses": 100589,
+     "tokens": 511
+    },
+    "evictions_total": 109033,
+    "instance": "instruction-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   }
+  },
+  "reasoning-v1__seed-42": {
+   "A": {
+    "arm": "A",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 85862,
+     "miss_bytes": 316828569600,
+     "misses": 110362,
+     "tokens": 511
+    },
+    "evictions_total": 119935,
+    "instance": "reasoning-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "CES": {
+    "arm": "CES",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 86250,
+     "miss_bytes": 315708309504,
+     "misses": 109974,
+     "tokens": 511
+    },
+    "evictions_total": 119531,
+    "instance": "reasoning-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_LO:LEX": {
+    "arm": "NUE_LO:LEX",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 90292,
+     "miss_bytes": 304217247744,
+     "misses": 105932,
+     "tokens": 511
+    },
+    "evictions_total": 115479,
+    "instance": "reasoning-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_X:LEX": {
+    "arm": "NUE_X:LEX",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 90886,
+     "miss_bytes": 302459793408,
+     "misses": 105338,
+     "tokens": 511
+    },
+    "evictions_total": 114390,
+    "instance": "reasoning-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_X:SOFT1": {
+    "arm": "NUE_X:SOFT1",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 90886,
+     "miss_bytes": 302459793408,
+     "misses": 105338,
+     "tokens": 511
+    },
+    "evictions_total": 114390,
+    "instance": "reasoning-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_X:SOFT4": {
+    "arm": "NUE_X:SOFT4",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 90886,
+     "miss_bytes": 302459793408,
+     "misses": 105338,
+     "tokens": 511
+    },
+    "evictions_total": 114390,
+    "instance": "reasoning-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   }
+  },
+  "summarization-v1__seed-42": {
+   "A": {
+    "arm": "A",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 86411,
+     "miss_bytes": 315372220416,
+     "misses": 109813,
+     "tokens": 511
+    },
+    "evictions_total": 119688,
+    "instance": "summarization-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "CES": {
+    "arm": "CES",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 86792,
+     "miss_bytes": 314283515904,
+     "misses": 109432,
+     "tokens": 511
+    },
+    "evictions_total": 119290,
+    "instance": "summarization-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_LO:LEX": {
+    "arm": "NUE_LO:LEX",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 90790,
+     "miss_bytes": 302968037376,
+     "misses": 105434,
+     "tokens": 511
+    },
+    "evictions_total": 115283,
+    "instance": "summarization-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_X:LEX": {
+    "arm": "NUE_X:LEX",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 90046,
+     "miss_bytes": 304886808576,
+     "misses": 106178,
+     "tokens": 511
+    },
+    "evictions_total": 115495,
+    "instance": "summarization-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_X:SOFT1": {
+    "arm": "NUE_X:SOFT1",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 90046,
+     "miss_bytes": 304886808576,
+     "misses": 106178,
+     "tokens": 511
+    },
+    "evictions_total": 115495,
+    "instance": "summarization-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   },
+   "NUE_X:SOFT4": {
+    "arm": "NUE_X:SOFT4",
+    "budget_violations": 0,
+    "decode": {
+     "accesses": 196224,
+     "events": 24528,
+     "hits": 90046,
+     "miss_bytes": 304886808576,
+     "misses": 106178,
+     "tokens": 511
+    },
+    "evictions_total": 115495,
+    "instance": "summarization-v1__seed-42",
+    "overflow_events": 0,
+    "overflow_misses": 0,
+    "peak_resident_bytes": 1610588160
+   }
+  }
+ },
+ "selected_variant": "LEX",
+ "summary": {
+  "CES": {
+   "per_trace_bytes_avoided_vs_A": {
+    "coding-v1__seed-42": 708968448,
+    "instruction-v1__seed-42": 924622848,
+    "reasoning-v1__seed-42": 1120260096,
+    "summarization-v1__seed-42": 1088704512
+   },
+   "per_trace_misses_avoided_vs_A": {
+    "coding-v1__seed-42": 250,
+    "instruction-v1__seed-42": 323,
+    "reasoning-v1__seed-42": 388,
+    "summarization-v1__seed-42": 381
+   },
+   "total_bytes_avoided_vs_A": 3842555904
+  },
+  "NUE_LO:LEX": {
+   "per_trace_bytes_avoided_vs_A": {
+    "coding-v1__seed-42": 5413699584,
+    "instruction-v1__seed-42": 10879672320,
+    "reasoning-v1__seed-42": 12611321856,
+    "summarization-v1__seed-42": 12404183040
+   },
+   "per_trace_misses_avoided_vs_A": {
+    "coding-v1__seed-42": 1915,
+    "instruction-v1__seed-42": 3828,
+    "reasoning-v1__seed-42": 4430,
+    "summarization-v1__seed-42": 4379
+   },
+   "total_bytes_avoided_vs_A": 41308876800
+  },
+  "NUE_X:LEX": {
+   "per_trace_bytes_avoided_vs_A": {
+    "coding-v1__seed-42": 5273800704,
+    "instruction-v1__seed-42": 10361143296,
+    "reasoning-v1__seed-42": 14368776192,
+    "summarization-v1__seed-42": 10485411840
+   },
+   "per_trace_misses_avoided_vs_A": {
+    "coding-v1__seed-42": 1849,
+    "instruction-v1__seed-42": 3559,
+    "reasoning-v1__seed-42": 5024,
+    "summarization-v1__seed-42": 3635
+   },
+   "total_bytes_avoided_vs_A": 40489132032
+  }
+ }
+}

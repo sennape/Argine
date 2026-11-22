@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{Offline mechanism results at 1.5~GiB on the canonical stream (512 decode tokens). Capture is the fraction of the Belady-style byte headroom, Eq.~\eqref{eq:capture}; gross value is Eq.~\eqref{eq:value} at $\kappa_{\mathrm{low}}$ with zero policy cost. The oracle row is clairvoyant and is not a causal target.}
+\label{tab:mech}
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Policy & misses/token & miss MB/token & misses avoided & byte capture & gross ms/token \\
+\midrule
+A (b\_selected) & 207.990 & 598.198 & 0 & 0.000\% & 0.00 \\
+PP (predicted\_protect) & 207.793 & 597.639 & 101 & 0.230\% & 0.21 \\
+CES & 207.512 & 596.840 & 245 & 0.559\% & 0.52 \\
+NUE\_LO & 203.889 & 586.573 & 2{,}100 & 4.78\% & 4.41 \\
+NUE\_X (LEX) & 200.547 & 576.811 & 3{,}811 & 8.79\% & 8.11 \\
+Belady-style oracle & 123.395 & 355.015 & 43{,}313 & 100.00\% & 92.22 \\
+\bottomrule
+\end{tabular}
+\end{table}

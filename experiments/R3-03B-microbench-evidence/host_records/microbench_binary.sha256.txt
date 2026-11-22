@@ -1,0 +1,3 @@
+SHA256 hash di C:\Users\alpel\Desktop\Argine4-r3runs\R3-03B-microbench-run2\argine-policy-microbench-r3-03b.exe:
+d9eb52d7e5de77629da9bad9fa60b174c80598a7ad98aa741f82fb5eda00cbb3
+CertUtil: - Esecuzione comando hashfile riuscita.

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "baseline_sha": "406763361a49a2c7ab6cbb811655dbdc51e77f9b",
+  "baseline_source_repo": "Argine2 (frozen Research Part 1)",
+  "baseline_source_branch": "master",
+  "baseline_source_tag": null,
+  "r2_main_branch": "r2-main",
+  "evidence": [
+    "No git tag exists in Argine2 marking a frozen/release commit (`git tag -l` is empty).",
+    "Argine2's HEAD (406763361a49a2c7ab6cbb811655dbdc51e77f9b, commit message 'Document public snapshot provenance') is a clean working tree at the tip of the only branch (master); there is no later commit.",
+    "Argine2's CITATION.cff records version '0.2.0' with date-released '2026-10-17', matching the date of HEAD and of the immediately preceding commit 707c088 ('Bind release metadata to public repository'), which added that version/date-released metadata.",
+    "Argine2's README.md Roadmap section states the publication experiment campaign is complete and the experiment registry contains no RUNNING or PLANNED experiments, consistent with treating this commit as the frozen Research Part 1 baseline.",
+    "No second, equally plausible candidate commit exists: Argine2 has a single branch and no tags, so HEAD is the only candidate, and the above evidence (tier 2 in the required priority order: an explicit commit documented as the frozen baseline) resolves it without ambiguity."
+  ],
+  "argine2_working_tree_at_inspection_time": {
+    "status": "dirty",
+    "note": "A later git status (before Argine3 was created) found Argine2's HEAD unchanged (still 406763361a49a2c7ab6cbb811655dbdc51e77f9b) but ~1112 tracked files showing as modified in the working tree, due to a CRLF/LF line-ending mismatch between the committed blobs and the on-disk files. File mtimes on every affected file examined predate this task (most around 2026-10-03..2026-10-11, all well before 2026-11-07), confirming this is pre-existing drift, not a change made by this task. Argine3 was created by `git clone` of Argine2's .git object database only, which is unaffected by working-tree content; Argine2 itself was not written to at any point."
+  }
+}

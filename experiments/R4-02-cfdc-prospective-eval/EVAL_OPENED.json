@@ -1,0 +1,100 @@
+{
+ "arms": [
+  "A",
+  "BELADY",
+  "NUE_X",
+  "DECAYED_COUNT",
+  "CHEAP",
+  "RICH"
+ ],
+ "artifact": "R4-02-EVAL-OPENED",
+ "branch": "r4-main",
+ "budget_bytes": 1610612736,
+ "endpoint": "capture(P) = sum(B_A - B_P) / sum(B_A - B_Belady), pooled, exact",
+ "eval_metrics_computed_before_this_record": false,
+ "eval_outcome_contained": false,
+ "eval_plan_lf_sha256": "c90b540da0d8862c0a7a9a691d598799150adc1c3f3141487420300f015fc8c2",
+ "eval_state_after": "OPENED",
+ "eval_state_before": "LOCKED",
+ "eval_trace_content_read_before_this_record": false,
+ "eval_trace_count": 4,
+ "eval_trace_identities": [
+  {
+   "category": "coding",
+   "expected_trace_sha256": "46104e88a19136153d3223862cd392181d80cc6bfc07e063f009cb7347a392d3",
+   "normalized_step_count": 523,
+   "workload_id": "coding-eval-v1"
+  },
+  {
+   "category": "reasoning",
+   "expected_trace_sha256": "9adc1ce8801b766fffe64fc54ffc80c7b7bf6dc16b7fe46bcc5c0b3c9a87c0ae",
+   "normalized_step_count": 524,
+   "workload_id": "reasoning-eval-v1"
+  },
+  {
+   "category": "summarization",
+   "expected_trace_sha256": "e33fa1e2951498c8e03b6c7fb9e967040e6eae7c8a638e0e2b4ca083e5c8ae33",
+   "normalized_step_count": 523,
+   "workload_id": "summarization-eval-v1"
+  },
+  {
+   "category": "instruction",
+   "expected_trace_sha256": "6a51113fc830b63fc1b8a60c394e16f84df2ff04fb2a566dd1653a96f202dd50",
+   "normalized_step_count": 523,
+   "workload_id": "instruction-eval-v1"
+  }
+ ],
+ "frozen_rules": {
+  "A_operational_viability": "capture_VAL(CHEAP) >= 1/4 AND capture_EVAL(CHEAP) >= 1/4. A value in [0.20, 0.25) is a FAIL.",
+  "B_incremental_value": "capture_EVAL(CHEAP) >= max(1/4, max(capture_EVAL(NUE_X), capture_EVAL(DECAYED_COUNT)) + 3/100), comparators replayed under the same Research 4 replay",
+  "C_workload_consistency": "capture_w(CHEAP) >= 0 for every EVAL workload w",
+  "RICH_information_gate": "capture_VAL(RICH) >= 1/4 AND capture_EVAL(RICH) >= 1/4"
+ },
+ "identity": {
+  "baselines_lf_sha256": "ca72b9dbe1af8d237e652c3779282ba7fcac90c8839d7629f0c7b94d3558b2f3",
+  "cheap_tree_hash": "8603908b188c3346c7ed86e1d6914f378c869e017a305fccf9b1adafc734fcf2",
+  "data_splits_lf_sha256": "007f6171d50b20e76c4e7ef5ef2ca367b58dd491b7adfe2fa5e9d1ef6384ce97",
+  "decision_rules_lf_sha256": "228a52c4567d55856dfb9460ba9324f77d7a9e15931703bdede592d1bc74f02b",
+  "implementation_files_lf_sha256": {
+   "_rich_infer.c": "f7616429593740b374115c1aeb26e66fc6f44d1eb12e25123d7c4c2a6f417a12",
+   "engine.py": "289bf2c783b54e5fe5d822da6aa964dd6d1d7b1659e42a7fa2c88ff99e6a6837",
+   "models.py": "f973722329f0bea979d8643cd1ecf66b730744702270faf11e79ace7dd433954",
+   "phase1.py": "3f27e1ccea9b62e1e15c17486ce8585c6e0908cff041d56abbb02d57cf277c40"
+  },
+  "model_hashes": {
+   "artifact": "R4-01-MODEL-HASHES",
+   "cheap_model_file_lf_sha256": "5c51be3dd445c4f62729e7c15e2eefa3b2078e055d713acc5b17a5f0192eb159",
+   "cheap_rule_md_lf_sha256": "a4bbeaa9392f7c5f8b2db143422d8ec7d8acd98166a899740a303a47601cd2a7",
+   "cheap_tree_hash": "8603908b188c3346c7ed86e1d6914f378c869e017a305fccf9b1adafc734fcf2",
+   "decayed_count_config_sha256": "22c206cd38699fbef0b5d6dab727178b1ab0a7f29b7be1da38706680b522236d",
+   "feature_contract_lf_sha256": "0c0aa3920228306cf6341a33fef907edb828ce64a8e8f0a13c25c402141468bd",
+   "feature_schema_hash": "cfa26696cfac6a486978a88b873a1224590cf8a19e1995bbc2f1bee60c34a598",
+   "model_contract_lf_sha256": "1a9e3d062ab4ac10bd2b0c7131f51f583e5925bf52d3ffda7a27cab21e2beda0",
+   "replay_engine_lf_sha256": "289bf2c783b54e5fe5d822da6aa964dd6d1d7b1659e42a7fa2c88ff99e6a6837",
+   "rich_model_digest": "8206a5098d0c1a094b91c5da3b9ecbcc0d07adefc584f78df10d6b043f58c3af",
+   "rich_model_file_lf_sha256": "61e899e018c06c9ba144d4c3eec8fea6e922d1c93df5c1814625b89d0f59e1e3"
+  },
+  "phase0_commit": "35410947d51895326aa7e6c39a09825e2ffb4c0c",
+  "phase0_contract_digest": "fa0ff8d4c93b463a99bdba4a65625251fa00c8102f5b2d788f8f22e73a20d64e",
+  "phase0_freeze_sha256": "41e9aa82fcf59155b6c98504ff08bee6ca2feb74027675e3fbce10778ca318be",
+  "phase1_commit": "e46df73992ec64e829eddce63e3d50e65bdbd434",
+  "phase1_contract_digest": "8d89ecd8198db93000456cde58f995e4fa23124d554402b61170a776d9a0e74f",
+  "phase1_eval_state": "LOCKED",
+  "phase1_freeze_sha256": "dbea96e96a386286e49b93e733fb1ed68b5fe22771d9b4d9cf7d8cf55f1756d5",
+  "phase1_implementation_commit": "db84d702989a3334578b00c1922063056118cd94",
+  "phase1_state": "R4_CFDC_PHASE1_VALIDATED",
+  "phase1_validation_decision_lf_sha256": "dbc06e3ef7413dafed9e01f4b07e40db688e4d1feae1718739ceb8a90956f693",
+  "phase1_validation_results_lf_sha256": "0ca96b04a5521da43d5af4ea1db30aa840cf1a7b595aef0765164bb6e2bb8834",
+  "rich_model_digest": "8206a5098d0c1a094b91c5da3b9ecbcc0d07adefc584f78df10d6b043f58c3af"
+ },
+ "rule": "no source change affecting policy behaviour after this record; each (trace, arm) unit runs once",
+ "scorer_code_lf_sha256": {
+  "phase2.py": "ea52b5299de460e9c22952a1036bd8f1bf76bad4138c19e52c66c619310050f2",
+  "runner.py": "cddc9c7c452f1d8653147e3fdb7809e73f7dc0aafeaceabb5266abe6c9946fb9"
+ },
+ "scorer_test_lf_sha256": {
+  "tests/test_phase2.py": "ef5900b1ecd6e8ecb45ba206b2d2471ab9512c1e6b85375b59fac7a5f215175b"
+ },
+ "starting_head": "e46df73992ec64e829eddce63e3d50e65bdbd434",
+ "state": "R4_CFDC_PHASE2_EVAL_OPENED_NO_OUTCOME"
+}

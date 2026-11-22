@@ -1,0 +1,130 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=27mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext}
+\usepackage[amsthm]{newtxmath}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{flafter}
+\usepackage{placeins}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{seqsplit}
+\usepackage{capt-of}
+\usepackage[hidelinks]{hyperref}
+
+% Keep every typeset line strictly inside the text block: no glyph
+% protrusion past the margin, and a generous emergency stretch so that
+% justified paragraphs break instead of overrunning.
+\microtypesetup{protrusion=false}
+\setlength{\emergencystretch}{3em}
+
+\captionsetup{font=small,labelfont=bf}
+
+% Generous float parameters: this paper has many figures and tables relative
+% to its text, and the defaults leave large vertical holes on float pages.
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.85}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\setlist[itemize]{leftmargin=*,topsep=4pt,itemsep=2pt}
+\setlist[enumerate]{leftmargin=*,topsep=4pt,itemsep=3pt}
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0pt}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+
+\newcommand{\argine}{\textsc{Argine}}
+\newcommand{\budget}{M}
+\newcommand{\notyetmeasured}{\textsc{not yet measured}}
+
+% Breakable renderings of machine-readable identifiers and digests.  They
+% introduce invisible line-break opportunities only; the stored value is
+% never truncated or padded.
+\newcommand{\hsh}[1]{\texttt{\seqsplit{#1}}}
+\newcommand{\code}[1]{\texttt{\seqsplit{#1}}}
+
+% Title set as three near-equal lines, each measured to stay well inside
+% the 443.9pt text block at \LARGE (measured widths: 382.7 / 398.8 / 400.3pt).
+\title{\textbf{Clairvoyant-Comparator Expert Retention, Routing\\
+Structure, and Causal Predictive-Retention Validation\\
+in Memory-Constrained Mixture-of-Experts Inference}}
+\author{sennape}
+\date{November 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We study memory-constrained retention of mixture-of-experts (MoE) expert
+weights using validated offline replay of real routing traces from
+Qwen3-30B-A3B-Q4\_K\_M on a consumer-machine runtime protocol. The
+clairvoyant-comparator analysis establishes, by behavioral validation with
+zero event disagreements on the measured coding trace, that a causal
+Global-LRU baseline leaves a substantial miss-byte gap relative to a
+non-causal Belady-style furthest-next-use comparator ($O_B$, the
+implemented \textsc{Oracle-Global-Belady}). At 4~GiB, Global-LRU incurs
+102,151,507,968 miss bytes versus 42,296,352,768 for $O_B$ (58.59\% relative
+reduction); the largest tested relative gap is 70.66\% at 8~GiB, and it
+collapses at 16~GiB. Because cache objects have two byte-size classes and
+the comparator ignores size, miss-byte optimality is not established
+(\textsc{AUDIT-ORACLE-001}, CASE~C), so the measured gap is not a proven
+upper bound on causal recovery. The routing characterization finds concentrated layer-local routing (median
+effective expert fraction $0.514$), measurable same-layer transition
+dependence (median NMI $0.099$, positive in every tested layer), short-horizon
+reuse locality that exceeds a deterministic shuffled null (median immediate
+reuse $0.426$ vs.\ $0.187$), and cross-workload divergence that exceeds
+temporal drift at matched horizon $H=388$ ($2.21\times$); static LFU never
+outperforms Global-LRU at a capacity-constrained point. A strictly causal
+predictor (\code{decayed\_transition}, decay $0.99$), selected on held-out
+DEV and confirmed on sealed EVAL, beats trivial baselines at $h{=}1$ (mean
+recall$@k$ $0.449817$ vs.\ $0.401473$, $+12.04\%$; vs.\ $0.349480$,
+$+28.71\%$), a margin the frozen decision rule classifies Category~B.
+Prospective (R-BRIDGE-01, \texttt{bridge\_positive}) and confirmatory (R-11,
+$72/72$ cells) replay evaluation show that the predictor-driven reactive
+policy reduces miss bytes per decode step at 4~GiB (mean paired delta
+$-87{,}476.85$, 95\% CI below zero). Real-runtime validation (R-12) finds that
+the same policy does not improve decode tokens per second at 4~GiB ($-0.171721$
+TPS, 95\% CI at or below zero; R-12 FAIL). We conclude that
+predictive expert information is measurably useful for forecasting and for a
+replay-level retention metric, but that the tested \emph{reactive}
+predictive-retention realization does not convert that information into
+end-to-end decode throughput on the evaluated runtime, consistent with a
+literature in which prediction pays only when paired with an active
+prefetch, scheduling, or compute/I/O-overlap mechanism.
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_problem_formulation}
+\input{sections/03_methodology_replay_validation}
+\input{sections/04_oracle_headroom_fixed_memory}
+\input{sections/05_sensitivity_capacity}
+\input{sections/06_recoverable_envelope}
+\input{sections/07_discussion}
+\input{sections/08_limitations}
+\input{sections/09_research_iib}
+\input{sections/10_research_iic}
+\input{sections/11_conclusion}
+
+\appendix
+\input{sections/12_provenance_appendix}
+
+{\small
+\bibliographystyle{unsrt}
+\bibliography{references}
+}
+
+\end{document}

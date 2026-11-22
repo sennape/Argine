@@ -1,0 +1,210 @@
+{
+  "artifact": "R2_11_PER_WORKLOAD_COMPARISON",
+  "generated_utc": "2026-11-14T09:40:00Z",
+  "data": {
+    "r2-11-coding-v1": {
+      "1.5": {
+        "predicted_protect_mbps": 575693040.4696673,
+        "b_selected_mbps": 576150197.3542074,
+        "delta": -457156.884540081
+      },
+      "4.0": {
+        "predicted_protect_mbps": 216242204.05479452,
+        "b_selected_mbps": 216253385.89432484,
+        "delta": -11181.839530318975
+      },
+      "8.0": {
+        "predicted_protect_mbps": 42125091.56947163,
+        "b_selected_mbps": 42125091.56947163,
+        "delta": 0.0
+      }
+    },
+    "r2-11-coding-v2": {
+      "1.5": {
+        "predicted_protect_mbps": 592508940.0234834,
+        "b_selected_mbps": 593240088.0469668,
+        "delta": -731148.0234833956
+      },
+      "4.0": {
+        "predicted_protect_mbps": 282783383.295499,
+        "b_selected_mbps": 282857760.5636008,
+        "delta": -74377.2681017518
+      },
+      "8.0": {
+        "predicted_protect_mbps": 60332733.36986301,
+        "b_selected_mbps": 60332733.36986301,
+        "delta": 0.0
+      }
+    },
+    "r2-11-coding-v3": {
+      "1.5": {
+        "predicted_protect_mbps": 556826607.9686888,
+        "b_selected_mbps": 557591734.3561643,
+        "delta": -765126.3874754906
+      },
+      "4.0": {
+        "predicted_protect_mbps": 229703263.18591,
+        "b_selected_mbps": 229905257.7064579,
+        "delta": -201994.52054792643
+      },
+      "8.0": {
+        "predicted_protect_mbps": 45883921.0332681,
+        "b_selected_mbps": 45883921.0332681,
+        "delta": 0.0
+      }
+    },
+    "r2-11-instruction-v1": {
+      "1.5": {
+        "predicted_protect_mbps": 597804947.7886497,
+        "b_selected_mbps": 598464676.3209393,
+        "delta": -659728.5322896242
+      },
+      "4.0": {
+        "predicted_protect_mbps": 246416650.52054796,
+        "b_selected_mbps": 246389597.68297455,
+        "delta": 27052.83757340908
+      },
+      "8.0": {
+        "predicted_protect_mbps": 38473247.06066536,
+        "b_selected_mbps": 38473247.06066536,
+        "delta": 0.0
+      }
+    },
+    "r2-11-instruction-v2": {
+      "1.5": {
+        "predicted_protect_mbps": 619276821.0410959,
+        "b_selected_mbps": 620291915.6477495,
+        "delta": -1015094.6066536903
+      },
+      "4.0": {
+        "predicted_protect_mbps": 245714575.27984345,
+        "b_selected_mbps": 245768103.82778865,
+        "delta": -53528.5479452014
+      },
+      "8.0": {
+        "predicted_protect_mbps": 37034036.10176125,
+        "b_selected_mbps": 37034036.10176125,
+        "delta": 0.0
+      }
+    },
+    "r2-11-instruction-v3": {
+      "1.5": {
+        "predicted_protect_mbps": 615321119.0606654,
+        "b_selected_mbps": 616141793.9412916,
+        "delta": -820674.8806262016
+      },
+      "4.0": {
+        "predicted_protect_mbps": 220425582.71624267,
+        "b_selected_mbps": 220485098.95890412,
+        "delta": -59516.24266144633
+      },
+      "8.0": {
+        "predicted_protect_mbps": 30774514.473581214,
+        "b_selected_mbps": 30774514.473581214,
+        "delta": 0.0
+      }
+    },
+    "r2-11-reasoning-v1": {
+      "1.5": {
+        "predicted_protect_mbps": 623981778.4109589,
+        "b_selected_mbps": 624640208.407045,
+        "delta": -658429.9960861206
+      },
+      "4.0": {
+        "predicted_protect_mbps": 292110985.26810175,
+        "b_selected_mbps": 292351719.4520548,
+        "delta": -240734.1839530468
+      },
+      "8.0": {
+        "predicted_protect_mbps": 50985725.49510763,
+        "b_selected_mbps": 50985725.49510763,
+        "delta": 0.0
+      }
+    },
+    "r2-11-reasoning-v2": {
+      "1.5": {
+        "predicted_protect_mbps": 568701000.1409003,
+        "b_selected_mbps": 569876968.9549903,
+        "delta": -1175968.8140900135
+      },
+      "4.0": {
+        "predicted_protect_mbps": 237194951.3894325,
+        "b_selected_mbps": 237330215.57729942,
+        "delta": -135264.1878669262
+      },
+      "8.0": {
+        "predicted_protect_mbps": 44965134.52837574,
+        "b_selected_mbps": 44965134.52837574,
+        "delta": 0.0
+      }
+    },
+    "r2-11-reasoning-v3": {
+      "1.5": {
+        "predicted_protect_mbps": 579884571.0528376,
+        "b_selected_mbps": 580506353.4716243,
+        "delta": -621782.4187866449
+      },
+      "4.0": {
+        "predicted_protect_mbps": 236414170.4266145,
+        "b_selected_mbps": 236354654.18395305,
+        "delta": 59516.24266144633
+      },
+      "8.0": {
+        "predicted_protect_mbps": 42711597.08806262,
+        "b_selected_mbps": 42711597.08806262,
+        "delta": 0.0
+      }
+    },
+    "r2-11-summarization-v1": {
+      "1.5": {
+        "predicted_protect_mbps": 594431062.1682974,
+        "b_selected_mbps": 594929844.3522505,
+        "delta": -498782.1839530468
+      },
+      "4.0": {
+        "predicted_protect_mbps": 231191818.52054796,
+        "b_selected_mbps": 231515875.444227,
+        "delta": -324056.9236790538
+      },
+      "8.0": {
+        "predicted_protect_mbps": 40110340.508806266,
+        "b_selected_mbps": 40110340.508806266,
+        "delta": 0.0
+      }
+    },
+    "r2-11-summarization-v2": {
+      "1.5": {
+        "predicted_protect_mbps": 611741920.4383562,
+        "b_selected_mbps": 612675640.1095891,
+        "delta": -933719.6712329388
+      },
+      "4.0": {
+        "predicted_protect_mbps": 240631238.88845402,
+        "b_selected_mbps": 240703596.2113503,
+        "delta": -72357.32289627194
+      },
+      "8.0": {
+        "predicted_protect_mbps": 36432669.557729945,
+        "b_selected_mbps": 36432669.557729945,
+        "delta": 0.0
+      }
+    },
+    "r2-11-summarization-v3": {
+      "1.5": {
+        "predicted_protect_mbps": 581006867.037182,
+        "b_selected_mbps": 582020807.3894324,
+        "delta": -1013940.3522504568
+      },
+      "4.0": {
+        "predicted_protect_mbps": 199452780.2113503,
+        "b_selected_mbps": 199416060.49315068,
+        "delta": 36719.71819961071
+      },
+      "8.0": {
+        "predicted_protect_mbps": 28570537.831702545,
+        "b_selected_mbps": 28570537.831702545,
+        "delta": 0.0
+      }
+    }
+  }
+}

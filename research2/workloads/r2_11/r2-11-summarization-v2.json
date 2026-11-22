@@ -1,0 +1,22 @@
+{
+  "name": "r2-11-summarization-v2",
+  "version": "r2-11-v1",
+  "split": "eval",
+  "semantic_category": "summarization",
+  "description": "R2-11 fresh confirmatory summarization specification (why urban bus schedules drift and operational countermeasures). New committed local source, not a reuse of the R2-08 DEV (MoE routing technical background), R2-09 EVAL (home battery backup), or R2-BRIDGE-01 (bicycle commuting) source texts.",
+  "n_predict": 512,
+  "items": [
+    {
+      "id": "r2-11-summarization-v2",
+      "segment": "r2-11-summarization-v2",
+      "prompt": "Read the source text below and produce: (1) a concise summary in 5-7 bullet points, (2) three practical takeaways a reader could act on, and (3) one limitation or open question the source does not fully resolve. Do not add facts that are not supported by the source.\n\nSOURCE TEXT:\nTitle: Why urban bus schedules drift and what cities do about it\n\nPublished bus schedules assume a fixed travel time between stops, but\nactual travel time varies with traffic, passenger boarding volume, and\ndriver behavior, so buses tend to drift away from the printed timetable\nas a route progresses. This drift is not random: it is dominated by a\nsmall number of structural causes, and transit agencies that understand\nthose causes can design schedules and operational rules that keep\nservice closer to on-time without adding more buses.\n\nThe largest single cause is bunching: two buses on the same route that\nwere originally spaced evenly start to clump together. A bus running\nslightly behind schedule picks up more waiting passengers at each stop\n(because more people have accumulated), which slows it down further and\nmakes it later still. Meanwhile the bus behind it finds fewer passengers\nwaiting, because they already boarded the delayed bus ahead, so the\ntrailing bus speeds up and catches up. Left uncorrected, this produces\ntwo buses arriving together followed by a long gap, rather than evenly\nspaced service.\n\nSignal priority is a secondary but still significant factor. Routes that\npass through many signalized intersections without any priority system\naccumulate variable delay at each light, and that variability compounds\nacross a route with dozens of intersections. Cities that give buses even\nlimited signal priority -- extending a green light slightly when a bus\nis detected approaching -- measurably reduce both average delay and the\nvariance in arrival time, which matters more to riders than the average\nalone, since riders plan around the worst case they have experienced.\n\nOperational countermeasures used by well-run systems include: holding a\nleading bus briefly at designated control points if it is running early\nrelative to the bus behind it, short-turning a badly delayed bus before\nthe end of the route so it can start its next trip on time rather than\narriving very late, and publishing real-time arrival predictions so\nriders can adjust their own arrival at the stop instead of experiencing\nthe drift as an unexplained wait.\n"
+    }
+  ],
+  "provenance_split_identity": "r2_11_eval",
+  "cli_split_field_note": "argine.research.cli's 'research trace --split' flag only accepts {dev, eval} (argine/research/cli.py 'trace' subparser, choices=['dev','eval']); there is no third CLI-level split value. Per the loader (argine/research/workloads.py:load, the 'items'-schema fallback branch), the CLI-facing 'split' field here is literal plumbing selecting which dict key the prompts load under -- it is set to the already-supported value 'eval' so this file can be captured with the existing CLI and loader, with NO code change. The true provenance-level identity of this corpus (a fresh, entirely new R2-11 confirmatory EVAL corpus -- distinct from R2-10 DEV, R2-10 EVAL, and R2-BRIDGE-01's holdout) is tracked entirely by workload_id, file path, output directory, and the 'provenance_split_identity' field below, plus experiments/R2-11-predictive-retention/eval_manifest.json -- exactly mirroring how R2-BRIDGE-01's own fresh holdout was externally distinguished from R2-09/R2-10 by workload_id/path/manifest, not by a unique CLI split string.",
+  "source_input": {
+    "path": "research2/workloads/r2_11/sources/summarization_r2_11_source_02_transit.txt",
+    "committed_locally": true,
+    "web_network_dependency": false
+  }
+}

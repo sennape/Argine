@@ -1,0 +1,2808 @@
+{
+  "per_budget": {
+    "1610612736": {
+      "budget_bytes": 1610612736,
+      "budget_gib": 1.5,
+      "selected": {
+        "family_id": "aged_frequency",
+        "config_id": "aged_frequency/decay=0.999,interval=1",
+        "params": {
+          "aging_interval_steps": 1,
+          "decay_factor": 0.999,
+          "decay_form": "exponential_step_decay"
+        },
+        "Score_B_M": 599967231.3925142,
+        "mean_misses_per_decode_step": 208.7934470519952,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 1,
+        "delta_vs_Global_LRU_score": -39209363.196942925,
+        "delta_vs_Global_LRU_pct": -6.1343552828506,
+        "delta_vs_LFU_score": -32016200.050171852,
+        "delta_vs_LFU_pct": -5.0659872486032675
+      },
+      "tie_break_used": "none",
+      "rankings": [
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.999,interval=1",
+          "params": {
+            "aging_interval_steps": 1,
+            "decay_factor": 0.999,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 599967231.3925142,
+          "mean_misses_per_decode_step": 208.7934470519952,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 1
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=3,crp=0",
+          "params": {
+            "K": 3,
+            "correlated_reference_period_objects": 0
+          },
+          "Score_B_M": 601155529.8154306,
+          "mean_misses_per_decode_step": 209.25998762141035,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 2
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=3,crp=1",
+          "params": {
+            "K": 3,
+            "correlated_reference_period_objects": 1
+          },
+          "Score_B_M": 601155529.8154306,
+          "mean_misses_per_decode_step": 209.25998762141035,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 3
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=3,crp=2",
+          "params": {
+            "K": 3,
+            "correlated_reference_period_objects": 2
+          },
+          "Score_B_M": 601155529.8154306,
+          "mean_misses_per_decode_step": 209.25998762141035,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 4
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.9,interval=64",
+          "params": {
+            "aging_interval_steps": 64,
+            "decay_factor": 0.9,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 602742445.1018691,
+          "mean_misses_per_decode_step": 209.78748760856948,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 5
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=2,crp=0",
+          "params": {
+            "K": 2,
+            "correlated_reference_period_objects": 0
+          },
+          "Score_B_M": 610924997.5945883,
+          "mean_misses_per_decode_step": 212.62430723556815,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 6
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=2,crp=1",
+          "params": {
+            "K": 2,
+            "correlated_reference_period_objects": 1
+          },
+          "Score_B_M": 610924997.5945883,
+          "mean_misses_per_decode_step": 212.62430723556815,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 7
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=2,crp=2",
+          "params": {
+            "K": 2,
+            "correlated_reference_period_objects": 2
+          },
+          "Score_B_M": 610924997.5945883,
+          "mean_misses_per_decode_step": 212.62430723556815,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 8
+        },
+        {
+          "family_id": "lfu",
+          "config_id": "lfu/default",
+          "params": {
+            "halflife": 0,
+            "in_cache_only": false,
+            "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+          },
+          "Score_B_M": 631983431.4426861,
+          "mean_misses_per_decode_step": 220.33594002804443,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 9
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.99,interval=16",
+          "params": {
+            "aging_interval_steps": 16,
+            "decay_factor": 0.99,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 637737791.2455738,
+          "mean_misses_per_decode_step": 222.05345521878257,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 10
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.25,a1out=4,main=lru",
+          "params": {
+            "a1in_fraction": 0.25,
+            "a1out_slots_factor": 4,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 638525265.9277316,
+          "mean_misses_per_decode_step": 222.41245871663304,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 11
+        },
+        {
+          "family_id": "global_lru",
+          "config_id": "global_lru/default",
+          "params": {},
+          "Score_B_M": 639176594.5894572,
+          "mean_misses_per_decode_step": 222.66457103820926,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 12
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.9,interval=16",
+          "params": {
+            "aging_interval_steps": 16,
+            "decay_factor": 0.9,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 639669834.2315978,
+          "mean_misses_per_decode_step": 222.83151121520768,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 13
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.99,interval=1",
+          "params": {
+            "aging_interval_steps": 1,
+            "decay_factor": 0.99,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 640013261.034316,
+          "mean_misses_per_decode_step": 222.95358542510954,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 14
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.9,interval=1",
+          "params": {
+            "aging_interval_steps": 1,
+            "decay_factor": 0.9,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 640053392.4395889,
+          "mean_misses_per_decode_step": 222.96730716879568,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 15
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.25,a1out=2,main=lru",
+          "params": {
+            "a1in_fraction": 0.25,
+            "a1out_slots_factor": 2,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 643171368.583201,
+          "mean_misses_per_decode_step": 224.0563187307066,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 16
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.50,a1out=1,main=lru",
+          "params": {
+            "a1in_fraction": 0.5,
+            "a1out_slots_factor": 1,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 646876549.0748725,
+          "mean_misses_per_decode_step": 225.4200078586067,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 17
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.10,a1out=1,main=lru",
+          "params": {
+            "a1in_fraction": 0.1,
+            "a1out_slots_factor": 1,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 648610055.1438742,
+          "mean_misses_per_decode_step": 225.88078930202218,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 18
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.25,a1out=1,main=lru",
+          "params": {
+            "a1in_fraction": 0.25,
+            "a1out_slots_factor": 1,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 651906705.4099882,
+          "mean_misses_per_decode_step": 227.0802528108644,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 19
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.50,a1out=4,main=lru",
+          "params": {
+            "a1in_fraction": 0.5,
+            "a1out_slots_factor": 4,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 653178913.0251322,
+          "mean_misses_per_decode_step": 227.68946304657123,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 20
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.50,a1out=2,main=lru",
+          "params": {
+            "a1in_fraction": 0.5,
+            "a1out_slots_factor": 2,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 654371230.9364069,
+          "mean_misses_per_decode_step": 228.10057347283646,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 21
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.10,a1out=2,main=lru",
+          "params": {
+            "a1in_fraction": 0.1,
+            "a1out_slots_factor": 2,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 665011347.7847049,
+          "mean_misses_per_decode_step": 231.6738922189521,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 22
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.10,a1out=4,main=lru",
+          "params": {
+            "a1in_fraction": 0.1,
+            "a1out_slots_factor": 4,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 669838170.1169546,
+          "mean_misses_per_decode_step": 233.36072802543518,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 23
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.99,interval=64",
+          "params": {
+            "aging_interval_steps": 64,
+            "decay_factor": 0.99,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 770610992.5239071,
+          "mean_misses_per_decode_step": 268.94283890883503,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 24
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.999,interval=16",
+          "params": {
+            "aging_interval_steps": 16,
+            "decay_factor": 0.999,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 851251698.311848,
+          "mean_misses_per_decode_step": 297.4614132137592,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 25
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.999,interval=64",
+          "params": {
+            "aging_interval_steps": 64,
+            "decay_factor": 0.999,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 1004829730.5556805,
+          "mean_misses_per_decode_step": 351.87605872896023,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 26
+        }
+      ],
+      "global_lru": {
+        "family_id": "global_lru",
+        "config_id": "global_lru/default",
+        "params": {},
+        "Score_B_M": 639176594.5894572,
+        "mean_misses_per_decode_step": 222.66457103820926,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 12
+      },
+      "lfu": {
+        "family_id": "lfu",
+        "config_id": "lfu/default",
+        "params": {
+          "halflife": 0,
+          "in_cache_only": false,
+          "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+        },
+        "Score_B_M": 631983431.4426861,
+        "mean_misses_per_decode_step": 220.33594002804443,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 9
+      }
+    },
+    "4294967296": {
+      "budget_bytes": 4294967296,
+      "budget_gib": 4.0,
+      "selected": {
+        "family_id": "aged_frequency",
+        "config_id": "aged_frequency/decay=0.99,interval=64",
+        "params": {
+          "aging_interval_steps": 64,
+          "decay_factor": 0.99,
+          "decay_form": "exponential_step_decay"
+        },
+        "Score_B_M": 238400316.38960198,
+        "mean_misses_per_decode_step": 82.85612329280758,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 1,
+        "delta_vs_Global_LRU_score": -20967144.08320877,
+        "delta_vs_Global_LRU_pct": -8.083953185564207,
+        "delta_vs_LFU_score": -33138866.443009704,
+        "delta_vs_LFU_pct": -12.20408270265655
+      },
+      "tie_break_used": "none",
+      "rankings": [
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.99,interval=64",
+          "params": {
+            "aging_interval_steps": 64,
+            "decay_factor": 0.99,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 238400316.38960198,
+          "mean_misses_per_decode_step": 82.85612329280758,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 1
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=3,crp=0",
+          "params": {
+            "K": 3,
+            "correlated_reference_period_objects": 0
+          },
+          "Score_B_M": 241550141.225881,
+          "mean_misses_per_decode_step": 84.19159848169664,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 2
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=3,crp=1",
+          "params": {
+            "K": 3,
+            "correlated_reference_period_objects": 1
+          },
+          "Score_B_M": 241550141.225881,
+          "mean_misses_per_decode_step": 84.19159848169664,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 3
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=3,crp=2",
+          "params": {
+            "K": 3,
+            "correlated_reference_period_objects": 2
+          },
+          "Score_B_M": 241550141.225881,
+          "mean_misses_per_decode_step": 84.19159848169664,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 4
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=2,crp=0",
+          "params": {
+            "K": 2,
+            "correlated_reference_period_objects": 0
+          },
+          "Score_B_M": 242027982.4307441,
+          "mean_misses_per_decode_step": 84.29966716489207,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 5
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=2,crp=1",
+          "params": {
+            "K": 2,
+            "correlated_reference_period_objects": 1
+          },
+          "Score_B_M": 242027982.4307441,
+          "mean_misses_per_decode_step": 84.29966716489207,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 6
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=2,crp=2",
+          "params": {
+            "K": 2,
+            "correlated_reference_period_objects": 2
+          },
+          "Score_B_M": 242027982.4307441,
+          "mean_misses_per_decode_step": 84.29966716489207,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 7
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.10,a1out=1,main=lru",
+          "params": {
+            "a1in_fraction": 0.1,
+            "a1out_slots_factor": 1,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 246482692.24845526,
+          "mean_misses_per_decode_step": 85.81551535510116,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 8
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.99,interval=16",
+          "params": {
+            "aging_interval_steps": 16,
+            "decay_factor": 0.99,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 248568600.27181533,
+          "mean_misses_per_decode_step": 86.4635897396387,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 9
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.10,a1out=2,main=lru",
+          "params": {
+            "a1in_fraction": 0.1,
+            "a1out_slots_factor": 2,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 248701467.81022236,
+          "mean_misses_per_decode_step": 86.57743681012477,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 10
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.10,a1out=4,main=lru",
+          "params": {
+            "a1in_fraction": 0.1,
+            "a1out_slots_factor": 4,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 248803745.5714748,
+          "mean_misses_per_decode_step": 86.61559727979208,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 11
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.999,interval=1",
+          "params": {
+            "aging_interval_steps": 1,
+            "decay_factor": 0.999,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 253742565.89389342,
+          "mean_misses_per_decode_step": 88.27742807833953,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 12
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.9,interval=64",
+          "params": {
+            "aging_interval_steps": 64,
+            "decay_factor": 0.9,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 257073049.91084334,
+          "mean_misses_per_decode_step": 89.447093085967,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 13
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.25,a1out=1,main=lru",
+          "params": {
+            "a1in_fraction": 0.25,
+            "a1out_slots_factor": 1,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 258803250.23196757,
+          "mean_misses_per_decode_step": 90.0616489719607,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 14
+        },
+        {
+          "family_id": "global_lru",
+          "config_id": "global_lru/default",
+          "params": {},
+          "Score_B_M": 259367460.47281075,
+          "mean_misses_per_decode_step": 90.25330523753024,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 15
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.9,interval=16",
+          "params": {
+            "aging_interval_steps": 16,
+            "decay_factor": 0.9,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 259511978.81393594,
+          "mean_misses_per_decode_step": 90.30324206049586,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 16
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.99,interval=1",
+          "params": {
+            "aging_interval_steps": 1,
+            "decay_factor": 0.99,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 259668242.58354008,
+          "mean_misses_per_decode_step": 90.35795054727748,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 17
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.9,interval=1",
+          "params": {
+            "aging_interval_steps": 1,
+            "decay_factor": 0.9,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 259695309.38539532,
+          "mean_misses_per_decode_step": 90.36742453426199,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 18
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.25,a1out=4,main=lru",
+          "params": {
+            "a1in_fraction": 0.25,
+            "a1out_slots_factor": 4,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 260378294.8374193,
+          "mean_misses_per_decode_step": 90.61701876306557,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 19
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.25,a1out=2,main=lru",
+          "params": {
+            "a1in_fraction": 0.25,
+            "a1out_slots_factor": 2,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 260385490.89221382,
+          "mean_misses_per_decode_step": 90.61995418380921,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 20
+        },
+        {
+          "family_id": "lfu",
+          "config_id": "lfu/default",
+          "params": {
+            "halflife": 0,
+            "in_cache_only": false,
+            "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+          },
+          "Score_B_M": 271539182.8326117,
+          "mean_misses_per_decode_step": 94.76976336862002,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 21
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.50,a1out=1,main=lru",
+          "params": {
+            "a1in_fraction": 0.5,
+            "a1out_slots_factor": 1,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 279478688.7036381,
+          "mean_misses_per_decode_step": 97.28194420902867,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 22
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.50,a1out=2,main=lru",
+          "params": {
+            "a1in_fraction": 0.5,
+            "a1out_slots_factor": 2,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 280227856.89914787,
+          "mean_misses_per_decode_step": 97.56132538227243,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 23
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.50,a1out=4,main=lru",
+          "params": {
+            "a1in_fraction": 0.5,
+            "a1out_slots_factor": 4,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 280227856.89914787,
+          "mean_misses_per_decode_step": 97.56132538227243,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 24
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.999,interval=16",
+          "params": {
+            "aging_interval_steps": 16,
+            "decay_factor": 0.999,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 368074045.596684,
+          "mean_misses_per_decode_step": 128.35187296793382,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 25
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.999,interval=64",
+          "params": {
+            "aging_interval_steps": 64,
+            "decay_factor": 0.999,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 618313668.6399679,
+          "mean_misses_per_decode_step": 216.190193691542,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 26
+        }
+      ],
+      "global_lru": {
+        "family_id": "global_lru",
+        "config_id": "global_lru/default",
+        "params": {},
+        "Score_B_M": 259367460.47281075,
+        "mean_misses_per_decode_step": 90.25330523753024,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 15
+      },
+      "lfu": {
+        "family_id": "lfu",
+        "config_id": "lfu/default",
+        "params": {
+          "halflife": 0,
+          "in_cache_only": false,
+          "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+        },
+        "Score_B_M": 271539182.8326117,
+        "mean_misses_per_decode_step": 94.76976336862002,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 21
+      }
+    },
+    "8589934592": {
+      "budget_bytes": 8589934592,
+      "budget_gib": 8.0,
+      "selected": {
+        "family_id": "aged_frequency",
+        "config_id": "aged_frequency/decay=0.999,interval=16",
+        "params": {
+          "decay_factor": 0.999,
+          "aging_interval_steps": 16,
+          "decay_form": "exponential_step_decay"
+        },
+        "Score_B_M": 43221096.976686135,
+        "mean_misses_per_decode_step": 15.107638514363787,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 1,
+        "delta_vs_Global_LRU_score": -4061973.7629782557,
+        "delta_vs_Global_LRU_pct": -8.590757113350476,
+        "delta_vs_LFU_score": -11446777.64901305,
+        "delta_vs_LFU_pct": -20.938764726792503
+      },
+      "tie_break_used": "none",
+      "rankings": [
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.999,interval=16",
+          "params": {
+            "decay_factor": 0.999,
+            "aging_interval_steps": 16,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 43221096.976686135,
+          "mean_misses_per_decode_step": 15.107638514363787,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 1
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.99,interval=64",
+          "params": {
+            "decay_factor": 0.99,
+            "aging_interval_steps": 64,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 43346352.0880164,
+          "mean_misses_per_decode_step": 15.152130812415571,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 2
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.99,interval=16",
+          "params": {
+            "decay_factor": 0.99,
+            "aging_interval_steps": 16,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 46497402.467540875,
+          "mean_misses_per_decode_step": 16.213967260941697,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 3
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=2,crp=0",
+          "params": {
+            "K": 2,
+            "correlated_reference_period_objects": 0
+          },
+          "Score_B_M": 46611526.01075551,
+          "mean_misses_per_decode_step": 16.29569291852217,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 4
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=2,crp=1",
+          "params": {
+            "K": 2,
+            "correlated_reference_period_objects": 1
+          },
+          "Score_B_M": 46611526.01075551,
+          "mean_misses_per_decode_step": 16.29569291852217,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 5
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=2,crp=2",
+          "params": {
+            "K": 2,
+            "correlated_reference_period_objects": 2
+          },
+          "Score_B_M": 46611526.01075551,
+          "mean_misses_per_decode_step": 16.29569291852217,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 6
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.999,interval=1",
+          "params": {
+            "decay_factor": 0.999,
+            "aging_interval_steps": 1,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 46937672.36969351,
+          "mean_misses_per_decode_step": 16.363023971318654,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 7
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.9,interval=64",
+          "params": {
+            "decay_factor": 0.9,
+            "aging_interval_steps": 64,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 47208093.5281446,
+          "mean_misses_per_decode_step": 16.458241521179716,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 8
+        },
+        {
+          "family_id": "global_lru",
+          "config_id": "global_lru/default",
+          "params": {},
+          "Score_B_M": 47283070.73966439,
+          "mean_misses_per_decode_step": 16.48399258311889,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 9
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.9,interval=16",
+          "params": {
+            "decay_factor": 0.9,
+            "aging_interval_steps": 16,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 47295946.233570114,
+          "mean_misses_per_decode_step": 16.488418827783512,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 10
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.9,interval=1",
+          "params": {
+            "decay_factor": 0.9,
+            "aging_interval_steps": 1,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 47308852.96959798,
+          "mean_misses_per_decode_step": 16.493155821275764,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 11
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.99,interval=1",
+          "params": {
+            "decay_factor": 0.99,
+            "aging_interval_steps": 1,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 47310349.893277034,
+          "mean_misses_per_decode_step": 16.49364505806637,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 12
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=3,crp=0",
+          "params": {
+            "K": 3,
+            "correlated_reference_period_objects": 0
+          },
+          "Score_B_M": 48874575.44650754,
+          "mean_misses_per_decode_step": 17.084840850373155,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 13
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=3,crp=1",
+          "params": {
+            "K": 3,
+            "correlated_reference_period_objects": 1
+          },
+          "Score_B_M": 48874575.44650754,
+          "mean_misses_per_decode_step": 17.084840850373155,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 14
+        },
+        {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=3,crp=2",
+          "params": {
+            "K": 3,
+            "correlated_reference_period_objects": 2
+          },
+          "Score_B_M": 48874575.44650754,
+          "mean_misses_per_decode_step": 17.084840850373155,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 15
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.10,a1out=1,main=lru",
+          "params": {
+            "a1in_fraction": 0.1,
+            "a1out_slots_factor": 1,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 48983439.37846126,
+          "mean_misses_per_decode_step": 17.098978637944228,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 16
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.10,a1out=2,main=lru",
+          "params": {
+            "a1in_fraction": 0.1,
+            "a1out_slots_factor": 2,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 48983439.37846126,
+          "mean_misses_per_decode_step": 17.098978637944228,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 17
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.10,a1out=4,main=lru",
+          "params": {
+            "a1in_fraction": 0.1,
+            "a1out_slots_factor": 4,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 48983439.37846126,
+          "mean_misses_per_decode_step": 17.098978637944228,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 18
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.25,a1out=1,main=lru",
+          "params": {
+            "a1in_fraction": 0.25,
+            "a1out_slots_factor": 1,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 52594413.747815765,
+          "mean_misses_per_decode_step": 18.344728313070455,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 19
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.25,a1out=2,main=lru",
+          "params": {
+            "a1in_fraction": 0.25,
+            "a1out_slots_factor": 2,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 52594413.747815765,
+          "mean_misses_per_decode_step": 18.344728313070455,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 20
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.25,a1out=4,main=lru",
+          "params": {
+            "a1in_fraction": 0.25,
+            "a1out_slots_factor": 4,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 52594413.747815765,
+          "mean_misses_per_decode_step": 18.344728313070455,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 21
+        },
+        {
+          "family_id": "lfu",
+          "config_id": "lfu/default",
+          "params": {
+            "halflife": 0,
+            "in_cache_only": false,
+            "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+          },
+          "Score_B_M": 54667874.625699185,
+          "mean_misses_per_decode_step": 19.12174805204144,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 22
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.50,a1out=1,main=lru",
+          "params": {
+            "a1in_fraction": 0.5,
+            "a1out_slots_factor": 1,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 60936354.79039092,
+          "mean_misses_per_decode_step": 21.26127427564705,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 23
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.50,a1out=2,main=lru",
+          "params": {
+            "a1in_fraction": 0.5,
+            "a1out_slots_factor": 2,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 60936354.79039092,
+          "mean_misses_per_decode_step": 21.26127427564705,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 24
+        },
+        {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.50,a1out=4,main=lru",
+          "params": {
+            "a1in_fraction": 0.5,
+            "a1out_slots_factor": 4,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 60936354.79039092,
+          "mean_misses_per_decode_step": 21.26127427564705,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 25
+        },
+        {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.999,interval=64",
+          "params": {
+            "decay_factor": 0.999,
+            "aging_interval_steps": 64,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 113345488.22164354,
+          "mean_misses_per_decode_step": 39.65544247037613,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 26
+        }
+      ],
+      "global_lru": {
+        "family_id": "global_lru",
+        "config_id": "global_lru/default",
+        "params": {},
+        "Score_B_M": 47283070.73966439,
+        "mean_misses_per_decode_step": 16.48399258311889,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 9
+      },
+      "lfu": {
+        "family_id": "lfu",
+        "config_id": "lfu/default",
+        "params": {
+          "halflife": 0,
+          "in_cache_only": false,
+          "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+        },
+        "Score_B_M": 54667874.625699185,
+        "mean_misses_per_decode_step": 19.12174805204144,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 22
+      }
+    }
+  },
+  "family_winners": {
+    "1610612736": {
+      "aged_frequency": {
+        "family_id": "aged_frequency",
+        "config_id": "aged_frequency/decay=0.999,interval=1",
+        "params": {
+          "aging_interval_steps": 1,
+          "decay_factor": 0.999,
+          "decay_form": "exponential_step_decay"
+        },
+        "Score_B_M": 599967231.3925142,
+        "mean_misses_per_decode_step": 208.7934470519952,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 1
+      },
+      "lru_k": {
+        "family_id": "lru_k",
+        "config_id": "lru_k/K=3,crp=0",
+        "params": {
+          "K": 3,
+          "correlated_reference_period_objects": 0
+        },
+        "Score_B_M": 601155529.8154306,
+        "mean_misses_per_decode_step": 209.25998762141035,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 2
+      },
+      "lfu": {
+        "family_id": "lfu",
+        "config_id": "lfu/default",
+        "params": {
+          "halflife": 0,
+          "in_cache_only": false,
+          "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+        },
+        "Score_B_M": 631983431.4426861,
+        "mean_misses_per_decode_step": 220.33594002804443,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 9
+      },
+      "twoq": {
+        "family_id": "twoq",
+        "config_id": "twoq/a1in=0.25,a1out=4,main=lru",
+        "params": {
+          "a1in_fraction": 0.25,
+          "a1out_slots_factor": 4,
+          "main_policy": "LRU"
+        },
+        "Score_B_M": 638525265.9277316,
+        "mean_misses_per_decode_step": 222.41245871663304,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 11
+      },
+      "global_lru": {
+        "family_id": "global_lru",
+        "config_id": "global_lru/default",
+        "params": {},
+        "Score_B_M": 639176594.5894572,
+        "mean_misses_per_decode_step": 222.66457103820926,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 12
+      }
+    },
+    "4294967296": {
+      "aged_frequency": {
+        "family_id": "aged_frequency",
+        "config_id": "aged_frequency/decay=0.99,interval=64",
+        "params": {
+          "aging_interval_steps": 64,
+          "decay_factor": 0.99,
+          "decay_form": "exponential_step_decay"
+        },
+        "Score_B_M": 238400316.38960198,
+        "mean_misses_per_decode_step": 82.85612329280758,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 1
+      },
+      "lru_k": {
+        "family_id": "lru_k",
+        "config_id": "lru_k/K=3,crp=0",
+        "params": {
+          "K": 3,
+          "correlated_reference_period_objects": 0
+        },
+        "Score_B_M": 241550141.225881,
+        "mean_misses_per_decode_step": 84.19159848169664,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 2
+      },
+      "twoq": {
+        "family_id": "twoq",
+        "config_id": "twoq/a1in=0.10,a1out=1,main=lru",
+        "params": {
+          "a1in_fraction": 0.1,
+          "a1out_slots_factor": 1,
+          "main_policy": "LRU"
+        },
+        "Score_B_M": 246482692.24845526,
+        "mean_misses_per_decode_step": 85.81551535510116,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 8
+      },
+      "global_lru": {
+        "family_id": "global_lru",
+        "config_id": "global_lru/default",
+        "params": {},
+        "Score_B_M": 259367460.47281075,
+        "mean_misses_per_decode_step": 90.25330523753024,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 15
+      },
+      "lfu": {
+        "family_id": "lfu",
+        "config_id": "lfu/default",
+        "params": {
+          "halflife": 0,
+          "in_cache_only": false,
+          "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+        },
+        "Score_B_M": 271539182.8326117,
+        "mean_misses_per_decode_step": 94.76976336862002,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 21
+      }
+    },
+    "8589934592": {
+      "aged_frequency": {
+        "family_id": "aged_frequency",
+        "config_id": "aged_frequency/decay=0.999,interval=16",
+        "params": {
+          "decay_factor": 0.999,
+          "aging_interval_steps": 16,
+          "decay_form": "exponential_step_decay"
+        },
+        "Score_B_M": 43221096.976686135,
+        "mean_misses_per_decode_step": 15.107638514363787,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 1
+      },
+      "lru_k": {
+        "family_id": "lru_k",
+        "config_id": "lru_k/K=2,crp=0",
+        "params": {
+          "K": 2,
+          "correlated_reference_period_objects": 0
+        },
+        "Score_B_M": 46611526.01075551,
+        "mean_misses_per_decode_step": 16.29569291852217,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 4
+      },
+      "global_lru": {
+        "family_id": "global_lru",
+        "config_id": "global_lru/default",
+        "params": {},
+        "Score_B_M": 47283070.73966439,
+        "mean_misses_per_decode_step": 16.48399258311889,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 9
+      },
+      "twoq": {
+        "family_id": "twoq",
+        "config_id": "twoq/a1in=0.10,a1out=1,main=lru",
+        "params": {
+          "a1in_fraction": 0.1,
+          "a1out_slots_factor": 1,
+          "main_policy": "LRU"
+        },
+        "Score_B_M": 48983439.37846126,
+        "mean_misses_per_decode_step": 17.098978637944228,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 16
+      },
+      "lfu": {
+        "family_id": "lfu",
+        "config_id": "lfu/default",
+        "params": {
+          "halflife": 0,
+          "in_cache_only": false,
+          "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+        },
+        "Score_B_M": 54667874.625699185,
+        "mean_misses_per_decode_step": 19.12174805204144,
+        "cell_status": "OK",
+        "n_cells": 8,
+        "rank": 22
+      }
+    }
+  },
+  "instances": [
+    "coding-v1__seed-42",
+    "coding-v1__seed-43",
+    "instruction-v1__seed-42",
+    "instruction-v1__seed-43",
+    "reasoning-v1__seed-42",
+    "reasoning-v1__seed-43",
+    "summarization-v1__seed-42",
+    "summarization-v1__seed-43"
+  ],
+  "N": 8,
+  "family_report": {
+    "1610612736": {
+      "aged_frequency": {
+        "best_config": {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.999,interval=1",
+          "params": {
+            "aging_interval_steps": 1,
+            "decay_factor": 0.999,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 599967231.3925142,
+          "mean_misses_per_decode_step": 208.7934470519952,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 1
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.999,interval=1",
+            "params": {
+              "aging_interval_steps": 1,
+              "decay_factor": 0.999,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 599967231.3925142,
+            "mean_misses_per_decode_step": 208.7934470519952,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 1
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.9,interval=64",
+            "params": {
+              "aging_interval_steps": 64,
+              "decay_factor": 0.9,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 602742445.1018691,
+            "mean_misses_per_decode_step": 209.78748760856948,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 5
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.99,interval=16",
+            "params": {
+              "aging_interval_steps": 16,
+              "decay_factor": 0.99,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 637737791.2455738,
+            "mean_misses_per_decode_step": 222.05345521878257,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 10
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.9,interval=16",
+            "params": {
+              "aging_interval_steps": 16,
+              "decay_factor": 0.9,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 639669834.2315978,
+            "mean_misses_per_decode_step": 222.83151121520768,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 13
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.99,interval=1",
+            "params": {
+              "aging_interval_steps": 1,
+              "decay_factor": 0.99,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 640013261.034316,
+            "mean_misses_per_decode_step": 222.95358542510954,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 14
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.9,interval=1",
+            "params": {
+              "aging_interval_steps": 1,
+              "decay_factor": 0.9,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 640053392.4395889,
+            "mean_misses_per_decode_step": 222.96730716879568,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 15
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.99,interval=64",
+            "params": {
+              "aging_interval_steps": 64,
+              "decay_factor": 0.99,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 770610992.5239071,
+            "mean_misses_per_decode_step": 268.94283890883503,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 24
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.999,interval=16",
+            "params": {
+              "aging_interval_steps": 16,
+              "decay_factor": 0.999,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 851251698.311848,
+            "mean_misses_per_decode_step": 297.4614132137592,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 25
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.999,interval=64",
+            "params": {
+              "aging_interval_steps": 64,
+              "decay_factor": 0.999,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 1004829730.5556805,
+            "mean_misses_per_decode_step": 351.87605872896023,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 26
+          }
+        ],
+        "delta_vs_Global_LRU_score": -39209363.196942925,
+        "delta_vs_LFU_score": -32016200.050171852
+      },
+      "lru_k": {
+        "best_config": {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=3,crp=0",
+          "params": {
+            "K": 3,
+            "correlated_reference_period_objects": 0
+          },
+          "Score_B_M": 601155529.8154306,
+          "mean_misses_per_decode_step": 209.25998762141035,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 2
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=3,crp=0",
+            "params": {
+              "K": 3,
+              "correlated_reference_period_objects": 0
+            },
+            "Score_B_M": 601155529.8154306,
+            "mean_misses_per_decode_step": 209.25998762141035,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 2
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=3,crp=1",
+            "params": {
+              "K": 3,
+              "correlated_reference_period_objects": 1
+            },
+            "Score_B_M": 601155529.8154306,
+            "mean_misses_per_decode_step": 209.25998762141035,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 3
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=3,crp=2",
+            "params": {
+              "K": 3,
+              "correlated_reference_period_objects": 2
+            },
+            "Score_B_M": 601155529.8154306,
+            "mean_misses_per_decode_step": 209.25998762141035,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 4
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=2,crp=0",
+            "params": {
+              "K": 2,
+              "correlated_reference_period_objects": 0
+            },
+            "Score_B_M": 610924997.5945883,
+            "mean_misses_per_decode_step": 212.62430723556815,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 6
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=2,crp=1",
+            "params": {
+              "K": 2,
+              "correlated_reference_period_objects": 1
+            },
+            "Score_B_M": 610924997.5945883,
+            "mean_misses_per_decode_step": 212.62430723556815,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 7
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=2,crp=2",
+            "params": {
+              "K": 2,
+              "correlated_reference_period_objects": 2
+            },
+            "Score_B_M": 610924997.5945883,
+            "mean_misses_per_decode_step": 212.62430723556815,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 8
+          }
+        ],
+        "delta_vs_Global_LRU_score": -38021064.77402651,
+        "delta_vs_LFU_score": -30827901.62725544
+      },
+      "lfu": {
+        "best_config": {
+          "family_id": "lfu",
+          "config_id": "lfu/default",
+          "params": {
+            "halflife": 0,
+            "in_cache_only": false,
+            "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+          },
+          "Score_B_M": 631983431.4426861,
+          "mean_misses_per_decode_step": 220.33594002804443,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 9
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "lfu",
+            "config_id": "lfu/default",
+            "params": {
+              "halflife": 0,
+              "in_cache_only": false,
+              "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+            },
+            "Score_B_M": 631983431.4426861,
+            "mean_misses_per_decode_step": 220.33594002804443,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 9
+          }
+        ],
+        "delta_vs_Global_LRU_score": -7193163.146771073,
+        "delta_vs_LFU_score": 0.0
+      },
+      "twoq": {
+        "best_config": {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.25,a1out=4,main=lru",
+          "params": {
+            "a1in_fraction": 0.25,
+            "a1out_slots_factor": 4,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 638525265.9277316,
+          "mean_misses_per_decode_step": 222.41245871663304,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 11
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.25,a1out=4,main=lru",
+            "params": {
+              "a1in_fraction": 0.25,
+              "a1out_slots_factor": 4,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 638525265.9277316,
+            "mean_misses_per_decode_step": 222.41245871663304,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 11
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.25,a1out=2,main=lru",
+            "params": {
+              "a1in_fraction": 0.25,
+              "a1out_slots_factor": 2,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 643171368.583201,
+            "mean_misses_per_decode_step": 224.0563187307066,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 16
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.50,a1out=1,main=lru",
+            "params": {
+              "a1in_fraction": 0.5,
+              "a1out_slots_factor": 1,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 646876549.0748725,
+            "mean_misses_per_decode_step": 225.4200078586067,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 17
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.10,a1out=1,main=lru",
+            "params": {
+              "a1in_fraction": 0.1,
+              "a1out_slots_factor": 1,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 648610055.1438742,
+            "mean_misses_per_decode_step": 225.88078930202218,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 18
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.25,a1out=1,main=lru",
+            "params": {
+              "a1in_fraction": 0.25,
+              "a1out_slots_factor": 1,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 651906705.4099882,
+            "mean_misses_per_decode_step": 227.0802528108644,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 19
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.50,a1out=4,main=lru",
+            "params": {
+              "a1in_fraction": 0.5,
+              "a1out_slots_factor": 4,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 653178913.0251322,
+            "mean_misses_per_decode_step": 227.68946304657123,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 20
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.50,a1out=2,main=lru",
+            "params": {
+              "a1in_fraction": 0.5,
+              "a1out_slots_factor": 2,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 654371230.9364069,
+            "mean_misses_per_decode_step": 228.10057347283646,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 21
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.10,a1out=2,main=lru",
+            "params": {
+              "a1in_fraction": 0.1,
+              "a1out_slots_factor": 2,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 665011347.7847049,
+            "mean_misses_per_decode_step": 231.6738922189521,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 22
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.10,a1out=4,main=lru",
+            "params": {
+              "a1in_fraction": 0.1,
+              "a1out_slots_factor": 4,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 669838170.1169546,
+            "mean_misses_per_decode_step": 233.36072802543518,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 23
+          }
+        ],
+        "delta_vs_Global_LRU_score": -651328.6617255211,
+        "delta_vs_LFU_score": 6541834.485045552
+      },
+      "global_lru": {
+        "best_config": {
+          "family_id": "global_lru",
+          "config_id": "global_lru/default",
+          "params": {},
+          "Score_B_M": 639176594.5894572,
+          "mean_misses_per_decode_step": 222.66457103820926,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 12
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "global_lru",
+            "config_id": "global_lru/default",
+            "params": {},
+            "Score_B_M": 639176594.5894572,
+            "mean_misses_per_decode_step": 222.66457103820926,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 12
+          }
+        ],
+        "delta_vs_Global_LRU_score": 0.0,
+        "delta_vs_LFU_score": 7193163.146771073
+      }
+    },
+    "4294967296": {
+      "aged_frequency": {
+        "best_config": {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.99,interval=64",
+          "params": {
+            "aging_interval_steps": 64,
+            "decay_factor": 0.99,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 238400316.38960198,
+          "mean_misses_per_decode_step": 82.85612329280758,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 1
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.99,interval=64",
+            "params": {
+              "aging_interval_steps": 64,
+              "decay_factor": 0.99,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 238400316.38960198,
+            "mean_misses_per_decode_step": 82.85612329280758,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 1
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.99,interval=16",
+            "params": {
+              "aging_interval_steps": 16,
+              "decay_factor": 0.99,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 248568600.27181533,
+            "mean_misses_per_decode_step": 86.4635897396387,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 9
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.999,interval=1",
+            "params": {
+              "aging_interval_steps": 1,
+              "decay_factor": 0.999,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 253742565.89389342,
+            "mean_misses_per_decode_step": 88.27742807833953,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 12
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.9,interval=64",
+            "params": {
+              "aging_interval_steps": 64,
+              "decay_factor": 0.9,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 257073049.91084334,
+            "mean_misses_per_decode_step": 89.447093085967,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 13
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.9,interval=16",
+            "params": {
+              "aging_interval_steps": 16,
+              "decay_factor": 0.9,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 259511978.81393594,
+            "mean_misses_per_decode_step": 90.30324206049586,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 16
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.99,interval=1",
+            "params": {
+              "aging_interval_steps": 1,
+              "decay_factor": 0.99,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 259668242.58354008,
+            "mean_misses_per_decode_step": 90.35795054727748,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 17
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.9,interval=1",
+            "params": {
+              "aging_interval_steps": 1,
+              "decay_factor": 0.9,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 259695309.38539532,
+            "mean_misses_per_decode_step": 90.36742453426199,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 18
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.999,interval=16",
+            "params": {
+              "aging_interval_steps": 16,
+              "decay_factor": 0.999,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 368074045.596684,
+            "mean_misses_per_decode_step": 128.35187296793382,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 25
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.999,interval=64",
+            "params": {
+              "aging_interval_steps": 64,
+              "decay_factor": 0.999,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 618313668.6399679,
+            "mean_misses_per_decode_step": 216.190193691542,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 26
+          }
+        ],
+        "delta_vs_Global_LRU_score": -20967144.08320877,
+        "delta_vs_LFU_score": -33138866.443009704
+      },
+      "lru_k": {
+        "best_config": {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=3,crp=0",
+          "params": {
+            "K": 3,
+            "correlated_reference_period_objects": 0
+          },
+          "Score_B_M": 241550141.225881,
+          "mean_misses_per_decode_step": 84.19159848169664,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 2
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=3,crp=0",
+            "params": {
+              "K": 3,
+              "correlated_reference_period_objects": 0
+            },
+            "Score_B_M": 241550141.225881,
+            "mean_misses_per_decode_step": 84.19159848169664,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 2
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=3,crp=1",
+            "params": {
+              "K": 3,
+              "correlated_reference_period_objects": 1
+            },
+            "Score_B_M": 241550141.225881,
+            "mean_misses_per_decode_step": 84.19159848169664,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 3
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=3,crp=2",
+            "params": {
+              "K": 3,
+              "correlated_reference_period_objects": 2
+            },
+            "Score_B_M": 241550141.225881,
+            "mean_misses_per_decode_step": 84.19159848169664,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 4
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=2,crp=0",
+            "params": {
+              "K": 2,
+              "correlated_reference_period_objects": 0
+            },
+            "Score_B_M": 242027982.4307441,
+            "mean_misses_per_decode_step": 84.29966716489207,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 5
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=2,crp=1",
+            "params": {
+              "K": 2,
+              "correlated_reference_period_objects": 1
+            },
+            "Score_B_M": 242027982.4307441,
+            "mean_misses_per_decode_step": 84.29966716489207,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 6
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=2,crp=2",
+            "params": {
+              "K": 2,
+              "correlated_reference_period_objects": 2
+            },
+            "Score_B_M": 242027982.4307441,
+            "mean_misses_per_decode_step": 84.29966716489207,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 7
+          }
+        ],
+        "delta_vs_Global_LRU_score": -17817319.246929735,
+        "delta_vs_LFU_score": -29989041.60673067
+      },
+      "twoq": {
+        "best_config": {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.10,a1out=1,main=lru",
+          "params": {
+            "a1in_fraction": 0.1,
+            "a1out_slots_factor": 1,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 246482692.24845526,
+          "mean_misses_per_decode_step": 85.81551535510116,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 8
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.10,a1out=1,main=lru",
+            "params": {
+              "a1in_fraction": 0.1,
+              "a1out_slots_factor": 1,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 246482692.24845526,
+            "mean_misses_per_decode_step": 85.81551535510116,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 8
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.10,a1out=2,main=lru",
+            "params": {
+              "a1in_fraction": 0.1,
+              "a1out_slots_factor": 2,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 248701467.81022236,
+            "mean_misses_per_decode_step": 86.57743681012477,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 10
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.10,a1out=4,main=lru",
+            "params": {
+              "a1in_fraction": 0.1,
+              "a1out_slots_factor": 4,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 248803745.5714748,
+            "mean_misses_per_decode_step": 86.61559727979208,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 11
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.25,a1out=1,main=lru",
+            "params": {
+              "a1in_fraction": 0.25,
+              "a1out_slots_factor": 1,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 258803250.23196757,
+            "mean_misses_per_decode_step": 90.0616489719607,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 14
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.25,a1out=4,main=lru",
+            "params": {
+              "a1in_fraction": 0.25,
+              "a1out_slots_factor": 4,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 260378294.8374193,
+            "mean_misses_per_decode_step": 90.61701876306557,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 19
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.25,a1out=2,main=lru",
+            "params": {
+              "a1in_fraction": 0.25,
+              "a1out_slots_factor": 2,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 260385490.89221382,
+            "mean_misses_per_decode_step": 90.61995418380921,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 20
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.50,a1out=1,main=lru",
+            "params": {
+              "a1in_fraction": 0.5,
+              "a1out_slots_factor": 1,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 279478688.7036381,
+            "mean_misses_per_decode_step": 97.28194420902867,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 22
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.50,a1out=2,main=lru",
+            "params": {
+              "a1in_fraction": 0.5,
+              "a1out_slots_factor": 2,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 280227856.89914787,
+            "mean_misses_per_decode_step": 97.56132538227243,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 23
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.50,a1out=4,main=lru",
+            "params": {
+              "a1in_fraction": 0.5,
+              "a1out_slots_factor": 4,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 280227856.89914787,
+            "mean_misses_per_decode_step": 97.56132538227243,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 24
+          }
+        ],
+        "delta_vs_Global_LRU_score": -12884768.224355489,
+        "delta_vs_LFU_score": -25056490.584156424
+      },
+      "global_lru": {
+        "best_config": {
+          "family_id": "global_lru",
+          "config_id": "global_lru/default",
+          "params": {},
+          "Score_B_M": 259367460.47281075,
+          "mean_misses_per_decode_step": 90.25330523753024,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 15
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "global_lru",
+            "config_id": "global_lru/default",
+            "params": {},
+            "Score_B_M": 259367460.47281075,
+            "mean_misses_per_decode_step": 90.25330523753024,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 15
+          }
+        ],
+        "delta_vs_Global_LRU_score": 0.0,
+        "delta_vs_LFU_score": -12171722.359800935
+      },
+      "lfu": {
+        "best_config": {
+          "family_id": "lfu",
+          "config_id": "lfu/default",
+          "params": {
+            "halflife": 0,
+            "in_cache_only": false,
+            "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+          },
+          "Score_B_M": 271539182.8326117,
+          "mean_misses_per_decode_step": 94.76976336862002,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 21
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "lfu",
+            "config_id": "lfu/default",
+            "params": {
+              "halflife": 0,
+              "in_cache_only": false,
+              "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+            },
+            "Score_B_M": 271539182.8326117,
+            "mean_misses_per_decode_step": 94.76976336862002,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 21
+          }
+        ],
+        "delta_vs_Global_LRU_score": 12171722.359800935,
+        "delta_vs_LFU_score": 0.0
+      }
+    },
+    "8589934592": {
+      "aged_frequency": {
+        "best_config": {
+          "family_id": "aged_frequency",
+          "config_id": "aged_frequency/decay=0.999,interval=16",
+          "params": {
+            "decay_factor": 0.999,
+            "aging_interval_steps": 16,
+            "decay_form": "exponential_step_decay"
+          },
+          "Score_B_M": 43221096.976686135,
+          "mean_misses_per_decode_step": 15.107638514363787,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 1
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.999,interval=16",
+            "params": {
+              "decay_factor": 0.999,
+              "aging_interval_steps": 16,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 43221096.976686135,
+            "mean_misses_per_decode_step": 15.107638514363787,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 1
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.99,interval=64",
+            "params": {
+              "decay_factor": 0.99,
+              "aging_interval_steps": 64,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 43346352.0880164,
+            "mean_misses_per_decode_step": 15.152130812415571,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 2
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.99,interval=16",
+            "params": {
+              "decay_factor": 0.99,
+              "aging_interval_steps": 16,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 46497402.467540875,
+            "mean_misses_per_decode_step": 16.213967260941697,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 3
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.999,interval=1",
+            "params": {
+              "decay_factor": 0.999,
+              "aging_interval_steps": 1,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 46937672.36969351,
+            "mean_misses_per_decode_step": 16.363023971318654,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 7
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.9,interval=64",
+            "params": {
+              "decay_factor": 0.9,
+              "aging_interval_steps": 64,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 47208093.5281446,
+            "mean_misses_per_decode_step": 16.458241521179716,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 8
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.9,interval=16",
+            "params": {
+              "decay_factor": 0.9,
+              "aging_interval_steps": 16,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 47295946.233570114,
+            "mean_misses_per_decode_step": 16.488418827783512,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 10
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.9,interval=1",
+            "params": {
+              "decay_factor": 0.9,
+              "aging_interval_steps": 1,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 47308852.96959798,
+            "mean_misses_per_decode_step": 16.493155821275764,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 11
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.99,interval=1",
+            "params": {
+              "decay_factor": 0.99,
+              "aging_interval_steps": 1,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 47310349.893277034,
+            "mean_misses_per_decode_step": 16.49364505806637,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 12
+          },
+          {
+            "family_id": "aged_frequency",
+            "config_id": "aged_frequency/decay=0.999,interval=64",
+            "params": {
+              "decay_factor": 0.999,
+              "aging_interval_steps": 64,
+              "decay_form": "exponential_step_decay"
+            },
+            "Score_B_M": 113345488.22164354,
+            "mean_misses_per_decode_step": 39.65544247037613,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 26
+          }
+        ],
+        "delta_vs_Global_LRU_score": -4061973.7629782557,
+        "delta_vs_LFU_score": -11446777.64901305
+      },
+      "lru_k": {
+        "best_config": {
+          "family_id": "lru_k",
+          "config_id": "lru_k/K=2,crp=0",
+          "params": {
+            "K": 2,
+            "correlated_reference_period_objects": 0
+          },
+          "Score_B_M": 46611526.01075551,
+          "mean_misses_per_decode_step": 16.29569291852217,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 4
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=2,crp=0",
+            "params": {
+              "K": 2,
+              "correlated_reference_period_objects": 0
+            },
+            "Score_B_M": 46611526.01075551,
+            "mean_misses_per_decode_step": 16.29569291852217,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 4
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=2,crp=1",
+            "params": {
+              "K": 2,
+              "correlated_reference_period_objects": 1
+            },
+            "Score_B_M": 46611526.01075551,
+            "mean_misses_per_decode_step": 16.29569291852217,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 5
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=2,crp=2",
+            "params": {
+              "K": 2,
+              "correlated_reference_period_objects": 2
+            },
+            "Score_B_M": 46611526.01075551,
+            "mean_misses_per_decode_step": 16.29569291852217,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 6
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=3,crp=0",
+            "params": {
+              "K": 3,
+              "correlated_reference_period_objects": 0
+            },
+            "Score_B_M": 48874575.44650754,
+            "mean_misses_per_decode_step": 17.084840850373155,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 13
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=3,crp=1",
+            "params": {
+              "K": 3,
+              "correlated_reference_period_objects": 1
+            },
+            "Score_B_M": 48874575.44650754,
+            "mean_misses_per_decode_step": 17.084840850373155,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 14
+          },
+          {
+            "family_id": "lru_k",
+            "config_id": "lru_k/K=3,crp=2",
+            "params": {
+              "K": 3,
+              "correlated_reference_period_objects": 2
+            },
+            "Score_B_M": 48874575.44650754,
+            "mean_misses_per_decode_step": 17.084840850373155,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 15
+          }
+        ],
+        "delta_vs_Global_LRU_score": -671544.7289088815,
+        "delta_vs_LFU_score": -8056348.614943676
+      },
+      "global_lru": {
+        "best_config": {
+          "family_id": "global_lru",
+          "config_id": "global_lru/default",
+          "params": {},
+          "Score_B_M": 47283070.73966439,
+          "mean_misses_per_decode_step": 16.48399258311889,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 9
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "global_lru",
+            "config_id": "global_lru/default",
+            "params": {},
+            "Score_B_M": 47283070.73966439,
+            "mean_misses_per_decode_step": 16.48399258311889,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 9
+          }
+        ],
+        "delta_vs_Global_LRU_score": 0.0,
+        "delta_vs_LFU_score": -7384803.886034794
+      },
+      "twoq": {
+        "best_config": {
+          "family_id": "twoq",
+          "config_id": "twoq/a1in=0.10,a1out=1,main=lru",
+          "params": {
+            "a1in_fraction": 0.1,
+            "a1out_slots_factor": 1,
+            "main_policy": "LRU"
+          },
+          "Score_B_M": 48983439.37846126,
+          "mean_misses_per_decode_step": 17.098978637944228,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 16
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.10,a1out=1,main=lru",
+            "params": {
+              "a1in_fraction": 0.1,
+              "a1out_slots_factor": 1,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 48983439.37846126,
+            "mean_misses_per_decode_step": 17.098978637944228,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 16
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.10,a1out=2,main=lru",
+            "params": {
+              "a1in_fraction": 0.1,
+              "a1out_slots_factor": 2,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 48983439.37846126,
+            "mean_misses_per_decode_step": 17.098978637944228,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 17
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.10,a1out=4,main=lru",
+            "params": {
+              "a1in_fraction": 0.1,
+              "a1out_slots_factor": 4,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 48983439.37846126,
+            "mean_misses_per_decode_step": 17.098978637944228,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 18
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.25,a1out=1,main=lru",
+            "params": {
+              "a1in_fraction": 0.25,
+              "a1out_slots_factor": 1,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 52594413.747815765,
+            "mean_misses_per_decode_step": 18.344728313070455,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 19
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.25,a1out=2,main=lru",
+            "params": {
+              "a1in_fraction": 0.25,
+              "a1out_slots_factor": 2,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 52594413.747815765,
+            "mean_misses_per_decode_step": 18.344728313070455,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 20
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.25,a1out=4,main=lru",
+            "params": {
+              "a1in_fraction": 0.25,
+              "a1out_slots_factor": 4,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 52594413.747815765,
+            "mean_misses_per_decode_step": 18.344728313070455,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 21
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.50,a1out=1,main=lru",
+            "params": {
+              "a1in_fraction": 0.5,
+              "a1out_slots_factor": 1,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 60936354.79039092,
+            "mean_misses_per_decode_step": 21.26127427564705,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 23
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.50,a1out=2,main=lru",
+            "params": {
+              "a1in_fraction": 0.5,
+              "a1out_slots_factor": 2,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 60936354.79039092,
+            "mean_misses_per_decode_step": 21.26127427564705,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 24
+          },
+          {
+            "family_id": "twoq",
+            "config_id": "twoq/a1in=0.50,a1out=4,main=lru",
+            "params": {
+              "a1in_fraction": 0.5,
+              "a1out_slots_factor": 4,
+              "main_policy": "LRU"
+            },
+            "Score_B_M": 60936354.79039092,
+            "mean_misses_per_decode_step": 21.26127427564705,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 25
+          }
+        ],
+        "delta_vs_Global_LRU_score": 1700368.638796866,
+        "delta_vs_LFU_score": -5684435.247237928
+      },
+      "lfu": {
+        "best_config": {
+          "family_id": "lfu",
+          "config_id": "lfu/default",
+          "params": {
+            "halflife": 0,
+            "in_cache_only": false,
+            "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+          },
+          "Score_B_M": 54667874.625699185,
+          "mean_misses_per_decode_step": 19.12174805204144,
+          "cell_status": "OK",
+          "n_cells": 8,
+          "rank": 22
+        },
+        "all_configs_ranked": [
+          {
+            "family_id": "lfu",
+            "config_id": "lfu/default",
+            "params": {
+              "halflife": 0,
+              "in_cache_only": false,
+              "tie_break": "lru_global_ordinal_then_stable_layer_expert"
+            },
+            "Score_B_M": 54667874.625699185,
+            "mean_misses_per_decode_step": 19.12174805204144,
+            "cell_status": "OK",
+            "n_cells": 8,
+            "rank": 22
+          }
+        ],
+        "delta_vs_Global_LRU_score": 7384803.886034794,
+        "delta_vs_LFU_score": 0.0
+      }
+    }
+  },
+  "global_lru_vs_lfu": [
+    {
+      "budget_bytes": 1610612736,
+      "budget_gib": "1.5 GiB",
+      "global_lru_score": 639176594.5894572,
+      "lfu_score": 631983431.4426861,
+      "lfu_minus_global_lru": -7193163.146771073,
+      "global_lru_wins": false
+    },
+    {
+      "budget_bytes": 4294967296,
+      "budget_gib": "4 GiB",
+      "global_lru_score": 259367460.47281075,
+      "lfu_score": 271539182.8326117,
+      "lfu_minus_global_lru": 12171722.359800935,
+      "global_lru_wins": true
+    },
+    {
+      "budget_bytes": 8589934592,
+      "budget_gib": "8 GiB",
+      "global_lru_score": 47283070.73966439,
+      "lfu_score": 54667874.625699185,
+      "lfu_minus_global_lru": 7384803.886034794,
+      "global_lru_wins": true
+    }
+  ]
+}

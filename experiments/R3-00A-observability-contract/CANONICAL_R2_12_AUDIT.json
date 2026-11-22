@@ -1,0 +1,2287 @@
+{
+  "artifact": "R3-00A-CANONICAL-R2-12-AUDIT",
+  "audit_digest": "eb94bc2ce783b417a4590c2acc60d78cd4e1d452a132e6258575cea10bcc1053",
+  "canonical_rule": "top-level runtime_results/*.json AND launch record AND counted==true AND warmup==false AND budget_gib in {1.5,4,8}",
+  "canonical_runs": [
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "60f08c17769e6cf5940dd153.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 1,
+      "run_id": "60f08c17769e6cf5940dd153",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "f70e2c63eb2631faa5909b27.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 1,
+      "run_id": "f70e2c63eb2631faa5909b27",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "63a541e7430dd53e18cd96af.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 2,
+      "run_id": "63a541e7430dd53e18cd96af",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "46927b8750069cdb09ad8584.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 2,
+      "run_id": "46927b8750069cdb09ad8584",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "1239ac5bdaa706db522e6373.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 3,
+      "run_id": "1239ac5bdaa706db522e6373",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "9370335cb53e278c62827e4c.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 3,
+      "run_id": "9370335cb53e278c62827e4c",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "e269f1f1beb388d3bf046283.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 4,
+      "run_id": "e269f1f1beb388d3bf046283",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "9a7304bdbdf6ab1745f07247.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 4,
+      "run_id": "9a7304bdbdf6ab1745f07247",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "77d3b7b5adb8da1e87cbbaf2.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 5,
+      "run_id": "77d3b7b5adb8da1e87cbbaf2",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "d3f55666efb9b2af1527d4ee.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 5,
+      "run_id": "d3f55666efb9b2af1527d4ee",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "8e0d41008f513e0d7b403506.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 1,
+      "run_id": "8e0d41008f513e0d7b403506",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "fa12a653a1f9c8789f33bbdb.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 1,
+      "run_id": "fa12a653a1f9c8789f33bbdb",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "d395b2fb6b5fa40bd3303f2f.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 2,
+      "run_id": "d395b2fb6b5fa40bd3303f2f",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "4efe09a0fbe684599ece024b.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 2,
+      "run_id": "4efe09a0fbe684599ece024b",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "abb887475a59a182eee242a2.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 3,
+      "run_id": "abb887475a59a182eee242a2",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "d7bc5ae8bf7970c94da91898.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 3,
+      "run_id": "d7bc5ae8bf7970c94da91898",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "28d7f05d28b43a5e88731b7c.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 4,
+      "run_id": "28d7f05d28b43a5e88731b7c",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "fbbf4329affc8c15169d05ad.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 4,
+      "run_id": "fbbf4329affc8c15169d05ad",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "7bff011e6c0fd5cae7048208.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 5,
+      "run_id": "7bff011e6c0fd5cae7048208",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "b090a3c79491320302088223.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 5,
+      "run_id": "b090a3c79491320302088223",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "1bd826044aecbdc7cb92d5bd.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 1,
+      "run_id": "1bd826044aecbdc7cb92d5bd",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "27ddc7608a5753a5442f28e7.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 1,
+      "run_id": "27ddc7608a5753a5442f28e7",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "5c2a492dc76747e44974ab95.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 2,
+      "run_id": "5c2a492dc76747e44974ab95",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "7134f304bad45ac9e9bb7b2b.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 2,
+      "run_id": "7134f304bad45ac9e9bb7b2b",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "f61d3a2b8ec318feccb3dc55.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 3,
+      "run_id": "f61d3a2b8ec318feccb3dc55",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "e4a48b35cc4e1bb9602cc6e9.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 3,
+      "run_id": "e4a48b35cc4e1bb9602cc6e9",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "a5f019c178a4ba5334e063f9.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 4,
+      "run_id": "a5f019c178a4ba5334e063f9",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "3178707effa0f567afcca52b.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 4,
+      "run_id": "3178707effa0f567afcca52b",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "7b831f03400b56a669d1d868.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 5,
+      "run_id": "7b831f03400b56a669d1d868",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "97ac4f585f1d2abc428ae8d2.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 5,
+      "run_id": "97ac4f585f1d2abc428ae8d2",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "6b9880f147a7a816a58a8dab.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 1,
+      "run_id": "6b9880f147a7a816a58a8dab",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "1fbecf2ce543ceea1d8d1654.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 1,
+      "run_id": "1fbecf2ce543ceea1d8d1654",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "4d0a7aefa6abcd82c25a3321.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 2,
+      "run_id": "4d0a7aefa6abcd82c25a3321",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "b3ef5350ba572acd5c4f23e9.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 2,
+      "run_id": "b3ef5350ba572acd5c4f23e9",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "5e9707bd8b0838288c031d65.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 3,
+      "run_id": "5e9707bd8b0838288c031d65",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "702a4f770ef003fb2046d16f.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 3,
+      "run_id": "702a4f770ef003fb2046d16f",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "be58378e5c2858a65e707719.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 4,
+      "run_id": "be58378e5c2858a65e707719",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "25c0354f4c20218e26e32fba.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 4,
+      "run_id": "25c0354f4c20218e26e32fba",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "8b11e09b59e3df03ec3047ae.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 5,
+      "run_id": "8b11e09b59e3df03ec3047ae",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 1.5,
+      "file": "adf30ca428c456393d336ed3.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 5,
+      "run_id": "adf30ca428c456393d336ed3",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "7c6ba31aa8bc6e9bf500f217.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 1,
+      "run_id": "7c6ba31aa8bc6e9bf500f217",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "316633d558d8d384686598c0.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 1,
+      "run_id": "316633d558d8d384686598c0",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "c21c3294189055c65ad6d5ae.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 2,
+      "run_id": "c21c3294189055c65ad6d5ae",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "07fc14bd46b3f49b23ac94b4.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 2,
+      "run_id": "07fc14bd46b3f49b23ac94b4",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "697360588ded42a3c52dada3.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 3,
+      "run_id": "697360588ded42a3c52dada3",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "4048b457e6b0a3d224f15da9.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 3,
+      "run_id": "4048b457e6b0a3d224f15da9",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "ad221b4e5d199eb8ac7b5dda.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 4,
+      "run_id": "ad221b4e5d199eb8ac7b5dda",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "c4bd37d760d2107ab8f91150.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 4,
+      "run_id": "c4bd37d760d2107ab8f91150",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "d37df801799a42033c4cb455.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 5,
+      "run_id": "d37df801799a42033c4cb455",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "543820c6cdc2081ee8562afe.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 5,
+      "run_id": "543820c6cdc2081ee8562afe",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "1b6cd1c7fd843132e1df7618.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 1,
+      "run_id": "1b6cd1c7fd843132e1df7618",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "5f14ecb2f9ab2f953bbf73bf.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 1,
+      "run_id": "5f14ecb2f9ab2f953bbf73bf",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "abeb11c38a2dc33ea7c3f9df.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 2,
+      "run_id": "abeb11c38a2dc33ea7c3f9df",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "07eff49670c4282d3e548dd1.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 2,
+      "run_id": "07eff49670c4282d3e548dd1",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "ae25d2963e53df39f0d95046.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 3,
+      "run_id": "ae25d2963e53df39f0d95046",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "5455f9d64e3c2472fff76aa7.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 3,
+      "run_id": "5455f9d64e3c2472fff76aa7",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "4e7215eec3f30109a78abc62.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 4,
+      "run_id": "4e7215eec3f30109a78abc62",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "834bd481eafe0f079046494d.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 4,
+      "run_id": "834bd481eafe0f079046494d",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "2dac8e8d754948797132ca88.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 5,
+      "run_id": "2dac8e8d754948797132ca88",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "95bf691a932f0c2fdc60863c.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 5,
+      "run_id": "95bf691a932f0c2fdc60863c",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "35a0cf5f2b84cc6d736284d5.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 1,
+      "run_id": "35a0cf5f2b84cc6d736284d5",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "c0f1f6625945575b866d06e5.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 1,
+      "run_id": "c0f1f6625945575b866d06e5",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "9b13942ab0d2dd4a4f5f789f.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 2,
+      "run_id": "9b13942ab0d2dd4a4f5f789f",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "f7f446829bb8c6b214dddc47.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 2,
+      "run_id": "f7f446829bb8c6b214dddc47",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "a9f4be38f653a1b93f5ebf8b.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 3,
+      "run_id": "a9f4be38f653a1b93f5ebf8b",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "eaba12c31adf6dc1241dc53a.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 3,
+      "run_id": "eaba12c31adf6dc1241dc53a",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "598dfc25a937c0598677a0dc.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 4,
+      "run_id": "598dfc25a937c0598677a0dc",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "825e610570139b5f0dce6864.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 4,
+      "run_id": "825e610570139b5f0dce6864",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "4008a677c05a45397777ddf2.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 5,
+      "run_id": "4008a677c05a45397777ddf2",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "6c711e5e66e69d6b1a51d103.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 5,
+      "run_id": "6c711e5e66e69d6b1a51d103",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "5b05e672cc1cc9ff90a56290.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 1,
+      "run_id": "5b05e672cc1cc9ff90a56290",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "6fbc661cfe758bfdc28902e1.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 1,
+      "run_id": "6fbc661cfe758bfdc28902e1",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "663658164720c5277b55d99b.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 2,
+      "run_id": "663658164720c5277b55d99b",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "d2a541ff23fd39810a22f3a3.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 2,
+      "run_id": "d2a541ff23fd39810a22f3a3",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "0b977da0807dd0e7790ce6dc.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 3,
+      "run_id": "0b977da0807dd0e7790ce6dc",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "9877a0563366367d3fab888f.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 3,
+      "run_id": "9877a0563366367d3fab888f",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "530be70d7c86bbad6c4c08d8.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 4,
+      "run_id": "530be70d7c86bbad6c4c08d8",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "67b671f108b3f7dd58b747f1.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 4,
+      "run_id": "67b671f108b3f7dd58b747f1",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "4d552e190b52845ca3d49fef.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 5,
+      "run_id": "4d552e190b52845ca3d49fef",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 4.0,
+      "file": "016f12e78b00f22cd4a65b28.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 5,
+      "run_id": "016f12e78b00f22cd4a65b28",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "a7838558f713f9a51a21ed12.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 1,
+      "run_id": "a7838558f713f9a51a21ed12",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "80bb93d054c76853b104cd03.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 1,
+      "run_id": "80bb93d054c76853b104cd03",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "3080acab5b6f7af4381378ee.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 2,
+      "run_id": "3080acab5b6f7af4381378ee",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "859b18056fdb1dfb8ce29c9e.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 2,
+      "run_id": "859b18056fdb1dfb8ce29c9e",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "ccbc7074ce1080be77f1fa52.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 3,
+      "run_id": "ccbc7074ce1080be77f1fa52",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "6e59ff9dd95282dcad540cca.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 3,
+      "run_id": "6e59ff9dd95282dcad540cca",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "7b9937812dde13bb73ea3cf3.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 4,
+      "run_id": "7b9937812dde13bb73ea3cf3",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "d2769b9a0b52c69e05ff7154.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 4,
+      "run_id": "d2769b9a0b52c69e05ff7154",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "19e8c967f9d4b60cc515ed5f.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 5,
+      "run_id": "19e8c967f9d4b60cc515ed5f",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "5d6dce0b521373356f934427.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 5,
+      "run_id": "5d6dce0b521373356f934427",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-coding-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "8b1eb4a2951bc96a13a0c19c.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 1,
+      "run_id": "8b1eb4a2951bc96a13a0c19c",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "bec267a95b7ed5e7ff4e28be.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 1,
+      "run_id": "bec267a95b7ed5e7ff4e28be",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "8715a76488e6a589c130c754.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 2,
+      "run_id": "8715a76488e6a589c130c754",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "aed915523ac56b250a3d7dd6.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 2,
+      "run_id": "aed915523ac56b250a3d7dd6",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "83c82d74ca22e8a8d44bd2f2.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 3,
+      "run_id": "83c82d74ca22e8a8d44bd2f2",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "f54731df9cd744cb659522db.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 3,
+      "run_id": "f54731df9cd744cb659522db",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "a0cf99ca97ee5cf1abfcb198.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 4,
+      "run_id": "a0cf99ca97ee5cf1abfcb198",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "459a3338a8bad12b7e51356b.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 4,
+      "run_id": "459a3338a8bad12b7e51356b",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "9252ed54caba0d3e86a78dbf.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 5,
+      "run_id": "9252ed54caba0d3e86a78dbf",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "a200a7326f4a9202aa096d28.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 5,
+      "run_id": "a200a7326f4a9202aa096d28",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-instruction-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "7665f7320577ea0ba9807965.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 1,
+      "run_id": "7665f7320577ea0ba9807965",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "2b2bceee2b40a82b661e59c9.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 1,
+      "run_id": "2b2bceee2b40a82b661e59c9",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "720d7d69d1f7fd61a3f795ae.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 2,
+      "run_id": "720d7d69d1f7fd61a3f795ae",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "18add846de7b2d3a1f4f813e.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 2,
+      "run_id": "18add846de7b2d3a1f4f813e",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "33986e3979a8556ddb234ccf.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 3,
+      "run_id": "33986e3979a8556ddb234ccf",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "19542107b425cd0b21347b93.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 3,
+      "run_id": "19542107b425cd0b21347b93",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "73d49cb0df4dc10d8e89f19f.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 4,
+      "run_id": "73d49cb0df4dc10d8e89f19f",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "dd641c6ff9b5828ddeee389b.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 4,
+      "run_id": "dd641c6ff9b5828ddeee389b",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "fed3d7d00757ffd388171c09.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 5,
+      "run_id": "fed3d7d00757ffd388171c09",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "61ce1bd6df49d6df4be07c11.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 5,
+      "run_id": "61ce1bd6df49d6df4be07c11",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-reasoning-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "8233ed90bd4a794c607bcc87.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 1,
+      "run_id": "8233ed90bd4a794c607bcc87",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "227cf7bae0e1ed2891574eaa.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 1,
+      "run_id": "227cf7bae0e1ed2891574eaa",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "578931ce1fe4ce2f40b7ec37.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 2,
+      "run_id": "578931ce1fe4ce2f40b7ec37",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "0ef25602986223886153c263.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 2,
+      "run_id": "0ef25602986223886153c263",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "a1ce9b83bc30916ab5317444.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 3,
+      "run_id": "a1ce9b83bc30916ab5317444",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "e92b0cbe7705d0749d5baad7.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 3,
+      "run_id": "e92b0cbe7705d0749d5baad7",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "443e27aa81e76ae8b444e5c2.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 4,
+      "run_id": "443e27aa81e76ae8b444e5c2",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "7886e9f9089a82156aa7de5f.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 4,
+      "run_id": "7886e9f9089a82156aa7de5f",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "8d3200ffb73a0b43155b0811.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "b_selected",
+      "repetition_index": 5,
+      "run_id": "8d3200ffb73a0b43155b0811",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    },
+    {
+      "admissible_under_r3_contract": false,
+      "budget_gib": 8.0,
+      "file": "d1b215c872e4cad89538e64d.json",
+      "missing_mandatory_fields": [
+        "expert_bytes_read",
+        "expert_miss_bytes",
+        "expert_read_count",
+        "prediction_overhead_seconds",
+        "retention_policy_overhead_seconds"
+      ],
+      "policy_id": "predicted_protect",
+      "repetition_index": 5,
+      "run_id": "d1b215c872e4cad89538e64d",
+      "telemetry_status": "ABSENT",
+      "trace_enabled": false,
+      "workload_id": "r2-11-summarization-v1"
+    }
+  ],
+  "contract": "argine-r3-observability-contract",
+  "contract_version": 1,
+  "counts": {
+    "canonical_by_budget": {
+      "1.5": 40,
+      "4.0": 40,
+      "8.0": 40
+    },
+    "canonical_counted": 120,
+    "control_files": 17,
+    "counted_if_scanned_recursively": 123,
+    "launch_records": 144,
+    "top_level_files": 161,
+    "warmups": 24
+  },
+  "excluded_records": {
+    "control_files": {
+      "count": 17,
+      "files": [
+        "GATE-FAILURE-1794749333.json",
+        "PREFLIGHT-1_5GIB-20261115T183558Z.json",
+        "PREFLIGHT-1_5GIB-20261115T183714Z.json",
+        "PREFLIGHT-4GIB-20261115T093458Z.json",
+        "PREFLIGHT-4GIB-20261115T093517Z.json",
+        "PREFLIGHT-4GIB-20261115T102121Z.json",
+        "PREFLIGHT-4GIB-20261115T122856Z.json",
+        "PREFLIGHT-4GIB-20261115T123059Z.json",
+        "PREFLIGHT-4GIB-20261115T131050Z.json",
+        "PREFLIGHT-4GIB-20261115T131616Z.json",
+        "PREFLIGHT-4GIB-20261115T132752Z.json",
+        "PREFLIGHT-4GIB-20261115T132846Z.json",
+        "PREFLIGHT-4GIB-20261115T162116Z.json",
+        "PREFLIGHT-4GIB-20261115T183610Z.json",
+        "PREFLIGHT-4GIB-20261115T183720Z.json",
+        "PREFLIGHT-8GIB-20261115T183604Z.json",
+        "PREFLIGHT-8GIB-20261115T183725Z.json"
+      ]
+    },
+    "other_noncanonical_records": {
+      "count": 5
+    },
+    "precanonical_trace_enabled_attempts": {
+      "count": 3,
+      "records": [
+        {
+          "budget_gib": 4.0,
+          "classification": "PRECANONICAL_TRACE_ENABLED_ATTEMPT",
+          "counted": true,
+          "decode_tokens_per_second": 0.8289852785095444,
+          "file": "07fc14bd46b3f49b23ac94b4.json",
+          "policy_id": "predicted_protect",
+          "reason": "Trace-enabled attempt excluded from the canonical set: heavy trace logging slows the runtime ~5x (0.83 vs 4.19 TPS), so it cannot be a timing record; it lives outside runtime_results/ top level and was never admitted by the canonical driver.",
+          "relative_path": "PRECANONICAL_TRACE_ENABLED_ATTEMPTS\\07fc14bd46b3f49b23ac94b4.json",
+          "repetition_index": 2,
+          "run_id": "07fc14bd46b3f49b23ac94b4",
+          "warmup": false,
+          "workload_id": "r2-11-coding-v1"
+        },
+        {
+          "budget_gib": 4.0,
+          "classification": "PRECANONICAL_TRACE_ENABLED_ATTEMPT",
+          "counted": true,
+          "decode_tokens_per_second": 0.8361639583277876,
+          "file": "316633d558d8d384686598c0.json",
+          "policy_id": "predicted_protect",
+          "reason": "Trace-enabled attempt excluded from the canonical set: heavy trace logging slows the runtime ~5x (0.83 vs 4.19 TPS), so it cannot be a timing record; it lives outside runtime_results/ top level and was never admitted by the canonical driver.",
+          "relative_path": "PRECANONICAL_TRACE_ENABLED_ATTEMPTS\\316633d558d8d384686598c0.json",
+          "repetition_index": 1,
+          "run_id": "316633d558d8d384686598c0",
+          "warmup": false,
+          "workload_id": "r2-11-coding-v1"
+        },
+        {
+          "budget_gib": 4.0,
+          "classification": "PRECANONICAL_TRACE_ENABLED_ATTEMPT",
+          "counted": true,
+          "decode_tokens_per_second": 0.8426471235328532,
+          "file": "7c6ba31aa8bc6e9bf500f217.json",
+          "policy_id": "b_selected",
+          "reason": "Trace-enabled attempt excluded from the canonical set: heavy trace logging slows the runtime ~5x (0.83 vs 4.19 TPS), so it cannot be a timing record; it lives outside runtime_results/ top level and was never admitted by the canonical driver.",
+          "relative_path": "PRECANONICAL_TRACE_ENABLED_ATTEMPTS\\7c6ba31aa8bc6e9bf500f217.json",
+          "repetition_index": 1,
+          "run_id": "7c6ba31aa8bc6e9bf500f217",
+          "warmup": false,
+          "workload_id": "r2-11-coding-v1"
+        }
+      ]
+    },
+    "preflight_selftest_records": {
+      "classification": "PREFLIGHT_SELFTEST",
+      "count": 1,
+      "files": [
+        "selftest-99ab977ad00e9dab.json"
+      ],
+      "reason": "carries counted=true but has no decode metric: it is a harness self-test, not a model launch, and is excluded from every count of runs"
+    },
+    "warmups": {
+      "count": 24,
+      "reason": "warmup=true, counted=false"
+    }
+  },
+  "reconciliation": {
+    "explains_123_vs_120": true,
+    "launches": "120 counted + 24 warmups",
+    "recursive_counted": "120 canonical + 3 pre-canonical trace-enabled attempts = 123 counted records with a decode metric; one further counted-flagged record is a preflight self-test with no metric and is not a launch",
+    "top_level": "144 launch records + 17 control files"
+  },
+  "telemetry_completeness": {
+    "admissible_under_r3_contract": 0,
+    "per_field_non_null": {
+      "expert_bytes_read": 0,
+      "expert_miss_bytes": 0,
+      "expert_read_count": 0,
+      "prediction_overhead_seconds": 0,
+      "retention_policy_overhead_seconds": 0
+    },
+    "runs_with_all_mandatory_fields": 0,
+    "scope": "canonical 120-run set only",
+    "verdict": "INADMISSIBLE_MISSING_TELEMETRY"
+  }
+}

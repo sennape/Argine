@@ -1,0 +1,22 @@
+{
+ "acquisition_opened": false,
+ "amended_schedule_sha256": "e87dc48518dd0281d5eeadd0c8db7a9cfc2234d0bce9d253f464566e43f511a0",
+ "artifact": "R3-04-CAMPAIGN-EFFICIENCY-AMENDMENT-FREEZE",
+ "files_sha256_lf": {
+  "AMENDMENT.json": "9dbc036233ebef8b68aa38edfc6018ff9daf094988b8dd280cbf9eb2e0962a93",
+  "CLAIM_IMPACT.md": "2122e7dcb2e4b8a2d23b7f095bdec9aee2a91746c5969884b40a07f972e72e9b",
+  "DESIGN_COMPARISON.json": "3d2a87c1e5d3b54855d63fa26d70812a3ed98141a0fa8e33509e354c96777ee2",
+  "EFFICIENCY_REVIEW.json": "af1cc4f7b29e31b614f83f4f374732b096569ff209a38b3afbe045ae1f83d6b4",
+  "README.md": "9bd32a790b3396f0ac39837e742c2554d3893e17890eedd91be3d0333e7ec06b",
+  "UPDATED_TIME_MODEL.json": "0850c66895f29490fc3eab3d3ca7d7de1537a3bc46b11192d4af41a0b798984c",
+  "build_amendment.py": "35b5426db8e52694ac6e117c22c76a35fec3effa137f32c59207b3f4f61b2fc1",
+  "time_model.py": "70c1fde6885b17cb91387829225fcedb25f2ac0952647b115cb672b0688df73f",
+  "validate_amendment.py": "8ab38420da856e248b910030fea7d4cfa11673ca45fb11ab465afb0709fd38c0"
+ },
+ "freeze_sha256": "ea0d6719f6d4f92dd77b597662ea3903bc22db70647e37dd8b4cf9ec06c9b3f6",
+ "gate2_freeze_sha256": "59fd7ac62242e8d126f6a8d7b6b31586b82119f9f8afccd5af20ded9237b2958",
+ "opening_freeze_exists": false,
+ "protocol_freeze_sha256": "a88359b52891f93ec49e67978d92c2eb3b73db588611bce46b3103b2978c1202",
+ "recommended_design": "PRIMARY_PLUS_8G",
+ "status": "AMENDMENT_FROZEN_ACQUISITION_NOT_OPENED"
+}

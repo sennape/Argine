@@ -1,0 +1,3 @@
+SHA256 hash di C:\Users\alpel\Desktop\Argine4\patches\argine-policy-microbench.cpp:
+bedffd0b8efc041c7a5ab593996c833a3f1eeeaf32b18336e621771e77f5cfd1
+CertUtil: - Esecuzione comando hashfile riuscita.

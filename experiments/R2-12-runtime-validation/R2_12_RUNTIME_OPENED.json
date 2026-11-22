@@ -1,0 +1,126 @@
+{
+  "artifact": "R2-12-RUNTIME-OPENED",
+  "schema_version": 1,
+  "state": "R2_12_RUNTIME_OPENED",
+  "prior_state": "R2_12_RUNTIME_READY",
+  "state_machine_position": "3 of 5 (R2_12_PROTOCOL_FROZEN -> R2_12_RUNTIME_READY -> R2_12_RUNTIME_OPENED -> R2_12_RUNTIME_COMPLETE -> R2_12_EVALUATED_CLOSED)",
+  "parent_readiness_commit": "0b615d6",
+  "r2_12_phase0_contract_digest": "3c09433d4b81546f9ae9f2bbdf2217ebc82225e50c9a7545d5f706a0db4913ad",
+  "r2_12_phase0_contract_validate_errors": [],
+  "no_runtime_result_inspected_before_opening": true,
+  "statement": "No runtime_results/ directory, no counted or warmup execution record, and no tokens/s or other scientific-performance figure of any kind was read, computed, or inspected by this agent before writing this artifact. This opening commit is based solely on the frozen protocol and the already-committed readiness evidence (commit 0b615d6), not on any runtime observation.",
+  "successful_readiness_artifact": {
+    "archived_report": "RUNTIME-READINESS-REPORT-ATTEMPT-2-PASS.json",
+    "generated_at_utc": "2026-11-14T14:49:35Z",
+    "overall": "PASS",
+    "n_checks": 23,
+    "n_pass": 22,
+    "n_blocking_failure": 0,
+    "n_advisory": 1
+  },
+  "model_identity": {
+    "sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+    "name": "Qwen3-30B-A3B-Q4_K_M",
+    "model_path_windows": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf"
+  },
+  "runtime_identity": {
+    "sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+    "name": "llama-research-v2"
+  },
+  "hardware_target_identity_observed_at_readiness": {
+    "cpu_identity": "13th Gen Intel(R) Core(TM) i5-1340P",
+    "physical_ram_bytes_detail": "16876888064 bytes",
+    "gpu_or_igpu_identity": "Intel(R) Iris(R) Xe Graphics",
+    "windows_version": "Microsoft Windows 11 Home 10.0.26200",
+    "storage_device_hosting_expert_store": "disk number 0 for C:",
+    "model_sha256_detail": "expected=a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32 actual=a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+    "runtime_sha256_detail": "expected=a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3 actual=a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+    "runtime_resolved_detail": "tier=registered path=C:\\Users\\alpel\\Desktop\\Argine2\\llama-research-v2\\llama-server.exe stale_env_note=None",
+    "argine_llama_dir_detail": "C:\\Users\\alpel\\Desktop\\Argine2\\llama-research-v2",
+    "note": "These are NOT yet a frozen HARDWARE-IDENTITY-STAMP.json -- hardware_contract.json defines that stamp as created at the FIRST REAL RUN's pre-run gate (execution_plan.json.pre_run_machine_gate), which has not happened yet. This section records what the readiness driver observed, for provenance, not a second frozen stamp."
+  },
+  "power_plan": {
+    "guid": "381b4222-f694-41f0-9685-ff5bb260df2e",
+    "name": "Balanced",
+    "must_remain_fixed_for_the_whole_campaign": true
+  },
+  "frozen_runtime_corpus": {
+    "n_workloads": 4,
+    "workload_ids": [
+      "r2-11-coding-v1",
+      "r2-11-instruction-v1",
+      "r2-11-reasoning-v1",
+      "r2-11-summarization-v1"
+    ],
+    "categories_covered": [
+      "coding",
+      "instruction",
+      "reasoning",
+      "summarization"
+    ]
+  },
+  "frozen_policies": {
+    "A": "B_selected(M)",
+    "A_config": {
+      "budget_gib": 4.0,
+      "config_id": "aged_frequency/decay=0.99,interval=64",
+      "family_id": "aged_frequency",
+      "params": {
+        "aging_interval_steps": 64,
+        "decay_factor": 0.99,
+        "decay_form": "exponential_step_decay"
+      }
+    },
+    "B": "PredictedProtectPolicy",
+    "B_predictor": {
+      "family": "decayed_transition",
+      "decay_factor": 0.99,
+      "no_retuning": true,
+      "no_predictor_tournament": true
+    },
+    "no_retuning_no_reselection_no_policy_changes": true
+  },
+  "frozen_budgets_bytes": {
+    "1610612736": {
+      "budget_gib": 1.5,
+      "config_id": "aged_frequency/decay=0.999,interval=1",
+      "family_id": "aged_frequency",
+      "params": {
+        "aging_interval_steps": 1,
+        "decay_factor": 0.999,
+        "decay_form": "exponential_step_decay"
+      }
+    },
+    "4294967296": {
+      "budget_gib": 4.0,
+      "config_id": "aged_frequency/decay=0.99,interval=64",
+      "family_id": "aged_frequency",
+      "params": {
+        "aging_interval_steps": 64,
+        "decay_factor": 0.99,
+        "decay_form": "exponential_step_decay"
+      }
+    },
+    "8589934592": {
+      "budget_gib": 8.0,
+      "config_id": "aged_frequency/decay=0.999,interval=16",
+      "family_id": "aged_frequency",
+      "params": {
+        "aging_interval_steps": 16,
+        "decay_factor": 0.999,
+        "decay_form": "exponential_step_decay"
+      }
+    }
+  },
+  "frozen_repetition_count_per_cell": 5,
+  "frozen_warmup_count_per_cell_per_policy": 1,
+  "frozen_run_order_reference": "run_order.json (ABBA, opening-policy balanced 6/6 across the 12 cells; unchanged)",
+  "matrix_reverified_at_opening": {
+    "total_plan_launches": 144,
+    "session_4gib_total_launches": 48,
+    "session_4gib_counted": 40,
+    "session_4gib_warmup": 8
+  },
+  "scope": "This commit opens R2-12 runtime execution authorization. It does not itself execute any warmup or benchmark. No process launch occurs before this commit exists, and none occurs as part of creating it.",
+  "stop_condition": "Do not execute any warmup or benchmark before this commit exists. This artifact itself performs no execution."
+}

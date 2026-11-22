@@ -1,0 +1,79 @@
+{
+ "artifact": "R3-03B-CAMPAIGN-AUDIT",
+ "problems": [],
+ "counted_records": 80,
+ "record_names_001_080": true,
+ "non_counted_files": [
+  "005.try1.ORPHAN_NONCOUNTED.json"
+ ],
+ "launch_logs": 81,
+ "runtime_sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5",
+ "schedule": "odd blocks A B B A, even blocks B A A B; verified slot-by-slot against an independently built schedule",
+ "attempts": [
+  1,
+  2
+ ],
+ "retried_slots": [
+  5
+ ],
+ "orphan": {
+  "artifact": "R3-03B-E2E-ATTEMPT-MARKER",
+  "attempt": 1,
+  "cleaning_up_logged": false,
+  "inference_completed_in_log": true,
+  "note": "no persisted launch record; never included in any estimator; the same scientific slot is retried under the next try index",
+  "policy_timing_present": false,
+  "slot": {
+   "arm": "B",
+   "block": 2,
+   "config_id": "B-8GiB",
+   "cooldown_before_s": 60,
+   "policy_id": "predicted_protect_sham",
+   "position": 1,
+   "seq": 5
+  },
+  "status": "INCOMPLETE_NONCOUNTED_LAUNCH",
+  "stderr_bytes": 3891,
+  "stderr_log": "005-b02p1-B-try1.stderr.log",
+  "stderr_sha256": "67e5c36c89d4f2baba583394996253d389f463f16dd2df19b5a9bfd38c71a502"
+ },
+ "orphan_zero_weight": {
+  "orphan_has_timing_fields": false,
+  "orphan_identity_is_counted": false,
+  "estimator_inputs": "80 counted summaries (seq 1..80, attempt [1, 2])",
+  "result_unchanged_under_orphan_perturbation": true,
+  "weight": 0.0
+ },
+ "opened": {
+  "blocks": 20,
+  "freeze_sha256": "eb3e87b6d2b7c1457f7a4bbb9d37308eb0a4b4b7adf2ab415f039826bc505173",
+  "runtime_sha256": "8d2e1def2bd46f9f395a9e5662bd04cc8eafad6c77a337de2abcff1f82685ba5",
+  "started_unix": 1795213728.061003
+ },
+ "resumed": [
+  {
+   "accepted_records_at_resume": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "amendment_sha256": "8d9bf840ddd734fde55ac5ece8dda150f967ff9915b87299dc348c76cbaa72eb",
+   "orphan_markers_created": [
+    "005.try1.ORPHAN_NONCOUNTED.json"
+   ],
+   "resumed_unix": 1795216165.255123
+  }
+ ],
+ "complete": {
+  "launches": 80
+ },
+ "resume_classification": "PROTOCOL_PRESERVING",
+ "resume_evidence": [
+  "resume followed the launch-005 shutdown stall, an operator interrupt inside a launch, not any scientific estimate",
+  "accepted records at resume: 001-004 (one complete ABBA block); they were re-validated, not rerun",
+  "005 was retried under try2 in the same slot; no slot skipped or reordered; N=20 fixed",
+  "the only analysis call is in CAMPAIGN_COMPLETE after the 80th record; no interim estimator existed"
+ ],
+ "all_80_valid": true
+}

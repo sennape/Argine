@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "contract_version": "r2-10-phase0-contract-v1.0",
+  "name": "R2-10 deterministic output contract",
+  "cardinality_rule": "Every predictor MUST return exactly k_{t,l} unique expert IDs for target (t,l), where k_{t,l} = len(selected experts tuple for that routing event as recorded in the trace), read per-event from the trace, never hardcoded to 8 even though 8 is expected for the canonical Qwen3-30B-A3B contract (matches prediction_contract.json.primary_target). No predictor-specific exemption from this rule is permitted ('no predictor should receive special-case privileges').",
+  "universe": "The candidate universe for layer l is range(0, n_experts) from trace.meta.n_experts. All expert IDs returned MUST be valid members of this universe; returning an ID outside [0, n_experts) is an invalid prediction and MUST raise (fail loud), never be silently clipped.",
+  "scoring_to_selection": "A predictor internally produces a real-valued score per candidate expert id in the universe (score may be 0 for unscored/unseen experts). The output contract selects the top-k_{t,l} by score using the deterministic tie-break below; this is the ONLY path from scores to the returned set, applied uniformly to every predictor family including trivial/null ones.",
+  "tie_breaking": {
+    "rule": "Sort candidates by (-score, expert_id) ascending, i.e. higher score first; ties broken by lower expert_id. This is the same stable (layer, expert_id) key direction already frozen in metrics_contract.json.prediction_metrics.metrics[primary].tie_breaking, specialized to a single fixed layer per call.",
+    "determinism": "No hash-map iteration order, no randomness, no wall-clock- or process-dependent tie-break is permitted. The sort key is pure data (score, expert_id)."
+  },
+  "insufficient_history_cold_start": {
+    "definition": "A predictor has 'insufficient history' for position i if its causal state (per causal_boundary.json.allowed) contains fewer distinct observed experts than k_{t,l}, or no observations at all (cold start, i==0 in the same-layer iterator stream).",
+    "rule": "Cold-start/insufficient-history fallback score for every candidate not yet distinguished by the predictor's own causal state is EXACTLY 0.0 (not -inf, not random, not uniform-random tie-break). The tie_breaking rule above then deterministically fills the remaining slots by ascending expert_id among the tied zero-score candidates. This guarantees the cardinality_rule is always satisfiable from t=0 without any predictor-specific cold-start code path."
+  },
+  "duplicate_ids": "A predictor's internal scoring must never assign more than one score to the same expert_id; if an implementation bug produces a duplicate, output_contract.py.apply_output_contract raises ValueError rather than silently de-duplicating, because silent de-duplication could return fewer than k_{t,l} IDs and silently violate the cardinality_rule.",
+  "unseen_experts": "An expert_id in the universe never yet observed in the predictor's causal state is scored 0.0 like any other unobserved candidate (see insufficient_history_cold_start) -- no separate 'unseen' code path; this is a direct consequence of the cold-start rule, not a special case.",
+  "invalid_predictions": "apply_output_contract(scores, k, n_experts) MUST raise ValueError if: len(scores) != n_experts (incomplete universe), k <= 0, k > n_experts, any score is NaN, or the function would otherwise return other than exactly k unique valid IDs. Fail loud, never silently repair.",
+  "reference_implementation": "argine/research2/r2_10/output_contract.py:apply_output_contract -- the single deterministic function every Phase-0 and later predictor family calls; tested directly in tests/test_r2_10_contract.py and tests/test_r2_10_leakage.py."
+}

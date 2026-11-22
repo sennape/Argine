@@ -1,0 +1,98 @@
+{
+  "artifacts": {
+    "expert_store": null,
+    "model": null,
+    "runtime_binary": null
+  },
+  "execution": {
+    "command": null,
+    "exit_code": null,
+    "raw_evidence_paths": [],
+    "stderr_path": null,
+    "stdout_path": null
+  },
+  "experiment": {
+    "baseline_policy": null,
+    "parameters": {
+      "candidate_status": "CANDIDATE",
+      "canonical_windows": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128,
+        256
+      ],
+      "distinct_intervening_definition": "For the same reuse event (e at t_prev, then t_now): the count of DISTINCT layer-local experts observed in any selection at a position strictly between t_prev and t_now, excluding e itself. Conceptually different from token_reuse_gap (a position-interval count, not a distinct-expert count) and never conflated with it under the same name.",
+      "distinct_intervening_thresholds": [
+        4,
+        8,
+        16,
+        32,
+        64
+      ],
+      "null_baseline_replicate_count": 1,
+      "null_baseline_seed": 1234,
+      "quantile_method": "Linear interpolation between order statistics over the sorted sample (NumPy/R 'linear'/type-7 convention): for sorted values and quantile q, h = q * (n - 1); result = sorted[floor(h)] + (h - floor(h)) * (sorted[ceil(h)] - sorted[floor(h)]). No unobserved-tail inference.",
+      "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+      "r2_04_run_id": "cd2b58b019314fafb90304234e6d1907",
+      "r2_05_canonical_digest": "4a1b72cdfcd37144446fc1a106b6fa8d559d10bc0729e1baf16dda7c1fa620df",
+      "r2_05_run_id": "da82e15b61c94019840477642618565a",
+      "r2_06_canonical_digest": "a727edf42735286420d326baad481687167d3d0aba0444a527183c084140926e",
+      "r2_06_run_id": "2e075161f02443ff822279add6938ca4",
+      "reuse_event_definition": "For layer-local expert e selected at position t_prev and next selected at position t_now (t_now > t_prev, t_prev being e's immediately preceding occurrence in this layer): one reuse event, with token_reuse_gap = t_now - t_prev (always >= 1). e's first-ever occurrence in a layer has no t_prev and is a COLD / FIRST OBSERVATION, tracked separately, never assigned an infinite or fabricated gap.",
+      "temporal_unit": "One POSITION = one (token_index, selection) entry yielded, in order, by Trace.token_selections(layer, phase) for one layer; positions are numbered 0, 1, 2, ... in that yielded order (never by raw token_index). A selection is an unordered SET of concurrently selected experts: no artificial within-token ordering is ever constructed.",
+      "token_gap_thresholds": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128,
+        256
+      ]
+    },
+    "seed": null,
+    "workload": null
+  },
+  "git": {
+    "branch": "r2-main",
+    "candidate_status": "CANDIDATE",
+    "clean": true,
+    "commit": "0472a46adc06214c65ed90f3a6e011e475ccee33",
+    "dirty_definition": "tracked files modified (untracked files ignored)",
+    "note": null,
+    "repo_root": "C:\\Users\\alpel\\Desktop\\Argine3"
+  },
+  "hardware": {
+    "cores_logical": 16,
+    "cores_physical": 12,
+    "cpu": "13th Gen Intel(R) Core(TM) i5-1340P",
+    "cpu_source": "windows-registry:ProcessorNameString",
+    "machine": "AMD64",
+    "os": "Windows-11-10.0.26200-SP0",
+    "os_release": "11",
+    "os_version": "10.0.26200",
+    "ram_total": 16876888064
+  },
+  "identity": {
+    "end_utc": "2026-11-08T11:18:57Z",
+    "experiment_id": "R2-07",
+    "outcome": "PASS",
+    "run_id": "af28e8c6dc5044a18e4a86137d59156a",
+    "runner_schema_version": 1,
+    "start_utc": "2026-11-08T11:18:46Z"
+  },
+  "schema_version": 1,
+  "software": {
+    "argine_version": "0.1.0",
+    "os": "Windows-11-10.0.26200-SP0",
+    "python_version": "3.13.9",
+    "runtime_identity": null
+  }
+}

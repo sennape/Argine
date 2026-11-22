@@ -1,0 +1,27 @@
+{
+ "budget_bytes": 4294967296,
+ "budget_violations": 0,
+ "completion_rows": 24672,
+ "decay_score_max_abs_diff": 0.0,
+ "duplicate_events": 0,
+ "events_per_pass": 48,
+ "history_last_ref": "MATCH",
+ "max_policy_resident_bytes": 4294950912,
+ "missing_events": 0,
+ "ok": true,
+ "passes": 514,
+ "physical": {
+  "max_post_service_bytes": 4294950912,
+  "next_before_equal_prev_post_service": 24610,
+  "next_before_greater_than_prev_post_service": 0,
+  "note": "post-service bytes may exceed policy bytes only by physical margin/transient slices; informational",
+  "post_service_over_budget": 0
+ },
+ "policy_event_rows": 24672,
+ "policy_id": "b_selected",
+ "protected_before_compared_events": 24672,
+ "r2_replay": "MATCH",
+ "semantic_events": 24672,
+ "total_evictions": 41786,
+ "trace_bytes": 5134162249
+}

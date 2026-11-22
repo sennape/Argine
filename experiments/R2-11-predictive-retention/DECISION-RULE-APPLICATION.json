@@ -1,0 +1,48 @@
+{
+  "artifact": "R2_11_DECISION_RULE_APPLICATION",
+  "generated_utc": "2026-11-14T09:40:00Z",
+  "implementation": "argine.research2.r2_11.decision.classify() (frozen Phase-0 implementation, unmodified, applying decision_rules.json's primary_decision_rule literally)",
+  "scientific_validity_failure": false,
+  "mean_delta_4gib_ge_0_fail_check": false,
+  "pass_conditions_detail": {
+    "primary_4gib_mean_delta_lt_0": {
+      "value": -87476.85322895646,
+      "pass": true
+    },
+    "bootstrap_ci_upper_lt_0": {
+      "value": -27178.93385517557,
+      "pass": true
+    },
+    "at_least_9_of_12_delta_le_0_at_4gib": {
+      "value": "9/12",
+      "pass": true
+    },
+    "no_single_workload_over_50pct_of_positive_reduction": {
+      "value": 0.27626076260763255,
+      "pass": true
+    },
+    "mean_delta_le_0_at_1_5gib": {
+      "value": -779296.0626223087,
+      "pass": true
+    },
+    "mean_delta_le_0_at_8gib": {
+      "value": 0.0,
+      "pass": true
+    },
+    "zero_budget_violations": {
+      "value": 0,
+      "pass": true
+    },
+    "zero_causal_leakage_failures": {
+      "value": 0,
+      "pass": true
+    },
+    "determinism_checks_pass": {
+      "value": true,
+      "pass": true
+    }
+  },
+  "all_pass_conditions_satisfied": true,
+  "classification": "R2_11_PASS",
+  "r2_12_gate_outcome": "R2-12 MAY BE PROPOSED FOR PROSPECTIVE RUNTIME VALIDATION."
+}

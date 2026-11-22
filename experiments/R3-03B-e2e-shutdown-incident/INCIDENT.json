@@ -1,0 +1,156 @@
+{
+ "artifact": "R3-03B-E2E-SHUTDOWN-INCIDENT",
+ "status": "DIAGNOSED_NO_MODEL_RUN",
+ "campaign_dir": "C:\\Users\\alpel\\Desktop\\Argine4-r3runs\\R3-03B-e2e",
+ "correction": "The campaign did not fail on the first launch: records 001-004 (complete ABBA block 1) are persisted; the interrupt happened in launch 005.",
+ "accepted_records": {
+  "001": {
+   "slot": {
+    "seq": 1,
+    "block": 1,
+    "position": 1,
+    "arm": "A",
+    "policy_id": "b_selected"
+   },
+   "record_sha256": "ec5e8e371c3a9220aa0e0dee381dc23b27871c77404691619e17018cbb1f2107",
+   "stderr_sha256": "9c0ff6851f668245aee0f5d016a07cb43250ed75c7f6593bee6d263a49b9fe59",
+   "admitted": true,
+   "shutdown_mode": "graceful",
+   "token_digest_ok": true,
+   "n_tokens": 512,
+   "policy_timing_calls": 24672,
+   "release_uptime_s": 70.689,
+   "cleaning_up_uptime_s": 150.398,
+   "shutdown_latency_s": 79.7,
+   "status": "ACCEPTED_COUNTED"
+  },
+  "002": {
+   "slot": {
+    "seq": 2,
+    "block": 1,
+    "position": 2,
+    "arm": "B",
+    "policy_id": "predicted_protect_sham"
+   },
+   "record_sha256": "04ea7e8cf220e34024b3a57f0592cc927271e3b5ad2de5054c6d330c02904001",
+   "stderr_sha256": "3b98c0004f6108b252e4a6a748606d57bd60e001fe5f6d561a425b58c17da8c8",
+   "admitted": true,
+   "shutdown_mode": "graceful",
+   "token_digest_ok": true,
+   "n_tokens": 512,
+   "policy_timing_calls": 24672,
+   "release_uptime_s": 79.29,
+   "cleaning_up_uptime_s": 123.185,
+   "shutdown_latency_s": 43.9,
+   "status": "ACCEPTED_COUNTED"
+  },
+  "003": {
+   "slot": {
+    "seq": 3,
+    "block": 1,
+    "position": 3,
+    "arm": "B",
+    "policy_id": "predicted_protect_sham"
+   },
+   "record_sha256": "af939a764c766e63dc4fdee845a13ed3fd094f0694572cdfd628ec798d529140",
+   "stderr_sha256": "b1c9a22a73498df7907fb3d6a8f7b467f3daa0542f862f3062b70a945be1ee9a",
+   "admitted": true,
+   "shutdown_mode": "graceful",
+   "token_digest_ok": true,
+   "n_tokens": 512,
+   "policy_timing_calls": 24672,
+   "release_uptime_s": 81.928,
+   "cleaning_up_uptime_s": 233.512,
+   "shutdown_latency_s": 151.6,
+   "status": "ACCEPTED_COUNTED"
+  },
+  "004": {
+   "slot": {
+    "seq": 4,
+    "block": 1,
+    "position": 4,
+    "arm": "A",
+    "policy_id": "b_selected"
+   },
+   "record_sha256": "13f7c9ec3b04ef9eec1c36206b07c2b661b408d8d3f8a094ad4364534333a12d",
+   "stderr_sha256": "e7c3de308027eecc3b435b0acf6afff60c2ae643ecd19c7fcfd3097d458d7d97",
+   "admitted": true,
+   "shutdown_mode": "graceful",
+   "token_digest_ok": true,
+   "n_tokens": 512,
+   "policy_timing_calls": 24672,
+   "release_uptime_s": 68.759,
+   "cleaning_up_uptime_s": 73.525,
+   "shutdown_latency_s": 4.8,
+   "status": "ACCEPTED_COUNTED"
+  }
+ },
+ "counted_launches_acquired": 4,
+ "complete_abba_blocks_acquired": 1,
+ "acceptance_semantics": "A launch is accepted only when validate_launch passes and write_atomic persists records/NNN.json (tmp file then replace). FAILED/INTERRUPTED/ORPHAN markers and *.tryK.* files are never accepted. load_accepted() re-validates 001-004 against the frozen admission rule and the frozen schedule: all four pass.",
+ "launch_005": {
+  "slot": {
+   "seq": 5,
+   "block": 2,
+   "position": 1,
+   "arm": "B",
+   "policy_id": "predicted_protect_sham"
+  },
+  "attempt": 1,
+  "status": "INCOMPLETE_NONCOUNTED_LAUNCH",
+  "record_present": false,
+  "inference_completed_in_log": true,
+  "release_uptime_s": 79.329,
+  "eval_512_tokens_logged": true,
+  "policy_timing_emitted": false,
+  "cleaning_up_logged": false,
+  "stderr_sha256": "67e5c36c89d4f2baba583394996253d389f463f16dd2df19b5a9bfd38c71a502",
+  "stderr_bytes": 3891,
+  "last_stderr_write_utc": "2026-11-20T22:42:36Z",
+  "acceptance_point_reached": false,
+  "graceful_wait_exceeded_180s": "inferred (not directly observed): the reported traceback is in proc.wait(timeout=60), which graceful_stop reaches only after its 180 s graceful wait expired and proc.terminate() was issued",
+  "terminate_wait_60s_elapsed": "unknown; KeyboardInterrupt arrived inside that wait, so TimeoutExpired was never raised",
+  "process_alive_afterwards": "not determinable from persisted files; check tasklist before resuming"
+ },
+ "shutdown_latency_release_to_cleaning_up_s": {
+  "e2e_001_004": [
+   79.7,
+   43.9,
+   151.6,
+   4.8
+  ],
+  "e2e_005": ">=180 (no 'cleaning up' line; inferred)",
+  "conformance_traced_launches": {
+   "A-8GiB-OFF": {
+    "release_uptime_s": 260.23,
+    "cleaning_up_uptime_s": 299.744,
+    "latency_s": 39.5
+   },
+   "A-8GiB-ON": {
+    "release_uptime_s": 267.09,
+    "cleaning_up_uptime_s": 300.002,
+    "latency_s": 32.9
+   },
+   "B-8GiB-OFF": {
+    "release_uptime_s": 278.052,
+    "cleaning_up_uptime_s": 299.998,
+    "latency_s": 21.9
+   },
+   "B-8GiB-ON": {
+    "release_uptime_s": 285.366,
+    "cleaning_up_uptime_s": 299.999,
+    "latency_s": 14.6
+   }
+  },
+  "note": "Ctrl-C is sent immediately after the HTTP response (urlopen returns at ~release). Latency to the server's 'cleaning up' line is therefore the shutdown reaction time. Source: server uptime stamps in each stderr log."
+ },
+ "findings": [
+  "Graceful shutdown works: 001-004 and the four conformance launches all exited gracefully and emitted exactly one policy_timing record.",
+  "Reaction latency is heavy-tailed (4.8, 43.9, 79.7, 151.6 s in 001-004; 14.6-39.5 s in conformance), far above the ~5 s of an idle server. 003 used 84% of the 180 s cap; 005 exceeded it.",
+  "The stall is BEFORE the 'cleaning up' log line, i.e. in console-signal delivery, the handler, or the main-loop wake-up; not in destructors or policy_timing emission. In the pinned server source the handler path (mcp_mgr.shutdown + queue terminate) contains no waits.",
+  "Root cause of the latency is NOT determined from the persisted evidence (candidates: Windows console Ctrl-event delivery to a non-group-leader child, host I/O or memory pressure). No hypothesis is asserted.",
+  "Real tooling defects found: (1) a resume would reuse try1 and overwrite the 005 try1 logs; (2) KeyboardInterrupt left no incident state and could leave llama-server running; (3) the 180 s graceful cap is inside the observed latency tail, so it would discard valid inferences (only policy_timing is missing) and make a second failure of some slot likely over 80 launches."
+ ],
+ "not_a_defect": "A manual interrupt of a slow shutdown is not by itself a reason to change code; the changes above are justified by the three defects, not by the interrupt.",
+ "inference_values_not_analysed": "per-launch timing values in the accepted records were not analysed or used in this incident review; analysis stays deferred to the frozen estimator after 80 accepted launches"
+}

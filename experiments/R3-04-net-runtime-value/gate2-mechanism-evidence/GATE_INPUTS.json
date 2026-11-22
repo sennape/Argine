@@ -1,0 +1,77 @@
+{
+ "off_vs_on": {
+  "byte_identical": true,
+  "diff_rows": 0,
+  "first_diff_row": null,
+  "ok": true,
+  "rows": null
+ },
+ "sham_vs_a": {
+  "1.5": {
+   "diff_rows": 0,
+   "fields": [
+    "requested_experts",
+    "hit_experts",
+    "miss_experts",
+    "evicted",
+    "resident_before",
+    "resident_after",
+    "policy_resident_bytes_after",
+    "cache_resident_bytes_before",
+    "cache_resident_bytes_after",
+    "bytes_of_layer",
+    "budget_bytes",
+    "step",
+    "layer",
+    "semantic_event"
+   ],
+   "first_diff_row": null,
+   "ok": true,
+   "rows": 49344
+  },
+  "4": {
+   "diff_rows": 0,
+   "fields": [
+    "requested_experts",
+    "hit_experts",
+    "miss_experts",
+    "evicted",
+    "resident_before",
+    "resident_after",
+    "policy_resident_bytes_after",
+    "cache_resident_bytes_before",
+    "cache_resident_bytes_after",
+    "bytes_of_layer",
+    "budget_bytes",
+    "step",
+    "layer",
+    "semantic_event"
+   ],
+   "first_diff_row": null,
+   "ok": true,
+   "rows": 49344
+  },
+  "8": {
+   "diff_rows": 0,
+   "fields": [
+    "requested_experts",
+    "hit_experts",
+    "miss_experts",
+    "evicted",
+    "resident_before",
+    "resident_after",
+    "policy_resident_bytes_after",
+    "cache_resident_bytes_before",
+    "cache_resident_bytes_after",
+    "bytes_of_layer",
+    "budget_bytes",
+    "step",
+    "layer",
+    "semantic_event"
+   ],
+   "first_diff_row": null,
+   "ok": true,
+   "rows": 49344
+  }
+ }
+}

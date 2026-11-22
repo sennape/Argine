@@ -1,0 +1,107 @@
+\section{Clairvoyant-Comparator Gap Decomposition (R-04)}
+\label{sec:recoverable-envelope}
+
+R-04 synthesizes the R-02/R-03 evidence into a single decomposition,
+applied at every tested budget, and reported here as the headline
+clairvoyant-comparator-gap result. No new replay, model, or runtime invocation is performed in this
+step; it is a pure offline synthesis over already-registered evidence.
+
+\begin{definition}[Structural, Belady-comparator, and total decomposition]
+\label{def:decomposition}
+Let $S_\budget$, $G_\budget$, and $O_{B,\budget}$ denote the miss-byte
+totals (at a fixed budget $\budget$) of Runtime-Sharded-LRU, Global-LRU,
+and the implemented clairvoyant comparator \textsc{Oracle-Global-Belady}
+($O_B$), respectively. Define
+\begin{align}
+\text{Structural sharding gap} &= S_\budget - G_\budget, \label{eq:structural} \\
+\text{Belady comparator gap} &= G_\budget - O_{B,\budget}, \label{eq:information} \\
+\text{Total runtime-to-comparator gap} &= S_\budget - O_{B,\budget}. \label{eq:total}
+\end{align}
+By construction, Eq.~\eqref{eq:structural} $+$ Eq.~\eqref{eq:information}
+$=$ Eq.~\eqref{eq:total} exactly, for both the miss-byte and miss-count
+views, independent of the sign of the structural term. The corresponding
+\emph{relative} fractions (each normalized by its own comparison's first
+operand) are \textbf{not} summed arithmetically, since their denominators
+differ -- see Table~\ref{tab:r2-03-sweep} vs.\ the structural
+percentages quoted in Section~\ref{sec:sensitivity-capacity}.
+\end{definition}
+
+The \emph{Belady comparator gap} (Eq.~\ref{eq:information}) is the measured
+miss-byte separation between the selected global causal baseline and the
+implemented clairvoyant comparator. It motivates the routing-characterization
+and causal-prediction stages as a measurement
+of unexplained separation from $O_B$, not as a proven maximum causal
+opportunity: $O_B$ is not established as byte-optimal, and there is no
+guaranteed ordering between $O_B$ and the causal optimum $C^*$
+(Section~\ref{sec:problem-formulation}). The \emph{structural sharding
+gap} (Eq.~\ref{eq:structural}) is reported for completeness but is not the
+focus of this report, and carries the limitation that the offline
+Runtime-Sharded-LRU's shard-to-key mapping is statistical rather than the
+runtime's exact address-derived mapping.
+
+\input{tables/table4_r2_04_synthesis}
+
+\paragraph{Absolute vs.\ relative comparator gaps occur at different
+budgets.} A single important distinction this synthesis makes explicit:
+the budget at which the \emph{relative} Belady comparator gap is maximized
+among tested points ($8$~GiB, $70.66\%$) is \textbf{not} the budget at
+which the \emph{absolute} miss-byte comparator gap is maximized
+($1.5$~GiB, $103{,}574{,}900{,}736$ bytes $\approx 103.57$~GB). Under more
+severe memory pressure (lower budgets), both Global-LRU and $O_B$ incur
+more total misses, so the \emph{absolute} volume of miss bytes avoided by
+$O_B$ can be larger even while its \emph{relative} advantage (as a
+fraction of Global-LRU's own, larger, miss-byte total) is smaller. Neither
+framing is more ``correct''; they answer different engineering questions
+(fraction of traffic reduced by the comparator vs.\ total bytes reduced) and
+are reported separately, never conflated into one number.
+
+\paragraph{Comparator-gap persistence under pressure.} At every one of the
+four capacity-constrained tested budgets ($1.5$--$8$~GiB, where
+Global-LRU's own eviction count is nonzero), $O_B$ has strictly fewer miss
+bytes and misses than Global-LRU. The $16$~GiB policy-indifference point is
+excluded from this statement by definition (no evictions occur, so policies
+do not differ at that tested point).
+
+\paragraph{Observed curve shape.} The relative Belady comparator gap curve
+(Figure~\ref{fig:headroom-vs-budget}) is classified, deterministically
+from the five tested points, as a \emph{rise followed by a collapse at
+the observed effective-residency budget}: non-decreasing across
+$1.5$--$8$~GiB, then dropping to its global minimum ($0$) exactly at
+$16$~GiB, the first tested budget exhibiting policy convergence. This
+classification is derived mechanically from the tested points, not
+assumed in advance.
+
+\begin{definition}[Future causal-prediction comparator-relative metric -- documented,
+not evaluated]
+\label{def:comparator-relative-metric}
+For a selected causal baseline with miss bytes $B_\budget$, the implemented
+clairvoyant comparator $O_B$ with miss bytes $O_{B,\budget}$, and a future
+causal policy or predictor-driven policy with miss bytes $P_\budget$, all
+at budget $\budget$, define
+\begin{equation}
+\mathrm{RecoveryOfBeladyGap}_\budget \;=\;
+\frac{B_\budget - P_\budget}{B_\budget - O_{B,\budget}}, \label{eq:comparator-relative}
+\end{equation}
+when $B_\budget \ne O_{B,\budget}$. This metric is signed (negative values
+are allowed when $P_\budget > B_\budget$) and values $>1$ are
+mathematically possible under CASE~C if $P_\budget < O_{B,\budget}$; a
+value $>1$ means $P$ beats $O_B$ on miss bytes, not that $P$ beats the true
+offline optimum $O^*$. The denominator is a measured comparator gap, not a
+proven maximum causal-recovery gap. The metric is defined here as a
+predeclared comparator-relative target for the causal-prediction and
+real-runtime validation stage, but
+\textbf{cannot be evaluated} -- no causal predictor/policy $P$ exists yet.
+\end{definition}
+
+\paragraph{Causal recovery: explicitly unmeasured (in this section).} We
+emphasize, as strongly as the evidence allows: nothing in \emph{this
+section} measures or estimates the fraction of any proven causal-recovery
+opportunity that a practical causal predictor could recover. The
+comparator-relative quantity in Eq.~\eqref{eq:comparator-relative} is not evaluated in
+the clairvoyant-comparator-gap or routing-characterization analyses;
+Section~\ref{sec:iic} reports its
+causal predictor and retention-policy evaluation using the frozen R-11/
+R-12 decision rules' own metrics rather than this exact comparator-relative
+form (see Section~\ref{sec:iib-synthesis} for why). A separate metric
+$\mathrm{Recovery\_vs\_LRU} = (B-P)/B$ may also have been useful, but
+neither metric is evaluated here.

@@ -1,0 +1,76 @@
+{
+ "CHEAP": {
+  "class": "single CART regression tree",
+  "deterministic": true,
+  "eviction_rule": "evict the candidate with the highest leaf rank; ties: larger F01 (LRU), then layer ascending, then expert ascending",
+  "export": "nested integer comparisons; each leaf stores an integer leaf rank = position of its mean y in ascending order over leaves (ties by node id); no floating point at decision time",
+  "forbidden": [
+   "ensembles",
+   "neural networks",
+   "online learning",
+   "a second CHEAP architecture"
+  ],
+  "four_feature_procedure": "fit on all 16 features; if more than 4 distinct features are used, rank features by total SSE reduction in that tree (ties: lower index), keep the top 4, refit on those 4 with the same settings. TRAIN only.",
+  "leaf_support_rule": "a split is admissible only if each child holds >= 1000 rows drawn from >= 50 distinct sampled decisions",
+  "loss": "squared error on y",
+  "max_depth": 3,
+  "max_distinct_features": 4,
+  "min_decisions_per_leaf": 50,
+  "min_samples_leaf": 1000,
+  "random_seed": 0,
+  "split_search": "exhaustive over integer thresholds t (left branch: x <= t); maximize SSE reduction; ties: lower feature index in feature_order, then lower t",
+  "stop": "a node is a leaf if depth = 3, if no split leaves >= min_samples_leaf rows on both sides, or if the best SSE reduction is <= 0"
+ },
+ "RICH": {
+  "binning": "per feature, edges = distinct values if <= 255, else the 255 quantile cut points of TRAIN rows (numpy.quantile, method='lower'); bins fixed from TRAIN",
+  "class": "gradient-boosted regression trees (single configuration, numpy implementation)",
+  "determinism": "pure numpy, single thread; numpy version and SHA-256 of the fitted model recorded in the Phase 1 lock",
+  "deterministic": true,
+  "eviction_rule": "predictions are quantized to integers round(pred * 2^16) before ranking; evict the maximum; ties: larger F01, then layer ascending, then expert ascending",
+  "init": "mean of y on TRAIN",
+  "learning_rate": 0.1,
+  "loss": "squared error on y",
+  "max_depth": 6,
+  "min_samples_leaf": 200,
+  "random_seed": 0,
+  "role": "diagnostic information ceiling of the frozen feature vocabulary; NOT a runtime candidate; inference cost ignored",
+  "rounds": 200,
+  "split_ties": "lower feature index, then lower bin",
+  "subsampling": "none (rows and features)"
+ },
+ "artifact": "R4-00-MODEL-CONTRACT",
+ "feature_order": [
+  "events_since_last_ref",
+  "decayed_count_fx",
+  "events_since_admission",
+  "hits_since_admission",
+  "reload_count",
+  "prev_reuse_interval",
+  "mean_reuse_interval",
+  "in_prev_layer_event",
+  "occupancy_permille",
+  "pending_misses",
+  "recency_rank",
+  "frequency_rank",
+  "expert_bytes",
+  "layer_id",
+  "expert_id",
+  "layer_cycle_offset"
+ ],
+ "shared_policy_rules": {
+  "admission": "demand admission",
+  "candidate_set": "current-event shield with total fallback (FEATURE_CONTRACT)",
+  "implementation_dependencies": "numpy only (no new production dependency)"
+ },
+ "teacher": {
+  "decision_unit": "each eviction required while admitting one missed expert; several evictions of one event are separate decisions in sequence",
+  "distance": "d = nu_j(k) - j, nu from argine.research.oracle.next_uses over the served event list; never used again => inf",
+  "no_future_in_policy": "targets never enter features; the deployed policies see only FEATURE_CONTRACT inputs",
+  "sampling": "eviction decisions of the A trajectory are numbered 0, 1, 2, ... per TRAIN trace over all served events (prefill included); decisions with index mod 64 == 0 are sampled; all candidates of a sampled decision are rows; total decisions and rows are reported",
+  "shift_diagnostic": "non-gating: on TRAIN, report agreement of CHEAP's victim with the teacher victim under A's states and under CHEAP's own states",
+  "target": "y = log2(1 + d) for finite d; y = 21.0 for d = inf. Phase 1 asserts that every trace has fewer than 2^20 served events, so every finite y < 20 < 21.",
+  "teacher_victim": "argmax d over candidates (Belady rule); used only for diagnostics",
+  "trajectory": "TRAIN labels come from the A (b_selected) replay state trajectory on each TRAIN trace (the frozen reference policy); the learned policies are evaluated under their own cache state."
+ },
+ "validation_use": "VALIDATION scores the TRAIN-fitted CHEAP and RICH once; there are no alternatives to select between."
+}

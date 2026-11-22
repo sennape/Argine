@@ -1,0 +1,36 @@
+{
+ "artifact": "R4-01-VALIDATION-DECISION",
+ "authorizes": "Nothing by itself. EVAL is opened exactly once in Phase 2 whatever this result is (DECISION_RULES.eval_opening).",
+ "cheap_capture_exact": "-7411084/20561187",
+ "cheap_capture_float": -0.3604404745698777,
+ "cheap_meets_validation_gate": false,
+ "decayed_count_capture_float": -0.05601476218274752,
+ "eval_state": "LOCKED",
+ "final_classification": "NOT COMPUTED: requires EVAL (Phase 2)",
+ "integrity_ok": true,
+ "nue_x_capture_float": 0.07416079626142207,
+ "per_workload_cheap_sign": {
+  "r2-11-coding-v1": "-",
+  "r2-11-coding-v2": "-",
+  "r2-11-coding-v3": "-",
+  "r2-11-instruction-v1": "-",
+  "r2-11-instruction-v2": "-",
+  "r2-11-instruction-v3": "-",
+  "r2-11-reasoning-v1": "-",
+  "r2-11-reasoning-v2": "-",
+  "r2-11-reasoning-v3": "-",
+  "r2-11-summarization-v1": "-",
+  "r2-11-summarization-v2": "-",
+  "r2-11-summarization-v3": "-"
+ },
+ "policy_changed_after_validation": false,
+ "rich_capture_float": 0.1545174653583959,
+ "rich_meets_validation_half_of_rich_gate": false,
+ "rule": "capture_VAL(CHEAP) >= 1/4 (DECISION_RULES.rules.A, VALIDATION half); 24.999% remains below the threshold",
+ "validation_overlap_sensitivity_nongating": {
+  "CHEAP": -0.35421926838874657,
+  "DECAYED_COUNT": -0.061437116908283775,
+  "NUE_X": 0.07404355282264005,
+  "RICH": 0.15519309723493524
+ }
+}

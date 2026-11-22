@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{Experimental configuration of the clairvoyant-comparator analysis.}
+\label{tab:configuration}
+\small
+\begin{tabular}{@{}lp{7.9cm}@{}}
+\toprule
+Workload trace source & \texttt{run-00-4G} (coding workload, 30B-A3B MoE) \\
+Phase analyzed & decode \\
+Expert-memory budgets tested (GiB) & 1.5, 2, 4, 8, 16 \\
+Reproduction (anchor) budget & 4~GiB \\
+Causal baselines & Runtime-Sharded-LRU, Global-LRU, LFU \\
+Clairvoyant comparator ($O_B$) & \textsc{Oracle-Global-Belady} / \texttt{BeladyGlobal}: Belady-style farthest-next-use, offline full-future; not proven byte-optimal under variable expert sizes (CASE~C) \\
+Replay semantics & byte-budgeted residency, per-expert-per-layer granularity \\
+\bottomrule
+\end{tabular}
+\end{table}

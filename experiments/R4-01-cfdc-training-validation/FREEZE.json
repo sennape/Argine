@@ -1,0 +1,36 @@
+{
+ "artifact": "R4-01-FREEZE",
+ "classification_inputs": {
+  "cheap_meets_validation_gate": false,
+  "cheap_validation_capture": -0.3604404745698777
+ },
+ "contract_digest": "8d89ecd8198db93000456cde58f995e4fa23124d554402b61170a776d9a0e74f",
+ "eval_state": "LOCKED",
+ "files_sha256": {
+  "CHEAP_MODEL.json": "5c51be3dd445c4f62729e7c15e2eefa3b2078e055d713acc5b17a5f0192eb159",
+  "CHEAP_RULE.md": "a4bbeaa9392f7c5f8b2db143422d8ec7d8acd98166a899740a303a47601cd2a7",
+  "FEATURE_IMPLEMENTATION.json": "0c31e78edb63ab4035d0f3a385ce857391dec169523ee6724eac27e15a25b92a",
+  "IMPLEMENTATION.json": "8bf7e21f76e38f532648a564850c6ed058021b863506aeceb097d06a46d2dcfc",
+  "MODEL_HASHES.json": "2772851089425a9e5ff65fed828e6fb81e711b88886a13d465ee9f532817c435",
+  "PROVENANCE.json": "0a5acee52044190328d16998f70ba313bdcc8572c76e460ee39feef4ead95441",
+  "README.md": "7309309ce74ebfb55e02eb539b41b35e85fbf72d3832b605d624193717c03e75",
+  "REPLAY_FIDELITY.json": "db3c91c8357119f100d4fd9edf8f004a3854d9202a7b4e7d5872160344bb901d",
+  "RICH_MODEL.json": "61e899e018c06c9ba144d4c3eec8fea6e922d1c93df5c1814625b89d0f59e1e3",
+  "TEACHER_MANIFEST.json": "9702055084653d54e9daad8573177613fae1611a80874b25f3cde8af35838722",
+  "TRAIN_MANIFEST.json": "f95aa930115702925a6c0bd0025f606479d20e26a115518f17eee716b461ee6a",
+  "VALIDATION_DECISION.json": "dbc06e3ef7413dafed9e01f4b07e40db688e4d1feae1718739ceb8a90956f693",
+  "VALIDATION_OPENED.json": "b17e73430ea08edd20be91fac00c2f9726ecb677fc28d0853a2407712dd2459c",
+  "VALIDATION_PLAN.json": "dda41c9008f8717e00de2a70bd334195e5756aa4908d694f4b0fbb6fadc6d9e5",
+  "VALIDATION_RESULTS.json": "0ca96b04a5521da43d5af4ea1db30aa840cf1a7b595aef0765164bb6e2bb8834",
+  "_rich_infer.c": "f7616429593740b374115c1aeb26e66fc6f44d1eb12e25123d7c4c2a6f417a12",
+  "engine.py": "289bf2c783b54e5fe5d822da6aa964dd6d1d7b1659e42a7fa2c88ff99e6a6837",
+  "models.py": "f973722329f0bea979d8643cd1ecf66b730744702270faf11e79ace7dd433954",
+  "phase1.py": "3f27e1ccea9b62e1e15c17486ce8585c6e0908cff041d56abbb02d57cf277c40",
+  "tests/test_phase1.py": "15ecfb8589a5fbdbec9a4926072c4994a156c445b0a754bc947882ea41e82891"
+ },
+ "freeze_sha256": "dbea96e96a386286e49b93e733fb1ed68b5fe22771d9b4d9cf7d8cf55f1756d5",
+ "implementation_commit": "db84d702989a3334578b00c1922063056118cd94",
+ "next": "Phase 2 (EVAL opened once) only on explicit instruction",
+ "phase0_contract_digest": "fa0ff8d4c93b463a99bdba4a65625251fa00c8102f5b2d788f8f22e73a20d64e",
+ "state": "R4_CFDC_PHASE1_VALIDATED"
+}

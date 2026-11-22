@@ -1,0 +1,680 @@
+{
+ "all_exact": true,
+ "artifact": "R4-01-REPLAY-FIDELITY",
+ "belady_note": "BELADY is the frozen argine.research.oracle.BeladyGlobal class driven through the Phase 1 event-list adapter (the same adapter pattern as R3-05 r2.py); its frozen reference exists on the Research canonical stream only",
+ "checks": [
+  {
+   "actual": {
+    "evictions": 106490,
+    "hits": 93967,
+    "miss_bytes": 306277576704,
+    "misses": 106491
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "evictions",
+    "hits",
+    "miss_bytes",
+    "misses"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "evictions": 106490,
+    "hits": 93967,
+    "miss_bytes": 306277576704,
+    "misses": 106491
+   },
+   "frozen_source": "R3-05 r2-belady-ceiling/RESULTS.json",
+   "policy": "A",
+   "seconds": 4.6,
+   "stream": "research canonical decode stream (24,672 events, 1.5 GiB)"
+  },
+  {
+   "actual": {
+    "evictions": 63179,
+    "hits": 137280,
+    "miss_bytes": 181767868416,
+    "misses": 63178
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "evictions",
+    "hits",
+    "miss_bytes",
+    "misses"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "evictions": 63179,
+    "hits": 137280,
+    "miss_bytes": 181767868416,
+    "misses": 63178
+   },
+   "frozen_source": "R3-05 r2-belady-ceiling/RESULTS.json",
+   "policy": "BELADY",
+   "seconds": 0.4,
+   "stream": "research canonical decode stream (24,672 events, 1.5 GiB)"
+  },
+  {
+   "actual": {
+    "evictions": 102679,
+    "hits": 97778,
+    "miss_bytes": 295327457280,
+    "misses": 102680
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "evictions",
+    "hits",
+    "miss_bytes",
+    "misses"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "evictions": 102679,
+    "hits": 97778,
+    "miss_bytes": 295327457280,
+    "misses": 102680
+   },
+   "frozen_source": "R3-05 r4-nue-candidate-gate/EVAL_RESULTS.json raw.NUE_X",
+   "policy": "NUE_X",
+   "seconds": 13.8,
+   "stream": "research canonical decode stream (24,672 events, 1.5 GiB)"
+  },
+  {
+   "actual": {
+    "accesses": 146304,
+    "events": 18288,
+    "evictions_total": 91939,
+    "hits": 69917,
+    "miss_bytes": 219677184000,
+    "misses": 76387,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 381
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "accesses",
+    "events",
+    "evictions_total",
+    "hits",
+    "miss_bytes",
+    "misses",
+    "peak_resident_bytes",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "accesses": 146304,
+    "events": 18288,
+    "evictions_total": 91939,
+    "hits": 69917,
+    "miss_bytes": 219677184000,
+    "misses": 76387,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 381
+   },
+   "frozen_source": "R3-05 r4-nue-candidate-gate/DEV_RESULTS.json runs[coding-v1__seed-42].A",
+   "policy": "A",
+   "seconds": 3.8,
+   "stream": "TRAIN coding-v1__seed-42"
+  },
+  {
+   "actual": {
+    "accesses": 146304,
+    "events": 18288,
+    "evictions_total": 89219,
+    "hits": 71766,
+    "miss_bytes": 214403383296,
+    "misses": 74538,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 381
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "accesses",
+    "events",
+    "evictions_total",
+    "hits",
+    "miss_bytes",
+    "misses",
+    "peak_resident_bytes",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "accesses": 146304,
+    "events": 18288,
+    "evictions_total": 89219,
+    "hits": 71766,
+    "miss_bytes": 214403383296,
+    "misses": 74538,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 381
+   },
+   "frozen_source": "R3-05 r4-nue-candidate-gate/DEV_RESULTS.json runs[coding-v1__seed-42].NUE_X:LEX",
+   "policy": "NUE_X",
+   "seconds": 11.3,
+   "stream": "TRAIN coding-v1__seed-42"
+  },
+  {
+   "actual": {
+    "accesses": 196224,
+    "events": 24528,
+    "evictions_total": 113167,
+    "hits": 92076,
+    "miss_bytes": 299499577344,
+    "misses": 104148,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "accesses",
+    "events",
+    "evictions_total",
+    "hits",
+    "miss_bytes",
+    "misses",
+    "peak_resident_bytes",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "accesses": 196224,
+    "events": 24528,
+    "evictions_total": 113167,
+    "hits": 92076,
+    "miss_bytes": 299499577344,
+    "misses": 104148,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 511
+   },
+   "frozen_source": "R3-05 r4-nue-candidate-gate/DEV_RESULTS.json runs[instruction-v1__seed-42].A",
+   "policy": "A",
+   "seconds": 4.9,
+   "stream": "TRAIN instruction-v1__seed-42"
+  },
+  {
+   "actual": {
+    "accesses": 196224,
+    "events": 24528,
+    "evictions_total": 109033,
+    "hits": 95635,
+    "miss_bytes": 289138434048,
+    "misses": 100589,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "accesses",
+    "events",
+    "evictions_total",
+    "hits",
+    "miss_bytes",
+    "misses",
+    "peak_resident_bytes",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "accesses": 196224,
+    "events": 24528,
+    "evictions_total": 109033,
+    "hits": 95635,
+    "miss_bytes": 289138434048,
+    "misses": 100589,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 511
+   },
+   "frozen_source": "R3-05 r4-nue-candidate-gate/DEV_RESULTS.json runs[instruction-v1__seed-42].NUE_X:LEX",
+   "policy": "NUE_X",
+   "seconds": 15.5,
+   "stream": "TRAIN instruction-v1__seed-42"
+  },
+  {
+   "actual": {
+    "accesses": 196224,
+    "events": 24528,
+    "evictions_total": 119935,
+    "hits": 85862,
+    "miss_bytes": 316828569600,
+    "misses": 110362,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "accesses",
+    "events",
+    "evictions_total",
+    "hits",
+    "miss_bytes",
+    "misses",
+    "peak_resident_bytes",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "accesses": 196224,
+    "events": 24528,
+    "evictions_total": 119935,
+    "hits": 85862,
+    "miss_bytes": 316828569600,
+    "misses": 110362,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 511
+   },
+   "frozen_source": "R3-05 r4-nue-candidate-gate/DEV_RESULTS.json runs[reasoning-v1__seed-42].A",
+   "policy": "A",
+   "seconds": 5.2,
+   "stream": "TRAIN reasoning-v1__seed-42"
+  },
+  {
+   "actual": {
+    "accesses": 196224,
+    "events": 24528,
+    "evictions_total": 114390,
+    "hits": 90886,
+    "miss_bytes": 302459793408,
+    "misses": 105338,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "accesses",
+    "events",
+    "evictions_total",
+    "hits",
+    "miss_bytes",
+    "misses",
+    "peak_resident_bytes",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "accesses": 196224,
+    "events": 24528,
+    "evictions_total": 114390,
+    "hits": 90886,
+    "miss_bytes": 302459793408,
+    "misses": 105338,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 511
+   },
+   "frozen_source": "R3-05 r4-nue-candidate-gate/DEV_RESULTS.json runs[reasoning-v1__seed-42].NUE_X:LEX",
+   "policy": "NUE_X",
+   "seconds": 15.9,
+   "stream": "TRAIN reasoning-v1__seed-42"
+  },
+  {
+   "actual": {
+    "accesses": 196224,
+    "events": 24528,
+    "evictions_total": 119688,
+    "hits": 86411,
+    "miss_bytes": 315372220416,
+    "misses": 109813,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "accesses",
+    "events",
+    "evictions_total",
+    "hits",
+    "miss_bytes",
+    "misses",
+    "peak_resident_bytes",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "accesses": 196224,
+    "events": 24528,
+    "evictions_total": 119688,
+    "hits": 86411,
+    "miss_bytes": 315372220416,
+    "misses": 109813,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 511
+   },
+   "frozen_source": "R3-05 r4-nue-candidate-gate/DEV_RESULTS.json runs[summarization-v1__seed-42].A",
+   "policy": "A",
+   "seconds": 5.2,
+   "stream": "TRAIN summarization-v1__seed-42"
+  },
+  {
+   "actual": {
+    "accesses": 196224,
+    "events": 24528,
+    "evictions_total": 115495,
+    "hits": 90046,
+    "miss_bytes": 304886808576,
+    "misses": 106178,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "accesses",
+    "events",
+    "evictions_total",
+    "hits",
+    "miss_bytes",
+    "misses",
+    "peak_resident_bytes",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "accesses": 196224,
+    "events": 24528,
+    "evictions_total": 115495,
+    "hits": 90046,
+    "miss_bytes": 304886808576,
+    "misses": 106178,
+    "peak_resident_bytes": 1610588160,
+    "tokens": 511
+   },
+   "frozen_source": "R3-05 r4-nue-candidate-gate/DEV_RESULTS.json runs[summarization-v1__seed-42].NUE_X:LEX",
+   "policy": "NUE_X",
+   "seconds": 15.7,
+   "stream": "TRAIN summarization-v1__seed-42"
+  },
+  {
+   "actual": {
+    "miss_bytes": 294412750848,
+    "misses": 102334,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "miss_bytes",
+    "misses",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "miss_bytes": 294412750848,
+    "misses": 102334,
+    "tokens": 511
+   },
+   "frozen_source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-coding-v1__budget-1.5__b_selected.json",
+   "note": "reproduction of the frozen R2-11 reference only",
+   "policy": "A",
+   "seconds": 5.0,
+   "stream": "VALIDATION r2-11-coding-v1"
+  },
+  {
+   "actual": {
+    "miss_bytes": 303145684992,
+    "misses": 105469,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "miss_bytes",
+    "misses",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "miss_bytes": 303145684992,
+    "misses": 105469,
+    "tokens": 511
+   },
+   "frozen_source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-coding-v2__budget-1.5__b_selected.json",
+   "note": "reproduction of the frozen R2-11 reference only",
+   "policy": "A",
+   "seconds": 5.2,
+   "stream": "VALIDATION r2-11-coding-v2"
+  },
+  {
+   "actual": {
+    "miss_bytes": 284929376256,
+    "misses": 98987,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "miss_bytes",
+    "misses",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "miss_bytes": 284929376256,
+    "misses": 98987,
+    "tokens": 511
+   },
+   "frozen_source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-coding-v3__budget-1.5__b_selected.json",
+   "note": "reproduction of the frozen R2-11 reference only",
+   "policy": "A",
+   "seconds": 5.0,
+   "stream": "VALIDATION r2-11-coding-v3"
+  },
+  {
+   "actual": {
+    "miss_bytes": 305815449600,
+    "misses": 106356,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "miss_bytes",
+    "misses",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "miss_bytes": 305815449600,
+    "misses": 106356,
+    "tokens": 511
+   },
+   "frozen_source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-instruction-v1__budget-1.5__b_selected.json",
+   "note": "reproduction of the frozen R2-11 reference only",
+   "policy": "A",
+   "seconds": 5.1,
+   "stream": "VALIDATION r2-11-instruction-v1"
+  },
+  {
+   "actual": {
+    "miss_bytes": 316969168896,
+    "misses": 110356,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "miss_bytes",
+    "misses",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "miss_bytes": 316969168896,
+    "misses": 110356,
+    "tokens": 511
+   },
+   "frozen_source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-instruction-v2__budget-1.5__b_selected.json",
+   "note": "reproduction of the frozen R2-11 reference only",
+   "policy": "A",
+   "seconds": 5.1,
+   "stream": "VALIDATION r2-11-instruction-v2"
+  },
+  {
+   "actual": {
+    "miss_bytes": 314848456704,
+    "misses": 109590,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "miss_bytes",
+    "misses",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "miss_bytes": 314848456704,
+    "misses": 109590,
+    "tokens": 511
+   },
+   "frozen_source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-instruction-v3__budget-1.5__b_selected.json",
+   "note": "reproduction of the frozen R2-11 reference only",
+   "policy": "A",
+   "seconds": 5.2,
+   "stream": "VALIDATION r2-11-instruction-v3"
+  },
+  {
+   "actual": {
+    "miss_bytes": 319191146496,
+    "misses": 110885,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "miss_bytes",
+    "misses",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "miss_bytes": 319191146496,
+    "misses": 110885,
+    "tokens": 511
+   },
+   "frozen_source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-reasoning-v1__budget-1.5__b_selected.json",
+   "note": "reproduction of the frozen R2-11 reference only",
+   "policy": "A",
+   "seconds": 5.4,
+   "stream": "VALIDATION r2-11-reasoning-v1"
+  },
+  {
+   "actual": {
+    "miss_bytes": 291207131136,
+    "misses": 101096,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "miss_bytes",
+    "misses",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "miss_bytes": 291207131136,
+    "misses": 101096,
+    "tokens": 511
+   },
+   "frozen_source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-reasoning-v2__budget-1.5__b_selected.json",
+   "note": "reproduction of the frozen R2-11 reference only",
+   "policy": "A",
+   "seconds": 5.1,
+   "stream": "VALIDATION r2-11-reasoning-v2"
+  },
+  {
+   "actual": {
+    "miss_bytes": 296638746624,
+    "misses": 103037,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "miss_bytes",
+    "misses",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "miss_bytes": 296638746624,
+    "misses": 103037,
+    "tokens": 511
+   },
+   "frozen_source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-reasoning-v3__budget-1.5__b_selected.json",
+   "note": "reproduction of the frozen R2-11 reference only",
+   "policy": "A",
+   "seconds": 5.1,
+   "stream": "VALIDATION r2-11-reasoning-v3"
+  },
+  {
+   "actual": {
+    "miss_bytes": 304009150464,
+    "misses": 105730,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "miss_bytes",
+    "misses",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "miss_bytes": 304009150464,
+    "misses": 105730,
+    "tokens": 511
+   },
+   "frozen_source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-summarization-v1__budget-1.5__b_selected.json",
+   "note": "reproduction of the frozen R2-11 reference only",
+   "policy": "A",
+   "seconds": 5.4,
+   "stream": "VALIDATION r2-11-summarization-v1"
+  },
+  {
+   "actual": {
+    "miss_bytes": 313077252096,
+    "misses": 108899,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "miss_bytes",
+    "misses",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "miss_bytes": 313077252096,
+    "misses": 108899,
+    "tokens": 511
+   },
+   "frozen_source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-summarization-v2__budget-1.5__b_selected.json",
+   "note": "reproduction of the frozen R2-11 reference only",
+   "policy": "A",
+   "seconds": 5.4,
+   "stream": "VALIDATION r2-11-summarization-v2"
+  },
+  {
+   "actual": {
+    "miss_bytes": 297412632576,
+    "misses": 103278,
+    "tokens": 511
+   },
+   "budget_violations": 0,
+   "compared_fields": [
+    "miss_bytes",
+    "misses",
+    "tokens"
+   ],
+   "exact_equal": true,
+   "expected": {
+    "miss_bytes": 297412632576,
+    "misses": 103278,
+    "tokens": 511
+   },
+   "frozen_source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-summarization-v3__budget-1.5__b_selected.json",
+   "note": "reproduction of the frozen R2-11 reference only",
+   "policy": "A",
+   "seconds": 5.3,
+   "stream": "VALIDATION r2-11-summarization-v3"
+  }
+ ],
+ "criterion": "exact integer equality with the frozen historical values on the streams where they were produced; no tolerance is needed (all quantities are integers)",
+ "n_checks": 23,
+ "nue_x_note": "NUE_X uses the frozen R2-10 DecayedTransitionPredictor and the frozen R3 key; its historical 8.79% is not compared to any Research 4 split"
+}

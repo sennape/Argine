@@ -1,0 +1,149 @@
+{
+ "artifact": "R4-01-FEATURE-IMPLEMENTATION",
+ "causality_tests": "tests/test_phase1.py::test_future_routing_cannot_change_features",
+ "contract_lf_sha256": "0c0aa3920228306cf6341a33fef907edb828ce64a8e8f0a13c25c402141468bd",
+ "feature_count": 16,
+ "features": [
+  {
+   "contract_definition": "j_now - j_last_ref(k)",
+   "depends_on_future": false,
+   "id": "F01",
+   "name": "events_since_last_ref",
+   "units": "semantic events"
+  },
+  {
+   "contract_definition": "floor(2^16 * S_k(i_now)), S_k(i) = sum over past requests r of k of 0.99^(i - i_r); request at the current event excluded",
+   "depends_on_future": false,
+   "id": "F02",
+   "name": "decayed_count_fx",
+   "units": "fixed point 2^-16 requests"
+  },
+  {
+   "contract_definition": "j_now - j_admit(k) for the current residency",
+   "depends_on_future": false,
+   "id": "F03",
+   "name": "events_since_admission",
+   "units": "semantic events"
+  },
+  {
+   "contract_definition": "number of requests of k served as hits since its current admission",
+   "depends_on_future": false,
+   "id": "F04",
+   "name": "hits_since_admission",
+   "units": "requests"
+  },
+  {
+   "contract_definition": "number of admissions of k before the current one, since replay start",
+   "depends_on_future": false,
+   "id": "F05",
+   "name": "reload_count",
+   "units": "admissions"
+  },
+  {
+   "contract_definition": "n_l at the last request of k minus n_l at the request before it",
+   "depends_on_future": false,
+   "id": "F06",
+   "name": "prev_reuse_interval",
+   "units": "layer events"
+  },
+  {
+   "contract_definition": "floor(sum of all past inter-request intervals of k / their count)",
+   "depends_on_future": false,
+   "id": "F07",
+   "name": "mean_reuse_interval",
+   "units": "layer events"
+  },
+  {
+   "contract_definition": "1 if expert e was requested by layer l's most recent served event strictly before the current event, else 0",
+   "depends_on_future": false,
+   "id": "F08",
+   "name": "in_prev_layer_event",
+   "units": "boolean"
+  },
+  {
+   "contract_definition": "floor(1000 * resident_bytes / budget_bytes) immediately before this eviction",
+   "depends_on_future": false,
+   "id": "F09",
+   "name": "occupancy_permille",
+   "units": "permille"
+  },
+  {
+   "contract_definition": "number of missed experts of the current event not yet admitted, including the one being admitted",
+   "depends_on_future": false,
+   "id": "F10",
+   "name": "pending_misses",
+   "units": "experts"
+  },
+  {
+   "contract_definition": "rank of k among the decision's candidates by j_last_ref descending (0 = most recent); ties by (layer, expert) ascending",
+   "depends_on_future": false,
+   "id": "F11",
+   "name": "recency_rank",
+   "units": "rank"
+  },
+  {
+   "contract_definition": "rank of k among the decision's candidates by F02 descending (0 = highest); ties by F01 ascending, then (layer, expert) ascending",
+   "depends_on_future": false,
+   "id": "F12",
+   "name": "frequency_rank",
+   "units": "rank"
+  },
+  {
+   "contract_definition": "byte size of k as given by the replay context (ctx.bytes_of(layer))",
+   "depends_on_future": false,
+   "id": "F13",
+   "name": "expert_bytes",
+   "units": "bytes"
+  },
+  {
+   "contract_definition": "l",
+   "depends_on_future": false,
+   "id": "F14",
+   "name": "layer_id",
+   "units": "index 0..47"
+  },
+  {
+   "contract_definition": "e",
+   "depends_on_future": false,
+   "id": "F15",
+   "name": "expert_id",
+   "units": "index 0..127"
+  },
+  {
+   "contract_definition": "((l - L_now - 1) mod 48) + 1 where L_now is the current event's layer",
+   "depends_on_future": false,
+   "id": "F16",
+   "name": "layer_cycle_offset",
+   "units": "layers"
+  }
+ ],
+ "future_features": 0,
+ "implementation": "engine.py Dec.col / Sim state arrays (see IMPLEMENTATION.json interpretations)",
+ "interpretations": [
+  "Candidate rows of TRAIN decisions are the shield-with-total-fallback set computed at A's state, although A itself evicts without a shield (frozen: teacher trajectory = A states; candidate set = FEATURE_CONTRACT).",
+  "pending_misses counts the current missed expert plus later-id members of the current event that are not resident at the decision.",
+  "In the rare total-fallback case a candidate may be a member of the current event: its features reflect requests processed so far, except decayed_count_fx/S which exclude the current event's request (frozen).",
+  "Decision numbering counts every A eviction (prefill included) from 0; decisions with index mod 64 == 0 are sampled.",
+  "F02 uses a precomputed table 0.99**n (Python float pow); the same table serves DECAYED_COUNT (exact binary64 S) and decayed_count_fx = floor(65536*S).",
+  "RICH bins: <=255 distinct values -> every value is a cut; otherwise the unique values of the 255 'lower' quantile cut points; split rule x <= cut goes left; level-wise growth; leaf = mean residual; split gain must be > 0 and each child >= 200 rows.",
+  "CHEAP gains and ties are compared in float64 (exact equality), then lower feature index, then lower threshold."
+ ],
+ "order": [
+  "events_since_last_ref",
+  "decayed_count_fx",
+  "events_since_admission",
+  "hits_since_admission",
+  "reload_count",
+  "prev_reuse_interval",
+  "mean_reuse_interval",
+  "in_prev_layer_event",
+  "occupancy_permille",
+  "pending_misses",
+  "recency_rank",
+  "frequency_rank",
+  "expert_bytes",
+  "layer_id",
+  "expert_id",
+  "layer_cycle_offset"
+ ]
+}

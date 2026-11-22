@@ -1,0 +1,26 @@
+{
+ "budgets": {
+  "1.5": {
+   "CLAIRVOYANT_VALUE_LOW_MS_PER_TOKEN": 92.21555273959194,
+   "clairvoyant_value_at_kappa_point_ms_informational": 184.43110547918388,
+   "kappa_estimable": true,
+   "miss_bytes_avoided_per_token": 243183024.0
+  },
+  "4": {
+   "CLAIRVOYANT_VALUE_LOW_MS_PER_TOKEN": "NOT_ESTIMABLE",
+   "descriptive_linear_value_unvalidated_ms": 47.54094249901262,
+   "kappa_estimable": false,
+   "miss_bytes_avoided_per_token": 125370936.0,
+   "reason": "no measured A wall time at this budget in R3-04 (4 GiB removed by the efficiency amendment); kappa is a 1.5<->8 GiB association and is not validated here"
+  },
+  "8": {
+   "CLAIRVOYANT_VALUE_LOW_MS_PER_TOKEN": 9.424189434932677,
+   "clairvoyant_value_at_kappa_point_ms_informational": 18.848378869865353,
+   "kappa_estimable": true,
+   "miss_bytes_avoided_per_token": 24852672.0
+  }
+ },
+ "kappa_low_ms_per_MB": 0.37920226183054595,
+ "kappa_point_ms_per_MB_informational": 0.7584045236610919,
+ "rule": "CLAIRVOYANT_VALUE_LOW = (A - BELADY decode miss bytes per token)/1e6 x kappa_low; kappa_low = 0.5 x the frozen Phase 0 two-point kappa"
+}

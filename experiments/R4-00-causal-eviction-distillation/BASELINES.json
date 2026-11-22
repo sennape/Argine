@@ -1,0 +1,39 @@
+{
+ "artifact": "R4-00-BASELINES",
+ "comparators": [
+  {
+   "definition": "Research 3 NUE_X, lexicographic key LEX, as frozen: r4.py make_nue('X', 'LEX'), decayed_transition decay 0.99, top_k 8, with current-event shield",
+   "historical_value_not_reused": {
+    "capture_of_belady_byte_headroom": "8.79% (Research 3, canonical r2-11-coding-v1 stream, 1.5 GiB)",
+    "note": "historical Research 3 value on a different stream; Research 4 re-scores NUE_X under the same replay on its own splits. The Research 3 result is unchanged.",
+    "source": "experiments/R3-05-economic-retention/r4-nue-candidate-gate/HEADROOM_CAPTURE.json",
+    "source_sha256": "78d681f5715ceae45934412b1103fbb1b5d46553f22da734f01b095fccc732ae"
+   },
+   "id": "NUE_X",
+   "retrained_or_modified": false
+  },
+  {
+   "definition": "evict the candidate with the LOWEST S_k (F02 exact, IEEE-754 binary64 evaluated as S*0.99^(i - i_last)+1 per request, decay 0.99 per served step, no sweep); ties: larger F01 (older), then layer ascending, then expert ascending; current-event shield with total fallback",
+   "id": "DECAYED_COUNT",
+   "retrained_or_modified": "new in Research 4; definition frozen here, no hyperparameter search"
+  }
+ ],
+ "distinction": "Historical frozen values are cited only as provenance. Every capture used by a Research 4 decision is a new Research 4 replay value on the frozen splits.",
+ "oracle": {
+  "definition": "argine.research.oracle.BeladyGlobal on the same served event list: evict the non-member resident with the farthest next use (never-used-again first); demand admission; not proven optimal for multi-key, two-size events",
+  "id": "BELADY",
+  "role": "denominator of the primary endpoint; clairvoyant, never a candidate"
+ },
+ "reference": {
+  "definition": "b_selected = AgedFrequency, decay 0.999 per access, aging interval 1 (r4.py make_arm('A'))",
+  "frozen_values": "TRAIN: R3-05 R4 DEV_RESULTS A rows; VALIDATION: R2-11 eval_cells b_selected 1.5 GiB (see DATA_SPLITS); EVAL: none exists (computed once in the EVAL phase)",
+  "id": "A_B_SELECTED",
+  "retrained_or_modified": false
+ },
+ "replay": {
+  "admission": "demand admission, event-atomic multi-key events",
+  "budget_bytes": 1610612736,
+  "byte_accounting": "decode miss bytes = sum over counted (decode) events of len(missed) * ctx.bytes_of(layer); identical to Research 3",
+  "loop": "experiments/R3-05-economic-retention/r4-nue-candidate-gate/r4.py:dev_replay (mirrors the frozen R2-09A fast_replay accounting: every served step replayed, decode steps counted, served_steps(trace, PHASE_DECODE, 'v2'))"
+ }
+}

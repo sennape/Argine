@@ -1,0 +1,22 @@
+{
+  "name": "r2-11-summarization-v3",
+  "version": "r2-11-v1",
+  "split": "eval",
+  "semantic_category": "summarization",
+  "description": "R2-11 fresh confirmatory summarization specification (diagnosing slow home Wi-Fi without replacing hardware). New committed local source, not a reuse of the R2-08 DEV (MoE routing technical background), R2-09 EVAL (home battery backup), or R2-BRIDGE-01 (bicycle commuting) source texts.",
+  "n_predict": 512,
+  "items": [
+    {
+      "id": "r2-11-summarization-v3",
+      "segment": "r2-11-summarization-v3",
+      "prompt": "Read the source text below and produce: (1) a concise summary in 5-7 bullet points, (2) three practical takeaways a reader could act on, and (3) one limitation or open question the source does not fully resolve. Do not add facts that are not supported by the source.\n\nSOURCE TEXT:\nTitle: Diagnosing slow home Wi-Fi without replacing hardware\n\nMost reported \"slow Wi-Fi\" problems are not caused by an underpowered\nrouter but by one of a handful of fixable conditions, and working\nthrough them in order resolves the large majority of cases before any\nhardware purchase is needed.\n\nFirst, check for channel congestion. Older 2.4 GHz Wi-Fi has only three\nnon-overlapping channels, and in dense housing many neighboring networks\ndefault to the same one or two channels, causing interference that looks\nlike generic slowness rather than a dropped connection. Switching the\nrouter to a less congested channel, or moving latency-sensitive devices\nto the 5 GHz band where available, often fixes this immediately with no\nother change. A free Wi-Fi analyzer app run from a phone can show which\nchannels are already crowded nearby.\n\nSecond, consider physical obstruction and distance. Wi-Fi signal strength\nfalls off faster through masonry, metal (such as a refrigerator or duct\nwork), and water (such as a fish tank or even a bathroom wall) than\nthrough drywall or wood. A router placed in a closet or behind a TV\nstand loses far more range than the same router placed centrally and\nelevated. Before assuming the router itself is the bottleneck, it is\nworth testing speed from a few different distances and rooms to see how\nmuch of the problem is simply placement.\n\nThird, check for a saturated internet connection rather than a wireless\nproblem at all. Running a wired speed test directly into the router,\ncompared against a wireless speed test from the same room, isolates\nwhether the bottleneck is the Wi-Fi link or the internet service itself.\nIf the wired speed is already far below the plan's advertised rate, no\nWi-Fi change will fix it, and the complaint is actually about the\ninternet service, not the local wireless network.\n\nFinally, firmware age matters more than most people expect. Routers that\nhave not had a firmware update in several years can have inefficient or\nbuggy implementations of newer Wi-Fi standards, and a router reboot plus\na firmware check resolves a meaningful fraction of reported slowdowns\nthat have no other identifiable cause.\n"
+    }
+  ],
+  "provenance_split_identity": "r2_11_eval",
+  "cli_split_field_note": "argine.research.cli's 'research trace --split' flag only accepts {dev, eval} (argine/research/cli.py 'trace' subparser, choices=['dev','eval']); there is no third CLI-level split value. Per the loader (argine/research/workloads.py:load, the 'items'-schema fallback branch), the CLI-facing 'split' field here is literal plumbing selecting which dict key the prompts load under -- it is set to the already-supported value 'eval' so this file can be captured with the existing CLI and loader, with NO code change. The true provenance-level identity of this corpus (a fresh, entirely new R2-11 confirmatory EVAL corpus -- distinct from R2-10 DEV, R2-10 EVAL, and R2-BRIDGE-01's holdout) is tracked entirely by workload_id, file path, output directory, and the 'provenance_split_identity' field below, plus experiments/R2-11-predictive-retention/eval_manifest.json -- exactly mirroring how R2-BRIDGE-01's own fresh holdout was externally distinguished from R2-09/R2-10 by workload_id/path/manifest, not by a unique CLI split string.",
+  "source_input": {
+    "path": "research2/workloads/r2_11/sources/summarization_r2_11_source_03_wifi.txt",
+    "committed_locally": true,
+    "web_network_dependency": false
+  }
+}

@@ -1,0 +1,41 @@
+{
+ "artifact": "RESEARCH-3-CLOSURE",
+ "classification": "R3_CLOSED_NEGATIVE_PREDICTIVE_RETENTION_NOT_VIABLE_IN_TESTED_REGIME",
+ "model_runs_for_closure": 0,
+ "old_roadmap": {
+  "R3-06": "SUPERSEDED_BY_NEGATIVE_R3_05_RESULT",
+  "R3-07": "SUPERSEDED_BY_NEGATIVE_R3_05_RESULT",
+  "R3-08": "SUPERSEDED_BY_NEGATIVE_R3_05_RESULT",
+  "R3-09": "SUPERSEDED_BY_NEGATIVE_R3_05_RESULT",
+  "R3-10": "SUPERSEDED_BY_NEGATIVE_R3_05_RESULT",
+  "R3-11": "SUPERSEDED_BY_NEGATIVE_R3_05_RESULT"
+ },
+ "old_roadmap_note": "R3-06..R3-11 were nominal plan stages that assumed R3-05 would nominate a viable predictive policy; no definitions exist in the repository (R3-05 DECISION_REPORT.md section 12). None is executed.",
+ "research_4_handoff": {
+  "framing": "a new research question; not an extension or rescue of R3 predictive retention",
+  "possible_mechanisms": [
+   "oracle-distilled eviction",
+   "admission",
+   "economic memory decisions"
+  ],
+  "question": "How much of the clairvoyant memory-management optimum can be recovered by a cheap causal policy using only information available at decision time?",
+  "status": "NOT OPENED"
+ },
+ "runtime_modified_for_closure": false,
+ "scope": "whether R2 predictive expert information can be converted into real-runtime retention value (not a general search over memory-management policies)",
+ "status": "CLOSED",
+ "untested_directions": {
+  "non_retention": {
+   "adaptive allocation": "NOT_TESTED",
+   "compute / I/O overlap": "NOT_TESTED",
+   "general policy switching / adaptive control": "NOT_TESTED",
+   "prefetch": "NOT_TESTED",
+   "scheduling": "NOT_TESTED"
+  },
+  "retention": {
+   "general economic eviction rules": "NOT_TESTED",
+   "oracle-distilled causal eviction": "NOT_TESTED",
+   "true admission / bypass policies": "NOT_TESTED"
+  }
+ }
+}

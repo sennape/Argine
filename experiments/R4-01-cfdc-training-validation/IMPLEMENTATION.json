@@ -1,0 +1,40 @@
+{
+ "artifact": "R4-01-IMPLEMENTATION",
+ "base_commit": "35410947d51895326aa7e6c39a09825e2ffb4c0c",
+ "dependencies": "numpy only (no new production dependency); optional C inference helper _rich_infer.c with a bit-identical numpy fallback",
+ "determinism": "single-thread numpy; no randomness is used by CART or GBRT (random_seed 0 is recorded; there is no row/feature subsampling)",
+ "files_lf_sha256": {
+  "_rich_infer.c": "f7616429593740b374115c1aeb26e66fc6f44d1eb12e25123d7c4c2a6f417a12",
+  "engine.py": "289bf2c783b54e5fe5d822da6aa964dd6d1d7b1659e42a7fa2c88ff99e6a6837",
+  "models.py": "f973722329f0bea979d8643cd1ecf66b730744702270faf11e79ace7dd433954",
+  "phase1.py": "3f27e1ccea9b62e1e15c17486ce8585c6e0908cff041d56abbb02d57cf277c40"
+ },
+ "independent_review": {
+  "confirmed_defects": 0,
+  "method": "read-only review agent compared engine.py / models.py / _rich_infer.c with the frozen Phase 0 contracts and brute-force reimplementations (3,449 sampled decisions, 200 random CHEAP split cases)",
+  "minor_observations": [
+   "float64 noise can create a split on a constant non-integer y node (gain ~1e-12); disclosed, not changed because CHEAP was already fitted",
+   "RICH bin grid = quantiles k/256, k=1..255, de-duplicated (a reading of '255 quantile cut points')",
+   "hit/miss interleaving inside an event follows the frozen policies (ascending expert id); it matters only in the total-fallback case",
+   "C-to-numpy fallback was silent; now warns and the scorer records the RICH backend (arithmetic identical, tested)"
+  ]
+ },
+ "interpretations": [
+  "Candidate rows of TRAIN decisions are the shield-with-total-fallback set computed at A's state, although A itself evicts without a shield (frozen: teacher trajectory = A states; candidate set = FEATURE_CONTRACT).",
+  "pending_misses counts the current missed expert plus later-id members of the current event that are not resident at the decision.",
+  "In the rare total-fallback case a candidate may be a member of the current event: its features reflect requests processed so far, except decayed_count_fx/S which exclude the current event's request (frozen).",
+  "Decision numbering counts every A eviction (prefill included) from 0; decisions with index mod 64 == 0 are sampled.",
+  "F02 uses a precomputed table 0.99**n (Python float pow); the same table serves DECAYED_COUNT (exact binary64 S) and decayed_count_fx = floor(65536*S).",
+  "RICH bins: <=255 distinct values -> every value is a cut; otherwise the unique values of the 255 'lower' quantile cut points; split rule x <= cut goes left; level-wise growth; leaf = mean residual; split gain must be > 0 and each child >= 200 rows.",
+  "CHEAP gains and ties are compared in float64 (exact equality), then lower feature index, then lower threshold."
+ ],
+ "numpy": "2.2.6",
+ "phase0_contract_digest": "fa0ff8d4c93b463a99bdba4a65625251fa00c8102f5b2d788f8f22e73a20d64e",
+ "platform": "Linux-6.8.0-149-generic-x86_64-with-glibc2.35",
+ "pow_table_sha256": "6a03c8bad4ce9f7576cf566285e0857c525c27f8d090d9b601bd42dfd0a02c34",
+ "python": "3.10.12",
+ "rounding": "predictions quantized with round-half-even of pred*2^16",
+ "test_files_lf_sha256": {
+  "tests/test_phase1.py": "15ecfb8589a5fbdbec9a4926072c4994a156c445b0a754bc947882ea41e82891"
+ }
+}

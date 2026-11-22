@@ -1,0 +1,1 @@
+MICROBENCH_VALID proc=1 reps=30

@@ -1,0 +1,35 @@
+{
+ "artifact": "R3-03A-FROZEN-TRIPLET-REPLAY",
+ "compression_ratio": 3.0,
+ "corrected_semantic_events": 24672,
+ "decode_passes": 512,
+ "events_per_decode_token_corrected": 48.0,
+ "forward_passes": 514,
+ "original_physical_rows": 74016,
+ "original_rows_per_decode_token": 144.0,
+ "r2_event_count_expected": 24672,
+ "r2_reference_vs_corrected_stream": {
+  "events_compared": 24672,
+  "first_divergence_event_index": null,
+  "frozen_reference": "argine.research2.r2_bridge01.retention_policies.PredictedProtectPolicy",
+  "protected_sets_identical_to_cpp_mirror_sim": 24672
+ },
+ "r2_reference_vs_logged_original_protected_before": {
+  "events_compared": 24672,
+  "first_divergence": {
+   "event_index": 48,
+   "layer": 0,
+   "pass": 1
+  },
+  "fraction_identical": 0.07478112840466926,
+  "identical": 1845,
+  "meaning": "logged protected_before came from the 3x-advanced predictor; the corrected runtime must instead equal the R2 reference"
+ },
+ "source": "B-4GiB.zst",
+ "structure": {
+  "all_triplets_identical_sets": true,
+  "anomaly_examples": [],
+  "every_pass_has_layers_0_to_47_once": true,
+  "groups_not_of_3_rows": 0
+ }
+}

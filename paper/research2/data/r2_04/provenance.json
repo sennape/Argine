@@ -1,0 +1,23 @@
+{
+  "binding": {
+    "fixed_budgets_bytes": [
+      1610612736,
+      2147483648,
+      4294967296,
+      8589934592,
+      17179869184
+    ],
+    "message": "bound to R2-01 run bb6d8ca34dbc4537a43d54be30c9f3e1, R2-02 PASS run 238c8ee7f0914df7b28942ec99627c24, and R2-03 PASS run d957077073374f1e9fd1e101a002946f; trace identity and binding consistent across all three, R2-03's own R2-02-reproduction check reads OK.",
+    "r2_01_run_id": "bb6d8ca34dbc4537a43d54be30c9f3e1",
+    "r2_02_run_id": "238c8ee7f0914df7b28942ec99627c24",
+    "r2_03_run_dir": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-03\\d957077073374f1e9fd1e101a002946f",
+    "r2_03_run_id": "d957077073374f1e9fd1e101a002946f",
+    "reproduction_budget_bytes": 4294967296,
+    "status": "OK",
+    "trace_path": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+    "trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1"
+  },
+  "canonical_digest": "a019475d67df002abad50bd508842fe87f2e6146a8a1c915ae610fef8d5c9b4d",
+  "nondeterminism": [],
+  "synthesis_errors": []
+}

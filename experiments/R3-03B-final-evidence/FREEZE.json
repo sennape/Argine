@@ -1,0 +1,21 @@
+{
+ "artifact": "R3-03B-FINAL-FREEZE",
+ "classification": "R3_03B_EXPLAINED",
+ "equivalence_interval": [
+  0.5,
+  2.0
+ ],
+ "fieller": {
+  "bounded": true,
+  "df": 19,
+  "g": 6.567541059277687e-05,
+  "hi": 0.9286851073705427,
+  "lo": 0.8759943227325426,
+  "t": 2.093024054408307
+ },
+ "final_result_sha256": "4ac3bb604141641551e9cb4a575e1d6ee1de76a61ad9ab30cfd81094c1b2e0d6",
+ "freeze_sha256": "1846b00954e033bc9a4cb136cd05373a411d7a8de699923235f31dbfd2f53448",
+ "model_runs_required": false,
+ "rho": 0.9024457830340606,
+ "validation_manifest_sha256": "179da98898442508e1a016b82257d8b640d37fc6ed76e5cac95d6a1e93a4be23"
+}

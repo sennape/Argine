@@ -1,0 +1,213 @@
+{
+  "contract": "argine-r3-observability-contract",
+  "version": 1,
+  "phase": "R3-00A",
+  "status": "FROZEN",
+  "purpose": "Define, mechanically, which expert-memory and overhead observables a future counted Research 3 run must carry, how each is obtained, and when a run or cell is inadmissible. This contract freezes observability only: it does not freeze the R3 policy, the R3 scientific endpoint, any DEV selection, or any EVAL decision rule.",
+  "scope": {
+    "applies_to": "every counted launch, and every comparison cell, of any Research 3 experiment that reasons about expert-memory cost or runtime value",
+    "does_not_apply_to": "Research 2 frozen evidence (read-only), the R2 paper, and any run that is explicitly diagnostic, warmup, or pre-canonical",
+    "enforcement_point": "run-record admission before analysis; no analysis may consume a record that this contract rejects"
+  },
+  "modes": {
+    "TRACE_COUNT": {
+      "purpose": "exact expert-level memory counters, derived from the retention-decision trace",
+      "timing_admissible": false,
+      "rationale": "enabling the decision trace slows the runtime by roughly 5x (measured: 0.83 vs 4.19 decode tokens/s on the same cell); counts are unaffected, wall-clock is not",
+      "required_fields": [
+        "identity.model_sha256",
+        "identity.store_sha256",
+        "identity.runtime_sha256",
+        "identity.workload_sha256",
+        "identity.policy_params_sha256",
+        "telemetry.mode",
+        "telemetry.status",
+        "telemetry.trace_sha256",
+        "telemetry.counters.expert_bytes_read",
+        "telemetry.counters.expert_read_count",
+        "telemetry.counters.expert_miss_bytes",
+        "telemetry.counters.expert_miss_count",
+        "telemetry.counters.expert_hits",
+        "telemetry.counters.expert_evictions",
+        "telemetry.counters.resident_bytes_peak",
+        "budget_bytes"
+      ],
+      "artifact": "retention-decision trace (JSONL: one decision row per (step, layer) plus one completion row per step)"
+    },
+    "TIMING": {
+      "purpose": "real wall-clock, per-process CPU, and policy bookkeeping counters; no expert-memory counters are claimed",
+      "timing_admissible": true,
+      "counters_claimed": false,
+      "required_fields": [
+        "identity.model_sha256",
+        "identity.store_sha256",
+        "identity.runtime_sha256",
+        "identity.workload_sha256",
+        "identity.policy_params_sha256",
+        "telemetry.mode",
+        "telemetry.status",
+        "timing.ttft_seconds",
+        "timing.decode_duration_seconds",
+        "timing.tokens_generated",
+        "timing.process_cpu_seconds",
+        "telemetry.overhead.events_served",
+        "telemetry.overhead.process_cpu_seconds",
+        "budget_bytes"
+      ],
+      "artifact": "run record with wall-clock timestamps and the retention diagnostics line"
+    }
+  },
+  "fields": [
+    {
+      "name": "expert_bytes_read",
+      "class": "EXACT_RUNTIME",
+      "source": "decision trace: sum over decision rows of len(miss_experts) * bytes_of_layer",
+      "required_in": ["TRACE_COUNT"],
+      "invariants": ["equals expert_miss_bytes (only misses read from the store)", "non-negative integer"]
+    },
+    {
+      "name": "expert_read_count",
+      "class": "DERIVED_RUNTIME",
+      "source": "decision trace: expert_miss_count * slices_per_expert (3: gate/up/down)",
+      "required_in": ["TRACE_COUNT"],
+      "invariants": ["equals 3x expert_miss_count when slices_per_expert == 3", "never less than expert_miss_count"],
+      "note": "the runtime counts slice reads internally (psx_cache_stats.letture) but never exports the raw count; expert-object granularity is exact, slice granularity is derived"
+    },
+    {
+      "name": "expert_miss_bytes",
+      "class": "EXACT_RUNTIME",
+      "source": "decision trace: sum over decision rows of len(miss_experts) * bytes_of_layer",
+      "required_in": ["TRACE_COUNT"],
+      "invariants": ["0 <= expert_miss_bytes <= expert_bytes_read"]
+    },
+    {
+      "name": "per_read_issue_timestamp",
+      "class": "UNAVAILABLE",
+      "source": "slice-level I/O trace (patch 0003 research trace); not present in the retention-decision trace and not produced by a trace-disabled run",
+      "required_in": [],
+      "note": "exact only if the slice-level trace is produced; that artifact is NOT required by this contract"
+    },
+    {
+      "name": "per_read_completion_timestamp",
+      "class": "UNAVAILABLE",
+      "source": "slice-level I/O trace (patch 0003 research trace)",
+      "required_in": []
+    },
+    {
+      "name": "per_read_wait_seconds",
+      "class": "UNAVAILABLE",
+      "source": "would be derived as waited_ts - issue_ts from the slice-level trace; unavailable without it",
+      "required_in": []
+    },
+    {
+      "name": "queue_depth",
+      "class": "MODELED",
+      "source": "the runtime prints only an average queue depth at exit, in verbose mode; per-instant queue depth is not exported",
+      "required_in": [],
+      "note": "a per-instant queue depth can only be reconstructed from slice-level read intervals, which this contract does not require"
+    },
+    {
+      "name": "resident_bytes",
+      "class": "EXACT_RUNTIME",
+      "source": "decision trace: cache_resident_bytes_after on every decision row; peak derived as max",
+      "required_in": ["TRACE_COUNT"],
+      "invariants": ["0 <= resident_bytes_peak <= budget_bytes at every recorded row"]
+    },
+    {
+      "name": "evictions",
+      "class": "EXACT_RUNTIME",
+      "source": "decision trace: sum of len(evicted) over decision rows",
+      "required_in": ["TRACE_COUNT"]
+    },
+    {
+      "name": "requested_experts",
+      "class": "EXACT_RUNTIME",
+      "source": "decision trace: requested_experts per row (router decision, independent of residency)",
+      "required_in": ["TRACE_COUNT"]
+    },
+    {
+      "name": "hit_miss_experts",
+      "class": "EXACT_RUNTIME",
+      "source": "decision trace: hit_experts / miss_experts per row",
+      "required_in": ["TRACE_COUNT"]
+    },
+    {
+      "name": "policy_decision_wall_time",
+      "class": "UNAVAILABLE",
+      "source": "the retention policy does not time its own victim selection; psx_retention_stats exposes counts (events_served, predictor_decisions) but no per-decision duration",
+      "required_in": []
+    },
+    {
+      "name": "policy_bookkeeping_wall_time",
+      "class": "UNAVAILABLE",
+      "source": "not computed by the runtime",
+      "required_in": []
+    },
+    {
+      "name": "protected_set_construction_wall_time",
+      "class": "UNAVAILABLE",
+      "source": "not computed by the runtime",
+      "required_in": []
+    },
+    {
+      "name": "decode_step_wall_time",
+      "class": "DERIVED_RUNTIME",
+      "source": "exact aggregate decode duration / tokens generated; per-step granularity is not exported",
+      "required_in": ["TIMING"],
+      "note": "the mean is exact as a ratio of exact totals; it is not a per-step measurement"
+    },
+    {
+      "name": "compute_io_overlap",
+      "class": "MODELED",
+      "source": "no runtime counter isolates overlap; it can only be inferred under a stated model of the read barrier",
+      "required_in": [],
+      "note": "must never be promoted to EXACT_RUNTIME without a new, contract-versioned instrumentation"
+    }
+  ],
+  "admissibility_rules": [
+    {"id": "V1_required_fields", "rule": "all mandatory fields for the declared mode are present and non-null", "on_failure": "INADMISSIBLE"},
+    {"id": "V2_mode", "rule": "telemetry.mode equals the mode the record is submitted under", "on_failure": "INADMISSIBLE"},
+    {"id": "V3_identities_hex64", "rule": "model/store/runtime/workload/policy-params identities are 64-hex digests", "on_failure": "INADMISSIBLE"},
+    {"id": "V4_trace_hex64", "rule": "telemetry.trace_sha256 is a 64-hex digest of the archived decision trace", "on_failure": "INADMISSIBLE"},
+    {"id": "V5_completeness", "rule": "telemetry.status is COMPLETE; a trace with a missing completion row or a budget violation is never COMPLETE", "on_failure": "INADMISSIBLE"},
+    {"id": "V6_bytes_consistency", "rule": "0 <= expert_miss_bytes <= expert_bytes_read", "on_failure": "INADMISSIBLE"},
+    {"id": "V7_count_consistency", "rule": "0 <= expert_miss_count <= expert_read_count", "on_failure": "INADMISSIBLE"},
+    {"id": "V8_budget_invariant", "rule": "resident_bytes_peak <= budget_bytes", "on_failure": "INADMISSIBLE"},
+    {"id": "V9_timing_positive", "rule": "ttft, decode duration, tokens and process CPU time are strictly positive", "on_failure": "INADMISSIBLE"},
+    {"id": "V10_overhead_counters", "rule": "events_served is present and non-negative", "on_failure": "INADMISSIBLE"},
+    {"id": "C1_same_cell", "rule": "the TRACE_COUNT and TIMING runs of a cell share workload, seed, budget, policy and policy-parameter digest", "on_failure": "INADMISSIBLE"},
+    {"id": "C2_output_identity", "rule": "the TRACE_COUNT and TIMING runs produced identical output_token_digest, proving the tracing did not change decisions", "on_failure": "INADMISSIBLE"}
+  ],
+  "cell_pairing": {
+    "unit": "one comparison cell = one TRACE_COUNT run + one TIMING run of the same physical configuration",
+    "neither_run_alone_is_analysable": true,
+    "counts_from": "TRACE_COUNT",
+    "timing_from": "TIMING",
+    "no_mixing": "counters from one mode may never be combined with timing from a different instrumentation mode within the same comparison",
+    "overhead": "policy overhead is bounded by events_served and process CPU time; it is never claimed to be isolated unless a sham-policy control is run (not required by this contract, but required before any overhead-difference claim)"
+  },
+  "prohibited_uses": [
+    "treating expert_bytes_read or expert_miss_bytes as throughput evidence",
+    "converting miss bytes into seconds with a model and reporting the result as measured runtime",
+    "using a diagnostic, warmup or pre-canonical record in analysis",
+    "claiming policy-overhead isolation without a sham-policy control",
+    "promoting a MODELED field (queue_depth, compute_io_overlap) to EXACT_RUNTIME",
+    "using any EVAL data to change this contract"
+  ],
+  "not_frozen": [
+    "the R3 primary policy",
+    "the R3 primary scientific endpoint",
+    "the DEV policy-selection rule",
+    "the EVAL decision rules",
+    "the runtime-realization authorization criteria"
+  ],
+  "root_cause_of_null_r2_telemetry": {
+    "summary": "R2-12 canonical records carry no expert-memory telemetry because the runtime never exported the counters it computes, the driver never parsed them, and the canonical runs neither enabled the decision trace nor archived stderr.",
+    "evidence": [
+      "tools/r2_12_benchmark_driver.py sets expert_bytes_read, expert_read_count and expert_miss_bytes to None unconditionally; only coverage/band stderr regexes exist",
+      "the runtime computes exact counters in psx_cache_stats (hits, misses, evictions, bytes_read, bytes_resident, budget, blocchi, letture) and prints a human-readable line only in verbose mode, with bytes truncated to MiB and no raw read count",
+      "psx_retention_stats exposes decision counts and trace row counts, not byte or read counters",
+      "all 120 canonical runs have trace_enabled == false and no archived stderr, so no recovery path exists"
+    ]
+  }
+}

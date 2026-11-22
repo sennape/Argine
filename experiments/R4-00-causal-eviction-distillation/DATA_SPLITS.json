@@ -1,0 +1,384 @@
+{
+ "access_rule": "Phase 0 reads no VALIDATION or EVAL trace file. Identities are taken from the sealed records listed above.",
+ "artifact": "R4-00-DATA-SPLITS",
+ "mapping_from_request": {
+  "EVAL": "the canonical held-out R2-09 EVAL corpus (4 workloads) used prospectively by the closed causal-predictor work (R2-10).",
+  "TRAIN": "as requested: frozen DEV seed-42 corpus of the prior predictor work (R2-09A).",
+  "VALIDATION": "DEVIATION, decided by the investigator on 2026-11-22: the requested 'independent DEV seed-43 corpus' is not independent. Under greedy decoding seed-43 routing is identical to seed-42 on every step except the last (coding 394/395 aligned steps, other workloads 523/524). The R2-11 confirmatory corpus (12 prompt-disjoint traces) replaces it; seed-43 is kept as REPLICATE_CHECK."
+ },
+ "no_overlap_rules": [
+  "trace_sha256 sets of TRAIN, VALIDATION, EVAL, REPLICATE_CHECK are pairwise disjoint",
+  "workload ids of TRAIN/REPLICATE_CHECK (DEV *-v1), VALIDATION (r2-11-*) and EVAL (*-eval-v1) are pairwise disjoint",
+  "VALIDATION and EVAL workload spec sha256 sets are disjoint"
+ ],
+ "replay_budget_bytes": 1610612736,
+ "seed43_independence_audit": {
+  "conclusion": "seed-43 is a near-duplicate of seed-42, not an independent validation set",
+  "method": "Trace.load of both DEV traces; per step compare n_tokens and the sorted expert set of each of 48 layers (Phase 0, DEV data only)",
+  "result": {
+   "coding-v1": "steps 396 vs 395; 394 identical; only step 394 differs (4 layers)",
+   "instruction-v1": "524 vs 524; 523 identical",
+   "reasoning-v1": "524 vs 524; 523 identical; only step 523 differs",
+   "summarization-v1": "524 vs 524; 523 identical"
+  }
+ },
+ "splits": {
+  "EVAL": {
+   "role": "scored exactly once after TRAIN fit and VALIDATION scoring are locked",
+   "source_record": "experiments/R2-10-working-set-predictor/PHASE3B-EVAL-CAPTURE-SEALED.json",
+   "source_record_sha256": "01faf546a8c36e05d6179428c86d7cdcdef9b87377ccc8ad29e206e5f143e56c",
+   "state": "LOCKED",
+   "traces": [
+    {
+     "nominal_category": "coding",
+     "normalized_step_count": 523,
+     "prior_exposure": "opened in R2-10 Phase 3 for predictor recall@k only; no eviction or retention outcome has ever been computed on it",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-09-EVAL\\captures\\coding-eval-v1\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "46104e88a19136153d3223862cd392181d80cc6bfc07e063f009cb7347a392d3",
+     "workload_id": "coding-eval-v1",
+     "workload_spec_path": "research2/workloads/r2_09/coding-v1.json",
+     "workload_spec_sha256": "a7af978474839e737e183105e4df945d7f6651d58e00862d8189f47bd48a5ff9"
+    },
+    {
+     "nominal_category": "reasoning",
+     "normalized_step_count": 524,
+     "prior_exposure": "opened in R2-10 Phase 3 for predictor recall@k only; no eviction or retention outcome has ever been computed on it",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-09-EVAL\\captures\\reasoning-eval-v1\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "9adc1ce8801b766fffe64fc54ffc80c7b7bf6dc16b7fe46bcc5c0b3c9a87c0ae",
+     "workload_id": "reasoning-eval-v1",
+     "workload_spec_path": "research2/workloads/r2_09/reasoning-v1.json",
+     "workload_spec_sha256": "bd4d4b304ff3c5189720b23ab57ea2891adcdbb5f2af3c92768871604901306f"
+    },
+    {
+     "nominal_category": "summarization",
+     "normalized_step_count": 523,
+     "prior_exposure": "opened in R2-10 Phase 3 for predictor recall@k only; no eviction or retention outcome has ever been computed on it",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-09-EVAL\\captures\\summarization-eval-v1\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "e33fa1e2951498c8e03b6c7fb9e967040e6eae7c8a638e0e2b4ca083e5c8ae33",
+     "workload_id": "summarization-eval-v1",
+     "workload_spec_path": "research2/workloads/r2_09/summarization-v1.json",
+     "workload_spec_sha256": "59e5540bbc3e357ee0e7cea8e895ae561ba398aa6e3f17b149b58e6b3fa03b4f"
+    },
+    {
+     "nominal_category": "instruction",
+     "normalized_step_count": 523,
+     "prior_exposure": "opened in R2-10 Phase 3 for predictor recall@k only; no eviction or retention outcome has ever been computed on it",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-09-EVAL\\captures\\instruction-eval-v1\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "6a51113fc830b63fc1b8a60c394e16f84df2ff04fb2a566dd1653a96f202dd50",
+     "workload_id": "instruction-eval-v1",
+     "workload_spec_path": "research2/workloads/r2_09/instruction-v1.json",
+     "workload_spec_sha256": "85e58d9a6d11a6364de18e8992f22ae36658d47c00094ff7888cc19e387bf4d5"
+    }
+   ]
+  },
+  "REPLICATE_CHECK": {
+   "role": "non-gating descriptive replicate of TRAIN; never used for fitting or any decision",
+   "traces": [
+    {
+     "decode_steps": 381,
+     "frozen_A_reference": "experiments/R3-05-economic-retention/r4-nue-candidate-gate/DEV_RESULTS.json runs[instance].A",
+     "instance_id": "coding-v1__seed-43",
+     "nominal_category": "coding",
+     "prompt_sha256": "460949e7abf004374bb0b06dcda89eeaba0e916b5f6053784afe037e6f2162d8",
+     "seed": 43,
+     "total_steps": 395,
+     "trace_path_host": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\coding-v1-seed43\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "0ce54e852eb057893ae13e9aa2775bcc282744d59d9b74cac78fa8eafac7665c",
+     "workload_id": "coding-v1"
+    },
+    {
+     "decode_steps": 511,
+     "frozen_A_reference": "experiments/R3-05-economic-retention/r4-nue-candidate-gate/DEV_RESULTS.json runs[instance].A",
+     "instance_id": "instruction-v1__seed-43",
+     "nominal_category": "instruction",
+     "prompt_sha256": "59636f262206fd6d621f91c3d31a5cc03072284f368c930292dea88dc40fcc40",
+     "seed": 43,
+     "total_steps": 524,
+     "trace_path_host": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\instruction-v1-seed43\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "f7c9a2bbaea8c95e46d25dfc70662d67301fc4bd8508c2db63c018c870a6376d",
+     "workload_id": "instruction-v1"
+    },
+    {
+     "decode_steps": 511,
+     "frozen_A_reference": "experiments/R3-05-economic-retention/r4-nue-candidate-gate/DEV_RESULTS.json runs[instance].A",
+     "instance_id": "reasoning-v1__seed-43",
+     "nominal_category": "reasoning",
+     "prompt_sha256": "df938ba8b233877743a80fac33a9fe7c6e363461969c399d2300aa0f0290c183",
+     "seed": 43,
+     "total_steps": 524,
+     "trace_path_host": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\reasoning-v1-seed43\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "fb38497d5f6c9d13465a9ed185f3c04204cb50835943bbfcca315df06f4bb65b",
+     "workload_id": "reasoning-v1"
+    },
+    {
+     "decode_steps": 511,
+     "frozen_A_reference": "experiments/R3-05-economic-retention/r4-nue-candidate-gate/DEV_RESULTS.json runs[instance].A",
+     "instance_id": "summarization-v1__seed-43",
+     "nominal_category": "summarization",
+     "prompt_sha256": "1411d3f44661822206a3c5c300cefbab7be1a4ff8dd8d6880d554b62d8943266",
+     "seed": 43,
+     "total_steps": 524,
+     "trace_path_host": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\summarization-v1-seed43\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "94b4522adb0faeb521ab12b7b67cf111d0a6623392e215f1ba499e2c1cf9042c",
+     "workload_id": "summarization-v1"
+    }
+   ]
+  },
+  "TRAIN": {
+   "role": "fit CHEAP and RICH; teacher labels",
+   "source_manifest": "experiments/R2-09-prediction-benchmark/r2_09a/dev_corpus_manifest.json",
+   "source_manifest_sha256": "5e8b49b92ecd1e8b0f9904d9479b3014da39551097e2556d7150be2e00ebc905",
+   "traces": [
+    {
+     "decode_steps": 381,
+     "frozen_A_reference": "experiments/R3-05-economic-retention/r4-nue-candidate-gate/DEV_RESULTS.json runs[instance].A",
+     "instance_id": "coding-v1__seed-42",
+     "nominal_category": "coding",
+     "prompt_sha256": "460949e7abf004374bb0b06dcda89eeaba0e916b5f6053784afe037e6f2162d8",
+     "seed": 42,
+     "total_steps": 396,
+     "trace_path_host": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-01\\captures\\286a41477ce54d5fb9ccc24f4e508f22\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "e6c16f2bcdb4ef841770ff16ac404c91312297112bcd7e653438cc22b8d7b2f1",
+     "workload_id": "coding-v1"
+    },
+    {
+     "decode_steps": 511,
+     "frozen_A_reference": "experiments/R3-05-economic-retention/r4-nue-candidate-gate/DEV_RESULTS.json runs[instance].A",
+     "instance_id": "instruction-v1__seed-42",
+     "nominal_category": "instruction",
+     "prompt_sha256": "59636f262206fd6d621f91c3d31a5cc03072284f368c930292dea88dc40fcc40",
+     "seed": 42,
+     "total_steps": 524,
+     "trace_path_host": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\instruction-v1-seed42\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "9934371d18a1ad3f0e2cb2a5e89cad87ed4e7a002732190646cfff9a0b489f54",
+     "workload_id": "instruction-v1"
+    },
+    {
+     "decode_steps": 511,
+     "frozen_A_reference": "experiments/R3-05-economic-retention/r4-nue-candidate-gate/DEV_RESULTS.json runs[instance].A",
+     "instance_id": "reasoning-v1__seed-42",
+     "nominal_category": "reasoning",
+     "prompt_sha256": "df938ba8b233877743a80fac33a9fe7c6e363461969c399d2300aa0f0290c183",
+     "seed": 42,
+     "total_steps": 524,
+     "trace_path_host": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\reasoning-v1-seed42\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "8dff85b9e99f6e10a2a6a608585c77102c65597561c2cf55dd4471e37eb48b3b",
+     "workload_id": "reasoning-v1"
+    },
+    {
+     "decode_steps": 511,
+     "frozen_A_reference": "experiments/R3-05-economic-retention/r4-nue-candidate-gate/DEV_RESULTS.json runs[instance].A",
+     "instance_id": "summarization-v1__seed-42",
+     "nominal_category": "summarization",
+     "prompt_sha256": "1411d3f44661822206a3c5c300cefbab7be1a4ff8dd8d6880d554b62d8943266",
+     "seed": 42,
+     "total_steps": 524,
+     "trace_path_host": "C:\\Users\\alpel\\AppData\\Local\\Argine3\\research\\R2-08\\captures\\6165471a12574e05b48932aac2f1626c\\summarization-v1-seed42\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "dc24bde642278f4a8d75c6eae077121faed8562d04e4d9fed2d7cb87aa39a9bf",
+     "workload_id": "summarization-v1"
+    }
+   ]
+  },
+  "VALIDATION": {
+   "freshness_reference": "experiments/R2-11-predictive-retention/freshness_audit.json (max cross-corpus 8-gram Jaccard 0.0367, R2-11 vs R2-09 EVAL)",
+   "role": "the single frozen gate (no selection among alternatives)",
+   "source_record": "experiments/R2-11-predictive-retention/R2_11_CAPTURED_SEALED.json",
+   "source_record_sha256": "6a4da556401762e748c3a32ca7957d93622f49babced45bc728f481f2a4252d4",
+   "traces": [
+    {
+     "frozen_A_reference": {
+      "decode_bytes_missed": 294412750848,
+      "decode_misses": 102334,
+      "decode_steps": 511,
+      "source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-coding-v1__budget-1.5__b_selected.json"
+     },
+     "nominal_category": "coding",
+     "normalized_trace_digest": "3f08a88e26fb8e6320edb033c47d547747ca01bd757a7fd8d557868b99109835",
+     "prior_exposure": "opened in R2-11 for b_selected and predicted_protect miss bytes only; same prompt as the Research 3 canonical stream (r2-11-coding-v1), on which NUE_X was scored in Research 3",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v1\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "da9a4535640fc1f64a2e7a3d8d01e456854c36daa08d70be99fb2e2a738d5ffd",
+     "workload_id": "r2-11-coding-v1",
+     "workload_spec_path": "research2/workloads/r2_11/r2-11-coding-v1.json",
+     "workload_spec_sha256": "3cc6a2f89fcc6600f894c967861e6ff5f53cb0b2d460fe7fc459481d8cca2019"
+    },
+    {
+     "frozen_A_reference": {
+      "decode_bytes_missed": 303145684992,
+      "decode_misses": 105469,
+      "decode_steps": 511,
+      "source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-coding-v2__budget-1.5__b_selected.json"
+     },
+     "nominal_category": "coding",
+     "normalized_trace_digest": "990c9f6ac6791959575a096cb620d8181c0314bc900ffcbc050e0c9b4a1f980f",
+     "prior_exposure": "opened in R2-11 for b_selected and predicted_protect miss bytes only",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v2\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "dfe19f93e42a809d44a45a22af238e049e4aaf8eb99219132cdf9b6e2313588b",
+     "workload_id": "r2-11-coding-v2",
+     "workload_spec_path": "research2/workloads/r2_11/r2-11-coding-v2.json",
+     "workload_spec_sha256": "b229deb3824ea24d5820f0f102ba7e92f743784a73132f920dd38ace06be62e9"
+    },
+    {
+     "frozen_A_reference": {
+      "decode_bytes_missed": 284929376256,
+      "decode_misses": 98987,
+      "decode_steps": 511,
+      "source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-coding-v3__budget-1.5__b_selected.json"
+     },
+     "nominal_category": "coding",
+     "normalized_trace_digest": "9d9879593d698cd174fa93f46f03fc6c51b53f3c069a39dff820a5c89bc9f359",
+     "prior_exposure": "opened in R2-11 for b_selected and predicted_protect miss bytes only",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-coding-v3\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "40a29f54c02b3f23a558d6d601b59e60d3f67fdb29f8cd8005e45fbc2a97e98d",
+     "workload_id": "r2-11-coding-v3",
+     "workload_spec_path": "research2/workloads/r2_11/r2-11-coding-v3.json",
+     "workload_spec_sha256": "9fa32b1641f17c017c8de7f5ca143b1d3edd3cb0e1045bdc998e258ce49b7d29"
+    },
+    {
+     "frozen_A_reference": {
+      "decode_bytes_missed": 305815449600,
+      "decode_misses": 106356,
+      "decode_steps": 511,
+      "source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-instruction-v1__budget-1.5__b_selected.json"
+     },
+     "nominal_category": "instruction",
+     "normalized_trace_digest": "894f6384d51f9e0324de35a83de86853feca4a205ed59837339a47cabcf9b30b",
+     "prior_exposure": "opened in R2-11 for b_selected and predicted_protect miss bytes only",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v1\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "085dca7571fced800a4605311ae11d6264e95b90bf953858e8dbabb9ff42bf08",
+     "workload_id": "r2-11-instruction-v1",
+     "workload_spec_path": "research2/workloads/r2_11/r2-11-instruction-v1.json",
+     "workload_spec_sha256": "5a9c042b5d8ecac9ca92d189fe074f42c9f24747606ae8edc75567901d29266d"
+    },
+    {
+     "frozen_A_reference": {
+      "decode_bytes_missed": 316969168896,
+      "decode_misses": 110356,
+      "decode_steps": 511,
+      "source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-instruction-v2__budget-1.5__b_selected.json"
+     },
+     "nominal_category": "instruction",
+     "normalized_trace_digest": "f7db1d1ab44eb5dc205b14606539fd82797203e6de08cf997dab09c92fffb3fe",
+     "prior_exposure": "opened in R2-11 for b_selected and predicted_protect miss bytes only",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v2\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "6abad7c87176f18d0f28abf1d8cc2fa78e6dc14b5722a0f76dffb41daed4b54e",
+     "workload_id": "r2-11-instruction-v2",
+     "workload_spec_path": "research2/workloads/r2_11/r2-11-instruction-v2.json",
+     "workload_spec_sha256": "19522635506886477ff466b0ac0178960e22917d011965e2f016141c435ecc09"
+    },
+    {
+     "frozen_A_reference": {
+      "decode_bytes_missed": 314848456704,
+      "decode_misses": 109590,
+      "decode_steps": 511,
+      "source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-instruction-v3__budget-1.5__b_selected.json"
+     },
+     "nominal_category": "instruction",
+     "normalized_trace_digest": "98cf25ca8aba5da0a973f4fd44fd80af94207f57f51c5e0e79518c30fcc0e6f5",
+     "prior_exposure": "opened in R2-11 for b_selected and predicted_protect miss bytes only",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-instruction-v3\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "3b8d5090f2191c1f0125f1e32acdf986cd7cb3765b14d30ea564f1397b0b4319",
+     "workload_id": "r2-11-instruction-v3",
+     "workload_spec_path": "research2/workloads/r2_11/r2-11-instruction-v3.json",
+     "workload_spec_sha256": "5797b1237e3cdd6bb441b8f8037f09af87675ce189bc3cce78e475e1235e5b3b"
+    },
+    {
+     "frozen_A_reference": {
+      "decode_bytes_missed": 319191146496,
+      "decode_misses": 110885,
+      "decode_steps": 511,
+      "source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-reasoning-v1__budget-1.5__b_selected.json"
+     },
+     "nominal_category": "reasoning",
+     "normalized_trace_digest": "d7024038c1b985fa5920b091cc0366cf77d83f495ba6b25340fe19be3648e7df",
+     "prior_exposure": "opened in R2-11 for b_selected and predicted_protect miss bytes only",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v1\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "d65807d8ea692a0dc7dbdd24492b4abe15d402b4d71bbe7c41befe5013c77a9e",
+     "workload_id": "r2-11-reasoning-v1",
+     "workload_spec_path": "research2/workloads/r2_11/r2-11-reasoning-v1.json",
+     "workload_spec_sha256": "bb82afa21e35b94c1e93910be4d4d50378a0ca5d040d40f387e6890243aa5791"
+    },
+    {
+     "frozen_A_reference": {
+      "decode_bytes_missed": 291207131136,
+      "decode_misses": 101096,
+      "decode_steps": 511,
+      "source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-reasoning-v2__budget-1.5__b_selected.json"
+     },
+     "nominal_category": "reasoning",
+     "normalized_trace_digest": "109307a57c33bfcfc30687969f402e01f18475c3fd22e35342fbe4c657aca0fc",
+     "prior_exposure": "opened in R2-11 for b_selected and predicted_protect miss bytes only",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v2\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "bd77666adb5b568d7247438acb36a752ec17c0d0a2ee3bd5577ae9d96d4e23b2",
+     "workload_id": "r2-11-reasoning-v2",
+     "workload_spec_path": "research2/workloads/r2_11/r2-11-reasoning-v2.json",
+     "workload_spec_sha256": "f286352e8f47d2a721f2858aa6cf5298a6ff99afb825635c7758fb2441cbae3d"
+    },
+    {
+     "frozen_A_reference": {
+      "decode_bytes_missed": 296638746624,
+      "decode_misses": 103037,
+      "decode_steps": 511,
+      "source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-reasoning-v3__budget-1.5__b_selected.json"
+     },
+     "nominal_category": "reasoning",
+     "normalized_trace_digest": "6e20844a484fedf019ce089884c1a5da641f4d191304e155743c71ad2e3c3ee3",
+     "prior_exposure": "opened in R2-11 for b_selected and predicted_protect miss bytes only",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-reasoning-v3\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "25912ff92747a52cabf13e48d535998f47b344272b04748671e2174d499fca73",
+     "workload_id": "r2-11-reasoning-v3",
+     "workload_spec_path": "research2/workloads/r2_11/r2-11-reasoning-v3.json",
+     "workload_spec_sha256": "95204a47c6f380dd5dd63302e48216b62b9be8c92b9ffc968387cc5e1b527a56"
+    },
+    {
+     "frozen_A_reference": {
+      "decode_bytes_missed": 304009150464,
+      "decode_misses": 105730,
+      "decode_steps": 511,
+      "source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-summarization-v1__budget-1.5__b_selected.json"
+     },
+     "nominal_category": "summarization",
+     "normalized_trace_digest": "164f9fc97904bd2e4e21e4c287f5c8bfe39f8a101be0a5ce0c91532304dd98cd",
+     "prior_exposure": "opened in R2-11 for b_selected and predicted_protect miss bytes only",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v1\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "6df5f46d25149682b8e986d45ee4739ede271925433cd6b81205bd3d8ceacb9d",
+     "workload_id": "r2-11-summarization-v1",
+     "workload_spec_path": "research2/workloads/r2_11/r2-11-summarization-v1.json",
+     "workload_spec_sha256": "ecc9425a9aeaec7e92a982d51cb742a804442e6765a192818bdac9b588820601"
+    },
+    {
+     "frozen_A_reference": {
+      "decode_bytes_missed": 313077252096,
+      "decode_misses": 108899,
+      "decode_steps": 511,
+      "source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-summarization-v2__budget-1.5__b_selected.json"
+     },
+     "nominal_category": "summarization",
+     "normalized_trace_digest": "31ff04346157541932c259ed66b3128c3fe6a96f1efa822d8cb35415cb888e2f",
+     "prior_exposure": "opened in R2-11 for b_selected and predicted_protect miss bytes only",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v2\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "44b1db845bb5f4c71b4ee5158f445e94706bcb1287bc8298ae5b712632d99b95",
+     "workload_id": "r2-11-summarization-v2",
+     "workload_spec_path": "research2/workloads/r2_11/r2-11-summarization-v2.json",
+     "workload_spec_sha256": "03da7f3363d91b9f390475461c1ac675134f1ba577d0fcabcfe106ac564bc5c6"
+    },
+    {
+     "frozen_A_reference": {
+      "decode_bytes_missed": 297412632576,
+      "decode_misses": 103278,
+      "decode_steps": 511,
+      "source": "experiments/R2-11-predictive-retention/eval_cells/r2-11-summarization-v3__budget-1.5__b_selected.json"
+     },
+     "nominal_category": "summarization",
+     "normalized_trace_digest": "848bc296dba4e709f7610e1aa2b11e3c5a4603a2c61b576811ad331d55b25516",
+     "prior_exposure": "opened in R2-11 for b_selected and predicted_protect miss bytes only",
+     "trace_path_host": "%LOCALAPPDATA%\\Argine3\\research\\R2-11\\captures\\r2-11-summarization-v3\\run-00-4G\\trace.jsonl.gz",
+     "trace_sha256": "eabe70fe56d2e1e33cdc6c6b9acc9820ed764aed38f369e5d514c6adfabf91fa",
+     "workload_id": "r2-11-summarization-v3",
+     "workload_spec_path": "research2/workloads/r2_11/r2-11-summarization-v3.json",
+     "workload_spec_sha256": "0abf4761b1b8fc6364afd1fa2e73c4a26c40b782707e8a54b718c0e76f511a8d"
+    }
+   ]
+  }
+ },
+ "trace_capture_note": "All traces were captured at 4 GiB; only routing is used. Replay at 1.5 GiB is valid because replay depends on routing, not on the capture budget (Research 2 replay validation)."
+}

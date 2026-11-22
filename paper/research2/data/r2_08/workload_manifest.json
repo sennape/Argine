@@ -1,0 +1,90 @@
+{
+  "canonical_cells": [
+    {
+      "seed": 42,
+      "workload_id": "coding-v1"
+    },
+    {
+      "seed": 43,
+      "workload_id": "coding-v1"
+    },
+    {
+      "seed": 42,
+      "workload_id": "reasoning-v1"
+    },
+    {
+      "seed": 43,
+      "workload_id": "reasoning-v1"
+    },
+    {
+      "seed": 42,
+      "workload_id": "summarization-v1"
+    },
+    {
+      "seed": 43,
+      "workload_id": "summarization-v1"
+    },
+    {
+      "seed": 42,
+      "workload_id": "instruction-v1"
+    },
+    {
+      "seed": 43,
+      "workload_id": "instruction-v1"
+    }
+  ],
+  "reused_cell": {
+    "seed": 42,
+    "source": "R2-01 canonical trace (coding-v1 / seed-42)",
+    "workload_id": "coding-v1"
+  },
+  "schema_version": 1,
+  "summarization_source_input": {
+    "committed_locally": true,
+    "path": "research2/workloads/r2_08/sources/summarization_technical_source.txt",
+    "sha256": "190c3cfac270293eb42572f698ff838761da59692290134dd817b0b8e5bfca0f",
+    "web_network_dependency": false
+  },
+  "workloads": [
+    {
+      "description": "Existing canonical R2-01 coding workload (workloads/v1/coding.json, dev split), reused as coding-v1 replicate seed-42 and captured as seed-43 under the same protocol.",
+      "n_predict": 128,
+      "semantic_category": "coding",
+      "sha256": "460949e7abf004374bb0b06dcda89eeaba0e916b5f6053784afe037e6f2162d8",
+      "source_path": "workloads/v1/coding.json",
+      "split": "dev",
+      "version": "v1",
+      "workload_id": "coding-v1"
+    },
+    {
+      "description": "Fixed analytical/multi-step reasoning task designed to generate a substantial decode sequence (frozen R2-08).",
+      "n_predict": 512,
+      "semantic_category": "reasoning",
+      "sha256": "df938ba8b233877743a80fac33a9fe7c6e363461969c399d2300aa0f0290c183",
+      "source_path": "research2/workloads/r2_08/reasoning-v1.json",
+      "split": "dev",
+      "version": "r2-08-v1",
+      "workload_id": "reasoning-v1"
+    },
+    {
+      "description": "Fixed long technical source input followed by detailed summarization/synthesis; source committed locally, no web/network dependency (frozen R2-08).",
+      "n_predict": 512,
+      "semantic_category": "summarization",
+      "sha256": "1411d3f44661822206a3c5c300cefbab7be1a4ff8dd8d6880d554b62d8943266",
+      "source_path": "research2/workloads/r2_08/summarization-v1.json",
+      "split": "dev",
+      "version": "r2-08-v1",
+      "workload_id": "summarization-v1"
+    },
+    {
+      "description": "Fixed general expository/instruction-following task, materially different from coding, explicit reasoning, and summarization (frozen R2-08).",
+      "n_predict": 512,
+      "semantic_category": "instruction",
+      "sha256": "59636f262206fd6d621f91c3d31a5cc03072284f368c930292dea88dc40fcc40",
+      "source_path": "research2/workloads/r2_08/instruction-v1.json",
+      "split": "dev",
+      "version": "r2-08-v1",
+      "workload_id": "instruction-v1"
+    }
+  ]
+}

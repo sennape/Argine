@@ -1,0 +1,3 @@
+SHA256 hash di C:\Users\alpel\Desktop\Argine4\experiments\R3-03B-direct-cost-attribution\routing_stream_A-4GiB.txt:
+0224419aa9928ef6c3bcc1698eddfffcf1ec97a88893755f030b2cd5ff5690b6
+CertUtil: - Esecuzione comando hashfile riuscita.

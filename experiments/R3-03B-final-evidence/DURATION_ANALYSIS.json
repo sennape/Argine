@@ -1,0 +1,91 @@
+{
+ "exit_regime": {
+  "launches_with_logs": 80,
+  "exit_uptime_s": {
+   "min": 73.525,
+   "median": 299.997,
+   "max": 300.009
+  },
+  "n_exit_at_300_0s_uptime": 71,
+  "first_seq_in_300s_regime": 9,
+  "seqs_not_at_300s": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   17
+  ],
+  "release_to_cleanup_s": {
+   "mean": 210.12145,
+   "min": 2.3259999999999934,
+   "max": 233.71200000000002
+  },
+  "interpretation": "from launch 9 on the server logs its shutdown at 300.0 s of uptime regardless of when the request ended; the mechanism is not established from the artifacts"
+ },
+ "accounting": {
+  "opened_to_record_004_s": 688.8600895404816,
+  "record_004_to_resume_s": 1748.3340303897858,
+  "resume_to_complete_s": 24057.56532549858,
+  "post_resume_launch_sum_s": 22061.786107301712,
+  "post_resume_gap_sum_s": 1935.224098443985,
+  "planned_shutdown_s_per_launch": 20,
+  "excess_shutdown_s_vs_plan": 15067.655331200338,
+  "excess_shutdown_h_vs_plan": 4.185459814222316
+ },
+ "campaign_opened_unix": 1795213728.061003,
+ "resumed_unix": 1795216165.255123,
+ "complete_unix": 1795240222.8204484,
+ "span_s": 26494.75944542885,
+ "span_h": 7.359655401508014,
+ "planned_total_h": 2.85,
+ "planned_per_launch_s": 102,
+ "planned_cooldown_s": 2100,
+ "planned_model_s": 8160,
+ "launches_with_timestamps": 76,
+ "launch_s": {
+  "mean": 290.28665930660145,
+  "median": 300.8063052892685,
+  "min": 81.20109009742737,
+  "max": 300.98607420921326,
+  "sum": 22061.786107301712
+ },
+ "inter_launch_gap_s": {
+  "n": 75,
+  "mean": 25.802987979253132,
+  "median": 15.003166198730469,
+  "min": 15.00214695930481,
+  "max": 60.004093647003174,
+  "sum": 1935.224098443985
+ },
+ "shutdown_wait_s": {
+  "n": 76,
+  "mean": 218.2586227789518,
+  "median": 225.29030250001233,
+  "max": 234.4611217000056,
+  "sum": 16587.655331200338
+ },
+ "launch_decomposition_s_mean": {
+  "request_wall": 65.61250321874249,
+  "prompt_ms_part_s": 9.497868200000001,
+  "shutdown_wait_recorded": 218.2586227789518
+ },
+ "incident_and_resume": {
+  "resume_count": 1,
+  "accepted_at_resume": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "resumed_unix": 1795216165.255123,
+  "orphan_markers_created": [
+   "005.try1.ORPHAN_NONCOUNTED.json"
+  ]
+ },
+ "observed_vs_planned_ratio": 2.582335228599303,
+ "excess_h": 4.509655401508013
+}

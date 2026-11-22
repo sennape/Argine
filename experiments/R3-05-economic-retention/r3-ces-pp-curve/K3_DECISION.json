@@ -1,0 +1,23 @@
+{
+ "N": 10,
+ "artifact": "R3-05-R3-K3-DECISION",
+ "classification": "R3_05_K3_FREQUENCY_FAMILY_SURVIVES",
+ "effect_metric": "decode miss bytes avoided vs A (the Phase 0 K2/K3 effect metric); misses reported alongside",
+ "inputs": {
+  "canonical_stream_sha256": "24fcc3e31e800826acb353c627326d4665af7b05c88a3138b18b79c5c435e776",
+  "events": 24672,
+  "passes": 514,
+  "phase0_freeze_sha256": "415f78a850a2917a2457797106589433f944c07a863f80b14cef88fde6232ae3",
+  "r1_classification": "R3_05_R1_FIDELITY_PASS",
+  "r1_freeze_sha256": "8d025fdfb3d2a48c54e4d905f3a0e3aad2dd70ed9fdabf602b21ec2b600c3382",
+  "r2_classification": "R3_05_K1_HEADROOM_PASS",
+  "r2_freeze_sha256": "8b22e41505e3c14b78b6c924b703f1da4b26643123a9240f7bd9ad7d232afa44",
+  "token_digest": "ac28efbe13c80f363f508a6f19d4b1d3af189eb26d6e9c81309376033075cdfa"
+ },
+ "interpretation": "SURVIVES would only mean amortization is still worth considering; it is not a success",
+ "retained": 0.6222479721900348,
+ "retained_exact": "178163712/286322688",
+ "retained_misses_exact": "63/101",
+ "rule": "K3 (Phase 0): drop the frequency-reduction family if the PP benefit retained at f = 0.10 (N = 10) is <= 0.2 (exact fractions)",
+ "threshold": 0.2
+}

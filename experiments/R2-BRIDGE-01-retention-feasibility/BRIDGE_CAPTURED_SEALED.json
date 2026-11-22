@@ -1,0 +1,142 @@
+{
+  "artifact": "BRIDGE_CAPTURED_SEALED",
+  "schema_version": 1,
+  "phase_name": "R2-BRIDGE-01 Phase 2A -- Fresh Holdout Capture and Sealing",
+  "state": "BRIDGE_CAPTURED_SEALED",
+  "state_machine": "BRIDGE_LOCKED -> BRIDGE_HOLDOUT_SPECS_FROZEN -> BRIDGE_ACQUISITION_PLANNED -> BRIDGE_CAPTURED_SEALED",
+  "next_state_not_taken": "BRIDGE_OPENED (requires separate, explicit authorization)",
+  "frozen_scientific_parameters": {
+    "model": "Qwen3-30B-A3B-Q4_K_M.gguf",
+    "model_sha256_full": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+    "model_sha256_full_method": "independently recomputed full sha256sum of the on-disk model file at C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf; matches canonical_model_sha256 in paper/research2/II-B-FREEZE.json exactly",
+    "model_fingerprint_fast_all_4_captures": "5a7219c361870ba46bfec4d97feee0c6ff83c92ffb91336bf3a7136767cd16bc (method sha256-fast; recorded identically in all 4 manifests, consistent with the same unmodified file)",
+    "runtime_binary": "llama-research-v2/llama-server.exe",
+    "runtime_sha256": "a0063720ec4bb5d1ba3e4f7c0387dd1bc6a239b0ce038ba3d755351dab3f5cf3",
+    "runtime_sha256_matches_canonical": true,
+    "seed": 42,
+    "ctx": 4096,
+    "threads": 4,
+    "threads_batch": 12,
+    "temperature": 0.0,
+    "top_k_sampling": 1,
+    "n_predict": 512,
+    "expert_budget": "4G",
+    "cli_split": "eval",
+    "provenance_split_identity": "bridge_holdout"
+  },
+  "canonical_captures": {
+    "bridge-coding-v1": {
+      "trace_path": "captures/bridge-coding-v1/run-00-4G/trace.jsonl.gz",
+      "trace_sha256": "493535d0266617f7adfd2285be53c32b0ad419571a31d98b8e89f58a77a5dec3",
+      "normalized_trace_digest": "7ee16773251747994a6a8ca2307f253675180ce16d527eb466694f13de6e4f65",
+      "workload_sha256": "a179a10e269549c3ce4af34bdf0f0c84a414097852eb6284f51444f3516c1ba5",
+      "wall_s": 97.22393,
+      "normalize_reconcile": "normalize() succeeded, reconcile() == []",
+      "trace_completeness": "complete=true, decode_steps=511/511, partial_steps=0",
+      "cardinality": "n_layers=48, n_experts=128, top_k=8, expert_id range [0,127]",
+      "publication_quality_warnings": [
+        "argine2 commit"
+      ],
+      "warning_classification": "A: provenance/display-only (git.exe not in PATH on capture host; verified directly via fingerprint.argine2.note = \"git unavailable: [WinError 2] Impossibile trovare il file specificato\"); zero scientific impact",
+      "failed_attempts": []
+    },
+    "bridge-reasoning-v1": {
+      "trace_path": "captures/bridge-reasoning-v1/run-00-4G/trace.jsonl.gz",
+      "trace_sha256": "218c66be51a40acf9fb39ac49da8cf73a69d901cecffe636d3d14993a5667d4e",
+      "normalized_trace_digest": "e3b74ad8a0102fb67bb665329eacf44d5776763c8d3f1de79a4421da87ffce71",
+      "workload_sha256": "f152008e9935c4fa536deb29e8b3124c71b2ae32314b2082c524bc764828cc1b",
+      "wall_s": 110.26711,
+      "normalize_reconcile": "normalize() succeeded, reconcile() == []",
+      "trace_completeness": "complete=true, decode_steps=511/511, partial_steps=0",
+      "cardinality": "n_layers=48, n_experts=128, top_k=8, expert_id range [0,127]",
+      "publication_quality_warnings": [
+        "argine2 commit"
+      ],
+      "warning_classification": "A: provenance/display-only; zero scientific impact",
+      "failed_attempts": [
+        {
+          "kind": "PRELAUNCH_RAM_FAILURE",
+          "evidence": "no files exist on disk for this attempt anywhere under the captures root"
+        }
+      ]
+    },
+    "bridge-summarization-v1": {
+      "trace_path": "captures/bridge-summarization-v1/run-00-4G/trace.jsonl.gz",
+      "trace_sha256": "6a1841b6a704efa3b72921e14b7e83d1f8bbe0242dc59d5979d2fb5fb75ff68b",
+      "normalized_trace_digest": "5a0cea556987498fc742905bf58a75429d930029bfee39508d78c794b6f6fcd2",
+      "workload_sha256": "6fb0210e02be9b8df454cc557e7cfff70aa6d2cc2781e852339f04487521f073",
+      "wall_s": 111.83796,
+      "normalize_reconcile": "normalize() succeeded, reconcile() == []",
+      "trace_completeness": "complete=true, decode_steps=511/511, partial_steps=0 (post Phase 2A.1 instrumentation repair, commit dbe8306)",
+      "cardinality": "n_layers=48, n_experts=128, top_k=8, expert_id range [0,127]",
+      "publication_quality_warnings": [
+        "argine2 commit"
+      ],
+      "warning_classification": "A: provenance/display-only; zero scientific impact",
+      "trace_meta_notes": [
+        "R2-BRIDGE-01 Phase 2A.1 instrumentation repair: graph 11's layer 47 record absorbed into graph 10 (split-tail forward pass, same logical request; see _absorb_split_tail_graphs)"
+      ],
+      "failed_attempts": [
+        {
+          "kind": "PRELAUNCH_RAM_FAILURE",
+          "evidence": "no files exist on disk for this attempt anywhere under the captures root"
+        },
+        {
+          "kind": "SCIENTIFIC_TRACE_INCOMPLETENESS_PRE_REPAIR",
+          "preserved_path": "captures/bridge-summarization-v1-attempt1-incomplete-trace-completeness/run-00-4G",
+          "trace_sha256": "07b669f1ecb68056310a31ac927f206d65a6d206386ea91c2b06aa8d44550dba",
+          "note": "graph-boundary accounting defect, classification C; fixed in Phase 2A.1 (commit dbe8306); preserved, not overwritten"
+        },
+        {
+          "kind": "SCIENTIFIC_TRACE_INCOMPLETENESS_PRE_REPAIR",
+          "preserved_path": "captures/bridge-summarization-v1-attempt2-incomplete-trace-completeness/run-00-4G",
+          "trace_sha256": "76dacb652699b68b820665894feeedf070e11e02d2b6e5b8219b9299bf32b833",
+          "note": "identical defect signature to attempt 1, independently reproduced; fixed in Phase 2A.1 (commit dbe8306); preserved, not overwritten"
+        }
+      ]
+    },
+    "bridge-instruction-v1": {
+      "trace_path": "captures/bridge-instruction-v1/run-00-4G/trace.jsonl.gz",
+      "trace_sha256": "0ccce92f92f669ac3308ac39f27fa17b8ad6d23e8aa858767f5f528957d1802c",
+      "normalized_trace_digest": "d8176c2c02cec1cc0309830e6c0074e255b2690f35c8e476afa2df72a4f6a4a1",
+      "workload_sha256": "bbc9f6f92950f6f006465cdb8b2008c78aa5f29aa3980df7e3dac2c6a3944dcb",
+      "wall_s": 92.241532,
+      "normalize_reconcile": "normalize() succeeded, reconcile() == []",
+      "trace_completeness": "complete=true, decode_steps=511/511, partial_steps=0",
+      "cardinality": "n_layers=48, n_experts=128, top_k=8, expert_id range [0,127]",
+      "publication_quality_warnings": [
+        "argine2 commit"
+      ],
+      "warning_classification": "A: provenance/display-only; zero scientific impact",
+      "failed_attempts": [],
+      "non_boundary_equivalence_check": "rebuilt independently from raw.tsv under the Phase 2A.1 repaired code, written to captures/instrumentation-validation/bridge-instruction-v1-repaired-rebuild.jsonl.gz (did not replace canonical trace): routing sequence identical before/after the repair"
+    }
+  },
+  "duplicate_contamination_audit": {
+    "all_4_canonical_trace_sha256_distinct": true,
+    "all_4_canonical_normalized_digests_distinct": true,
+    "checked_against_r2_09_eval_coding_reasoning_summarization_instruction": "all 4 R2-09-EVAL trace sha256 distinct from all 4 BRIDGE canonical trace sha256",
+    "checked_against_preserved_failed_summarization_attempts": "both preserved incomplete attempts trace sha256 distinct from the canonical sealed summarization trace and from each other",
+    "no_dev_eval_substitution": true,
+    "no_workload_spec_mismatch": true
+  },
+  "frozen_upstream_identities_unchanged": {
+    "phase0_contract_digest": "e4ef4268e6bc207f20d5f4a56c165b75b977536600ff9d6f7e59604f77a889fc",
+    "phase01_dev_selection_rule_addendum_digest": "5954a0f6d13fcf427124f8b7f7d7f009d2d76fbe82e4b4e28c6aa2167fc8eb92",
+    "phase1_selection_freeze_identity": {
+      "classification": "DEV_RETENTION_SIGNAL_POSITIVE",
+      "selected_config_id": "predicted_protect/budget=4294967296"
+    },
+    "phase2a0_acquisition_plan_digest": "33cab68f3ff05e5d3cb442aac6bb6e2eb0f4b026ebdc5157101c4e2905150fdd",
+    "phase2a0_freeze_digest": "31f3f50f4fd26b564947d449b1e3b8d458ebd47a17535fcbc8d3616ae221d29a",
+    "phase2a1_instrumentation_repair_commit": "dbe8306",
+    "none_of_the_above_modified_by_this_sealing_step": true
+  },
+  "retention_metric_computed": false,
+  "predicted_protect_policy_run_against_holdout": false,
+  "b_selected_run_against_holdout": false,
+  "bridge_opened": false,
+  "r2_10_status_unchanged": "R2-10 CLOSED",
+  "r2_11_status_unchanged": "NOT PROPOSED",
+  "r2_12_status_unchanged": "NOT STARTED"
+}
