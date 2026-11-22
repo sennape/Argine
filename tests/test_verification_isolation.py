@@ -220,7 +220,9 @@ class VerifierIsolation(unittest.TestCase):
         self.assertEqual(kinds[-2:], ["exit", "cleanup"], "the verifier's Popen context exited before cleanup began")
         self.assertEqual(kinds.count("cleanup"), 1)
         for e in events[:-1]:
-            self.assertIsNotNone(e[1]); self.assertEqual(e[2:], (None, None, None))
+            self.assertIsNotNone(e[1])
+            for stream in e[2:]:
+                self.assertTrue(stream is None or stream.closed, "pipes are closed when the Popen context exits")
 
     def test_exit_codes_dirty_setup_and_verifier(self):
         import io, contextlib
