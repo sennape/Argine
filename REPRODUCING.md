@@ -32,6 +32,7 @@ All of this needs Python 3.9+ and no model weights or network.
 | Research 2 paper freeze | `python paper/research2/scripts/verify_paper_freeze.py` | nothing external |
 | Research 3 closure | `python shared/tooling/run_frozen_verifier.py experiments/R3-final-closure/closure.py verify` | nothing external |
 | Research 3 paper | `python shared/tooling/run_frozen_verifier.py paper/research3/scripts/verify_paper.py` | nothing external |
+| Research 4 paper | `python shared/tooling/run_frozen_verifier.py paper/research4/scripts/verify_paper.py` | nothing external (check-only; `--write` regenerates the source map) |
 | Research 4 Phase 0 | `python shared/tooling/run_frozen_verifier.py experiments/R4-00-causal-eviction-distillation/phase0.py verify` | verifies frozen records; regenerating from raw traces needs the external corpus |
 | Research 4 Phase 1 | `python shared/tooling/run_frozen_verifier.py experiments/R4-01-cfdc-training-validation/phase1.py verify` | frozen records |
 | Research 4 Phase 2 | `python shared/tooling/run_frozen_verifier.py experiments/R4-02-cfdc-prospective-eval/phase2.py verify` | frozen records |
