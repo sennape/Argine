@@ -1,0 +1,37 @@
+{
+  "artifact": "github-consolidation",
+  "new_repository": "https://github.com/sennape/Argine",
+  "branch": "main",
+  "final_main_head": "RECORDED_AFTER_PUSH (a commit cannot contain its own hash; read it with `git rev-parse origin/main`)",
+  "prepared_date": "2026-11-22",
+  "push_status": "NOT_DONE_BY_CLAUDE_SESSION: no GitHub credentials in the session; user pushes from Windows",
+  "research_status": {
+    "R1": "CLOSED",
+    "R2": "CLOSED_FROZEN",
+    "R3": "CLOSED (R3_CLOSED_NEGATIVE_PREDICTIVE_RETENTION_NOT_VIABLE_IN_TESTED_REGIME)",
+    "R4": "CLOSED (R4_CFDC_CLOSED)",
+    "R5": "NOT_OPENED"
+  },
+  "r4_classification": "R4_CFDC_CAUSAL_STATE_INSUFFICIENT",
+  "source_base": {
+    "repo": "Argine4",
+    "branch": "r4-main",
+    "head": "a9f92f2e06eacc2d52920f972739e19936074632"
+  },
+  "legacy_repositories": "see manifests/legacy-repositories.json",
+  "legacy_tags": {
+    "legacy/argine2/main": "faa613d18645e58dbb3f5e11cdf4d526bea842aa",
+    "legacy/argine2/v0.2.0": "8ed817dc05a7db5a7e7e22138fa4d75bfc6c5e17",
+    "legacy/argine2/local-master": "406763361a49a2c7ab6cbb811655dbdc51e77f9b",
+    "legacy/argine3/r2-main": "fda402f05876ed557e4282bc2ccfdec3b3a33957",
+    "legacy/argine3/research2-paper-final": "ebd8e50bb616bb15ed286a4d8e0408ddc0cfbe70",
+    "legacy/argine4/main": "66d2b8ebaa2ad3f26a42dfc0e310857409f99cbd",
+    "legacy/argine4/research3-paper-v1": "bcc9bde72ac6a926dbcc21a06f34088c6ec7d1dc"
+  },
+  "verifiers": "python shared/tooling/verify_all.py",
+  "omitted_raw_artifacts": "manifests/raw-artifacts-omitted.json",
+  "clean_clone_verification": "PENDING_USER_RUN",
+  "old_repositories_deleted": "NONE_YET (blocked until clean-clone verification passes and `gh auth refresh -s delete_repo`)",
+  "post_deletion_inventory": "PENDING",
+  "local_source_repositories_deleted": false
+}

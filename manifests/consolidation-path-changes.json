@@ -1,0 +1,50 @@
+{
+  "artifact": "consolidation-path-changes",
+  "summary": "No frozen scientific file was modified, moved or renamed. The consolidated tree is the Argine4 r4-main tree (a9f92f2e06eacc2d52920f972739e19936074632) plus additive files. Layout option chosen: index layer, files stay in place.",
+  "scientific_classification_changed": false,
+  "frozen_files_modified": 0,
+  "verifier_changes": [
+    {
+      "path": "(none: frozen verifier sources are byte-identical)",
+      "old_behaviour": "Frozen R3/R4 verifiers ran git log -1 --format=%h -- PATH, git show COMMIT:PATH and git diff --name-only REV -- PATHS against historical commits f88001558542b648c0a3abff54c919adedf27809, 35410947d51895326aa7e6c39a09825e2ffb4c0c, e46df73992ec64e829eddce63e3d50e65bdbd434 and others.",
+      "new_behaviour": "Those commits carry four ~1.9 GB R2-12 traces and cannot exist in the public history. shared/tooling/run_frozen_verifier.py runs the unmodified verifier with shared/tooling/gitcompat/sitecustomize.py, which answers exactly those three query types from manifests/git-object-equivalence.json, but only when the current HEAD:path Git object equals the recorded original object; otherwise it fails like a missing object. All other git commands pass through.",
+      "reason": "Equivalent frozen artifact/hash/digest check instead of an unavailable Git-object check; no threshold, rule, digest or expected value is weakened.",
+      "verified": "91/91 observed log queries matched the original; all five frozen verifiers pass in a fresh clone."
+    }
+  ],
+  "added_files": [
+    "shared/tooling/gitcompat/sitecustomize.py",
+    "shared/tooling/run_frozen_verifier.py",
+    "shared/tooling/verify_all.py",
+    "shared/tooling/verify_consolidation.py",
+    ".gitattributes",
+    "manifests/*",
+    "research/**",
+    "papers/**"
+  ],
+  "modified_documentation": [
+    {
+      "path": "README.md",
+      "change": "rewritten as one research-program README (R1-R4); the preserved Research 1 section is research/research-1/RECORD.md with links rewritten to ../../"
+    },
+    {
+      "path": "CITATION.cff",
+      "change": "title and repository-code now https://github.com/sennape/Argine; version and date-released (which described Argine2 v0.2.0) removed; author unchanged; no publication metadata invented"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "change": "repository identity and verifier commands updated"
+    },
+    {
+      "path": "REPRODUCING.md",
+      "change": "Part I added (structure, frozen stages, omitted raw artifacts, hash provenance, verifier commands); previous text preserved as Part II"
+    }
+  ],
+  "line_endings": {
+    "file": ".gitattributes",
+    "reason": "Frozen verifiers hash on-disk bytes; the original worktree mixed CRLF and LF per file. Per-file eol attributes make any clone reproduce the original bytes.",
+    "known_exception": "experiments/R3-02B-acquisition-driver/README.md had mixed line endings in the original and is checked out CRLF-only; no verifier failure was observed."
+  },
+  "path_only_changes": [],
+  "source_commit": "a9f92f2e06eacc2d52920f972739e19936074632"
+}

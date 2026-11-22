@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+"""Run every verifier of the consolidated repository and report each result.
+
+    python shared/tooling/verify_all.py [--skip-unittest]
+
+Frozen verifiers run unmodified through shared/tooling/run_frozen_verifier.py. Exit code 0 only if all pass.
+The R1/R2 unit-test suite contains environment-dependent tests (built runtime, raw data); it is run last and
+reported separately, and is excluded by --skip-unittest."""
+from __future__ import annotations
+
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "shared" / "tooling"))
+import run_frozen_verifier as rfv  # noqa: E402
+
+FROZEN = [
+    ("R3 closure", "experiments/R3-final-closure/closure.py", ["verify"]),
+    ("R3 paper", "paper/research3/scripts/verify_paper.py", []),
+    ("R4 Phase 0", "experiments/R4-00-causal-eviction-distillation/phase0.py", ["verify"]),
+    ("R4 Phase 1", "experiments/R4-01-cfdc-training-validation/phase1.py", ["verify"]),
+    ("R4 Phase 2", "experiments/R4-02-cfdc-prospective-eval/phase2.py", ["verify"]),
+]
+PLAIN = [
+    ("R1 registry", ["tools/index_experiments.py", "--check"]),
+    ("R2 paper freeze", ["paper/research2/scripts/verify_paper_freeze.py"]),
+    ("README index", ["strumenti/controlla_readme.py"]),
+    ("links", ["tools/check_links.py"]),
+    ("consolidation", ["shared/tooling/verify_consolidation.py"]),
+]
+
+
+def main() -> int:
+    results = []
+    for name, script, args in FROZEN:
+        results.append((name, rfv.run(script, *args)))
+    for name, cmd in PLAIN:
+        results.append((name, subprocess.run([sys.executable, *cmd], cwd=str(ROOT)).returncode))
+    if "--skip-unittest" not in sys.argv:
+        results.append(("unittest (R1/R2, env-dependent)", subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests"], cwd=str(ROOT)).returncode))
+    print()
+    for name, rc in results:
+        print(("PASS " if rc == 0 else "FAIL ") + name)
+    return 0 if all(rc == 0 for _, rc in results) else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
