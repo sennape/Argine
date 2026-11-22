@@ -1,25 +1,58 @@
 #!/usr/bin/env python3
-"""Run a frozen verifier UNMODIFIED with the Git-object equivalence layer active.
+"""Run a frozen verifier UNMODIFIED, in a disposable clone of the current commit, with the Git-object
+equivalence layer active.
 
     python shared/tooling/run_frozen_verifier.py experiments/R3-final-closure/closure.py verify
 
+Why a disposable clone: some frozen verifiers write files into their own tree (verify_paper.py rewrites
+paper/research3/SOURCE_MAP.md; on Windows Python's text mode writes CRLF into a file this repository pins to LF).
+Running them in a throw-away `git clone` of HEAD means the caller's checkout can never be modified; the clone is
+deleted afterwards and the verifier's real exit code and output are propagated. Nothing is masked (no
+assume-unchanged, skip-worktree or ignore rules): the caller's `git status` is simply never touched.
+
 The layer (shared/tooling/gitcompat/sitecustomize.py) answers the verifier's historical-Git queries from
-manifests/git-object-equivalence.json, and only when the current Git objects equal the recorded originals.
-Child interpreters (a verifier that runs another verifier) inherit it through PYTHONPATH."""
+manifests/git-object-equivalence.json, and only when the clone's Git objects equal the recorded originals.
+Child interpreters (a verifier that runs another verifier) inherit it through PYTHONPATH.
+
+Verification is of the COMMITTED state (HEAD); uncommitted caller changes are not seen by the verifier.
+Set ARGINE_KEEP_VERIFY_TREE=1 to keep the clone for diagnosis (its path is printed)."""
 from __future__ import annotations
 
 import os
+import shutil
+import stat
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def _rmtree(path: str) -> None:
+    def onerror(func, p, _exc):  # read-only Git objects on Windows
+        os.chmod(p, stat.S_IWRITE); func(p)
+    shutil.rmtree(path, onerror=onerror)
+
+
+def make_clone(dest: str) -> None:
+    """Clone the caller's current commit into dest (long paths on, autocrlf off; .gitattributes decides bytes)."""
+    subprocess.run(["git", "-c", "core.longpaths=true", "-c", "core.autocrlf=false", "clone", "-q", "--no-hardlinks", str(ROOT), dest], check=True)
+
+
 def run(script: str, *args: str) -> int:
-    env = dict(os.environ); env["ARGINE_GITCOMPAT_ROOT"] = str(ROOT)
-    env["PYTHONPATH"] = str(ROOT / "shared" / "tooling" / "gitcompat") + os.pathsep + env.get("PYTHONPATH", "")
-    return subprocess.run([sys.executable, str(ROOT / script), *args], cwd=str(ROOT), env=env).returncode
+    tmp = tempfile.mkdtemp(prefix="arv")  # short path: Windows path-length limits
+    clone = os.path.join(tmp, "r")
+    try:
+        make_clone(clone)
+        env = dict(os.environ); env["ARGINE_GITCOMPAT_ROOT"] = clone
+        env["PYTHONPATH"] = os.path.join(clone, "shared", "tooling", "gitcompat") + os.pathsep + env.get("PYTHONPATH", "")
+        return subprocess.run([sys.executable, os.path.join(clone, script), *args], cwd=clone, env=env).returncode
+    finally:
+        if os.environ.get("ARGINE_KEEP_VERIFY_TREE"):
+            print("kept verification clone:", clone)
+        else:
+            _rmtree(tmp)
 
 
 if __name__ == "__main__":
