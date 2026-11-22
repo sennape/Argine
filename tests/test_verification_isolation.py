@@ -186,6 +186,80 @@ class VerifierIsolation(unittest.TestCase):
         self.assertEqual(os.listdir(scratch), [], "no disposable verifier clone may remain")
         self.assertEqual(_git(self.caller, "status", "--porcelain").stdout, "")
 
+    # --- resource lifetime (the parent must own and release everything before cleanup) -------------------------
+    def test_parent_cwd_never_enters_clone_and_resources_released_before_cleanup(self):
+        from unittest import mock
+        m = self._load_wrapper(); start = os.getcwd(); seen = {}
+        def spy(path):
+            seen["cwd"] = os.getcwd(); seen["path"] = path; seen.update(m.LAST_RUN)
+            return real(path)
+        real = m._rmtree
+        with mock.patch.object(m, "_rmtree", spy):
+            rc = m.run("tools/check_links.py")
+        self.assertEqual(rc, 0)
+        self.assertEqual(seen["cwd"], start, "A: parent cwd unchanged")
+        self.assertFalse(os.path.abspath(seen["cwd"]).startswith(os.path.abspath(seen["path"])), "A: parent cwd is outside the clone")
+        self.assertIs(seen["terminated"], True, "B: verifier terminated before cleanup")
+        self.assertIsNotNone(seen["returncode"])
+        self.assertIs(seen["handles_closed"], True, "C: wrapper-owned handles closed before cleanup")
+        self.assertIs(seen["finished_before_cleanup"], True, "D: cleanup follows the end of the verifier context")
+        if os.name != "nt":
+            with self.assertRaises(ProcessLookupError):
+                os.kill(seen["pid"], 0)  # the verifier pid is gone (reaped), not merely finished
+        self.assertEqual(os.getcwd(), start)
+
+    def test_popen_is_used_as_context_manager_with_closed_streams(self):
+        from unittest import mock
+        m = self._load_wrapper(); events = []; real_popen = subprocess.Popen
+        class Spy(real_popen):
+            def __exit__(self, *a):
+                r = super().__exit__(*a); events.append(("exit", self.returncode, self.stdin, self.stdout, self.stderr)); return r
+        with mock.patch.object(m.subprocess, "Popen", Spy), mock.patch.object(m, "_rmtree", side_effect=lambda p: events.append(("cleanup",)) or True):
+            m.run("tools/check_links.py")
+        kinds = [e[0] for e in events]
+        self.assertEqual(kinds, ["exit", "cleanup"], "Popen context exited before cleanup began")
+        self.assertIsNotNone(events[0][1]); self.assertEqual(events[0][2:], (None, None, None))
+
+    def test_exit_codes_dirty_setup_and_verifier(self):
+        import io, contextlib
+        from unittest import mock
+        m = self._load_wrapper()
+        with mock.patch.object(m, "make_clone", side_effect=subprocess.CalledProcessError(128, "git")), contextlib.redirect_stderr(io.StringIO()) as e:
+            self.assertEqual(m.run("tools/check_links.py"), 4)   # H
+        self.assertIn("HARNESS SETUP ERROR", e.getvalue())
+        self.assertNotEqual(m.run("experiments/R4-00-causal-eviction-distillation/phase0.py", "bogus-subcommand"), 0)  # E
+        self.assertEqual(m.run("tools/check_links.py"), 0)  # F
+        Path(self.caller, "CONTRIBUTING.md").write_bytes(Path(self.caller, "CONTRIBUTING.md").read_bytes() + b"x")
+        with contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(m.run("tools/check_links.py"), 2)  # G
+        self.assertEqual(m.LAST_RUN, {}, "no verifier was started for a dirty caller")
+
+    def test_extended_length_path_for_windows(self):
+        m = self._load_wrapper()
+        self.assertEqual(m._to_extended("C:\\Users\\x\\Temp\\arv1\\r"), "\\\\?\\C:\\Users\\x\\Temp\\arv1\\r")
+        self.assertEqual(m._to_extended("\\\\?\\C:\\a"), "\\\\?\\C:\\a")
+        self.assertEqual(m._to_extended("\\\\srv\\sh\\a"), "\\\\?\\UNC\\srv\\sh\\a")
+        self.assertEqual(m._long("/tmp/x"), "/tmp/x" if os.name != "nt" else m._to_extended("/tmp/x"))
+
+    def test_very_long_paths_are_removed(self):
+        m = self._load_wrapper(); d = tempfile.mkdtemp(prefix="arl", dir=self.tmp)
+        deep = os.path.join(d, "r", "experiments", "R2-10-working-set-predictor", "dev_tournament_checkpoint", "cells"); os.makedirs(deep)
+        for i in range(5):
+            Path(deep, ("instruction-v1_seed-42__recency_frequency_transition_blend__" * 3)[:170] + str(i) + ".json").write_text("{}", encoding="utf-8")
+        self.assertTrue(m._rmtree(d)); self.assertFalse(os.path.exists(d))
+
+    def test_debug_report_is_opt_in(self):
+        import io, contextlib
+        from unittest import mock
+        m = self._load_wrapper()
+        with contextlib.redirect_stderr(io.StringIO()) as quiet:
+            m.run("tools/check_links.py")
+        self.assertNotIn("[cleanup-debug]", quiet.getvalue())
+        with mock.patch.dict(os.environ, {"ARGINE_VERIFY_DEBUG_CLEANUP": "1"}), contextlib.redirect_stderr(io.StringIO()) as loud:
+            m.run("tools/check_links.py")
+        for key in ("parent pid=", "verifier pid=", "terminated=True", "entries_remaining=", "wrapper-owned open resources"):
+            self.assertIn(key, loud.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main()
