@@ -1,0 +1,273 @@
+{
+ "artifact": "R5-00-PROVENANCE",
+ "closures": {
+  "research2": {
+   "lf_sha256_at_source_head": "9d3795e50ae5501e8fd36fe44f391ba18c003e3ff25894d1681b41d3917f1421",
+   "path": "RESEARCH_2_FINAL_CLOSURE.json"
+  },
+  "research3": {
+   "lf_sha256_at_source_head": "6d5fa60746ef9b7ab81493d91b16b91ad48179db53eacf76260695885bd6af1f",
+   "path": "experiments/R3-final-closure/FINAL_RESULT.json"
+  },
+  "research3_freeze": {
+   "lf_sha256_at_source_head": "736b31487c7b082559e08ea88d59921e96eaa1bdfe28eed2c5c44485d99fbfee",
+   "path": "experiments/R3-final-closure/FREEZE.json"
+  },
+  "research4": {
+   "lf_sha256_at_source_head": "762481f47a62480da42498ffd26dc9ea92436e8e735e55f92f74c402613ada20",
+   "path": "experiments/R4-02-cfdc-prospective-eval/FINAL_CLASSIFICATION.json"
+  },
+  "research4_freeze": {
+   "lf_sha256_at_source_head": "ccc957046839470a879c6e271505668cd094a76743c397a3bdfe1b37ceff144a",
+   "path": "experiments/R4-02-cfdc-prospective-eval/FREEZE.json"
+  },
+  "research4_paper_freeze": {
+   "lf_sha256_at_source_head": "7ad57ebabfa7a16d5bbec83e5a9182098a1791b3cd1a985f9d2fd821a5930c56",
+   "path": "paper/research4/PUBLICATION_FREEZE.json"
+  }
+ },
+ "note": "Values are read from the frozen artifacts at the source HEAD by phase0.py; none is typed by hand. They motivate and calibrate the protocol; none is an R5 result.",
+ "source_head": "8493320cdc034d44896cce910d559c5484076f6d",
+ "values": [
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "7e6979d47415a74e47196f214a49eff0ac394e0766425170ba9c730cd49b433e",
+    "path": "experiments/R2-12-runtime-validation/R2_12_4GIB_PRIMARY_FORMAL_ANALYSIS.json"
+   },
+   "field": "official_primary_statistics/primary_aggregate_statistic/observed_mean_delta_tps",
+   "id": "r2_12_4gib_delta_tps",
+   "meaning": "Research 2 real runtime: PredictedProtect - B_selected tokens/s at 4 GiB",
+   "value": -0.1717210141200016
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "7e6979d47415a74e47196f214a49eff0ac394e0766425170ba9c730cd49b433e",
+    "path": "experiments/R2-12-runtime-validation/R2_12_4GIB_PRIMARY_FORMAL_ANALYSIS.json"
+   },
+   "field": "official_primary_statistics/bootstrap_95ci/lower",
+   "id": "r2_12_4gib_ci_lower",
+   "meaning": "lower 95% bound of the above",
+   "value": -0.2599166924803421
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "7e6979d47415a74e47196f214a49eff0ac394e0766425170ba9c730cd49b433e",
+    "path": "experiments/R2-12-runtime-validation/R2_12_4GIB_PRIMARY_FORMAL_ANALYSIS.json"
+   },
+   "field": "official_primary_statistics/bootstrap_95ci/upper",
+   "id": "r2_12_4gib_ci_upper",
+   "meaning": "upper 95% bound of the above",
+   "value": -0.09164232770056749
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "7e6979d47415a74e47196f214a49eff0ac394e0766425170ba9c730cd49b433e",
+    "path": "experiments/R2-12-runtime-validation/R2_12_4GIB_PRIMARY_FORMAL_ANALYSIS.json"
+   },
+   "field": "primary_classification/classification",
+   "id": "r2_12_classification",
+   "meaning": "Research 2 runtime validation outcome",
+   "value": "R2_12_FAIL"
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "4ac3bb604141641551e9cb4a575e1d6ee1de76a61ad9ab30cfd81094c1b2e0d6",
+    "path": "experiments/R3-03B-final-evidence/FINAL_RESULT.json"
+   },
+   "field": "performance/microbench_c_predictor_us_per_call",
+   "id": "r3_03b_predictor_us_per_call",
+   "meaning": "predictor cost per call (microbenchmark)",
+   "value": 123.67945268590574
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "4ac3bb604141641551e9cb4a575e1d6ee1de76a61ad9ab30cfd81094c1b2e0d6",
+    "path": "experiments/R3-03B-final-evidence/FINAL_RESULT.json"
+   },
+   "field": "mean_O_ms_per_token",
+   "id": "r3_03b_O_ms_per_token",
+   "meaning": "in-situ predictor overhead O",
+   "value": 17.466373388671876
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "4ac3bb604141641551e9cb4a575e1d6ee1de76a61ad9ab30cfd81094c1b2e0d6",
+    "path": "experiments/R3-03B-final-evidence/FINAL_RESULT.json"
+   },
+   "field": "mean_P_ms_per_token",
+   "id": "r3_03b_P_ms_per_token",
+   "meaning": "in-situ policy contrast P",
+   "value": 19.35448501953125
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "4ac3bb604141641551e9cb4a575e1d6ee1de76a61ad9ab30cfd81094c1b2e0d6",
+    "path": "experiments/R3-03B-final-evidence/FINAL_RESULT.json"
+   },
+   "field": "rho",
+   "id": "r3_03b_rho",
+   "meaning": "share of the runtime loss explained by predictor cost",
+   "value": 0.9024457830340606
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "fbd93c2ca3ce27a8f6fd0f21b5390ef04d6b0c767b111b31ccd101155501cac1",
+    "path": "experiments/R3-04-final-evidence/ARM_STATISTICS.json"
+   },
+   "field": "1.5_A/ms_per_token/mean",
+   "id": "r3_04_1p5_A_ms_per_token",
+   "meaning": "Research 3 baseline A (b_selected, blocco read mode, one shard) decode ms/token at 1.5 GiB",
+   "value": 526.9731852213541
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "fbd93c2ca3ce27a8f6fd0f21b5390ef04d6b0c767b111b31ccd101155501cac1",
+    "path": "experiments/R3-04-final-evidence/ARM_STATISTICS.json"
+   },
+   "field": "1.5_A/ms_per_token/sd",
+   "id": "r3_04_1p5_A_ms_sd_launch",
+   "meaning": "launch-level SD of the above",
+   "value": 15.19220823259189
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "24a09785677bb1fba029cd5303aef630f1dc57d46571f0b858acb162b947555a",
+    "path": "experiments/R3-04-closure/CLOSURE.json"
+   },
+   "field": "primary_1.5GiB/P_minus_A_ms_per_token/sd",
+   "id": "r3_04_1p5_block_sd_ms",
+   "meaning": "SD of the paired block contrast at 1.5 GiB (planning noise floor)",
+   "value": 10.791768144296567
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "24a09785677bb1fba029cd5303aef630f1dc57d46571f0b858acb162b947555a",
+    "path": "experiments/R3-04-closure/CLOSURE.json"
+   },
+   "field": "primary_1.5GiB/P_minus_A_ms_per_token/n_blocks",
+   "id": "r3_04_1p5_n_blocks",
+   "meaning": "blocks behind that SD",
+   "value": 18
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "24a09785677bb1fba029cd5303aef630f1dc57d46571f0b858acb162b947555a",
+    "path": "experiments/R3-04-closure/CLOSURE.json"
+   },
+   "field": "primary_1.5GiB/P_minus_A_ms_per_token/mean",
+   "id": "r3_04_1p5_P_minus_A_ms",
+   "meaning": "Research 3 net runtime loss at 1.5 GiB",
+   "value": 15.826754014756936
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "8b928ec199306905e0bf223992ece58db376a91577d448eee28941be6b2e5109",
+    "path": "experiments/R3-05-economic-retention/r2-belady-ceiling/RESULTS.json"
+   },
+   "field": "budgets/1.5/mechanism/relative_miss_reduction_pct",
+   "id": "r3_belady_miss_reduction_pct_1p5",
+   "meaning": "clairvoyant miss reduction relative to baseline at 1.5 GiB",
+   "value": 40.67292071630467
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "6d5fa60746ef9b7ab81493d91b16b91ad48179db53eacf76260695885bd6af1f",
+    "path": "experiments/R3-final-closure/FINAL_RESULT.json"
+   },
+   "field": "classification",
+   "id": "r3_classification",
+   "meaning": "Research 3 closure",
+   "value": "R3_CLOSED_NEGATIVE_PREDICTIVE_RETENTION_NOT_VIABLE_IN_TESTED_REGIME"
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "762481f47a62480da42498ffd26dc9ea92436e8e735e55f92f74c402613ada20",
+    "path": "experiments/R4-02-cfdc-prospective-eval/FINAL_CLASSIFICATION.json"
+   },
+   "field": "classification",
+   "id": "r4_classification",
+   "meaning": "Research 4 closure",
+   "value": "R4_CFDC_CAUSAL_STATE_INSUFFICIENT"
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "cde30ab8159574a70b7a39598c04bd76b392ed40bbcd8055a3b7ab8486a0a454",
+    "path": "experiments/R4-02-cfdc-prospective-eval/EVAL_RESULTS.json"
+   },
+   "field": "aggregate/RICH/capture_float",
+   "id": "r4_eval_capture_rich",
+   "meaning": "best tested causal policy, held-out capture",
+   "value": 0.1910686819862832
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "cde30ab8159574a70b7a39598c04bd76b392ed40bbcd8055a3b7ab8486a0a454",
+    "path": "experiments/R4-02-cfdc-prospective-eval/EVAL_RESULTS.json"
+   },
+   "field": "aggregate/CHEAP/capture_float",
+   "id": "r4_eval_capture_cheap",
+   "meaning": "distilled cheap policy, held-out capture",
+   "value": -0.29956204882611787
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "b940c943fd94b23075b144fc8cca3e2450c0c8b3f80c4520d210b4ff10ed7c26",
+    "path": "experiments/EXP-025-performance-model/results.csv"
+   },
+   "field": "label=1.5G/measured_ms",
+   "id": "exp025_1p5_measured_ms_per_token",
+   "meaning": "Research 1 performance model: measured decode ms/token at 1.5 GiB on the asincrono LRU path",
+   "value": 258.11498
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "1017e6e326f87d73b99b6bf098bf05e6c32e7ed5809fdd118de0e85279195383",
+    "path": "experiments/EXP-025-performance-model/README.md"
+   },
+   "field": "fitted NNLS coefficient `compute`",
+   "id": "exp025_compute_coefficient",
+   "meaning": "fitted compute intercept (ms/token); collinear with sync_nodes, contextual only",
+   "value": 85.5716
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "2686e64cf1478d2e307ecd72980c7a08012437ba57a9be0c40d208efd92c4f39",
+    "path": "experiments/EXP-004-async-store/results.csv"
+   },
+   "field": "config=budget=1.5G mode=sincrono/gen_tok_s_median",
+   "id": "exp004_1p5G_sincrono",
+   "meaning": "Research 1: read-read overlap (issue-and-continue) vs synchronous reads, tokens/s",
+   "value": 3.51
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "2686e64cf1478d2e307ecd72980c7a08012437ba57a9be0c40d208efd92c4f39",
+    "path": "experiments/EXP-004-async-store/results.csv"
+   },
+   "field": "config=budget=1.5G mode=asincrono/gen_tok_s_median",
+   "id": "exp004_1p5G_asincrono",
+   "meaning": "Research 1: read-read overlap (issue-and-continue) vs synchronous reads, tokens/s",
+   "value": 3.89
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "2686e64cf1478d2e307ecd72980c7a08012437ba57a9be0c40d208efd92c4f39",
+    "path": "experiments/EXP-004-async-store/results.csv"
+   },
+   "field": "config=budget=4G mode=sincrono/gen_tok_s_median",
+   "id": "exp004_4G_sincrono",
+   "meaning": "Research 1: read-read overlap (issue-and-continue) vs synchronous reads, tokens/s",
+   "value": 6.37
+  },
+  {
+   "artifact": {
+    "lf_sha256_at_source_head": "2686e64cf1478d2e307ecd72980c7a08012437ba57a9be0c40d208efd92c4f39",
+    "path": "experiments/EXP-004-async-store/results.csv"
+   },
+   "field": "config=budget=4G mode=asincrono/gen_tok_s_median",
+   "id": "exp004_4G_asincrono",
+   "meaning": "Research 1: read-read overlap (issue-and-continue) vs synchronous reads, tokens/s",
+   "value": 6.33
+  }
+ ]
+}

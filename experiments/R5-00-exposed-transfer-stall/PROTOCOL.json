@@ -1,0 +1,52 @@
+{
+ "artifact": "R5-00-PROTOCOL",
+ "contract_files": [
+  "PROTOCOL.json",
+  "RUNTIME_AUDIT.json",
+  "COMPARATORS.json",
+  "WORKLOADS.json",
+  "ENDPOINTS.json",
+  "INSTRUMENTATION.json",
+  "DECISION_RULES.json",
+  "SCHEDULE.json",
+  "PROVENANCE.json",
+  "README.md",
+  "PREREGISTRATION.md",
+  "CLAIM_BOUNDARIES.md",
+  "REVIEW.md"
+ ],
+ "eval_state": "LOCKED",
+ "falsifiers": [
+  "H < 4% of decode time on development prompts (not enough transfer latency overlaps a compute window)",
+  "the deferred wait cannot be implemented with identical tokens, zero budget violations, no pending reads and a faithful baseline (synchronisation or ownership prevents overlap)",
+  "the mechanism campaign shows no reduction of exposed wait against C0, or fewer than a quarter of deferred bytes arrive in time (causal information arrives too late)",
+  "the mechanism is present but the primary lower bound stays below 2% (hidden stall does not reach end-to-end time, or concurrent transfers slow compute)",
+  "miss bytes or evictions change beyond 1% (the change is not pure scheduling)",
+  "harm above 2% at 4 GiB or inconsistency across prompts"
+ ],
+ "hypotheses": {
+  "H_headroom": "Before evaluation, on development prompts, the one-shot trace-derived hideable bound H is at least 4% of decode time.",
+  "H_mechanism": "C lowers the critical-path wait inside the expert-store hook relative to the bookkeeping-matched control C0, at least a quarter of deferred read bytes complete before they are needed, and wait reduction accounts for at least half of C's reduction of store-hook time.",
+  "H_no_harm": "At 4 GiB, C is not slower than A by more than 2.0% (95% upper bound).",
+  "H_null": "The relative reduction is below 2.0% (including zero or a slowdown).",
+  "H_primary": "C lowers decode wall ms/token relative to A at 1.5 GiB: the 95% lower bound of the mean block relative reduction is >= 2.0%."
+ },
+ "implementation_state": "NOT_STARTED",
+ "phases": {
+  "phase0": "this contract (frozen after independent adversarial review; see REVIEW.md)",
+  "phase1a": "implementation and conformance on development prompts only: store and hook changes behind ARGINE_EXPERT_WAIT = layer | layer_touch | kind (fail-closed), model-free tests, one R5 build, gate G1, development log of every timing comparison, then the IMPLEMENTATION_FREEZE. No evaluation prompt is run by any binary.",
+  "phase1b": "one-shot headroom gate G2 from 8 pre-declared B launches on the frozen binary",
+  "phase2": "evaluation opened once: mechanism campaign, primary timing campaign, 4 GiB no-harm campaign, classification by DECISION_RULES.json"
+ },
+ "question": "In the Argine expert-store runtime (Qwen3-30B-A3B-Q4_K_M, asynchronous LRU read path, 1.5 GiB expert budget), does a causal deferred-wait scheduler -- which waits for each expert-weight kind at the node that consumes it instead of waiting for all kinds of the layer before any expert compute, uses only the current layer's router decision, adds no prediction, and leaves the requested slices, bytes read and residency decisions unchanged -- reduce the expert-transfer wait exposed on the decode critical path and thereby lower end-to-end decode wall time per token by at least 2%?",
+ "relationship": {
+  "research2": "predictive structure exists",
+  "research3": "prediction-led retention fails economically in the real runtime",
+  "research4": "the tested richer causal state does not recover enough retention headroom",
+  "research5": "changes the target from avoiding transfers to hiding the latency of unavoidable transfers behind compute that the runtime already performs"
+ },
+ "schema": "r5-00-protocol-v1",
+ "short_name": "ETS (exposed transfer stall)",
+ "source_head": "8493320cdc034d44896cce910d559c5484076f6d",
+ "state": "R5_ETS_PHASE0_FROZEN"
+}

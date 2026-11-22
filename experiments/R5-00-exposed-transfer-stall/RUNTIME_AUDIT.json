@@ -1,0 +1,142 @@
+{
+ "artifact": "R5-00-RUNTIME-AUDIT",
+ "capability_matrix": {
+  "blocking_wait": "MEASURED (arx_io wait_start/wait_end per thread; arx_node hook interval on the critical path)",
+  "bytes_transferred": "MEASURED (store bytes_read; arx_io bytes)",
+  "per_kind_deferred_wait": "MISSING: must be added with the new arm (Phase 1)",
+  "prefetch_and_wasted_prefetch": "NOT APPLICABLE: no R5 arm prefetches; the legacy predictive prefetcher is pinned off",
+  "resident_hit_and_miss": "MEASURED (arx_access outcome h / m / w; store counters)",
+  "transfer_completion_time": "MEASURED; exact when observed by arx_wait_precise, otherwise an upper bound flagged ARX_FLAG_COMPLETE_BOUND",
+  "transfer_initiation_time": "MEASURED (arx_io issue_ns)",
+  "useful_compute": "BOUNDED: the stock ggml kernel is not instrumented; compute between expert nodes is the gap between consecutive hook intervals (includes small non-expert ops such as the GLU)"
+ },
+ "files": {
+  "argine/cli.py": "6e89de70d8b4f787f5ea8024d3d02e53293e295ca7a5304f8cac124e881d6fbd",
+  "patches/README.md": "1ef3ce0b24ecab6d9a099d9b784742751f09a3628ebb57fdb80baf617095f74a",
+  "patches/argine-experts.cpp": "20ea2a2f69cb3a421c69b1f67f89e4dd6f7d3491df34dec86036a457b405bf89",
+  "patches/argine-store.cpp": "dc11824f9f3effaa80e7ea0bfa40bee0698c5888d06a0964f1d67de7780d8403",
+  "patches/argine-store.h": "a1bcc17b8afc282f26c84f07cfc7bfac911b982e68f15ca89f7b2e24ac17240c"
+ },
+ "findings": [
+  {
+   "anchors": [
+    "bool compute_forward(ggml_compute_params * params, ggml_tensor * op) override",
+    "if (op->op != GGML_OP_MUL_MAT_ID)"
+   ],
+   "file": "patches/argine-experts.cpp",
+   "finding": "Expert transfers are driven from ExpertTraits::compute_forward on every MUL_MAT_ID node: the hook reads the router ids (op->src[2]), makes the slices resident, synchronises the threads and returns false so the stock ggml kernel computes on the filled memory. No custom kernel exists.",
+   "id": "F1_hook_point"
+  },
+  {
+   "anchors": [
+    "const ggml_tensor * ids  = op->src[2];"
+   ],
+   "file": "patches/argine-experts.cpp",
+   "finding": "The expert set of layer L becomes causally known only when the router of layer L has run, i.e. immediately before the first MUL_MAT_ID node of layer L. The router of L depends on the attention output of L, so no exact knowledge of layer L experts exists while layer L-1 or the attention of L computes. Any earlier issue of a layer-L read requires prediction.",
+   "id": "F2_causal_knowledge_point"
+  },
+  {
+   "anchors": [
+    "Tutti e tre i tensori del layer, non solo quello di questo nodo.",
+    "const uint32_t totale = n_serve * (uint32_t) n_dove;"
+   ],
+   "file": "patches/argine-experts.cpp",
+   "finding": "The first expert node of a layer issues the reads for all three weight kinds (gate, up, down) of every selected expert, to cut synchronised rounds from 144 to 48 per token.",
+   "id": "F3_all_kinds_loaded_at_first_node"
+  },
+  {
+   "anchors": [
+    "Le letture emesse vanno attese QUI: da questo punto i byte si usano.",
+    "if (!psx_cache_attendi(c.cache, c.store)) {"
+   ],
+   "file": "patches/argine-experts.cpp",
+   "finding": "In the default asincrono mode every thread then waits for ALL reads it issued (all three kinds) before the barrier that precedes the first node's compute. Reads of the kinds consumed by the second and third node are therefore waited for before any expert compute of the layer: today there is no overlap between expert transfers and compute. Read-read overlap exists (queue depth); read-compute overlap does not.",
+   "id": "F4_wait_before_any_compute"
+  },
+  {
+   "anchors": [
+    "int psx_cache_avvia(struct psx_cache * c, struct psx_store * s, struct psx_region * region,",
+    "if (ReadFile(st.preso.h, pr.dst, (DWORD) pr.want, &got, &so.ov)) {",
+    "} else if (GetLastError() == ERROR_IO_PENDING) {"
+   ],
+   "file": "patches/argine-store.cpp",
+   "finding": "psx_cache_avvia reserves the slot (budget accounted, slice pinned) and issues an OVERLAPPED ReadFile that proceeds without a CPU thread; psx_cache_attendi waits for all reads pending on the calling thread. A deferred wait is therefore possible without new threads, but the current API waits for all pending reads of a thread at once and releases the borrowed file handle at that point.",
+   "id": "F5_async_read_layer"
+  },
+  {
+   "anchors": [
+    "I miei pin del nodo precedente: da qui possono essere sfrattati",
+    "psx_cache_unpin(c.cache, p.region, p.offset);"
+   ],
+   "file": "patches/argine-experts.cpp",
+   "finding": "In asincrono mode each thread releases its pins at the start of the next MoE node; the later nodes re-acquire the same slices as hits. A deferred wait must keep the pins of in-flight slices across the layer's nodes (released at the next layer's first node), as the retention-policy path already does for follow-up nodes; otherwise an in-flight slice could be evicted while its DMA is running.",
+   "id": "F6_pin_lifetime"
+  },
+  {
+   "anchors": [
+    "void psx_cache_touch(struct psx_cache * c, struct psx_region * region, size_t offset) {",
+    "sh.order.splice(sh.order.begin(), sh.order, it->second);"
+   ],
+   "file": "patches/argine-store.cpp",
+   "finding": "psx_cache_touch applies the same LRU recency move as a hit without pinning or waiting, so a deferred-wait arm can reproduce the baseline's access sequence at the later nodes. Hit COUNTERS differ by construction (the baseline counts its re-accesses as hits); misses, miss bytes and evictions must not.",
+   "id": "F7_lru_touch_equivalence"
+  },
+  {
+   "anchors": [
+    "void arx_wait_precise(StatoThread & st) {",
+    "The part of\n        // [issue, complete] before wait_start was hidden behind other work of\n        // this thread; the rest was not."
+   ],
+   "file": "patches/argine-store.cpp",
+   "finding": "ARGINE_RESEARCH_TRACE already records, per read, issue time, completion time (exact, or an upper bound flagged as such) and the wait interval of the issuing thread, and per MoE node the hook start and end (arx_node). Transfer latency, blocking wait, the compute gap between the nodes of a layer and the part of a transfer that elapsed before its wait are therefore measurable with the existing trace; only the per-kind wait attribution of the new arm must be added.",
+   "id": "F8_existing_timing_trace"
+  },
+  {
+   "anchors": [
+    "argine: ARGINE_RETENTION_POLICY richiede ARGINE_EXPERT_READ=blocco "
+   ],
+   "file": "patches/argine-experts.cpp",
+   "finding": "A retention policy (b_selected / predicted_protect) forces the blocco read mode with one shard and one ensure_many call from thread 0. Research 3 measured its baseline at about 527 ms/token at 1.5 GiB, whereas the default asincrono LRU path was measured at about 258 ms/token at 1.5 GiB in Research 1 (EXP-025). The two figures come from different builds, sessions and workloads and are NOT a paired comparison; they only establish that the asincrono LRU path is the strongest documented baseline and the one R5 must use.",
+   "id": "F9_policy_path_slower_and_not_deferrable"
+  },
+  {
+   "anchors": [
+    "undocumented asynchronous prefetch subsystem (`argine_prefetch`, `argine_issue_prefetch`, `argine_worker_main`, gated by `ARGINE_PREFETCH`, default off)"
+   ],
+   "file": "patches/README.md",
+   "finding": "A legacy ARGINE_PREFETCH subsystem warms mmap pages of experts PREDICTED for later layers from threads outside the ggml barrier; it is off by default, does not use the expert store, and was a demonstrated memory-safety hazard. It is prediction, not causal scheduling, and is pinned OFF in every R5 arm.",
+   "id": "F10_legacy_predictive_prefetch"
+  },
+  {
+   "anchors": [
+    "Emetti e continua: la lettura parte, il thread prende la slice dopo, si",
+    "La terza, e la piu' veloce misurata."
+   ],
+   "file": "patches/argine-experts.cpp",
+   "finding": "Overlap of reads WITH EACH OTHER (issue-and-continue) was already implemented and measured in Research 1 (EXP-004: regime-dependent gain, largest at 1.5 GiB). R5 does not retest it; it is part of the baseline.",
+   "id": "F11_read_read_overlap_already_tested"
+  },
+  {
+   "anchors": [
+    "`VirtualAlloc(MEM_COMMIT)` costa 0.005 ms per slice, ma non e' li' che si paga",
+    "Windows azzera le pagine al primo accesso"
+   ],
+   "file": "patches/argine-store.h",
+   "finding": "Committing and zeroing fresh pages is CPU work on the issuing thread (inside the read path, EXP-015). It stays on the critical path under any wait placement and is not hideable by the R5 mechanism; the headroom bound below excludes it by construction (it is measured from completion times, not from issue cost).",
+   "id": "F12_page_commit_on_issue_path"
+  }
+ ],
+ "overlap_opportunities": {
+  "does_not_exist_causally": "Across layers: the experts of layer L+1 are unknown until its router runs; issuing them earlier is prediction (Research 2-4 territory) and is excluded.",
+  "exists_causal": "Within a layer: after the router decision, the reads of the kinds consumed by the second and third expert node can stay in flight while the first (and second) node compute.",
+  "not_hideable": "Page commit/zeroing on issue, the first node's own reads, and synchronisation barriers."
+ },
+ "prerequisites": [
+  "store API: wait for the pending reads of one weight kind of the calling thread (others stay in flight); borrowed handle released only when no read of the thread is pending",
+  "experts hook: in the new arm, keep the layer's pins until the next layer's first expert node; later nodes wait only for their own kind and LRU-touch (not re-acquire) the layer's slices in the baseline's order",
+  "fail-closed mode switch ARGINE_EXPERT_WAIT = layer (baseline, default, code path unchanged) | kind (new arm); any other value aborts",
+  "assert zero pending reads at the end of every graph; budget violations must stay 0",
+  "trace: attribute each wait interval to the node kind awaited; count deferred reads and those already complete at their wait"
+ ],
+ "source_head": "8493320cdc034d44896cce910d559c5484076f6d",
+ "verdict": "FEASIBLE_AFTER_PREREQUISITE_IMPLEMENTATION"
+}

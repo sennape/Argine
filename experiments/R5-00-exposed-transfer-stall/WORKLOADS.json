@@ -1,0 +1,128 @@
+{
+ "artifact": "R5-00-WORKLOADS",
+ "budgets": {
+  "primary": {
+   "bytes": 1610612736,
+   "label": "1.5 GiB",
+   "why": "Research 3/4 primary budget; strongest miss pressure; where read stall dominates (EXP-025)"
+  },
+  "secondary": {
+   "bytes": 4294967296,
+   "label": "4 GiB",
+   "why": "Research 2 runtime primary budget; used only as a no-harm check"
+  }
+ },
+ "corpus": {
+  "coding": {
+   "file": {
+    "lf_sha256_at_source_head": "460949e7abf004374bb0b06dcda89eeaba0e916b5f6053784afe037e6f2162d8",
+    "path": "workloads/v1/coding.json"
+   },
+   "split_rule": "repository workload corpus: tune on dev, claim on eval (workloads/README.md)"
+  },
+  "natural-language": {
+   "file": {
+    "lf_sha256_at_source_head": "71b170bc0fde211e3694fede63192c72ea70ef7f561791ac28b82ebac25105cc",
+    "path": "workloads/v1/natural-language.json"
+   },
+   "split_rule": "repository workload corpus: tune on dev, claim on eval (workloads/README.md)"
+  },
+  "reasoning-math": {
+   "file": {
+    "lf_sha256_at_source_head": "de60c25a04b72e5887f85e738f7de60029af828b81def5fba58125c2fd05325e",
+    "path": "workloads/v1/reasoning-math.json"
+   },
+   "split_rule": "repository workload corpus: tune on dev, claim on eval (workloads/README.md)"
+  },
+  "structured-json": {
+   "file": {
+    "lf_sha256_at_source_head": "74e518b464d01286c6d58c03bd4fca1a73832166a8d323a09909bb18fffa82bb",
+    "path": "workloads/v1/structured-json.json"
+   },
+   "split_rule": "repository workload corpus: tune on dev, claim on eval (workloads/README.md)"
+  }
+ },
+ "development": {
+  "prompts": [
+   {
+    "category": "coding",
+    "id": "code-dev-1",
+    "prompt_object_sha256": "4feeb29ea0401a33055cb0ed08919bbb99dd3aa97a5639e2a7bc858338b881ea"
+   },
+   {
+    "category": "natural-language",
+    "id": "nl-dev-1",
+    "prompt_object_sha256": "0621dde4dba5fe34cd87a389b1c850cefa99805e10794a38573db919ed9bd69e"
+   },
+   {
+    "category": "reasoning-math",
+    "id": "math-dev-1",
+    "prompt_object_sha256": "e087d05704fd232e502a7535a81268a914cdb4c9c35ae6d47cabec97b03bb54d"
+   },
+   {
+    "category": "structured-json",
+    "id": "json-dev-1",
+    "prompt_object_sha256": "8cc18e3e82d5fafa8647a6bf35ae8262f7c83dfd7acfce2bbc3229121b7f9a99"
+   }
+  ],
+  "role": "implementation, conformance, baseline fidelity, trace-overhead report and the one-shot headroom gate; every timing comparison run on them is logged"
+ },
+ "evaluation": {
+  "prior_use_statement": "At the source HEAD no tracked artifact other than the workload file itself names these prompt ids, so no tracked Research 1-4 result was measured on them. Untracked historical logs cannot be excluded; none informs C, which has no parameter.",
+  "prompts": [
+   {
+    "category": "coding",
+    "id": "code-eval-1",
+    "prompt_object_sha256": "b5cc23b5dd4131f5bc852231130fc96202a243dfff33692cb99afcb1c988fa52",
+    "tracked_references_at_source_head": [
+     "workloads/v1/coding.json"
+    ]
+   },
+   {
+    "category": "natural-language",
+    "id": "nl-eval-1",
+    "prompt_object_sha256": "9bb85ccbdf4ce6d6477c877ac6fa4bf807ea0ae6794ad7e2ee098cc880aa5181",
+    "tracked_references_at_source_head": [
+     "workloads/v1/natural-language.json"
+    ]
+   },
+   {
+    "category": "reasoning-math",
+    "id": "math-eval-1",
+    "prompt_object_sha256": "e84231865979a71779f7743c007273b600ba864a1b8a88c48ff2142eb7ad26f9",
+    "tracked_references_at_source_head": [
+     "workloads/v1/reasoning-math.json"
+    ]
+   },
+   {
+    "category": "structured-json",
+    "id": "json-eval-1",
+    "prompt_object_sha256": "efe5c98724d8a121b4ee145ad79fa6199ee8ba3baea77db36972b7b973a878d0",
+    "tracked_references_at_source_head": [
+     "workloads/v1/structured-json.json"
+    ]
+   }
+  ],
+  "role": "Phase 2 only. No binary of any kind (R5 or earlier) may be run on these prompts before the evaluation is opened."
+ },
+ "launch": {
+  "context": 4096,
+  "decode_metric_source": "llama.cpp server timings predicted_ms / predicted_n",
+  "ignore_eos": true,
+  "ignore_eos_why": "evaluation prompts cannot be inspected in advance; without it an early end-of-sequence would make predicted_n < 512 and invalidate every arm by design",
+  "n_predict": 512,
+  "process": "one fresh server process per launch",
+  "seed": 42,
+  "temperature": 0,
+  "threads": 12,
+  "threads_batch": 12,
+  "threads_why": "EXP-027: 12 generation threads were the fastest measured setting for the 30B model; fixed, never tuned in R5",
+  "top_k": 1
+ },
+ "model": {
+  "gguf": "Qwen_Qwen3-30B-A3B-Q4_K_M.gguf",
+  "identity": "file SHA-256 of gguf and psxs recorded at the implementation freeze and checked at every launch",
+  "name": "Qwen3-30B-A3B-Q4_K_M",
+  "store": "Qwen_Qwen3-30B-A3B-Q4_K_M.psxs"
+ }
+}

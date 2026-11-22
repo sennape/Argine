@@ -1,0 +1,60 @@
+{
+ "artifact": "R5-00-FREEZE",
+ "classification_labels": [
+  "R5_IMPLEMENTATION_OR_CAPABILITY_BLOCKED",
+  "R5_NO_MEANINGFUL_OVERLAP_HEADROOM",
+  "R5_INVALID",
+  "R5_CONFOUNDED_NOT_PURE_SCHEDULING",
+  "R5_POSITIVE_RUNTIME_IMPROVEMENT",
+  "R5_PRIMARY_GAIN_NOT_ROBUST",
+  "R5_RUNTIME_CHANGE_WITHOUT_MECHANISM",
+  "R5_MECHANISM_PRESENT_BUT_NO_NET_RUNTIME_GAIN",
+  "R5_NO_REALISED_OVERLAP_NO_GAIN"
+ ],
+ "contract_digest": "9d480ccf1b5109fa9be6cd717261e824876122e1ec504a3ccd85e0e30e619e52",
+ "development_prompt_ids": [
+  "code-dev-1",
+  "nl-dev-1",
+  "math-dev-1",
+  "json-dev-1"
+ ],
+ "eval_state": "LOCKED",
+ "evaluation_prompt_ids": [
+  "code-eval-1",
+  "nl-eval-1",
+  "math-eval-1",
+  "json-eval-1"
+ ],
+ "files_lf_sha256": {
+  "CLAIM_BOUNDARIES.md": "055c7d27e0843af5b9d51e62015c0ee6f51810ec764877692f2e061fcf925fdc",
+  "COMPARATORS.json": "227ca6512347db8a703c001d169fe42b401a7b4affbafddc00806f5583b1c3df",
+  "DECISION_RULES.json": "fff9f2e1219688d3c711ed357bbe3a12a886cba4dce6069d4cc910da16a9a253",
+  "ENDPOINTS.json": "fa8b3bf7db70ae0162a09f514832656c6ad0226b5bcd21389c70fe77b491471f",
+  "INSTRUMENTATION.json": "ce79616f7b38bc5219618678ae8a6d278b5e4a815f72bfd18c0f5976b2fd7c75",
+  "PREREGISTRATION.md": "17f2cd829f007152eecc301127fb05c62963dde253204cb3dc144d4f6bdc66e2",
+  "PROTOCOL.json": "1f2870895392d0e25d77eeb24c358bcc159f9374ea0fb9e662460d6d31854343",
+  "PROVENANCE.json": "158e9a7a712512904391472605a0173367930b2e5b76b7eeba241234e9cfdc50",
+  "README.md": "90e75fcec8cae1c57d33bae337b2c763f2b1c085b30f3f2d921eb2abed3e0b22",
+  "REVIEW.md": "bcb1bd167f3473e82d9c9c75dcb21bf73ed6143e285b5d3d5a07207ee6e603a3",
+  "RUNTIME_AUDIT.json": "300907216174ea4686622a1efd8e3ba91c07554b2ba00866412137b80b8c3fbf",
+  "SCHEDULE.json": "384ba9b65eb049be15221c19be010aa5310a8504678dff6bc83704273899a248",
+  "WORKLOADS.json": "f23b13884d5f7b1384dcd2be22bc2195591f351684bd7a4891dad0165e43d940"
+ },
+ "freeze_sha256": "21ed630b638ca56a19b6a392a6ce1e47782dcd4351b178d523d5e28a6c7f63ee",
+ "implementation_state": "NOT_STARTED",
+ "outcome_metrics_present": false,
+ "primary_endpoint": "decode_wall_ms_per_token",
+ "research3_classification": "R3_CLOSED_NEGATIVE_PREDICTIVE_RETENTION_NOT_VIABLE_IN_TESTED_REGIME",
+ "research4_classification": "R4_CFDC_CAUSAL_STATE_INSUFFICIENT",
+ "runtime_launched": false,
+ "source_head": "8493320cdc034d44896cce910d559c5484076f6d",
+ "state": "R5_ETS_PHASE0_FROZEN",
+ "thresholds": {
+  "headroom_gate": 0.04,
+  "hidden_deferred_bytes_floor": 0.25,
+  "mechanism_attribution_share": 0.5,
+  "minimum_effect_of_interest": 0.02,
+  "no_harm_4GiB": 0.02,
+  "scheduling_purity": 0.01
+ }
+}

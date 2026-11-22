@@ -10,8 +10,9 @@
 | **Research 2** — oracle headroom, routing structure, causal prediction, predictive retention, runtime validation (`R2-*`) | Is there recoverable retention headroom, and can a causal predictor turn it into fewer miss bytes and faster decoding? | **CLOSED / FROZEN** | Clairvoyant headroom and routing structure exist; the causal predictor beat trivial baselines at horizon 1 and cut miss bytes in replay (72 of 72 cells); no real-runtime throughput gain at 4 GiB was recorded (`R2_12_FAIL`). |
 | **Research 3** — can predictive information become real-runtime retention value? (`R3-*`) | Does the Research 2 predictor yield net economic value in the real runtime? | **CLOSED / PUBLISHED** | `R3_CLOSED_NEGATIVE_PREDICTIVE_RETENTION_NOT_VIABLE_IN_TESTED_REGIME`. Net loss of 15.83 ms/token at 1.5 GiB; best causal next-use eviction reached 8.11 ms/token before any computation cost, below the frozen 10 ms/token floor. |
 | **Research 4** — causal future-distance distillation (`R4-*`) | Can a cheap causal rule, distilled from the clairvoyant eviction optimum, recover enough of the headroom? | **CLOSED** | `R4_CFDC_CAUSAL_STATE_INSUFFICIENT` (state `R4_CFDC_CLOSED`). On the prospective EVAL set the cheap rule captured −29.96% of the headroom (it incurred more miss bytes than the baseline) and the rich learner 19.11%, below the preregistered 25% bar. Manuscript: [`paper/research4/`](paper/research4/README.md). |
+| **Research 5** — exposed transfer stall (`R5-*`) | Can a causal deferred-wait scheduler keep unavoidable expert-transfer latency off the decode critical path and lower decode time per token by at least 2%? | **OPEN — Phase 0 FROZEN** | Protocol frozen (`R5_ETS_PHASE0_FROZEN`); implementation not started; evaluation locked. No result yet. |
 
-**Research 5 is not opened.**
+**Research 5 is open at Phase 0 only:** the prospective protocol is frozen and no runtime result exists. See [`research/research-5`](research/research-5/README.md).
 
 ## Scientific trajectory
 
@@ -25,7 +26,7 @@ This is a record of successful falsification, not of a failed project. Research 
 |---|---|
 | [`research/`](research/README.md) | navigation layer: one folder per research with its question, status, experiment index, verifier commands and the omitted raw artifacts |
 | [`papers/`](papers/README.md) | pointers to the manuscripts (Research 1 `paper/`, Research 2 `paper/research2/`, Research 3 `paper/research3/`) |
-| [`experiments/`](experiments/INDEX.md) | the frozen scientific tree: `EXP-*` (Research 1), `R2-*`, `R3-*`, `R4-*`; stays in place so every frozen hash and verifier path remains valid |
+| [`experiments/`](experiments/INDEX.md) | the frozen scientific tree: `EXP-*` (Research 1), `R2-*`, `R3-*`, `R4-*`, `R5-*`; stays in place so every frozen hash and verifier path remains valid |
 | `argine/`, `tools/`, `tests/`, `patches/`, `workloads/`, `data/`, `docs/`, `research2/` | shared runtime, tooling, tests, patches, frozen workloads, historical data and documentation |
 | [`manifests/`](manifests) | consolidation manifests: legacy repositories, omitted raw artifacts, research layout map, file hashes, path-compatibility record |
 | [`REPRODUCING.md`](REPRODUCING.md) | how to verify each research stage |

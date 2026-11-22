@@ -1,0 +1,113 @@
+{
+ "anti_rescue": [
+  "only R5_POSITIVE_RUNTIME_IMPROVEMENT may be described as an improvement; every other label is reported as a negative or uninterpretable outcome, never as a partial success",
+  "no secondary endpoint, subset, prompt, budget, thread count or tracing configuration can upgrade the classification",
+  "no second scheduler variant, no parameter, no new prompt and no new budget after the freeze",
+  "the oracle bound H is never reported as an achievable gain",
+  "the evaluation is opened once; reruns only under blame_rules",
+  "no optional stopping: block counts are constants of this contract",
+  "no outlier removal, imputation, reordering or data-driven exclusion"
+ ],
+ "artifact": "R5-00-DECISION-RULES",
+ "blame_rules": {
+  "infrastructure_causes": [
+   "loss of AC power or host shutdown/reboot documented in the Windows event log",
+   "forced Windows Update or Defender scan documented in the event log",
+   "disk full on the system drive",
+   "manual interruption by the operator, recorded before the launch result is read"
+  ],
+  "reruns": "a slot failed for an infrastructure cause may be rerun once (attempt+1); a correctness failure of C/C_I/C0_I (token digest, budget, pending reads, abort) is never rerun; a second failure of the same slot aborts the campaign",
+  "rule": "A failed or invalid launch of C, C_I or C0_I is attributed to the intervention unless it matches a pre-listed infrastructure cause with documentary evidence; a failed or invalid launch of A or B is attributed to the campaign.",
+  "terminal": "R5_INVALID is final: the evaluation is not reopened, no new campaign is started under this contract"
+ },
+ "classification_order": [
+  [
+   "G1 fails (Phase 1a), or any Phase 2 launch of C, C_I or C0_I has a correctness failure or a non-infrastructure failure",
+   "R5_IMPLEMENTATION_OR_CAPABILITY_BLOCKED"
+  ],
+  [
+   "G2 fails (Phase 1b)",
+   "R5_NO_MEANINGFUL_OVERLAP_HEADROOM"
+  ],
+  [
+   "Phase 2 campaign aborted or integrity failure of A/B launches",
+   "R5_INVALID"
+  ],
+  [
+   "G7 fails",
+   "R5_CONFOUNDED_NOT_PURE_SCHEDULING"
+  ],
+  [
+   "G3 and G4 and G5 and G6",
+   "R5_POSITIVE_RUNTIME_IMPROVEMENT"
+  ],
+  [
+   "G3 and G4 and not (G5 and G6)",
+   "R5_PRIMARY_GAIN_NOT_ROBUST"
+  ],
+  [
+   "G3 and not G4",
+   "R5_RUNTIME_CHANGE_WITHOUT_MECHANISM"
+  ],
+  [
+   "not G3 and G4",
+   "R5_MECHANISM_PRESENT_BUT_NO_NET_RUNTIME_GAIN"
+  ],
+  [
+   "not G3 and not G4",
+   "R5_NO_REALISED_OVERLAP_NO_GAIN"
+  ]
+ ],
+ "gates": {
+  "G1_implementation": "Phase 1a delivers C and C0 with: identical tokens to A on all four development prompts at 1.5 and 4 GiB; 0 budget violations; 0 pending reads at graph end; 0 redundant transfers; the frozen issue order (model-free test); scheduling purity within 1% on development prompts; model-free store tests passing; all mechanism metrics computable; baseline fidelity: A on the R5 build produces tokens identical to the pre-R5 runtime (llama-research-v5) on the development prompts and its mean decode ms/token is not more than 2% slower (point estimate over 4 prompts x 2 launches each). Otherwise R5_IMPLEMENTATION_OR_CAPABILITY_BLOCKED.",
+  "G2_headroom": "one-shot: H from the 8 pre-declared B launches on the frozen binary >= 0.04. Otherwise R5_NO_MEANINGFUL_OVERLAP_HEADROOM and the evaluation is never opened. H is not recomputed.",
+  "G3_primary": "95% lower bound of the primary aggregate >= 0.02",
+  "G4_mechanism": "mechanism campaign (12 blocks, df = 11): (a) 95% upper bound of the mean block difference exposed_wait_ms_per_token(C_I) - exposed_wait_ms_per_token(C0_I) < 0; (b) mean hidden_deferred_bytes_fraction(C_I) >= 0.25; (c) mean[exposed_wait(C0_I) - exposed_wait(C_I)] >= 0.5 x mean[exposed_store(B) - exposed_store(C_I)] whenever the latter is positive",
+  "G5_no_harm": "4 GiB: 95% upper bound of the mean block relative slowdown (-r_b) <= 0.02",
+  "G6_consistency": "at least 3 of the 4 evaluation prompts have a positive mean r_b at 1.5 GiB",
+  "G7_purity": "in the mechanism campaign (C_I vs B) and in both timing campaigns (C vs A, end-of-run counters): relative difference of mean miss bytes per token and of mean evictions per token <= 0.01; budget violations 0",
+  "IMPLEMENTATION_FREEZE": "before G2: source hashes, binary hash, model and store hashes, and the list of implementation choices (wait primitive, handle-release point, barrier placement, pin-release point, touch order, trace record layout) are frozen; no change afterwards; every development timing comparison run before the freeze is appended to a committed development log",
+  "INTEGRITY": "every counted launch: 512 decode tokens; token digest equal to the digest of that prompt in every other arm; runtime, model and store hashes equal to the implementation freeze; no abort; server timings present; end-of-run counter record present; ARGINE_EXPERT_WAIT echoed as expected; AC power"
+ },
+ "hopi_gate": "HoPi M9+ stays paused unless the classification is R5_POSITIVE_RUNTIME_IMPROVEMENT. Every other label, including a clean negative, does not unlock HoPi; it requires the next Argine direction to be identified.",
+ "label_meaning": {
+  "R5_CONFOUNDED_NOT_PURE_SCHEDULING": "C changed residency beyond tolerance: no attribution possible",
+  "R5_IMPLEMENTATION_OR_CAPABILITY_BLOCKED": "the deferred wait cannot be implemented correctly, stably or measurably in this runtime",
+  "R5_INVALID": "the campaign cannot be interpreted; final",
+  "R5_MECHANISM_PRESENT_BUT_NO_NET_RUNTIME_GAIN": "stall was hidden but end-to-end decode did not improve by the MEI: falsifies the runtime hypothesis",
+  "R5_NO_MEANINGFUL_OVERLAP_HEADROOM": "not enough hideable transfer latency on the critical path: the direction is closed before evaluation",
+  "R5_NO_REALISED_OVERLAP_NO_GAIN": "headroom existed in the bound but the implementation did not hide stall: falsifies the mechanism hypothesis",
+  "R5_POSITIVE_RUNTIME_IMPROVEMENT": "the only outcome that counts as a demonstrated real-runtime improvement (and the only one that can unlock HoPi)",
+  "R5_PRIMARY_GAIN_NOT_ROBUST": "faster at 1.5 GiB but harmful at 4 GiB or not consistent across prompts: not an improvement",
+  "R5_RUNTIME_CHANGE_WITHOUT_MECHANISM": "a timing change that the deferred-wait mechanism does not explain (for example cheaper bookkeeping): not attributed to the R5 hypothesis, not an improvement"
+ },
+ "precision_plan": {
+  "approx_pass_prob_no_harm_true_0": 0.9885337200543476,
+  "approx_power_primary_true_3pct": 0.5361607862872052,
+  "approx_power_primary_true_4pct": 0.9885337200543476,
+  "expected_half_width_relative": 0.009584364259734975,
+  "n_blocks": 20,
+  "note": "planning only; normal approximation with the t critical value; no R5 data are used",
+  "reference_A_ms_per_token": 526.9731852213541,
+  "reference_block_contrast_sd_ms": 10.791768144296567,
+  "relative_block_sd": 0.020478780414156187,
+  "risk_statement": "The reference SD comes from the Research 3 blocco path (about 527 ms/token); the asincrono path is faster and its relative SD may be larger. If so, power falls; block counts are nevertheless fixed now and are not changed after any R5 data exist. A development A-vs-A noise estimate is reported in Phase 1 for information only.",
+  "t_975_df19": 2.093024054408263
+ },
+ "threshold_justification": {
+  "H_gate_4pct": "twice the MEI; realised hiding is a fraction of this optimistic bound, so below 4% there is no realistic way to pass the primary gate. Failing it only closes the direction early.",
+  "MEI_2pct": "practical relevance plus measurement scale: a decode-time reduction below 2% would not justify carrying a runtime change, and 2% is the frozen instrumentation-cost scale of EXP-024; it is about twice the expected 95% half-width of the paired primary interval (precision_plan)",
+  "attribution_50pct": "at least half of the reduction of time inside the store hook must come from waiting less, not from cheaper bookkeeping",
+  "hidden_floor_25pct": "a mechanism in which fewer than a quarter of the deferred bytes arrive before they are needed is not a meaningful overlap",
+  "no_harm_2pct": "the same practical scale as the MEI: C must not trade a gain at 1.5 GiB for a loss of comparable size where misses are rarer; with 20 blocks a harmless C passes with high probability (precision_plan)",
+  "purity_1pct": "C must be a scheduling change; a larger change in miss bytes or evictions would mean residency changed and the effect could not be attributed to overlap"
+ },
+ "thresholds": {
+  "headroom_gate": 0.04,
+  "hidden_deferred_bytes_floor": 0.25,
+  "mechanism_attribution_share": 0.5,
+  "minimum_effect_of_interest": 0.02,
+  "no_harm_4GiB": 0.02,
+  "scheduling_purity": 0.01
+ }
+}

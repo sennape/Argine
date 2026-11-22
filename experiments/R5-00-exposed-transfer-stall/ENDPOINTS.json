@@ -1,0 +1,41 @@
+{
+ "artifact": "R5-00-ENDPOINTS",
+ "critical_path_rule": "Every per-node time is taken on the critical path: a node starts when the first thread enters the hook and its store phase ends when the last thread leaves the hook (max over threads); a per-node wait is the maximum over threads of that thread's wait in that node. Thread 0 alone, means over threads and sums over threads are never used for a mechanism endpoint.",
+ "headroom_bound_H": {
+  "definition": "for every decode layer event: T_tail = time from the latest completion (over threads) of a first-node-kind read to the latest completion of any read issued at the first node, clipped to the first node's critical-path wait interval; W = gap from the last thread leaving the first node's hook to the first thread entering the hook of the layer's last expert node; H_layer = min(T_tail, W). H = sum of H_layer / decode tokens, expressed as a fraction of the mean decode ms/token of the same 8 launches.",
+  "interpretation": "an optimistic, loose upper bound on what moving the wait can hide (ignores interference); an opening gate only, never a result",
+  "source": "computed ONCE, after the implementation freeze, from exactly 8 B launches (each of the four development prompts twice) at 1.5 GiB on the frozen binary; every H value ever computed in R5 is reported"
+ },
+ "mechanism": {
+  "bookkeeping_effect": "descriptive: exposed_store_ms_per_token(C0_I) - (B)",
+  "deferred_read_bytes_per_token": "bytes of decode reads of kinds not consumed by the issuing node",
+  "exposed_store_ms_per_token": "sum over decode expert nodes of (max_thread hook_end - min_thread hook_start), divided by decode tokens",
+  "exposed_wait_ms_per_token": "sum over decode expert nodes of max_thread(wait duration in that node), divided by decode tokens. This is the operational exposed transfer stall and the G4 endpoint.",
+  "hidden_deferred_bytes_fraction": "C_I only: bytes of deferred decode reads whose completion (exact, or an upper bound) is at or before the earliest wait start of their consuming node, divided by all deferred decode read bytes. Conservative: a bounded completion counts as hidden only if the bound precedes the wait.",
+  "miss_bytes_per_token, misses_per_token, evictions_per_token": "scheduling purity",
+  "non_hook_ms_per_token": "decode wall ms/token minus exposed_store_ms_per_token (compute and other graph work; shows whether concurrent transfers slow compute)",
+  "prefetch_used / prefetch_unused": "not applicable: no arm prefetches",
+  "queue_depth": "descriptive, from per-request timestamps as in EXP-007",
+  "redundant_transfers": "reads of slices already resident; must be 0",
+  "resident_bytes_peak, budget_violations, pending_reads_at_graph_end": "residency pressure and correctness (violations and pending reads must be 0)",
+  "source": "traced launches only (B, C0_I, C_I); never mixed with the timing campaign; 12 blocks of 3 launches, df = 11",
+  "transfer_latency_ms": "complete_ns - issue_ns per read (distribution; exact/bound flag kept)"
+ },
+ "primary": {
+  "aggregate": "mean of r_b over all 20 blocks of the primary campaign",
+  "arms": "C vs A (both untraced)",
+  "block_statistic": "r_b = (mean_A_b - mean_C_b) / mean_A_b, with mean over the two launches of each arm in block b (relative decode-time reduction; positive = C faster)",
+  "budget": "1.5 GiB",
+  "definition": "server timings predicted_ms / predicted_n for one launch (predicted_n must be 512); lower is better",
+  "interval": "two-sided 95% Student t interval, df = 19",
+  "name": "decode_wall_ms_per_token",
+  "unit_of_analysis": "block"
+ },
+ "secondary": {
+  "no_harm_4GiB": "same block statistic at 4 GiB (C vs A, 20 blocks, df = 19)",
+  "per_prompt_consistency": "mean r_b per evaluation prompt at 1.5 GiB (point estimates only; no per-prompt test)",
+  "prefill_ms": "descriptive only",
+  "purity_untraced": "end-of-run counters of every timing launch: |mean miss bytes per token C - A| / A and the same for evictions, per budget",
+  "tokens_per_second": "1000 / ms_per_token per launch; reported, never used to classify"
+ }
+}

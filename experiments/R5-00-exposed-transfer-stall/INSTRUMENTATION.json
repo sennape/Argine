@@ -1,0 +1,33 @@
+{
+ "artifact": "R5-00-INSTRUMENTATION",
+ "existing_reused": [
+  "arx_io (issue, completion with exact/bound flag, wait start/end, bytes)",
+  "arx_access (h/m/w)",
+  "arx_evict",
+  "arx_snapshot",
+  "store counters (bytes_read, hits, misses, evictions, ns_read, ns_attesa, violazioni)"
+ ],
+ "host_record_per_launch": [
+  "power source (AC required)",
+  "Windows power plan",
+  "CPU package temperature and frequency at start and end",
+  "NVMe temperature where readable",
+  "Defender real-time / scheduled scan state and Windows Update state",
+  "start and end wall-clock time"
+ ],
+ "not_measurable_and_how_handled": [
+  "true device completion of a read is observed only when polled or waited: unobserved completions are upper bounds and are treated conservatively",
+  "time inside the stock ggml kernel is not instrumented: compute windows are hook gaps and include small non-expert ops; this loosens H, which is only an opening gate",
+  "tracing perturbs timing (EXP-024): traced launches are never used for the primary endpoint; traced arms are compared only with each other"
+ ],
+ "symmetry": "the same record types and fields in B, C0_I and C_I",
+ "timing_campaign_trace": "off (A and C untraced)",
+ "to_add_in_phase1": [
+  "per-thread hook start/end and wait start/end for every expert node (arx_node is written by thread 0 only today)",
+  "the node kind awaited by each wait, and the deferred reads it covers",
+  "count and bytes of deferred reads already complete at their wait",
+  "pending-reads-at-graph-end counter (must be 0; fail-closed abort otherwise)",
+  "one end-of-run counter record in EVERY launch (traced or not): misses, bytes_read, evictions, violations, pending reads, ARGINE_EXPERT_WAIT value",
+  "arx_config records ARGINE_EXPERT_WAIT"
+ ]
+}

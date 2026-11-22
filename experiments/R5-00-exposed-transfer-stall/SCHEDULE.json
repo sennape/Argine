@@ -1,0 +1,556 @@
+{
+ "artifact": "R5-00-SCHEDULE",
+ "campaign_order": [
+  "mechanism_1.5GiB",
+  "timing_1.5GiB",
+  "timing_4GiB"
+ ],
+ "campaigns": {
+  "mechanism_1.5GiB": {
+   "arms": [
+    "B",
+    "C0_I",
+    "C_I"
+   ],
+   "blocks": [
+    {
+     "block": 1,
+     "order": [
+      "C0_I",
+      "B",
+      "C_I"
+     ],
+     "prompt": "code-eval-1"
+    },
+    {
+     "block": 2,
+     "order": [
+      "B",
+      "C_I",
+      "C0_I"
+     ],
+     "prompt": "math-eval-1"
+    },
+    {
+     "block": 3,
+     "order": [
+      "C_I",
+      "B",
+      "C0_I"
+     ],
+     "prompt": "code-eval-1"
+    },
+    {
+     "block": 4,
+     "order": [
+      "C_I",
+      "B",
+      "C0_I"
+     ],
+     "prompt": "math-eval-1"
+    },
+    {
+     "block": 5,
+     "order": [
+      "C_I",
+      "C0_I",
+      "B"
+     ],
+     "prompt": "code-eval-1"
+    },
+    {
+     "block": 6,
+     "order": [
+      "C_I",
+      "C0_I",
+      "B"
+     ],
+     "prompt": "json-eval-1"
+    },
+    {
+     "block": 7,
+     "order": [
+      "B",
+      "C_I",
+      "C0_I"
+     ],
+     "prompt": "json-eval-1"
+    },
+    {
+     "block": 8,
+     "order": [
+      "B",
+      "C0_I",
+      "C_I"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 9,
+     "order": [
+      "B",
+      "C0_I",
+      "C_I"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 10,
+     "order": [
+      "C0_I",
+      "C_I",
+      "B"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 11,
+     "order": [
+      "C0_I",
+      "B",
+      "C_I"
+     ],
+     "prompt": "json-eval-1"
+    },
+    {
+     "block": 12,
+     "order": [
+      "C0_I",
+      "C_I",
+      "B"
+     ],
+     "prompt": "math-eval-1"
+    }
+   ],
+   "budget_bytes": 1610612736
+  },
+  "timing_1.5GiB": {
+   "arms": [
+    "A",
+    "C"
+   ],
+   "blocks": [
+    {
+     "block": 1,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "code-eval-1"
+    },
+    {
+     "block": 2,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "code-eval-1"
+    },
+    {
+     "block": 3,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 4,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "json-eval-1"
+    },
+    {
+     "block": 5,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "math-eval-1"
+    },
+    {
+     "block": 6,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "code-eval-1"
+    },
+    {
+     "block": 7,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 8,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 9,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "json-eval-1"
+    },
+    {
+     "block": 10,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "json-eval-1"
+    },
+    {
+     "block": 11,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 12,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "math-eval-1"
+    },
+    {
+     "block": 13,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "json-eval-1"
+    },
+    {
+     "block": 14,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "code-eval-1"
+    },
+    {
+     "block": 15,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 16,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "math-eval-1"
+    },
+    {
+     "block": 17,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "math-eval-1"
+    },
+    {
+     "block": 18,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "json-eval-1"
+    },
+    {
+     "block": 19,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "math-eval-1"
+    },
+    {
+     "block": 20,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "code-eval-1"
+    }
+   ],
+   "budget_bytes": 1610612736
+  },
+  "timing_4GiB": {
+   "arms": [
+    "A",
+    "C"
+   ],
+   "blocks": [
+    {
+     "block": 1,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "code-eval-1"
+    },
+    {
+     "block": 2,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "json-eval-1"
+    },
+    {
+     "block": 3,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "json-eval-1"
+    },
+    {
+     "block": 4,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "math-eval-1"
+    },
+    {
+     "block": 5,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 6,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "code-eval-1"
+    },
+    {
+     "block": 7,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "code-eval-1"
+    },
+    {
+     "block": 8,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "code-eval-1"
+    },
+    {
+     "block": 9,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 10,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "json-eval-1"
+    },
+    {
+     "block": 11,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 12,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "math-eval-1"
+    },
+    {
+     "block": 13,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 14,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "nl-eval-1"
+    },
+    {
+     "block": 15,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "math-eval-1"
+    },
+    {
+     "block": 16,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "code-eval-1"
+    },
+    {
+     "block": 17,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "math-eval-1"
+    },
+    {
+     "block": 18,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "json-eval-1"
+    },
+    {
+     "block": 19,
+     "order": [
+      "A",
+      "C",
+      "C",
+      "A"
+     ],
+     "prompt": "math-eval-1"
+    },
+    {
+     "block": 20,
+     "order": [
+      "C",
+      "A",
+      "A",
+      "C"
+     ],
+     "prompt": "json-eval-1"
+    }
+   ],
+   "budget_bytes": 4294967296
+  }
+ },
+ "cooldown_between_launches_s": 10,
+ "design": "timing: palindromic 4-launch blocks (XYYX), balanced first arm, prompts balanced across blocks; mechanism: 3-launch blocks, each of the 6 arm orders used twice, prompts balanced",
+ "host_conditions": "AC power; same Windows power plan; background applications closed; Defender scheduled scans and Windows Update paused for the campaign; host record per launch (INSTRUMENTATION.json); no data-driven exclusion",
+ "launch_counts": {
+  "mechanism_1.5GiB": 36,
+  "timing_1.5GiB": 80,
+  "timing_4GiB": 80
+ },
+ "seed": 20261122,
+ "warmup": "one uncounted launch per campaign with the first arm of block 1 and the identical environment, then 60 s cooldown; recorded, never used"
+}

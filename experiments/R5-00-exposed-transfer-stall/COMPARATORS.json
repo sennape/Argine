@@ -1,0 +1,88 @@
+{
+ "arms": {
+  "A": {
+   "ARGINE_EXPERT_WAIT": "layer",
+   "ARGINE_RESEARCH_TRACE": "<unset>",
+   "definition": "today's asincrono LRU path, code path unchanged: all kinds waited for at the first expert node; later nodes release and re-acquire the slices as hits",
+   "role": "baseline: current runtime behaviour",
+   "used_in": [
+    "timing"
+   ]
+  },
+  "B": {
+   "ARGINE_EXPERT_WAIT": "layer",
+   "ARGINE_RESEARCH_TRACE": "1",
+   "definition": "A with the research trace on; supplies the one-shot headroom bound (Phase 1b, development prompts) and the mechanism reference (Phase 2)",
+   "role": "traced baseline",
+   "used_in": [
+    "headroom",
+    "mechanism"
+   ]
+  },
+  "C": {
+   "ARGINE_EXPERT_WAIT": "kind",
+   "ARGINE_RESEARCH_TRACE": "<unset>",
+   "definition": "issue exactly as A at the first expert node; wait only for the kind this node consumes; at each later node of the same layer wait only for that node's kind and LRU-touch the layer's slices in A's order; the layer's pins are held until the next layer's first expert node",
+   "parameters": "none",
+   "role": "causal deferred-wait scheduler (the tested intervention)",
+   "used_in": [
+    "timing"
+   ],
+   "uses_only": "the router decision of the current layer (already used by A)"
+  },
+  "C0_I": {
+   "ARGINE_EXPERT_WAIT": "layer_touch",
+   "ARGINE_RESEARCH_TRACE": "1",
+   "definition": "C's code path (pins held for the layer, later nodes LRU-touch instead of re-acquire) but every thread waits for ALL its reads at the first expert node, as A. Differs from C only in where the wait happens, so C_I - C0_I isolates overlap from cheaper bookkeeping. Never in the timing campaign, never in the classification except through G4.",
+   "role": "bookkeeping control (traced, mechanism only)",
+   "used_in": [
+    "mechanism"
+   ]
+  },
+  "C_I": {
+   "ARGINE_EXPERT_WAIT": "kind",
+   "ARGINE_RESEARCH_TRACE": "1",
+   "definition": "C with the research trace on",
+   "role": "C traced",
+   "used_in": [
+    "mechanism",
+    "conformance"
+   ]
+  }
+ },
+ "artifact": "R5-00-COMPARATORS",
+ "common_environment": {
+  "ARGINE_EXPERT_DIRECT": "1",
+  "ARGINE_EXPERT_PRETOUCH": "<unset>",
+  "ARGINE_EXPERT_READ": "asincrono",
+  "ARGINE_PREFETCH": "0",
+  "ARGINE_RETENTION_POLICY": "<unset>",
+  "binary": "the single R5 build frozen at the implementation freeze; all arms of all campaigns use the same binary",
+  "end_of_run_counters": "every launch of every arm writes one end-of-run record of store counters (misses, bytes_read, evictions, budget violations, pending reads at graph end)"
+ },
+ "excluded": [
+  "any predictor or prediction-led prefetch",
+  "the legacy ARGINE_PREFETCH subsystem",
+  "retention policies and the blocco read mode",
+  "changes to budgets, thread counts, read mode or kernels",
+  "any second scheduler variant"
+ ],
+ "invariants_C_vs_A": [
+  "same set of slices requested per layer, the frozen issue order, same bytes read",
+  "same LRU access sequence (later-node hits replaced by psx_cache_touch in the same order); misses, miss bytes and evictions within the purity tolerance",
+  "same pinned footprint (no extra residency); budget violations 0; no pending read at the end of any graph",
+  "no prediction, no lookahead across layers, no new thread, no tunable parameter",
+  "identical generated tokens (greedy decoding on identical weights and kernels)"
+ ],
+ "issue_order": "A's current order, frozen: at the first expert node of a layer the slices are indexed k = 0 .. n_serve*n_kinds-1 with kind = k / n_serve over the kind list [this node's kind, then the remaining kinds in enum order gate, up, down] and expert = the k % n_serve-th selected expert in ascending id; threads claim k dynamically from one shared atomic counter. C and C0 must issue exactly this sequence (verified by a model-free test that records the claimed (k, kind, expert) sequence).",
+ "oracle_E": {
+  "definition": "the trace-derived hideable bound H of ENDPOINTS.json, computed once from B launches on development prompts; it characterises headroom only and is never a policy, an arm or a result in favour of R5; it is loose (W spans to the last expert node although node-2 reads can only hide behind node-1 compute)",
+  "implementable": false,
+  "included": true
+ },
+ "stronger_causal_scheduler_D": {
+  "included": false,
+  "reason": "The runtime offers no further causally known information before a layer's router runs (F2). A 'stronger' causal scheduler of the same information would differ only in wait placement, which C already moves to the latest correct point. Any scheduler that issues layer-L reads earlier needs predicted expert ids, which is Research 2-4 territory and is excluded. A second variant would only add multiplicity."
+ },
+ "trace_symmetry": "B, C0_I and C_I write the identical set of trace record types and fields (fields that do not apply are written empty), so trace overhead is the same in every traced arm; the per-arm trace overhead is reported on development prompts"
+}
