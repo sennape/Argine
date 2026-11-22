@@ -19,6 +19,7 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning,arrows.meta}
 \usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Causal State Is Not Enough: Prospective Evidence That Tested Causal Eviction Policies Recover Too Little Clairvoyant Headroom in Expert Retention},pdfauthor={sennape},pdfsubject={Prospective offline-replay test of whether causal eviction policies, including a rich learned policy and a distilled cheap rule, recover enough clairvoyant miss-byte headroom in Mixture-of-Experts expert retention},pdfkeywords={Mixture-of-Experts, expert retention, cache eviction, causal state, Belady, memory-constrained inference}}
 
 \microtypesetup{protrusion=false}
 \setlength{\emergencystretch}{3em}
@@ -52,7 +53,7 @@ Too Little Clairvoyant Headroom in Expert Retention}}
 \maketitle
 
 \begin{abstract}
-Serving a Mixture-of-Experts model from a fixed memory budget requires an online rule for which expert weights to keep resident. A clairvoyant eviction rule (Belady) bounds what any such rule could save, and earlier studies in this series found that this clairvoyant headroom is large, that expert routing contains causal predictive structure, and that prediction-led retention nevertheless produced no net runtime benefit. We ask whether the remaining obstacle is the causal state available to an online eviction policy: how much of the clairvoyant miss-byte headroom can causal policies recover, and can a rich causal decision rule be distilled into a deployable rule of a few integer comparisons? We replay frozen routing traces of Qwen3-30B-A3B-Q4\_K\_M offline at a 1.5~GiB expert budget. A gradient-boosted regression-tree policy and a depth-3 decision tree are fitted on four development traces, scored once on twelve validation traces, and scored once on four prospective held-out traces; the headroom captured is the pooled fraction of baseline miss bytes that a policy recovers relative to the clairvoyant reference. Belady removes $41.85\%$ of the baseline's miss bytes on the held-out traces. A frozen rule required at least $25\%$ capture on both splits. Two hand-built causal comparators capture at most $7.42\%$ (validation) and $9.37\%$ (held-out); the rich learned policy captures $15.45\%$ and $19.11\%$, about twice as much, but below the requirement; and the distilled cheap policy captures $-36.04\%$ and $-29.96\%$, that is, it incurs more miss bytes than the baseline on every one of the sixteen traces. No tested policy meets the requirement, so within the frozen feature vocabulary, model families and regime the causal state is insufficient. The result does not show that causal or learned eviction is impossible in general, and the clairvoyant reference is not a deployable target.
+Serving a Mixture-of-Experts model from a fixed memory budget requires an online rule for which expert weights to keep resident. A clairvoyant Belady-style eviction rule defines a future-aware reference for the recoverable miss-byte headroom, and earlier studies in this series found that this clairvoyant headroom is large, that expert routing contains causal predictive structure, and that prediction-led retention nevertheless produced no net runtime benefit. We ask whether the remaining obstacle is the causal state available to an online eviction policy: how much of the clairvoyant miss-byte headroom can causal policies recover, and can a rich causal decision rule be distilled into a deployable rule of a few integer comparisons? We replay frozen routing traces of Qwen3-30B-A3B-Q4\_K\_M offline at a 1.5~GiB expert budget. A gradient-boosted regression-tree policy and a depth-3 decision tree are fitted on four development traces, scored once on twelve validation traces, and scored once on four prospective held-out traces; the headroom captured is the pooled fraction of baseline miss bytes that a policy recovers relative to the clairvoyant reference. Belady removes $41.85\%$ of the baseline's miss bytes on the held-out traces. A frozen rule required at least $25\%$ capture on both splits. Two hand-built causal comparators capture at most $7.42\%$ (validation) and $9.37\%$ (held-out); the rich learned policy captures $15.45\%$ and $19.11\%$, about twice as much, but below the requirement; and the distilled cheap policy captures $-36.04\%$ and $-29.96\%$, that is, it incurs more miss bytes than the baseline on every one of the sixteen traces. No tested policy meets the requirement, so within the frozen feature vocabulary, model families and regime the causal state is insufficient. The result does not show that causal or learned eviction is impossible in general, and the clairvoyant reference is not a deployable target.
 \end{abstract}
 
 %=====================================================================
@@ -339,7 +340,15 @@ Prospective Evaluation and Classification & R4-02 & opening commit \hsh{30e37fdb
 \item instruction: \hsh{6a51113fc830b63fc1b8a60c394e16f84df2ff04fb2a566dd1653a96f202dd50}
 \end{itemize}
 
-\paragraph{Reproduction.} From the repository root: \code{python}~\code{paper/research4/scripts/build\_assets.py} regenerates tables, figure data and figures from the frozen artifacts; \code{python}~\code{paper/research4/scripts/verify\_paper.py} recomputes every numerical claim, checks the source map, the generated assets, the provenance values and the PDF hash, and fails on any drift; the scientific verifiers of the three stages are run through \code{shared/tooling/run\_frozen\_verifier.py}.
+\paragraph{Reproduction.} From the repository root, the tables, figure data and figures are regenerated from the frozen artifacts, and every numerical claim, the generated assets, the provenance values and the PDF hash are checked (the check fails on any drift), by:
+\begin{quote}\ttfamily\small
+python paper/research4/scripts/build\_assets.py\\
+python paper/research4/scripts/verify\_paper.py
+\end{quote}
+The scientific verifiers of the three stages are run through the wrapper
+\begin{quote}\ttfamily\small
+python shared/tooling/run\_frozen\_verifier.py <verifier> [args]
+\end{quote}
 
 \section{Feature Vocabulary}
 \label{app:feat}

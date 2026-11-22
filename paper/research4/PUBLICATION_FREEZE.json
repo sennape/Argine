@@ -19,7 +19,7 @@
   "manuscript": "paper/research4/research4.tex",
   "note": "Does not modify any frozen contract. The publication commit is the commit that adds this file; it cannot be recorded inside it.",
   "pdf": "paper/research4/research4.pdf",
-  "pdf_sha256": "65368b263e5b695838e11ec5e0279bbb44fee0f5058a50fc67dee45f4947353e",
+  "pdf_sha256": "833822a853b1ef8ab8b5cc180fe79d876531b5a1f95f1b5bbd5c7741210dfe44",
   "r4_contract_digests": {
     "R4-00": "fa0ff8d4c93b463a99bdba4a65625251fa00c8102f5b2d788f8f22e73a20d64e",
     "R4-01": "8d89ecd8198db93000456cde58f995e4fa23124d554402b61170a776d9a0e74f",
@@ -44,7 +44,7 @@
     "tables/table3_eval_workloads.tex": "f25b53e12902109a2af4791febab070850b27de284a51aa8597c7ecdac2e77ce",
     "tables/table4_validation_traces.tex": "d37e4734f95f5eb8f6e72677c7e098795a28c6f334971c8534a61e1980632de8"
   },
-  "tex_lf_sha256": "f6353c4e5ec88b82d0c2a202affebf05d576eed3b3748d2d95880abbb5c8cc17",
+  "tex_lf_sha256": "84a3aeffa6d4cd35ffcd677e97ad96ec43f2d75b59b49168ff58e05a4d439c6b",
   "title": "Causal State Is Not Enough: Prospective Evidence That Tested Causal Eviction Policies Recover Too Little Clairvoyant Headroom in Expert Retention",
   "verifier": "paper/research4/scripts/verify_paper.py",
   "verifier_result": "PASS"
