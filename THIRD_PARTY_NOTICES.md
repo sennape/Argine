@@ -1,10 +1,10 @@
 # Third-party notices and provenance
 
-Argine2 is released under the repository's `LICENSE`. This file records third-party material and provenance that should remain visible in public distributions.
+This repository (Argine3) is released under the repository's `LICENSE`. This file records third-party material and provenance that should remain visible in public distributions.
 
 ## llama.cpp / ggml
 
-Argine2 contains patches and build metadata targeting `llama.cpp` commit
+This repository contains patches and build metadata targeting `llama.cpp` commit
 `254b177307b14d055bbe4c050c9c441a1e06d8a4`.
 
 The patch files under `patches/` contain diff context from upstream `llama.cpp` / `ggml` source files in addition to Argine-specific additions. Upstream `llama.cpp` is distributed under the MIT License.

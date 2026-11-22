@@ -1,10 +1,22 @@
-# Contributing to Argine2
+# Contributing to Argine3
 
-Argine2 is a research project. The most valuable contributions produce evidence — including evidence that something does not work.
+Argine is a research project on memory-constrained Mixture-of-Experts inference. This repository, **Argine3**, contains the project through the completion of **Research 2** (Research 1 is CLOSED; Research 2 is CLOSED / FROZEN). The most valuable contributions produce evidence — including evidence that something does not work.
+
+## Scope of this repository
+
+- Frozen scientific evidence (experiment records, `*-FREEZE.json` files, result JSON, classification labels, measured numbers, raw-data manifests and the frozen papers) **must not be modified**.
+- New scientific work is **additive**: it adds new records and never edits or reinterprets old ones. Research after Research 2 belongs to later repository generations, not to this repository; contributions here are replications, audits, corrections recorded as new records, and documentation.
+- Protocol and decision rules are frozen **before** evaluation, wherever the experiment has an evaluation.
+- Scientific history is not rewritten: no history rewriting, no amended or force-pushed commits on published history.
+- Reader-facing scientific names and canonical repository identifiers (`EXP-NNN`, `R2-NN`, classification labels) are distinct things: identifiers are permanent and stay in provenance material; prose uses descriptive names.
+- Every claim maps to evidence: name the experiment or milestone and the artifact that supports it.
+- Validators and tests stay green (see rule 9 below, and `python tools/check_links.py` and `python strumenti/controlla_readme.py` for documentation).
+- Large raw artifacts that are omitted from Git remain represented through hashes and manifests.
+- Documentation-only changes must not alter any scientific classification, number or label.
 
 ## Good contributions
 
-- **Reproduce an existing experiment** (`EXP-NNN`) and report whether you get the same result.
+- **Reproduce an existing experiment** (`EXP-NNN` or a Research 2 milestone) and report whether you get the same result.
 - **Add a workload** to `workloads/v1/` (or propose `v2`), with disjoint `dev` and `eval` prompts.
 - **Test an open hypothesis** (`RQ-NNN` in [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md)).
 - **Implement a baseline policy** in `argine/research/policies.py` (ARC, LeCaR, a published MoE policy) — with a test that it never exceeds its budget.
