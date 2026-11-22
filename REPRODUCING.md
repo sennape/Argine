@@ -1,20 +1,50 @@
-# Reproducing Argine4
+# Reproducing Argine
 
-This repository (Argine4, the project through Research 3) distinguishes between **artifact reproduction** and **experimental replication**.
+This is the single reproduction guide for the consolidated repository (Research 1-4). It first explains the structure and how provenance works, then how to run each verifier; the preserved Research 1 toolchain guide follows as Part II.
 
-Artifact reproduction verifies analyses, tables, checks, and figures from the
-evidence committed to this repository. Full reprocessing of experiments whose
-run artifacts live under `experiments/EXP-*/raw/` requires the external raw
-corpus identified by `data/external_raw_manifest.csv`. It does not require downloading or
-running the evaluated language models.
+## Part I — structure, provenance and verifiers
 
-Experimental replication performs new instrumented model runs. It requires
-compatible GGUF models, an Argine expert store, the patched llama.cpp runtime,
-and suitable local hardware. Absolute performance numbers are hardware- and
-runtime-dependent and are therefore not expected to reproduce byte-for-byte on
-a different machine.
+### Structure
 
-## 1. Requirements
+The frozen scientific tree is physically unchanged from the research repositories: `experiments/` (EXP-*, R2-*, R3-*, R4-*), `paper/`, `data/`, `argine/`, `tools/`, `tests/`. The folders [`research/`](research/README.md) and [`papers/`](papers/README.md) are an index layer on top of it; [`manifests/research-layout-map.json`](manifests/research-layout-map.json) maps every path to its research. Nothing was moved because frozen records and verifiers store `experiments/...` paths and hash the files.
+
+### Frozen stages
+
+Each closed stage carries a `FREEZE.json` (file SHA-256 values, contract digests, freeze identifiers). Frozen files are byte-identical to the originals: [`manifests/tracked-file-hashes.json`](manifests/tracked-file-hashes.json) records SHA-256 before and after consolidation (all equal). [`.gitattributes`](.gitattributes) pins per-file line endings so that a clone on any operating system reproduces the original on-disk bytes (several verifiers hash on-disk bytes). One file, `experiments/R3-02B-acquisition-driver/README.md`, had mixed line endings in the original and is checked out with CRLF only; no verifier depends on it.
+
+### Omitted raw artifacts
+
+Four R2-12 conformance traces (~1.9 GB each) and the external R4 trace corpora are not in Git. Their path, size and SHA-256 are in [`manifests/raw-artifacts-omitted.json`](manifests/raw-artifacts-omitted.json) and (R4) `experiments/R4-00-causal-eviction-distillation/DATA_SPLITS.json`; the Research 1 external raw inventory is `data/external_raw_manifest.csv`. The preservation location of the omitted traces beyond the author's local repositories is UNKNOWN. A hash identifies an artifact: if you obtain a file, its SHA-256 must equal the recorded value, otherwise it is not the evidence.
+
+### How hashes establish provenance
+
+Verifiers recompute SHA-256 of the committed artifacts and compare with the frozen records, so any silent edit to a frozen file, result or digest makes a verifier fail. Some frozen verifiers also asked Git about the historical commits at which stages were frozen (`git log -- PATH`, `git show COMMIT:PATH`, `git diff --name-only REV -- PATHS`). Those commits contain the oversized traces and are not in this repository's public history. [`manifests/git-object-equivalence.json`](manifests/git-object-equivalence.json) records, for those queries, the original Git object IDs; the wrapper [`shared/tooling/run_frozen_verifier.py`](shared/tooling/run_frozen_verifier.py) (via [`shared/tooling/gitcompat/`](shared/tooling/gitcompat/sitecustomize.py)) answers them only if the current blob equals the recorded original, and otherwise fails like a missing object. All other Git commands pass through. Details: [`manifests/consolidation-path-changes.json`](manifests/consolidation-path-changes.json). Earlier repositories are preserved as tags `legacy/argine2/*`, `legacy/argine3/*`, `legacy/argine4/*` ([`manifests/legacy-repositories.json`](manifests/legacy-repositories.json)).
+
+### Running each verifier (from the repository root)
+
+All of this needs Python 3.9+ and no model weights or network.
+
+| scope | command | needs |
+|---|---|---|
+| everything below | `python shared/tooling/verify_all.py` | as below |
+| Research 1 registry | `python tools/index_experiments.py --check` | nothing external |
+| Research 1/2 unit tests | `python -m unittest discover -s tests` | some tests need a built runtime or raw data and are environment-dependent |
+| Research 2 paper freeze | `python paper/research2/scripts/verify_paper_freeze.py` | nothing external |
+| Research 3 closure | `python shared/tooling/run_frozen_verifier.py experiments/R3-final-closure/closure.py verify` | nothing external |
+| Research 3 paper | `python shared/tooling/run_frozen_verifier.py paper/research3/scripts/verify_paper.py` | nothing external |
+| Research 4 Phase 0 | `python shared/tooling/run_frozen_verifier.py experiments/R4-00-causal-eviction-distillation/phase0.py verify` | verifies frozen records; regenerating from raw traces needs the external corpus |
+| Research 4 Phase 1 | `python shared/tooling/run_frozen_verifier.py experiments/R4-01-cfdc-training-validation/phase1.py verify` | frozen records |
+| Research 4 Phase 2 | `python shared/tooling/run_frozen_verifier.py experiments/R4-02-cfdc-prospective-eval/phase2.py verify` | frozen records |
+| documentation | `python tools/check_links.py` and `python strumenti/controlla_readme.py` | nothing external |
+| consolidation | `python shared/tooling/verify_consolidation.py` | Git |
+
+Stages that need external assets: re-scoring R4 from raw traces (external trace corpora), re-processing Research 1 raw runs (`data/external_raw_manifest.csv`), re-checking R2-12 raw traces (omitted files), and any new model run (GGUF models, the patched llama.cpp runtime, local hardware; Part II.6).
+
+---
+
+## Part II — Research 1 toolchain and replication (preserved)
+
+## Part II.1 Requirements
 
 The analysis and verification path requires:
 

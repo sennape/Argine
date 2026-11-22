@@ -1,15 +1,13 @@
 cff-version: 1.2.0
 message: >-
   If you use this repository's data, code or findings, please cite the repository and the
-  commit hash of the results you use, together with the EXP-, R2- or R3- identifiers.
-title: "Argine4: memory-constrained Mixture-of-Experts inference, the project through Research 3"
+  commit hash of the results you use, together with the EXP-, R2-, R3- or R4- identifiers.
+title: "Argine: memory-constrained Mixture-of-Experts inference, Research 1-4"
 type: software
 authors:
   - name: "sennape"
-version: "0.2.0"
-date-released: "2026-10-17"
 license: MIT
-repository-code: "https://github.com/sennape/Argine4"
+repository-code: "https://github.com/sennape/Argine"
 keywords:
   - Mixture-of-Experts
   - MoE inference

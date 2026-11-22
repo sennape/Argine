@@ -1,6 +1,6 @@
-# Contributing to Argine4
+# Contributing to Argine
 
-Argine is a research project on memory-constrained Mixture-of-Experts inference. This repository, **Argine4**, contains the project through the completion of **Research 3** (Research 1 CLOSED; Research 2 CLOSED / FROZEN; Research 3 CLOSED; Research 4 Phase 0 frozen, no results). The most valuable contributions produce evidence — including evidence that something does not work.
+Argine is a research project on memory-constrained Mixture-of-Experts inference. This repository, **Argine** (`https://github.com/sennape/Argine`), is the single canonical public repository for Research 1-4 (Research 1 CLOSED; Research 2 CLOSED / FROZEN; Research 3 CLOSED; Research 4 CLOSED with classification `R4_CFDC_CAUSAL_STATE_INSUFFICIENT`; Research 5 is not opened). The most valuable contributions produce evidence — including evidence that something does not work.
 
 ## Scope of this repository
 
@@ -10,10 +10,10 @@ Argine is a research project on memory-constrained Mixture-of-Experts inference.
 - Scientific history is not rewritten: no history rewriting, no amended or force-pushed commits on published history.
 - Reader-facing scientific names and canonical repository identifiers (`EXP-NNN`, `R2-NN`, `R3-NN`, classification labels) are distinct things: identifiers are permanent and stay in provenance material; prose uses descriptive names.
 - Every claim maps to evidence: name the experiment or milestone and the artifact that supports it (`paper/research3/SOURCE_MAP.md` shows the convention).
-- Validators and tests stay green: `python experiments/R3-final-closure/closure.py verify`, `python paper/research3/scripts/verify_paper.py`, the per-stage `verify` commands, and the rule-9 checks below; for documentation, `python tools/check_links.py` and `python strumenti/controlla_readme.py`.
+- Validators and tests stay green: `python shared/tooling/verify_all.py` (every frozen verifier, run through `shared/tooling/run_frozen_verifier.py`; see [`REPRODUCING.md`](REPRODUCING.md)), and the rule-9 checks below; for documentation, `python tools/check_links.py` and `python strumenti/controlla_readme.py`.
 - Large raw artifacts that are omitted from Git or from the public snapshot remain represented through hashes and manifests.
 - Documentation-only changes must not alter any scientific classification, number or label.
-- **Research 4** started with a separately frozen Phase 0 protocol (`experiments/R4-00-causal-eviction-distillation/`, branch `r4-main`); it must follow that protocol, keep EVAL locked until the frozen Phase 1 lock, and must not alter the Research 3 closure.
+- **Research 4** is closed; its Phase 0, 1 and 2 records are frozen like the earlier research. A possible Research 5 would need its own new, separately frozen protocol and must not alter any closure.
 
 ## Good contributions
 
