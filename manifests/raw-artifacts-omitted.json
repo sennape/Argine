@@ -1,0 +1,83 @@
+{
+ "artifact": "RAW-ARTIFACTS-OMITTED",
+ "policy": "No multi-gigabyte raw trace is stored in GitHub. Each omitted artifact is identified by path, size and SHA-256 so the exact evidence used can be recognized and re-checked if the file is available.",
+ "omitted_from_git": [
+  {
+   "canonical_path": "experiments/R2-12-runtime-validation/conformance_traces/conformance-b_selected-20261115.jsonl",
+   "size_bytes": 1921137735,
+   "sha256": "3ae926280e0fb092aabf196cacb98fe59742901fd4ba8fc1217b00bdd2fd384f",
+   "git_blob_sha1_in_source": "f64c227b1b7ee4d96699f0daf37128e6d758bbb5",
+   "research_stage": "Research 2 / R2-12 runtime policy conformance",
+   "provenance": "real-runtime conformance run of the frozen retention policies (runtime llama-research-v8); described by experiments/R2-12-runtime-validation/HOST-CONFORMANCE-PASS-V8-20261115/CONFORMANCE-MANIFEST.json (runtime/model/expert-store hashes)",
+   "reason_omitted": "single file larger than GitHub's 100 MB blob limit (about 1.9 GB each)",
+   "preservation_location": "Argine4 and Argine3 local Git histories on the research machine (C:\\Users\\alpel\\Desktop\\Argine4, commit a9f92f2) - UNKNOWN beyond that; no off-machine copy is documented",
+   "used_by": "conformance evidence only; never read by any benchmark or later research stage"
+  },
+  {
+   "canonical_path": "experiments/R2-12-runtime-validation/conformance_traces/conformance-predicted_protect-20261115.jsonl",
+   "size_bytes": 1921816398,
+   "sha256": "ae872d509591eae0c1a8b6fc699989b41396e70b8cdf6154129206a948af6c4f",
+   "git_blob_sha1_in_source": "3035bffd74940619056e8c380d34136ae17f12fb",
+   "research_stage": "Research 2 / R2-12 runtime policy conformance",
+   "provenance": "real-runtime conformance run of the frozen retention policies (runtime llama-research-v8); described by experiments/R2-12-runtime-validation/HOST-CONFORMANCE-PASS-V8-20261115/CONFORMANCE-MANIFEST.json (runtime/model/expert-store hashes)",
+   "reason_omitted": "single file larger than GitHub's 100 MB blob limit (about 1.9 GB each)",
+   "preservation_location": "Argine4 and Argine3 local Git histories on the research machine (C:\\Users\\alpel\\Desktop\\Argine4, commit a9f92f2) - UNKNOWN beyond that; no off-machine copy is documented",
+   "used_by": "conformance evidence only; never read by any benchmark or later research stage"
+  },
+  {
+   "canonical_path": "experiments/R2-12-runtime-validation/HOST-CONFORMANCE-PASS-V8-20261115/b_selected.decisions.jsonl",
+   "size_bytes": 1920426120,
+   "sha256": "4debf9f4a199313834b8d9b5bc83e40fb2ec74cad0ea9d2660ce4551691b9ce4",
+   "git_blob_sha1_in_source": "a6ea930fca44ddd36b2d6a2b6e9732d71d948f02",
+   "research_stage": "Research 2 / R2-12 runtime policy conformance",
+   "provenance": "real-runtime conformance run of the frozen retention policies (runtime llama-research-v8); described by experiments/R2-12-runtime-validation/HOST-CONFORMANCE-PASS-V8-20261115/CONFORMANCE-MANIFEST.json (runtime/model/expert-store hashes)",
+   "reason_omitted": "single file larger than GitHub's 100 MB blob limit (about 1.9 GB each)",
+   "preservation_location": "Argine4 and Argine3 local Git histories on the research machine (C:\\Users\\alpel\\Desktop\\Argine4, commit a9f92f2) - UNKNOWN beyond that; no off-machine copy is documented",
+   "used_by": "conformance evidence only; never read by any benchmark or later research stage"
+  },
+  {
+   "canonical_path": "experiments/R2-12-runtime-validation/HOST-CONFORMANCE-PASS-V8-20261115/predicted_protect.decisions.jsonl",
+   "size_bytes": 1921104783,
+   "sha256": "2a4e955d988b69327c11560863df5fda24fcd751716bafe6e01c6bf089da2475",
+   "git_blob_sha1_in_source": "b473a492343d979acb7761438d7a51b6d1ec210a",
+   "research_stage": "Research 2 / R2-12 runtime policy conformance",
+   "provenance": "real-runtime conformance run of the frozen retention policies (runtime llama-research-v8); described by experiments/R2-12-runtime-validation/HOST-CONFORMANCE-PASS-V8-20261115/CONFORMANCE-MANIFEST.json (runtime/model/expert-store hashes)",
+   "reason_omitted": "single file larger than GitHub's 100 MB blob limit (about 1.9 GB each)",
+   "preservation_location": "Argine4 and Argine3 local Git histories on the research machine (C:\\Users\\alpel\\Desktop\\Argine4, commit a9f92f2) - UNKNOWN beyond that; no off-machine copy is documented",
+   "used_by": "conformance evidence only; never read by any benchmark or later research stage"
+  }
+ ],
+ "external_raw_traces_referenced_by_research_4": [
+  {
+   "split": "TRAIN",
+   "role": "fit CHEAP and RICH; teacher labels",
+   "trace_count": 4,
+   "identities_with_sha256": "experiments/R4-00-causal-eviction-distillation/DATA_SPLITS.json",
+   "reason_omitted": "raw routing traces live outside the repository (host research directories) and are multi-hundred-megabyte; identified by SHA-256 in the frozen DATA_SPLITS record",
+   "preservation_location": "host path pattern %LOCALAPPDATA%\\Argine3\\research\\... as recorded per trace; no other location documented - UNKNOWN"
+  },
+  {
+   "split": "VALIDATION",
+   "role": "the single frozen gate (no selection among alternatives)",
+   "trace_count": 12,
+   "identities_with_sha256": "experiments/R4-00-causal-eviction-distillation/DATA_SPLITS.json",
+   "reason_omitted": "raw routing traces live outside the repository (host research directories) and are multi-hundred-megabyte; identified by SHA-256 in the frozen DATA_SPLITS record",
+   "preservation_location": "host path pattern %LOCALAPPDATA%\\Argine3\\research\\... as recorded per trace; no other location documented - UNKNOWN"
+  },
+  {
+   "split": "EVAL",
+   "role": "scored exactly once after TRAIN fit and VALIDATION scoring are locked",
+   "trace_count": 4,
+   "identities_with_sha256": "experiments/R4-00-causal-eviction-distillation/DATA_SPLITS.json",
+   "reason_omitted": "raw routing traces live outside the repository (host research directories) and are multi-hundred-megabyte; identified by SHA-256 in the frozen DATA_SPLITS record",
+   "preservation_location": "host path pattern %LOCALAPPDATA%\\Argine3\\research\\... as recorded per trace; no other location documented - UNKNOWN"
+  }
+ ],
+ "already_preserved_manifests": [
+  {
+   "path": "data/external_raw_manifest.csv",
+   "description": "Research 1 cryptographic inventory (path, size, sha256) of external experiment raw data; 3280 rows",
+   "status": "unchanged"
+  }
+ ]
+}

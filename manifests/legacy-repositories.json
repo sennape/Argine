@@ -1,0 +1,200 @@
+{
+ "artifact": "LEGACY-REPOSITORIES",
+ "new_repository": "https://github.com/sennape/Argine",
+ "note": "Legacy commits remain reachable inside the new repository through namespaced annotated tags legacy/<repo>/<ref>. HoPi (C:\\Users\\alpel\\Desktop\\HoPi) is an unrelated project and is not part of this consolidation. Argine4-r3build and Argine4-r3runs are not git repositories and were not inspected or imported.",
+ "sources": [
+  {
+   "id": "argine2-github",
+   "github_repository": "sennape/Argine2",
+   "url": "https://github.com/sennape/Argine2",
+   "local_path": "C:\\Users\\alpel\\Desktop\\Argine2-public",
+   "default_branch": "main",
+   "head_sha": "faa613d18645e58dbb3f5e11cdf4d526bea842aa",
+   "visibility": "public",
+   "branches": [
+    "main"
+   ],
+   "important_tags": [
+    {
+     "name": "v0.2.0",
+     "tag_object": "13cdb6444d92576d4af4af4fab54cf1afb649319",
+     "commit": "8ed817dc05a7db5a7e7e22138fa4d75bfc6c5e17"
+    }
+   ],
+   "role": "Research 1 public repository (observation campaign, EXP-001..EXP-027) - canonical public record",
+   "status": "IMPORTED_AS_LEGACY_TAGS",
+   "imports": [
+    {
+     "tag": "legacy/argine2/main",
+     "tag_object": "530d4f3b55256c8067398c0d7604dfc5984e792e",
+     "resolves_to": "faa613d18645e58dbb3f5e11cdf4d526bea842aa",
+     "expected": "faa613d18645e58dbb3f5e11cdf4d526bea842aa",
+     "match": true,
+     "commits_reachable": 3
+    },
+    {
+     "tag": "legacy/argine2/v0.2.0",
+     "tag_object": "37d6560f61536db0491e4142b74e6835cdf09b2c",
+     "resolves_to": "8ed817dc05a7db5a7e7e22138fa4d75bfc6c5e17",
+     "expected": "8ed817dc05a7db5a7e7e22138fa4d75bfc6c5e17",
+     "match": true,
+     "commits_reachable": 2
+    }
+   ]
+  },
+  {
+   "id": "argine3-github",
+   "github_repository": "sennape/Argine3",
+   "url": "https://github.com/sennape/Argine3",
+   "local_path": "C:\\Users\\alpel\\Desktop\\Argine3-github",
+   "default_branch": "r2-main",
+   "head_sha": "fda402f05876ed557e4282bc2ccfdec3b3a33957",
+   "visibility": "public",
+   "branches": [
+    "r2-main"
+   ],
+   "important_tags": [
+    {
+     "name": "research2-paper-final",
+     "tag_object": "e6faa15f7fd7ee2e383a4031709e4c6c045178dd",
+     "commit": "ebd8e50bb616bb15ed286a4d8e0408ddc0cfbe70"
+    }
+   ],
+   "role": "Research 2 public repository (project through Research 2) - canonical public record",
+   "status": "IMPORTED_AS_LEGACY_TAGS",
+   "imports": [
+    {
+     "tag": "legacy/argine3/r2-main",
+     "tag_object": "217f3cbb13076024489b1bb758a00abb8caad711",
+     "resolves_to": "fda402f05876ed557e4282bc2ccfdec3b3a33957",
+     "expected": "fda402f05876ed557e4282bc2ccfdec3b3a33957",
+     "match": true,
+     "commits_reachable": 134
+    },
+    {
+     "tag": "legacy/argine3/research2-paper-final",
+     "tag_object": "f2cc57c55de9788d782cbd59695b90116caf327c",
+     "resolves_to": "ebd8e50bb616bb15ed286a4d8e0408ddc0cfbe70",
+     "expected": "ebd8e50bb616bb15ed286a4d8e0408ddc0cfbe70",
+     "match": true,
+     "commits_reachable": 131
+    }
+   ]
+  },
+  {
+   "id": "argine4-github",
+   "github_repository": "sennape/Argine4",
+   "url": "https://github.com/sennape/Argine4",
+   "local_path": "C:\\Users\\alpel\\Desktop\\Argine4-public",
+   "default_branch": "main",
+   "head_sha": "66d2b8ebaa2ad3f26a42dfc0e310857409f99cbd",
+   "visibility": "public",
+   "branches": [
+    "main"
+   ],
+   "important_tags": [
+    {
+     "name": "research3-paper-v1",
+     "tag_object": "e355c31f83731f2d206a20fbc54da312c63a5f6f",
+     "commit": "bcc9bde72ac6a926dbcc21a06f34088c6ec7d1dc"
+    }
+   ],
+   "role": "Research 3 public repository (project through Research 3; published paper tag) - canonical public record",
+   "status": "IMPORTED_AS_LEGACY_TAGS",
+   "imports": [
+    {
+     "tag": "legacy/argine4/main",
+     "tag_object": "bc86f5607a39cd91025d743433091b6cfc980c53",
+     "resolves_to": "66d2b8ebaa2ad3f26a42dfc0e310857409f99cbd",
+     "expected": "66d2b8ebaa2ad3f26a42dfc0e310857409f99cbd",
+     "match": true,
+     "commits_reachable": 2
+    },
+    {
+     "tag": "legacy/argine4/research3-paper-v1",
+     "tag_object": "1008145a2133931329ba6c8805087df10f56c1ae",
+     "resolves_to": "bcc9bde72ac6a926dbcc21a06f34088c6ec7d1dc",
+     "expected": "bcc9bde72ac6a926dbcc21a06f34088c6ec7d1dc",
+     "match": true,
+     "commits_reachable": 1
+    }
+   ]
+  },
+  {
+   "id": "argine2-local",
+   "github_repository": null,
+   "url": null,
+   "local_path": "C:\\Users\\alpel\\Desktop\\Argine2",
+   "default_branch": "master",
+   "head_sha": "406763361a49a2c7ab6cbb811655dbdc51e77f9b",
+   "visibility": "local-only",
+   "branches": [
+    "master"
+   ],
+   "important_tags": [],
+   "role": "Research 1 private working history (36 commits); ancestor of Argine4 r4-main",
+   "status": "IMPORTED_AS_LEGACY_TAG",
+   "imports": [
+    {
+     "tag": "legacy/argine2/local-master",
+     "tag_object": "7ff8ff0aea9ec50d932583f43e9daec36b09f722",
+     "resolves_to": "406763361a49a2c7ab6cbb811655dbdc51e77f9b",
+     "expected": "406763361a49a2c7ab6cbb811655dbdc51e77f9b",
+     "match": true,
+     "commits_reachable": 36
+    }
+   ]
+  },
+  {
+   "id": "argine3-local",
+   "github_repository": null,
+   "url": null,
+   "local_path": "C:\\Users\\alpel\\Desktop\\Argine3",
+   "default_branch": "r3-main (working branch)",
+   "head_sha": "15a623863d4df848c9c9679b94811f681ea30dea",
+   "visibility": "local-only",
+   "branches": {
+    "master": "406763361a49a2c7ab6cbb811655dbdc51e77f9b",
+    "r2-main": "4ce35fef61cd9c8155c3b88222cb6b52a3f62fb6",
+    "r3-main": "15a623863d4df848c9c9679b94811f681ea30dea"
+   },
+   "important_tags": [],
+   "role": "Research 2/3 private working history (133 commits)",
+   "status": "NOT_IMPORTED_OVERSIZED_OBJECTS",
+   "imports": [],
+   "reason": "its history contains the four 1.9 GB R2-12 conformance traces (blobs of 1,920,426,120 to 1,921,816,398 bytes) and cannot be hosted on GitHub; the content of its research is present in main via the Argine4 import and the public Argine3 history is preserved as legacy/argine3/*"
+  },
+  {
+   "id": "argine4-local",
+   "github_repository": null,
+   "url": null,
+   "local_path": "C:\\Users\\alpel\\Desktop\\Argine4",
+   "default_branch": "r4-main",
+   "head_sha": "a9f92f2e06eacc2d52920f972739e19936074632",
+   "visibility": "local-only (its origin points to sennape/Argine4, which holds a different, cleaned public history)",
+   "branches": {
+    "r3-main": "f88001558542b648c0a3abff54c919adedf27809",
+    "r4-main": "a9f92f2e06eacc2d52920f972739e19936074632"
+   },
+   "important_tags": [
+    {
+     "name": "research3-paper-v1",
+     "tag_object": "6ba5ab50a58969b01f8262e988849a32a3fd1717",
+     "commit": "337000808896e54955de0278686c5b7dae001b4e"
+    }
+   ],
+   "role": "canonical cumulative base through Research 4 (184 commits on r3-main lineage + R4 phases)",
+   "status": "TREE_IMPORTED_AS_MAIN_COMMIT_1",
+   "imports": [],
+   "tree_import": {
+    "main_commit": "4829bd148337ed728d10ef056184714801474e63",
+    "source_commit": "a9f92f2e06eacc2d52920f972739e19936074632",
+    "files_source": 3844,
+    "files_imported": 3840,
+    "omitted": "4 raw traces, see manifests/raw-artifacts-omitted.json",
+    "verification": "all 3840 imported blobs and modes identical to the source commit"
+   },
+   "reason": "its history cannot be pushed (oversized R2-12 blobs); not rewritten"
+  }
+ ]
+}
