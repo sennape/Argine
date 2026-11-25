@@ -30,7 +30,7 @@ def good_records():
     return recs
 
 
-MF = {"returncode": 0, "passed": 136, "failed": 0, "skipped": 3}
+MF = {"returncode": 0, "passed": 143, "failed": 0, "skipped": 3}
 SM = {"version_returncode": 0, "refusals": [{"pass": True}] * 3}
 
 
@@ -140,7 +140,7 @@ class Evaluate(unittest.TestCase):
             self.assertFalse(self._mut(f)["criteria"]["zero_fail_closed_and_drain_events"], k)
 
     def test_windows_counts_are_pinned(self):
-        for mf in ({"returncode": 0, "passed": 136, "failed": 0, "skipped": 4}, {"returncode": 0, "passed": 135, "failed": 0, "skipped": 3}):
+        for mf in ({"returncode": 0, "passed": 143, "failed": 0, "skipped": 4}, {"returncode": 0, "passed": 142, "failed": 0, "skipped": 3}):
             self.assertFalse(H.evaluate(good_records(), mf, SM)["criteria"]["windows_model_free_tests"])
 
     def test_model_free_and_smoke_required(self):

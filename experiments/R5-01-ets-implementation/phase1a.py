@@ -18,14 +18,17 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 P0_DIR = REPO / "experiments" / "R5-00-exposed-transfer-stall"
 R5SRC = REPO / "patches" / "r5-ets"
-BUILD_INFO = REPO / "llama-research-r5-ets" / "BUILD-INFO.json"
+# The R5 runtime build in force. llama-research-r5-ets/BUILD-INFO.json (first build) is kept unchanged; it was superseded
+# after the host incident of the first G1 attempt (G1-ATTEMPT-1-INCIDENT.md).
+BUILD_INFO = REPO / "llama-research-r5-ets-2" / "BUILD-INFO.json"
+BUILD_INFO_SUPERSEDED = REPO / "llama-research-r5-ets" / "BUILD-INFO.json"
 SOURCE_HEAD = "6a178123134b4139e776bb5ee4664fb32b4cefae"           # Research 5 Phase 0 commit
 P0_CONTRACT_DIGEST = "9d480ccf1b5109fa9be6cd717261e824876122e1ec504a3ccd85e0e30e619e52"
 P0_FREEZE = "21ed630b638ca56a19b6a392a6ce1e47782dcd4351b178d523d5e28a6c7f63ee"
 STATE = "R5_ETS_PHASE1A_IMPLEMENTED"
 CHANGED = ["argine-store.cpp", "argine-store.h", "argine-experts.cpp", "argine-research.cpp", "argine-research.h"]
 NEW = ["argine-ets.h", "argine-ets-test.cpp", "build-r5-ets.sh", "toolchain-mingw-w64.cmake", "mingw-toolchain-debs.sha256",
-       "pe_normalized_sha256.py", "README.md", "R5_CHANGES.diff"]
+       "pe_normalized_sha256.py", "README.md", "R5_CHANGES.diff", "argine-tls.h", "mingw-tls-emulation.cpp"]
 FROZEN_RUNTIME = ["patches/" + f for f in CHANGED + ["argine-experts.h", "argine-retention-policy.cpp", "argine-retention-policy.h"]]
 FORBIDDEN_OUTCOME_NAMES = ["G1_HOST_RESULT", "HEADROOM", "EVAL_OPENED", "TIMING", "MECHANISM_DATA", "CLASSIFICATION.json", "DEV_LOG"]
 

@@ -7,14 +7,18 @@ IMPLEMENTATION_FREEZE rule requires.
 
     python host_conformance.py run --model M.gguf --store M.psxs --v5-search-root %USERPROFILE% --out OUTDIR
     python host_conformance.py evaluate --out OUTDIR
+    python host_conformance.py model-free --out OUTDIR     # ONLY the Windows model-free test (no model, no store, no v5)
 
 Steps of `run` (each launch: fresh process, 512 greedy tokens with ignore_eos, 12 threads, context 4096):
-  1. identities: R5 runtime and Windows conformance-test hashes against llama-research-r5-ets/BUILD-INFO.json; the
+  1. identities: R5 runtime and Windows conformance-test hashes against llama-research-r5-ets-2/BUILD-INFO.json and the
+     identity pinned below (R5_AUTHORIZED); the
      llama-research-v5 runtime, accepted only as its historical raw SHA-256 or as the ONE reconstruction frozen in
      V5-RECOVERY.json (v5_identity); model and store SHA-256 recorded;
   2. the model-free conformance test on the real Windows OVERLAPPED path (argine-ets-test.exe);
+     GATE: exit code 0 and exactly one well-formed RESULT line with the pinned counts, else exit 3 with no model launch;
   3. startup smoke: --version; fail-closed refusals (invalid ARGINE_EXPERT_WAIT, kind + ARGINE_PREFETCH=2,
      kind + ARGINE_EXPERT_READ=blocco) must abort before serving;
+     GATE: version exit code 0 and all three refusals, else exit 3 with no workload launch;
   4. arm conformance: A (layer), C0 (layer_touch), C (kind) on every development prompt at 1.5 and 4 GiB (24 launches);
   5. baseline fidelity at 1.5 GiB: per development prompt v5, R5-A, R5-A, v5 (16 launches);
   6. instrumentation completeness: B (layer, traced) and C_I (kind, traced) on code-dev-1 at 1.5 GiB; the raw trace is
@@ -39,7 +43,14 @@ from typing import Any, Dict, List, Optional
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 P0 = REPO / "experiments" / "R5-00-exposed-transfer-stall"
-BUILD_INFO = REPO / "llama-research-r5-ets" / "BUILD-INFO.json"
+# R5 runtime identity. llama-research-r5-ets/BUILD-INFO.json (the first Phase 1a build) is kept unchanged as a record; it was
+# superseded because its argine-ets-test.exe died on the host with STATUS_HEAP_CORRUPTION (thread_local destructors on
+# freed emutls storage, see patches/r5-ets/argine-tls.h and G1-ATTEMPT-1-INCIDENT.md). Only the identity below is
+# authorized: the binaries must equal BOTH this pin and llama-research-r5-ets-2/BUILD-INFO.json.
+BUILD_INFO = REPO / "llama-research-r5-ets-2" / "BUILD-INFO.json"
+R5_AUTHORIZED = {"llama-server.exe": "da6e7183e44f6f69d58156cf683f5a929f16fc74bba442fdea39f139e4007493", "argine-ets-test.exe": "0b8275a031ea100e58a970872fcaf92898bdcb97822f95a9f89964cd290f8ce6"}
+R5_SUPERSEDED = {"llama-server.exe": "e8c94da8b777244237db9055993276ec488e84ac7c03fad47a88682a5d9d6ea2",
+                 "argine-ets-test.exe": "133a5ed0502e350b627f1f945d8c802fcb5e29975cf7e43f36bff967298f5164"}
 V5_SHA256 = "65f445c42ac145765735984582691964181dd4dd8019f4519edac1fa315df26c"   # llama-research-v5/BUILD-INFO.json
 # The historical v5 executable was lost (untracked file, local cleanup). V5-RECOVERY.json freezes ONE deterministic
 # reconstruction from the frozen v5 source/toolchain/build contract. It is accepted only if the binary has exactly this raw
@@ -63,7 +74,9 @@ FIDELITY_SLOWDOWN = 0.02  # R5-00 DECISION_RULES gates.G1_implementation (baseli
 READY_TIMEOUT_S, REQUEST_TIMEOUT_S, REFUSAL_TIMEOUT_S = 900, 3600, 600
 # argine-ets-test.exe plan on Windows (no POSIX deferred backend): exactly these counts (validated on POSIX with
 # -DETS_TEST_NO_DEFERRED, see MODEL_FREE_CONFORMANCE.json). Any other count fails G1.
-WINDOWS_MODEL_FREE_EXPECTED = {"passed": 136, "failed": 0, "skipped": 3}
+WINDOWS_MODEL_FREE_EXPECTED = {"passed": 143, "failed": 0, "skipped": 3}
+RESULT_RE = re.compile(r"^RESULT: (\d+) passed, (\d+) failed, (\d+) skipped\s*$")
+EXIT_PREREQUISITES = 3   # a mandatory prerequisite failed: no model / workload launch happened
 COUNTERS_RE = re.compile(r"argine: r5_counters (\{.*\})")
 IDENTITY_RE = re.compile(r"argine: attesa expert: (\S+) \((esplicita|default)\), ARGINE_PREFETCH=([^,\s]+)")
 
@@ -304,44 +317,154 @@ def locate_v5(root: Path) -> Optional[Path]:
     return None
 
 
-def cmd_run(a: argparse.Namespace) -> int:
-    out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
-    bi = json.loads(BUILD_INFO.read_text(encoding="utf-8"))
-    rt_dir = BUILD_INFO.parent
-    runtime, etstest = rt_dir / "llama-server.exe", rt_dir / "argine-ets-test.exe"
-    ident = {"r5_runtime": str(runtime), "r5_runtime_sha256": sha256_file(runtime), "ets_test_sha256": sha256_file(etstest)}
-    if ident["r5_runtime_sha256"] != bi["binaries"]["llama-server.exe"] or ident["ets_test_sha256"] != bi["binaries"]["argine-ets-test.exe"]:
-        print("R5 runtime or test binary hash differs from BUILD-INFO.json: refusing to run"); return 2
+def ntstatus_hex(rc: Optional[int]) -> Optional[str]:
+    return None if rc is None else "0x%08X" % (rc & 0xFFFFFFFF)
+
+
+def parse_model_free(returncode: int, stdout: str, stderr: str) -> Dict[str, Any]:
+    """Strict reading of argine-ets-test output: exactly one well-formed RESULT line, else no counts."""
+    lines = [m for m in (RESULT_RE.match(l) for l in stdout.splitlines()) if m]
+    m = lines[0] if len(lines) == 1 else None
+    return {"returncode": returncode, "returncode_hex": ntstatus_hex(returncode), "result_lines": len(lines),
+            "passed": int(m.group(1)) if m else None, "failed": int(m.group(2)) if m else None,
+            "skipped": int(m.group(3)) if m else None, "unexpected_skip_count": "UNEXPECTED SKIP COUNT" in stdout,
+            "stdout_tail": stdout[-4000:], "stderr_tail": stderr[-4000:]}
+
+
+def model_free_failures(mf: Dict[str, Any]) -> List[str]:
+    f = []
+    if mf.get("returncode") != 0:
+        f.append(f"argine-ets-test exit code {mf.get('returncode')} ({mf.get('returncode_hex')}), expected 0")
+    if mf.get("result_lines") != 1:
+        f.append(f"argine-ets-test printed {mf.get('result_lines')} well-formed RESULT lines, expected exactly 1")
+    for k, v in WINDOWS_MODEL_FREE_EXPECTED.items():
+        if mf.get(k) != v:
+            f.append(f"argine-ets-test {k} = {mf.get(k)}, expected {v}")
+    if mf.get("unexpected_skip_count"):
+        f.append("argine-ets-test reported an unexpected skip count")
+    return f
+
+
+def smoke_failures(smoke: Dict[str, Any]) -> List[str]:
+    f = []
+    if smoke.get("version_returncode") != 0:
+        f.append(f"llama-server --version exit code {smoke.get('version_returncode')}, expected 0")
+    ref = smoke.get("refusals") or []
+    if len(ref) != 3:
+        f.append(f"{len(ref)} configuration refusals ran, expected 3")
+    for x in ref:
+        if not x.get("pass"):
+            f.append(f"configuration refusal '{x.get('name')}' did not refuse as required")
+    return f
+
+
+def stop_prerequisites(out: Path, stage: str, failures: List[str]) -> int:
+    rec = {"pass": False, "stage": stage, "failures": failures, "model_launches": 0,
+           "note": "a mandatory G1 prerequisite failed: no workload launch was started; fix it and rerun in a NEW output directory"}
+    (out / "PREREQUISITES.json").write_text(json.dumps(rec, indent=1), encoding="utf-8")
+    print(f"G1 PREREQUISITE FAILED ({stage}): " + "; ".join(failures))
+    print("no workload launch was started (exit %d)" % EXIT_PREREQUISITES)
+    return EXIT_PREREQUISITES
+
+
+def check_identities(a: argparse.Namespace, out: Path):
+    """Runtime, test and comparator identities. Returns (ident, runtime, etstest, v5) or None (refused)."""
+    paths = authorized_binaries()
+    if paths is None:
+        return None
+    runtime, etstest = paths["llama-server.exe"], paths["argine-ets-test.exe"]
+    ident = {"r5_runtime": str(runtime), "r5_runtime_sha256": R5_AUTHORIZED["llama-server.exe"],
+             "ets_test_sha256": R5_AUTHORIZED["argine-ets-test.exe"], "r5_build_info": str(BUILD_INFO.relative_to(REPO))}
     v5 = Path(a.v5_runtime) if a.v5_runtime else locate_v5(Path(a.v5_search_root))
     v5id = v5_identity(v5) if v5 is not None and v5.is_file() else {"accepted": False, "reason": "not found"}
     if not v5id["accepted"]:
         print("llama-research-v5 runtime (historical sha256 %s, or the reconstruction frozen in V5-RECOVERY.json) not accepted: %s: "
-              "refusing to run" % (V5_SHA256, v5id.get("reason"))); return 2
+              "refusing to run" % (V5_SHA256, v5id.get("reason")))
+        return None
     print(f"llama-research-v5 comparator: {v5id['kind']} identity, sha256 {v5id['raw_sha256']}")
     ident.update({"v5_runtime": str(v5), "v5_runtime_sha256": v5id["raw_sha256"], "v5_identity": v5id,
                   "v5_historical_sha256": V5_SHA256, "model": a.model, "store": a.store})
-    print("hashing model and store (read-only) ..."); sys.stdout.flush()
-    ident.update({"model_sha256": sha256_file(Path(a.model)), "store_sha256": sha256_file(Path(a.store))})
-    (out / "IDENTITY.json").write_text(json.dumps(ident, indent=1), encoding="utf-8")
-    prompts = {p["id"]: p["prompt"] for p in dev_prompts()}
-    # 2. model-free conformance on the real OVERLAPPED path
-    scratch = out / "ets-test-scratch"; scratch.mkdir(exist_ok=True)
+    prev = out / "IDENTITY.json"
+    if prev.exists() or (out / "DEV_LOG.jsonl").exists():
+        old = json.loads(prev.read_text(encoding="utf-8")) if prev.exists() else {}
+        if (old.get("r5_runtime_sha256"), old.get("ets_test_sha256")) != (ident["r5_runtime_sha256"], ident["ets_test_sha256"]):
+            print(f"{out} holds launches or identities of another runtime (or an unidentified attempt): use a NEW output directory")
+            return None
+    return ident, runtime, etstest, v5
+
+
+def run_model_free(etstest: Path, scratch: Path) -> Dict[str, Any]:
     r = subprocess.run([str(etstest), str(scratch)], capture_output=True, text=True, timeout=1800)
-    m = re.search(r"RESULT: (\d+) passed, (\d+) failed, (\d+) skipped", r.stdout)
-    mf = {"returncode": r.returncode, "passed": int(m.group(1)) if m else None, "failed": int(m.group(2)) if m else None,
-          "skipped": int(m.group(3)) if m else None, "stdout_tail": r.stdout[-4000:]}
-    (out / "WINDOWS_MODEL_FREE.json").write_text(json.dumps(mf, indent=1), encoding="utf-8")
-    print(f"windows model-free conformance: rc={r.returncode} {m.group(0) if m else 'no RESULT line'}")
-    # 3. startup smoke and fail-closed refusals
+    return parse_model_free(r.returncode, r.stdout, r.stderr)
+
+
+def run_smoke(runtime: Path, a: argparse.Namespace, out: Path) -> Dict[str, Any]:
     ver = subprocess.run([str(runtime), "--version"], capture_output=True, text=True, timeout=120)
-    smoke = {"version_returncode": ver.returncode, "version_output": (ver.stdout + ver.stderr)[-2000:], "refusals": [
+    return {"version_returncode": ver.returncode, "version_output": (ver.stdout + ver.stderr)[-2000:], "refusals": [
         refusal(runtime, Path(a.model), Path(a.store), {"ARGINE_EXPERT_WAIT": "deferred"}, "ARGINE_EXPERT_WAIT=deferred non riconosciuto", out, "invalid-value"),
         refusal(runtime, Path(a.model), Path(a.store), {"ARGINE_EXPERT_WAIT": "kind", "ARGINE_PREFETCH": "2"}, "configurazione R5 non valida", out, "kind-with-prefetch"),
         refusal(runtime, Path(a.model), Path(a.store), {"ARGINE_EXPERT_WAIT": "kind", "ARGINE_EXPERT_READ": "blocco"}, "configurazione R5 non valida", out, "kind-with-blocco"),
     ]}
+
+
+def authorized_binaries() -> Optional[Dict[str, Path]]:
+    bi = json.loads(BUILD_INFO.read_text(encoding="utf-8"))
+    paths = {n: BUILD_INFO.parent / n for n in ("llama-server.exe", "argine-ets-test.exe")}
+    for n, p in paths.items():
+        h = sha256_file(p) if p.is_file() else None
+        if h is None or h != bi["binaries"][n] or h != R5_AUTHORIZED[n]:
+            print(f"{p}: sha256 {h} is not the authorized R5 identity {R5_AUTHORIZED[n]}: refusing to run")
+            return None
+    return paths
+
+
+def cmd_model_free(a: argparse.Namespace) -> int:
+    """Minimal host validation: the Windows model-free conformance test alone, with the G1 gate applied."""
+    out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
+    paths = authorized_binaries()
+    if paths is None:
+        return 2
+    scratch = out / "ets-test-scratch"; scratch.mkdir(exist_ok=True)
+    mf = run_model_free(paths["argine-ets-test.exe"], scratch)
+    (out / "WINDOWS_MODEL_FREE.json").write_text(json.dumps(mf, indent=1), encoding="utf-8")
+    fails = model_free_failures(mf)
+    print(f"argine-ets-test.exe exit code {mf['returncode']} ({mf['returncode_hex']}); RESULT lines {mf['result_lines']}: "
+          f"{mf['passed']} passed, {mf['failed']} failed, {mf['skipped']} skipped (required {WINDOWS_MODEL_FREE_EXPECTED})")
+    if fails:
+        print("MODEL-FREE VALIDATION FAILED: " + "; ".join(fails))
+        return EXIT_PREREQUISITES
+    print("MODEL-FREE VALIDATION PASSED")
+    return 0
+
+
+def cmd_run(a: argparse.Namespace) -> int:
+    out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
+    ids = check_identities(a, out)
+    if ids is None:
+        return 2
+    ident, runtime, etstest, v5 = ids
+    # 2. model-free conformance on the real OVERLAPPED path -- BEFORE anything touches the model
+    scratch = out / "ets-test-scratch"; scratch.mkdir(exist_ok=True)
+    mf = run_model_free(etstest, scratch)
+    (out / "WINDOWS_MODEL_FREE.json").write_text(json.dumps(mf, indent=1), encoding="utf-8")
+    print(f"windows model-free conformance: rc={mf['returncode']} ({mf['returncode_hex']}) "
+          f"{'RESULT: %s passed, %s failed, %s skipped' % (mf['passed'], mf['failed'], mf['skipped']) if mf['result_lines'] == 1 else 'no valid RESULT line'}")
+    fails = model_free_failures(mf)
+    if fails:
+        return stop_prerequisites(out, "windows_model_free", fails)
+    print("hashing model and store (read-only) ..."); sys.stdout.flush()
+    ident.update({"model_sha256": sha256_file(Path(a.model)), "store_sha256": sha256_file(Path(a.store))})
+    (out / "IDENTITY.json").write_text(json.dumps(ident, indent=1), encoding="utf-8")
+    prompts = {p["id"]: p["prompt"] for p in dev_prompts()}
+    # 3. startup smoke and fail-closed refusals
+    smoke = run_smoke(runtime, a, out)
     (out / "STARTUP_SMOKE.json").write_text(json.dumps(smoke, indent=1), encoding="utf-8")
-    print("startup smoke:", "version rc", ver.returncode, "| refusals", [x["pass"] for x in smoke["refusals"]])
-    # 4-6. launches (resumable: a slot with a record and no error is not rerun)
+    print("startup smoke:", "version rc", smoke["version_returncode"], "| refusals", [x["pass"] for x in smoke["refusals"]])
+    fails = smoke_failures(smoke)
+    if fails:
+        return stop_prerequisites(out, "startup_smoke", fails)
+    (out / "PREREQUISITES.json").write_text(json.dumps({"pass": True, "stages": ["windows_model_free", "startup_smoke"]}, indent=1), encoding="utf-8")
+    # 4-6. launches (resumable within this directory and this identity: a slot with a record and no error is not rerun)
     log = out / "DEV_LOG.jsonl"
     done = set()
     if log.exists():
@@ -464,8 +587,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     r.add_argument("--model", required=True); r.add_argument("--store", required=True); r.add_argument("--out", required=True)
     g = r.add_mutually_exclusive_group(required=True); g.add_argument("--v5-runtime"); g.add_argument("--v5-search-root")
     e = sp.add_parser("evaluate"); e.add_argument("--out", required=True)
+    m = sp.add_parser("model-free"); m.add_argument("--out", required=True)
     a = ap.parse_args(argv)
-    return cmd_run(a) if a.cmd == "run" else cmd_evaluate(a)
+    return {"run": cmd_run, "evaluate": cmd_evaluate, "model-free": cmd_model_free}[a.cmd](a)
 
 
 if __name__ == "__main__":

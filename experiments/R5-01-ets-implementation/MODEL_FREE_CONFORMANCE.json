@@ -1,12 +1,38 @@
 {
  "artifact": "R5-01-MODEL-FREE-CONFORMANCE",
- "note": "Model-free evidence produced on the Linux build host (Ubuntu 24.04, g++ 13). No model, no evaluation prompt, no timing metric. The Windows run of argine-ets-test.exe on the real OVERLAPPED path is part of the host G1 step.",
+ "note": "Model-free evidence produced on the Linux build host (Ubuntu 24.04, g++ 13). No model, no evaluation prompt, no timing metric. The Windows run of argine-ets-test.exe on the real OVERLAPPED path is part of the host G1 step. Updated after the first G1 host attempt (G1-ATTEMPT-1-INCIDENT.md): Windows TLS-teardown defect corrected in argine-tls.h; counts, sanitizer modes and group 11 refer to the corrected sources.",
  "argine_ets_test": {
   "source": "patches/r5-ets/argine-ets-test.cpp",
-  "linux_deferred_and_immediate": {"passed": 190, "failed": 0, "skipped": 0},
-  "windows_plan_validated_on_posix": {"flag": "-DETS_TEST_NO_DEFERRED", "passed": 136, "failed": 0, "skipped": 3, "note": "the exact plan argine-ets-test.exe runs on Windows; host_conformance.py pins these counts"},
-  "threadsanitizer": {"modes": ["deferred+immediate", "ETS_TEST_NO_DEFERRED"], "warnings": 0, "failed": 0},
-  "asan_ubsan": {"modes": ["deferred+immediate", "ETS_TEST_NO_DEFERRED"], "errors": 0, "failed": 0},
+  "linux_deferred_and_immediate": {
+   "passed": 197,
+   "failed": 0,
+   "skipped": 0
+  },
+  "windows_plan_validated_on_posix": {
+   "flag": "-DETS_TEST_NO_DEFERRED -DARGINE_TLS_FORCE_KEYED",
+   "passed": 143,
+   "failed": 0,
+   "skipped": 3,
+   "note": "the exact plan argine-ets-test.exe runs on Windows, with the keyed per-thread storage mingw uses; host_conformance.py pins these counts"
+  },
+  "threadsanitizer": {
+   "modes": [
+    "deferred+immediate (native TLS)",
+    "deferred+immediate (ARGINE_TLS_FORCE_KEYED)"
+   ],
+   "warnings": 0,
+   "failed": 0,
+   "result": "197 passed, 0 failed, 0 skipped in both"
+  },
+  "asan_ubsan": {
+   "modes": [
+    "deferred+immediate (native TLS)",
+    "deferred+immediate (ARGINE_TLS_FORCE_KEYED)"
+   ],
+   "errors": 0,
+   "failed": 0,
+   "result": "197 passed, 0 failed, 0 skipped in both"
+  },
   "covers": {
    "fail_closed_configuration": true,
    "bookkeeping_control_wait_placement": true,
@@ -20,7 +46,8 @@
    "instrumentation_inert_and_coherent": true,
    "orphan_reads_counted_and_waited": true,
    "followup_mismatch_fail_closed": true,
-   "synchronous_completion_never_hidden": true
+   "synchronous_completion_never_hidden": true,
+   "thread_exit_per_thread_state_on_live_storage": true
   },
   "test_groups": {
    "1": "ARGINE_EXPERT_WAIT parsing (10 invalid spellings rejected) and fail-closed combinations (prefetch, read mode, retention policy)",
@@ -32,34 +59,95 @@
    "7": "an injected read error is reported at the node that waits for that read (kind: the down node; layer_touch: the first node)",
    "8": "node order up, gate, down; only the last layer stays pinned; a kind unknown at the first node is issued and waited at its own node",
    "9": "wait decisions and cache statistics identical with tracing on and off; a read completed in the background before its wait is counted hidden, with coherent I records",
-   "10": "independent-review cases: orphan reads counted and waited before pins are released; a later node with different experts is refused; synchronous completions never counted as background"
+   "10": "independent-review cases: orphan reads counted and waited before pins are released; a later node with different experts is refused; synchronous completions never counted as background",
+   "11": "regression of the host heap-corruption incident: 48 short-lived threads with a per-thread object (created and destroyed once each, on live storage); 6 rounds of thread churn through the store and the trace (team threads of every arm plus reader threads with 8 reads in flight); per-thread runtime state created == destroyed; no read drained at thread exit; trace flushed; Windows: HeapValidate and _heapchk"
+  },
+  "mingw_tls_emulation": {
+   "build": "clang++ 18 -O1 -g -std=c++17 -pthread -femulated-tls -fsanitize=address -DETS_TEST_NO_DEFERRED, linked with patches/r5-ets/mingw-tls-emulation.cpp (libstdc++ 10.3 key-based __cxa_thread_atexit fallback); the mingw thread_local teardown order on Linux",
+   "first_build_sources": "FAIL as on the host: AddressSanitizer heap-use-after-free in StatoThread::~StatoThread() called from the fallback's run() at thread exit, the block freed by libgcc emutls_destroy (__nptl_deallocate_tsd); no RESULT line (stdout lost in the abort)",
+   "corrected_sources": "143 passed, 0 failed, 3 skipped (with -DARGINE_TLS_FORCE_KEYED); AddressSanitizer clean",
+   "store_and_trace_churn": "first-build store+trace sources under the emulation: heap-use-after-free in ThreadBuf::~ThreadBuf(); corrected sources: clean (LeakSanitizer on); native-TLS control on the first-build sources: clean"
   }
  },
  "existing_store_regressions": {
-  "argine-research-test": {"frozen": "pass", "r5": "pass", "note": "multi-threaded section is nondeterministic in both (frozen sources vary run to run)"},
-  "argine-partial-kind-admission-test": {"frozen": "pass", "r5": "pass"},
-  "argine-retention-concurrency-test": {"frozen": "pass", "r5": "pass"},
-  "argine-retention-integration-test": {"frozen": "pass", "r5": "pass"},
-  "argine-semantic-event-test selftest": {"frozen": "pass", "r5": "pass"},
-  "argine-store-fidelity-test": {"frozen": "pass", "r5": "pass", "note": "identical counts: hits 23256, misses 6966, evictions 6930, violations 0"},
-  "argine-prefetch-race-test": {"frozen": "pass", "r5": "pass"},
-  "argine-protected-for-observational-test": {"frozen": "pass", "r5": "pass"},
-  "argine-store-stress (NT=8)": {"frozen": "pass", "r5": "pass"}
+  "argine-research-test": {
+   "frozen": "pass",
+   "r5": "pass",
+   "note": "multi-threaded section is nondeterministic in both (frozen sources vary run to run)"
+  },
+  "argine-partial-kind-admission-test": {
+   "frozen": "pass",
+   "r5": "pass"
+  },
+  "argine-retention-concurrency-test": {
+   "frozen": "pass",
+   "r5": "pass"
+  },
+  "argine-retention-integration-test": {
+   "frozen": "pass",
+   "r5": "pass"
+  },
+  "argine-semantic-event-test selftest": {
+   "frozen": "pass",
+   "r5": "pass"
+  },
+  "argine-store-fidelity-test": {
+   "frozen": "pass",
+   "r5": "pass",
+   "note": "identical counts: hits 23256, misses 6966, evictions 6930, violations 0"
+  },
+  "argine-prefetch-race-test": {
+   "frozen": "pass",
+   "r5": "pass"
+  },
+  "argine-protected-for-observational-test": {
+   "frozen": "pass",
+   "r5": "pass"
+  },
+  "argine-store-stress (NT=8)": {
+   "frozen": "pass",
+   "r5": "pass"
+  }
  },
- "trace_analysis_tests": {"source": "experiments/R5-01-ets-implementation/tests/test_ets_trace.py", "passed": 7, "failed": 0},
+ "trace_analysis_tests": {
+  "source": "experiments/R5-01-ets-implementation/tests/test_ets_trace.py",
+  "passed": 7,
+  "failed": 0
+ },
  "windows_execution_on_build_host": "not possible (wine aborts in this sandbox even for a hello-world executable); the binaries were checked statically (PE32+, import table, strings) and run on the host in the G1 step",
  "independent_review": {
-  "material_found": 1, "material_open": 0, "minor_found": 7, "minor_open": 0, "notes": 3,
+  "material_found": 1,
+  "material_open": 0,
+  "minor_found": 7,
+  "minor_open": 0,
+  "notes": [
+   "host purity is totals within 1% (frozen G7/G1 wording); the model-free test additionally requires exact single-thread sequences",
+   "ARGINE_PREFETCH: the legacy prefetcher reads exactly getenv(\"ARGINE_PREFETCH\"), the same name the fail-closed check reads",
+   "verified correct: no prediction, same requests and claim order, same LRU moves, pinned footprint unchanged, sound in-flight lifetimes, baseline path unchanged, C0 and C differ only in wait mask, no decision depends on tracing"
+  ],
   "material": "hidden_deferred_bytes_fraction would have been biased to ~0 on Windows: completions were stamped only after the wait began. Fixed: a tracing-only completion poll before every expert node's barrier and before every wait (psx_cache_poll_pending, timbra_completate), so a background completion is stamped before any wait of its consuming node.",
-  "minor_fixed": ["reads completed inside ReadFile flagged ARX_FLAG_SYNC_IN_ISSUE and never counted hidden",
-                  "later nodes fail closed if their experts or slices differ from the first node's, or a touched slice is missing (psx_cache_touch_checked)",
-                  "thread exit with reads in flight: StatoThread destructor cancels, waits and counts (drained_at_thread_exit, must be 0)",
-                  "trace wait_mask = the mask actually waited for (psx_wait_report.wait_mask)",
-                  "Windows test plan: skips limited to 3 byte-level/background checks, counts pinned (136/0/3) and validated on POSIX",
-                  "new tests for the orphan path, follow-up mismatch and synchronous completions; host G1 requires identical C0/C bookkeeping counters (touches, issued_followup, first_nodes, followup_nodes)",
-                  "first_nodes, followup_nodes, followup_mismatch, touch_missing, drained_at_thread_exit added to r5_counters"],
-  "notes": ["host purity is totals within 1% (frozen G7/G1 wording); the model-free test additionally requires exact single-thread sequences",
-            "ARGINE_PREFETCH: the legacy prefetcher reads exactly getenv(\"ARGINE_PREFETCH\"), the same name the fail-closed check reads",
-            "verified correct: no prediction, same requests and claim order, same LRU moves, pinned footprint unchanged, sound in-flight lifetimes, baseline path unchanged, C0 and C differ only in wait mask, no decision depends on tracing"]
+  "minor_fixed": [
+   "reads completed inside ReadFile flagged ARX_FLAG_SYNC_IN_ISSUE and never counted hidden",
+   "later nodes fail closed if their experts or slices differ from the first node's, or a touched slice is missing (psx_cache_touch_checked)",
+   "thread exit with reads in flight: StatoThread destructor cancels, waits and counts (drained_at_thread_exit, must be 0)",
+   "trace wait_mask = the mask actually waited for (psx_wait_report.wait_mask)",
+   "Windows test plan: skips limited to 3 byte-level/background checks, counts pinned (136/0/3) and validated on POSIX",
+   "new tests for the orphan path, follow-up mismatch and synchronous completions; host G1 requires identical C0/C bookkeeping counters (touches, issued_followup, first_nodes, followup_nodes)",
+   "first_nodes, followup_nodes, followup_mismatch, touch_missing, drained_at_thread_exit added to r5_counters"
+  ]
+ },
+ "existing_store_regressions_rerun": {
+  "note": "rerun on the corrected R5 sources (argine-tls.h) against the frozen sources, synthetic 4x16 store",
+  "result": "all 9 pass on both; argine-store-fidelity-test identical counts (hits 174067, misses 52355, evictions 52320, violations 0, failures 0)"
+ },
+ "host_incident": {
+  "record": "experiments/R5-01-ets-implementation/G1-ATTEMPT-1-INCIDENT.md",
+  "first_build_argine_ets_test_sha256": "133a5ed0502e350b627f1f945d8c802fcb5e29975cf7e43f36bff967298f5164",
+  "exit_code": 3221226356,
+  "ntstatus": "0xC0000374 STATUS_HEAP_CORRUPTION",
+  "result_line": null,
+  "root_cause": "mingw-w64 GCC 10: thread_local destructors (libstdc++ __cxa_thread_atexit key fallback) ran after libgcc emutls_destroy had freed the objects (winpthreads destroys keys in ascending order)",
+  "scope": "per-thread runtime storage (store, trace, hook); not the scheduler",
+  "status": "corrected; Windows re-validation pending on the host"
  }
 }

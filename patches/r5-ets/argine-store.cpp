@@ -4,6 +4,7 @@
 #include "argine-store.h"
 #include "argine-research.h"
 #include "argine-retention-policy.h"
+#include "argine-tls.h"
 
 #include <cstdio>
 
@@ -1512,7 +1513,8 @@ static size_t psx_read_many(struct psx_store * s, size_t n, const uint64_t * off
     }
     // Un evento per richiesta. Sono thread_local e riusati: crearli a ogni nodo
     // MoE significherebbe migliaia di CreateEvent al secondo.
-    static thread_local std::vector<HANDLE> eventi;
+    struct TagEventiMany;
+    std::vector<HANDLE> & eventi = argine_thread_object<std::vector<HANDLE>, TagEventiMany>();  // R5: argine-tls.h
     std::vector<OVERLAPPED> ov(n);
     std::vector<unsigned char> emessa(n, 0);
     while (eventi.size() < n) {
@@ -2743,9 +2745,11 @@ StatoThread::~StatoThread() {
     }
 }
 
+struct TagStatoThread;
 StatoThread & mio_stato() {
-    static thread_local StatoThread st;
-    return st;
+    // R5: per-thread state via argine_thread_object (argine-tls.h): on mingw a plain thread_local's destructor ran
+    // on storage that emutls had already freed (heap corruption at thread exit).
+    return argine_thread_object<StatoThread, TagStatoThread>();
 }
 
 #if defined(_WIN32)

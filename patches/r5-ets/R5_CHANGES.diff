@@ -1,6 +1,14 @@
 --- patches/argine-store.cpp
 +++ patches/r5-ets/argine-store.cpp
-@@ -61,6 +61,8 @@
+@@ -4,6 +4,7 @@
+ #include "argine-store.h"
+ #include "argine-research.h"
+ #include "argine-retention-policy.h"
++#include "argine-tls.h"
+ 
+ #include <cstdio>
+ 
+@@ -61,6 +62,8 @@
      return false;
  }
  std::atomic<int>      g_pretouch{ 0 };
@@ -9,7 +17,17 @@
  
  constexpr size_t kMaxHandles = 64;  // un descrittore per thread, con un tetto
  
-@@ -2670,6 +2672,17 @@
+@@ -1510,7 +1513,8 @@
+     }
+     // Un evento per richiesta. Sono thread_local e riusati: crearli a ogni nodo
+     // MoE significherebbe migliaia di CreateEvent al secondo.
+-    static thread_local std::vector<HANDLE> eventi;
++    struct TagEventiMany;
++    std::vector<HANDLE> & eventi = argine_thread_object<std::vector<HANDLE>, TagEventiMany>();  // R5: argine-tls.h
+     std::vector<OVERLAPPED> ov(n);
+     std::vector<unsigned char> emessa(n, 0);
+     while (eventi.size() < n) {
+@@ -2670,6 +2674,17 @@
      uint64_t complete_ns = 0;
      uint32_t flags       = 0;
      bool     esito       = false;
@@ -27,7 +45,7 @@
  #if defined(_WIN32)
      OVERLAPPED ov;
      size_t     i_evento = 0;
-@@ -2696,11 +2709,39 @@
+@@ -2696,15 +2711,45 @@
      std::vector<HANDLE> eventi;
      Borrowed            preso{ -1, INVALID_HANDLE_VALUE };
  #endif
@@ -42,7 +60,7 @@
  static_assert(std::is_same<decltype(StatoThread::sospese), std::deque<Sospesa>>::value,
                "le sospese vogliono un contenitore con indirizzi stabili: il kernel "
                "tiene il puntatore all'OVERLAPPED finche' la lettura e' in volo");
-+
+ 
 +std::atomic<uint64_t> g_drenate_a_fine_thread{ 0 };
 +
 +StatoThread::~StatoThread() {
@@ -64,10 +82,18 @@
 +        g_drenate_a_fine_thread.fetch_add(n, std::memory_order_relaxed);
 +    }
 +}
- 
++
++struct TagStatoThread;
  StatoThread & mio_stato() {
-     static thread_local StatoThread st;
-@@ -2854,7 +2895,7 @@
+-    static thread_local StatoThread st;
+-    return st;
++    // R5: per-thread state via argine_thread_object (argine-tls.h): on mingw a plain thread_local's destructor ran
++    // on storage that emutls had already freed (heap corruption at thread exit).
++    return argine_thread_object<StatoThread, TagStatoThread>();
+ }
+ 
+ #if defined(_WIN32)
+@@ -2854,7 +2899,7 @@
          if (arx) {
              // completed inside ReadFile: observed the moment the call returned
              so.complete_ns = arx_now_ns();
@@ -76,7 +102,7 @@
          }
      } else if (GetLastError() == ERROR_IO_PENDING) {
          so.emessa = 1;
-@@ -2867,6 +2908,13 @@
+@@ -2867,6 +2912,13 @@
      if (arx) {
          so.issue_ns = arx_now_ns();
      }
@@ -90,7 +116,7 @@
      so.letta = read_at(s, pr.file_off, pr.dst, pr.want);
      if (arx) {
          so.complete_ns = arx_now_ns();
-@@ -2903,6 +2951,10 @@
+@@ -2903,6 +2955,10 @@
              ok = GetOverlappedResult(st.preso.h, &so.ov, &got, TRUE) && got >= so.pr.want;
          }
  #else
@@ -101,7 +127,7 @@
          ok = so.letta;
  #endif
          if (ok && guasto_iniettato()) {
-@@ -2951,6 +3003,282 @@
+@@ -2951,6 +3007,282 @@
      return tutte;
  }
  
@@ -457,15 +483,28 @@
  #endif
 --- patches/argine-experts.cpp
 +++ patches/r5-ets/argine-experts.cpp
-@@ -41,6 +41,7 @@
+@@ -41,6 +41,8 @@
  #include "argine-experts.h"
  #include "argine-store.h"
  #include "argine-research.h"
 +#include "argine-ets.h"
++#include "argine-tls.h"
  
  #include "ggml-backend-impl.h"
  #include "ggml-cpu.h"
-@@ -326,6 +327,15 @@
+@@ -263,9 +265,9 @@
+     // barriera in piu' perche' nessuno cominciasse a caricare prima che lo
+     // sblocco fosse finito. Con le liste locali non c'e' ne' il mutex ne' la
+     // barriera: nessuno tocca i pin di un altro.
++    struct TagMieiPin;
+     static std::vector<Pin> & miei_pin() {
+-        static thread_local std::vector<Pin> v;
+-        return v;
++        return argine_thread_object<std::vector<Pin>, TagMieiPin>();  // R5: argine-tls.h
+     }
+     bool             detto_in_uso = false;
+ 
+@@ -326,6 +328,15 @@
      // psx_cache_ensure_many: letto da tutti DOPO la barriera che segue
      // quella chiamata, scritto solo dal thread 0 prima di quella barriera.
      std::atomic<bool> nodo_fallito_policy{ false };
@@ -474,14 +513,14 @@
 +    psx_wait_mode    attesa           = PSX_WAIT_LAYER;
 +    int              attesa_esplicita = 0;
 +    psx_ets_counters ets;
++    struct TagEtsThread;
 +    static psx_ets_thread & ets_thread() {
-+        static thread_local psx_ets_thread t;
-+        return t;
++        return argine_thread_object<psx_ets_thread, TagEtsThread>();  // R5: argine-tls.h
 +    }
  
      // Contiene un mutex, quindi non e' copiabile ne' spostabile: si inizializza
      // sul posto, una volta sola, alla prima chiamata.
-@@ -432,6 +442,19 @@
+@@ -432,6 +443,19 @@
                              predictor_txt);
                  }
              }
@@ -501,7 +540,7 @@
              c.attivo = true;
              if (c.direct && !psx_direct(c.store)) {
                  // chiesta ma non concessa: succede su certi filesystem e certi
-@@ -472,6 +495,14 @@
+@@ -472,6 +496,14 @@
                      "%u settori di cache, cache dell'OS %s, lettura %s\n",
                      path, psx_n_layers(c.store), psx_n_experts(c.store), budget_txt,
                      psx_cache_shards(c.cache), c.direct ? "scavalcata" : "attiva", modo_txt);
@@ -516,7 +555,7 @@
              if (arx_enabled()) {
                  // Argine2: the configuration travels inside the trace, so that a
                  // raw log can never be separated from the conditions that made it.
-@@ -489,6 +520,9 @@
+@@ -489,6 +521,9 @@
                  snprintf(num, sizeof(num), "%u", psx_n_experts(c.store));
                  arx_config("store_experts", num);
                  arx_config("pretouch", env_flag("ARGINE_EXPERT_PRETOUCH", false) ? "1" : "0");
@@ -526,7 +565,7 @@
                  arx_flush_thread();
                  arx_flush_file(0);
              }
-@@ -706,6 +740,31 @@
+@@ -706,6 +741,31 @@
              }
              fflush(stderr);
          }
@@ -558,7 +597,17 @@
          if (attivo && verbose) {
              resoconto("fine");
          }
-@@ -1020,7 +1079,20 @@
+@@ -979,7 +1039,8 @@
+                 c.arx_route_graph = c.arx_graph;
+                 c.arx_route_layer = (int64_t) id.layer;
+                 // ids: ne[0] = experts used per token, ne[1] = tokens in the ubatch
+-                static thread_local std::vector<int32_t> buf;
++                struct TagRouteBuf;
++                std::vector<int32_t> & buf = argine_thread_object<std::vector<int32_t>, TagRouteBuf>();  // R5: argine-tls.h
+                 const int64_t n_used = ids->ne[0];
+                 const int64_t n_tok  = ids->ne[1];
+                 buf.resize((size_t) (n_used * n_tok));
+@@ -1020,7 +1081,20 @@
          // (salvo che questo nodo sia un seguito dello stesso evento semantico:
          // i pin dell'evento restano fino al primo nodo dell'evento successivo).
          // Nessun lock e nessuna barriera: tocco solo roba mia.
@@ -580,7 +629,7 @@
              auto & precedenti = Contesto::miei_pin();
              for (const auto & p : precedenti) {
                  psx_cache_unpin(c.cache, p.region, p.offset);
-@@ -1030,6 +1102,13 @@
+@@ -1030,6 +1104,13 @@
                  c.pol_event_pins.clear();
                  c.pol_event_experts.clear();
              }
@@ -594,7 +643,7 @@
          }
  
          // Una sola barriera prima delle letture, per l'azzeramento del
-@@ -1119,7 +1198,27 @@
+@@ -1119,7 +1200,27 @@
          // I tre modi stanno qui accanto, selezionabili a runtime, perche' il
          // confronto fra loro e' un risultato del progetto e un risultato va
          // poter essere rifatto. Vedi `ModoLettura`.
@@ -623,7 +672,7 @@
              for (;;) {
                  const uint32_t k = c.prossima_slice.fetch_add(1, std::memory_order_relaxed);
                  if (k >= totale) {
-@@ -1140,8 +1239,17 @@
+@@ -1140,8 +1241,17 @@
              // Le letture emesse vanno attese QUI: da questo punto i byte si usano.
              // Uno zero e' fatale per il nodo, e lo stato dei pin non e' piu' quello
              // registrato sopra: si aborta, non si sblocca.
@@ -641,7 +690,7 @@
              }
          } else if (c.modo == LETTURA_SINCRONA) {
              // La prima versione: una slice, la si aspetta, la prossima. Coda 1
-@@ -1444,6 +1552,19 @@
+@@ -1444,6 +1554,19 @@
                  arx_node(c.arx_graph, id.layer, (uint32_t) id.kind, t_start, arx_now_ns(), n_serve,
                           (uint32_t) nth);
              }
@@ -663,7 +712,27 @@
                  arx_flush_file(250);
 --- patches/argine-research.cpp
 +++ patches/r5-ets/argine-research.cpp
-@@ -337,6 +337,26 @@
+@@ -1,6 +1,7 @@
+ // Argine2 — research instrumentation. See argine-research.h for the format.
+ 
+ #include "argine-research.h"
++#include "argine-tls.h"
+ 
+ #include <atomic>
+ #include <chrono>
+@@ -112,9 +113,9 @@
+     flush_buf(*this);
+ }
+ 
++struct TagThreadBuf;
+ ThreadBuf & tb() {
+-    static thread_local ThreadBuf t;
+-    return t;
++    return argine_thread_object<ThreadBuf, TagThreadBuf>();  // R5: argine-tls.h (destructor on live storage)
+ }
+ 
+ void append_u64(std::string & s, uint64_t v) {
+@@ -337,6 +338,26 @@
      maybe_spill(t);
  }
  

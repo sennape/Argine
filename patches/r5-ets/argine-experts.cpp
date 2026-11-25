@@ -42,6 +42,7 @@
 #include "argine-store.h"
 #include "argine-research.h"
 #include "argine-ets.h"
+#include "argine-tls.h"
 
 #include "ggml-backend-impl.h"
 #include "ggml-cpu.h"
@@ -264,9 +265,9 @@ struct Contesto {
     // barriera in piu' perche' nessuno cominciasse a caricare prima che lo
     // sblocco fosse finito. Con le liste locali non c'e' ne' il mutex ne' la
     // barriera: nessuno tocca i pin di un altro.
+    struct TagMieiPin;
     static std::vector<Pin> & miei_pin() {
-        static thread_local std::vector<Pin> v;
-        return v;
+        return argine_thread_object<std::vector<Pin>, TagMieiPin>();  // R5: argine-tls.h
     }
     bool             detto_in_uso = false;
 
@@ -332,9 +333,9 @@ struct Contesto {
     psx_wait_mode    attesa           = PSX_WAIT_LAYER;
     int              attesa_esplicita = 0;
     psx_ets_counters ets;
+    struct TagEtsThread;
     static psx_ets_thread & ets_thread() {
-        static thread_local psx_ets_thread t;
-        return t;
+        return argine_thread_object<psx_ets_thread, TagEtsThread>();  // R5: argine-tls.h
     }
 
     // Contiene un mutex, quindi non e' copiabile ne' spostabile: si inizializza
@@ -1038,7 +1039,8 @@ class ExpertTraits : public ggml::cpu::tensor_traits {
                 c.arx_route_graph = c.arx_graph;
                 c.arx_route_layer = (int64_t) id.layer;
                 // ids: ne[0] = experts used per token, ne[1] = tokens in the ubatch
-                static thread_local std::vector<int32_t> buf;
+                struct TagRouteBuf;
+                std::vector<int32_t> & buf = argine_thread_object<std::vector<int32_t>, TagRouteBuf>();  // R5: argine-tls.h
                 const int64_t n_used = ids->ne[0];
                 const int64_t n_tok  = ids->ne[1];
                 buf.resize((size_t) (n_used * n_tok));

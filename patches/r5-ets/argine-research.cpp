@@ -1,6 +1,7 @@
 // Argine2 — research instrumentation. See argine-research.h for the format.
 
 #include "argine-research.h"
+#include "argine-tls.h"
 
 #include <atomic>
 #include <chrono>
@@ -112,9 +113,9 @@ ThreadBuf::~ThreadBuf() {
     flush_buf(*this);
 }
 
+struct TagThreadBuf;
 ThreadBuf & tb() {
-    static thread_local ThreadBuf t;
-    return t;
+    return argine_thread_object<ThreadBuf, TagThreadBuf>();  // R5: argine-tls.h (destructor on live storage)
 }
 
 void append_u64(std::string & s, uint64_t v) {

@@ -20,6 +20,11 @@
 #include "argine-ets.h"
 #include "argine-research.h"
 #include "argine-store.h"
+#include "argine-tls.h"
+#if defined(_WIN32)
+#    include <malloc.h>
+#    include <windows.h>
+#endif
 
 #include <algorithm>
 #include <atomic>
@@ -628,6 +633,88 @@ static void t_instrumentation(const std::string & dir, const std::string & store
     psx_debug_set_posix_deferred_reads(0);
 }
 
+// [11] Regression test of the Phase 1a host incident (STATUS_HEAP_CORRUPTION, exit 0xC0000374): with mingw-w64
+// GCC 10, the destructors of thread_local objects (the store's per-thread state, the trace buffer) ran on storage
+// emutls had already freed when a thread exited (argine-tls.h). This test does what the earlier groups do many
+// times -- threads that use the store and the trace and then exit -- and checks that every per-thread object is
+// destroyed exactly once, on live storage, and (Windows) that the process heap is intact afterwards.
+namespace {
+std::atomic<int> g_probe_ctor{ 0 }, g_probe_dtor{ 0 }, g_probe_dead_dtor{ 0 };
+struct ProbeTag;
+struct Probe {
+    static constexpr uint64_t kAlive = 0xA11CE5A11CE5ull, kDead = 0xDEADDEADDEADull;
+    uint64_t           magic = kAlive;
+    std::vector<int>   payload = std::vector<int>(64, 7);   // owns heap memory, like StatoThread's deque
+    Probe() { g_probe_ctor++; }
+    ~Probe() {
+        if (magic != kAlive || payload.size() != 64 || payload[63] != 7) g_probe_dead_dtor++;
+        magic = kDead;
+        g_probe_dtor++;
+    }
+};
+bool heap_intact() {
+#if defined(_WIN32)
+    return HeapValidate(GetProcessHeap(), 0, nullptr) != 0 && _heapchk() == _HEAPOK;
+#else
+    return true;   // POSIX: the same churn runs under ASan in the conformance build (MODEL_FREE_CONFORMANCE.json)
+#endif
+}
+}  // namespace
+
+static void t_thread_exit(const std::string & dir, const std::string & store) {
+    printf("[11] thread exit: per-thread state destroyed once, on live storage (Windows heap-corruption regression)\n");
+    const uint64_t c0 = g_argine_tls_created.load(), d0 = g_argine_tls_destroyed.load();
+    const int      n_threads = 48;
+    {
+        std::vector<std::thread> th;
+        for (int i = 0; i < n_threads; i++)
+            th.emplace_back([] { Probe & p = argine_thread_object<Probe, ProbeTag>(); p.payload[0] = 1; });
+        for (auto & t : th) t.join();
+    }
+    check(g_probe_ctor.load() == n_threads && g_probe_dtor.load() == n_threads, "one per-thread object per thread, each destroyed exactly once at thread exit");
+    check(g_probe_dead_dtor.load() == 0, "every per-thread destructor ran on live storage");
+    // the store and the trace from short-lived threads (StatoThread with a multi-node deque, ThreadBuf)
+    const std::string tp = dir + "/t11.trace";
+    arx_debug_open(tp.c_str());
+    bool bytes_ok = true;
+    std::atomic<bool> ok{ true };
+    int  rounds_done = 0;
+    for (int round = 0; round < 6; round++) {
+        Rig r(store, 4, 16, 0, 6, (psx_wait_mode) (round % 3));
+        if (!run_workload(r, 4, 6, 300 + (uint32_t) round)) ok = false;
+        bytes_ok &= r.bytes_ok;
+        // plus short-lived threads, each with 8 reads in flight at a time (a multi-node deque of pending reads).
+        // Every thread owns a disjoint set of 24 slices, so no thread waits for another thread's read (the hook
+        // likewise hands out each slice of a node to exactly one thread).
+        std::vector<std::thread> th;
+        for (int t = 0; t < 8; t++)
+            th.emplace_back([&r, &ok, t] {
+                std::vector<std::pair<psx_region *, size_t>> pins;
+                for (int i = 0; i < 24; i++) {
+                    const uint32_t j = (uint32_t) (t * 24 + i);
+                    const uint32_t l = j % 4, x = (j / 4) % 16, k = j / 64;
+                    const size_t   off = (size_t) x * r.slab[k];
+                    if (psx_cache_avvia(r.c, r.s, r.reg[l * 3 + k], off, l, x, (psx_kind) k) == 0) { ok = false; continue; }
+                    pins.emplace_back(r.reg[l * 3 + k], off);
+                    if (i % 8 == 7 && !psx_cache_attendi(r.c, r.s)) ok = false;
+                }
+                for (auto & p : pins) psx_cache_unpin(r.c, p.first, p.second);
+                arx_flush_thread();
+            });
+        for (auto & t : th) t.join();
+        rounds_done++;
+    }   // every Rig joins its team: 6 x 6 team threads plus 6 x 8 reader threads have exited
+    arx_debug_open(nullptr);
+    const uint64_t dc = g_argine_tls_created.load() - c0, dd = g_argine_tls_destroyed.load() - d0;
+    check(ok && bytes_ok && rounds_done == 6, "6 rounds of thread churn through the store: workload ok, bytes correct");
+    check(dc > 0 && dc == dd, "per-thread runtime state (store, trace, probes): created " + std::to_string(dc) + ", destroyed " + std::to_string(dd));
+    check(psx_debug_reads_drained_at_thread_exit() == 0, "no thread exited with a read in flight");
+    int io = 0;
+    for (auto & rec : read_trace(tp)) io += rec.t == 'I';
+    check(io > 0, "trace records written by exited threads were flushed");
+    check(heap_intact(), "process heap intact after the churn (Windows: HeapValidate and _heapchk)");
+}
+
 static void t_review_cases(const std::string & dir, const std::string & store) {
     printf("[10] orphan reads, follow-up mismatch (fail-closed), synchronous completions never hidden\n");
     psx_debug_set_posix_deferred_reads(kDeferredBackend ? 1 : 0);
@@ -666,6 +753,7 @@ static void t_review_cases(const std::string & dir, const std::string & store) {
 
 int main(int argc, char ** argv) {
     if (argc < 2) { fprintf(stderr, "usage: %s <scratch-dir>\n", argv[0]); return 2; }
+    setvbuf(stdout, nullptr, _IONBF, 0);   // a crash must not lose the lines already printed (host incident)
     const std::string dir = argv[1];
     const std::string store = make_store(dir, 4, 16);
     printf("R5 ETS model-free conformance (%s backend)\n", kDeferredBackend ? "POSIX deferred + immediate" : "Windows OVERLAPPED");
@@ -679,6 +767,7 @@ int main(int argc, char ** argv) {
     t_boundary_and_order(store);
     t_instrumentation(dir, store);
     t_review_cases(dir, store);
+    t_thread_exit(dir, store);
     printf("\nRESULT: %d passed, %d failed, %d skipped\n", g_pass, g_fail, g_skip);
     // Windows runs skip exactly the checks that need the POSIX deferred backend; any other count is a failure.
     const int expected_skips = kDeferredBackend ? 0 : 1 + 1 + 1;

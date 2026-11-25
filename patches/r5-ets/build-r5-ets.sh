@@ -6,7 +6,7 @@
 # -D_WIN32_WINNT=0x0A00 -DWINVER=0x0A00, static, no OpenMP, AVX2/FMA/F16C/BMI2.
 # Sources: patches 0001-0003, 0005, 0006 applied with `git apply`; 0004 (retention-policy CMake wiring) applied as its
 # equivalent edit because its context predates 0002/0003; the frozen ../argine-retention-policy.{h,cpp}; the R5 copies
-# in this directory of argine-store.{h,cpp}, argine-experts.cpp, argine-research.{h,cpp} and argine-ets.h.
+# in this directory of argine-store.{h,cpp}, argine-experts.cpp, argine-research.{h,cpp}, argine-ets.h and argine-tls.h.
 # Nothing under ../ is modified. Needs network (github.com, archive.ubuntu.com) and root for dpkg -i
 # (or unpack the debs with dpkg-deb -x into a prefix, as the v3 build did).
 #
@@ -48,7 +48,7 @@ sed -i 's#^\(\s*\)ggml-cpu/argine-research.h$#&\n\1ggml-cpu/argine-retention-pol
 grep -q "argine-retention-policy.cpp" ggml/src/ggml-cpu/CMakeLists.txt
 D=ggml/src/ggml-cpu
 cp "$PATCHES/argine-retention-policy.cpp" "$PATCHES/argine-retention-policy.h" "$D/"
-for f in argine-store.cpp argine-store.h argine-experts.cpp argine-experts.h argine-research.cpp argine-research.h argine-ets.h; do
+for f in argine-store.cpp argine-store.h argine-experts.cpp argine-experts.h argine-research.cpp argine-research.h argine-ets.h argine-tls.h; do
   if [ -f "$HERE/$f" ]; then cp "$HERE/$f" "$D/"; else cp "$PATCHES/$f" "$D/"; fi
 done
 sed -i 's/\r$//' $D/argine-*

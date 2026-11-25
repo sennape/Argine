@@ -33,9 +33,11 @@ class Records(unittest.TestCase):
         self.assertEqual(P.lf((P.R5SRC / "R5_CHANGES.diff").read_bytes()).decode(), P.r5_diff())
 
     def test_baseline_code_untouched(self):
-        """The R5 change is additive: the trace and identity changes remove no line; the hook loses exactly two lines,
-        each rewritten to add the R5 branch in front of the unchanged baseline block; the store loses exactly one
-        tracing-only line (inside `if (arx)`), rewritten to keep its flag and add ARX_FLAG_SYNC_IN_ISSUE."""
+        """The R5 change is additive: the hook loses exactly two lines, each rewritten to add the R5 branch in front of the
+        unchanged baseline block; the store loses exactly one tracing-only line (inside `if (arx)`), rewritten to keep its
+        flag and add ARX_FLAG_SYNC_IN_ISSUE. Beyond those, only the STORAGE of the per-thread objects changes (host
+        incident, argine-tls.h): each removed `static thread_local T x;` (and its `return x;`) is replaced by
+        argine_thread_object<T, Tag>() for the same T, which keeps the object, its construction and its destruction."""
         removed, added = {}, {}
         cur = None
         for l in P.r5_diff().splitlines():
@@ -47,11 +49,25 @@ class Records(unittest.TestCase):
                 removed.setdefault(cur, []).append(l[1:].strip())
             elif l.startswith("+"):
                 added.setdefault(cur, []).append(l[1:].strip())
-        self.assertEqual(set(removed), {"patches/argine-experts.cpp", "patches/argine-store.cpp"}, removed)
-        self.assertEqual(removed["patches/argine-experts.cpp"], ["if (!pol_followup) {", "if (c.modo == LETTURA_ASINCRONA) {"])
-        self.assertEqual(removed["patches/argine-store.cpp"], ["so.flags |= ARX_FLAG_COMPLETE_EXACT;"])
+        self.assertEqual(set(removed), {"patches/argine-experts.cpp", "patches/argine-store.cpp", "patches/argine-research.cpp"}, removed)
+        self.assertEqual(removed["patches/argine-experts.cpp"], ["static thread_local std::vector<Pin> v;", "return v;",
+                                                                  "static thread_local std::vector<int32_t> buf;",
+                                                                  "if (!pol_followup) {", "if (c.modo == LETTURA_ASINCRONA) {"])
+        self.assertEqual(removed["patches/argine-store.cpp"], ["static thread_local std::vector<HANDLE> eventi;", "static thread_local StatoThread st;",
+                                                                "return st;", "so.flags |= ARX_FLAG_COMPLETE_EXACT;"])
+        self.assertEqual(removed["patches/argine-research.cpp"], ["static thread_local ThreadBuf t;", "return t;"])
         self.assertIn("so.flags |= ARX_FLAG_COMPLETE_EXACT | ARX_FLAG_SYNC_IN_ISSUE;  // R5: paid by the issuer, never \"hidden\"",
                       added["patches/argine-store.cpp"])
+        for f, typ in (("patches/argine-store.cpp", "std::vector<HANDLE>"), ("patches/argine-store.cpp", "StatoThread"),
+                       ("patches/argine-research.cpp", "ThreadBuf"), ("patches/argine-experts.cpp", "std::vector<Pin>"),
+                       ("patches/argine-experts.cpp", "std::vector<int32_t>")):
+            self.assertTrue(any(f"argine_thread_object<{typ}, " in l for l in added[f]), (f, typ))
+        # no thread_local with a non-trivial destructor is left in the R5 runtime sources
+        for f in ("argine-store.cpp", "argine-research.cpp", "argine-experts.cpp"):
+            for l in (P.R5SRC / f).read_text(encoding="utf-8").splitlines():
+                code = l.split("//")[0]
+                if "thread_local" in code:
+                    self.assertTrue("HANDLE ev_singolo" in code or "psx_semantic_event_tracker tr_evt" in code, (f, l))
 
     def test_eval_ids_absent(self):
         self.assertFalse([x for x in P.verify() if "evaluation prompt id" in x])
