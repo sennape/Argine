@@ -27,7 +27,8 @@ Where read/compute overlap can now occur: only in `kind`. Once the current layer
 | `phase1a.py` | builder and verifier (`python phase1a.py verify`) |
 | `ets_trace.py` | trace analysis: `structure()` (completeness only, Phase 1a) and `metrics()` (Phase 1b/2) |
 | `host_conformance.py` | the development-only Windows host probe for gate G1 (next step) |
-| `tests/` | verifier, trace-analysis and driver tests |
+| [`V5-RECOVERY.md`](V5-RECOVERY.md), [`V5-RECOVERY.json`](V5-RECOVERY.json), `v5-recovery/` | reconstruction of the lost llama-research-v5 comparator of G1 from frozen inputs, and the single identity the probe accepts besides the historical hash |
+| `tests/` | verifier, trace-analysis, driver and v5-recovery tests |
 
 Runtime sources are in [`patches/r5-ets/`](../../patches/r5-ets/README.md), an additive copy; the frozen `patches/` files are unchanged. The build identity is [`llama-research-r5-ets/BUILD-INFO.json`](../../llama-research-r5-ets/BUILD-INFO.json). The binaries themselves are not in Git.
 

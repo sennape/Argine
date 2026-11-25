@@ -1,0 +1,388 @@
+{
+ "artifact": "R5-01-V5-RECOVERY",
+ "verdict": "R5_V5_DETERMINISTIC_RECONSTRUCTION_ACCEPTED",
+ "identity_statement": "deterministic normalized identity of a reconstruction from the frozen v5 source/toolchain/build contract; NOT the normalized digest of the original binary, which was never frozen",
+ "reason": "The host G1 probe (host_conformance.py) needs llama-research-v5 as the baseline-fidelity comparator. Its llama-server.exe was an untracked local file and was deleted by the intentional local repository cleanup (the original Argine2 working directory no longer exists); only the frozen llama-research-v5/BUILD-INFO.json survives. The first G1 attempt refused at the identity check, before any model launch.",
+ "g1_launches_before_recovery": 0,
+ "outcome_blind": "No G1, timing, token or mechanism output of any kind exists; the recovery used only frozen Git objects, the frozen build record and model-free checks.",
+ "historical": {
+  "historical_raw_sha256": "65f445c42ac145765735984582691964181dd4dd8019f4519edac1fa315df26c",
+  "build_info": "llama-research-v5/BUILD-INFO.json (unchanged)",
+  "other_binaries_raw_sha256": {
+   "llama-imatrix.exe": "dadca756289645d63bc183b86ceed478d87c56902d1a64868c0775d68cb84f7f",
+   "llama-perplexity.exe": "4dabf0dc0790603d789fe7a358fa0e2d699e0c1e9b076dfefaa92e74d2b166ab",
+   "llama-quantize.exe": "869668b9244132b320539f8a5af43668d9b61f7a659812923e585737dda47bba"
+  },
+  "source_commit": "34997c2 R2-12: fix per-kind event fragmentation under LETTURA_BLOCCO, add admission diagnostics",
+  "built_utc": "2026-11-14T20:18:00Z",
+  "build_mode": "incremental ninja rebuild of the v3/v4 build-win tree: argine-store.cpp and argine-experts.cpp recompiled, ggml-cpu.a and the four binaries relinked"
+ },
+ "search": {
+  "result": "no copy found",
+  "searched": [
+   "the canonical repository and the whole Desktop (6,655 files named llama-server*.exe: 6,654 HoPi test stubs of 6..700 bytes, plus the R5 runtime)",
+   "C:\\Users\\<user> top-level folders: Downloads, Documents, Tools, Claude, Videos, Music, Pictures, dot-folders, AppData\\Local\\Argine*, AppData\\Local\\Temp, AppData\\Roaming, AppData\\LocalLow (files named llama-server*.exe larger than 100 kB)"
+  ],
+  "not_searched": "the Recycle Bin and folders outside the user profile (not reachable); a few protected subfolders were unreadable"
+ },
+ "build_contract": {
+  "source_commit": "34997c27d8be83d030014d215ad83b119dd49751",
+  "source_patches_tree": "03fe2f75209e19945df01743b7bb42193b7ba7ab",
+  "llama_cpp_commit": "254b177307b14d055bbe4c050c9c441a1e06d8a4",
+  "llama_cpp_checkout": "git fetch --depth 1 of the pinned commit (LLAMA_BUILD_NUMBER = 1)",
+  "source_path": "/home/claude/llama.cpp",
+  "build_dir": "build-win",
+  "apply": [
+   "git apply patches/0002-argine-expert-store.patch",
+   "cp patches/argine-{store,experts,research}.{h,cpp} ggml/src/ggml-cpu/",
+   "git apply patches/0001-argine-route-log.patch",
+   "git apply patches/0003-argine-research-trace.patch",
+   "0004 as its edit: ggml/src/ggml-cpu/CMakeLists.txt must hash to 0004's post-image blob 8f9d51d",
+   "cp patches/argine-retention-policy.{h,cpp} ggml/src/ggml-cpu/"
+  ],
+  "toolchain_file": "set(CMAKE_SYSTEM_NAME Windows)\nset(CMAKE_SYSTEM_PROCESSOR x86_64)\nset(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc-posix)\nset(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++-posix)\nset(CMAKE_RC_COMPILER x86_64-w64-mingw32-windres)\nset(CMAKE_FIND_ROOT_PATH /usr/x86_64-w64-mingw32)\nset(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\nset(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\nset(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n",
+  "cmake_flags": [
+   "-DCMAKE_TOOLCHAIN_FILE=/tmp/mingw.cmake",
+   "-DCMAKE_BUILD_TYPE=Release",
+   "-DBUILD_SHARED_LIBS=OFF",
+   "-DLLAMA_CURL=OFF",
+   "-DLLAMA_OPENSSL=OFF",
+   "-DGGML_NATIVE=OFF",
+   "-DGGML_AVX=ON",
+   "-DGGML_AVX2=ON",
+   "-DGGML_FMA=ON",
+   "-DGGML_F16C=ON",
+   "-DGGML_BMI2=ON",
+   "-DGGML_OPENMP=OFF",
+   "-DLLAMA_BUILD_TESTS=OFF",
+   "-DLLAMA_BUILD_EXAMPLES=OFF",
+   "-DCMAKE_EXE_LINKER_FLAGS=-static -static-libgcc -static-libstdc++",
+   "-DCMAKE_C_FLAGS=-D_WIN32_WINNT=0x0A00 -DWINVER=0x0A00",
+   "-DCMAKE_CXX_FLAGS=-D_WIN32_WINNT=0x0A00 -DWINVER=0x0A00"
+  ],
+  "targets": [
+   "llama-server",
+   "llama-perplexity",
+   "llama-quantize",
+   "llama-imatrix"
+  ],
+  "embedded_web_ui": "none: the llama-server UI provisioning step must report '-- UI: embedded 0 assets' (no tools/ui/dist, no HuggingFace download; the build script fails otherwise)",
+  "compiler": "x86_64-w64-mingw32-g++-posix (GCC) 10-posix 20220113",
+  "c_compiler": "x86_64-w64-mingw32-gcc-posix (GCC) 10-posix 20220113",
+  "linker": "GNU ld (GNU Binutils) 2.38",
+  "mingw_packages": [
+   "binutils-mingw-w64-x86-64 2.38-3ubuntu1+9build1",
+   "g++-mingw-w64-x86-64-posix 10.3.0-14ubuntu1+24.3",
+   "gcc-mingw-w64-base:amd64 10.3.0-14ubuntu1+24.3",
+   "gcc-mingw-w64-x86-64-posix 10.3.0-14ubuntu1+24.3",
+   "gcc-mingw-w64-x86-64-posix-runtime 10.3.0-14ubuntu1+24.3",
+   "mingw-w64-common 8.0.0-1",
+   "mingw-w64-x86-64-dev 8.0.0-1"
+  ],
+  "mingw_debs_sha256": {
+   "binutils-mingw-w64-x86-64_2.38-3ubuntu1+9build1_amd64.deb": "499e24490c602d9c7c38889eb9ea0c3bb2f07bc9f2102b56726848c4949ca176",
+   "g++-mingw-w64-x86-64-posix_10.3.0-14ubuntu1+24.3_amd64.deb": "155cdf42a505c2b9933a03949a16b96b4c913d87f25afbab59a63dac522add03",
+   "gcc-mingw-w64-base_10.3.0-14ubuntu1+24.3_amd64.deb": "4ce674630cd658924ecdc50d6a9379da9ea0a28d5017709b579cb766eb42bb58",
+   "gcc-mingw-w64-x86-64-posix-runtime_10.3.0-14ubuntu1+24.3_amd64.deb": "86632d0e35a49f253f060b287e3d281efa80bac7e2a8e6899c66601e50d0c703",
+   "gcc-mingw-w64-x86-64-posix_10.3.0-14ubuntu1+24.3_amd64.deb": "801e7fcdd2d0ccab285ae8176705f5d03192dfc9c67559eeb6ed51f8e9bee19b",
+   "mingw-w64-common_8.0.0-1_all.deb": "2d017884de1556e5183f849b758042b9cfcbf3f4f7b1d441fb696d222aa0514c",
+   "mingw-w64-x86-64-dev_8.0.0-1_all.deb": "755ead5b4c96b13ea1ffba83dc52ac47bd827ebe5c0be1e7a461bbc85377b322"
+  },
+  "cmake": "cmake version 3.22.1",
+  "ninja": "1.10.1",
+  "cmake_ninja_debs_sha256": {
+   "cmake-data_3.22.1-1ubuntu1.22.04.2_all.deb": "0009fa5659c702cb654f868a6d1e7ebd4f8d230092df2f086a32aab2fa00b9ba",
+   "cmake_3.22.1-1ubuntu1.22.04.2_amd64.deb": "55a46b2f9bbc8899ae6772f0313ca2dd88801a514feaa488c88094c4fafa83c5",
+   "ninja-build_1.10.1-1_amd64.deb": "ca8aae8ac7efad41d1f96a7e227653bd62b24e89cc7ddb18cec262f1869877b2"
+  }
+ },
+ "build_contract_sha256": "64dbf7dc6e243b5b6d6dc9a0d811aac8b66cedd911d3873be11c4c3fdca1e7f4",
+ "build_script": {
+  "path": "experiments/R5-01-ets-implementation/v5-recovery/build-v5-recovery.sh",
+  "lf_sha256": "e1cb392ba2be20a1a87f006802b1cae7db5d3ea8c678477062345e95240d0161"
+ },
+ "clean_builds": {
+  "procedure": "two independent clean builds: fresh clone of the pinned llama.cpp commit, fresh patch application, fresh CMake configure and full Ninja build, each in its own tree created at the same source path /home/claude/llama.cpp (the first tree moved away before the second was created), on a Linux x86_64 build host",
+  "build1": {
+   "llama-server.exe": {
+    "raw_sha256": "1ed0f0037a56b14abb3b4ce6706e166c489f9166f6be6b22f491a39c1f521c12",
+    "pe_normalized_sha256": "a3164821861a56dec259e1e977cdfc6c805bffd062a2ab379f7b4a02843c7815",
+    "size": 19781812,
+    "TimeDateStamp": 1795470517,
+    "CheckSum": 19816510,
+    "dll_imports": [
+     "ADVAPI32.dll",
+     "KERNEL32.dll",
+     "SHELL32.dll",
+     "WS2_32.dll",
+     "msvcrt.dll"
+    ]
+   },
+   "llama-imatrix.exe": {
+    "raw_sha256": "4ac159bd9de53d0c3d20f788ecc3b6ed540a271fa49fa75045c69553cda19b09",
+    "pe_normalized_sha256": "a1a2c8ae4fbee93b11579f093c171c69905357acc5075f13469b8fbf0d6d7940",
+    "size": 15844532,
+    "TimeDateStamp": 1795470390,
+    "CheckSum": 15861377,
+    "dll_imports": [
+     "ADVAPI32.dll",
+     "KERNEL32.dll",
+     "SHELL32.dll",
+     "WS2_32.dll",
+     "msvcrt.dll"
+    ]
+   },
+   "llama-perplexity.exe": {
+    "raw_sha256": "4589be52657ae397895b125dcad2ae4049bb143ecb4a058a5b3ae7777fecf2c2",
+    "pe_normalized_sha256": "417db01aaf0a23c1eb23b799068595942b21b00adbb150c7df96afd3550f2d41",
+    "size": 15832723,
+    "TimeDateStamp": 1795470387,
+    "CheckSum": 15863150,
+    "dll_imports": [
+     "ADVAPI32.dll",
+     "KERNEL32.dll",
+     "SHELL32.dll",
+     "WS2_32.dll",
+     "msvcrt.dll"
+    ]
+   },
+   "llama-quantize.exe": {
+    "raw_sha256": "0e308701def8e013987c0a3717337bf6d0d370978357d7ffcd7496497d1fc182",
+    "pe_normalized_sha256": "d6b0b095d0eeee9cd3d65dc620008db138eded8fa6744c3312cfff988368a081",
+    "size": 11268397,
+    "TimeDateStamp": 1795470386,
+    "CheckSum": 11285906,
+    "dll_imports": [
+     "ADVAPI32.dll",
+     "KERNEL32.dll",
+     "msvcrt.dll"
+    ]
+   }
+  },
+  "build2": {
+   "llama-server.exe": {
+    "raw_sha256": "e4a8d9e4aaa5465ed4563c9555ee40c5a27b028067250be0cfd71c2f4d5f373e",
+    "pe_normalized_sha256": "a3164821861a56dec259e1e977cdfc6c805bffd062a2ab379f7b4a02843c7815",
+    "size": 19781812,
+    "TimeDateStamp": 1795470915,
+    "CheckSum": 19816908,
+    "dll_imports": [
+     "ADVAPI32.dll",
+     "KERNEL32.dll",
+     "SHELL32.dll",
+     "WS2_32.dll",
+     "msvcrt.dll"
+    ]
+   },
+   "llama-imatrix.exe": {
+    "raw_sha256": "ea8cabea8ccb2fd36482a2b7a167e175aa67277442730086467458ab8dc5b19b",
+    "pe_normalized_sha256": "a1a2c8ae4fbee93b11579f093c171c69905357acc5075f13469b8fbf0d6d7940",
+    "size": 15844532,
+    "TimeDateStamp": 1795470790,
+    "CheckSum": 15861777,
+    "dll_imports": [
+     "ADVAPI32.dll",
+     "KERNEL32.dll",
+     "SHELL32.dll",
+     "WS2_32.dll",
+     "msvcrt.dll"
+    ]
+   },
+   "llama-perplexity.exe": {
+    "raw_sha256": "145e93ee03f589974a1220ad73634bf60f298ec21a55515f482c41dc23fc2a53",
+    "pe_normalized_sha256": "417db01aaf0a23c1eb23b799068595942b21b00adbb150c7df96afd3550f2d41",
+    "size": 15832723,
+    "TimeDateStamp": 1795470789,
+    "CheckSum": 15863552,
+    "dll_imports": [
+     "ADVAPI32.dll",
+     "KERNEL32.dll",
+     "SHELL32.dll",
+     "WS2_32.dll",
+     "msvcrt.dll"
+    ]
+   },
+   "llama-quantize.exe": {
+    "raw_sha256": "7e787dee3589f4875ef3893577788fafc8c2dd7514ee853acdf67ebc15e3e21a",
+    "pe_normalized_sha256": "d6b0b095d0eeee9cd3d65dc620008db138eded8fa6744c3312cfff988368a081",
+    "size": 11268397,
+    "TimeDateStamp": 1795470786,
+    "CheckSum": 11286306,
+    "dll_imports": [
+     "ADVAPI32.dll",
+     "KERNEL32.dll",
+     "msvcrt.dll"
+    ]
+   }
+  },
+  "patched_trees_identical": true,
+  "cmake_cache_identical": true
+ },
+ "binary_difference_analysis": {
+  "method": "byte-by-byte comparison of build1 and build2, every differing range mapped to PE header fields (pe_analysis.py diff)",
+  "per_binary": {
+   "llama-server": {
+    "differing_byte_ranges_half_open": [
+     [
+      136,
+      138
+     ],
+     [
+      216,
+      218
+     ]
+    ],
+    "fields": {
+     "136-138": "TimeDateStamp",
+     "216-218": "CheckSum"
+    },
+    "only_pe_metadata": true,
+    "TimeDateStamp": [
+     1795470517,
+     1795470915
+    ],
+    "CheckSum": [
+     19816510,
+     19816908
+    ]
+   },
+   "llama-imatrix": {
+    "differing_byte_ranges_half_open": [
+     [
+      136,
+      138
+     ],
+     [
+      216,
+      218
+     ]
+    ],
+    "fields": {
+     "136-138": "TimeDateStamp",
+     "216-218": "CheckSum"
+    },
+    "only_pe_metadata": true,
+    "TimeDateStamp": [
+     1795470390,
+     1795470790
+    ],
+    "CheckSum": [
+     15861377,
+     15861777
+    ]
+   },
+   "llama-perplexity": {
+    "differing_byte_ranges_half_open": [
+     [
+      136,
+      138
+     ],
+     [
+      216,
+      218
+     ]
+    ],
+    "fields": {
+     "136-138": "TimeDateStamp",
+     "216-218": "CheckSum"
+    },
+    "only_pe_metadata": true,
+    "TimeDateStamp": [
+     1795470387,
+     1795470789
+    ],
+    "CheckSum": [
+     15863150,
+     15863552
+    ]
+   },
+   "llama-quantize": {
+    "differing_byte_ranges_half_open": [
+     [
+      136,
+      138
+     ],
+     [
+      216,
+      218
+     ]
+    ],
+    "fields": {
+     "136-138": "TimeDateStamp",
+     "216-218": "CheckSum"
+    },
+    "only_pe_metadata": true,
+    "TimeDateStamp": [
+     1795470386,
+     1795470786
+    ],
+    "CheckSum": [
+     11285906,
+     11286306
+    ]
+   }
+  },
+  "normalization": "patches/r5-ets/pe_normalized_sha256.py zeroes exactly 8 bytes: COFF TimeDateStamp (e_lfanew+8..+12) and optional-header CheckSum (e_lfanew+88..+92); every other byte is hashed",
+  "substantive_bytes_differ": false
+ },
+ "historical_exact_hash_comparison": {
+  "matches": false,
+  "timestamp_search": "every TimeDateStamp (with its recomputed PE CheckSum) in 2026-11-14 19:40:00Z..20:25:00Z (2,701 values; the v4 build at 19:48Z and the v5 commit at 20:19:33Z bound the link) and in 14:18:00Z..2026-11-15 02:18:00Z applied to build1: no variant has the historical raw SHA-256",
+  "interpretation": "the reconstruction differs from the original beyond the two PE fields. Inputs the frozen record does not fix: (1) the embedded web UI: llama-server's build downloads UI assets from HuggingFace when it has network access (tag b<build number>, then latest); the reconstruction builds had none and embedded 0 assets, while the historical build may have embedded a UI -- the likely main cause; (2) llama.cpp clone depth, which sets LLAMA_BUILD_NUMBER (here 1) in version strings and in the UI tag; (3) the original source path and the user-owned toolchain prefix (only __FILE__ strings). The mechanism that injected the _WIN32_WINNT define is shown immaterial: a variant build with the define in the C++ flags only gave byte-identical objects and the same normalized llama-server.exe (ggml.h defines _WIN32_WINNT 0x0A00 when unset). None of these is an R2-12 code change, and none touches the /health and /completion paths, token output or the expert-store decode path that G1 compares; the exact cause is not proven and the original normalized digest is unknown"
+ },
+ "semantic_identity": {
+  "sources_equal_34997c2_blobs": true,
+  "v5_literals_present": "20 of 20 string literals that 34997c2 added in code (3 further quoted phrases are inside comments)",
+  "post_v5_literals_absent": "0 of 16 literals added to the runtime sources after 34997c2, and 0 of 115 R5 (patches/r5-ets) literals, appear in llama-server.exe. Supporting evidence only (no positive control: the reviewer found 8/16 and 19/116 of them in the R5 executable); the decisive evidence is that every source file equals its 34997c2 blob",
+  "dll_imports": "llama-server/imatrix/perplexity: ADVAPI32, KERNEL32, msvcrt, SHELL32, WS2_32; llama-quantize: ADVAPI32, KERNEL32, msvcrt (the v3..v5 shape)",
+  "model_free_regressions_note": "run natively (Linux g++) on the 34997c2 sources against the synthetic 4-layer x 16-expert store, not the real Qwen store used by the original R2-12 evidence",
+  "model_free_regressions_on_v5_sources": {
+   "argine-store-stress (NT=8)": "pass",
+   "argine-protected-for-observational-test": "pass",
+   "argine-store-fidelity-test": "pass (violations 0, failures 0)",
+   "argine-research-test": "pass",
+   "argine-retention-integration-test (incl. R2-12 sections 11-12)": "pass"
+  }
+ },
+ "accepted_reconstruction": {
+  "binary": "llama-server.exe of build1",
+  "reconstructed_raw_sha256": "1ed0f0037a56b14abb3b4ce6706e166c489f9166f6be6b22f491a39c1f521c12",
+  "reconstructed_pe_normalized_sha256": "a3164821861a56dec259e1e977cdfc6c805bffd062a2ab379f7b4a02843c7815",
+  "local_path": "llama-research-v5-recovered/llama-server.exe (not in Git: local exclude)",
+  "note": "exactly one raw identity is accepted; build2 (same normalized identity, different PE timestamp) is a reproducibility witness and is not accepted by the driver"
+ },
+ "g1_relationship": "R5-00 DECISION_RULES gates.G1_implementation requires that A on the R5 build produce tokens identical to 'the pre-R5 runtime (llama-research-v5)' and be no more than 2% slower. The comparator is the pre-R5 v5 implementation, not a byte sequence; no frozen R5-00 artifact names the binary hash. The hash 65f445c4... is named by the R5-01 Phase 1a artifacts (llama-research-r5-ets/BUILD-INFO.json predecessor_runtime, host_conformance.py V5_SHA256) as the identity of that reference; both stay unchanged, and this manifest adds the single reconstructed identity next to it. The reconstruction is the v5 implementation built from the v5 commit with the recorded v3..v5 toolchain and configuration (the same toolchain and flags as the R5 build), so G1 still compares R5-A with the pre-R5 runtime. host_conformance.py records which identity (historical or reconstructed) was used in IDENTITY.json and G1_HOST_RESULT.json.",
+ "disclosures": [
+  "The original binary cannot be recovered; the reconstruction is not byte-identical to it beyond the PE timestamp and checksum (see historical_exact_hash_comparison).",
+  "The v3..v5 CMake flags were never recorded for those builds: they are taken from tools/build_llama_research.sh at 34997c2 (also recorded verbatim in llama-research-v2/BUILD-INFO.json) plus the disclosed _WIN32_WINNT deviation. The historical builds ran the same compiler packages from a user-owned prefix (GCC_EXEC_PREFIX/--sysroot/-B); the reconstruction uses the packages installed normally.",
+  "llama-research-v5 was built at 2026-11-14T20:18Z, about 90 s before commit 34997c2 (20:19:33Z); the reconstruction assumes the built working tree equals the commit (its BUILD-INFO describes exactly the committed change).",
+  "The compiler's host libraries (isl, mpfr, gmp of the Ubuntu 24.04 build host) and the historical CMake/Ninja versions are not pinned or recorded; the compiler identity string and the package hashes are.",
+  "Model-free regressions ran on a synthetic store, not on the real Qwen store.",
+  "The driver hashes the comparator once per run (unchanged behaviour) and records the identity in IDENTITY.json, not in every launch record."
+ ],
+ "review": {
+  "reviewer": "independent review agent (separate context; read-only on the recovery evidence; adversarial brief)",
+  "conclusion": "ACCEPT",
+  "material_findings": 0,
+  "questions": {
+   "sources_exactly_v5": "yes: bundle fsck clean, export 21/21 blobs equal 34997c2, trees equal; independent re-application identical; 0004 post-image blob 8f9d51d reproduced",
+   "post_v5_code_present": "no: no 0005/0006/ETS code; ARGINE_EXPERT_WAIT/layer_touch/argine-ets strings absent",
+   "frozen_toolchain": "yes: 7 pinned debs, 229 compile commands use the pinned mingw g++/gcc, 301 GCC 10-posix 20220113 idents in the PE (104 9.3-win32 idents come from the pinned mingw-w64 8.0.0 CRT)",
+   "flags_equivalent": "yes with disclosed inference; _WIN32_WINNT injection proven immaterial by an independent variant build (byte-identical objects, same normalized hash)",
+   "differences_only_pe_metadata": "yes: own byte comparison, offsets 136,137 (TimeDateStamp) and 216,217 (CheckSum) only, in all four executables",
+   "normalization_can_hide_changes": "no: zeroes exactly 8 bytes at e_lfanew+8 and +88; the driver additionally pins the raw hash, so a manifest edit can only cause rejection",
+   "weakens_g1": "no: G1 names the pre-R5 runtime, not a hash; the residual risk (cause of the hash mismatch unproven) is disclosed",
+   "outcome_knowledge": "none: no G1/timing/token artifacts exist; one recipe built (plus reproducibility builds), no selection among variants"
+  },
+  "minor_findings_resolved": [
+   "embedded web UI recorded in the build contract (no assets; the build script now fails otherwise) and named as the likely main cause of the hash mismatch",
+   "'historical toolchain file and flags verbatim' reworded; user-owned prefix disclosed",
+   "build-before-commit timing disclosed",
+   "R5-01 predecessor_runtime pin of 65f445c4... cross-referenced in g1_relationship",
+   "synthetic store of the model-free regressions disclosed",
+   "string-marker check marked as supporting evidence without positive control",
+   "unpinned compiler host libraries and unrecorded historical CMake/Ninja versions disclosed",
+   "single per-run comparator hashing disclosed (pre-existing driver behaviour)"
+  ]
+ }
+}

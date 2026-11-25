@@ -10,7 +10,8 @@ IMPLEMENTATION_FREEZE rule requires.
 
 Steps of `run` (each launch: fresh process, 512 greedy tokens with ignore_eos, 12 threads, context 4096):
   1. identities: R5 runtime and Windows conformance-test hashes against llama-research-r5-ets/BUILD-INFO.json; the
-     llama-research-v5 runtime located by its frozen SHA-256; model and store SHA-256 recorded;
+     llama-research-v5 runtime, accepted only as its historical raw SHA-256 or as the ONE reconstruction frozen in
+     V5-RECOVERY.json (v5_identity); model and store SHA-256 recorded;
   2. the model-free conformance test on the real Windows OVERLAPPED path (argine-ets-test.exe);
   3. startup smoke: --version; fail-closed refusals (invalid ARGINE_EXPERT_WAIT, kind + ARGINE_PREFETCH=2,
      kind + ARGINE_EXPERT_READ=blocco) must abort before serving;
@@ -40,6 +41,19 @@ REPO = HERE.parents[1]
 P0 = REPO / "experiments" / "R5-00-exposed-transfer-stall"
 BUILD_INFO = REPO / "llama-research-r5-ets" / "BUILD-INFO.json"
 V5_SHA256 = "65f445c42ac145765735984582691964181dd4dd8019f4519edac1fa315df26c"   # llama-research-v5/BUILD-INFO.json
+# The historical v5 executable was lost (untracked file, local cleanup). V5-RECOVERY.json freezes ONE deterministic
+# reconstruction from the frozen v5 source/toolchain/build contract. It is accepted only if the binary has exactly this raw
+# SHA-256 and PE-normalized SHA-256 AND the manifest agrees on every pinned value below. No other v5 rebuild is accepted.
+V5_RECOVERY = HERE / "V5-RECOVERY.json"
+V5_RECONSTRUCTED = {
+    "reconstructed_raw_sha256": "1ed0f0037a56b14abb3b4ce6706e166c489f9166f6be6b22f491a39c1f521c12",
+    "reconstructed_pe_normalized_sha256": "a3164821861a56dec259e1e977cdfc6c805bffd062a2ab379f7b4a02843c7815",
+    "source_commit": "34997c27d8be83d030014d215ad83b119dd49751",
+    "source_patches_tree": "03fe2f75209e19945df01743b7bb42193b7ba7ab",
+    "llama_cpp_commit": "254b177307b14d055bbe4c050c9c441a1e06d8a4",
+    "compiler": "x86_64-w64-mingw32-g++-posix (GCC) 10-posix 20220113",
+    "build_contract_sha256": "64dbf7dc6e243b5b6d6dc9a0d811aac8b66cedd911d3873be11c4c3fdca1e7f4",
+}
 PORT = 18095
 N_PREDICT, CONTEXT, THREADS, SEED = 512, 4096, 12, 42
 BUDGETS = {"1.5": 1610612736, "4": 4294967296}
@@ -69,6 +83,51 @@ def shutdown_mod():
 def token_digest(tokens: List[int]) -> str:
     tel = _load("r3_telemetry_telemetry", REPO / "experiments" / "R3-01-telemetry-realization" / "r3_telemetry" / "telemetry.py")
     return tel.output_token_digest(tokens)
+
+
+def pe_normalized_sha256(p: Path) -> str:
+    """SHA-256 with the COFF TimeDateStamp and the optional-header CheckSum zeroed (patches/r5-ets/pe_normalized_sha256.py)."""
+    return _load("pe_normalized_sha256", REPO / "patches" / "r5-ets" / "pe_normalized_sha256.py").normalized(p)
+
+
+def contract_sha256(contract: Any) -> str:
+    return hashlib.sha256(json.dumps(contract, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def v5_identity(p: Path, manifest: Path = V5_RECOVERY, expected: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
+    """Accept the v5 comparator only as (a) the historical raw SHA-256 or (b) the single frozen reconstruction.
+    Fails closed on everything else, including a timestamp-only rebuild, a manifest that disagrees with the pinned values,
+    or a missing manifest."""
+    exp = V5_RECONSTRUCTED if expected is None else expected
+    raw = sha256_file(p)
+    if raw == V5_SHA256:
+        return {"accepted": True, "kind": "historical", "raw_sha256": raw}
+    out: Dict[str, Any] = {"accepted": False, "kind": None, "raw_sha256": raw}
+    if raw != exp["reconstructed_raw_sha256"]:
+        out["reason"] = "neither the historical v5 SHA-256 nor the frozen reconstructed v5 SHA-256"; return out
+    try:
+        m = json.loads(Path(manifest).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        out["reason"] = f"recovery manifest unreadable: {e}"; return out
+    acc, bc = m.get("accepted_reconstruction") or {}, m.get("build_contract") or {}
+    norm = pe_normalized_sha256(p)
+    checks = {
+        "manifest_verdict": m.get("verdict") == "R5_V5_DETERMINISTIC_RECONSTRUCTION_ACCEPTED",
+        "manifest_review_accepts": (m.get("review") or {}).get("conclusion") == "ACCEPT",
+        "manifest_keeps_historical_sha": (m.get("historical") or {}).get("historical_raw_sha256") == V5_SHA256,
+        "raw_sha256": acc.get("reconstructed_raw_sha256") == exp["reconstructed_raw_sha256"] == raw,
+        "pe_normalized_sha256": acc.get("reconstructed_pe_normalized_sha256") == exp["reconstructed_pe_normalized_sha256"] == norm,
+        "source_identity": (bc.get("source_commit"), bc.get("source_patches_tree"), bc.get("llama_cpp_commit"))
+                           == (exp["source_commit"], exp["source_patches_tree"], exp["llama_cpp_commit"]),
+        "toolchain_identity": bc.get("compiler") == exp["compiler"],
+        "build_contract": m.get("build_contract_sha256") == contract_sha256(bc) == exp["build_contract_sha256"],
+    }
+    out.update({"pe_normalized_sha256": norm, "checks": checks, "manifest_sha256": sha256_file(Path(manifest))})
+    if all(checks.values()):
+        out.update({"accepted": True, "kind": "reconstructed"})
+    else:
+        out["reason"] = "recovery manifest check failed: " + ", ".join(k for k, v in checks.items() if not v)
+    return out
 
 
 def sha256_file(p: Path) -> str:
@@ -238,7 +297,7 @@ def locate_v5(root: Path) -> Optional[Path]:
             if f.lower() == "llama-server.exe":
                 p = Path(d) / f
                 try:
-                    if sha256_file(p) == V5_SHA256:
+                    if v5_identity(p)["accepted"]:
                         return p
                 except OSError:
                     continue
@@ -254,9 +313,13 @@ def cmd_run(a: argparse.Namespace) -> int:
     if ident["r5_runtime_sha256"] != bi["binaries"]["llama-server.exe"] or ident["ets_test_sha256"] != bi["binaries"]["argine-ets-test.exe"]:
         print("R5 runtime or test binary hash differs from BUILD-INFO.json: refusing to run"); return 2
     v5 = Path(a.v5_runtime) if a.v5_runtime else locate_v5(Path(a.v5_search_root))
-    if v5 is None or sha256_file(v5) != V5_SHA256:
-        print("llama-research-v5 runtime (sha256 %s) not found: refusing to run" % V5_SHA256); return 2
-    ident.update({"v5_runtime": str(v5), "v5_runtime_sha256": V5_SHA256, "model": a.model, "store": a.store})
+    v5id = v5_identity(v5) if v5 is not None and v5.is_file() else {"accepted": False, "reason": "not found"}
+    if not v5id["accepted"]:
+        print("llama-research-v5 runtime (historical sha256 %s, or the reconstruction frozen in V5-RECOVERY.json) not accepted: %s: "
+              "refusing to run" % (V5_SHA256, v5id.get("reason"))); return 2
+    print(f"llama-research-v5 comparator: {v5id['kind']} identity, sha256 {v5id['raw_sha256']}")
+    ident.update({"v5_runtime": str(v5), "v5_runtime_sha256": v5id["raw_sha256"], "v5_identity": v5id,
+                  "v5_historical_sha256": V5_SHA256, "model": a.model, "store": a.store})
     print("hashing model and store (read-only) ..."); sys.stdout.flush()
     ident.update({"model_sha256": sha256_file(Path(a.model)), "store_sha256": sha256_file(Path(a.store))})
     (out / "IDENTITY.json").write_text(json.dumps(ident, indent=1), encoding="utf-8")
@@ -386,6 +449,9 @@ def cmd_evaluate(a: argparse.Namespace) -> int:
     mf = json.loads((out / "WINDOWS_MODEL_FREE.json").read_text()) if (out / "WINDOWS_MODEL_FREE.json").exists() else {}
     sm = json.loads((out / "STARTUP_SMOKE.json").read_text()) if (out / "STARTUP_SMOKE.json").exists() else {}
     res = evaluate(recs, mf, sm)
+    ident = json.loads((out / "IDENTITY.json").read_text(encoding="utf-8")) if (out / "IDENTITY.json").exists() else {}
+    res["v5_reference"] = {k: (ident.get("v5_identity") or {}).get(k) for k in ("accepted", "kind", "raw_sha256", "pe_normalized_sha256")}
+    res["v5_reference"]["historical_raw_sha256"] = V5_SHA256
     (out / "G1_HOST_RESULT.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
     print(json.dumps({"verdict": res["verdict"], "criteria": res["criteria"]}, indent=1))
     return 0 if res["verdict"].endswith("PASS") else 1
