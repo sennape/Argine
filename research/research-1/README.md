@@ -12,7 +12,7 @@
 |---|---|
 | full Research 1 record (preserved README of the earlier repository) | [`RECORD.md`](RECORD.md) |
 | experiments | [`experiments/EXP-*`](../../experiments/INDEX.md) (registry: [`INDEX.md`](../../experiments/INDEX.md), [`index.json`](../../experiments/index.json)) |
-| manuscript | [`paper/main.tex`](../../paper/main.tex), [`paper/sections/`](../../paper/sections) — see [`papers/research-1`](../../papers/research-1/README.md) |
+| manuscript | [`paper/main.tex`](../../paper/main.pdf), [`paper/sections/`](../../paper/sections) — see [`papers/research-1`](../../papers/research-1/README.md) |
 | research notes | [`ARGINE2-MEMORY-CHARACTERIZATION.md`](../../ARGINE2-MEMORY-CHARACTERIZATION.md), [`docs/research/`](../../docs/research) |
 | toolchain | [`argine/research/`](../../argine/research), [`tools/`](../../tools), [`tests/`](../../tests) |
 | historical raw data and the external raw inventory | [`data/`](../../data), [`data/external_raw_manifest.csv`](../../data/external_raw_manifest.csv) |
