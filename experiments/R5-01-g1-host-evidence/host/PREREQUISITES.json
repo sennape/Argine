@@ -1,0 +1,7 @@
+{
+ "pass": true,
+ "stages": [
+  "windows_model_free",
+  "startup_smoke"
+ ]
+}

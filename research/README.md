@@ -8,6 +8,6 @@ Argine is one program in four closed research stages and one open one. This dire
 | Research 2 — oracle headroom, causal prediction, predictive retention | CLOSED / FROZEN | `R2_12_FAIL` for real-runtime throughput at 4 GiB; replay-level gains | [research-2](research-2/README.md) |
 | Research 3 — predictive retention in the real runtime | CLOSED / PUBLISHED | `R3_CLOSED_NEGATIVE_PREDICTIVE_RETENTION_NOT_VIABLE_IN_TESTED_REGIME` | [research-3](research-3/README.md) |
 | Research 4 — causal future-distance distillation | CLOSED | `R4_CFDC_CAUSAL_STATE_INSUFFICIENT` (`R4_CFDC_CLOSED`) | [research-4](research-4/README.md) |
-| Research 5 — exposed transfer stall (latency hiding) | OPEN — Phase 1a IMPLEMENTED; host conformance pending; evaluation LOCKED | none yet (`R5_ETS_PHASE1A_IMPLEMENTED`) | [research-5](research-5/README.md) |
+| Research 5 — exposed transfer stall (latency hiding) | OPEN — G1 host conformance PASSED (sealed); evaluation LOCKED | none yet (`R5_G1_HOST_CONFORMANCE_PASS` is a conformance gate, not a result) | [research-5](research-5/README.md) |
 
 Research 5 Phase 0 is frozen; its evaluation is locked. Verification commands: [`REPRODUCING.md`](../REPRODUCING.md).

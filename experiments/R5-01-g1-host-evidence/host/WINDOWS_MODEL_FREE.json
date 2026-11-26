@@ -1,0 +1,11 @@
+{
+ "returncode": 0,
+ "returncode_hex": "0x00000000",
+ "result_lines": 1,
+ "passed": 143,
+ "failed": 0,
+ "skipped": 3,
+ "unexpected_skip_count": false,
+ "stdout_tail": "R5 ETS model-free conformance (Windows OVERLAPPED backend)\n[1] mode parsing and fail-closed configuration\n[2] wait placement: layer and layer_touch wait for every kind at the first node, kind defers\n  SKIP (needs the POSIX deferred backend): kind: byte-level absence of up/down while gate computes\n[3] identical requests, bytes, residency, eviction sequence and LRU order across arms (1 thread, budget pressure)\n[4] multi-threaded (6 threads): correctness, budget, pending reads; totals equal without pressure\n[5] a read in flight is never evicted (budget pressure while up/down are pending)\n[6] hits introduce no wait\n[7] read errors are fatal at the node that waits for them (fail-closed)\n[8] layer boundaries, node order, kinds unknown at the first node\n[9] instrumentation: coherent, and unable to change scheduling decisions\n  SKIP (needs the POSIX deferred backend): deterministic background completion before a wait\n[10] orphan reads, follow-up mismatch (fail-closed), synchronous completions never hidden\n  SKIP (needs the POSIX deferred backend): synchronous POSIX completion check (Windows completions depend on the device)\n[11] thread exit: per-thread state destroyed once, on live storage (Windows heap-corruption regression)\n\nRESULT: 143 passed, 0 failed, 3 skipped\n",
+ "stderr_tail": "argine: research trace attiva: %USERPROFILE%\\AppData\\Local\\Argine\\r5\\phase1a-host-g1-v2\\ets-test-scratch/t3-layer.trace\nargine: research trace attiva: %USERPROFILE%\\AppData\\Local\\Argine\\r5\\phase1a-host-g1-v2\\ets-test-scratch/t3-layer_touch.trace\nargine: research trace attiva: %USERPROFILE%\\AppData\\Local\\Argine\\r5\\phase1a-host-g1-v2\\ets-test-scratch/t3-kind.trace\nargine: research trace attiva: %USERPROFILE%\\AppData\\Local\\Argine\\r5\\phase1a-host-g1-v2\\ets-test-scratch/t5.trace\nargine: research trace attiva: %USERPROFILE%\\AppData\\Local\\Argine\\r5\\phase1a-host-g1-v2\\ets-test-scratch/t9.trace\nargine: research trace attiva: %USERPROFILE%\\AppData\\Local\\Argine\\r5\\phase1a-host-g1-v2\\ets-test-scratch/t10.trace\nargine: research trace attiva: %USERPROFILE%\\AppData\\Local\\Argine\\r5\\phase1a-host-g1-v2\\ets-test-scratch/t11.trace\n"
+}

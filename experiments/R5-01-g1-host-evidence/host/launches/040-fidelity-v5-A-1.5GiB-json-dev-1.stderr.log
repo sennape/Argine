@@ -1,0 +1,59 @@
+0.00.015.706 I srv  llama_server: initializing ...
+0.00.015.706 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.015.706 W srv  llama_server: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)
+0.00.031.427 I srv    load_model: loading model 'C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf'
+argine: expert store aperto: C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs, 48 layer x 128 expert, budget 1536 MiB, 16 settori di cache, cache dell'OS scavalcata, lettura asincrono
+0.00.472.576 W load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.04.009.163 I cmn          init: llama threadpool init, n_threads = 12
+argine: expert store IN USO: primo nodo MoE servito (layer 0, blk.0.ffn_gate_exps.weight, 15 expert richiesti, 12 thread)
+0.05.556.161 I srv    load_model: initializing, n_slots = 4, n_ctx_slot = 4096, kv_unified = 'true'
+0.05.571.850 I srv  llama_server: model loaded
+0.05.571.850 I srv  llama_server: listening on http://127.0.0.1:18095
+0.06.509.988 I slot get_availabl: id  3 | task -1 | selected slot by LRU, t_last = -1
+0.06.509.988 I slot launch_slot_: id  3 | task 0 | processing task, is_child = 0
+0.39.012.185 I slot print_timing: id  3 | task 0 | n_gen =    100, tg =   3.36 t/s, tg_3s =   3.40 t/s
+0.42.111.821 I slot print_timing: id  3 | task 0 | n_gen =    111, tg =   3.38 t/s, tg_3s =   3.56 t/s
+0.45.167.459 I slot print_timing: id  3 | task 0 | n_gen =    121, tg =   3.37 t/s, tg_3s =   3.27 t/s
+0.48.461.806 I slot print_timing: id  3 | task 0 | n_gen =    132, tg =   3.37 t/s, tg_3s =   3.34 t/s
+0.51.678.662 I slot print_timing: id  3 | task 0 | n_gen =    143, tg =   3.37 t/s, tg_3s =   3.43 t/s
+0.54.898.193 I slot print_timing: id  3 | task 0 | n_gen =    155, tg =   3.40 t/s, tg_3s =   3.73 t/s
+0.58.145.990 I slot print_timing: id  3 | task 0 | n_gen =    167, tg =   3.42 t/s, tg_3s =   3.69 t/s
+1.01.211.333 I slot print_timing: id  3 | task 0 | n_gen =    178, tg =   3.43 t/s, tg_3s =   3.58 t/s
+1.04.258.724 I slot print_timing: id  3 | task 0 | n_gen =    188, tg =   3.42 t/s, tg_3s =   3.29 t/s
+1.07.311.579 I slot print_timing: id  3 | task 0 | n_gen =    198, tg =   3.41 t/s, tg_3s =   3.27 t/s
+1.10.417.634 I slot print_timing: id  3 | task 0 | n_gen =    208, tg =   3.40 t/s, tg_3s =   3.23 t/s
+1.13.504.981 I slot print_timing: id  3 | task 0 | n_gen =    219, tg =   3.41 t/s, tg_3s =   3.55 t/s
+1.16.504.261 I slot print_timing: id  3 | task 0 | n_gen =    229, tg =   3.41 t/s, tg_3s =   3.33 t/s
+1.19.784.479 I slot print_timing: id  3 | task 0 | n_gen =    240, tg =   3.41 t/s, tg_3s =   3.36 t/s
+1.22.788.917 I slot print_timing: id  3 | task 0 | n_gen =    250, tg =   3.40 t/s, tg_3s =   3.33 t/s
+1.26.062.284 I slot print_timing: id  3 | task 0 | n_gen =    260, tg =   3.39 t/s, tg_3s =   3.05 t/s
+1.29.098.712 I slot print_timing: id  3 | task 0 | n_gen =    270, tg =   3.38 t/s, tg_3s =   3.29 t/s
+1.32.248.333 I slot print_timing: id  3 | task 0 | n_gen =    281, tg =   3.39 t/s, tg_3s =   3.49 t/s
+1.35.309.229 I slot print_timing: id  3 | task 0 | n_gen =    292, tg =   3.40 t/s, tg_3s =   3.59 t/s
+1.38.480.554 I slot print_timing: id  3 | task 0 | n_gen =    302, tg =   3.39 t/s, tg_3s =   3.15 t/s
+1.41.602.050 I slot print_timing: id  3 | task 0 | n_gen =    312, tg =   3.38 t/s, tg_3s =   3.20 t/s
+1.44.823.675 I slot print_timing: id  3 | task 0 | n_gen =    322, tg =   3.37 t/s, tg_3s =   3.10 t/s
+1.47.978.464 I slot print_timing: id  3 | task 0 | n_gen =    333, tg =   3.37 t/s, tg_3s =   3.49 t/s
+1.51.257.740 I slot print_timing: id  3 | task 0 | n_gen =    345, tg =   3.38 t/s, tg_3s =   3.66 t/s
+1.54.497.903 I slot print_timing: id  3 | task 0 | n_gen =    356, tg =   3.38 t/s, tg_3s =   3.39 t/s
+1.57.508.164 I slot print_timing: id  3 | task 0 | n_gen =    366, tg =   3.38 t/s, tg_3s =   3.32 t/s
+2.00.590.474 I slot print_timing: id  3 | task 0 | n_gen =    376, tg =   3.38 t/s, tg_3s =   3.24 t/s
+2.03.754.576 I slot print_timing: id  3 | task 0 | n_gen =    386, tg =   3.37 t/s, tg_3s =   3.16 t/s
+2.06.875.320 I slot print_timing: id  3 | task 0 | n_gen =    397, tg =   3.38 t/s, tg_3s =   3.52 t/s
+2.10.168.591 I slot print_timing: id  3 | task 0 | n_gen =    409, tg =   3.38 t/s, tg_3s =   3.64 t/s
+2.13.313.209 I slot print_timing: id  3 | task 0 | n_gen =    420, tg =   3.39 t/s, tg_3s =   3.50 t/s
+2.16.382.203 I slot print_timing: id  3 | task 0 | n_gen =    430, tg =   3.38 t/s, tg_3s =   3.26 t/s
+2.19.486.848 I slot print_timing: id  3 | task 0 | n_gen =    440, tg =   3.38 t/s, tg_3s =   3.22 t/s
+2.22.526.260 I slot print_timing: id  3 | task 0 | n_gen =    450, tg =   3.38 t/s, tg_3s =   3.29 t/s
+2.25.763.833 I slot print_timing: id  3 | task 0 | n_gen =    461, tg =   3.38 t/s, tg_3s =   3.40 t/s
+2.28.792.836 I slot print_timing: id  3 | task 0 | n_gen =    471, tg =   3.38 t/s, tg_3s =   3.30 t/s
+2.32.105.931 I slot print_timing: id  3 | task 0 | n_gen =    481, tg =   3.37 t/s, tg_3s =   3.02 t/s
+2.35.258.869 I slot print_timing: id  3 | task 0 | n_gen =    491, tg =   3.36 t/s, tg_3s =   3.17 t/s
+2.38.283.589 I slot print_timing: id  3 | task 0 | n_gen =    501, tg =   3.36 t/s, tg_3s =   3.31 t/s
+2.41.539.882 I slot print_timing: id  3 | task 0 | n_gen =    511, tg =   3.36 t/s, tg_3s =   3.07 t/s
+2.41.811.043 I slot print_timing: id  3 | task 0 | prompt eval time =    3089.05 ms /    42 tokens (   73.55 ms per token,    13.60 tokens per second)
+2.41.811.043 I slot print_timing: id  3 | task 0 |        eval time =  152209.23 ms /   512 tokens (  297.87 ms per token,     3.36 tokens per second)
+2.41.811.043 I slot print_timing: id  3 | task 0 |       total time =  155298.28 ms /   554 tokens
+2.41.811.043 I slot print_timing: id  3 | task 0 |    graphs reused =        509
+2.41.811.043 I slot      release: id  3 | task 0 | stop processing: n_tokens = 553, truncated = 0
+2.41.959.974 I srv    operator(): operator(): cleaning up before exit...

@@ -1,0 +1,41 @@
+{
+ "version_returncode": 0,
+ "version_output": "version: 0.5.0-dev (build 1, commit 254b177)\nbuilt with GNU 10.0.0 for Windows x86_64\n",
+ "refusals": [
+  {
+   "name": "invalid-value",
+   "env": {
+    "ARGINE_EXPERT_WAIT": "deferred"
+   },
+   "served": false,
+   "returncode": 3,
+   "expected_message": "ARGINE_EXPERT_WAIT=deferred non riconosciuto",
+   "message_found": true,
+   "pass": true
+  },
+  {
+   "name": "kind-with-prefetch",
+   "env": {
+    "ARGINE_EXPERT_WAIT": "kind",
+    "ARGINE_PREFETCH": "2"
+   },
+   "served": false,
+   "returncode": 3,
+   "expected_message": "configurazione R5 non valida",
+   "message_found": true,
+   "pass": true
+  },
+  {
+   "name": "kind-with-blocco",
+   "env": {
+    "ARGINE_EXPERT_WAIT": "kind",
+    "ARGINE_EXPERT_READ": "blocco"
+   },
+   "served": false,
+   "returncode": 3,
+   "expected_message": "configurazione R5 non valida",
+   "message_found": true,
+   "pass": true
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+{
+ "r5_runtime": "%USERPROFILE%\\Desktop\\Argine\\llama-research-r5-ets-2\\llama-server.exe",
+ "r5_runtime_sha256": "da6e7183e44f6f69d58156cf683f5a929f16fc74bba442fdea39f139e4007493",
+ "ets_test_sha256": "0b8275a031ea100e58a970872fcaf92898bdcb97822f95a9f89964cd290f8ce6",
+ "r5_build_info": "llama-research-r5-ets-2\\BUILD-INFO.json",
+ "v5_runtime": "%USERPROFILE%\\Desktop\\Argine\\llama-research-v5-recovered\\llama-server.exe",
+ "v5_runtime_sha256": "1ed0f0037a56b14abb3b4ce6706e166c489f9166f6be6b22f491a39c1f521c12",
+ "v5_identity": {
+  "accepted": true,
+  "kind": "reconstructed",
+  "raw_sha256": "1ed0f0037a56b14abb3b4ce6706e166c489f9166f6be6b22f491a39c1f521c12",
+  "pe_normalized_sha256": "a3164821861a56dec259e1e977cdfc6c805bffd062a2ab379f7b4a02843c7815",
+  "checks": {
+   "manifest_verdict": true,
+   "manifest_review_accepts": true,
+   "manifest_keeps_historical_sha": true,
+   "raw_sha256": true,
+   "pe_normalized_sha256": true,
+   "source_identity": true,
+   "toolchain_identity": true,
+   "build_contract": true
+  },
+  "manifest_sha256": "30544f1c556bd0885a2af5ce1e5e55d4a38c261c380d191c44c5b54658b8763e"
+ },
+ "v5_historical_sha256": "65f445c42ac145765735984582691964181dd4dd8019f4519edac1fa315df26c",
+ "model": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf",
+ "store": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs",
+ "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+ "store_sha256": "fef943ae0bc017864a47d41c1fc90d422016045f7e8705b1d138b7defd8c5146"
+}

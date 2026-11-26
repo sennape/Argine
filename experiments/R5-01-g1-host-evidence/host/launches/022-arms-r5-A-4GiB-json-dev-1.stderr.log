@@ -1,0 +1,52 @@
+I srv  llama_server: initializing ...
+I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+W srv  llama_server: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)
+0.00.013.640 I srv    load_model: loading model 'C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf'
+argine: expert store aperto: C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs, 48 layer x 128 expert, budget 4096 MiB, 16 settori di cache, cache dell'OS scavalcata, lettura asincrono
+argine: attesa expert: layer (esplicita), ARGINE_PREFETCH=0, schema r5-ets-v1
+0.00.577.639 W load: control-looking token: 128247 '</s>' was not control-type; this is probably a bug in the model. its type will be overridden
+0.04.268.370 I cmn          init: llama threadpool init, n_threads = 12
+argine: expert store IN USO: primo nodo MoE servito (layer 0, blk.0.ffn_gate_exps.weight, 15 expert richiesti, 12 thread)
+0.05.874.668 I srv    load_model: initializing, n_slots = 4, n_ctx_slot = 4096, kv_unified = 'true'
+0.05.894.761 I srv  llama_server: model loaded
+0.05.894.761 I srv  llama_server: listening on http://127.0.0.1:18095
+0.06.482.897 I slot get_availabl: id  3 | task -1 | selected slot by LRU, t_last = -1
+0.06.482.897 I slot launch_slot_: id  3 | task 0 | processing task, is_child = 0
+0.31.879.771 I slot print_timing: id  3 | task 0 | n_gen =    100, tg =   4.50 t/s, tg_3s =   4.54 t/s
+0.34.988.360 I slot print_timing: id  3 | task 0 | n_gen =    115, tg =   4.54 t/s, tg_3s =   4.81 t/s
+0.38.161.088 I slot print_timing: id  3 | task 0 | n_gen =    130, tg =   4.56 t/s, tg_3s =   4.74 t/s
+0.41.395.353 I slot print_timing: id  3 | task 0 | n_gen =    144, tg =   4.53 t/s, tg_3s =   4.32 t/s
+0.44.588.255 I slot print_timing: id  3 | task 0 | n_gen =    158, tg =   4.52 t/s, tg_3s =   4.38 t/s
+0.47.635.487 I slot print_timing: id  3 | task 0 | n_gen =    172, tg =   4.53 t/s, tg_3s =   4.61 t/s
+0.50.773.276 I slot print_timing: id  3 | task 0 | n_gen =    186, tg =   4.52 t/s, tg_3s =   4.46 t/s
+0.53.851.789 I slot print_timing: id  3 | task 0 | n_gen =    200, tg =   4.52 t/s, tg_3s =   4.55 t/s
+0.56.894.214 I slot print_timing: id  3 | task 0 | n_gen =    213, tg =   4.51 t/s, tg_3s =   4.28 t/s
+1.00.013.837 I slot print_timing: id  3 | task 0 | n_gen =    226, tg =   4.49 t/s, tg_3s =   4.17 t/s
+1.03.086.747 I slot print_timing: id  3 | task 0 | n_gen =    239, tg =   4.47 t/s, tg_3s =   4.23 t/s
+1.06.298.570 I slot print_timing: id  3 | task 0 | n_gen =    253, tg =   4.47 t/s, tg_3s =   4.36 t/s
+1.09.423.721 I slot print_timing: id  3 | task 0 | n_gen =    265, tg =   4.43 t/s, tg_3s =   3.84 t/s
+1.12.420.228 I slot print_timing: id  3 | task 0 | n_gen =    277, tg =   4.41 t/s, tg_3s =   3.99 t/s
+1.15.516.369 I slot print_timing: id  3 | task 0 | n_gen =    291, tg =   4.42 t/s, tg_3s =   4.54 t/s
+1.18.561.161 I slot print_timing: id  3 | task 0 | n_gen =    304, tg =   4.41 t/s, tg_3s =   4.27 t/s
+1.21.670.942 I slot print_timing: id  3 | task 0 | n_gen =    317, tg =   4.40 t/s, tg_3s =   4.18 t/s
+1.24.893.647 I slot print_timing: id  3 | task 0 | n_gen =    330, tg =   4.38 t/s, tg_3s =   4.03 t/s
+1.28.035.952 I slot print_timing: id  3 | task 0 | n_gen =    344, tg =   4.39 t/s, tg_3s =   4.46 t/s
+1.31.269.481 I slot print_timing: id  3 | task 0 | n_gen =    358, tg =   4.39 t/s, tg_3s =   4.33 t/s
+1.34.284.334 I slot print_timing: id  3 | task 0 | n_gen =    372, tg =   4.39 t/s, tg_3s =   4.64 t/s
+1.37.332.440 I slot print_timing: id  3 | task 0 | n_gen =    384, tg =   4.38 t/s, tg_3s =   3.94 t/s
+1.40.579.717 I slot print_timing: id  3 | task 0 | n_gen =    397, tg =   4.37 t/s, tg_3s =   4.00 t/s
+1.43.782.002 I slot print_timing: id  3 | task 0 | n_gen =    411, tg =   4.37 t/s, tg_3s =   4.37 t/s
+1.46.990.243 I slot print_timing: id  3 | task 0 | n_gen =    425, tg =   4.37 t/s, tg_3s =   4.36 t/s
+1.50.121.692 I slot print_timing: id  3 | task 0 | n_gen =    439, tg =   4.37 t/s, tg_3s =   4.46 t/s
+1.53.175.882 I slot print_timing: id  3 | task 0 | n_gen =    451, tg =   4.36 t/s, tg_3s =   3.94 t/s
+1.56.346.494 I slot print_timing: id  3 | task 0 | n_gen =    465, tg =   4.36 t/s, tg_3s =   4.42 t/s
+1.59.477.444 I slot print_timing: id  3 | task 0 | n_gen =    479, tg =   4.36 t/s, tg_3s =   4.47 t/s
+2.02.485.652 I slot print_timing: id  3 | task 0 | n_gen =    491, tg =   4.35 t/s, tg_3s =   3.98 t/s
+2.05.547.876 I slot print_timing: id  3 | task 0 | n_gen =    504, tg =   4.35 t/s, tg_3s =   4.25 t/s
+2.07.439.540 I slot print_timing: id  3 | task 0 | prompt eval time =    3378.11 ms /    42 tokens (   80.43 ms per token,    12.43 tokens per second)
+2.07.439.540 I slot print_timing: id  3 | task 0 |        eval time =  117576.90 ms /   512 tokens (  230.09 ms per token,     4.35 tokens per second)
+2.07.439.540 I slot print_timing: id  3 | task 0 |       total time =  120955.01 ms /   554 tokens
+2.07.439.540 I slot print_timing: id  3 | task 0 |    graphs reused =        509
+2.07.439.540 I slot      release: id  3 | task 0 | stop processing: n_tokens = 553, truncated = 0
+2.07.593.046 I srv    operator(): operator(): cleaning up before exit...
+argine: r5_counters {"schema":"r5-ets-v1","expert_wait":"layer","explicit":1,"read_mode":"asincrono","prefetch":"0","hits":1631108,"misses":175147,"evictions":170653,"bytes_read":167731826688,"violations":0,"budget":4294967296,"moe_nodes":74016,"deferred_reads":0,"deferred_bytes":0,"touches":0,"issued_followup":0,"orphan_pending":0,"pending_at_event_end":0,"first_nodes":0,"followup_nodes":0,"followup_mismatch":0,"touch_missing":0,"drained_at_thread_exit":0}

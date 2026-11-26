@@ -1,0 +1,41 @@
+{
+ "artifact": "R5-01-G1-HOST-RESULT",
+ "verdict": "R5_G1_HOST_CONFORMANCE_PASS",
+ "criteria": {
+  "windows_model_free_tests": true,
+  "startup_smoke_and_fail_closed": true,
+  "all_launches_complete": true,
+  "all_launches_512_tokens": true,
+  "graceful_shutdown": true,
+  "arm_identity_echoed": true,
+  "one_counter_record_per_launch": true,
+  "zero_budget_violations": true,
+  "zero_pending_reads_at_event_boundaries": true,
+  "zero_fail_closed_and_drain_events": true,
+  "identical_tokens_all_arms_budgets_and_v5": true,
+  "scheduling_purity_1pct": true,
+  "bookkeeping_control_exercised": true,
+  "bookkeeping_identical_C0_C": true,
+  "kind_arm_defers": true,
+  "baseline_fidelity_within_2pct": true,
+  "instrumentation_complete": true
+ },
+ "missing_or_failed_slots": [],
+ "baseline_fidelity": {
+  "v5_mean_ms_per_token": 291.4857412109375,
+  "r5_A_mean_ms_per_token": 290.81065478515626,
+  "relative_slowdown": -0.002316018694350719
+ },
+ "trace_overhead_same_arm": {
+  "B_vs_A": 0.026405841443610356,
+  "C_I_vs_C": -0.0942886693317232
+ },
+ "note": "Development prompts only. No timing contrast between C or C0 and A is computed. H (Phase 1b) is not computed.",
+ "v5_reference": {
+  "accepted": true,
+  "kind": "reconstructed",
+  "raw_sha256": "1ed0f0037a56b14abb3b4ce6706e166c489f9166f6be6b22f491a39c1f521c12",
+  "pe_normalized_sha256": "a3164821861a56dec259e1e977cdfc6c805bffd062a2ab379f7b4a02843c7815",
+  "historical_raw_sha256": "65f445c42ac145765735984582691964181dd4dd8019f4519edac1fa315df26c"
+ }
+}

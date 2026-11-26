@@ -1,0 +1,5 @@
+[32mI [0msrv  llama_server: initializing ...
+[32mI [0mcmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+[35mW srv  llama_server: security: no API key is set and CORS allows all origins (see https://github.com/ggml-org/llama.cpp/pull/25655)
+[0m[34m0.00.015.816[0m [32mI [0msrv    load_model: loading model 'C:\modelli\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf'
+/root/r5/fbuild/llama.cpp/ggml/src/ggml-cpu/argine-experts.cpp:456: argine: configurazione R5 non valida: ARGINE_EXPERT_WAIT=layer_touch|kind richiede ARGINE_EXPERT_READ=asincrono (il percorso di base congelato da R5)
