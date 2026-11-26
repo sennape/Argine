@@ -1,0 +1,122 @@
+{
+ "artifact": "R5-02-PHASE1B-PROTOCOL",
+ "decision": {
+  "fail_label": "R5_NO_MEANINGFUL_OVERLAP_HEADROOM",
+  "fail_means": "R5_NO_MEANINGFUL_OVERLAP_HEADROOM: the direction is closed before evaluation; the evaluation is never opened",
+  "inclusive": true,
+  "never": [
+   "recompute H with another definition",
+   "change the threshold",
+   "add launches or prompts",
+   "describe H as a gain"
+  ],
+  "pass_label": "R5_G2_HEADROOM_GATE_PASS",
+  "pass_means": "Phase 2 MAY be opened by its own, separate, later step; nothing is opened here",
+  "threshold": 0.04
+ },
+ "estimator": {
+  "differs_from_phase1a_draft": "experiments/R5-01-ets-implementation/ets_trace.py metrics_from_log (never used to compute an H) clips T_tail to the union of all threads' wait windows and lets synchronous reads extend the tail; both can exceed the critical-path wait. headroom.py is the Phase 1b estimator; the draft is not used for G2.",
+  "implementation": "experiments/R5-02-headroom-gate/headroom.py (launch_h, decide)",
+  "independent_review": "an independent reviewer challenged bound validity, double counting, causality, tracing bias, critical path, endpoint consistency and outcome dependence before acquisition; the 4 material findings (critical-wait thread choice, thread-id rule, readiness binding, rerun policy) were resolved; a second review found 2 more (flag-2 gate reads shrinking H; a seen-then-interrupted slot being rerun and overwritten), resolved by the issue-time rule above and the rerun rules below; the second reviewer then ACCEPTED, and its one residual minor gap (raw trace on disk before it is logged) was closed by trace_received and the traces/ accounting",
+  "operational_choices": [
+   "critical-path wait interval of the first node = [wait_start, wait_end] of the thread whose wait ENDS LAST (ties -> the longer wait): the node cannot exit before that thread, so only that interval is on the critical path. first_node_wait = the maximum over threads of wait_end - wait_start; invariant H_layer <= first_node_wait (asserted)",
+   "c_first = latest completion of a read of the first node's kind issued at the first node (or the critical wait start if there is none); c_all = latest completion of a read issued at the first node that is not flagged SYNCHRONOUS (4), FALLBACK (8) or SYNC_IN_ISSUE (16); T_tail = max(0, min(c_all, wait_end) - max(c_first, wait_start))",
+   "W = max(0, min hook_in of the layer's last expert node - max hook_out of the first node): the compute window in which the deferred reads could at best be hidden",
+   "H_layer = min(T_tail, W); exactly one value per decode layer event, so overlapping or simultaneous reads are never summed (read/read overlap is not read/compute overlap); the union of all threads' wait windows is never used",
+   "reads issued at the first node = I records of the layer whose issue time lies in the first node's window [min hook_in, max hook_out]; every read must be attributable to exactly one node window, else the trace is invalid",
+   "reads flagged 4, 8 or 16 never extend the tail (paid synchronously, never hideable); a bounded completion (flag 2, recorded time = an upper bound) is taken at its optimistic end on each side: the recorded time for c_all and the issue time for c_first, so a late poll never shrinks H",
+   "thread identity: every node has exactly 12 T records with 12 distinct thread ids, the same id set in every node; every I record's thread id is in that set (arx_thread_id is shared by a thread's T and I records; ids need not start at 0)",
+   "decode tokens = decode graphs of the trace (router records with n_tokens = 1) and must equal predicted_n - 1 = 511",
+   "H = (sum over the 8 launches of sum H_layer, in ms) / (sum over the 8 launches of predicted_ms): the share of the measured decode time (WORKLOADS decode_metric_source) that is at best hideable",
+   "G2: H >= 1/25 in exact rational arithmetic (inclusive at exactly 4%)",
+   "every per-launch H fraction is reported with the pooled H; only the pooled H decides",
+   "telemetry is validated (pass/fail only, no H) right after every launch, warmup included, so an invalid trace stops the acquisition at once instead of after 9 launches"
+  ],
+  "telemetry_fail_closed": "unparseable records, wrong schema or arm, missing thread records, incoherent records, failed or unattributable reads, missing first node, single-node events, decode-graph mismatch, truncated or undecodable files: no H is computed"
+ },
+ "frozen_texts_quoted": {
+  "G2_headroom": "one-shot: H from the 8 pre-declared B launches on the frozen binary >= 0.04. Otherwise R5_NO_MEANINGFUL_OVERLAP_HEADROOM and the evaluation is never opened. H is not recomputed.",
+  "IMPLEMENTATION_FREEZE": "before G2: source hashes, binary hash, model and store hashes, and the list of implementation choices (wait primitive, handle-release point, barrier placement, pin-release point, touch order, trace record layout) are frozen; no change afterwards; every development timing comparison run before the freeze is appended to a committed development log",
+  "anti_rescue": [
+   "only R5_POSITIVE_RUNTIME_IMPROVEMENT may be described as an improvement; every other label is reported as a negative or uninterpretable outcome, never as a partial success",
+   "no secondary endpoint, subset, prompt, budget, thread count or tracing configuration can upgrade the classification",
+   "no second scheduler variant, no parameter, no new prompt and no new budget after the freeze",
+   "the oracle bound H is never reported as an achievable gain",
+   "the evaluation is opened once; reruns only under blame_rules",
+   "no optional stopping: block counts are constants of this contract",
+   "no outlier removal, imputation, reordering or data-driven exclusion"
+  ],
+  "cooldown_between_launches_s": 10,
+  "critical_path_rule": "Every per-node time is taken on the critical path: a node starts when the first thread enters the hook and its store phase ends when the last thread leaves the hook (max over threads); a per-node wait is the maximum over threads of that thread's wait in that node. Thread 0 alone, means over threads and sums over threads are never used for a mechanism endpoint.",
+  "headroom_bound_H": {
+   "definition": "for every decode layer event: T_tail = time from the latest completion (over threads) of a first-node-kind read to the latest completion of any read issued at the first node, clipped to the first node's critical-path wait interval; W = gap from the last thread leaving the first node's hook to the first thread entering the hook of the layer's last expert node; H_layer = min(T_tail, W). H = sum of H_layer / decode tokens, expressed as a fraction of the mean decode ms/token of the same 8 launches.",
+   "interpretation": "an optimistic, loose upper bound on what moving the wait can hide (ignores interference); an opening gate only, never a result",
+   "source": "computed ONCE, after the implementation freeze, from exactly 8 B launches (each of the four development prompts twice) at 1.5 GiB on the frozen binary; every H value ever computed in R5 is reported"
+  },
+  "headroom_gate": 0.04,
+  "host_conditions": "AC power; same Windows power plan; background applications closed; Defender scheduled scans and Windows Update paused for the campaign; host record per launch (INSTRUMENTATION.json); no data-driven exclusion",
+  "launch": {
+   "context": 4096,
+   "decode_metric_source": "llama.cpp server timings predicted_ms / predicted_n",
+   "ignore_eos": true,
+   "ignore_eos_why": "evaluation prompts cannot be inspected in advance; without it an early end-of-sequence would make predicted_n < 512 and invalidate every arm by design",
+   "n_predict": 512,
+   "process": "one fresh server process per launch",
+   "seed": 42,
+   "temperature": 0,
+   "threads": 12,
+   "threads_batch": 12,
+   "threads_why": "EXP-027: 12 generation threads were the fastest measured setting for the 30B model; fixed, never tuned in R5",
+   "top_k": 1
+  },
+  "model_identity": "file SHA-256 of gguf and psxs recorded at the implementation freeze and checked at every launch",
+  "phase1b": "one-shot headroom gate G2 from 8 pre-declared B launches on the frozen binary",
+  "threshold_justification_H": "twice the MEI; realised hiding is a fraction of this optimistic bound, so below 4% there is no realistic way to pass the primary gate. Failing it only closes the direction early.",
+  "warmup_convention": "one uncounted launch per campaign with the first arm of block 1 and the identical environment, then 60 s cooldown; recorded, never used"
+ },
+ "outputs": {
+  "disk_estimate": "raw trace about 0.24 GB per launch (G1 traced B launch: 236 MB), one at a time; kept gzip traces about 35-60 MB each (ratio about 0.15-0.25 on real-format traces), about 0.3-0.5 GB for 8; logs about 1 MB. 2 GB free required.",
+  "duration_estimate": "ESTIMATE: about 4-5 min per launch (G1 averaged 2.5 min per launch; plus tracing, model/store hashing before every launch, trace structure and gzip, cooldown) x 9 launches, plus about 5 min for the one-shot analysis: roughly 45-75 min in total",
+  "in_output_directory": [
+   "IDENTITY_1B.json",
+   "PHASE1B_LOG.jsonl (one record per launch)",
+   "launches/*.log",
+   "traces/*.trace.gz (the 8 counted traces, kept; SHA-256 in the log)",
+   "G2_RESULT.json (once)",
+   "ACQUISITION_STOPPED.json (only if stopped)"
+  ]
+ },
+ "preconditions": [
+  "R5-00 phase0 verify passes",
+  "G1 sealed (g1_seal verify) with R5_G1_HOST_CONFORMANCE_PASS",
+  "no Phase 1b result committed or present in the output directory (one-shot)",
+  "R5 runtime SHA-256 = IMPLEMENTATION_FREEZE = host_conformance R5_AUTHORIZED",
+  "development prompts only (evaluation ids are refused)",
+  "at least 2 GB free in the output directory",
+  "Phase 1b readiness verifies; its digest and the estimator, driver and protocol hashes are recorded in IDENTITY_1B.json and re-checked before H is computed",
+  "no other Phase 1b campaign marker on the host; an existing output directory must have the same identity"
+ ],
+ "question": "Does the frozen R5 runtime's baseline (arm B: layer wait, traced) leave enough expert-transfer wait on the decode critical path, hideable behind the compute that follows the first expert node of each layer, to justify opening Phase 2? Operationally: is the optimistic bound H >= 4% of decode time (G2)?",
+ "schedule": {
+  "arm": "B = ARGINE_EXPERT_WAIT=layer (explicit), ARGINE_RESEARCH_TRACE on, ARGINE_PREFETCH=0, asincrono, direct I/O",
+  "budget": "1.5 GiB (1610612736 bytes)",
+  "cooldown_s": 10,
+  "counted_launches": 8,
+  "counted_order": [
+   "code-dev-1",
+   "nl-dev-1",
+   "math-dev-1",
+   "json-dev-1",
+   "json-dev-1",
+   "math-dev-1",
+   "nl-dev-1",
+   "code-dev-1"
+  ],
+  "invalid_launch": "the acquisition stops (no H). R5-00 blame_rules: a failed B launch is attributed to the campaign; one rerun of that slot only with --rerun-infrastructure CAUSE (power, windows-update-or-defender, disk-full, operator-interruption) --evidence FILE (hashed into the log); a second failure of the same slot aborts the campaign and G2 stays undecided. A counted trace is kept under an attempt-numbered name and its hash logged before any post-launch work; an attempt interrupted after that point cannot be rerun for operator-interruption; every superseded kept trace is reported in G2_RESULT (never deciding), and a missing or altered one blocks the gate. A trace_received record is logged as soon as the runtime's raw trace is handed over (interruptions from then on count as after the trace); a raw trace left in traces/ is analyzed and reported (never deciding), and any other unaccounted file blocks the gate. An attempt without a launch record counts as a failure. Every (re)start begins with a fresh uncounted warmup. A campaign marker in %LOCALAPPDATA%\\Argine\\r5 refuses a second output directory.",
+  "launch": "one fresh server process per launch; 512 greedy tokens (ignore_eos, temperature 0, top_k 1, seed 42), 12 threads, context 4096 (host_conformance.py run_launch, unchanged)",
+  "per_launch_checks": "model and store SHA-256 against the IMPLEMENTATION_FREEZE before the first launch of every (re)start and after every launch; AC power before every launch and in the host record after it (unknown = stop); host record before and after; telemetry validation; launch validity (512 tokens, graceful shutdown, one counter record, explicit layer arm, prefetch 0, budget, 0 violations / pending / drain / deferred reads, trace structure complete, 511 decode graphs)",
+  "warmup": "1 uncounted B launch with code-dev-1 (SCHEDULE warmup convention), structure recorded, trace deleted, never used; then 60 s cooldown"
+ },
+ "scope": "development prompts only; one-shot; no scheduler variant; no Phase 2 artifact; H is never an achievable gain",
+ "state": "R5_PHASE1B_ACQUISITION_READY"
+}

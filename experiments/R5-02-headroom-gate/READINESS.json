@@ -1,0 +1,24 @@
+{
+ "artifact": "R5-02-PHASE1B-READINESS",
+ "eval_state": "LOCKED",
+ "g1_freeze_sha256": "3827b5a1cf1745869186a79ed50f335f9c6583ab69ca6611dc7f6e633deebce5",
+ "g2_computed": false,
+ "phase0": {
+  "contract_digest": "9d480ccf1b5109fa9be6cd717261e824876122e1ec504a3ccd85e0e30e619e52",
+  "freeze_sha256": "21ed630b638ca56a19b6a392a6ce1e47782dcd4351b178d523d5e28a6c7f63ee"
+ },
+ "protocol_lf_sha256": "de9f96e4329944173028a48baae18a6dff54d65c270fbb5ee4688cd2503240ab",
+ "readiness_sha256": "a0f773ab5826e4d705c13e9ea8a48abd2c5e4400957f29e52c4ab56469a3f274",
+ "sources_lf_sha256": {
+  "../R5-01-ets-implementation/ets_trace.py": "37a29ec7b28ccb289c2f2a58eee2a1f2bcbdcaa2c4fb17e664fa8850a54c0cfc",
+  "../R5-01-ets-implementation/host_conformance.py": "50380683b5f44ba2a7e88d74f2b68167464ca697fd4672866c51f3b7a809e876",
+  "README.md": "84237e1a86399126482102c805e4fce208602c6a9be188d5f917927687f940f1",
+  "acquire.py": "c2598fadb06aa24b6b478b62f9e3cb8af44223eb6f8ad823d28cff79fb3d2e85",
+  "headroom.py": "7e380692cbe95ed4a7189bfe0048566b2c613f4f2ccf555a11b852d8942f20ea",
+  "phase1b.py": "79cfe6c201bb828c8d54e0926d1b2962ca05f90bf80bdbf3da503360eb2bb0f6",
+  "tests/test_acquire.py": "b3551710bf7da0b8c8bf5448234ccd284123b40ebae99229c0395cf216320d2f",
+  "tests/test_headroom.py": "c6c84d50577bfdde7afdd8c3f30da9a5a8bd56666aaa123b4330d3ecbd9d473b",
+  "tests/test_phase1b.py": "fec4430da9f873adccbac1d4d1e644a169b039cad6345a4b03773b4e8b84b82c"
+ },
+ "state": "R5_PHASE1B_ACQUISITION_READY"
+}
