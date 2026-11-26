@@ -80,7 +80,7 @@ class VerifierIsolation(unittest.TestCase):
     def test_verify_all_passes_and_leaves_caller_clean(self):
         r = subprocess.run([sys.executable, "shared/tooling/verify_all.py", "--skip-unittest"], cwd=self.caller, env=self.env, capture_output=True, text=True)
         self.assertEqual(r.returncode, 0, r.stdout[-3000:] + r.stderr[-2000:])
-        for name in ["R3 closure", "R3 paper", "R4 paper", "R4 Phase 0", "R4 Phase 1", "R4 Phase 2", "R5 Phase 0", "R5 Phase 1a", "R5 G1 seal", "R5 Phase 1b", "R5 G2 seal", "R1 registry", "R2 paper freeze", "README index", "links", "consolidation"]:
+        for name in ["R3 closure", "R3 paper", "R4 paper", "R4 Phase 0", "R4 Phase 1", "R4 Phase 2", "R5 Phase 0", "R5 Phase 1a", "R5 G1 seal", "R5 Phase 1b", "R5 G2 seal", "R5 Phase 2 readiness", "R1 registry", "R2 paper freeze", "README index", "links", "consolidation"]:
             self.assertIn("PASS " + name, r.stdout)
         self.assertEqual(_git(self.caller, "status", "--porcelain").stdout, "")
 

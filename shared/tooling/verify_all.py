@@ -28,6 +28,7 @@ FROZEN = [
     ("R5 G1 seal", "experiments/R5-01-g1-host-evidence/g1_seal.py", ["verify"]),
     ("R5 Phase 1b", "experiments/R5-02-headroom-gate/phase1b.py", ["verify"]),
     ("R5 G2 seal", "experiments/R5-02-g2-host-evidence/g2_seal.py", ["verify"]),
+    ("R5 Phase 2 readiness", "experiments/R5-03-prospective-evaluation/phase2.py", ["verify"]),
     ("R2 paper freeze", "paper/research2/scripts/verify_paper_freeze.py", []),
 ]
 PLAIN = [
@@ -51,7 +52,7 @@ def main() -> int:
         results.append((name, subprocess.run([sys.executable, *cmd], cwd=str(ROOT)).returncode))
     if "--skip-unittest" not in sys.argv:
         results.append(("unittest (R1/R2, env-dependent)", subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests"], cwd=str(ROOT)).returncode))
-    order = ["R3 closure", "R3 paper", "R4 paper", "R4 Phase 0", "R4 Phase 1", "R4 Phase 2", "R5 Phase 0", "R5 Phase 1a", "R5 G1 seal", "R5 Phase 1b", "R5 G2 seal", "R1 registry", "R2 paper freeze", "README index", "links", "consolidation"]
+    order = ["R3 closure", "R3 paper", "R4 paper", "R4 Phase 0", "R4 Phase 1", "R4 Phase 2", "R5 Phase 0", "R5 Phase 1a", "R5 G1 seal", "R5 Phase 1b", "R5 G2 seal", "R5 Phase 2 readiness", "R1 registry", "R2 paper freeze", "README index", "links", "consolidation"]
     results.sort(key=lambda r: order.index(r[0]) if r[0] in order else len(order))
     print()
     for name, rc in results:

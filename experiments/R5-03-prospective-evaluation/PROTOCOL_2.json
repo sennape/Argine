@@ -1,0 +1,903 @@
+{
+ "arm_realisation": {
+  "A": "ARGINE_EXPERT_WAIT=layer, untraced",
+  "B": "layer, ARGINE_RESEARCH_TRACE",
+  "C": "kind, untraced",
+  "C0_I": "layer_touch, ARGINE_RESEARCH_TRACE",
+  "C_I": "kind, ARGINE_RESEARCH_TRACE",
+  "binary": "the single frozen R5 runtime llama-research-r5-ets-2/llama-server.exe (IMPLEMENTATION_FREEZE)",
+  "environment": "host_conformance.build_env unchanged (asincrono, direct I/O, ARGINE_PREFETCH=0, budget bytes of the campaign); host_conformance.run_launch unchanged (one fresh server process, 512 greedy tokens, 12 threads, seed 42)"
+ },
+ "artifact": "R5-03-PHASE2-PROTOCOL",
+ "counts_confirmed_against_the_contract": {
+  "blocks": {
+   "mechanism_1.5GiB": 12,
+   "timing_1.5GiB": 20,
+   "timing_4GiB": 20
+  },
+  "counted_total": 196,
+  "per_campaign": {
+   "mechanism_1.5GiB": 36,
+   "timing_1.5GiB": 80,
+   "timing_4GiB": 80
+  },
+  "traced_counted": 36,
+  "warmups_minimum": 3
+ },
+ "disclosures": {
+  "G2": "H = 0.0844 of decode time is an optimistic opening bound, never an expected or achieved gain",
+  "deviation_from_blame_rules": "STRICTER than the frozen blame_rules ('a slot failed for an infrastructure cause may be rerun once'): a slot whose failed attempt produced outcome information is never rerun, even for a genuine, corroborated infrastructure cause; this can only move the result toward a negative or invalid label, never toward an improvement, and prevents outcome-dependent repetition",
+  "evidence_files": "the opening record and the campaign marker are host files; their uniqueness rests on committing them with the sealed Phase 2 evidence",
+  "host_corroboration_untested_here": "the event-log, AC-power and boot queries run only on Windows; the tests exercise them through mocks",
+  "resume_warmup": "a resume warmup uses the next slot's arm, so after a resume that slot's predecessor launch differs from the schedule's (for example C then C instead of A then C); uncounted, the same for every arm, pre-declared",
+  "stale_lock_race": "two runs started at the same moment over a stale lock have a very narrow race; start one run",
+  "superseded_phase1b_assertion": "the frozen Phase 1b test test_phase1b.py::test_no_phase2_artifact asserts (1) no evaluation-opening file exists and (2) no experiments/R5-03* directory exists. (1) still holds. (2) recorded the pre-G2 state 'Phase 2 not prepared' and fails by design now that G2 is sealed PASS and Phase 2 is prepared here; the test is hashed into the Phase 1b readiness (a0f773ab...) bound by the G2 seal, so it is not edited",
+  "torn_log_line": "a power loss during an append can leave a torn last log line; `run` moves it to PHASE2_LOG.torn.N.txt and logs the repair; a torn launch or result record leaves its attempt open and it is then treated by the rules above",
+  "tracing": "B, C0_I and C_I are traced; tracing perturbs timing (EXP-024); traced arms are compared only with each other",
+  "unrecoverable_window": "a crash in the few seconds between the server printing its request timings and the saved launch result (server shutdown), or between the trace hand-over and the saved result, cannot be completed and, because an outcome may have been visible, cannot be rerun: the slot's failure stands and `finalize` attributes it (C-family: BLOCKED; A/B: R5_INVALID); this trades a small risk of losing the campaign for the absence of any outcome-dependent repetition",
+  "v5_comparator": "G1 baseline fidelity used the reconstructed llama-research-v5 comparator, not the lost original; Phase 2 does not use v5 (all arms run the frozen R5 binary)"
+ },
+ "estimates": {
+  "disk": "36 kept gzip traces of about 47-49 MB each (about 1.8 GB) + one raw trace at a time (about 0.24 GB) + logs (about 20 MB): about 2.1 GB; at least 4 GB free required",
+  "duration": "ESTIMATE from the Phase 1b host log (traced launch about 155 s plus about 3-4 min of post-processing and hashing): mechanism 37-38 traced launches x 5.5-7 min = about 3.5-4.5 h; timing 162 untraced launches x 3.5-5 min (launch about 2.5 min, model/store hashing, 10 s cooldown) = about 9.5-13.5 h; total about 13-18 h, possibly over several sessions (PAUSE between launches)"
+ },
+ "eval_state": "LOCKED",
+ "frozen_texts_quoted": {
+  "anti_rescue": [
+   "only R5_POSITIVE_RUNTIME_IMPROVEMENT may be described as an improvement; every other label is reported as a negative or uninterpretable outcome, never as a partial success",
+   "no secondary endpoint, subset, prompt, budget, thread count or tracing configuration can upgrade the classification",
+   "no second scheduler variant, no parameter, no new prompt and no new budget after the freeze",
+   "the oracle bound H is never reported as an achievable gain",
+   "the evaluation is opened once; reruns only under blame_rules",
+   "no optional stopping: block counts are constants of this contract",
+   "no outlier removal, imputation, reordering or data-driven exclusion"
+  ],
+  "arms": {
+   "A": {
+    "ARGINE_EXPERT_WAIT": "layer",
+    "ARGINE_RESEARCH_TRACE": "<unset>",
+    "definition": "today's asincrono LRU path, code path unchanged: all kinds waited for at the first expert node; later nodes release and re-acquire the slices as hits",
+    "role": "baseline: current runtime behaviour",
+    "used_in": [
+     "timing"
+    ]
+   },
+   "B": {
+    "ARGINE_EXPERT_WAIT": "layer",
+    "ARGINE_RESEARCH_TRACE": "1",
+    "definition": "A with the research trace on; supplies the one-shot headroom bound (Phase 1b, development prompts) and the mechanism reference (Phase 2)",
+    "role": "traced baseline",
+    "used_in": [
+     "headroom",
+     "mechanism"
+    ]
+   },
+   "C": {
+    "ARGINE_EXPERT_WAIT": "kind",
+    "ARGINE_RESEARCH_TRACE": "<unset>",
+    "definition": "issue exactly as A at the first expert node; wait only for the kind this node consumes; at each later node of the same layer wait only for that node's kind and LRU-touch the layer's slices in A's order; the layer's pins are held until the next layer's first expert node",
+    "parameters": "none",
+    "role": "causal deferred-wait scheduler (the tested intervention)",
+    "used_in": [
+     "timing"
+    ],
+    "uses_only": "the router decision of the current layer (already used by A)"
+   },
+   "C0_I": {
+    "ARGINE_EXPERT_WAIT": "layer_touch",
+    "ARGINE_RESEARCH_TRACE": "1",
+    "definition": "C's code path (pins held for the layer, later nodes LRU-touch instead of re-acquire) but every thread waits for ALL its reads at the first expert node, as A. Differs from C only in where the wait happens, so C_I - C0_I isolates overlap from cheaper bookkeeping. Never in the timing campaign, never in the classification except through G4.",
+    "role": "bookkeeping control (traced, mechanism only)",
+    "used_in": [
+     "mechanism"
+    ]
+   },
+   "C_I": {
+    "ARGINE_EXPERT_WAIT": "kind",
+    "ARGINE_RESEARCH_TRACE": "1",
+    "definition": "C with the research trace on",
+    "role": "C traced",
+    "used_in": [
+     "mechanism",
+     "conformance"
+    ]
+   }
+  },
+  "blame_rules": {
+   "infrastructure_causes": [
+    "loss of AC power or host shutdown/reboot documented in the Windows event log",
+    "forced Windows Update or Defender scan documented in the event log",
+    "disk full on the system drive",
+    "manual interruption by the operator, recorded before the launch result is read"
+   ],
+   "reruns": "a slot failed for an infrastructure cause may be rerun once (attempt+1); a correctness failure of C/C_I/C0_I (token digest, budget, pending reads, abort) is never rerun; a second failure of the same slot aborts the campaign",
+   "rule": "A failed or invalid launch of C, C_I or C0_I is attributed to the intervention unless it matches a pre-listed infrastructure cause with documentary evidence; a failed or invalid launch of A or B is attributed to the campaign.",
+   "terminal": "R5_INVALID is final: the evaluation is not reopened, no new campaign is started under this contract"
+  },
+  "classification_order": [
+   [
+    "G1 fails (Phase 1a), or any Phase 2 launch of C, C_I or C0_I has a correctness failure or a non-infrastructure failure",
+    "R5_IMPLEMENTATION_OR_CAPABILITY_BLOCKED"
+   ],
+   [
+    "G2 fails (Phase 1b)",
+    "R5_NO_MEANINGFUL_OVERLAP_HEADROOM"
+   ],
+   [
+    "Phase 2 campaign aborted or integrity failure of A/B launches",
+    "R5_INVALID"
+   ],
+   [
+    "G7 fails",
+    "R5_CONFOUNDED_NOT_PURE_SCHEDULING"
+   ],
+   [
+    "G3 and G4 and G5 and G6",
+    "R5_POSITIVE_RUNTIME_IMPROVEMENT"
+   ],
+   [
+    "G3 and G4 and not (G5 and G6)",
+    "R5_PRIMARY_GAIN_NOT_ROBUST"
+   ],
+   [
+    "G3 and not G4",
+    "R5_RUNTIME_CHANGE_WITHOUT_MECHANISM"
+   ],
+   [
+    "not G3 and G4",
+    "R5_MECHANISM_PRESENT_BUT_NO_NET_RUNTIME_GAIN"
+   ],
+   [
+    "not G3 and not G4",
+    "R5_NO_REALISED_OVERLAP_NO_GAIN"
+   ]
+  ],
+  "common_environment": {
+   "ARGINE_EXPERT_DIRECT": "1",
+   "ARGINE_EXPERT_PRETOUCH": "<unset>",
+   "ARGINE_EXPERT_READ": "asincrono",
+   "ARGINE_PREFETCH": "0",
+   "ARGINE_RETENTION_POLICY": "<unset>",
+   "binary": "the single R5 build frozen at the implementation freeze; all arms of all campaigns use the same binary",
+   "end_of_run_counters": "every launch of every arm writes one end-of-run record of store counters (misses, bytes_read, evictions, budget violations, pending reads at graph end)"
+  },
+  "critical_path_rule": "Every per-node time is taken on the critical path: a node starts when the first thread enters the hook and its store phase ends when the last thread leaves the hook (max over threads); a per-node wait is the maximum over threads of that thread's wait in that node. Thread 0 alone, means over threads and sums over threads are never used for a mechanism endpoint.",
+  "endpoints_mechanism": {
+   "bookkeeping_effect": "descriptive: exposed_store_ms_per_token(C0_I) - (B)",
+   "deferred_read_bytes_per_token": "bytes of decode reads of kinds not consumed by the issuing node",
+   "exposed_store_ms_per_token": "sum over decode expert nodes of (max_thread hook_end - min_thread hook_start), divided by decode tokens",
+   "exposed_wait_ms_per_token": "sum over decode expert nodes of max_thread(wait duration in that node), divided by decode tokens. This is the operational exposed transfer stall and the G4 endpoint.",
+   "hidden_deferred_bytes_fraction": "C_I only: bytes of deferred decode reads whose completion (exact, or an upper bound) is at or before the earliest wait start of their consuming node, divided by all deferred decode read bytes. Conservative: a bounded completion counts as hidden only if the bound precedes the wait.",
+   "miss_bytes_per_token, misses_per_token, evictions_per_token": "scheduling purity",
+   "non_hook_ms_per_token": "decode wall ms/token minus exposed_store_ms_per_token (compute and other graph work; shows whether concurrent transfers slow compute)",
+   "prefetch_used / prefetch_unused": "not applicable: no arm prefetches",
+   "queue_depth": "descriptive, from per-request timestamps as in EXP-007",
+   "redundant_transfers": "reads of slices already resident; must be 0",
+   "resident_bytes_peak, budget_violations, pending_reads_at_graph_end": "residency pressure and correctness (violations and pending reads must be 0)",
+   "source": "traced launches only (B, C0_I, C_I); never mixed with the timing campaign; 12 blocks of 3 launches, df = 11",
+   "transfer_latency_ms": "complete_ns - issue_ns per read (distribution; exact/bound flag kept)"
+  },
+  "endpoints_primary": {
+   "aggregate": "mean of r_b over all 20 blocks of the primary campaign",
+   "arms": "C vs A (both untraced)",
+   "block_statistic": "r_b = (mean_A_b - mean_C_b) / mean_A_b, with mean over the two launches of each arm in block b (relative decode-time reduction; positive = C faster)",
+   "budget": "1.5 GiB",
+   "definition": "server timings predicted_ms / predicted_n for one launch (predicted_n must be 512); lower is better",
+   "interval": "two-sided 95% Student t interval, df = 19",
+   "name": "decode_wall_ms_per_token",
+   "unit_of_analysis": "block"
+  },
+  "endpoints_secondary": {
+   "no_harm_4GiB": "same block statistic at 4 GiB (C vs A, 20 blocks, df = 19)",
+   "per_prompt_consistency": "mean r_b per evaluation prompt at 1.5 GiB (point estimates only; no per-prompt test)",
+   "prefill_ms": "descriptive only",
+   "purity_untraced": "end-of-run counters of every timing launch: |mean miss bytes per token C - A| / A and the same for evictions, per budget",
+   "tokens_per_second": "1000 / ms_per_token per launch; reported, never used to classify"
+  },
+  "evaluation_role": "Phase 2 only. No binary of any kind (R5 or earlier) may be run on these prompts before the evaluation is opened.",
+  "falsifiers": [
+   "H < 4% of decode time on development prompts (not enough transfer latency overlaps a compute window)",
+   "the deferred wait cannot be implemented with identical tokens, zero budget violations, no pending reads and a faithful baseline (synchronisation or ownership prevents overlap)",
+   "the mechanism campaign shows no reduction of exposed wait against C0, or fewer than a quarter of deferred bytes arrive in time (causal information arrives too late)",
+   "the mechanism is present but the primary lower bound stays below 2% (hidden stall does not reach end-to-end time, or concurrent transfers slow compute)",
+   "miss bytes or evictions change beyond 1% (the change is not pure scheduling)",
+   "harm above 2% at 4 GiB or inconsistency across prompts"
+  ],
+  "gates": {
+   "G3_primary": "95% lower bound of the primary aggregate >= 0.02",
+   "G4_mechanism": "mechanism campaign (12 blocks, df = 11): (a) 95% upper bound of the mean block difference exposed_wait_ms_per_token(C_I) - exposed_wait_ms_per_token(C0_I) < 0; (b) mean hidden_deferred_bytes_fraction(C_I) >= 0.25; (c) mean[exposed_wait(C0_I) - exposed_wait(C_I)] >= 0.5 x mean[exposed_store(B) - exposed_store(C_I)] whenever the latter is positive",
+   "G5_no_harm": "4 GiB: 95% upper bound of the mean block relative slowdown (-r_b) <= 0.02",
+   "G6_consistency": "at least 3 of the 4 evaluation prompts have a positive mean r_b at 1.5 GiB",
+   "G7_purity": "in the mechanism campaign (C_I vs B) and in both timing campaigns (C vs A, end-of-run counters): relative difference of mean miss bytes per token and of mean evictions per token <= 0.01; budget violations 0",
+   "INTEGRITY": "every counted launch: 512 decode tokens; token digest equal to the digest of that prompt in every other arm; runtime, model and store hashes equal to the implementation freeze; no abort; server timings present; end-of-run counter record present; ARGINE_EXPERT_WAIT echoed as expected; AC power"
+  },
+  "hopi_gate": "HoPi M9+ stays paused unless the classification is R5_POSITIVE_RUNTIME_IMPROVEMENT. Every other label, including a clean negative, does not unlock HoPi; it requires the next Argine direction to be identified.",
+  "host_record_per_launch": [
+   "power source (AC required)",
+   "Windows power plan",
+   "CPU package temperature and frequency at start and end",
+   "NVMe temperature where readable",
+   "Defender real-time / scheduled scan state and Windows Update state",
+   "start and end wall-clock time"
+  ],
+  "hypotheses": {
+   "H_headroom": "Before evaluation, on development prompts, the one-shot trace-derived hideable bound H is at least 4% of decode time.",
+   "H_mechanism": "C lowers the critical-path wait inside the expert-store hook relative to the bookkeeping-matched control C0, at least a quarter of deferred read bytes complete before they are needed, and wait reduction accounts for at least half of C's reduction of store-hook time.",
+   "H_no_harm": "At 4 GiB, C is not slower than A by more than 2.0% (95% upper bound).",
+   "H_null": "The relative reduction is below 2.0% (including zero or a slowdown).",
+   "H_primary": "C lowers decode wall ms/token relative to A at 1.5 GiB: the 95% lower bound of the mean block relative reduction is >= 2.0%."
+  },
+  "invariants_C_vs_A": [
+   "same set of slices requested per layer, the frozen issue order, same bytes read",
+   "same LRU access sequence (later-node hits replaced by psx_cache_touch in the same order); misses, miss bytes and evictions within the purity tolerance",
+   "same pinned footprint (no extra residency); budget violations 0; no pending read at the end of any graph",
+   "no prediction, no lookahead across layers, no new thread, no tunable parameter",
+   "identical generated tokens (greedy decoding on identical weights and kernels)"
+  ],
+  "label_meaning": {
+   "R5_CONFOUNDED_NOT_PURE_SCHEDULING": "C changed residency beyond tolerance: no attribution possible",
+   "R5_IMPLEMENTATION_OR_CAPABILITY_BLOCKED": "the deferred wait cannot be implemented correctly, stably or measurably in this runtime",
+   "R5_INVALID": "the campaign cannot be interpreted; final",
+   "R5_MECHANISM_PRESENT_BUT_NO_NET_RUNTIME_GAIN": "stall was hidden but end-to-end decode did not improve by the MEI: falsifies the runtime hypothesis",
+   "R5_NO_MEANINGFUL_OVERLAP_HEADROOM": "not enough hideable transfer latency on the critical path: the direction is closed before evaluation",
+   "R5_NO_REALISED_OVERLAP_NO_GAIN": "headroom existed in the bound but the implementation did not hide stall: falsifies the mechanism hypothesis",
+   "R5_POSITIVE_RUNTIME_IMPROVEMENT": "the only outcome that counts as a demonstrated real-runtime improvement (and the only one that can unlock HoPi)",
+   "R5_PRIMARY_GAIN_NOT_ROBUST": "faster at 1.5 GiB but harmful at 4 GiB or not consistent across prompts: not an improvement",
+   "R5_RUNTIME_CHANGE_WITHOUT_MECHANISM": "a timing change that the deferred-wait mechanism does not explain (for example cheaper bookkeeping): not attributed to the R5 hypothesis, not an improvement"
+  },
+  "launch": {
+   "context": 4096,
+   "decode_metric_source": "llama.cpp server timings predicted_ms / predicted_n",
+   "ignore_eos": true,
+   "ignore_eos_why": "evaluation prompts cannot be inspected in advance; without it an early end-of-sequence would make predicted_n < 512 and invalidate every arm by design",
+   "n_predict": 512,
+   "process": "one fresh server process per launch",
+   "seed": 42,
+   "temperature": 0,
+   "threads": 12,
+   "threads_batch": 12,
+   "threads_why": "EXP-027: 12 generation threads were the fastest measured setting for the 30B model; fixed, never tuned in R5",
+   "top_k": 1
+  },
+  "model_identity": "file SHA-256 of gguf and psxs recorded at the implementation freeze and checked at every launch",
+  "not_measurable_and_how_handled": [
+   "true device completion of a read is observed only when polled or waited: unobserved completions are upper bounds and are treated conservatively",
+   "time inside the stock ggml kernel is not instrumented: compute windows are hook gaps and include small non-expert ops; this loosens H, which is only an opening gate",
+   "tracing perturbs timing (EXP-024): traced launches are never used for the primary endpoint; traced arms are compared only with each other"
+  ],
+  "phase2": "evaluation opened once: mechanism campaign, primary timing campaign, 4 GiB no-harm campaign, classification by DECISION_RULES.json",
+  "precision_plan": {
+   "approx_pass_prob_no_harm_true_0": 0.9885337200543476,
+   "approx_power_primary_true_3pct": 0.5361607862872052,
+   "approx_power_primary_true_4pct": 0.9885337200543476,
+   "expected_half_width_relative": 0.009584364259734975,
+   "n_blocks": 20,
+   "note": "planning only; normal approximation with the t critical value; no R5 data are used",
+   "reference_A_ms_per_token": 526.9731852213541,
+   "reference_block_contrast_sd_ms": 10.791768144296567,
+   "relative_block_sd": 0.020478780414156187,
+   "risk_statement": "The reference SD comes from the Research 3 blocco path (about 527 ms/token); the asincrono path is faster and its relative SD may be larger. If so, power falls; block counts are nevertheless fixed now and are not changed after any R5 data exist. A development A-vs-A noise estimate is reported in Phase 1 for information only.",
+   "t_975_df19": 2.093024054408263
+  },
+  "question": "In the Argine expert-store runtime (Qwen3-30B-A3B-Q4_K_M, asynchronous LRU read path, 1.5 GiB expert budget), does a causal deferred-wait scheduler -- which waits for each expert-weight kind at the node that consumes it instead of waiting for all kinds of the layer before any expert compute, uses only the current layer's router decision, adds no prediction, and leaves the requested slices, bytes read and residency decisions unchanged -- reduce the expert-transfer wait exposed on the decode critical path and thereby lower end-to-end decode wall time per token by at least 2%?",
+  "schedule": {
+   "artifact": "R5-00-SCHEDULE",
+   "campaign_order": [
+    "mechanism_1.5GiB",
+    "timing_1.5GiB",
+    "timing_4GiB"
+   ],
+   "campaigns": {
+    "mechanism_1.5GiB": {
+     "arms": [
+      "B",
+      "C0_I",
+      "C_I"
+     ],
+     "blocks": [
+      {
+       "block": 1,
+       "order": [
+        "C0_I",
+        "B",
+        "C_I"
+       ],
+       "prompt": "code-eval-1"
+      },
+      {
+       "block": 2,
+       "order": [
+        "B",
+        "C_I",
+        "C0_I"
+       ],
+       "prompt": "math-eval-1"
+      },
+      {
+       "block": 3,
+       "order": [
+        "C_I",
+        "B",
+        "C0_I"
+       ],
+       "prompt": "code-eval-1"
+      },
+      {
+       "block": 4,
+       "order": [
+        "C_I",
+        "B",
+        "C0_I"
+       ],
+       "prompt": "math-eval-1"
+      },
+      {
+       "block": 5,
+       "order": [
+        "C_I",
+        "C0_I",
+        "B"
+       ],
+       "prompt": "code-eval-1"
+      },
+      {
+       "block": 6,
+       "order": [
+        "C_I",
+        "C0_I",
+        "B"
+       ],
+       "prompt": "json-eval-1"
+      },
+      {
+       "block": 7,
+       "order": [
+        "B",
+        "C_I",
+        "C0_I"
+       ],
+       "prompt": "json-eval-1"
+      },
+      {
+       "block": 8,
+       "order": [
+        "B",
+        "C0_I",
+        "C_I"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 9,
+       "order": [
+        "B",
+        "C0_I",
+        "C_I"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 10,
+       "order": [
+        "C0_I",
+        "C_I",
+        "B"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 11,
+       "order": [
+        "C0_I",
+        "B",
+        "C_I"
+       ],
+       "prompt": "json-eval-1"
+      },
+      {
+       "block": 12,
+       "order": [
+        "C0_I",
+        "C_I",
+        "B"
+       ],
+       "prompt": "math-eval-1"
+      }
+     ],
+     "budget_bytes": 1610612736
+    },
+    "timing_1.5GiB": {
+     "arms": [
+      "A",
+      "C"
+     ],
+     "blocks": [
+      {
+       "block": 1,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "code-eval-1"
+      },
+      {
+       "block": 2,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "code-eval-1"
+      },
+      {
+       "block": 3,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 4,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "json-eval-1"
+      },
+      {
+       "block": 5,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "math-eval-1"
+      },
+      {
+       "block": 6,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "code-eval-1"
+      },
+      {
+       "block": 7,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 8,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 9,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "json-eval-1"
+      },
+      {
+       "block": 10,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "json-eval-1"
+      },
+      {
+       "block": 11,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 12,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "math-eval-1"
+      },
+      {
+       "block": 13,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "json-eval-1"
+      },
+      {
+       "block": 14,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "code-eval-1"
+      },
+      {
+       "block": 15,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 16,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "math-eval-1"
+      },
+      {
+       "block": 17,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "math-eval-1"
+      },
+      {
+       "block": 18,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "json-eval-1"
+      },
+      {
+       "block": 19,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "math-eval-1"
+      },
+      {
+       "block": 20,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "code-eval-1"
+      }
+     ],
+     "budget_bytes": 1610612736
+    },
+    "timing_4GiB": {
+     "arms": [
+      "A",
+      "C"
+     ],
+     "blocks": [
+      {
+       "block": 1,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "code-eval-1"
+      },
+      {
+       "block": 2,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "json-eval-1"
+      },
+      {
+       "block": 3,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "json-eval-1"
+      },
+      {
+       "block": 4,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "math-eval-1"
+      },
+      {
+       "block": 5,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 6,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "code-eval-1"
+      },
+      {
+       "block": 7,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "code-eval-1"
+      },
+      {
+       "block": 8,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "code-eval-1"
+      },
+      {
+       "block": 9,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 10,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "json-eval-1"
+      },
+      {
+       "block": 11,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 12,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "math-eval-1"
+      },
+      {
+       "block": 13,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 14,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "nl-eval-1"
+      },
+      {
+       "block": 15,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "math-eval-1"
+      },
+      {
+       "block": 16,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "code-eval-1"
+      },
+      {
+       "block": 17,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "math-eval-1"
+      },
+      {
+       "block": 18,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "json-eval-1"
+      },
+      {
+       "block": 19,
+       "order": [
+        "A",
+        "C",
+        "C",
+        "A"
+       ],
+       "prompt": "math-eval-1"
+      },
+      {
+       "block": 20,
+       "order": [
+        "C",
+        "A",
+        "A",
+        "C"
+       ],
+       "prompt": "json-eval-1"
+      }
+     ],
+     "budget_bytes": 4294967296
+    }
+   },
+   "cooldown_between_launches_s": 10,
+   "design": "timing: palindromic 4-launch blocks (XYYX), balanced first arm, prompts balanced across blocks; mechanism: 3-launch blocks, each of the 6 arm orders used twice, prompts balanced",
+   "host_conditions": "AC power; same Windows power plan; background applications closed; Defender scheduled scans and Windows Update paused for the campaign; host record per launch (INSTRUMENTATION.json); no data-driven exclusion",
+   "launch_counts": {
+    "mechanism_1.5GiB": 36,
+    "timing_1.5GiB": 80,
+    "timing_4GiB": 80
+   },
+   "seed": 20261122,
+   "warmup": "one uncounted launch per campaign with the first arm of block 1 and the identical environment, then 60 s cooldown; recorded, never used"
+  },
+  "thresholds": {
+   "headroom_gate": 0.04,
+   "hidden_deferred_bytes_floor": 0.25,
+   "mechanism_attribution_share": 0.5,
+   "minimum_effect_of_interest": 0.02,
+   "no_harm_4GiB": 0.02,
+   "scheduling_purity": 0.01
+  },
+  "timing_campaign_trace": "off (A and C untraced)"
+ },
+ "monitoring": "campaign.py status [--json] and monitor_phase2.ps1 report counts, the running slot and its phase (launch, post-processing, cooldown), interrupted attempts, failures, pause and stop state; never a timing, metric or label",
+ "operational_choices": [
+  "decode ms/token of a launch = server predicted_ms / predicted_n, predicted_n must be 512 (ENDPOINTS primary.definition)",
+  "r_b = (mean_A_b - mean_C_b) / mean_A_b; G3: lower limit of the two-sided 95% Student t interval of mean r_b over the 20 1.5 GiB blocks (df 19) >= 0.02",
+  "G5: s_b = -r_b at 4 GiB; upper limit of the two-sided 95% t interval of mean s_b (df 19) <= 0.02",
+  "G4 (a): d_b = exposed_wait(C_I) - exposed_wait(C0_I) per mechanism block; upper limit of the two-sided 95% t interval (df 11) < 0 (strict); the same two-sided convention as the primary and no-harm intervals",
+  "G4 (b): mean over the 12 C_I launches of hidden_deferred_bytes_fraction >= 0.25 (a C_I launch without deferred bytes counts 0)",
+  "G4 (c): mean[exposed_wait(C0_I) - exposed_wait(C_I)] >= 0.5 x mean[exposed_store(B) - exposed_store(C_I)] if the latter mean is positive, else (c) holds",
+  "G6: count of the 4 evaluation prompts with a positive mean r_b at 1.5 GiB >= 3 (point estimates, no test)",
+  "every gate is decided in exact rational arithmetic: measured values exactly as logged (each float bit-exactly), frozen thresholds as the decimals written in DECISION_RULES (0.02 = 1/50), interval comparisons as (mean - threshold)^2 against t^2 x variance / n with t(0.975, 19) = 2.093024054408263 (the frozen precision_plan value) and t(0.975, 11) = 2.200985160091639; so no decision depends on the Python build or the platform's floating point; floating-point intervals are reported for reading only",
+  "G7: per campaign, |mean(arm) - mean(ref)| / mean(ref) <= 0.01 for miss bytes per token (end-of-run bytes_read / n_tokens, reads happen only on misses since no arm prefetches) and evictions per token (evictions / n_tokens), C_I vs B (mechanism) and C vs A (each timing campaign); budget violations 0 in every counted launch",
+  "mechanism metrics per traced launch: mechanism.py (frozen critical-path rule; per-token values over the 511 decode graphs, as in Phase 1b; strict telemetry checks with the arm's own trace mode)",
+  "INTEGRITY: every counted launch passes campaign.launch_problems; per prompt the A and B launches are the token-digest reference; an A/B disagreement is an integrity failure (R5_INVALID); a C, C_I or C0_I digest differing from a consistent reference is a correctness failure (R5_IMPLEMENTATION_OR_CAPABILITY_BLOCKED)",
+  "terminal at once, never rerun: a correctness failure of C, C_I or C0_I (budget violation, pending or orphan reads, follow-up mismatch, missing touch, drain at thread exit, abort marker in stderr, token digest, deferral in C0_I) and an integrity failure of A or B (the same counters, deferral, token digest) or of any launch that did not run the scheduled arm or budget",
+  "every other failed or interrupted launch stops the campaign. The launch result (the full record from the runtime) is saved to the log the moment the server has stopped, before any post-processing; an interruption after that point is completed by the next run from the saved result and the slot is never rerun",
+  "no outcome-dependent repetition: a slot is rerun (once) only if its failed attempt produced NO outcome information (no saved result with timings, no trace handed over, no request timings printed by the server); otherwise the failure stands and `finalize` attributes it; warmups (never analysed) are exempt from this condition",
+  "every rerun cause must be corroborated by the host itself (the evidence file, hashed and copied into evidence/, documents, it does not prove): `power` by an unexpected-shutdown event (Kernel-Power 41 or EventLog 6008) since the failed attempt started, or the driver's own AC-power stop; `windows-update-or-defender` by a Windows Update client or Defender scan event since the failed attempt started (wevtutil); `disk-full` by the driver's own disk stop or a disk-full message of the failed launch; `operator-interruption` needs nothing more (the attempt produced no outcome)",
+  "a second failure of the same slot aborts the campaign; the label is then fixed by `finalize` (not by `analyze`, which refuses an unattributed abort): with no corroborated infrastructure cause a C, C_I or C0_I slot -> BLOCKED, otherwise R5_INVALID",
+  "`finalize` attributes an unresolved stop, abort or interruption by blame_rules: without a documented infrastructure cause a failed C, C_I or C0_I slot is attributed to the intervention (R5_IMPLEMENTATION_OR_CAPABILITY_BLOCKED, row 1 of classification_order: a non-infrastructure failure of C), otherwise the campaign is aborted (R5_INVALID, final); a wrong arm or budget echo of C, C_I or C0_I is a non-infrastructure failure of the intervention (BLOCKED), of A or B an integrity failure (R5_INVALID)",
+  "token-digest precedence corner: when the A and B launches of a prompt disagree among themselves there is no valid reference, the C-family launches of that prompt are not judged, and the label is R5_INVALID (both are terminal negatives)",
+  "an analysis whose kept evidence does not support it (a kept trace altered or a trace file named by no log record) writes no result and logs analysis_input_failure; `finalize` then records R5_INVALID (integrity failure of the campaign)",
+  "monitoring never affects a launch: heartbeat writes are atomic with retries and their failure is ignored; a stale run lock (dead pid, or no heartbeat for 2 h) is moved aside atomically, never deleted",
+  "warmups: one uncounted launch per campaign with the first arm and prompt of block 1 (identical environment), then 60 s; additionally one uncounted warmup before the first counted launch after every (re)start, with that launch's arm, prompt and budget, then 60 s; warmups are recorded and checked for correctness and integrity, never analysed",
+  "one run at a time: an exclusive run lock (RUN_STATE.json, created exclusively before any check, holding the pid and a heartbeat written atomically); `status` reports the open attempt of a live run as running in its phase (pre-launch checks, launch, post-processing, cooldown), never as failed or interrupted",
+  "pause: a file named PAUSE in the output directory stops the run cleanly between launches; not a failure; the block structure, order and counts are unchanged (no optional stopping: the analysis needs all 196 counted launches)",
+  "no endpoint is computed before all 196 counted launches are valid; the analysis runs once and writes PHASE2_RESULT.json",
+  "the 36 counted traces are kept gzip'd under attempt-numbered names: the raw hash and intended name are logged when the runtime hands the trace over, the gzip is written to a .partial name and renamed after hashing, then logged; a launch_result marker is logged as soon as the server has stopped, before model/store hashing; files of interrupted attempts are reported, never used; untraced campaigns write no trace; traced and untraced launches are never compared",
+  "decode graphs of a traced launch: the one-token graphs after the last multi-token (prefill) graph; if the prompt's last micro-batch had exactly one token, the first of 512 such graphs is that prefill graph and is excluded (511)",
+  "descriptive only, never classifying: per traced launch, read records versus store misses (a read of a resident slice would make them differ; ENDPOINTS redundant_transfers must be 0, gated in G1); queue depth, transfer-latency distribution and peak resident bytes are not computed (descriptive in ENDPOINTS, used by no gate); non_hook_ms_per_token subtracts a per-decode-graph store time (511) from the frozen per-token decode time (512)",
+  "every rerun authorization, superseded launch (with its server timings) and interrupted attempt is reported in PHASE2_RESULT.json, never used",
+  "runtime hash before every launch; model and store hashes before the first launch of every (re)start and after every launch; AC power before and after; host record before and after every launch",
+  "evaluation prompts are read only after a valid opening record exists, by id from workloads/v1 (split eval), each checked against its frozen prompt_object_sha256; prompt text is never printed, logged or written"
+ ],
+ "outcome_leakage_limits": "the driver and the monitor never print or summarise a timing, metric or label before the one-shot analysis. The acquisition log, the server logs (llama-server prints each request's timings) and the kept traces are on the operator's disk and can be read; software cannot prevent that. What is bounded: no stopping rule depends on outcomes (counts are constants; nothing is analysed before all 196 counted launches; abandoning yields no positive label); a slot can be repeated at most once and only for a listed, corroborated infrastructure cause; an operator interruption is refused once a result exists; every rerun and every superseded launch, with its timings, is reported in the result",
+ "outputs": [
+  "IDENTITY_2.json",
+  "PHASE2_LOG.jsonl",
+  "launches/*.log",
+  "traces/*.trace.gz (36 counted traced launches)",
+  "PHASE2_RESULT.json (once)",
+  "ACQUISITION_STOPPED.json (only if stopped)"
+ ],
+ "preconditions": [
+  "Phase 2 readiness verifies (Phase 0, G1 seal, G2 seal, Phase 1b readiness, sources, protocol)",
+  "G1 sealed R5_G1_HOST_CONFORMANCE_PASS and G2 sealed R5_G2_HEADROOM_GATE_PASS",
+  "R5 runtime SHA-256 = IMPLEMENTATION_FREEZE = host_conformance R5_AUTHORIZED",
+  "model and store SHA-256 = IMPLEMENTATION_FREEZE",
+  "a valid one-shot evaluation-opening record bound to this readiness",
+  "AC power; at least 4 GB free (1 GB before each traced launch)",
+  "no other Phase 2 campaign on the host",
+  "no Phase 2 result committed or present"
+ ],
+ "scope": "Phase 2 of the frozen R5-00 contract, made executable; no new arm, scheduler variant, workload, budget, parameter or threshold; prepared after G1 and G2 PASS and BEFORE the evaluation is opened; opening is a separate explicit step",
+ "state": "R5_PHASE2_ACQUISITION_READY"
+}

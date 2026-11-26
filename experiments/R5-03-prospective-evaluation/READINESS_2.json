@@ -1,0 +1,31 @@
+{
+ "artifact": "R5-03-PHASE2-READINESS",
+ "eval_state": "LOCKED",
+ "evaluation_opened": false,
+ "g1_freeze_sha256": "3827b5a1cf1745869186a79ed50f335f9c6583ab69ca6611dc7f6e633deebce5",
+ "g2_freeze_sha256": "9d6e6421a9c242dc908d67269c7b950a9b160a62842f2ce9050a4c63878436f2",
+ "phase0": {
+  "contract_digest": "9d480ccf1b5109fa9be6cd717261e824876122e1ec504a3ccd85e0e30e619e52",
+  "freeze_sha256": "21ed630b638ca56a19b6a392a6ce1e47782dcd4351b178d523d5e28a6c7f63ee"
+ },
+ "phase1b_readiness_sha256": "a0f773ab5826e4d705c13e9ea8a48abd2c5e4400957f29e52c4ab56469a3f274",
+ "protocol_lf_sha256": "8eaf40d004cb8b39399d4450239def2f8c0e7016dae498bc6a743cdcd909d20a",
+ "readiness_sha256": "ec839e0862ed512b5e853186a61e531ab2c63cb55724e50473f6bf8c4c397a81",
+ "sources_lf_sha256": {
+  "../../tools/r3_04_shutdown.py": "37c0d3b9ba388ad9b3429e48e6c3f0c6f8e2bd7b43b2debac99f7bd584073acf",
+  "../R5-01-ets-implementation/ets_trace.py": "37a29ec7b28ccb289c2f2a58eee2a1f2bcbdcaa2c4fb17e664fa8850a54c0cfc",
+  "../R5-01-ets-implementation/host_conformance.py": "50380683b5f44ba2a7e88d74f2b68167464ca697fd4672866c51f3b7a809e876",
+  "README.md": "1c280ec93adf3ccd64e725b288c064f45237f2ba47485f90231fd1e695d22e7c",
+  "analysis.py": "d8a19e346d3c4ae4991f0f82be81f5aca676804b18d8ed688587b38aa1bb5535",
+  "campaign.py": "10d5a0368c5ed6ef9a7ad0cc33df0cf0c7e6d29085754454d5f93a52ad4c3a0e",
+  "mechanism.py": "e1dca717ebabddc1f133e0a69d1bfa5c79c390b1a499a1f14ae05fb0e892bedf",
+  "monitor_phase2.ps1": "95b1a575eb661d3fd0e2a5d098ac7badd0a00080b686ec66b2a44627bc9b40db",
+  "phase2.py": "aa7d0d7771f4e2bdd7624eb65031ec7b4e589f540a37b0627fb85c8fe27c03fb",
+  "tests/fixtures.py": "c87b2e729bdad7eb90bd8896ca4c3f8a6a77de888a2058af64390446a0de7c73",
+  "tests/test_analysis.py": "0018c376274afc05a75f0ac0fa4f007a29dfc93b32b9bda2d128d8f88992c8a9",
+  "tests/test_campaign.py": "4ea5095be5f72bac2b5a0f97a82c71341ba1b1d84772fad30d5399e51a746553",
+  "tests/test_mechanism.py": "af9c10345848504948d9335546ab2e19760cee1f639eec0afd296e8bff2f56e3",
+  "tests/test_phase2.py": "9f54832e1f4facab6a1d8b975731fc5ac932419ad74fa64b1338819120a040ca"
+ },
+ "state": "R5_PHASE2_ACQUISITION_READY"
+}

@@ -11,7 +11,7 @@
 | Phase 0 — protocol freeze | [`R5-00-exposed-transfer-stall`](../../experiments/R5-00-exposed-transfer-stall/README.md) | frozen after independent adversarial review ([`REVIEW.md`](../../experiments/R5-00-exposed-transfer-stall/REVIEW.md)) |
 | Phase 1a — implementation and conformance (development prompts) | [`R5-01-ets-implementation`](../../experiments/R5-01-ets-implementation/README.md) | implemented; model-free implementation gate PASS ([`GATE.json`](../../experiments/R5-01-ets-implementation/GATE.json)); host part of G1 PASS, 17/17 criteria and 42/42 launches, sealed ([`R5-01-g1-host-evidence`](../../experiments/R5-01-g1-host-evidence/README.md); the v5 comparator is a disclosed reconstruction); runtime sources [`patches/r5-ets`](../../patches/r5-ets/README.md), build [`llama-research-r5-ets`](../../llama-research-r5-ets/BUILD-INFO.json) |
 | Phase 1b — one-shot headroom gate | [`R5-02-headroom-gate`](../../experiments/R5-02-headroom-gate/README.md) | `R5_G2_HEADROOM_GATE_PASS`: H = 2072921725103767552/24558530549356953125 ≈ 0.0844 ≥ 0.04 from 8 B launches, re-derived by the frozen and a clean-room estimator; sealed ([`R5-02-g2-host-evidence`](../../experiments/R5-02-g2-host-evidence/README.md)); readiness [`READINESS.json`](../../experiments/R5-02-headroom-gate/READINESS.json) |
-| Phase 2 — evaluation (opened once) | — | locked |
+| Phase 2 — evaluation (opened once) | [`R5-03-prospective-evaluation`](../../experiments/R5-03-prospective-evaluation/README.md) | acquisition ready (`R5_PHASE2_ACQUISITION_READY`, [`READINESS_2.json`](../../experiments/R5-03-prospective-evaluation/READINESS_2.json)): 36 mechanism + 80 + 80 timing launches; evaluation LOCKED until the explicit one-shot opening |
 
 **Outcome labels.** These are frozen in [`DECISION_RULES.json`](../../experiments/R5-00-exposed-transfer-stall/DECISION_RULES.json). Only `R5_POSITIVE_RUNTIME_IMPROVEMENT` is an improvement, and only it can lift the HoPi pause. The other labels are:
 - `R5_PRIMARY_GAIN_NOT_ROBUST`
@@ -33,4 +33,5 @@ python shared/tooling/run_frozen_verifier.py experiments/R5-01-ets-implementatio
 python shared/tooling/run_frozen_verifier.py experiments/R5-01-g1-host-evidence/g1_seal.py verify
 python shared/tooling/run_frozen_verifier.py experiments/R5-02-headroom-gate/phase1b.py verify
 python shared/tooling/run_frozen_verifier.py experiments/R5-02-g2-host-evidence/g2_seal.py verify
+python shared/tooling/run_frozen_verifier.py experiments/R5-03-prospective-evaluation/phase2.py verify
 ```

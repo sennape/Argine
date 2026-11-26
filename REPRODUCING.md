@@ -41,6 +41,7 @@ All of this needs Python 3.9+ and no model weights or network.
 | Research 5 G1 seal | `python shared/tooling/run_frozen_verifier.py experiments/R5-01-g1-host-evidence/g1_seal.py verify` | sealed host evidence copies (raw host files checked only with `--host-dir`) |
 | Research 5 Phase 1b readiness | `python shared/tooling/run_frozen_verifier.py experiments/R5-02-headroom-gate/phase1b.py verify` | protocol, sources and G1 seal; no outcome artifact may exist |
 | Research 5 G2 seal | `python shared/tooling/run_frozen_verifier.py experiments/R5-02-g2-host-evidence/g2_seal.py verify` | sealed G2 evidence and exact H (raw host files with `--host-dir`, trace re-derivation with `--rederive`) |
+| Research 5 Phase 2 readiness | `python shared/tooling/run_frozen_verifier.py experiments/R5-03-prospective-evaluation/phase2.py verify` | protocol, sources, Phase 0, G1 and G2 seals; no opening or outcome artifact may exist |
 | documentation | `python tools/check_links.py` and `python strumenti/controlla_readme.py` | nothing external |
 | consolidation | `python shared/tooling/verify_consolidation.py` | Git |
 
