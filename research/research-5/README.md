@@ -1,6 +1,6 @@
 # Research 5 — exposed transfer stall (ETS)
 
-**State: OPEN, Phase 1a IMPLEMENTED** (`R5_ETS_PHASE1A_IMPLEMENTED`; protocol `R5_ETS_PHASE0_FROZEN`). Host conformance (G1): `R5_G1_HOST_CONFORMANCE_PASS`, sealed in [`R5-01-g1-host-evidence`](../../experiments/R5-01-g1-host-evidence/README.md). Evaluation: LOCKED. No runtime result exists.
+**State: OPEN, Phase 1a IMPLEMENTED** (`R5_ETS_PHASE1A_IMPLEMENTED`; protocol `R5_ETS_PHASE0_FROZEN`). Host conformance (G1): `R5_G1_HOST_CONFORMANCE_PASS`, sealed in [`R5-01-g1-host-evidence`](../../experiments/R5-01-g1-host-evidence/README.md). Headroom gate (G2): `R5_G2_HEADROOM_GATE_PASS`, sealed in [`R5-02-g2-host-evidence`](../../experiments/R5-02-g2-host-evidence/README.md) (H = 0.0844 of decode time, an optimistic bound, never a gain). Evaluation: LOCKED. No runtime result exists.
 
 **Question.** In the expert-store runtime (Qwen3-30B-A3B-Q4_K_M, asynchronous LRU read path, 1.5 GiB), can a causal deferred-wait scheduler lower decode wall time per token by at least 2%? The scheduler waits for each expert-weight kind only at the node that consumes it, instead of waiting for all kinds of the layer before any expert compute. It adds no prediction and changes no residency decision. The aim is to keep unavoidable transfer latency off the decode critical path.
 
@@ -10,7 +10,7 @@
 |---|---|---|
 | Phase 0 — protocol freeze | [`R5-00-exposed-transfer-stall`](../../experiments/R5-00-exposed-transfer-stall/README.md) | frozen after independent adversarial review ([`REVIEW.md`](../../experiments/R5-00-exposed-transfer-stall/REVIEW.md)) |
 | Phase 1a — implementation and conformance (development prompts) | [`R5-01-ets-implementation`](../../experiments/R5-01-ets-implementation/README.md) | implemented; model-free implementation gate PASS ([`GATE.json`](../../experiments/R5-01-ets-implementation/GATE.json)); host part of G1 PASS, 17/17 criteria and 42/42 launches, sealed ([`R5-01-g1-host-evidence`](../../experiments/R5-01-g1-host-evidence/README.md); the v5 comparator is a disclosed reconstruction); runtime sources [`patches/r5-ets`](../../patches/r5-ets/README.md), build [`llama-research-r5-ets`](../../llama-research-r5-ets/BUILD-INFO.json) |
-| Phase 1b — one-shot headroom gate | [`R5-02-headroom-gate`](../../experiments/R5-02-headroom-gate/README.md) | acquisition ready (`R5_PHASE1B_ACQUISITION_READY`, [`READINESS.json`](../../experiments/R5-02-headroom-gate/READINESS.json)); not run; no H computed |
+| Phase 1b — one-shot headroom gate | [`R5-02-headroom-gate`](../../experiments/R5-02-headroom-gate/README.md) | `R5_G2_HEADROOM_GATE_PASS`: H = 2072921725103767552/24558530549356953125 ≈ 0.0844 ≥ 0.04 from 8 B launches, re-derived by the frozen and a clean-room estimator; sealed ([`R5-02-g2-host-evidence`](../../experiments/R5-02-g2-host-evidence/README.md)); readiness [`READINESS.json`](../../experiments/R5-02-headroom-gate/READINESS.json) |
 | Phase 2 — evaluation (opened once) | — | locked |
 
 **Outcome labels.** These are frozen in [`DECISION_RULES.json`](../../experiments/R5-00-exposed-transfer-stall/DECISION_RULES.json). Only `R5_POSITIVE_RUNTIME_IMPROVEMENT` is an improvement, and only it can lift the HoPi pause. The other labels are:
@@ -32,4 +32,5 @@ python shared/tooling/run_frozen_verifier.py experiments/R5-00-exposed-transfer-
 python shared/tooling/run_frozen_verifier.py experiments/R5-01-ets-implementation/phase1a.py verify
 python shared/tooling/run_frozen_verifier.py experiments/R5-01-g1-host-evidence/g1_seal.py verify
 python shared/tooling/run_frozen_verifier.py experiments/R5-02-headroom-gate/phase1b.py verify
+python shared/tooling/run_frozen_verifier.py experiments/R5-02-g2-host-evidence/g2_seal.py verify
 ```

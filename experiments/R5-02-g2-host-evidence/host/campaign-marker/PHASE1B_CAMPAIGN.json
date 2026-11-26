@@ -1,0 +1,18 @@
+{
+ "out": "%USERPROFILE%\\AppData\\Local\\Argine\\r5\\phase1b-headroom",
+ "started_unix": 1795723462.6559799,
+ "identity": {
+  "runtime": "%USERPROFILE%\\Desktop\\Argine\\llama-research-r5-ets-2\\llama-server.exe",
+  "runtime_sha256": "da6e7183e44f6f69d58156cf683f5a929f16fc74bba442fdea39f139e4007493",
+  "model": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.gguf",
+  "store": "C:\\modelli\\Qwen_Qwen3-30B-A3B-Q4_K_M.psxs",
+  "model_sha256_frozen": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+  "store_sha256_frozen": "fef943ae0bc017864a47d41c1fc90d422016045f7e8705b1d138b7defd8c5146",
+  "runtime_dll_dependencies": "system DLLs only (static build; BUILD-INFO dll_dependencies), not hashed",
+  "g1_freeze_sha256": "3827b5a1cf1745869186a79ed50f335f9c6583ab69ca6611dc7f6e633deebce5",
+  "readiness_sha256": "a0f773ab5826e4d705c13e9ea8a48abd2c5e4400957f29e52c4ab56469a3f274",
+  "headroom_py_lf_sha256": "7e380692cbe95ed4a7189bfe0048566b2c613f4f2ccf555a11b852d8942f20ea",
+  "acquire_py_lf_sha256": "c2598fadb06aa24b6b478b62f9e3cb8af44223eb6f8ad823d28cff79fb3d2e85",
+  "protocol_lf_sha256": "de9f96e4329944173028a48baae18a6dff54d65c270fbb5ee4688cd2503240ab"
+ }
+}

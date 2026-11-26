@@ -1,0 +1,257 @@
+{
+ "artifact": "R5-02-G2-EVIDENCE-MANIFEST",
+ "bytes_total": 386477504,
+ "campaign_marker": "%USERPROFILE%\\AppData\\Local\\Argine\\r5\\PHASE1B_CAMPAIGN.json (committed as campaign-marker/PHASE1B_CAMPAIGN.json)",
+ "canonical_host_directory": "%USERPROFILE%\\AppData\\Local\\Argine\\r5\\phase1b-headroom (on the Windows host; kept, not deleted)",
+ "committed_transform": "user-profile prefix -> %USERPROFILE% (plain and JSON-escaped), CRLF -> LF; nothing else",
+ "files": [
+  {
+   "bytes": 7347,
+   "committed": true,
+   "committed_lf_sha256": "9e78bc60cc4c7d507d58e24c3c74d01144a36dc1786b162677f53249c4a079e6",
+   "committed_path": "host/G2_RESULT.json",
+   "path": "G2_RESULT.json",
+   "raw_sha256": "f0e38cd0f6d37592e35e530a127060022d53ffc40679cc68fc03cc406315045a",
+   "sanitized": true
+  },
+  {
+   "bytes": 1053,
+   "committed": true,
+   "committed_lf_sha256": "6054b575ef2b991dfa967a54e2bd74137c5e8b53b7bd921df5d179e6f8bff7af",
+   "committed_path": "host/IDENTITY_1B.json",
+   "path": "IDENTITY_1B.json",
+   "raw_sha256": "25757ed4f38da14f64dcd88266d77f99bc3ffa41be5ff72e754ace9cf350d883",
+   "sanitized": true
+  },
+  {
+   "bytes": 44874,
+   "committed": true,
+   "committed_lf_sha256": "4553812a8dd8656e601758c3ab787cfaf692952859bd28ba55080474e292062e",
+   "committed_path": "host/PHASE1B_LOG.jsonl",
+   "path": "PHASE1B_LOG.jsonl",
+   "raw_sha256": "789207a0b42c99b2f38391e7db0a2ba649476687ac14f6d8fe4bd9ca58b4eaac",
+   "sanitized": true
+  },
+  {
+   "bytes": 6600,
+   "committed": true,
+   "committed_lf_sha256": "eb3e13b04e9ff5d7965fbe0397f041c53d36a904893e0dbea6e498da967a8438",
+   "committed_path": "host/launches/000-warmup-a1-r5-A-1.5GiB-code-dev-1.stderr.log",
+   "path": "launches/000-warmup-a1-r5-A-1.5GiB-code-dev-1.stderr.log",
+   "raw_sha256": "ffb8d037b21581c9862d3d66f57e24ad8adcced12e42c281f7728537fb5056c4",
+   "sanitized": true
+  },
+  {
+   "bytes": 0,
+   "committed": true,
+   "committed_lf_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "committed_path": "host/launches/000-warmup-a1-r5-A-1.5GiB-code-dev-1.stdout.log",
+   "path": "launches/000-warmup-a1-r5-A-1.5GiB-code-dev-1.stdout.log",
+   "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "sanitized": false
+  },
+  {
+   "bytes": 6602,
+   "committed": true,
+   "committed_lf_sha256": "212508d2c874bc5ac7ab2e2eca6740995d16f350756c4fe3f4ef77b537a033f7",
+   "committed_path": "host/launches/001-headroom-a1-r5-A-1.5GiB-code-dev-1.stderr.log",
+   "path": "launches/001-headroom-a1-r5-A-1.5GiB-code-dev-1.stderr.log",
+   "raw_sha256": "01ecbc30894566854d97ff5935e39839b32627ebd296d0f96b5f8593904f37f1",
+   "sanitized": true
+  },
+  {
+   "bytes": 0,
+   "committed": true,
+   "committed_lf_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "committed_path": "host/launches/001-headroom-a1-r5-A-1.5GiB-code-dev-1.stdout.log",
+   "path": "launches/001-headroom-a1-r5-A-1.5GiB-code-dev-1.stdout.log",
+   "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "sanitized": false
+  },
+  {
+   "bytes": 6392,
+   "committed": true,
+   "committed_lf_sha256": "70573593896b80bbd953420743519ede9821d9bea93ef88207301659c29856eb",
+   "committed_path": "host/launches/002-headroom-a1-r5-A-1.5GiB-nl-dev-1.stderr.log",
+   "path": "launches/002-headroom-a1-r5-A-1.5GiB-nl-dev-1.stderr.log",
+   "raw_sha256": "c83d208a2239958bab2aba0dd3de54f2c9013366c72b824f80a75e05916737c7",
+   "sanitized": true
+  },
+  {
+   "bytes": 0,
+   "committed": true,
+   "committed_lf_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "committed_path": "host/launches/002-headroom-a1-r5-A-1.5GiB-nl-dev-1.stdout.log",
+   "path": "launches/002-headroom-a1-r5-A-1.5GiB-nl-dev-1.stdout.log",
+   "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "sanitized": false
+  },
+  {
+   "bytes": 6602,
+   "committed": true,
+   "committed_lf_sha256": "64b9ad8e925915a210427a26c77871492d987ca89bf2742a390a5e9099b9006f",
+   "committed_path": "host/launches/003-headroom-a1-r5-A-1.5GiB-math-dev-1.stderr.log",
+   "path": "launches/003-headroom-a1-r5-A-1.5GiB-math-dev-1.stderr.log",
+   "raw_sha256": "7da3bb233b5a7f0d061b688e91ec4b68339c901bf70f4c0c9542b9b8714006c6",
+   "sanitized": true
+  },
+  {
+   "bytes": 0,
+   "committed": true,
+   "committed_lf_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "committed_path": "host/launches/003-headroom-a1-r5-A-1.5GiB-math-dev-1.stdout.log",
+   "path": "launches/003-headroom-a1-r5-A-1.5GiB-math-dev-1.stdout.log",
+   "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "sanitized": false
+  },
+  {
+   "bytes": 6589,
+   "committed": true,
+   "committed_lf_sha256": "0fc2a6e1aebb5bc65fcd7b25a25c6931877fa763f2b1780373b8ba3b3b6a9f20",
+   "committed_path": "host/launches/004-headroom-a1-r5-A-1.5GiB-json-dev-1.stderr.log",
+   "path": "launches/004-headroom-a1-r5-A-1.5GiB-json-dev-1.stderr.log",
+   "raw_sha256": "5c0e0d08353b119f12a996cb9be4b8374867f90a8f66f0f0b11f57c1001015cf",
+   "sanitized": true
+  },
+  {
+   "bytes": 0,
+   "committed": true,
+   "committed_lf_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "committed_path": "host/launches/004-headroom-a1-r5-A-1.5GiB-json-dev-1.stdout.log",
+   "path": "launches/004-headroom-a1-r5-A-1.5GiB-json-dev-1.stdout.log",
+   "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "sanitized": false
+  },
+  {
+   "bytes": 6706,
+   "committed": true,
+   "committed_lf_sha256": "5d246a3070ab14bdfc208dbac87c5a3a97f5a73d967d32af3702513c352c4748",
+   "committed_path": "host/launches/005-headroom-a1-r5-A-1.5GiB-json-dev-1.stderr.log",
+   "path": "launches/005-headroom-a1-r5-A-1.5GiB-json-dev-1.stderr.log",
+   "raw_sha256": "75cf07a278dd5a6aae3507683bb063717e05de3edf5a6606fde5e567cc54346c",
+   "sanitized": true
+  },
+  {
+   "bytes": 0,
+   "committed": true,
+   "committed_lf_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "committed_path": "host/launches/005-headroom-a1-r5-A-1.5GiB-json-dev-1.stdout.log",
+   "path": "launches/005-headroom-a1-r5-A-1.5GiB-json-dev-1.stdout.log",
+   "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "sanitized": false
+  },
+  {
+   "bytes": 6498,
+   "committed": true,
+   "committed_lf_sha256": "9f43445f0a562c9685bb9a1f97c87e40f3dabb7c4b29dee4f4712f5b694b7747",
+   "committed_path": "host/launches/006-headroom-a1-r5-A-1.5GiB-math-dev-1.stderr.log",
+   "path": "launches/006-headroom-a1-r5-A-1.5GiB-math-dev-1.stderr.log",
+   "raw_sha256": "67a449121ec6ec4228148a206ed791b4588a6fdcc97920f2648b897583766b59",
+   "sanitized": true
+  },
+  {
+   "bytes": 0,
+   "committed": true,
+   "committed_lf_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "committed_path": "host/launches/006-headroom-a1-r5-A-1.5GiB-math-dev-1.stdout.log",
+   "path": "launches/006-headroom-a1-r5-A-1.5GiB-math-dev-1.stdout.log",
+   "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "sanitized": false
+  },
+  {
+   "bytes": 6392,
+   "committed": true,
+   "committed_lf_sha256": "b8c50482a1df33267c1c62cdc56cf54f7c4b5aebc8968c75a079703aac2c1b9d",
+   "committed_path": "host/launches/007-headroom-a1-r5-A-1.5GiB-nl-dev-1.stderr.log",
+   "path": "launches/007-headroom-a1-r5-A-1.5GiB-nl-dev-1.stderr.log",
+   "raw_sha256": "d255b818778780f112e0fc6d5edd1870754a0241c91c567c6debecf42ecf4acc",
+   "sanitized": true
+  },
+  {
+   "bytes": 0,
+   "committed": true,
+   "committed_lf_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "committed_path": "host/launches/007-headroom-a1-r5-A-1.5GiB-nl-dev-1.stdout.log",
+   "path": "launches/007-headroom-a1-r5-A-1.5GiB-nl-dev-1.stdout.log",
+   "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "sanitized": false
+  },
+  {
+   "bytes": 6602,
+   "committed": true,
+   "committed_lf_sha256": "0f00b66a8631ecd1792b76f50a63f887aaf4555f7d77b63d4815ae94bb6c5e77",
+   "committed_path": "host/launches/008-headroom-a1-r5-A-1.5GiB-code-dev-1.stderr.log",
+   "path": "launches/008-headroom-a1-r5-A-1.5GiB-code-dev-1.stderr.log",
+   "raw_sha256": "931a921525d8d19e9835bee3062538f06d4fdb3f0fb413770f624b3f8e11294f",
+   "sanitized": true
+  },
+  {
+   "bytes": 0,
+   "committed": true,
+   "committed_lf_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "committed_path": "host/launches/008-headroom-a1-r5-A-1.5GiB-code-dev-1.stdout.log",
+   "path": "launches/008-headroom-a1-r5-A-1.5GiB-code-dev-1.stdout.log",
+   "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "sanitized": false
+  },
+  {
+   "bytes": 48850412,
+   "committed": false,
+   "path": "traces/001-headroom-a1-r5-A-1.5GiB-code-dev-1.trace.gz",
+   "raw_sha256": "eb1ed60e940c2948dca36b7af1401f80a45e7788c2f88bcc7868ea3c97fe6a47"
+  },
+  {
+   "bytes": 46976990,
+   "committed": false,
+   "path": "traces/002-headroom-a1-r5-A-1.5GiB-nl-dev-1.trace.gz",
+   "raw_sha256": "45a7bb91cbf92bb1cc46865f3f88f60d7185d7e96172dd221165dee52a025154"
+  },
+  {
+   "bytes": 48180149,
+   "committed": false,
+   "path": "traces/003-headroom-a1-r5-A-1.5GiB-math-dev-1.trace.gz",
+   "raw_sha256": "e9d6fb90b00706ef8827efbf89673a73e564ce135cfaf003007dfafd96e5c439"
+  },
+  {
+   "bytes": 49141835,
+   "committed": false,
+   "path": "traces/004-headroom-a1-r5-A-1.5GiB-json-dev-1.trace.gz",
+   "raw_sha256": "2c2e05cc5da98aa35e49d7744faebeaf3e90e569194c293991fbd054bd885e0d"
+  },
+  {
+   "bytes": 49196223,
+   "committed": false,
+   "path": "traces/005-headroom-a1-r5-A-1.5GiB-json-dev-1.trace.gz",
+   "raw_sha256": "ac5623876e40c00abf5e25525627f1fd50b466ebbbb4731f38203e6c9da69a1a"
+  },
+  {
+   "bytes": 48147029,
+   "committed": false,
+   "path": "traces/006-headroom-a1-r5-A-1.5GiB-math-dev-1.trace.gz",
+   "raw_sha256": "430b0d8446cf39b37ccbf8cf993a72043479599750cc5bd0240eed9fe6769340"
+  },
+  {
+   "bytes": 46960413,
+   "committed": false,
+   "path": "traces/007-headroom-a1-r5-A-1.5GiB-nl-dev-1.trace.gz",
+   "raw_sha256": "fb4d97721d4d977b9e7af22fbde6eba83b9d9b461cdb368cc4ba9c25132d4928"
+  },
+  {
+   "bytes": 48910998,
+   "committed": false,
+   "path": "traces/008-headroom-a1-r5-A-1.5GiB-code-dev-1.trace.gz",
+   "raw_sha256": "5a4bd82f9ca1e7370d392e09649b72f7bc17f8360618d74f9a850b2482cc0aeb"
+  },
+  {
+   "bytes": 1198,
+   "committed": true,
+   "committed_lf_sha256": "f44cb292561e93e457f814050c4113e2ddcd308f80da3dd5694943258560290e",
+   "committed_path": "host/campaign-marker/PHASE1B_CAMPAIGN.json",
+   "path": "campaign-marker/PHASE1B_CAMPAIGN.json",
+   "raw_sha256": "ae372ee5a370aa6c0f37a0d196e33fd71cc6642b379b3b8136b4ea049998681a",
+   "sanitized": true
+  }
+ ],
+ "n_files": 30,
+ "not_committed": "traces/*.trace.gz (8 kept gzip traces, about 47-49 MB each, 386 MB in all): hashed here, kept on the host; their uncompressed SHA-256 and size are in REDERIVATION.json and agree with the acquisition log"
+}

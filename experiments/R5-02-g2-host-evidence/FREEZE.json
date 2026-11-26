@@ -1,0 +1,43 @@
+{
+ "artifact": "R5-02-G2-FREEZE",
+ "eval_state": "LOCKED",
+ "files_lf_sha256": {
+  "G2_SEAL.json": "39a09ead19de9d20b0609ae5a940c3b78f52b0c09893ccab5895f28e64b78d2f",
+  "MANIFEST.json": "9baa545e151c640abeebe4f96f43c8e7fc1f8504b93281b475382d3437719138",
+  "README.md": "28834c9de33d86507b22f6f9399f015699a6b99dc7a8cc1980615b3c0ba470ee",
+  "REDERIVATION.json": "ba6b724aced160ad24082c212aa5727963a4a79014fb490abd30f8a09ba85044",
+  "g2_seal.py": "7039dbee951980c8930a3b2576189fc141a743f1b153b79c3a846b0ee3efb82a",
+  "host/G2_RESULT.json": "9e78bc60cc4c7d507d58e24c3c74d01144a36dc1786b162677f53249c4a079e6",
+  "host/IDENTITY_1B.json": "6054b575ef2b991dfa967a54e2bd74137c5e8b53b7bd921df5d179e6f8bff7af",
+  "host/PHASE1B_LOG.jsonl": "4553812a8dd8656e601758c3ab787cfaf692952859bd28ba55080474e292062e",
+  "host/campaign-marker/PHASE1B_CAMPAIGN.json": "f44cb292561e93e457f814050c4113e2ddcd308f80da3dd5694943258560290e",
+  "host/launches/000-warmup-a1-r5-A-1.5GiB-code-dev-1.stderr.log": "eb3e13b04e9ff5d7965fbe0397f041c53d36a904893e0dbea6e498da967a8438",
+  "host/launches/000-warmup-a1-r5-A-1.5GiB-code-dev-1.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "host/launches/001-headroom-a1-r5-A-1.5GiB-code-dev-1.stderr.log": "212508d2c874bc5ac7ab2e2eca6740995d16f350756c4fe3f4ef77b537a033f7",
+  "host/launches/001-headroom-a1-r5-A-1.5GiB-code-dev-1.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "host/launches/002-headroom-a1-r5-A-1.5GiB-nl-dev-1.stderr.log": "70573593896b80bbd953420743519ede9821d9bea93ef88207301659c29856eb",
+  "host/launches/002-headroom-a1-r5-A-1.5GiB-nl-dev-1.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "host/launches/003-headroom-a1-r5-A-1.5GiB-math-dev-1.stderr.log": "64b9ad8e925915a210427a26c77871492d987ca89bf2742a390a5e9099b9006f",
+  "host/launches/003-headroom-a1-r5-A-1.5GiB-math-dev-1.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "host/launches/004-headroom-a1-r5-A-1.5GiB-json-dev-1.stderr.log": "0fc2a6e1aebb5bc65fcd7b25a25c6931877fa763f2b1780373b8ba3b3b6a9f20",
+  "host/launches/004-headroom-a1-r5-A-1.5GiB-json-dev-1.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "host/launches/005-headroom-a1-r5-A-1.5GiB-json-dev-1.stderr.log": "5d246a3070ab14bdfc208dbac87c5a3a97f5a73d967d32af3702513c352c4748",
+  "host/launches/005-headroom-a1-r5-A-1.5GiB-json-dev-1.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "host/launches/006-headroom-a1-r5-A-1.5GiB-math-dev-1.stderr.log": "9f43445f0a562c9685bb9a1f97c87e40f3dabb7c4b29dee4f4712f5b694b7747",
+  "host/launches/006-headroom-a1-r5-A-1.5GiB-math-dev-1.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "host/launches/007-headroom-a1-r5-A-1.5GiB-nl-dev-1.stderr.log": "b8c50482a1df33267c1c62cdc56cf54f7c4b5aebc8968c75a079703aac2c1b9d",
+  "host/launches/007-headroom-a1-r5-A-1.5GiB-nl-dev-1.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "host/launches/008-headroom-a1-r5-A-1.5GiB-code-dev-1.stderr.log": "0f00b66a8631ecd1792b76f50a63f887aaf4555f7d77b63d4815ae94bb6c5e77",
+  "host/launches/008-headroom-a1-r5-A-1.5GiB-code-dev-1.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "independent/clean_room_h.py": "bfe13b084e866c71d62d37e363a99ef74819193fd974dceae978ff4314d25252"
+ },
+ "freeze_sha256": "9d6e6421a9c242dc908d67269c7b950a9b160a62842f2ce9050a4c63878436f2",
+ "g1_freeze_sha256": "3827b5a1cf1745869186a79ed50f335f9c6583ab69ca6611dc7f6e633deebce5",
+ "phase0": {
+  "contract_digest": "9d480ccf1b5109fa9be6cd717261e824876122e1ec504a3ccd85e0e30e619e52",
+  "freeze_sha256": "21ed630b638ca56a19b6a392a6ce1e47782dcd4351b178d523d5e28a6c7f63ee"
+ },
+ "phase1b_readiness_sha256": "a0f773ab5826e4d705c13e9ea8a48abd2c5e4400957f29e52c4ab56469a3f274",
+ "state": "R5_G2_SEALED",
+ "verdict": "R5_G2_HEADROOM_GATE_PASS"
+}

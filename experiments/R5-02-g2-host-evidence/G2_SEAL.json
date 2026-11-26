@@ -1,0 +1,59 @@
+{
+ "H": 0.0844074005542667,
+ "H_exact": "2072921725103767552/24558530549356953125",
+ "H_ms_per_decode_step": 23.612509760273973,
+ "H_over_threshold": 2.1101850138566673,
+ "H_percent_of_decode_time": 8.44074005542667,
+ "acquisition_checks": {
+  "ac_power_before_and_after_every_launch": true,
+  "all_slots_arm_B_budget_1_5_traced": true,
+  "every_launch_valid_by_the_frozen_driver": true,
+  "host_result_one_shot": true,
+  "log_order_attempt_received_kept_launch": true,
+  "model_store_identity_after_every_launch": true,
+  "no_superseded_or_unaccounted_traces": true,
+  "one_attempt_per_slot_no_reruns": true,
+  "readiness_binding": true,
+  "runtime_identity_frozen": true,
+  "schedule_8_counted_in_predeclared_order": true,
+  "telemetry_valid_all_launches": true,
+  "token_digests_one_per_prompt": true,
+  "trace_hashes_logged_before_launch_record_agree": true,
+  "warmup_one_uncounted_excluded": true
+ },
+ "artifact": "R5-02-G2-SEAL",
+ "decode_ms_per_decode_step_mean": 279.74454378669276,
+ "disclosures": {
+  "monitor_display": "the Phase 1b `status` command listed the slot that was still running (an attempt not yet recorded) under 'failed:'. This was display-only: `run` evaluates slot states only at start-up, and the log shows 9 attempts, 9 launch records, no rerun and no stop. The frozen Phase 1b files are not changed; the Phase 2 monitor reports running and post-processing slots separately",
+  "trace_overhead": "H is computed on traced B launches; tracing perturbs timing (EXP-024), so H's denominator is traced decode time",
+  "units": "H = sum of H_layer (ms) / sum of predicted_ms of the same 8 launches, the PROTOCOL_1B operational choice fixed before acquisition. The frozen ENDPOINTS wording (sum of H_layer / decode tokens as a fraction of mean decode ms/token, with decode ms/token = predicted_ms / predicted_n and 511 decode graphs per launch) equals this H x 512/511 = 0.0845725814; reported for completeness (every H value computed in R5 is reported); the classification is the same under both readings and H is not recomputed for any decision",
+  "v5_comparator": "G1 baseline fidelity used the reconstructed llama-research-v5 comparator (not byte-identical to the lost original); this does not enter H, which uses only the frozen R5 binary"
+ },
+ "gate": "G2_headroom (R5-00 DECISION_RULES gates.G2_headroom)",
+ "host_result_agrees": true,
+ "identity": {
+  "g1_freeze_sha256": "3827b5a1cf1745869186a79ed50f335f9c6583ab69ca6611dc7f6e633deebce5",
+  "model_sha256": "a015794bfb1d69cb03dbb86b185fb2b9b339f757df5f8f9dd9ebdab8f6ed5d32",
+  "phase1b_readiness_commit": "2f996ff7923cbc46d153c44731f3efb637e0b663",
+  "phase1b_readiness_sha256": "a0f773ab5826e4d705c13e9ea8a48abd2c5e4400957f29e52c4ab56469a3f274",
+  "runtime_sha256": "da6e7183e44f6f69d58156cf683f5a929f16fc74bba442fdea39f139e4007493",
+  "store_sha256": "fef943ae0bc017864a47d41c1fc90d422016045f7e8705b1d138b7defd8c5146"
+ },
+ "inclusive": true,
+ "independent_rederivations_agree": true,
+ "interpretation": "H is an optimistic, loose upper bound on the expert-transfer wait that moving the wait could hide (it ignores interference, and W spans to the layer's last expert node). It is an opening gate only: it is NOT an achieved, measured or achievable runtime improvement, and it is never reported as one (R5-00 anti_rescue). PASS only permits Phase 2 to be prepared and opened by its own separate, explicitly authorized step.",
+ "per_launch_H_fraction": [
+  0.0837988336870587,
+  0.08560876243070047,
+  0.08383869404163302,
+  0.08412281729658232,
+  0.0836899638505766,
+  0.08400978256374338,
+  0.08654103967015403,
+  0.08383926753012566
+ ],
+ "scope": "development prompts only; evaluation LOCKED; no Phase 2 artifact; no timing contrast between arms",
+ "threshold": 0.04,
+ "threshold_exact": "1/25",
+ "verdict": "R5_G2_HEADROOM_GATE_PASS"
+}
